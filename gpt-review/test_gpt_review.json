@@ -8,5 +8,74 @@
     "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37"
   },
   "review_method": "One source testcase row per review; no batch, category, keyword, regex, or copy-forward template classification.",
-  "cases": []
+  "cases": [
+    {
+      "code": "Wistron-HW-00001-V006",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 2
+      },
+      "test_name": "Mechanical_Seat_accuracy",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify by physical inspection that all DUT components are seated correctly and that the inspected assembly matches the approved hardware recipe.",
+      "preconditions": [
+        "A qualified operator has physical access to the DUT and the approved hardware/recipe documentation.",
+        "Use appropriate power isolation and ESD controls before opening or touching the chassis.",
+        "The component checklist and required photo locations are defined."
+      ],
+      "pre_check_commands": [],
+      "safety_checks": [
+        "Do not perform the inspection on an energized chassis if the platform procedure requires power isolation.",
+        "Do not force, reseat, remove, or replace a component merely to make the criterion pass.",
+        "Do not clear dmesg, syslog, SEL, or blackbox evidence; preserve existing evidence before inspection."
+      ],
+      "required_packages": [],
+      "test_command": "Manual physical and visual inspection of every specified component for correct seating; capture operator photos and the blackbox status record.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Incorrect handling can damage connectors, cards, cables, or other components.",
+        "The remote agent cannot physically inspect the DUT or produce trustworthy seating photographs."
+      ],
+      "expected_evidence": [
+        "Operator checklist identifying every inspected component.",
+        "Timestamped photos showing component seating and any discrepancy.",
+        "Blackbox status record and preserved before/after system or BMC evidence when available."
+      ],
+      "post_check_commands": [],
+      "logs_to_collect": [
+        "Operator photos and inspection checklist",
+        "Blackbox status record",
+        "Existing kernel, system, and BMC/SEL evidence without clearing prior logs"
+      ],
+      "blocked_conditions": [
+        "No qualified operator or physical access is available.",
+        "The approved component list, seating criteria, or photo/evidence requirement is missing.",
+        "The inspection would require unsafe energized handling."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "Not runnable by agent: physical/visual inspection of component seating accuracy requires a person physically present at the machine.",
+        "ai_logs_output": "Operator takes photos and records blackbox status; agent cannot produce this evidence over SSH.",
+        "risk": "Component seat accuracy is a physical/visual check; human only."
+      },
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct because the acceptance criterion is physical seating accuracy. GPT additionally rejects the source instruction to clear logs as a baseline action; existing kernel, system, BMC/SEL, and blackbox evidence must be preserved. The agent may organize operator evidence but must not claim that it performed the inspection.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware, connectors, cards, and cables; no remote command should alter the DUT.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop the inspection if damage, abnormal seating, or unsafe handling is observed. Preserve photos and logs, do not force the component, and escalate to the hardware owner.",
+      "manual_steps": [
+        "Operator performs the physical inspection and records each component.",
+        "Operator captures the required photos and blackbox status evidence."
+      ],
+      "openhands_instruction": "Do not attempt to simulate or claim the physical inspection. Request the operator's checklist, photos, and blackbox evidence; report only the supplied evidence. PASS/FAIL/BLOCKED is decided by the end user.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    }
+  ]
 }
