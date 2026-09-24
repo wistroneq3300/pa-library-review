@@ -905,5 +905,24 @@
       "manual_steps":["User/vendor supplies PWM High definition, limits, trigger method, and expected LED behavior.","Operator applies the approved condition and records the physical LED response."],
       "openhands_instruction":"Do not generate or apply an unverified PWM signal or claim to see the LED. Request the vendor procedure and operator evidence, then collect only approved supporting BMC data; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00041-V004","source_ref":{"sheet":"Functionality","source_row":37},"test_name":"LED_behavior_from_PWM_Low_State","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify the CRPS PSU LED behavior when the vendor-defined PWM input is in the Low state.",
+      "preconditions":["Qualified operator, PSU/PWM specification defining Low level, expected LED color/pattern/timing, PSU identity, approved trigger tool/procedure, and physical access are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, firmware/FRU identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not drive or alter a PSU PWM/control input without the vendor-approved electrical procedure and recovery path.","Do not infer the physical LED response from telemetry; stop on abnormal PSU/power state or management loss."],
+      "required_packages":[],"test_command":"Qualified operator applies the vendor-approved PWM Low condition and visually records the specified PSU LED response; agent may collect supporting BMC/SEL evidence afterward.","user_confirmation_required":true,
+      "risk_notes":["PWM control and LED behavior are platform-specific; an incorrect signal may damage or disable the PSU.","The optical response requires direct visual/video evidence and cannot be verified over SSH."],
+      "expected_evidence":["PWM specification and operator record of applied state","Timestamped video/photo of LED behavior and timing/color","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence, power state, and BMC/SEL delta; verify the DUT remains reachable and stable."],
+      "logs_to_collect":["PWM/tool record and operator video/photo","BMC PSU health/presence and SEL logs","Reachability evidence"],
+      "blocked_conditions":["Missing PWM/LED specification, approved trigger method, PSU identity, qualified operator, or safe recovery path; abnormal PSU/power state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED behavior from a PWM Low state must be visually observed and photographed; agent cannot see it over SSH.","ai_logs_output":"Operator visual/video evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. Although the trigger is a PWM state, acceptance is the physical LED behavior and the PWM control is platform-specific and potentially hazardous. GPT requires vendor signal limits/procedure and rejects log clearing; only supporting BMC evidence may be automated.",
+      "risk_level":"CRITICAL","blast_radius":"PSU control input, power behavior, DUT availability, and possible PSU hardware damage.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on unexpected LED/power behavior, alarm, or management loss; remove the PWM condition only via the vendor procedure, preserve video/logs, and do not reset or power-cycle automatically.",
+      "manual_steps":["User/vendor supplies PWM Low definition, limits, trigger method, and expected LED behavior.","Operator applies the approved condition and records the physical LED response."],
+      "openhands_instruction":"Do not generate or apply an unverified PWM signal or claim to see the LED. Request the vendor procedure and operator evidence, then collect only approved supporting BMC data; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
