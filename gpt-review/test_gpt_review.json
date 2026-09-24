@@ -2849,6 +2849,80 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00045-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 42
+      },
+      "test_name": "Input_power_cycling",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify Input_power_cycling according to the source procedure and criteria: The_PSU_shall_reset_the_warning_and_fault_limits_to_default_values_for_the_following_case..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [
+        "vendor PMBus/PSU tool",
+        "PSU platform specification",
+        "vendor PSU/BMC tool"
+      ],
+      "test_command": "Run the vendor-approved PSU input/PSON power-cycle procedure after explicit approval and recovery planning.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: The_PSU_shall_reset_the_warning_and_fault_limits_to_default_values_for_the_following_case..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case verifies the PSU resets its warning/fault limits to defaults after an input-power cycle, which requires physically cycling AC input to the PSU and then re-reading its limits over PMBus; the physical input-power cycle on the PSU must be done by a person at the machine, and the re-verification needs a PMBus master on the PSU after the cycle.",
+        "ai_logs_output": "operator physically cycles the PSU input power then, with a PMBus master, re-reads warning/fault limit registers to confirm default reset; agent cannot physically cycle PSU input power.",
+        "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt."
+      },
+      "gpt_second_review_findings": "The source testcase Input_power_cycling changes PSU/power state or injects a fault. DeepSeek's NO direction is not permission to run; vendor tooling, hardware identity, recovery path, and explicit approval are required.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
