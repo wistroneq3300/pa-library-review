@@ -3070,6 +3070,79 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00048-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 45
+      },
+      "test_name": "Packet Error Checking",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify Packet Error Checking according to the source procedure and criteria: The PSU shall support packet error checking to support error checking and handling..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [
+        "vendor PMBus/PSU tool",
+        "PSU platform specification"
+      ],
+      "test_command": "Run the vendor-approved read-only PMBus query for the named command after the PSU address, command code, and expected value are supplied.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: The PSU shall support packet error checking to support error checking and handling..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "i2c-tools",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power'; echo ---pec_packet_error_checking---; dmesg | grep -iE 'PEC|SMBus|i2c.*(error|fault|pec|crc)' | tail -20\"",
+        "ai_logs_output": "first enumerate the hwmon/PMBus device names on the DUT and return any dmesg SMBus/PEC errors, to confirm the PMBus master is present; the actual a corrupted-PEC packet on the PMBus to confirm the PSU/controller flags a packet error requires a PEC-capable PMBus master + a controlled error injection, which the operator must run - agent reports the PMBus enumeration + existing PEC/SMBus errors only (this is the Packet Error Checking case).",
+        "risk": "RISK: requires a PEC-capable PMBus master and controlled SMBus error-injection hardware; the fault injection (Packet Error Checking) is state-changing and needs the operator. Agent only enumerates PMBus + reads existing PEC/SMBus errors."
+      },
+      "gpt_second_review_findings": "The source testcase Packet Error Checking is a PMBus/PSU specification query. DeepSeek's PARTIAL direction is incomplete without the PSU address, command code, vendor tool, and expected value; use read-only semantics.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
