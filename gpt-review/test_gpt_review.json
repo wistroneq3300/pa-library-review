@@ -943,5 +943,24 @@
       "manual_steps":["User/vendor provides the LED color/state specification.","Operator observes and photographs the color under the approved state."],
       "openhands_instruction":"Do not claim to see or classify the PSU LED color. Request the specification and operator photo/video, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00043-V004","source_ref":{"sheet":"Functionality","source_row":39},"test_name":"Flashing_Eight_Times","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the specified CRPS PSU LED flashes exactly eight times under the defined fault/state signature.",
+      "preconditions":["Qualified operator, PSU LED fault-signature specification defining trigger/color/timing, PSU identity, physical access, and recovery procedure are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, FRU/firmware identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not inject a PSU fault or alter power merely to trigger the LED without explicit approval and a documented recovery path.","Stop on abnormal power, alarm, heat, or management loss; do not infer the physical count from BMC telemetry."],
+      "required_packages":[],"test_command":"Operator triggers the approved PSU condition and records the physical LED sequence, confirming exactly eight flashes and the specified color/timing; agent may collect supporting BMC/SEL evidence afterward.","user_confirmation_required":true,
+      "risk_notes":["The optical flash count/pattern requires direct visual/video evidence and may involve a service-impacting PSU fault.","An incorrect trigger can interrupt power or leave a latched fault."],
+      "expected_evidence":["Vendor fault-signature reference","Timestamped video showing exactly eight flashes","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence, fault/latch status, BMC/SEL delta, and DUT reachability; verify recovery state."],
+      "logs_to_collect":["Operator video/checklist","BMC PSU fault/health and SEL logs","Reachability evidence"],
+      "blocked_conditions":["Missing eight-flash specification/trigger, PSU identity, qualified operator/physical access, or safe fault recovery path."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED must be visually observed flashing eight times and photographed; agent cannot see it over SSH.","ai_logs_output":"Operator visual/video evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. Exact physical flash counting is not remotely automatable and the source does not define trigger/timing/color. GPT requires the vendor signature and rejects clearing logs or unapproved fault injection.",
+      "risk_level":"CRITICAL","blast_radius":"PSU fault state, power availability, DUT service, and BMC/SEL latch state.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on an unexpected sequence, latched fault, power interruption, or management loss; preserve video/logs, follow the vendor fault-clear/recovery procedure with approval, and do not reboot/power-cycle automatically.",
+      "manual_steps":["User/vendor supplies the eight-flash fault signature and recovery procedure.","Operator triggers the approved condition and records the LED sequence."],
+      "openhands_instruction":"Do not trigger or claim to observe the PSU LED sequence. Request the specification and operator video, then collect only approved BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
