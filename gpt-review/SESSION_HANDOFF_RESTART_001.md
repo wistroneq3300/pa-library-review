@@ -1,9 +1,9 @@
 # GPT Second Review Handoff — Restart 001
 
 - Active review method: exactly one testcase row at a time.
-- Active overlay records: 44.
-- Completed through `Functionality/row-44/Wistron-HW-00048-V004`.
-- Next testcase: `Functionality/Wistron-HW-00049-V004`.
+- Active overlay records: 45.
+- Completed through `Functionality/row-45/Wistron-HW-00049-V004`.
+- Next testcase: `Functionality/Wistron-HW-00050-V004`.
 - A 99-case run was discarded because its generation method did not meet the
   independent-reasoning requirement.
 - A review run may accumulate up to approximately 200 completed individual

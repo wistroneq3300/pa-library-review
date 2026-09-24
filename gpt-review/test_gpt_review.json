@@ -1057,5 +1057,24 @@
       "manual_steps":["User/vendor supplies topology, packet-error criteria, package, and any approved injection fixture.","User approves the exact query and separately approves injection if required."],
       "openhands_instruction":"Validate PSU identity, bus/address from the board spec, tool compatibility, and read-only query. Show the resolved command and wait for OK; never inject errors without explicit approval, then return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00049-V004","source_ref":{"sheet":"Functionality","source_row":45},"test_name":"Capability and Inventory Reporting  CAPABILITY","automation_classification":"REQUIRES PACKAGE / USER CONFIRMATION","pa_manager_display":"PARTIAL",
+      "purpose":"Read the identified PSU capability/inventory fields and verify PEC support, SMBus/PMBus bus speed, and SMBAlert support against the platform/vendor specification.",
+      "preconditions":["User/vendor provides PSU model/serial/FRU identity, BMC/PMBus topology and exact 7-bit address, expected capability values, register/command mapping, and approved read-only tool.","Confirm the query is through the BMC-managed PSU path and that the package is compatible with Ubuntu and this platform."],
+      "pre_check_commands":["Collect BMC/PSU inventory, firmware, health, verified bus/address mapping from the board spec, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Never guess PMBUS_BUS, PMBUS_ADDR, command/register, or expected bit encoding.","Use only vendor-approved read-only commands; do not use -f or raw writes unless explicitly documented safe.","Stop if the target is not uniquely identified or the package/spec is missing."],
+      "required_packages":["Compatible vendor PSU/PMBus tool or approved i2c-tools and ipmitool"],"test_command":"After the user supplies and approves the verified PSU bus/address and command mapping, run the read-only capability/inventory query and compare PEC, bus-speed, and SMBAlert fields to the supplied specification.","user_confirmation_required":true,
+      "risk_notes":["The DeepSeek command hard-codes no address but an unverified i2cget target can read the wrong BMC device or issue unsafe semantics.","Presence of a PMBus hwmon device or a dmesg line does not prove the required capability values."],
+      "expected_evidence":["PSU identity/topology and tool version","Raw and decoded capability fields","Comparison to vendor specification","BMC/SEL/kernel delta and unchanged PSU health"],
+      "post_check_commands":["Repeat the approved read-only query, verify BMC PSU health/presence and reachability, and collect BMC/SEL/kernel delta without clearing prior logs."],
+      "logs_to_collect":["Vendor/i2c/ipmitool output and exit status","PSU identity/firmware and topology reference","BMC PSU/SEL and kernel logs"],
+      "blocked_conditions":["Missing PSU identity, verified bus/address, register/command mapping, expected values, compatible package, or read-only approval."],
+      "deepseek_original_review":{"ai_can_execute":"PARTIAL","ai_packages_needed":"i2c-tools ipmitool","ai_commands":"Enumerate PMBus/i2c and read capability register using ${PMBUS_BUS} and ${PMBUS_ADDR} placeholders.","ai_logs_output":"PMBus enumeration and raw capability register output","risk":"Bus/address must come from board schematic; read-only but target must be verified."},
+      "gpt_second_review_findings":"DeepSeek's PARTIAL classification is appropriate, but the command still lacks explicit device identity, register decoding, and protection against unsafe raw reads. Keep PARTIAL only after the user supplies the BMC/PMBus spec, address, expected bit fields, and compatible package. Do not infer capability from hwmon names or dmesg alone.",
+      "risk_level":"HIGH","blast_radius":"BMC/PMBus device access, PSU telemetry, and potentially PSU behavior if an incorrect command is used.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"If communication errors or unexpected PSU state appears, stop querying, preserve tool/BMC/SEL logs, and use the vendor BMC/PSU recovery path; do not write, reset, or power-cycle automatically.",
+      "manual_steps":["User/vendor supplies PSU identity, bus/address, field mapping, expected values, and package.","User confirms the exact read-only query before execution."],
+      "openhands_instruction":"Validate the PSU identity, BMC/PMBus bus/address, command/register mapping, decoding, and package. Show pre-checks and exact parameterized command, wait for explicit OK, then return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
