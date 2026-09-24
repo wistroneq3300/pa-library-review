@@ -419,5 +419,34 @@
       "openhands_instruction": "Do not perform or claim the physical Front IOB action. After operator confirmation, collect only the approved post-action evidence. End user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
     }
+    ,{
+      "code": "Wistron-HW-00010-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 11},
+      "test_name": "CEM Riser",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Inspect the CEM riser, perform the approved plug/reconnect action, and verify correct seating and post-cycle device detection.",
+      "preconditions": ["Qualified operator, CEM riser seating specification, correct device identity, and safe power/ESD procedure are available."],
+      "pre_check_commands": ["Record current PCIe/device enumeration and kernel/BMC state if post-cycle detection is required; do not clear logs."],
+      "safety_checks": ["Do not remove or insert the riser while energized unless explicitly permitted by the platform procedure.", "Do not guess expected PCIe identity or slot mapping."],
+      "required_packages": [],
+      "test_command": "Operator inspects and performs the approved CEM riser plug/reconnect cycle; agent may collect post-action PCIe and log evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["Incorrect handling can damage the riser, connector, PCIe device, or chassis.", "Physical seating cannot be verified remotely."],
+      "expected_evidence": ["Operator photos/checklist", "Post-cycle device enumeration and kernel/BMC evidence when applicable"],
+      "post_check_commands": ["Collect approved PCIe enumeration and relevant kernel/BMC logs after operator confirmation."],
+      "logs_to_collect": ["Operator photos/checklist", "PCIe enumeration", "Kernel/BMC/SEL logs"],
+      "blocked_conditions": ["No qualified operator/physical access, unknown riser/device identity, or unsafe plug-cycle procedure."],
+      "deepseek_original_review": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Physical/visual CEM riser seating and plug-cycle check is not runnable over SSH.", "ai_logs_output": "Operator performs and reports the visual/mechanical result."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct for the physical CEM riser inspection and plug cycle. GPT limits automation to evidence collection after operator action, requires identity/mapping confirmation, and rejects clearing existing logs as a baseline.",
+      "risk_level": "HIGH",
+      "blast_radius": "CEM riser, PCIe connector/device, chassis, and potentially system availability.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on damage, failed seating, or missing PCIe device; preserve evidence, do not repeat the physical cycle, and escalate to the hardware owner.",
+      "manual_steps": ["Operator performs and photographs the CEM riser inspection/cycle."],
+      "openhands_instruction": "Do not perform or claim the physical CEM riser action. After operator confirmation, collect only approved post-action evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
+    }
   ]
 }
