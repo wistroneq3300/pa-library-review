@@ -601,5 +601,24 @@
       "manual_steps":["Operator inspects and photographs the specified power connectors.","Operator performs the approved plug/reconnect cycle with service-impact and recovery controls."],
       "openhands_instruction":"Do not perform or claim the physical power action. After operator confirmation, collect only approved BMC/OS evidence and return it; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00021-V003","source_ref":{"sheet":"Functionality","source_row":21},"test_name":"Mechanical_Cable_Adapters","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect each specified slot to verify the cable adapters are installed correctly and can be removed/reinstalled without physical obstruction or damage.",
+      "preconditions":["Qualified operator, approved adapter/slot drawing, component identity, physical access, and safe power/ESD procedure are available."],
+      "pre_check_commands":["Record current device/slot inventory and kernel/BMC evidence if a post-action detection check is required; preserve existing logs."],
+      "safety_checks":["Do not remove or insert adapters while energized unless explicitly permitted.","Do not force an adapter, bend cable/connector pins, or infer expected slot mapping.","Stop on damage, mismatch, abnormal power, or loss of management connectivity; do not clear logs."],
+      "required_packages":[],"test_command":"Operator inspects every specified slot and performs the approved adapter remove/reinstall action; after confirmation, the agent may collect approved post-action enumeration and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Physical adapter handling can damage cables, connectors, slots, or attached hardware.","The installation/removal criterion is physical and cannot be verified remotely."],
+      "expected_evidence":["Operator checklist and timestamped photos per slot","Post-action device/slot enumeration and relevant kernel/BMC evidence when specified"],
+      "post_check_commands":["After operator confirmation, collect approved device/slot enumeration and journalctl -k --since <baseline-time>; collect BMC/SEL delta when applicable."],
+      "logs_to_collect":["Operator photos/checklist","Device/slot enumeration","Kernel/BMC/SEL evidence without clearing prior logs"],
+      "blocked_conditions":["No qualified operator/physical access, missing adapter/slot drawing or identity, unsafe procedure, or failed post-action detection."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical adapter installation/removal and cable/component inspection requires a person at the machine.","ai_logs_output":"Operator checks adapter installation and reports physical result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. The source purpose requires a person to inspect and physically install/remove adapters in each slot; remote commands cannot prove ease of removal or physical seating. GPT rejects clearing logs and permits only post-action evidence collection after operator confirmation.",
+      "risk_level":"HIGH","blast_radius":"Adapters, cables, connectors, slots, attached devices, and potentially DUT availability.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on resistance, damage, mismatch, missing device, or management loss; preserve photos/logs, do not force or repeat the action, and escalate to the hardware owner.",
+      "manual_steps":["Operator inspects each specified slot and records adapter identity/seating.","Operator performs the approved adapter remove/reinstall action and captures photos."],
+      "openhands_instruction":"Do not perform or claim the physical adapter action. After operator confirmation, collect only approved post-action evidence for the supplied slot/device identity. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
