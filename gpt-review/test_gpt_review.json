@@ -332,5 +332,34 @@
       "openhands_instruction": "Do not perform or claim the physical sled operation; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
     }
+    ,{
+      "code": "Wistron-HW-00007-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 8},
+      "test_name": "Mechanical_Latch - PSU",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Toggle the PSU latch and verify that it engages and releases correctly without damage.",
+      "preconditions": ["Qualified operator, PSU mechanical specification, and safe power/ESD procedure are available."],
+      "pre_check_commands": [],
+      "safety_checks": ["Do not actuate the latch in an unsafe energized state or force a binding latch.", "Do not clear existing logs for this physical check."],
+      "required_packages": [],
+      "test_command": "Qualified operator toggles the PSU latch and records engagement, release, fit, and damage state with photos.",
+      "user_confirmation_required": true,
+      "risk_notes": ["Incorrect operation can damage the PSU latch, connector, or power path.", "Remote agent cannot perform or visually verify the action."],
+      "expected_evidence": ["Operator checklist and photos showing latch engagement/release and any defect."],
+      "post_check_commands": [],
+      "logs_to_collect": ["Operator photos/checklist", "BMC/SEL evidence if an electrical/PSU event occurs"],
+      "blocked_conditions": ["No qualified operator/physical access, unknown latch criteria, or unsafe power state."],
+      "deepseek_original_review": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Physical PSU latch actuation is not runnable over SSH.", "ai_logs_output": "Operator performs and reports the visual/mechanical result."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct. The source is a physical PSU latch engagement/release check with no safe remote substitute. GPT adds power-state and connector-protection gates and removes the unnecessary log-clearing step.",
+      "risk_level": "HIGH",
+      "blast_radius": "PSU latch, connector, and potentially the DUT power path.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on binding, cracking, failed engagement, or any PSU/BMC event; preserve evidence, do not force or repeatedly cycle the latch, and escalate.",
+      "manual_steps": ["Operator actuates and photographs the PSU latch."],
+      "openhands_instruction": "Do not perform or claim the physical latch action; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
+    }
   ]
 }
