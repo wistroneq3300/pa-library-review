@@ -848,5 +848,24 @@
       "manual_steps":["Operator confirms the approved trigger/state and records LED color and blink cadence on video."],
       "openhands_instruction":"Do not claim to see or measure the PSU LED blink. Request the operator video/record and specification, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00038-V004","source_ref":{"sheet":"Functionality","source_row":34},"test_name":"LED_Blink_N_Times_then_Off","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the specified CRPS PSU LED blinks the specification-defined number of times and then turns OFF.",
+      "preconditions":["Qualified operator, PSU LED specification defining N, color, timing, trigger state, PSU identity, and physical access are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, firmware/FRU identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not change PSU state or introduce a fault to trigger the pattern without explicit approval and a recovery plan.","Do not infer N or timing from a generic LED status; stop if the trigger or PSU state is unsafe."],
+      "required_packages":[],"test_command":"Operator triggers the approved PSU state and records the LED blink count, color/timing, and transition to OFF; agent may collect supporting BMC/SEL evidence afterward.","user_confirmation_required":true,
+      "risk_notes":["The source row omits N, cadence, color, and trigger; physical counting requires direct visual/video evidence.","Triggering a PSU fault/state can interrupt power."],
+      "expected_evidence":["Specification reference for N and timing","Timestamped video showing exactly N blinks followed by OFF","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence and BMC/SEL delta; verify the DUT remains reachable and no unexpected event persists."],
+      "logs_to_collect":["Operator video/checklist and count","BMC PSU health/presence and SEL logs","Reachability evidence"],
+      "blocked_conditions":["N, color/timing, trigger state, or PSU identity is unspecified; no qualified operator/physical access; unsafe fault trigger; or abnormal PSU state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED must be observed blinking N times then OFF and photographed; agent cannot see it over SSH.","ai_logs_output":"Operator visual/video evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. This is a physical optical sequence and the source does not define N or timing, so the acceptance criterion is incomplete as well as human-only. GPT requires the vendor specification and rejects clearing logs or unapproved fault triggering.",
+      "risk_level":"CRITICAL","blast_radius":"PSU fault/state, power availability, and DUT service if the trigger is mishandled.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop if the sequence is unexpected, PSU alarms, or power changes; preserve video and BMC/SEL evidence, restore only via the documented vendor procedure, and do not reboot/power-cycle automatically.",
+      "manual_steps":["User/vendor provides N, timing/color, and trigger specification.","Operator records the physical sequence on video and confirms transition to OFF."],
+      "openhands_instruction":"Do not trigger or claim to observe the LED sequence. Request the specification and operator video, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
