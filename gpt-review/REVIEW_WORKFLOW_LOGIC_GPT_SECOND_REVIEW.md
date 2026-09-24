@@ -31,8 +31,10 @@ it does not replace or modify the original test library.
   risk, package, or approval requirement.
 - After each individual testcase, persist its record and checkpoint. If the
   next testcase is unclear, stop before reviewing it and ask the user.
-- A scheduled run may wake up once per day, but it must process only the next
-  single unreviewed testcase and then stop.
+- A scheduled run may process up to 200 sequentially unreviewed testcases per
+  daily run, but every testcase must be independently reviewed and checkpointed
+  before the next one is selected. The 200-case value is only a run quota; it
+  must never become a batch template or grouped classification.
 
 ## Role and execution boundary
 
@@ -83,7 +85,9 @@ no diff, then commit and push the checkpoint before asking the user.
 Only generalizable review rules belong in this policy and the reusable skill.
 Case-specific facts and unresolved questions belong in the per-testcase overlay
 record and session handoff. The next run must resume from the persisted
-single-testcase checkpoint.
+single-testcase checkpoint. A run stops immediately on a user question or hard
+safety blocker, otherwise it stops after approximately 200 completed individual
+testcases.
 
 The confirmation interaction is:
 
@@ -298,7 +302,7 @@ turning it into a safe execution plan.
 3. Write one English overlay record with the actual purpose, concise command or
    physical action, dependencies, safety gates, evidence, and classification.
 4. Verify that the original XLSX and `data/tests.json` have no diff.
-5. Commit and push the single-case checkpoint before moving to another case or
-   asking the user a question.
-6. Never use batch completion counts as evidence that individual review quality
-   is sufficient.
+5. Commit and push that single-case checkpoint before selecting the next row.
+6. Repeat steps 1-5 until a user question/hard blocker occurs or the run quota
+   reaches approximately 200 completed individual testcases.
+7. Never use the quota as evidence that individual review quality is sufficient.
