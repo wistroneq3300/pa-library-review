@@ -6454,6 +6454,79 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00095-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 92
+      },
+      "test_name": "Link flap",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify Link flap according to the source procedure and criteria: 1. NIC should work when it link up and not work when it link down 2. NIC should still be normal after 5 times link flap 3. BMC network should work without problem during test. 4. Need to confirm: 1G Lan, PDB BMC NIC, BMC dedicate NIC.",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [
+        "ethtool",
+        "approved network peer/specification"
+      ],
+      "test_command": "ip -br link; ethtool <CONFIRMED_INTERFACE>",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. NIC should work when it link up and not work when it link down 2. NIC should still be normal after 5 times link flap 3. BMC network should work without problem during test. 4. Need to confirm: 1G Lan, PDB BMC NIC, BMC dedicate NIC.",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "iproute2 (ip)",
+        "ai_commands": "-- Link flap: repeat link up/down 5x per port via sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"for i in $(seq 1 5); do ip link set ${IFACE:?operator must set the target NIC interface name} down; sleep 1; ip link set ${IFACE:?operator must set the target NIC interface name} up; sleep 2; ip link show ${IFACE:?operator must set the target NIC interface name}; done 2>&1\" then check the interface + BMC network recovered.",
+        "ai_logs_output": "return the 5x link flap loop output (link state per iteration) + final `ip link show` + BMC ping check so the user confirms the NIC and BMC network survived.",
+        "risk": "RISK: link flapping drops networking on that port 5x; use a non-management test port to avoid losing the SSH session."
+      },
+      "gpt_second_review_findings": "The source testcase Link flap requires the exact interface and expected network specification. A management NIC must not be guessed or disconnected; require an out-of-band recovery path.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
