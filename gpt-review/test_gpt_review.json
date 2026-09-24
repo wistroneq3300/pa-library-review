@@ -77,5 +77,68 @@
         "BLOCKED"
       ]
     }
+    ,{
+      "code": "Wistron-HW-00002-V005",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 3
+      },
+      "test_name": "Mechanical_Sharp_edge",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Inspect the DUT chassis and node surfaces to verify that no accessible edge can injure a user during normal operation or handling.",
+      "preconditions": [
+        "A qualified operator has physical access to every exterior chassis and node surface.",
+        "Use the approved mechanical-safety checklist and appropriate ESD/power-isolation controls."
+      ],
+      "pre_check_commands": [],
+      "safety_checks": [
+        "Do not run a hand over an energized, hot, sharp, or otherwise unsafe area.",
+        "Do not clear existing dmesg, syslog, SEL, or blackbox evidence; this testcase is physical and does not need log deletion."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator performs hand and visual inspection of every accessible chassis/node edge and records any sharp edge with photos.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The inspection itself can cause injury if performed without appropriate protection.",
+        "A remote agent cannot feel, see, or photograph the physical edges and must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator checklist covering every accessible edge/sheet.",
+        "Timestamped photos of inspected areas and any defect.",
+        "Operator statement of whether a sharp edge affecting user operation was found."
+      ],
+      "post_check_commands": [],
+      "logs_to_collect": [
+        "Operator checklist and photos",
+        "Existing system/BMC evidence only if another concurrent issue is observed"
+      ],
+      "blocked_conditions": [
+        "No qualified operator or physical access is available.",
+        "The inspection area cannot be safely accessed or the acceptance scope is not defined."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "Not runnable by agent: the mechanical check requires hand and visual inspection of every exterior edge/sheet.",
+        "ai_logs_output": "Operator performs the physical inspection and reports the visual/mechanical result; agent cannot operate or see the hardware."
+      },
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct. The source purpose is a tactile and visual injury-prevention inspection, not an OS or BMC state check. GPT additionally removes the unnecessary log-clearing step and requires complete operator coverage of the accessible chassis/node surfaces.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical operator safety and DUT chassis surfaces; no remote command should modify the DUT.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop immediately if an injury hazard or damaged edge is found, photograph and isolate the area, and escalate to the hardware owner. Do not file, bend, or modify the chassis as part of this test.",
+      "manual_steps": [
+        "Inspect every accessible chassis/node edge by sight and safe touch.",
+        "Record and photograph any sharp edge or inaccessible area."
+      ],
+      "openhands_instruction": "Do not attempt this inspection remotely. Request the operator checklist and photos, then report only the supplied evidence. PASS/FAIL/BLOCKED is decided by the end user.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    }
   ]
 }
