@@ -4816,6 +4816,76 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00072-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 69
+      },
+      "test_name": "Power on with two sockets",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify Power on with two sockets according to the source procedure and criteria: 1. System can power on normally with full CPU. 2. CPU information should match with SPEC. 3. Core/Thread should be correct as the setting in BIOS setup menu..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [],
+      "test_command": "Use the approved BIOS/BMC power-on configuration procedure after socket topology and reboot approval are confirmed.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. System can power on normally with full CPU. 2. CPU information should match with SPEC. 3. Core/Thread should be correct as the setting in BIOS setup menu..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "numactl util-linux",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lscpu 2>&1 | grep -iE 'socket|core|model name'; echo ---; ls /sys/devices/system/cpu 2>&1 | head; echo ---numa---; numactl -H 2>&1 | head 2>&1\"",
+        "ai_logs_output": "return FULL lscpu socket count + NUMA topology so the user confirms two CPU sockets are populated and enumerated; the physical install of the second socket CPU is done by the operator.",
+        "risk": "RISK: reading socket/NUMA is read-only; the physical dual-socket install is operator."
+      },
+      "gpt_second_review_findings": "The source testcase Power on with two sockets is not unconditionally runnable. DeepSeek's PARTIAL result is treated as a gated recommendation until the required target, parameters, tool, and expected criteria are confirmed.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
