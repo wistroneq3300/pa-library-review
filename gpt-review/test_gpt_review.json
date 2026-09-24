@@ -303,5 +303,34 @@
       "openhands_instruction": "Do not perform or claim the physical sled operation; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
     }
+    ,{
+      "code": "Wistron-HW-00006-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 7},
+      "test_name": "Mechanical_Handle - AMD GPU Sled",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Operate the AMD GPU sled handle and verify that the sled slides, seats, and locks with the specified mechanical accuracy.",
+      "preconditions": ["Qualified operator, correct AMD GPU sled, approved mechanical specification, and safe power/ESD procedure are available."],
+      "pre_check_commands": [],
+      "safety_checks": ["Do not force the sled or operate it in an unsafe energized state.", "Do not clear existing logs for this physical check."],
+      "required_packages": [],
+      "test_command": "Qualified operator slides and locks/unlocks the AMD GPU sled handle and records mechanical behavior with photos.",
+      "user_confirmation_required": true,
+      "risk_notes": ["Incorrect handling can damage the GPU sled, rails, latch, connector, or chassis.", "Remote agent cannot perform or visually verify the action."],
+      "expected_evidence": ["Operator checklist and photos showing slide/lock/release behavior and any defect."],
+      "post_check_commands": [],
+      "logs_to_collect": ["Operator photos/checklist", "BMC/SEL or kernel evidence only if an abnormal hardware event occurs"],
+      "blocked_conditions": ["No qualified operator/physical access, unknown sled specification, or unsafe handling condition."],
+      "deepseek_original_review": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Physical AMD-GPU-sled handle operation is not runnable over SSH.", "ai_logs_output": "Operator performs and reports the visual/mechanical result."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct. This is a physical AMD GPU sled handle test; the agent may organize operator evidence but must not claim the sled was moved or locked. The source log-clearing step is unnecessary and unsafe as a baseline practice.",
+      "risk_level": "HIGH",
+      "blast_radius": "AMD GPU sled, rails, connector, latch, and chassis.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on binding, damage, or abnormal latch behavior; preserve evidence, do not force or repeatedly cycle the sled, and escalate to the hardware owner.",
+      "manual_steps": ["Operator performs and photographs the AMD GPU sled handle operation."],
+      "openhands_instruction": "Do not perform or claim the physical sled operation; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
+    }
   ]
 }
