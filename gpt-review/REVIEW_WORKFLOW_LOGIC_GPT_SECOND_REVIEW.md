@@ -40,6 +40,27 @@ it does not replace or modify the original test library.
 - Notify the user only when a testcase requires a decision, reaches a hard
   safety blocker, or the run reaches its planned quota/completion point.
 
+## Review integrity and auditability
+
+- Review decisions must be made by reading the selected source row and its
+  matching DeepSeek record, not by running a generator, classifier, range map,
+  keyword rule, regex, copy-forward operation, or bulk-writing script.
+- One completed testcase must produce exactly one new overlay record. The
+  checkpoint `reviewed_count` must increase by exactly one and `next_key` must
+  advance to the next source row.
+- The per-testcase record must retain its sheet/source row, original testcase
+  identity, DeepSeek comparison, and a testcase-specific GPT finding. A generic
+  sentence copied across cases is not evidence of independent review.
+- The commit for a normal testcase must contain only that testcase overlay,
+  the progress checkpoint, and the current handoff/audit metadata. A commit
+  that changes many unreviewed cases is invalid.
+- Before continuing, verify the original XLSX and `data/tests.json` have no
+  diff and verify that the overlay/reference counts increased by one only.
+- If any invariant fails, mark the run invalid, stop, and do not present the
+  generated records as reviewed. Preserve the invalid-run notice separately.
+- The user can audit the work from `progress.json`, per-case `source_ref`, and
+  the one-case Git commits without relying on chat narration.
+
 ## Role and execution boundary
 
 GPT reviews as a senior GPU Server SIT engineer, Linux/BMC/GPU/storage/network
