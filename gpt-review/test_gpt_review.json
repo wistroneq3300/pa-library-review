@@ -715,5 +715,24 @@
       "manual_steps":["Operator inspects and photographs the manifold, seals, and routing.","Operator performs only the approved physical connection action and monitors for leaks."],
       "openhands_instruction":"Do not perform or claim the physical manifold inspection/action. After operator confirmation, collect only approved BMC cooling and error evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00031-V002","source_ref":{"sheet":"Functionality","source_row":27},"test_name":"Liquid Level Scale Check","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"With the CDU operated according to its procedure, visually verify that the coolant level indicator is in the approved range and not low.",
+      "preconditions":["Qualified CDU/cooling operator, approved level range and CDU procedure, physical access, and leak/emergency controls are available."],
+      "pre_check_commands":["Before changing CDU state, collect available BMC/CDU telemetry, pump/flow/temperature status, uptime/reachability, and kernel/BMC/SEL baseline; do not clear logs."],
+      "safety_checks":["Do not power on, service, or open a CDU without the approved procedure and responsible operator.","Stop for low level, leak, abnormal flow/temperature, alarm, or unsafe CDU state; do not continue the server test.","A software telemetry value must not be substituted for the physical scale criterion unless the vendor explicitly defines equivalence."],
+      "required_packages":[],"test_command":"Qualified operator powers/operates the CDU per its approved procedure and visually reads the physical liquid-level scale; after confirmation, the agent may collect approved CDU/BMC telemetry and logs.","user_confirmation_required":true,
+      "risk_notes":["Incorrect CDU operation or low coolant can cause pump damage, leaks, overheating, or server hardware damage.","The physical level scale cannot be observed reliably by a remote agent."],
+      "expected_evidence":["Timestamped operator photo of the level scale and recorded reading","CDU/BMC pump, flow, temperature, and alarm status","Kernel/BMC/SEL delta without clearing prior evidence"],
+      "post_check_commands":["After operator confirmation, collect CDU/BMC telemetry and alarms, server thermal state, uptime/reachability, and journalctl -k --since <baseline-time>; verify no new cooling errors."],
+      "logs_to_collect":["Operator photo/checklist and level reading","CDU/BMC telemetry and alarm logs","Kernel/BMC/SEL evidence"],
+      "blocked_conditions":["No qualified operator/physical access, missing approved level range or CDU procedure, low/unknown level, leak/alarm, or unsafe CDU state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none (physical observation - human)","ai_commands":"Liquid Level Scale Check reads the coolant reservoir level visually; the scale reading requires a person observing the physical level indicator.","ai_logs_output":"Operator physical observation result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct because the criterion is a physical level-scale reading and the source procedure also changes CDU state. GPT adds CDU/pump/flow/thermal safety gates and rejects clearing logs. An agent may verify vendor telemetry after the operator's reading, but telemetry alone cannot satisfy the physical criterion.",
+      "risk_level":"CRITICAL","blast_radius":"CDU/cooling loop, pump/flow, GPU/CPU thermal state, and server hardware availability.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop for low level, leak, alarm, abnormal flow/temperature, or CDU fault; follow the vendor emergency cooling procedure, preserve photos and logs, and do not reboot/power-cycle automatically.",
+      "manual_steps":["Operator powers/operates the CDU per procedure and reads the physical level scale.","Operator captures a timestamped photo and records the value/range."],
+      "openhands_instruction":"Do not claim to have read the physical CDU scale or operate the CDU. After operator confirmation, collect only approved telemetry and logs and report the supplied reading; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
