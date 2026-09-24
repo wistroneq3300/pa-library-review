@@ -563,5 +563,24 @@
       "manual_steps":["Operator inspects and photographs all specified power connectors.","Operator performs the approved plug/reconnect action with the documented power and recovery controls."],
       "openhands_instruction":"Do not perform or claim the physical power-connector action. After operator confirmation, collect only approved BMC/OS evidence and report it. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00019-V002","source_ref":{"sheet":"Functionality","source_row":19},"test_name":"Power Routing","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect power-cable routing and connector seating, perform only the approved physical plug cycle, and verify that the DUT remains safely powered and reachable afterward.",
+      "preconditions":["Qualified operator, approved power-routing drawing, connector identity, physical access, and documented power-isolation/recovery procedure are available."],
+      "pre_check_commands":["Record BMC power/PSU status, current reachability, and kernel/BMC/SEL evidence before any physical action; do not clear logs."],
+      "safety_checks":["Do not unplug, reroute, or insert a power cable while energized unless explicitly approved by the platform procedure.","Do not move cables across fans, hot surfaces, sharp edges, or service loops; do not force connectors.","Stop on damaged insulation, heat, arcing, unexpected power change, or loss of management connectivity."],
+      "required_packages":[],"test_command":"Operator inspects the specified power-cable routing and connectors and performs the approved plug/reconnect cycle; after confirmation, the agent collects BMC/OS power and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Incorrect routing or handling can obstruct cooling, damage insulation/connectors, interrupt power, or cause data loss.","Physical routing and connector condition cannot be verified remotely."],
+      "expected_evidence":["Operator checklist/photos showing routing, clearance, and seating","Post-cycle BMC power/PSU state and DUT reachability","Kernel/BMC/SEL delta with previous evidence preserved"],
+      "post_check_commands":["After operator confirmation, collect BMC power/PSU inventory, uptime/reachability, and journalctl -k --since <baseline-time>; verify no new power or hardware errors."],
+      "logs_to_collect":["Operator photos/checklist","BMC power/PSU and SEL logs","Kernel/system and reachability evidence"],
+      "blocked_conditions":["Missing routing drawing or connector identity, no qualified operator, unsafe energized handling, no recovery path, or unexpected power/management state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical Power Routing cable/component connection and plug-cycle check requires a person at the machine.","ai_logs_output":"Operator checks physical connection and reports plug-cycle detection."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. The routing, clearance, and physical plug-cycle purpose cannot be evaluated over SSH. GPT adds cooling/clearance and power-recovery guards, rejects clearing logs, and limits automation to approved post-action evidence collection.",
+      "risk_level":"CRITICAL","blast_radius":"Power cables/connectors, cooling airflow, PSU/board hardware, DUT availability, and remote management connectivity.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on routing damage, abnormal heat/power, missing device, or lost management access; preserve photos and all logs, follow the documented power recovery path, and do not remotely reboot or power-cycle without separate approval.",
+      "manual_steps":["Operator inspects and photographs cable routing, clearance, and connector seating.","Operator performs the approved plug/reconnect action under the platform power procedure."],
+      "openhands_instruction":"Do not perform or claim physical power-cable routing or plug actions. After operator confirmation, collect only approved BMC/OS evidence and return it; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
