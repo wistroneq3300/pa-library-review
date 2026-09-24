@@ -9,3 +9,6 @@ source testcase at a time with independent reasoning and no templates.
 
 The invalid artifact remains recoverable in Git history at commit
 `4aad54a`, but is intentionally absent from the active `test_gpt_review.json`.
+
+The later 99-case automated run was also discarded for the same reason. It is
+not valid review data and must not be consumed.
