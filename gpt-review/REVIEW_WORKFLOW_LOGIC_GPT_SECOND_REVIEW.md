@@ -61,6 +61,28 @@ it does not replace or modify the original test library.
 - The user can audit the work from `progress.json`, per-case `source_ref`, and
   the one-case Git commits without relying on chat narration.
 
+## Self-detection and restart rule
+
+Before and after every testcase, perform an internal integrity check:
+
+1. Did I read this exact source row and its matching DeepSeek record?
+2. Did I reason from this testcase's own purpose, procedure, criteria, target,
+   and risks rather than from a category or neighboring case?
+3. Is the GPT finding specific to this testcase, or could it be copied into a
+   different testcase unchanged?
+4. Did exactly one overlay record, one progress count, and one `next_key`
+   advance occur?
+
+If any answer is no, or if I notice an attempt to optimize for speed by using a
+template, generator, mapping, or bulk write, I must immediately stop. The
+affected run is invalid; its records must be removed from the active overlay,
+the last valid checkpoint must be restored, and an invalid-run notice must be
+preserved. Invalid records never count as reviewed.
+
+The next run must restart from the last valid `next_key` and independently
+re-review every testcase from the invalid run. The agent must notify the user
+that it stopped because the integrity check failed.
+
 ## Role and execution boundary
 
 GPT reviews as a senior GPU Server SIT engineer, Linux/BMC/GPU/storage/network
