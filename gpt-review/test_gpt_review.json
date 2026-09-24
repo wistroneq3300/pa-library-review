@@ -1,6 +1,6 @@
 {
   "schema_version": "gpt-second-review-v1",
-  "review_scope": "Functionality cases 1-14",
+  "review_scope": "Functionality cases 1-14, 16, and 1816",
   "source_files": {
     "xlsx": "data/REVISED_commands_merged_with_raw.xlsx",
     "tests_json": "data/tests.json",
@@ -8,6 +8,80 @@
     "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37"
   },
   "cases": [
+    {
+      "code": "Wistron-HW-00015-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 16,
+        "duplicate_code_context": "Mechanical -Cable / PCIe Connector"
+      },
+      "test_name": "PCIe Connector",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physically unplug and reconnect the PCIe component, then verify seating and post-cycle device detection without errors.",
+      "required_packages": [],
+      "test_command": "Operator physically performs the PCIe unplug/reconnect cycle; agent may collect post-action lspci and kernel/BMC evidence but cannot perform the physical action.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Incorrect insertion or removal can damage the connector, card, cable, or system. The agent must not claim that the physical cycle occurred."
+      ],
+      "expected_evidence": [
+        "Operator photos and record of the physical cycle.",
+        "Post-cycle PCIe enumeration and kernel/BMC error evidence collected by the agent."
+      ],
+      "blocked_conditions": [
+        "No qualified operator is available to perform and document the physical PCIe cycle."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_commands_summary": "DeepSeek proposed i3c-tools/i3cdetect evidence, which does not validate the physical PCIe connector cycle."
+      },
+      "gpt_second_review_findings": "The source testcase is a physical PCIe connector plug/unplug and seating check. The DeepSeek I3C command is a purpose mismatch. GPT classifies this as MANUAL ONLY; automation is limited to collecting evidence after an operator completes the physical action.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00015-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1816,
+        "duplicate_code_context": "HW Robust / I3C CPU1"
+      },
+      "test_name": "I3C CPU1",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "purpose": "Verify the CPU1 I3C controller/target response through the Wistron BMC or platform-management path according to the platform specification.",
+      "required_packages": [
+        "Wistron platform/BMC I2C-I3C specification",
+        "BMC or OOB access path",
+        "BMC/I3C vendor tool and version, if required"
+      ],
+      "test_command": "Run the vendor-provided read-only BMC/I3C probe command for CPU1 after the controller, bus, target address, and expected response are supplied; do not invent a generic i3cdetect command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "In this Wistron project I2C/I3C is BMC/platform-management scope. A wrong bus or address can probe the wrong device or affect management functions. Use read-only semantics unless the vendor specification explicitly requires otherwise."
+      ],
+      "expected_evidence": [
+        "BMC/OOB controller and bus identification.",
+        "CPU1 target address response and device identity/data returned by the vendor tool.",
+        "Raw command output, exit status, and relevant BMC event/log evidence."
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, BMC controller/bus, target address, vendor tool/command, or expected response/criteria.",
+        "The supplied command is not confirmed read-only or its recovery behavior is unknown."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_commands_summary": "DeepSeek proposed host-side i3c-tools/i3cdetect and Linux sysfs/dmesg checks without the BMC target specification."
+      },
+      "gpt_second_review_findings": "The testcase is not automatically BLOCKED by I3C ownership because Wistron defines I2C/I3C as BMC/platform-management scope. It is PARTIAL in PA Manager terms, but execution must stop until the BMC/I3C specification, controller/bus, target address, vendor tool/command, and expected criteria are provided.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
     {
       "code": "Wistron-HW-00001-V006",
       "source_ref": {

@@ -1,1 +1,17 @@
-# GPT Second Review Batch 001\n\n- Scope: Functionality cases 1-14\n- Reviewed: 14\n- Status: PAUSED at case 15 for user clarification\n- Classification summary: 14 MANUAL ONLY\n- Original source files: unchanged\n\n## Findings\n\nCases 1-14 are physical or visual mechanical inspections. The DeepSeek NO direction is consistent, but the GPT review makes the physical limitation and required operator evidence explicit. No remote test command is proposed.\n\n## Blocking question for next case\n\nWistron-HW-00015-V002 (PCIe Connector) has a purpose/criteria about component seating, while the DeepSeek command checks the I3C bus. Please confirm whether the intended test is physical PCIe connector seating or software/I3C evidence.\n
+# GPT Second Review Batch 001
+
+- Scope: Functionality cases 1-14, plus source rows 16 and 1816 sharing code `Wistron-HW-00015-V002`
+- Reviewed: 16 source rows
+- Status: PAUSED_FOR_USER_INPUT before the next sequential case
+- Classification summary: 15 MANUAL ONLY; 1 REQUIRES PACKAGE / USER CONFIRMATION
+- Original source files: unchanged
+
+## Findings
+
+Cases 1-14 and source row 16 are physical or visual mechanical inspections. The DeepSeek NO direction is generally consistent, except row 16 where DeepSeek's I3C command does not validate the physical PCIe connector cycle.
+
+Source row 1816 is an I3C CPU1 check. Per the Wistron project rule, I2C/I3C belongs to BMC/platform-management scope, so this is not automatically BLOCKED. It remains `REQUIRES PACKAGE / USER CONFIRMATION` until the BMC/I3C specification, bus/address, vendor tool, and expected criteria are supplied.
+
+## Required user input before continuing
+
+For row 1816, provide the Wistron BMC/I3C platform specification or exact controller/bus, target address, vendor tool/command, and expected response/criteria. The next sequential case is `Wistron-HW-00016-V002`.
