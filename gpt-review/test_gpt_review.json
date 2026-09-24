@@ -7029,6 +7029,77 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00103-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 100
+      },
+      "test_name": "UID (include rear and front)",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify UID (include rear and front) according to the source procedure and criteria: 1. UID LED should be bright Blue when turning on manually 2. UID LED should be OFF when turning off manually 3. UID LED should be bright Blue when turning on by IPMI command 4. UID LED should be OFF when turning on by IPMI command.",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator performs the specified physical or visual inspection/action; agent collects permitted evidence only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical handling or visual inspection can damage hardware; a remote agent must not claim to have performed or observed it."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. UID LED should be bright Blue when turning on manually 2. UID LED should be OFF when turning off manually 3. UID LED should be bright Blue when turning on by IPMI command 4. UID LED should be OFF when turning on by IPMI command.",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "ipmitool (or curl for Redfish)",
+        "ai_commands": "-- UID (include rear and front): drive the UID/identify LED with `sudo ipmitool chassis identify <on|off>` (or Redfish IndicatorLED PATCH), then confirm color (Blue) + blink on/off. Agent can toggle and read the LED state; visual color confirmation by a person at the machine.",
+        "ai_logs_output": "return the `ipmitool chassis identify` result + indicator-LED state readback (and note the LED color seen) so user confirms the Blue UID LED on/off behavior.",
+        "risk": "RISK: turning the UID LED on/off changes an indicator state; restore it to Off after the check."
+      },
+      "gpt_second_review_findings": "The source criterion for UID (include rear and front) requires a physical or visual action. DeepSeek's NO direction is appropriate; the agent must not claim that the action or visual inspection occurred. The agent may collect operator-provided evidence and permitted post-action logs.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [
+        "Qualified operator performs the physical action and supplies photos/observations."
+      ],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
