@@ -1,0 +1,446 @@
+{
+  "schema_version": "gpt-second-review-v1",
+  "review_scope": "Functionality cases 1-14",
+  "source_files": {
+    "xlsx": "data/REVISED_commands_merged_with_raw.xlsx",
+    "tests_json": "data/tests.json",
+    "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37"
+  },
+  "cases": [
+    {
+      "code": "Wistron-HW-00001-V006",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 2
+      },
+      "test_name": "Mechanical_Seat_accuracy",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical inspection of component seating accuracy.",
+      "required_packages": [],
+      "test_command": "Inspect all DUT components and confirm that each component is properly seated. Physical inspection and photographs; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record confirming proper seating."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot visually or physically verify component seating."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00002-V005",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 3
+      },
+      "test_name": "Mechanical_Sharp_edge",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical inspection for sharp external edges.",
+      "required_packages": [],
+      "test_command": "Inspect all accessible DUT surfaces and confirm there are no sharp edges that could injure a user. Physical hand/visual inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record for all accessible edges."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot safely perform the physical hand/visual inspection."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00003-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 4
+      },
+      "test_name": "Mechanical_install_and_uninstall",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical OSFP module installation and removal check.",
+      "required_packages": [],
+      "test_command": "Install and remove the OSFP module and verify that the module remains detectable after the physical cycle. Physical installation/removal and operator observation; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator record, photos, and optional post-action device-detection evidence."
+      ],
+      "blocked_conditions": [
+        "The physical insertion/removal step cannot be performed remotely."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00004-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 5
+      },
+      "test_name": "Mechanical_Handle - PSU",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical PSU handle operation check.",
+      "required_packages": [],
+      "test_command": "Operate the PSU handle/latch and confirm correct fit, movement, and mechanical accuracy. Physical PSU handle operation; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator inspection record and photos."
+      ],
+      "blocked_conditions": [
+        "The handle/latch operation requires physical access."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00005-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 6
+      },
+      "test_name": "Mechanical_Handle - NV GPU Sled",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical NV GPU sled handle check.",
+      "required_packages": [],
+      "test_command": "Operate the NV GPU sled handle and confirm that the sled slides and locks correctly. Physical sled handling; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator inspection record and photos."
+      ],
+      "blocked_conditions": [
+        "The sled handling and locking action requires physical access."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00006-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 7
+      },
+      "test_name": "Mechanical_Handle - AMD GPU Sled",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical AMD GPU sled handle check.",
+      "required_packages": [],
+      "test_command": "Operate the AMD GPU sled handle and confirm that the sled slides and locks correctly. Physical sled handling; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator inspection record and photos."
+      ],
+      "blocked_conditions": [
+        "The sled handling and locking action requires physical access."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00007-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 8
+      },
+      "test_name": "Mechanical_Latch - PSU",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical PSU latch check.",
+      "required_packages": [],
+      "test_command": "Toggle the PSU latch and confirm that it engages and releases correctly without damage. Physical latch operation; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator inspection record and photos."
+      ],
+      "blocked_conditions": [
+        "The latch operation requires physical access."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00008-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 9
+      },
+      "test_name": "Mechanical_Latch - System",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical system latch check.",
+      "required_packages": [],
+      "test_command": "Toggle the system latch and confirm that it engages and releases correctly. Physical system-latch operation; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Operator inspection record and photos."
+      ],
+      "blocked_conditions": [
+        "The latch operation requires physical access."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00009-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 10
+      },
+      "test_name": "Front IOB",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical Front IOB seating inspection.",
+      "required_packages": [],
+      "test_command": "Inspect the Front IOB and confirm that its components are correctly seated and secured. Physical/visual inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot visually or physically inspect the Front IOB."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00010-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 11
+      },
+      "test_name": "CEM Riser",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical CEM riser seating inspection.",
+      "required_packages": [],
+      "test_command": "Inspect the CEM riser and confirm that it is seated and secured correctly. Physical/visual inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot visually or physically inspect the CEM riser."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00011-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 12
+      },
+      "test_name": "HIB",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical HIB seating inspection.",
+      "required_packages": [],
+      "test_command": "Inspect the HIB and confirm that its components are correctly seated. Physical/visual inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot visually or physically inspect the HIB."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00012-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 13
+      },
+      "test_name": "PDB",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical PDB seating inspection.",
+      "required_packages": [],
+      "test_command": "Inspect the PDB and confirm that its components are correctly seated. Physical/visual inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot visually or physically inspect the PDB."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00013-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 14
+      },
+      "test_name": "Fan module",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical fan-module seating inspection.",
+      "required_packages": [],
+      "test_command": "Inspect the fan module and connector seating and confirm that the fan module is properly installed. Physical/visual inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record."
+      ],
+      "blocked_conditions": [
+        "A remote agent cannot visually or physically inspect the fan module or connector."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00014-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 15
+      },
+      "test_name": "Mechanical_Cable_Connection",
+      "automation_classification": "MANUAL ONLY",
+      "purpose": "Physical cable and connection inspection.",
+      "required_packages": [],
+      "test_command": "Inspect cable/component connections for correct position, mismatch, bent pins, and routing issues. Physical connection inspection; no automated command.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical action or visual inspection is required; a remote agent must not claim completion."
+      ],
+      "expected_evidence": [
+        "Photos and operator inspection record; optional post-action device-detection evidence."
+      ],
+      "blocked_conditions": [
+        "The physical connection and visual inspection require an operator at the machine."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO"
+      },
+      "gpt_second_review_findings": "DeepSeek's NO direction is consistent with the physical nature of this testcase. GPT classifies it as MANUAL ONLY and limits the agent to recording operator-provided evidence; no remote execution command is proposed.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    }
+  ]
+}
