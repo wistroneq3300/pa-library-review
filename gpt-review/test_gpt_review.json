@@ -696,5 +696,24 @@
       "manual_steps":["Operator inspects and photographs the connector and seal with leak controls.","Operator performs only the approved physical connection action and monitors for leaks."],
       "openhands_instruction":"Do not perform or claim the physical liquid-cooling connector action. After operator confirmation, collect only approved BMC cooling and error evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00030-V002","source_ref":{"sheet":"Functionality","source_row":26},"test_name":"Manifold","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect the liquid-cooling manifold for correct installation, physical seal/connection condition, and safe routing, with optional post-action cooling evidence.",
+      "preconditions":["Qualified operator, approved manifold/loop drawing, leak-control procedure, physical access, and safe power/ESD controls are available."],
+      "pre_check_commands":["Record BMC pump/flow/temperature sensors, uptime, reachability, and kernel/BMC/SEL baseline; do not clear logs."],
+      "safety_checks":["Do not disconnect or reseat a manifold on an energized or pressurized loop unless explicitly approved.","Stop for leak, moisture, abnormal flow/temperature, damaged seal, or management loss.","Do not claim manifold integrity from software telemetry alone."],
+      "required_packages":[],"test_command":"Operator visually and physically inspects the manifold and approved connections; after confirmation, collect BMC cooling and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Manifold damage or disconnection can leak coolant onto electronics and cause thermal damage or system loss.","Physical manifold/seal condition cannot be verified remotely."],
+      "expected_evidence":["Operator checklist/photos of manifold, seals, and routing","BMC flow/pump/temperature state before and after the action","Kernel/BMC/SEL delta without clearing prior evidence"],
+      "post_check_commands":["After operator confirmation, collect BMC cooling sensors/flow/pump state, temperatures, uptime/reachability, and journalctl -k --since <baseline-time>; inspect for new thermal/hardware events."],
+      "logs_to_collect":["Operator photos/checklist","BMC cooling/flow/pump and SEL logs","Kernel/system/reachability evidence"],
+      "blocked_conditions":["No qualified operator, missing manifold/loop procedure, uncertain pressure/leak state, unsafe handling, or any leak/abnormal thermal state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none (physical inspection - human)","ai_commands":"Manifold: cooling manifold inspection is a physical visual/seal check; human-only.","ai_logs_output":"Operator physical inspection result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. A manifold visual/seal inspection is physical and high risk; remote commands cannot prove it. GPT adds leak, flow, and thermal safety gates, rejects clearing logs, and limits automation to post-action telemetry after operator confirmation.",
+      "risk_level":"CRITICAL","blast_radius":"Liquid-cooling manifold/loop, electronics, thermal control, DUT availability, and potential coolant damage.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on leak, moisture, abnormal flow/temperature, or manifold damage; follow emergency coolant/power isolation, preserve photos/logs, and escalate. Do not reboot or power-cycle automatically.",
+      "manual_steps":["Operator inspects and photographs the manifold, seals, and routing.","Operator performs only the approved physical connection action and monitors for leaks."],
+      "openhands_instruction":"Do not perform or claim the physical manifold inspection/action. After operator confirmation, collect only approved BMC cooling and error evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
