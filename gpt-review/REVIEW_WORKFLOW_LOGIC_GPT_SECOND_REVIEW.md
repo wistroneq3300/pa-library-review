@@ -35,6 +35,10 @@ it does not replace or modify the original test library.
   daily run, but every testcase must be independently reviewed and checkpointed
   before the next one is selected. The 200-case value is only a run quota; it
   must never become a batch template or grouped classification.
+- During normal uninterrupted review, do not send per-testcase progress,
+  checkpoint, commit, or push narration to the user. Continue silently.
+- Notify the user only when a testcase requires a decision, reaches a hard
+  safety blocker, or the run reaches its planned quota/completion point.
 
 ## Role and execution boundary
 
