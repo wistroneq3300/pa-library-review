@@ -4529,6 +4529,77 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00068-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 65
+      },
+      "test_name": "Insert",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify Insert according to the source procedure and criteria: 1. Power cord should be unplugged without any problem 2. Power supply should be removed without any problem 3. Power supply should be OFF when power cord is unplugged (FAN and LED should be OFF) 4. PSU information in sensor list and SEL of BMC should be correct when PSU is removed 5. Power supply should be inserted without any problem 6. PSU information in sensor list and SEL of BMC should be correct when power cord is plugged back 7. All other modules in use should keep working without any interference 8. All reset of PSU should have the same behavior as PSU 1.",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator performs the specified physical or visual inspection/action; agent collects permitted evidence only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical handling or visual inspection can damage hardware; a remote agent must not claim to have performed or observed it."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. Power cord should be unplugged without any problem 2. Power supply should be removed without any problem 3. Power supply should be OFF when power cord is unplugged (FAN and LED should be OFF) 4. PSU information in sensor list and SEL of BMC should be correct when PSU is removed 5. Power supply should be inserted without any problem 6. PSU information in sensor list and SEL of BMC should be correct when power cord is plugged back 7. All other modules in use should keep working without any interference 8. All reset of PSU should have the same behavior as PSU 1.",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this PSU Function case (inserting a PSU into a slot and checking the SUT/BMC behavior) requires physically inserting/removing/cycling the PSU module and its power-cord at the machine and visually observing the PSU LED/status; a person must be present at the hardware. The agent can only read the post-operator BMC PSU sensors/SEL, which the operator records after the physical step.",
+        "ai_logs_output": "operator physically inserting a PSU into a slot and checking the SUT/BMC behavior then records PSU LED/status; after that the agent can run ipmitool (on agent host) sdr elist 2>&1 | grep -iE \"psu|power supply\" ; echo ---sel---; ipmitool (on agent host) sel list last 30 2>&1 | tail -30 ; echo ---psu_inserting_a_psu---; ipmitool (on agent host) sensor list 2>&1 | grep -iE \"psu|power supply\" to confirm BMC sees the PSU state, but the physical action must be human.",
+        "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt."
+      },
+      "gpt_second_review_findings": "The source criterion for Insert requires a physical or visual action. DeepSeek's NO direction is appropriate; the agent must not claim that the action or visual inspection occurred. The agent may collect operator-provided evidence and permitted post-action logs.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [
+        "Qualified operator performs the physical action and supplies photos/observations."
+      ],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
