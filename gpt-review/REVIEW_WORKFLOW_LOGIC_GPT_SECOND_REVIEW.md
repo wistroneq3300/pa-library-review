@@ -59,6 +59,17 @@ If the user does not reply `OK`, replies ambiguously, or a pre-check finds a
 hard safety blocker, the test must remain `NOT STARTED`. The agent must report
 the evidence and the reason; it must not infer approval.
 
+## Stop-and-ask persistence rule
+
+Whenever review must stop for a user decision, the agent must first persist the
+completed work, progress checkpoint, exact question, and the current handoff in
+`gpt-review/`. It must verify that the original XLSX and `data/tests.json` have
+no diff, then commit and push the checkpoint before asking the user.
+
+Only generalizable review rules belong in this policy and the reusable skill.
+Case-specific facts and unresolved questions belong in the overlay, batch audit,
+and session handoff. The next run must resume from the persisted checkpoint.
+
 The confirmation interaction is:
 
 ```text
@@ -186,6 +197,18 @@ For each testcase, answer these questions:
   backup/evidence plan, approval, timeout, reconnect, verification, and recovery
   strategy.
 - Do not use `dmesg -c` merely to create a baseline; preserve existing evidence.
+
+### I2C and I3C ownership (Wistron project rule)
+
+- For this Wistron GPU Server SIT library, I2C and I3C are treated as BMC or
+  platform-management scope by default.
+- This company-specific rule overrides the generic assumption that I3C may be
+  host-side. A testcase may override it only when its supplied platform
+  specification explicitly identifies a different ownership path.
+- The review must still identify the BMC controller/bus, target address, BMC or
+  OOB access path, vendor tool/specification, and expected output.
+- A Linux `/sys/bus/i3c` listing alone does not prove that the required BMC
+  target was reached or that the expected address/response is correct.
 
 ## Output format for each reviewed testcase
 
