@@ -639,5 +639,24 @@
       "manual_steps":["Operator inspects each specified adapter and slot against the AVL documentation.","Operator performs the approved adapter remove/reinstall action and captures evidence."],
       "openhands_instruction":"Do not perform or claim the physical adapter action. After operator confirmation, collect only approved post-action evidence for the supplied adapter/slot identity. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00023-V002","source_ref":{"sheet":"Functionality","source_row":23},"test_name":"SSD","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect the specified SSD installation and perform the approved physical plug cycle, then verify that the expected SSD is detected without new errors.",
+      "preconditions":["Qualified operator, approved AVL/slot and SSD identity, physical access, power/ESD procedure, and a data-protection/recovery plan are available.","Confirm whether the SSD contains OS, boot, mounted, swap, RAID, LVM, or other active data; never remove an unverified drive."],
+      "pre_check_commands":["Record lsblk -o NAME,MODEL,SERIAL,TYPE,FSTYPE,MOUNTPOINTS,PKNAME,ROTA,WWN,STATE, lsscsi or nvme list as applicable, findmnt, /proc/mounts, swapon --show, LVM/RAID maps, and lspci; do not clear logs."],
+      "safety_checks":["Do not unplug, remove, or reseat a drive until its identity and non-OS/non-boot/non-mounted/non-active status are verified by the user-approved procedure.","Do not perform destructive fio, dd, format, or filesystem operations as a substitute for this physical check.","Stop if target identity, slot mapping, data state, or recovery path is unknown."],
+      "required_packages":[],"test_command":"Operator inspects and performs the approved SSD plug/reconnect action only after the drive is proven safe to handle; after confirmation, collect approved post-cycle storage enumeration and error evidence.","user_confirmation_required":true,
+      "risk_notes":["SSD removal can cause data loss, RAID degradation, filesystem corruption, or loss of the OS/boot path.","Physical seating and plug-cycle ease cannot be verified remotely."],
+      "expected_evidence":["Operator checklist/photos identifying the SSD and slot","Pre/post storage enumeration and health state for the supplied device identity","Kernel/BMC/SEL delta with existing evidence preserved"],
+      "post_check_commands":["After operator confirmation, collect the approved lsblk/nvme or SCSI inventory, device health/status, and journalctl -k --since <baseline-time>; verify no unexpected storage or management error."],
+      "logs_to_collect":["Operator photos/checklist","Storage enumeration and health output","Kernel/BMC/SEL logs without clearing prior evidence"],
+      "blocked_conditions":["Unknown SSD identity or data role, OS/boot/mounted/swap/LVM/RAID involvement, no qualified operator, unsafe procedure, or missing recovery plan."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical SSD seating and plug/unplug check requires a person at the machine.","ai_logs_output":"Operator checks physical SSD installation and reports plug-cycle detection."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct, but SSD handling requires an additional storage safety gate: the target must be proven not to be OS, boot, mounted, swap, LVM, RAID, or otherwise active before any operator removal. GPT rejects the source log-clearing step and any destructive storage substitute; automation is limited to post-action evidence.",
+      "risk_level":"CRITICAL","blast_radius":"SSD contents, OS/boot availability, filesystems, LVM/RAID state, data integrity, and DUT availability.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"If the drive is missing, errors appear, or the system becomes unstable, stop and preserve all evidence; do not run repair, format, reboot, or power-cycle commands automatically. Follow the storage owner's documented recovery path.",
+      "manual_steps":["Operator and storage owner identify the SSD and verify it is safe to remove.","Operator performs the approved physical plug/reconnect action and captures photos."],
+      "openhands_instruction":"Perform only non-destructive identity/mount/boot/RAID checks first. Do not select or guess a target SSD. After operator confirmation of the approved physical action, collect evidence for the supplied device identity; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
