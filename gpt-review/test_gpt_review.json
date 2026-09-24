@@ -448,5 +448,34 @@
       "openhands_instruction": "Do not perform or claim the physical CEM riser action. After operator confirmation, collect only approved post-action evidence. End user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
     }
+    ,{
+      "code": "Wistron-HW-00011-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 12},
+      "test_name": "HIB",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Inspect the HIB assembly and verify that all components are seated properly, with optional post-cycle detection evidence after an operator action.",
+      "preconditions": ["Qualified operator, HIB seating specification, hardware identity, and safe power/ESD procedure are available."],
+      "pre_check_commands": ["Record current device enumeration and kernel/BMC state if a post-cycle check is required; do not clear logs."],
+      "safety_checks": ["Do not remove or insert the HIB while energized unless explicitly permitted.", "Do not guess expected device identity."],
+      "required_packages": [],
+      "test_command": "Operator inspects and performs the approved HIB plug/reconnect cycle; agent may collect approved post-action detection and log evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["Incorrect handling can damage the HIB, connector, or chassis.", "Physical seating cannot be verified remotely."],
+      "expected_evidence": ["Operator photos/checklist", "Post-cycle device enumeration and kernel/BMC evidence when applicable"],
+      "post_check_commands": ["Collect approved device enumeration and relevant kernel/BMC logs after operator confirmation."],
+      "logs_to_collect": ["Operator photos/checklist", "Device enumeration", "Kernel/BMC/SEL logs"],
+      "blocked_conditions": ["No qualified operator/physical access, unknown HIB identity/criteria, or unsafe plug-cycle procedure."],
+      "deepseek_original_review": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Physical/visual HIB seating and plug-cycle check is not runnable over SSH.", "ai_logs_output": "Operator performs and reports the visual/mechanical result."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct for the physical HIB inspection and plug cycle. GPT limits automation to evidence collection after operator action, requires identity/criteria confirmation, and rejects clearing existing logs as a baseline.",
+      "risk_level": "HIGH",
+      "blast_radius": "HIB assembly, connector, chassis, and potentially system availability.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on damage, failed seating, or missing device; preserve evidence, do not repeat the physical cycle, and escalate.",
+      "manual_steps": ["Operator performs and photographs the HIB inspection/cycle."],
+      "openhands_instruction": "Do not perform or claim the physical HIB action. After operator confirmation, collect only approved post-action evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
+    }
   ]
 }
