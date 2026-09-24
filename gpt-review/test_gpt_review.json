@@ -6744,6 +6744,77 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00099-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 96
+      },
+      "test_name": "Front and Rear_Resolution Multiplexing Functionality",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify Front and Rear_Resolution Multiplexing Functionality according to the source procedure and criteria: 1. To verify that you can hot plug a monitor into a multiple VGA port system without loss of video functionality and with proper detection of monitors. 2. Only one VGA port is driven at a time and the front VGA port overrides the back VGA port when both are connected..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator performs the specified physical or visual inspection/action; agent collects permitted evidence only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical handling or visual inspection can damage hardware; a remote agent must not claim to have performed or observed it."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. To verify that you can hot plug a monitor into a multiple VGA port system without loss of video functionality and with proper detection of monitors. 2. Only one VGA port is driven at a time and the front VGA port overrides the back VGA port when both are connected..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "x11-utils mesa-utils xrandr",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"xrandr --query 2>&1; cat /sys/class/drm/card*/modes 2>/dev/null; for m in /sys/class/drm/card*/status; do echo $m=$(cat $m 2>/dev/null); done 2>&1\"",
+        "ai_logs_output": "return FULL `xrandr` + DRM connector status/modes to identify the front/rear display mux present; confirming mux switching output actually multiplexes needs a person to observe the physical monitors.",
+        "risk": "RISK: display tests need a physical monitor head + a person to observe rendering; agent runs the read-only/headless probe for mode/status evidence only."
+      },
+      "gpt_second_review_findings": "The source criterion for Front and Rear_Resolution Multiplexing Functionality requires a physical or visual action. DeepSeek's NO direction is appropriate; the agent must not claim that the action or visual inspection occurred. The agent may collect operator-provided evidence and permitted post-action logs.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [
+        "Qualified operator performs the physical action and supplies photos/observations."
+      ],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
