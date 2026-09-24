@@ -791,5 +791,24 @@
       "manual_steps":["User/vendor supplies PSU identity, Table 1248 revision/expected type, compatible decoder, and read-only procedure.","User confirms the resolved command and comparison before execution."],
       "openhands_instruction":"Validate the PSU identity, table/spec, package, and read-only command parameters. Show the resolved command and safety checks, wait for explicit OK, then execute and return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00035-V004","source_ref":{"sheet":"Functionality","source_row":31},"test_name":"LED_OFF","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the specified CRPS PSU LED is OFF under the defined PSU state and capture evidence.",
+      "preconditions":["Qualified operator, PSU LED state/color specification, PSU identity, physical access, and safe service-impact procedure are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, firmware/FRU identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not change PSU state or remove a PSU merely to force an LED condition without explicit approval.","Do not infer physical LED state from BMC telemetry; stop on abnormal PSU/power state."],
+      "required_packages":[],"test_command":"Operator observes the specified PSU bezel and verifies the LED is physically OFF under the approved state; agent may collect post-observation BMC/SEL evidence.","user_confirmation_required":true,
+      "risk_notes":["LED state and color/pattern require direct visual inspection and cannot be proven over SSH.","Incorrect PSU manipulation can interrupt power."],
+      "expected_evidence":["Timestamped photo/video and operator record of the PSU LED","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence and BMC/SEL delta; verify the DUT remains reachable."],
+      "logs_to_collect":["Operator photo/checklist","BMC PSU health/presence and SEL logs","Reachability evidence"],
+      "blocked_conditions":["Missing LED state specification or PSU identity, no qualified operator/physical access, insufficient lighting/visibility, or abnormal PSU state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED must be visually observed OFF and photographed; agent cannot see/photograph it over SSH.","ai_logs_output":"Operator visual/photo evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. The OFF state is a physical visual criterion; software telemetry cannot replace the required observation. GPT rejects clearing logs and limits the agent to collecting supporting BMC evidence after the operator's observation.",
+      "risk_level":"HIGH","blast_radius":"PSU state and DUT power availability if the state is changed to perform the observation.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop if the LED is unexpected or the PSU/power state changes; preserve photo and BMC/SEL evidence, do not manipulate the PSU further, and escalate.",
+      "manual_steps":["Operator sets or confirms the approved PSU state and visually records the LED as OFF."],
+      "openhands_instruction":"Do not claim to see or change the PSU LED. Request the operator photo/record, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
