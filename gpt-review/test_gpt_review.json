@@ -210,5 +210,69 @@
         "BLOCKED"
       ]
     }
+    ,{
+      "code": "Wistron-HW-00004-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 5,
+        "duplicate_code_context": "Mechanical -System / Mechanical_Handle - PSU"
+      },
+      "test_name": "Mechanical_Handle - PSU",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Physically operate the PSU handle/latch and verify its mechanical accuracy and ease of use.",
+      "preconditions": [
+        "Qualified operator has physical access to the PSU and the approved mechanical specification.",
+        "Use the required power-isolation and ESD controls before operating or removing the PSU handle."
+      ],
+      "pre_check_commands": [],
+      "safety_checks": [
+        "Do not operate the handle in a way that can release an energized PSU or damage the latch.",
+        "Do not clear existing kernel, BMC, SEL, or blackbox logs; this is a physical inspection."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator actuates the PSU handle/latch and records fit, movement, locking, and release behavior with photos.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Incorrect handle operation can damage the PSU latch, PSU connector, or power path.",
+        "A remote agent cannot operate or visually inspect the handle."
+      ],
+      "expected_evidence": [
+        "Operator mechanical checklist and photos.",
+        "Record of handle movement, lock/release behavior, and any damage or abnormal resistance."
+      ],
+      "post_check_commands": [],
+      "logs_to_collect": [
+        "Operator photos and checklist",
+        "BMC/SEL evidence only if an electrical or PSU event occurs during the inspection"
+      ],
+      "blocked_conditions": [
+        "No qualified operator or physical access.",
+        "PSU power state, handling procedure, or mechanical acceptance criteria are unknown.",
+        "The handle cannot be operated without unsafe energized manipulation."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "Not runnable by agent: physical PSU handle/latch operation and visual confirmation are required.",
+        "ai_logs_output": "Operator performs the mechanical operation and reports the result; agent cannot operate or see the hardware."
+      },
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct. The source criterion is a physical PSU handle accuracy check with no meaningful SSH substitute. GPT adds power-state, connector-protection, and evidence requirements and removes the unnecessary instruction to clear logs.",
+      "risk_level": "HIGH",
+      "blast_radius": "PSU handle/latch, connector, and potentially the DUT power path.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop if the handle binds, cracks, fails to lock, or causes a PSU/BMC event. Preserve evidence, do not force the handle, and escalate to the hardware owner.",
+      "manual_steps": [
+        "Operator actuates and inspects the PSU handle/latch.",
+        "Operator records photos and any abnormal mechanical behavior."
+      ],
+      "openhands_instruction": "Do not attempt this physical PSU-handle test remotely. Collect and report operator evidence only; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    }
   ]
 }
