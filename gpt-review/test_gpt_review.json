@@ -1076,5 +1076,24 @@
       "manual_steps":["User/vendor supplies PSU identity, bus/address, field mapping, expected values, and package.","User confirms the exact read-only query before execution."],
       "openhands_instruction":"Validate the PSU identity, BMC/PMBus bus/address, command/register mapping, decoding, and package. Show pre-checks and exact parameterized command, wait for explicit OK, then return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00050-V004","source_ref":{"sheet":"Functionality","source_row":46},"test_name":"Capability and Inventory Reporting  QUERY","automation_classification":"REQUIRES PACKAGE / USER CONFIRMATION","pa_manager_display":"PARTIAL",
+      "purpose":"Query the identified PSU for the vendor/PMBus commands listed in Table 1223 and verify each response and support indication against the specification.",
+      "preconditions":["User/vendor provides PSU model/serial/FRU identity, Table 1223 revision and command list, expected response/encoding, verified BMC/PMBus bus and 7-bit address, and approved read-only tool.","Confirm all requested commands are safe reads for this PSU and the Ubuntu package/tool is compatible."],
+      "pre_check_commands":["Collect BMC/PSU inventory, firmware, health, verified topology/address, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not guess PMBUS_BUS, PMBUS_ADDR, command code, page, data format, or expected response.","Use only vendor-approved read-only commands; do not query write/configuration commands or use blind scans/raw forcing.","Stop if Table 1223, identity, package, or safe read mapping is missing."],
+      "required_packages":["Compatible vendor PSU/PMBus query tool or approved i2c-tools/ipmitool"],"test_command":"After the user supplies and approves the exact command list and verified target, run the vendor-approved read-only query for each Table 1223 command and decode each response against the supplied specification.","user_confirmation_required":true,
+      "risk_notes":["The DeepSeek command hard-codes register 0xE0 and does not represent the Table 1223 command set; it may query the wrong field/device.","A raw PMBus read without page/address/format validation can produce misleading data or unsafe bus access."],
+      "expected_evidence":["PSU identity/topology and Table 1223 revision","Tool version and per-command raw/decoded responses","Support/unsupported comparison and any vendor-defined error response","BMC/SEL/kernel delta with unchanged PSU health"],
+      "post_check_commands":["Repeat approved read-only queries as needed, verify BMC PSU health/presence and reachability, and collect BMC/SEL/kernel delta without clearing prior logs."],
+      "logs_to_collect":["Per-command vendor/i2c/ipmitool output and exit status","PSU identity/firmware and Table 1223 reference","BMC PSU/SEL and kernel logs"],
+      "blocked_conditions":["Missing Table 1223 revision/command list, expected encoding, PSU identity, verified bus/address/page mapping, compatible package, or read-only approval."],
+      "deepseek_original_review":{"ai_can_execute":"PARTIAL","ai_packages_needed":"i2c-tools ipmitool","ai_commands":"Enumerate PMBus/i2c and read a hard-coded MFR_SPECIFIC register 0xE0 using ${PMBUS_BUS}/${PMBUS_ADDR} placeholders.","ai_logs_output":"PMBus enumeration and raw register output","risk":"Bus/address must come from board schematic; read-only but target must be verified."},
+      "gpt_second_review_findings":"DeepSeek's PARTIAL classification is directionally correct, but its single 0xE0 read does not test the Table 1223 command list and MFR_SPECIFIC is vendor-defined. Keep PARTIAL only with user-supplied command mapping, target identity, decoding, and package. Do not infer support from one register or guess addresses.",
+      "risk_level":"HIGH","blast_radius":"BMC/PMBus device access, PSU telemetry, and potentially PSU behavior if an incorrect command is used.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"If a command causes communication errors or an unexpected PSU state, stop, preserve all tool/BMC/SEL logs, and use the vendor recovery path; do not reset, write, or power-cycle automatically.",
+      "manual_steps":["User/vendor supplies Table 1223, command/encoding mapping, PSU identity, topology/address, and package.","User confirms the exact read-only command list before execution."],
+      "openhands_instruction":"Validate the Table 1223 revision, command list, target identity/address/page, decoding, and package. Show all resolved queries and safety checks, wait for explicit OK, then return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
