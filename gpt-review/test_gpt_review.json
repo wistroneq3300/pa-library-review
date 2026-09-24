@@ -829,5 +829,24 @@
       "manual_steps":["Operator confirms the approved PSU state and visually records the LED as steadily ON."],
       "openhands_instruction":"Do not claim to see or change the PSU LED. Request the operator photo/record, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00037-V004","source_ref":{"sheet":"Functionality","source_row":33},"test_name":"LED_Blinking","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the specified CRPS PSU LED blinks with the color, cadence, and state defined by the PSU specification.",
+      "preconditions":["Qualified operator, PSU LED blink specification including timing/color, PSU identity, physical access, and safe procedure are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, firmware/FRU identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not force or change a PSU fault/state solely to create blinking without explicit approval.","Do not infer blink cadence or color from software telemetry; stop on abnormal PSU/power state."],
+      "required_packages":[],"test_command":"Operator observes and records the specified PSU LED color and blink cadence under the approved state; agent may collect supporting BMC/SEL evidence afterward.","user_confirmation_required":true,
+      "risk_notes":["Blinking pattern and timing require direct visual observation and cannot be proven over SSH.","Changing PSU state to trigger the pattern can interrupt power."],
+      "expected_evidence":["Timestamped video/photo and operator measurement of blink color/cadence","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence and BMC/SEL delta; verify the DUT remains reachable."],
+      "logs_to_collect":["Operator video/photo/checklist and cadence","BMC PSU health/presence and SEL logs","Reachability evidence"],
+      "blocked_conditions":["Missing blink color/timing specification or PSU identity, no qualified operator/physical access, inability to observe timing, or abnormal PSU state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED blinking rate/pattern must be visually observed and photographed; agent cannot see it over SSH.","ai_logs_output":"Operator visual/video evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. The source says only 'blinking' and omits cadence/color acceptance criteria; even with a specification, the physical optical pattern requires a human observation. GPT rejects clearing logs and limits automation to supporting BMC evidence.",
+      "risk_level":"HIGH","blast_radius":"PSU state and DUT power availability if a fault/state is changed to produce the pattern.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop if the LED pattern or PSU state is unexpected; preserve video and BMC/SEL evidence, do not manipulate the PSU further, and escalate.",
+      "manual_steps":["Operator confirms the approved trigger/state and records LED color and blink cadence on video."],
+      "openhands_instruction":"Do not claim to see or measure the PSU LED blink. Request the operator video/record and specification, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
