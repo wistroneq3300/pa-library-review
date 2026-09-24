@@ -924,5 +924,24 @@
       "manual_steps":["User/vendor supplies PWM Low definition, limits, trigger method, and expected LED behavior.","Operator applies the approved condition and records the physical LED response."],
       "openhands_instruction":"Do not generate or apply an unverified PWM signal or claim to see the LED. Request the vendor procedure and operator evidence, then collect only approved supporting BMC data; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00042-V004","source_ref":{"sheet":"Functionality","source_row":38},"test_name":"Color","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the CRPS PSU LED color matches the vendor specification for the defined PSU state.",
+      "preconditions":["Qualified operator, PSU LED color/state specification, PSU identity, physical access, and safe trigger/service-impact procedure are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, firmware/FRU identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not change PSU state or introduce a fault solely to produce a color without explicit approval and recovery.","Do not infer optical color from BMC telemetry; stop on abnormal PSU/power state or unsafe conditions."],
+      "required_packages":[],"test_command":"Operator observes and records the specified PSU LED color under the approved state and compares it to the vendor specification; agent may collect supporting BMC/SEL evidence afterward.","user_confirmation_required":true,
+      "risk_notes":["LED color and shade require direct visual evidence and may depend on ambient lighting/camera calibration.","Changing PSU state to trigger a color can interrupt power."],
+      "expected_evidence":["Vendor color/state specification","Timestamped photo/video with operator color identification","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence and BMC/SEL delta; verify DUT reachability and no unexpected PSU event."],
+      "logs_to_collect":["Operator photo/video/checklist","BMC PSU health/presence and SEL logs","Reachability evidence"],
+      "blocked_conditions":["Missing color/state specification or PSU identity, no qualified operator/physical access, poor visibility, or abnormal PSU state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED color must be visually observed per fault state and photographed; agent cannot see it over SSH.","ai_logs_output":"Operator visual/photo evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. LED color is a physical optical criterion and cannot be established through BMC/SSH output. GPT requires the vendor color/state reference, rejects clearing logs, and limits automation to supporting evidence collection after operator observation.",
+      "risk_level":"HIGH","blast_radius":"PSU state and DUT power availability if a trigger state is changed.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop if color is unexpected or PSU/power state changes; preserve photo and BMC/SEL evidence, restore only via the documented procedure, and do not reboot/power-cycle automatically.",
+      "manual_steps":["User/vendor provides the LED color/state specification.","Operator observes and photographs the color under the approved state."],
+      "openhands_instruction":"Do not claim to see or classify the PSU LED color. Request the specification and operator photo/video, then collect only approved supporting BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
