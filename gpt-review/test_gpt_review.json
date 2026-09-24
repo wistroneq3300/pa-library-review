@@ -962,5 +962,24 @@
       "manual_steps":["User/vendor supplies the eight-flash fault signature and recovery procedure.","Operator triggers the approved condition and records the LED sequence."],
       "openhands_instruction":"Do not trigger or claim to observe the PSU LED sequence. Request the specification and operator video, then collect only approved BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00044-V004","source_ref":{"sheet":"Functionality","source_row":40},"test_name":"Frequecy_0.5_to_8_Hz","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the specified CRPS PSU LED flashing frequency matches each required value from 0.5 through 8 Hz under the defined states.",
+      "preconditions":["Qualified operator, PSU LED frequency/state specification, trigger method, PSU identity, calibrated observation method, physical access, and recovery procedure are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, FRU/firmware identity, and BMC/SEL/kernel baseline; do not clear logs."],
+      "safety_checks":["Do not alter PSU control/fault state or power merely to generate frequencies without explicit approval and recovery.","Do not infer optical frequency from telemetry; stop on abnormal PSU/power state or management loss."],
+      "required_packages":[],"test_command":"Operator applies each approved test state and measures the physical LED flash frequency at 0.5, 1, 2, 3, 4, 5, 6, 7, and 8 Hz using the specified observation method; agent may collect supporting BMC/SEL evidence.","user_confirmation_required":true,
+      "risk_notes":["The source requires multiple physical optical measurements and does not define tolerance or measurement method.","Triggering PSU states can interrupt power or latch faults."],
+      "expected_evidence":["Specification with frequency tolerances and trigger states","Timestamped video/measurement record for every requested frequency","PSU/BMC state and BMC/SEL evidence without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU health/presence, fault/latch status, BMC/SEL delta, and DUT reachability."],
+      "logs_to_collect":["Operator video/measurement checklist","BMC PSU fault/health and SEL logs","Reachability evidence"],
+      "blocked_conditions":["Missing frequency tolerances, trigger states, measurement method, PSU identity, qualified operator, or recovery path."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Physical PSU LED flashing frequency from 0.5 to 8 Hz must be observed and photographed; agent cannot see it over SSH.","ai_logs_output":"Operator visual/video evidence."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. This requires calibrated physical optical measurements at nine frequencies, while the source omits tolerances and method. GPT requires the vendor specification and rejects clearing logs or unapproved fault triggering.",
+      "risk_level":"CRITICAL","blast_radius":"PSU control/fault state, power availability, DUT service, and BMC/SEL state.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on unexpected frequency/state, PSU alarm, power interruption, or management loss; preserve measurements/video/logs, follow the vendor recovery procedure, and do not reboot/power-cycle automatically.",
+      "manual_steps":["User/vendor supplies frequency tolerances, trigger states, and measurement method.","Operator performs and records each physical frequency observation."],
+      "openhands_instruction":"Do not generate PSU trigger states or claim to measure LED frequency. Request the specification and operator measurements, then collect only approved BMC evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
