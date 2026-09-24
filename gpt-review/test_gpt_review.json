@@ -5238,6 +5238,77 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00078-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 75
+      },
+      "test_name": "Remove test",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify Remove test according to the source procedure and criteria: 1. CPU size is follow spec , and can remove in motherboard..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator performs the specified physical or visual inspection/action; agent collects permitted evidence only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical handling or visual inspection can damage hardware; a remote agent must not claim to have performed or observed it."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. CPU size is follow spec , and can remove in motherboard..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case performs CPU removing a physical cpu from the socket and checks the board functions; removing a physical CPU from the socket is a physical task at the hardware (socket handling, TIM application). A person must be present; agent cannot mount/remove a physical CPU over SSH.",
+        "ai_logs_output": "operator physically removing a physical CPU from the socket and verifies the board; agent cannot handle the physical CPU.",
+        "risk": null
+      },
+      "gpt_second_review_findings": "The source criterion for Remove test requires a physical or visual action. DeepSeek's NO direction is appropriate; the agent must not claim that the action or visual inspection occurred. The agent may collect operator-provided evidence and permitted post-action logs.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [
+        "Qualified operator performs the physical action and supplies photos/observations."
+      ],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
