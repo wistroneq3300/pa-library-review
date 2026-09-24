@@ -772,5 +772,24 @@
       "manual_steps":["Operator inspects and photographs the latch.","Operator performs the approved lock/release action and records the result."],
       "openhands_instruction":"Do not actuate or claim the physical PSU latch action. After operator confirmation, collect only approved BMC/OS evidence and report the supplied physical result; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00034-V004","source_ref":{"sheet":"Functionality","source_row":30},"test_name":"Latch_on_fault_configBlockType","automation_classification":"REQUIRES PACKAGE / USER CONFIRMATION","pa_manager_display":"PARTIAL",
+      "purpose":"Read and decode the CRPS PSU configuration-block type and verify it matches the PSU vendor's Table 1248 definition for the identified platform and firmware.",
+      "preconditions":["User/vendor provides the exact PSU model/serial or FRU identity, configuration-block format/version, Table 1248 revision and expected type, and approved read-only access.","A compatible vendor PSU config-block/VPD decode tool and dependencies are installed or supplied.","Confirm that the command cannot write, clear, latch, reset, or update PSU configuration."],
+      "pre_check_commands":["Collect BMC/PSU inventory, model/serial/firmware, health/presence, and BMC/SEL baseline; preserve logs and do not clear them."],
+      "safety_checks":["Do not guess PSU identity, table revision, block type, or field offset.","Use read-only vendor tooling only; never use a PMBus write or firmware/update/reset command.","Stop if the package, specification/table, identity, or recovery path is missing."],
+      "required_packages":["PSU vendor configuration-block/VPD decode tool and documented dependencies"],"test_command":"After the user supplies and approves the PSU identity, Table 1248 revision, expected type, and read-only tool, run the vendor decoder with parameterized inputs and compare the reported block type to the supplied table.","user_confirmation_required":true,
+      "risk_notes":["The source row does not include the table contents or expected type; a generic decoder output cannot establish correctness.","An incorrect PMBus/configuration command could alter PSU behavior or disrupt power."],
+      "expected_evidence":["PSU identity and firmware","Decoder version and full read-only output","Decoded configuration-block type and exact Table 1248 reference","BMC/SEL delta showing no unexpected PSU event"],
+      "post_check_commands":["Validate the read-only field query again, collect PSU health/power status and BMC/SEL delta, and confirm no configuration or power state changed."],
+      "logs_to_collect":["Full vendor decoder output","Tool exit status/version","BMC PSU inventory/health and SEL logs","User-supplied table/spec reference"],
+      "blocked_conditions":["Missing PSU identity, Table 1248 revision/expected type, compatible package, read-only procedure, or recovery path."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"PSU vendor config-block decode tool (operator/vendor)","ai_commands":"Confirm configuration-block type per Table 1248 Configuration block types.","ai_logs_output":"Vendor/operator config-block dump compared to printed spec table."},
+      "gpt_second_review_findings":"DeepSeek correctly identified the vendor-tool dependency, but NO is too restrictive if the vendor supplies a compatible read-only decoder and Table 1248 reference. This row is PARTIAL with a mandatory user/spec/package gate; the agent must not guess the block type or table revision and must not issue a write-capable PMBus command.",
+      "risk_level":"HIGH","blast_radius":"CRPS PSU configuration interpretation, PSU power behavior, BMC telemetry, and DUT power availability.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"If the tool attempts a write, reports communication failure, or an unexpected PSU event appears, stop, preserve all output and BMC/SEL logs, and follow the vendor PSU recovery path; do not reset, clear latches, or power-cycle automatically.",
+      "manual_steps":["User/vendor supplies PSU identity, Table 1248 revision/expected type, compatible decoder, and read-only procedure.","User confirms the resolved command and comparison before execution."],
+      "openhands_instruction":"Validate the PSU identity, table/spec, package, and read-only command parameters. Show the resolved command and safety checks, wait for explicit OK, then execute and return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
