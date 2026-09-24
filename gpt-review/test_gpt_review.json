@@ -753,5 +753,24 @@
       "manual_steps":["User/vendor supplies the PSU model/serial, layout/table version, expected offset, compatible decoder, and read-only procedure.","User confirms the resolved command and comparison before execution."],
       "openhands_instruction":"Ask for and validate the PSU identity, vendor layout/table, package, and read-only command parameters. Show the resolved command and safety checks to the user, wait for explicit OK, then run and return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00033-V004","source_ref":{"sheet":"Functionality","source_row":29},"test_name":"Latch connecter check","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Physically verify that the CRPS PSU latch connector locks correctly and is not broken or damaged.",
+      "preconditions":["Qualified operator, approved CRPS/PSU latch procedure, PSU identity, physical access, and safe power/service-impact controls are available."],
+      "pre_check_commands":["Record BMC PSU presence/health, power state, firmware/FRU identity, and BMC/SEL/kernel baseline before any physical action; do not clear logs."],
+      "safety_checks":["Do not remove or insert a PSU while energized unless the platform explicitly supports and approves the procedure.","Do not force the latch or continue if it is cracked, jammed, hot, or under abnormal mechanical load.","Confirm redundancy and out-of-band recovery before any action; stop on power or management change."],
+      "required_packages":[],"test_command":"Operator physically actuates the CRPS PSU latch according to the approved procedure and records lock/release behavior and condition; after confirmation, the agent may collect BMC PSU evidence.","user_confirmation_required":true,
+      "risk_notes":["A broken or forced PSU latch can cause PSU disengagement, power interruption, arcing, or hardware damage.","Latch locking and physical condition cannot be verified remotely."],
+      "expected_evidence":["Operator checklist/photos of latch condition and lock state","BMC PSU presence/health and power status before/after","BMC/SEL/kernel delta without clearing prior evidence"],
+      "post_check_commands":["After operator confirmation, collect BMC PSU presence/health, power redundancy, uptime/reachability, and relevant journalctl -k/BMC SEL delta."],
+      "logs_to_collect":["Operator photos/checklist","BMC PSU health/presence and SEL logs","Kernel/system/reachability evidence"],
+      "blocked_conditions":["No qualified operator/physical access, missing PSU/latch procedure, non-redundant power state without approval, damaged latch, or abnormal PSU state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"physical PSU latch/handle (operator)","ai_commands":"Latch connecter check physically verifies the PSU CRPS latch locks and does not break; requires hands and visual confirmation.","ai_logs_output":"Operator physical latch result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. Latch engagement and breakage are physical criteria that cannot be established by software. GPT adds PSU redundancy/power and recovery checks, rejects clearing logs, and allows only post-action BMC evidence collection.",
+      "risk_level":"CRITICAL","blast_radius":"CRPS PSU latch, PSU engagement, power redundancy, DUT availability, and possible data integrity.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop if the latch is damaged, will not lock, or PSU presence/power changes unexpectedly; preserve photos and logs, secure the PSU using the vendor procedure, and do not reboot or power-cycle automatically.",
+      "manual_steps":["Operator inspects and photographs the latch.","Operator performs the approved lock/release action and records the result."],
+      "openhands_instruction":"Do not actuate or claim the physical PSU latch action. After operator confirmation, collect only approved BMC/OS evidence and report the supplied physical result; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
