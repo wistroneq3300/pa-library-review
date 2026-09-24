@@ -6886,6 +6886,78 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00101-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 98
+      },
+      "test_name": "VGA - Stress test",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify VGA - Stress test according to the source procedure and criteria: 1. The on-board VGA should still be detected after stress. 2. System should be OK and no error message after stress..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [
+        "approved CPU stress tool"
+      ],
+      "test_command": "Run the approved CPU stress tool with user-confirmed worker count and duration.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. The on-board VGA should still be detected after stress. 2. System should be OK and no error message after stress..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "x11-utils mesa-utils xrandr",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"glxinfo -B 2>&1 | head -40; echo ---; glxgears -info 2>&1 & sleep 10; kill %1 2>/dev/null 2>&1\"",
+        "ai_logs_output": "return FULL glxinfo + a short glxgears run so the user confirms VGA/GPU renders under stress without error; a long visual stress needs a person to watch for artifacts.",
+        "risk": "RISK: display tests need a physical monitor head + a person to observe rendering; agent runs the read-only/headless probe for mode/status evidence only."
+      },
+      "gpt_second_review_findings": "The source testcase VGA - Stress test is a sustained load test. DeepSeek's PARTIAL direction requires package, duration, worker/target confirmation, active-workload checks, thermal evidence, and explicit approval.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
