@@ -525,5 +525,24 @@
       "manual_steps":["User/vendor supplies the BMC/I3C specification, expected address/identity, compatible package, and pass criteria.","User confirms the approved read-only procedure before the agent runs it."],
       "openhands_instruction":"Ask for and validate the platform-specific BMC/I3C spec, CPU1 address/identity, package, and read-only command parameters. Show the resolved pre-checks and exact command to the user, wait for explicit OK, then run and return evidence only. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00017-V002","source_ref":{"sheet":"Functionality","source_row":17},"test_name":"PCIe Stability","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect the PCIe connection and perform the approved physical plug cycle, then verify that the specified device remains detected without new errors.",
+      "preconditions":["Qualified operator, physical access, approved PCIe handling/power-isolation procedure, and expected device identity/slot mapping are available."],
+      "pre_check_commands":["Record lspci -Dnn and journalctl -k --no-pager before any physical action; preserve existing logs."],
+      "safety_checks":["Do not unplug or insert the PCIe device while energized unless explicitly approved by the platform procedure.","Do not guess device identity or repeat a cycle after damage, abnormal power, or loss of management connectivity.","Never clear existing kernel, system, or BMC/SEL logs."],
+      "required_packages":[],"test_command":"Operator inspects and performs the approved PCIe plug/reconnect cycle; after operator confirmation, collect post-cycle lspci and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Physical handling can damage the PCIe slot/card/retimer and interrupt the DUT.","Remote automation cannot establish physical stability or connector condition."],
+      "expected_evidence":["Operator checklist/photos","Pre/post PCIe enumeration for the supplied device identity","Kernel/BMC error delta without clearing prior logs"],
+      "post_check_commands":["After operator confirmation, collect lspci -Dnn and journalctl -k --since <baseline-time> --no-pager; collect BMC/SEL delta if available."],
+      "logs_to_collect":["Operator photos/checklist","Pre/post lspci output","Kernel and BMC/SEL deltas"],
+      "blocked_conditions":["No qualified operator/physical access, missing device identity/slot mapping, unsupported physical procedure, or management path loss."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical PCIe cable/component connection and plug-cycle check requires a person at the machine.","ai_logs_output":"Operator checks physical connection and reports plug-cycle detection."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. The purpose includes physical connection handling and stability after a plug cycle; only post-action evidence collection can be automated. The source instruction to clear logs is rejected, and expected device identity/mapping must be supplied rather than inferred.",
+      "risk_level":"HIGH","blast_radius":"PCIe device/slot/retimer, chassis, OS device availability, and remote management connectivity.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on damage, missing device, new PCIe error, or lost management access; preserve all evidence, do not repeat the cycle or reboot automatically, and escalate to the hardware owner.",
+      "manual_steps":["Operator performs and photographs the PCIe physical inspection and approved plug cycle."],
+      "openhands_instruction":"Do not perform or claim the physical PCIe action. After operator confirmation, collect only approved pre/post enumeration and error evidence for the supplied device identity. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
