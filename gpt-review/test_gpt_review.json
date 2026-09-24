@@ -390,5 +390,34 @@
       "openhands_instruction": "Do not perform or claim the physical latch action; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
     }
+    ,{
+      "code": "Wistron-HW-00009-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 10},
+      "test_name": "Front IOB",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Inspect the Front IOB assembly and verify that its components are seated correctly and remain detectable after an operator-performed plug cycle.",
+      "preconditions": ["Qualified operator, Front IOB seating specification, correct hardware, and safe power/ESD procedure are available."],
+      "pre_check_commands": ["Record current device enumeration and kernel/BMC state if a post-cycle detection check is required; do not clear logs."],
+      "safety_checks": ["Do not remove or insert the Front IOB while energized unless the platform procedure explicitly permits it.", "Do not guess the expected device identity."],
+      "required_packages": [],
+      "test_command": "Operator inspects, unplugs/reconnects, and reseats the Front IOB; agent may collect approved post-action detection and log evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["Incorrect handling can damage the IOB, connector, or chassis.", "Physical action and seating cannot be performed or verified remotely."],
+      "expected_evidence": ["Operator photos/checklist", "Post-cycle device enumeration and kernel/BMC evidence when applicable"],
+      "post_check_commands": ["Collect device enumeration and relevant kernel/BMC logs after the operator confirms the physical cycle."],
+      "logs_to_collect": ["Operator photos/checklist", "Device enumeration", "Kernel/BMC/SEL logs"],
+      "blocked_conditions": ["No qualified operator/physical access, unknown IOB identity/criteria, or unsafe plug-cycle procedure."],
+      "deepseek_original_review": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Physical/visual Front IOB seating and plug-cycle check is not runnable over SSH.", "ai_logs_output": "Operator performs and reports the visual/mechanical result."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct for the physical Front IOB inspection and plug cycle. GPT allows only post-action evidence collection and rejects the source instruction to clear logs; the physical cycle and seating must be operator-confirmed.",
+      "risk_level": "HIGH",
+      "blast_radius": "Front IOB board, connector, chassis, and potentially device availability.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on damaged connector, failed seating, or missing device after the cycle; preserve evidence, do not repeat the physical cycle, and escalate.",
+      "manual_steps": ["Operator performs the Front IOB inspection and plug/reconnect cycle."],
+      "openhands_instruction": "Do not perform or claim the physical Front IOB action. After operator confirmation, collect only the approved post-action evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
+    }
   ]
 }
