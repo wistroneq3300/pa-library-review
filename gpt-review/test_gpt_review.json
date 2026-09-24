@@ -544,5 +544,24 @@
       "manual_steps":["Operator performs and photographs the PCIe physical inspection and approved plug cycle."],
       "openhands_instruction":"Do not perform or claim the physical PCIe action. After operator confirmation, collect only approved pre/post enumeration and error evidence for the supplied device identity. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00018-V002","source_ref":{"sheet":"Functionality","source_row":18},"test_name":"Power Connector","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect the DUT power connectors and perform the approved physical plug cycle to verify correct seating without creating a power interruption or hardware damage.",
+      "preconditions":["Qualified operator, physical access, approved power-connector procedure, ESD/PPE controls, and expected connector/cable identity are available."],
+      "pre_check_commands":["Record BMC power state, relevant PSU/FRU inventory, and current kernel/BMC/SEL evidence before any physical action; do not clear logs."],
+      "safety_checks":["Do not unplug or insert a power connector on an energized DUT unless the platform procedure explicitly permits it.","Confirm the DUT may lose power before any action; never rely on a remote OS session as the only recovery path.","Stop on arcing, heat, damaged latch/pin, unexpected power change, or management-path loss."],
+      "required_packages":[],"test_command":"Operator inspects and performs the approved power-connector plug/reconnect cycle under the platform power procedure; after operator confirmation, collect BMC/OS power and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Incorrect handling can cause arcing, power interruption, PSU/board damage, data loss, or an unavailable DUT.","Power-connector seating and physical condition cannot be verified remotely."],
+      "expected_evidence":["Operator checklist/photos of each specified connector","BMC power/PSU state and post-cycle reachability","Kernel/BMC/SEL delta with all pre-existing evidence preserved"],
+      "post_check_commands":["After operator confirmation, collect BMC power/PSU inventory, system uptime, lspci or required device inventory, and journalctl -k --since <baseline-time>; verify the approved management path."],
+      "logs_to_collect":["Operator photos/checklist","BMC power/PSU/SEL logs","Kernel/system logs and post-cycle reachability evidence"],
+      "blocked_conditions":["No qualified operator, unknown connector identity/procedure, no approved power-isolation or recovery plan, or unexpected power/management state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical Power Connector connection and plug-cycle check requires a person at the machine.","ai_logs_output":"Operator checks physical connection and reports plug-cycle detection."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct and the risk is higher than a generic cable inspection because an incorrect power-connector action can interrupt or damage the DUT. Only evidence collection after an operator-approved physical action is automatable; clearing logs is not an acceptable baseline step.",
+      "risk_level":"CRITICAL","blast_radius":"DUT power rails, PSU/board hardware, data integrity, OS availability, and remote management connectivity.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"If power is interrupted or abnormal, stop the physical action, preserve BMC/SEL and operator evidence, follow the platform's documented power-recovery procedure, and do not issue remote reboot/AC-cycle commands without separate approval.",
+      "manual_steps":["Operator inspects and photographs all specified power connectors.","Operator performs the approved plug/reconnect action with the documented power and recovery controls."],
+      "openhands_instruction":"Do not perform or claim the physical power-connector action. After operator confirmation, collect only approved BMC/OS evidence and report it. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
