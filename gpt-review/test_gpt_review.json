@@ -140,5 +140,75 @@
         "BLOCKED"
       ]
     }
+    ,{
+      "code": "Wistron-HW-00003-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 4,
+        "duplicate_code_context": "Mechanical -System / Mechanical_install_and_uninstall"
+      },
+      "test_name": "Mechanical_install_and_uninstall",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify that the specified nodes/components can be physically installed and removed easily, and that the OSFP module remains detectable after the approved plug cycle and reboot.",
+      "preconditions": [
+        "Qualified operator has the correct OSFP module, chassis access, approved installation procedure, and recovery plan.",
+        "Confirm whether the reboot after the physical cycle is permitted and capture the pre-cycle device identity."
+      ],
+      "pre_check_commands": [
+        "Record the current device enumeration and kernel/BMC state before the physical cycle; do not clear existing logs."
+      ],
+      "safety_checks": [
+        "Use power isolation and ESD controls required by the platform procedure.",
+        "Do not force the OSFP module or perform an unapproved reboot."
+      ],
+      "required_packages": [],
+      "test_command": "Operator physically installs and removes the OSFP module, then performs the approved post-cycle reboot and agent-assisted device-detection check.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Incorrect insertion/removal can damage the module, connector, or chassis.",
+        "The physical action cannot be performed or verified remotely; reboot is service-impacting and requires approval."
+      ],
+      "expected_evidence": [
+        "Operator photos and installation/removal record.",
+        "Before/after device identity and enumeration.",
+        "Kernel/BMC evidence after the approved reboot, without clearing prior logs."
+      ],
+      "post_check_commands": [
+        "Collect device enumeration, kernel error evidence, and BMC/SEL evidence after the operator action and approved reboot."
+      ],
+      "logs_to_collect": [
+        "Operator photos/checklist",
+        "Device enumeration before and after the cycle",
+        "Kernel and BMC/SEL logs"
+      ],
+      "blocked_conditions": [
+        "No qualified operator or physical access.",
+        "Reboot permission, OSFP identity, or expected detection criteria are missing.",
+        "The module or recovery path is unknown."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "Not runnable by agent: physical OSFP seating/unseating and reboot/detection confirmation require a person at the machine.",
+        "ai_logs_output": "Operator performs the physical cycle and reports the result; agent cannot manipulate or visually verify the hardware."
+      },
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct for the physical install/uninstall action. GPT separates the remotely verifiable post-action enumeration from the physical step and adds explicit reboot approval, pre-cycle identity capture, and recovery requirements. The agent must not claim the physical step occurred.",
+      "risk_level": "HIGH",
+      "blast_radius": "OSFP module/connector and DUT availability during the physical cycle and approved reboot.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop if insertion/removal is abnormal or post-cycle enumeration fails; preserve photos and logs, do not repeatedly reseat or reboot, and escalate to the hardware owner.",
+      "manual_steps": [
+        "Operator installs and removes the OSFP module according to the platform procedure.",
+        "Operator supplies photos and confirms the physical action; agent performs only the permitted post-action evidence collection."
+      ],
+      "openhands_instruction": "Do not perform or claim the physical OSFP cycle. After operator confirmation and explicit reboot approval, collect only the approved post-action detection/log evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    }
   ]
 }
