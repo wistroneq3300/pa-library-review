@@ -42,6 +42,11 @@ it does not replace or modify the original test library.
 
 ## Review integrity and auditability
 
+- Before an interactive or scheduled run writes anything, acquire the
+  untracked `gpt-review/.review_run_lock.json` according to
+  `gpt-review/REVIEW_LOCK_PROTOCOL.md`. A fresh lock means another runner is
+  active; do not write or compete with it.
+
 - Review decisions must be made by reading the selected source row and its
   matching DeepSeek record, not by running a generator, classifier, range map,
   keyword rule, regex, copy-forward operation, or bulk-writing script.
