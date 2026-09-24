@@ -620,5 +620,24 @@
       "manual_steps":["Operator inspects each specified slot and records adapter identity/seating.","Operator performs the approved adapter remove/reinstall action and captures photos."],
       "openhands_instruction":"Do not perform or claim the physical adapter action. After operator confirmation, collect only approved post-action evidence for the supplied slot/device identity. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00022-V002","source_ref":{"sheet":"Functionality","source_row":22},"test_name":"Mechanical_Adapters","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect the specified adapters in each slot and verify that they are correctly installed and can be removed/reinstalled without obstruction or damage.",
+      "preconditions":["Qualified operator, approved adapter/slot and AVL documentation, component identity, physical access, and safe power/ESD procedure are available."],
+      "pre_check_commands":["Record current device/slot inventory and kernel/BMC evidence if post-action detection is required; preserve existing logs and do not clear them."],
+      "safety_checks":["Do not remove or insert adapters on an energized DUT unless explicitly permitted by the platform procedure.","Do not force hardware or infer the expected adapter/slot from enumeration alone.","Stop on damage, mismatch, abnormal power, or management-path loss."],
+      "required_packages":[],"test_command":"Operator inspects every specified slot and performs the approved adapter remove/reinstall action; after confirmation, the agent may collect approved device and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Physical adapter handling can damage connectors, slots, cables, or attached hardware.","Installation/removal ease and mechanical condition cannot be verified remotely."],
+      "expected_evidence":["Operator checklist/photos identifying each adapter and slot","Post-action device/slot enumeration and relevant kernel/BMC evidence when specified"],
+      "post_check_commands":["After operator confirmation, collect approved device/slot enumeration and journalctl -k --since <baseline-time>; collect BMC/SEL delta when applicable."],
+      "logs_to_collect":["Operator photos/checklist","Device/slot enumeration","Kernel/BMC/SEL evidence without clearing prior logs"],
+      "blocked_conditions":["Missing AVL/slot documentation or component identity, no qualified operator/physical access, unsafe procedure, or failed post-action detection."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical adapter installation/removal and mechanical inspection requires a person at the machine.","ai_logs_output":"Operator checks adapter installation and reports physical result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. This AVL adapter test is a physical installation/removal check; remote commands cannot establish seating or ease of removal. GPT requires the approved AVL/slot identity, rejects clearing logs, and limits automation to post-action evidence collection.",
+      "risk_level":"HIGH","blast_radius":"Adapters, cables, connectors, slots, attached devices, and potentially DUT availability.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on resistance, damage, mismatch, missing device, or management loss; preserve photos and logs, do not force/repeat the action, and escalate to the hardware owner.",
+      "manual_steps":["Operator inspects each specified adapter and slot against the AVL documentation.","Operator performs the approved adapter remove/reinstall action and captures evidence."],
+      "openhands_instruction":"Do not perform or claim the physical adapter action. After operator confirmation, collect only approved post-action evidence for the supplied adapter/slot identity. End user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
