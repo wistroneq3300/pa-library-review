@@ -582,5 +582,24 @@
       "manual_steps":["Operator inspects and photographs cable routing, clearance, and connector seating.","Operator performs the approved plug/reconnect action under the platform power procedure."],
       "openhands_instruction":"Do not perform or claim physical power-cable routing or plug actions. After operator confirmation, collect only approved BMC/OS evidence and return it; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00020-V002","source_ref":{"sheet":"Functionality","source_row":20},"test_name":"Power Stability","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect power connectors and perform the approved physical plug cycle, then verify stable power and DUT availability without new hardware or system errors.",
+      "preconditions":["Qualified operator, physical access, approved power stability/plug-cycle procedure, expected connector identity, and an out-of-band recovery path are available."],
+      "pre_check_commands":["Record BMC power/PSU status, uptime, reachability, and kernel/BMC/SEL baseline before any physical action; do not clear logs."],
+      "safety_checks":["Do not manipulate an energized power connector unless the platform explicitly supports and approves it.","Confirm interruption impact and recovery ownership before the cycle; never assume remote SSH will survive.","Stop on voltage/power abnormality, heat/arcing, damaged connector, unexpected shutdown, or management loss."],
+      "required_packages":[],"test_command":"Operator inspects and performs the approved power-connector plug/reconnect cycle; after operator confirmation, collect BMC/OS power-state, reachability, and error evidence.","user_confirmation_required":true,
+      "risk_notes":["A power-connector cycle can interrupt service, cause data loss, or damage PSU/board hardware.","Physical stability and connector condition cannot be proven by remote commands alone."],
+      "expected_evidence":["Operator checklist/photos","BMC power/PSU state and stable post-cycle reachability","Kernel/BMC/SEL delta with prior evidence preserved"],
+      "post_check_commands":["After operator confirmation, collect BMC power/PSU inventory, uptime, required device inventory, and journalctl -k --since <baseline-time>; verify the approved management path."],
+      "logs_to_collect":["Operator photos/checklist","BMC power/PSU/SEL logs","Kernel/system and reachability evidence"],
+      "blocked_conditions":["No qualified operator, unknown connector/procedure, no approved service-impact and recovery plan, or unexpected power/management state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical Power Stability connection and plug-cycle check requires a person at the machine.","ai_logs_output":"Operator checks physical connection and reports plug-cycle detection."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. Power stability requires a physical connector action and a controlled service interruption risk; GPT adds explicit out-of-band recovery, power/PSU baselines, and a prohibition on clearing existing logs. Only post-action evidence capture may be automated.",
+      "risk_level":"CRITICAL","blast_radius":"DUT power path, PSU/board hardware, data integrity, OS availability, and management connectivity.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on shutdown, abnormal power, damage, or lost management access; preserve all evidence, use the documented out-of-band power recovery procedure, and do not reboot or AC-cycle remotely without separate approval.",
+      "manual_steps":["Operator inspects and photographs the specified power connectors.","Operator performs the approved plug/reconnect cycle with service-impact and recovery controls."],
+      "openhands_instruction":"Do not perform or claim the physical power action. After operator confirmation, collect only approved BMC/OS evidence and return it; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
