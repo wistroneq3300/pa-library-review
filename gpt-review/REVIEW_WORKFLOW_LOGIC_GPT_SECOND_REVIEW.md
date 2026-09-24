@@ -20,6 +20,20 @@ it does not replace or modify the original test library.
 - GPT second-review results are stored separately and associated by the real
   testcase `code` key.
 
+## Mandatory one-testcase-at-a-time review
+
+- The atomic review unit is exactly one source testcase row.
+- Review each testcase independently from its own `Items`, `Procedure`,
+  `Criteria`, and matching DeepSeek record before writing its overlay record.
+- Do not review by batch, category, keyword rule, regex, copy-forward template,
+  or generated classification table.
+- Do not infer that similar-looking testcases have the same purpose, command,
+  risk, package, or approval requirement.
+- After each individual testcase, persist its record and checkpoint. If the
+  next testcase is unclear, stop before reviewing it and ask the user.
+- A scheduled run may wake up once per day, but it must process only the next
+  single unreviewed testcase and then stop.
+
 ## Role and execution boundary
 
 GPT reviews as a senior GPU Server SIT engineer, Linux/BMC/GPU/storage/network
@@ -67,8 +81,9 @@ completed work, progress checkpoint, exact question, and the current handoff in
 no diff, then commit and push the checkpoint before asking the user.
 
 Only generalizable review rules belong in this policy and the reusable skill.
-Case-specific facts and unresolved questions belong in the overlay, batch audit,
-and session handoff. The next run must resume from the persisted checkpoint.
+Case-specific facts and unresolved questions belong in the per-testcase overlay
+record and session handoff. The next run must resume from the persisted
+single-testcase checkpoint.
 
 The confirmation interaction is:
 
@@ -278,10 +293,12 @@ turning it into a safe execution plan.
 
 ## Review process
 
-1. Review the two pilot cases and confirm this contract.
-2. Review the remaining cases in bounded batches.
-3. Keep all GPT output in a separate overlay keyed by `code`.
-4. After each batch, verify that the original XLSX and `data/tests.json` have no
-   diff.
-5. Do not begin full-library modification or System Manager integration until
-   the user approves the pilot quality and schema.
+1. Read the current single-testcase checkpoint and select exactly its `next_key`.
+2. Read that one source row and its matching DeepSeek record independently.
+3. Write one English overlay record with the actual purpose, concise command or
+   physical action, dependencies, safety gates, evidence, and classification.
+4. Verify that the original XLSX and `data/tests.json` have no diff.
+5. Commit and push the single-case checkpoint before moving to another case or
+   asking the user a question.
+6. Never use batch completion counts as evidence that individual review quality
+   is sufficient.
