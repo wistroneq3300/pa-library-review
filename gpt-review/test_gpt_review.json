@@ -677,5 +677,24 @@
       "manual_steps":["Operator inspects and photographs every specified node/component/cable connection.","Operator performs the approved physical action and records the result."],
       "openhands_instruction":"Do not perform or claim the physical connection inspection/action. After operator confirmation, collect only approved evidence for the supplied component identity; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00029-V002","source_ref":{"sheet":"Functionality","source_row":25},"test_name":"Connector","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect the liquid-cooling connector for correct seating and physical seal/condition, with optional post-action cooling and error evidence.",
+      "preconditions":["Qualified operator, approved liquid-cooling connector/loop drawing, physical access, leak-control procedure, and safe power/ESD controls are available."],
+      "pre_check_commands":["Record BMC cooling sensors, pump/flow status, temperature, uptime, and kernel/BMC/SEL baseline before any physical action; do not clear logs."],
+      "safety_checks":["Do not disconnect or reseat a liquid-cooling connector on an energized or pressurized loop unless the platform procedure explicitly permits it.","Stop immediately for leak, moisture, abnormal temperature/flow, damaged seal, or management loss; protect power and electronics.","Do not infer seal integrity from software status alone."],
+      "required_packages":[],"test_command":"Operator visually and physically inspects the liquid-cooling connector/seal and performs only the approved connection action; after confirmation, collect cooling-sensor and error evidence.","user_confirmation_required":true,
+      "risk_notes":["A damaged or disconnected liquid-cooling connector can leak onto electronics and cause thermal damage or system loss.","Physical seal and connector condition cannot be verified remotely."],
+      "expected_evidence":["Operator photos/checklist of connector and seal","BMC flow/pump/temperature evidence before and after the action","Kernel/BMC/SEL delta without clearing prior evidence"],
+      "post_check_commands":["After operator confirmation, collect BMC cooling sensors/flow/pump state, temperatures, uptime/reachability, and journalctl -k --since <baseline-time>; inspect for new thermal or hardware events."],
+      "logs_to_collect":["Operator photos/checklist","BMC cooling sensors/flow/pump and SEL logs","Kernel/system and reachability evidence"],
+      "blocked_conditions":["No qualified operator, missing cooling-loop procedure, uncertain pressure/leak state, unsafe energized handling, or any leak/abnormal thermal state."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none (physical inspection - human)","ai_commands":"Connector: liquid-cooling connector inspection verifies physical connector seating/seal; human visual/physical check at the cooling loop.","ai_logs_output":"Operator physical inspection result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. This is a liquid-cooling connector/seal inspection; remote commands cannot establish physical seating or leak risk. GPT adds flow/temperature/leak safety gates and rejects clearing logs. Only post-action sensor evidence is automatable after operator confirmation.",
+      "risk_level":"CRITICAL","blast_radius":"Liquid-cooling loop, electronics, thermal control, DUT availability, and potential water damage.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on any leak, moisture, abnormal flow/temperature, or connector damage; isolate power/cooling per the platform emergency procedure, preserve photos and logs, and escalate. Do not reboot or power-cycle automatically.",
+      "manual_steps":["Operator inspects and photographs the connector and seal with leak controls.","Operator performs only the approved physical connection action and monitors for leaks."],
+      "openhands_instruction":"Do not perform or claim the physical liquid-cooling connector action. After operator confirmation, collect only approved BMC cooling and error evidence; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
