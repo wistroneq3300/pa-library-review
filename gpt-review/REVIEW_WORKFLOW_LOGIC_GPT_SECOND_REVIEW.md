@@ -42,6 +42,38 @@ it does not replace or modify the original test library.
 
 ## Review integrity and auditability
 
+## Anti-template pressure controls
+
+The following are known causes of non-compliant review and are themselves
+integrity triggers:
+
+1. Adjacent cases look similar (for example, a run of PSU LED, PMBus, or
+   connector rows). Similarity must never substitute for reading the selected
+   row's own `Items`, `Procedure`, `Criteria`, and DeepSeek record.
+2. The required overlay schema is mistaken for an analysis template. Common
+   field names are allowed; copied reasoning, risks, commands, or recovery
+   text is not.
+3. A daily quota, target count, schedule, or token budget creates speed
+   pressure. Quota is never a reason to shorten or combine a review.
+4. DeepSeek's classification or command is treated as the answer instead of a
+   comparison baseline. GPT must independently test purpose-to-command
+   alignment and safety.
+5. One Git commit per row is mistaken for independent reasoning. Commit
+   granularity does not prove review quality; the reasoning must be specific to
+   the selected source row.
+6. Shared safety rules are pasted without identifying the testcase-specific
+   hazard, target, blast radius, evidence, and recovery. Repeated rules must be
+   re-expressed only when they are actually applicable to this row.
+7. Long context or token-saving pressure causes earlier wording to be reused.
+   Do not compress by copying. If independent reasoning cannot be maintained,
+   stop and mark the run invalid.
+
+Before saving a record, the reviewer must be able to point to at least one
+source-specific purpose finding, one source-specific DeepSeek mismatch or
+agreement, and one source-specific safety/evidence decision. If those cannot be
+shown, the record is invalid. The reviewer must stop, preserve the checkpoint,
+and ask the user; it must not silently continue or auto-restart.
+
 - Before an interactive or scheduled run writes anything, acquire the
   untracked `gpt-review/.review_run_lock.json` according to
   `gpt-review/REVIEW_LOCK_PROTOCOL.md`. A fresh lock means another runner is
