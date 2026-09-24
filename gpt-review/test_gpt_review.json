@@ -658,5 +658,24 @@
       "manual_steps":["Operator and storage owner identify the SSD and verify it is safe to remove.","Operator performs the approved physical plug/reconnect action and captures photos."],
       "openhands_instruction":"Perform only non-destructive identity/mount/boot/RAID checks first. Do not select or guess a target SSD. After operator confirmation of the approved physical action, collect evidence for the supplied device identity; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
     }
+    ,{
+      "code":"Wistron-HW-00028-V002","source_ref":{"sheet":"Functionality","source_row":24},"test_name":"Mechanical_Connection","automation_classification":"MANUAL ONLY","pa_manager_display":"NO",
+      "purpose":"Inspect node, component, and cable connections for correct position, matching parts, intact pins, and acceptable routing.",
+      "preconditions":["Qualified operator, approved connection/AVL drawing, component identities, physical access, and safe power/ESD procedure are available."],
+      "pre_check_commands":["Record current device and BMC/kernel state if a post-action detection check is required; preserve existing logs and do not clear them."],
+      "safety_checks":["Do not unplug or reseat energized hardware unless the platform procedure explicitly permits it.","Do not force connectors or infer expected identity/routing from software enumeration alone.","Stop on bent pins, mismatch, damage, abnormal power, or management loss."],
+      "required_packages":[],"test_command":"Operator inspects all specified connections and performs only the approved physical connection/plug-cycle action; after confirmation, the agent may collect approved post-action device and error evidence.","user_confirmation_required":true,
+      "risk_notes":["Physical handling can damage connectors, pins, cables, or attached hardware and may interrupt the DUT.","Positioning, routing, and mechanical condition cannot be verified remotely."],
+      "expected_evidence":["Operator checklist and timestamped photos for each connection","Post-action device enumeration and kernel/BMC evidence when applicable"],
+      "post_check_commands":["After operator confirmation, collect approved device enumeration and journalctl -k --since <baseline-time>; collect BMC/SEL delta when available."],
+      "logs_to_collect":["Operator photos/checklist","Post-action device enumeration","Kernel/BMC/SEL evidence without clearing prior logs"],
+      "blocked_conditions":["Missing connection/AVL drawing or identity, no qualified operator/physical access, unsafe procedure, or failed detection after the action."],
+      "deepseek_original_review":{"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"Not runnable by agent: physical Mechanical_Connection inspection and plug/unplug requires a person at the machine.","ai_logs_output":"Operator checks connection/seating and reports physical result."},
+      "gpt_second_review_findings":"DeepSeek's NO classification is correct. The criteria are physical position, connector condition, matching, and routing; SSH cannot verify them. GPT rejects clearing logs and limits the agent to optional post-action evidence after a qualified operator performs the physical action.",
+      "risk_level":"HIGH","blast_radius":"Cables, connectors, attached hardware, chassis, device enumeration, and potentially DUT availability.","destructive_actions":false,"requires_human_approval":true,
+      "recovery_procedure":"Stop on mismatch, bent pin, damage, missing device, or management loss; preserve photos/logs, do not force or repeat the action, and escalate to the hardware owner.",
+      "manual_steps":["Operator inspects and photographs every specified node/component/cable connection.","Operator performs the approved physical action and records the result."],
+      "openhands_instruction":"Do not perform or claim the physical connection inspection/action. After operator confirmation, collect only approved evidence for the supplied component identity; end user decides PASS/FAIL/BLOCKED.","end_user_decides":["PASS","FAIL","BLOCKED"]
+    }
   ]
 }
