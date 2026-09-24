@@ -5,6 +5,7 @@ library.
 
 Planned contents:
 
+- `REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md` — GPT second-review policy.
 - `test_gpt_review.json` — GPT review overlay keyed by testcase `code`.
 - Batch audit reports for human review.
 - Session handoff and progress checkpoints.
