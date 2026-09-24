@@ -3727,6 +3727,80 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00057-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 54
+      },
+      "test_name": "General fault",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify General fault according to the source procedure and criteria: Check data is saved to blackbox is this status.",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [
+        "vendor PMBus/PSU tool",
+        "PSU platform specification",
+        "vendor PSU/BMC tool"
+      ],
+      "test_command": "Apply the vendor-approved PSU fault-injection procedure for the named condition, then collect blackbox/BMC evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: Check data is saved to blackbox is this status.",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must General fault (injecting a general/unknown PSU fault condition) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+        "ai_logs_output": "operator General fault (injecting a general/unknown PSU fault condition) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+        "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt."
+      },
+      "gpt_second_review_findings": "The source testcase General fault changes PSU/power state or injects a fault. DeepSeek's NO direction is not permission to run; vendor tooling, hardware identity, recovery path, and explicit approval are required.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
