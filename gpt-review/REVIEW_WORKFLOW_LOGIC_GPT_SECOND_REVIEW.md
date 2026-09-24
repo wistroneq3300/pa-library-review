@@ -80,13 +80,18 @@ Before and after every testcase, perform an internal integrity check:
 
 If any answer is no, or if I notice an attempt to optimize for speed by using a
 template, generator, mapping, or bulk write, I must immediately stop. The
-affected run is invalid; its records must be removed from the active overlay,
-the last valid checkpoint must be restored, and an invalid-run notice must be
-preserved. Invalid records never count as reviewed.
+affected run is invalid; invalid records never count as reviewed.
 
-The next run must restart from the last valid `next_key` and independently
-re-review every testcase from the invalid run. The agent must notify the user
-that it stopped because the integrity check failed.
+When `invalid` is detected, the agent must not silently continue, auto-restart,
+or decide by itself that the run should be re-reviewed. It must first persist an
+invalid-run notice, the affected range, the last valid checkpoint, and the
+specific integrity failure in `progress.json`/handoff. It may restore the
+active overlay to that last valid checkpoint as checkpoint cleanup, but this is
+not permission to resume reviewing. It must commit and push that checkpoint,
+then stop and ask the user whether to discard/re-review the affected range and
+how to proceed. No next testcase may be selected until the user gives explicit
+direction. The user-facing message must clearly say that the run stopped due to
+an integrity failure and must not present the invalid records as reviewed.
 
 ## Role and execution boundary
 
