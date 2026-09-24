@@ -83,8 +83,13 @@ integrity triggers:
 Before saving a record, the reviewer must be able to point to at least one
 source-specific purpose finding, one source-specific DeepSeek mismatch or
 agreement, and one source-specific safety/evidence decision. If those cannot be
-shown, the record is invalid. The reviewer must stop, preserve the checkpoint,
-and ask the user; it must not silently continue or auto-restart.
+shown, the record is invalid. The reviewer must immediately admit the failure,
+rollback to the last valid checkpoint, persist the invalid-run notice, and
+automatically re-review from the first affected source row one testcase at a
+time. It must not silently continue with invalid records, but it must not pause
+for user permission to redo a confirmed template/integrity failure because the
+user has authorized automatic re-review. Only a separate user decision or hard
+safety blocker may pause the run.
 
 - Before an interactive or scheduled run writes anything, acquire the
   untracked `gpt-review/.review_run_lock.json` according to
@@ -108,8 +113,9 @@ and ask the user; it must not silently continue or auto-restart.
   that changes many unreviewed cases is invalid.
 - Before continuing, verify the original XLSX and `data/tests.json` have no
   diff and verify that the overlay/reference counts increased by one only.
-- If any invariant fails, mark the run invalid, stop, and do not present the
-  generated records as reviewed. Preserve the invalid-run notice separately.
+- If any invariant fails, mark the run invalid, do not present the generated
+  records as reviewed, restore the last valid checkpoint, and automatically
+  re-review the affected range after persisting the invalid-run notice.
 - The user can audit the work from `progress.json`, per-case `source_ref`, and
   the one-case Git commits without relying on chat narration.
 
@@ -127,19 +133,19 @@ Before and after every testcase, perform an internal integrity check:
 
 If any answer is no, or if I notice an attempt to optimize for speed by using a
 template, generator, mapping, guessed key, or bulk write, I must immediately
-stop. The
-affected run is invalid; invalid records never count as reviewed.
+admit the failure and rollback. The affected run is invalid; invalid records
+never count as reviewed. After persisting the rollback and notice, I must
+automatically re-review the affected source rows one at a time. I may not
+silently retain invalid records or wait for user permission to redo them.
 
-When `invalid` is detected, the agent must not silently continue, auto-restart,
-or decide by itself that the run should be re-reviewed. It must first persist an
-invalid-run notice, the affected range, the last valid checkpoint, and the
-specific integrity failure in `progress.json`/handoff. It may restore the
-active overlay to that last valid checkpoint as checkpoint cleanup, but this is
-not permission to resume reviewing. It must commit and push that checkpoint,
-then stop and ask the user whether to discard/re-review the affected range and
-how to proceed. No next testcase may be selected until the user gives explicit
-direction. The user-facing message must clearly say that the run stopped due to
-an integrity failure and must not present the invalid records as reviewed.
+When `invalid` is detected, the agent must not silently retain or count the
+invalid records. It must immediately admit the failure, persist an invalid-run
+notice with the affected range, last valid checkpoint, and specific integrity
+failure in `progress.json`/handoff, restore the active overlay to that last
+valid checkpoint, commit and push the rollback, and automatically re-review the
+affected range from its first source row. No invalid record may be presented as
+reviewed. A user decision is required only for a separate question or hard
+safety blocker, not for redoing a confirmed template/integrity failure.
 
 ## Role and execution boundary
 
