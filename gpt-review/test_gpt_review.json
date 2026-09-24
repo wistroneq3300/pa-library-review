@@ -2494,6 +2494,77 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00040-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 37
+      },
+      "test_name": "LED_behavior_from_PWM_High_State",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Verify LED_behavior_from_PWM_High_State according to the source procedure and criteria: Check LED status if PWM High state.",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [],
+      "test_command": "Qualified operator performs the specified physical or visual inspection/action; agent collects permitted evidence only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Physical handling or visual inspection can damage hardware; a remote agent must not claim to have performed or observed it."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: Check LED status if PWM High state.",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED behavior driven from a PWM high state on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+        "ai_logs_output": "operator visually inspects and photographs the PSU LED behavior driven from a PWM high state and records it; agent cannot observe the physical PSU LED.",
+        "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt."
+      },
+      "gpt_second_review_findings": "The source criterion for LED_behavior_from_PWM_High_State requires a physical or visual action. DeepSeek's NO direction is appropriate; the agent must not claim that the action or visual inspection occurred. The agent may collect operator-provided evidence and permitted post-action logs.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [
+        "Qualified operator performs the physical action and supplies photos/observations."
+      ],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
