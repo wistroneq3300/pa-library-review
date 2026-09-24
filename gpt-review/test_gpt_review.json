@@ -361,5 +361,34 @@
       "openhands_instruction": "Do not perform or claim the physical latch action; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
     }
+    ,{
+      "code": "Wistron-HW-00008-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 9},
+      "test_name": "Mechanical_Latch - System",
+      "automation_classification": "MANUAL ONLY",
+      "pa_manager_display": "NO",
+      "purpose": "Toggle the system latch and verify correct engagement and release without damage.",
+      "preconditions": ["Qualified operator, system-latch specification, and safe power/ESD procedure are available."],
+      "pre_check_commands": [],
+      "safety_checks": ["Do not force or actuate the latch in an unsafe energized state.", "Do not clear existing logs for this physical check."],
+      "required_packages": [],
+      "test_command": "Qualified operator toggles the system latch and records engagement, release, fit, and damage state with photos.",
+      "user_confirmation_required": true,
+      "risk_notes": ["Incorrect operation can damage the system latch, chassis, or connected hardware.", "Remote agent cannot perform or visually verify the action."],
+      "expected_evidence": ["Operator checklist and photos showing latch engagement/release and any defect."],
+      "post_check_commands": [],
+      "logs_to_collect": ["Operator photos/checklist", "BMC/SEL evidence if an abnormal system event occurs"],
+      "blocked_conditions": ["No qualified operator/physical access, unknown latch criteria, or unsafe handling condition."],
+      "deepseek_original_review": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Physical system latch actuation is not runnable over SSH.", "ai_logs_output": "Operator performs and reports the visual/mechanical result."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct. The source is a physical system-latch engagement/release check with no safe remote substitute. GPT adds safe handling and evidence requirements and removes the unnecessary log-clearing step.",
+      "risk_level": "HIGH",
+      "blast_radius": "System latch, chassis, and potentially connected hardware.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on binding, cracking, failed engagement, or damage; preserve evidence, do not force or repeatedly cycle the latch, and escalate.",
+      "manual_steps": ["Operator actuates and photographs the system latch."],
+      "openhands_instruction": "Do not perform or claim the physical latch action; report only operator-supplied evidence. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS", "FAIL", "BLOCKED"]
+    }
   ]
 }
