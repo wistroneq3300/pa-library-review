@@ -4671,6 +4671,80 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00070-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 67
+      },
+      "test_name": "FW upgrade/downgrade",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify FW upgrade/downgrade according to the source procedure and criteria: 1. Login BMC webUI successfully. 2. Find the page. 3. PSU firmware update successfully without issue. 4. SUT can power cycle without issue..",
+      "preconditions": [
+        "Ubuntu DUT is reachable and the applicable hardware/platform specification is available.",
+        "Physical access, package/tool, target identity, and expected criteria are confirmed as applicable."
+      ],
+      "pre_check_commands": [
+        "uname -a",
+        "date -Is",
+        "Check target identity, current state, active workload, and management reachability before execution."
+      ],
+      "safety_checks": [
+        "Do not guess device, interface, PSU address, threshold, worker count, or recovery action.",
+        "Preserve existing kernel/BMC/SEL/blackbox evidence; do not clear logs to create a baseline."
+      ],
+      "required_packages": [
+        "vendor PMBus/PSU tool",
+        "PSU platform specification",
+        "vendor PSU/BMC tool"
+      ],
+      "test_command": "Run the vendor-approved PSU firmware upgrade/downgrade command only after identity, image, compatibility, and recovery are confirmed.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The operation may affect PSU power, OS state, workload, thermal state, or network management; obtain explicit approval where applicable.",
+        "Do not run with unknown target, parameter, tool, or recovery path."
+      ],
+      "expected_evidence": [
+        "Raw command/tool output and exit status.",
+        "Evidence for source criterion: 1. Login BMC webUI successfully. 2. Find the page. 3. PSU firmware update successfully without issue. 4. SUT can power cycle without issue..",
+        "Relevant kernel, BMC/SEL, thermal, device, or operator evidence as applicable."
+      ],
+      "post_check_commands": [
+        "Collect raw result and exit status.",
+        "Collect relevant logs and before/after state without clearing existing evidence."
+      ],
+      "logs_to_collect": [
+        "Test output",
+        "Kernel/system logs",
+        "BMC/SEL/blackbox logs when applicable",
+        "Operator photos/observations when physical"
+      ],
+      "blocked_conditions": [
+        "Missing platform specification, target identity, package/vendor tool, expected criteria, or recovery path.",
+        "Unsafe physical access, active workload conflict, or loss of management connectivity."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "ipmitool, PSU FW image (user-provided)",
+        "ai_commands": "-- PSU firmware upgrade/downgrade is a multi-step flash (place the user-supplied PSU FW image on the DUT, run the vendor/BMC flash command) that resets the PSU; needs the exact image + a maintenance window. After the flash, verify with sudo ipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" sensor list 2>&1 | grep -iE \"psu\" and the FW version readback.",
+        "ai_logs_output": "return FULL ipmitool PSU sensor/FW-version readback after the user completes the PSU FW flash, so the user confirms the new/downgraded FW version is active.",
+        "risk": "RISK: PSU FW flash resets the PSU and momentarily drops its output; only run in a maintenance window with the confirmed image and a recovery plan."
+      },
+      "gpt_second_review_findings": "The source testcase FW upgrade/downgrade changes PSU/power state or injects a fault. DeepSeek's PARTIAL direction is not permission to run; vendor tooling, hardware identity, recovery path, and explicit approval are required.",
+      "risk_level": "HIGH",
+      "blast_radius": "Physical DUT hardware or DUT/PSU/OS/network state depending on the testcase.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on error, preserve logs/evidence, do not reboot/reset/power-cycle unless explicitly approved, and use the documented vendor/OOB recovery path.",
+      "manual_steps": [],
+      "openhands_instruction": "Read this testcase record, perform read-only pre-checks, report facts and the exact planned command in Chinese, wait for explicit OK, then execute only the approved action. Do not guess missing parameters. End user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
