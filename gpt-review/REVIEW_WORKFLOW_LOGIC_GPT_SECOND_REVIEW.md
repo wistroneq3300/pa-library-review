@@ -31,10 +31,22 @@ it does not replace or modify the original test library.
   risk, package, or approval requirement.
 - After each individual testcase, persist its record and checkpoint. If the
   next testcase is unclear, stop before reviewing it and ask the user.
+- Checkpoint key derivation is source-driven, never sequence-driven. Before
+  writing a record or progress file, read the selected source row and the
+  actual next source row from the XLSX/JSON source ordering. Copy the next
+  row's real sheet, source-row ordinal, and `code` into `next_key`; never infer
+  it from a numeric code, version suffix, neighboring testcase, string
+  substitution, or prior memory.
+- Before the write, assert all three mappings: the current `next_key` selects
+  the exact row being reviewed, the proposed `next_key` equals the actual next
+  source row, and the source row's real code matches the overlay code. If any
+  assertion fails, write no review record or checkpoint for that case.
 - A scheduled run may process up to 200 sequentially unreviewed testcases per
   daily run, but every testcase must be independently reviewed and checkpointed
   before the next one is selected. The 200-case value is only a run quota; it
-  must never become a batch template or grouped classification.
+  must never become a batch template, grouped classification, deadline, or
+  throughput target. There is no speed requirement; slow, source-backed review
+  is the expected behavior.
 - During normal uninterrupted review, do not send per-testcase progress,
   checkpoint, commit, or push narration to the user. Continue silently.
 - Notify the user only when a testcase requires a decision, reaches a hard
@@ -84,7 +96,10 @@ and ask the user; it must not silently continue or auto-restart.
   keyword rule, regex, copy-forward operation, or bulk-writing script.
 - One completed testcase must produce exactly one new overlay record. The
   checkpoint `reviewed_count` must increase by exactly one and `next_key` must
-  advance to the next source row.
+  advance to the actual next source row verified from the source data. A
+  plausible-looking count with a guessed, stale, or semantically incorrect
+  `next_key` is an integrity failure, even when JSON parsing and source hashes
+  pass.
 - The per-testcase record must retain its sheet/source row, original testcase
   identity, DeepSeek comparison, and a testcase-specific GPT finding. A generic
   sentence copied across cases is not evidence of independent review.
@@ -107,11 +122,12 @@ Before and after every testcase, perform an internal integrity check:
    and risks rather than from a category or neighboring case?
 3. Is the GPT finding specific to this testcase, or could it be copied into a
    different testcase unchanged?
-4. Did exactly one overlay record, one progress count, and one `next_key`
-   advance occur?
+4. Did exactly one overlay record and one progress count advance, and was the
+   new `next_key` copied from and verified against the actual next source row?
 
 If any answer is no, or if I notice an attempt to optimize for speed by using a
-template, generator, mapping, or bulk write, I must immediately stop. The
+template, generator, mapping, guessed key, or bulk write, I must immediately
+stop. The
 affected run is invalid; invalid records never count as reviewed.
 
 When `invalid` is detected, the agent must not silently continue, auto-restart,
