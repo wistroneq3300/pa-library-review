@@ -16,6 +16,9 @@ This violates the one-row source-key advancement invariant. The review content f
 - `last_valid_checkpoint`: `Functionality/row-19/Wistron-HW-00019-V002`
 - `next_key`: `Functionality/row-20/Wistron-HW-00020-V002`
 
-## Required direction
+## Resolution
 
-Do not select another testcase until the user explicitly authorizes re-reviewing source row 20 onward after this integrity failure.
+The user authorized automatic re-review after this integrity failure. Source
+row 20 was re-reviewed independently, the real next source code
+`Wistron-HW-00021-V003` was read from the source before checkpointing, and the
+active progress checkpoint now resumes at source row 21.
