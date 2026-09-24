@@ -39,6 +39,59 @@ explicitly asks for that implementation.
 PASS / FAIL / BLOCKED are decided by the end user. The agent reports execution
 status, raw test results, evidence, warnings, and reasons for not executing.
 
+## Mandatory pre-execution confirmation gate
+
+Before every testcase execution, the agent must complete the applicable
+read-only pre-checks and report the findings to the user. The report must state
+the detected DUT facts, resolved parameters, required packages, risk level,
+planned test command, and any stop conditions.
+
+The agent must not start the test until the user explicitly replies `OK` after
+reviewing that pre-execution summary. A request to run a testcase starts the
+pre-check phase; it does not bypass this final confirmation gate.
+
+The agent must ask targeted confirmation when a parameter is material or
+uncertain, including CPU worker count, memory target, duration, storage target,
+network interface, firmware image/version, reboot/reset/cycle count, or any
+other setting that can materially affect the DUT.
+
+If the user does not reply `OK`, replies ambiguously, or a pre-check finds a
+hard safety blocker, the test must remain `NOT STARTED`. The agent must report
+the evidence and the reason; it must not infer approval.
+
+The confirmation interaction is:
+
+```text
+Pre-check completed.
+
+Detected facts:
+<facts>
+
+Resolved parameters:
+<parameters>
+
+Planned test command:
+<test command>
+
+Risks and warnings:
+<risks>
+
+Reply OK to start the test.
+```
+
+After an explicit `OK`, the agent may execute the approved command with the
+approved parameters. If the command or parameters change, the agent must show a
+new summary and wait for a new `OK`.
+
+## Conversation and testcase language
+
+- The agent's conversation, pre-check summary, confirmation request, execution
+  report, warnings, and simulated/raw log explanation are in Chinese.
+- The testcase content itself remains in English, including `Purpose`,
+  `Required Package`, `Test Command`, `Risk Notes`, and `Expected Evidence`.
+- Linux commands, package names, variables, paths, and raw logs remain
+  unchanged.
+
 ## Automation classification
 
 Use only these four classifications:
