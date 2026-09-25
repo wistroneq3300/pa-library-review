@@ -844,6 +844,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-016",
+      "code": "Wistron-HW-00062-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 58,
+        "physical_xlsx_row": 59
+      },
+      "test_name": "Fan failure",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No fan-fault method, thermal envelope, monitoring, blackbox method, isolation, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Fan failure (forcing the PSU fan to fail) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+        "ai_logs_output": "operator Fan failure (forcing the PSU fan to fail) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures)."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: target PSU fan, cooling path, and blackbox are not identified.",
+        "exact_operation_semantics": "FAIL: \"Fan failure\" does not define whether to simulate, stop, disconnect, throttle, or otherwise stimulate the fan.",
+        "parameters_and_acceptance_criteria": "FAIL: thermal/speed limits, duration, protection response, blackbox fields, and pass rule are absent.",
+        "dependencies": "FAIL: no approved fixture/service method, monitoring, or extraction interface is supplied.",
+        "safety_and_recovery": "FAIL: loss of cooling, thermal rise, emergency restoration, isolation, and recovery are undefined.",
+        "evidence_mapping": "FAIL: no deterministic fan/tach/temperature and raw blackbox evidence contract is defined.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the physical destructive boundary; it does not resolve the safe failure method."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. Fan failure is not a safe generic command, and inferred obstruction or unplugging could overheat or damage the PSU. Do not induce a failure or clear logs without a bounded vendor procedure.",
+      "unresolved_blockers": [
+        "Defined fan-failure stimulus and target",
+        "Thermal/speed limit, duration, and protection response",
+        "Approved fixture/service method and monitoring",
+        "Blackbox interface/fields and extraction",
+        "Immediate cooling restoration and recovery",
+        "Explicit destructive-action approval"
+      ],
+      "required_evidence_to_reopen": [
+        "Vendor fan-fault specification",
+        "Validated fixture/monitoring/cutoff",
+        "Blackbox extraction method and expected record",
+        "Dedicated isolated system and recovery plan",
+        "Qualified operator and explicit authorization"
+      ],
+      "safety_decision": "Do not stop, obstruct, unplug, throttle, or write an unknown fan-control register. Preserve baseline; stop for rising temperature, loss of airflow, smoke, abnormal noise, protection failure, shutdown, or loss of recovery.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
