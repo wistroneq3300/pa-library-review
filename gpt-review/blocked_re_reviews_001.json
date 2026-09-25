@@ -1288,6 +1288,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-024",
+      "code": "Wistron-HW-00122-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 118,
+        "physical_xlsx_row": 119
+      },
+      "test_name": "Heating temperature sensor",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No calibrated thermal method/BMC command, sensor/fan map, limits, warning/restart criteria, or boot recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Heating temperature sensors to check FAN speed by Tool/BMC\n1. Insert required fan on SUT\n2. Power on\n3. boot to OS\n4. Use tool/ command in BMC to heat temperature\n5. Check warnnibg information popup\n6. Check fan speed get faster and faster\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. fan speed get faster and faster\n2. System will restart\n3. Make sure system can boot again",
+        "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/hw/feature/heating-temperature-sensor"
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "thermal control equipment (physical)",
+        "ai_commands": "-- Heating temperature sensor: the heating-temp-sensor test heats the chassis with an external heat/thermal source and observes the sensor response; requires physical environmental control (heat gun / chamber) - human only.",
+        "ai_logs_output": "operator applies heat and records the sensor read; agent cannot apply physical heat over SSH."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: target sensor/fan map, thermal path, and platform revision are not defined.",
+        "exact_operation_semantics": "FAIL: \"tool/command in BMC to heat temperature\" is not an executable or validated stimulus.",
+        "parameters_and_acceptance_criteria": "FAIL: temperature/rate/duration, warning/restart threshold, fan tolerance, sampling, and boot criteria are missing.",
+        "dependencies": "FAIL: no calibrated thermal equipment or validated BMC function, monitoring, operator, or OOB recovery is supplied.",
+        "safety_and_recovery": "FAIL: thermal damage and restart/boot impact are unbounded.",
+        "evidence_mapping": "FAIL: \"fan speed get faster and faster\" has no objective tolerance and no synchronized sensor/restart evidence contract.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies physical thermal equipment; it does not resolve the missing stimulus/restart contract."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. Do not guess a BMC heat command or use a heat gun/chamber profile. The expected restart is state-changing and the source lacks limits, monitoring, and boot recovery criteria.",
+      "unresolved_blockers": [
+        "Target sensor/fan map",
+        "Calibrated thermal stimulus or validated BMC method",
+        "Temperature/rate/duration/abort limits",
+        "Warning/restart and fan response criteria",
+        "Continuous monitoring and OOB/boot recovery",
+        "Objective evidence/tolerance"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner thermal procedure and calibration",
+        "Target/sampling/limits and warning/restart table",
+        "Qualified operator and continuous monitoring",
+        "Recovery/cooldown/boot procedure",
+        "Timestamped telemetry and console/SEL evidence"
+      ],
+      "safety_decision": "Do not heat the SUT or issue a guessed BMC command and do not clear logs. Preserve baseline; stop for thermal runaway, sensor disagreement, fan stall, power/BMC/OOB alarm, uncontrolled restart, or boot failure.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
