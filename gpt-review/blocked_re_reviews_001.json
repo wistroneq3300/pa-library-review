@@ -292,6 +292,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-006",
+      "code": "Wistron-HW-00040-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 36,
+        "physical_xlsx_row": 37
+      },
+      "test_name": "LED_behavior_from_PWM_High_State",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new PWM interface, electrical limit, fixture, expected LED response, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check LED status if PWM High state\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Check LED status if PWM High state",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED behavior driven from a PWM high state on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+        "ai_logs_output": "operator visually inspects and photographs the PSU LED behavior driven from a PWM high state and records it; agent cannot observe the physical PSU LED."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the PSU LED and PWM signal path are not uniquely identified.",
+        "exact_operation_semantics": "FAIL: PWM high is named but the source gives no way to generate or apply the stimulus.",
+        "parameters_and_acceptance_criteria": "FAIL: voltage/logic, frequency, duty cycle, target pin, and expected LED color/pattern are absent.",
+        "dependencies": "FAIL: no approved PWM source, fixture, control tool, or interface specification is supplied.",
+        "safety_and_recovery": "FAIL: no safe signal connection, isolation, stop condition, or PSU recovery path is defined.",
+        "evidence_mapping": "FAIL: visual LED evidence is required but the expected response and observation method are undefined.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the physical LED observation limit; it does not resolve the missing stimulus definition."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. PWM High State is an undefined physical stimulus, and LED behavior is a visual acceptance result. Do not guess a GPIO/PMBus/PWM write or claim a remote LED observation.",
+      "unresolved_blockers": [
+        "PWM signal location/interface and target PSU identity",
+        "High-state electrical limits, frequency, duty cycle, polarity, and isolation",
+        "Approved fixture/source/control method",
+        "Expected LED color/pattern and observation evidence",
+        "Safe removal and PSU/BMC/power recovery procedure"
+      ],
+      "required_evidence_to_reopen": [
+        "Vendor/platform PWM specification",
+        "Validated fixture/tool and connection procedure",
+        "Expected LED response with photo/video evidence format",
+        "Qualified operator and recovery plan",
+        "Pre/post PSU/BMC/power evidence plan"
+      ],
+      "safety_decision": "Do not drive a guessed PWM pin, connector, GPIO, PMBus register, or undocumented control interface. Preserve logs and stop for abnormal PSU, power, LED, BMC, or host behavior.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
