@@ -1844,6 +1844,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-034",
+      "code": "Wistron-HW-00162-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 158,
+        "physical_xlsx_row": 159
+      },
+      "test_name": "Install OS",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No Windows image/license, disposable target, RAID/signed driver set, TPM/Secure Boot policy, backup, or OOB/reimage recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check security mode could be enable and work\n1. Asserted TPM physical presence by on-board jumper or switch\n2. Power on SUT and enter into F1 setup.\n3. Navigate to Security page to enable secure boot and TPM function.\n4. Install Windows Server 2012/R2 OS. Load RAID controller driver first during installation if there is out-of-box driver support.\n5. Install all necessary driver bases on the latest SDL including chipset/NIC/VGA/storage/PCIe devices. Check all drivers be installed without error.\n6. Open PowerShell as administrator.\n7. Run the command “confirm-SecureBootUEFI” to verify secure boot is enabled.\n8. If secure boot is working, “TRUE” will be displayed on the following line. Otherwise “FALSE” will be displayed.\n9. Perform standard UEFI and BMC under OS and then reboot SUT\n10. Check UEFI system event log and BMC SEL, there is no any warning/error log.\n11. Reboot system and check system can boot normally.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1.SUT can install OS, DD and FW successfully with Security boot Enabled\n2. CSM disabled and secure boot Standard Mode. And then reboot into OS normal without any warning/error.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "Windows Server ISO + install media; mokutil (for pre-check)",
+        "ai_commands": "-- Install OS sheet-A (Secure Boot enabled): install Windows Server with Secure Boot/TPM on the SUT. Agent can pre-check the secure-boot state from OS sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"bootctl status 2>&1 | grep -iE 'secure boot|setup mode'; mokutil --sb-state 2>&1\"; the OS install itself needs the Windows ISO + interactive setup (BIOS F1, RAID driver loading) performed by an operator.",
+        "ai_logs_output": "return the pre-install secure-boot status (SecureBoot state + Setup Mode) so the user confirms CSM disabled / Secure Boot Standard Mode before install; the OS install evidence (drivers without error, confirm-SecureBootUEFI result) is collected by the operator."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: installation disk/array, RAID target, and platform security target are not identified.",
+        "exact_operation_semantics": "PASS for a general Windows install intent but FAIL for the complete BIOS/TPM/driver/reboot sequence and final state.",
+        "parameters_and_acceptance_criteria": "FAIL: image/build, driver versions, target, CSM/Secure Boot/TPM mode, reboot, and no-error criteria are incomplete.",
+        "dependencies": "FAIL: no validated ISO/license/media, RAID/signed driver set, installer procedure, or recovery recipe is supplied.",
+        "safety_and_recovery": "FAIL: OS install can wipe storage and secure-boot/TPM/RAID/driver changes can prevent boot; recovery is undefined.",
+        "evidence_mapping": "FAIL: Linux-oriented bootctl/mokutil pre-checks do not prove Windows installation, driver state, Confirm-SecureBootUEFI, or UEFI/BMC evidence.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek supplies Linux-oriented checks and does not resolve target/image/driver/security/recovery gates."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. This is a destructive Windows Server install with storage, RAID, signed-driver, Secure Boot/TPM, and reboot dependencies. Do not touch any disk or execute the physical presence/BIOS sequence without the complete owner-approved recipe.",
+      "unresolved_blockers": [
+        "Windows image/build/hash/license",
+        "Disposable target disk/array identity",
+        "RAID and signed driver set",
+        "TPM/Secure Boot/CSM/key policy",
+        "Backup/OOB/reimage recovery",
+        "UEFI/BMC/driver/reboot evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Validated image and target serial/WWN",
+        "Driver/RAID compatibility manifest",
+        "Security/boot policy and physical procedure",
+        "Backup/reimage/OOB plan",
+        "Qualified operator and explicit approval"
+      ],
+      "safety_decision": "Do not install, repartition, change TPM/Secure Boot, or clear logs while blocked. Preserve storage/boot/security/BMC/UEFI/host/SEL baseline and stop on any target, driver, boot, or recovery ambiguity.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
