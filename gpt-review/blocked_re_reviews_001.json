@@ -1677,6 +1677,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-031",
+      "code": "Wistron-HW-00157-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 153,
+        "physical_xlsx_row": 154
+      },
+      "test_name": "TPM disbled",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No correction of the enabled/disabled contradiction, OS/state transition, key/boot impact, backup, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check TPM can disable work\n1. Check the TPM enabled in BIOS setting.\n2. Check the TPM device in OS.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. The TPM can be disabled in BIOS.\n2. Check the device not exists.\nWindows:\nThe OS has no TPM device in device manager.\nLinux:\nThe OS has no TPM device in lspci command.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "tpm2-tools (tpm2_getcap) + pciutils",
+        "ai_commands": "-- TPM disbled: disabling TPM is done in the BIOS Security/TPM setup page by an operator; the agent can only check OS-side TPM absence after it is disabled sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"ls -la /dev/tpm* 2>&1; lspci 2>&1 | grep -i tpm; [ -e /sys/class/tpm/tpm0 ] && echo \"TPM present\" || echo \"TPM absent\" 2>&1\".",
+        "ai_logs_output": "return the /dev/tpm* listing + lspci TPM grep + sys TPM flag so the user confirms TPM device should NOT exist on the OS side."
+      },
+      "gate_results": {
+        "exact_target_identity": "PASS for a general TPM setting but FAIL for the exact platform/BIOS/OS state target.",
+        "exact_operation_semantics": "FAIL: item/criteria say disabled while procedure says check enabled; state transition is contradictory.",
+        "parameters_and_acceptance_criteria": "FAIL: OS, start/final state, BIOS path, absence evidence, key impact, and restore criteria are not resolved.",
+        "dependencies": "FAIL: OS-specific tools and KVM/OOB/backup/recovery recipe are not defined.",
+        "safety_and_recovery": "FAIL: changing TPM can break encrypted-volume unlock, attestation, measured boot, or services.",
+        "evidence_mapping": "FAIL: fixed lspci/tpm0 checks are not universal and cannot prove the corrected state without a defined OS/method.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek assumes the disable interpretation and does not resolve the source contradiction."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The enabled/disabled contradiction changes the test itself, so no BIOS action or OS absence check can be approved. Do not toggle TPM or infer a final state from DeepSeek.",
+      "unresolved_blockers": [
+        "Corrected TPM state and start/final transition",
+        "OS and BIOS path",
+        "TPM/secure-boot/key impact",
+        "OS-specific evidence and acceptance",
+        "Backup, OOB/KVM, and restoration plan"
+      ],
+      "required_evidence_to_reopen": [
+        "Corrected source/specification",
+        "Validated BIOS/OS procedure",
+        "Security/boot/key backup and recovery",
+        "OS-specific evidence method",
+        "Explicit approval"
+      ],
+      "safety_decision": "Do not enable/disable, clear, own, reboot, or clear logs for TPM while blocked. Preserve TPM/BIOS/OS/boot/security/BMC/host/SEL baseline.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
