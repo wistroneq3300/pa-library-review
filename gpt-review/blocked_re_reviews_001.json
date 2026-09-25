@@ -2064,6 +2064,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-038",
+      "code": "Wistron-HW-00174-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 166,
+        "physical_xlsx_row": 167
+      },
+      "test_name": "System warm reboot test",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No exact 1000-cycle harness/script contents, boot gate, interval, abort/recovery, time reference, or maintenance approval was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check SUT time after system warm reboot\n1. Disable NTP function in OS\n2. Adjust SUT time to match with a standard time\n3. Start a system warm reboot for 1000 times\n4. Check SUT time after reboot test completes\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. NTP should be disabled successfully\n2. SUT time should be adjusted successfully\n3. SUT time should be accuracy (The tolerance is within 5 secend)",
+        "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/x-wing/power-cycle/1.reboot-cycle_hour"
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "coreutils",
+        "ai_commands": "-- System warm reboot test: warm reboot the system sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"reboot 2>&1\" and confirm it boots to the OS; agent triggers the warm reboot and collects the post-boot uptime.",
+        "ai_logs_output": "return the reboot trigger + post-boot uptime so the user confirms the warm reboot completed successfully."
+      },
+      "gate_results": {
+        "exact_target_identity": "PASS for a general SUT but FAIL for the supported platform/OS and cycle harness target.",
+        "exact_operation_semantics": "FAIL: a single SSH reboot is not the defined 1000-cycle harness.",
+        "parameters_and_acceptance_criteria": "FAIL: cycle interval, boot-success gate, abort/retry, clock reference/timezone, and final measurement are incomplete.",
+        "dependencies": "FAIL: linked script contents/support, OOB recovery, dedicated SUT, and authoritative time source are not supplied.",
+        "safety_and_recovery": "FAIL: 1000 reboots may cause prolonged outage, filesystem/service damage, or no-boot; recovery is undefined.",
+        "evidence_mapping": "FAIL: one uptime result cannot prove count, boot health, time accuracy, or recovery.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek reduces 1000 cycles to one reboot and omits the 5-second time measurement."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The linked script is not a verified executable contract, and a single reboot is not a 1000-cycle stress. Do not disable NTP or start reboot cycling until the harness, reference time, stop rules, and recovery are supplied.",
+      "unresolved_blockers": [
+        "Verified 1000-cycle harness and platform support",
+        "Cycle interval/count/boot gate/abort/retry",
+        "Authoritative time reference and tolerance measurement",
+        "Dedicated SUT/maintenance/OOB recovery",
+        "Per-cycle evidence and time-sync restoration"
+      ],
+      "required_evidence_to_reopen": [
+        "Script/harness contents and target parameters",
+        "Health/boot/abort/recovery policy",
+        "Time reference/timezone and 5-second rule",
+        "Maintenance approval and dedicated system",
+        "Resumable evidence plan"
+      ],
+      "safety_decision": "Do not run `reboot`, disable NTP, cycle power, or clear logs while blocked. Preserve baseline; stop on boot/storage/UEFI/BMC/time-service failure or cycle-count ambiguity.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
