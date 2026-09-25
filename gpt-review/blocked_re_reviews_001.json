@@ -1622,6 +1622,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-030",
+      "code": "Wistron-HW-00155-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 151,
+        "physical_xlsx_row": 152
+      },
+      "test_name": "Security mode",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No exact security modes, TPM/ROT/secure-boot identity, physical-presence map, key/image policy, backup, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check security mode could be change\n1. Asserted TPM physical presence by on-board jumper or switch\n2. Power on SUT and enter into F1 setup.\n3. Navigate to Security page to enable secure boot and TPM function.\n4. Change Security Boot mode to another mode .\n5. Save and reboot system.\n6. Check Security mode has been changed.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Security mode can be changed successfully.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "mokutil (read-only state check)",
+        "ai_commands": "-- Security mode: change the ROT security mode. Agent can only read current state from OS sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"mokutil --sb-state 2>&1; dmesg 2>&1 | grep -iE 'rot|pfr|secure' | tail -n 20 2>&1\"; the security-mode change requires the TPM physical-presence jumper/switch and BIOS F1 setup navigation by an operator.",
+        "ai_logs_output": "return the current secure-boot/ROT-related dmesg lines so the user confirms the state before an operator changes the ROT security mode in BIOS."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: platform/ROT/PFR/TPM/BIOS identity and physical-presence path are not fully specified.",
+        "exact_operation_semantics": "FAIL: \"another mode\" does not define the from/to security transition.",
+        "parameters_and_acceptance_criteria": "FAIL: key impact, secure-boot/TPM policy, reboot timing, final state, and rollback are missing.",
+        "dependencies": "FAIL: no validated physical-presence/BIOS procedure, keys/images, backup, or OOB recovery recipe is supplied.",
+        "safety_and_recovery": "FAIL: security-mode changes can affect root-of-trust, keys, attestation, boot, and recovery.",
+        "evidence_mapping": "FAIL: mokutil/dmesg readback cannot by itself prove the BIOS/physical transition or final approved mode.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek limits itself to read-only state checks and acknowledges operator action; it does not resolve the target mode."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. Physical presence, TPM/secure boot, and ROT security changes are high-consequence state changes, while the source leaves the mode transition and recovery undefined. Do not toggle the jumper or change BIOS security settings.",
+      "unresolved_blockers": [
+        "Exact from/to security modes",
+        "Platform/ROT/TPM/BIOS identity and physical-presence map",
+        "Key/image/secure-boot impact",
+        "Backup, rollback, and OOB recovery",
+        "Before/after state evidence and owner approval"
+      ],
+      "required_evidence_to_reopen": [
+        "Resolved security-mode specification",
+        "Validated physical/BIOS procedure",
+        "Key/image/backup/recovery plan",
+        "Qualified operator and maintenance authorization",
+        "Full before/after security/boot/SEL evidence"
+      ],
+      "safety_decision": "Do not assert physical presence, change secure boot/TPM/ROT mode, reboot, clear TPM/keys, or clear logs while blocked. Preserve security baseline and stop on boot/OOB/credential/security anomalies.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
