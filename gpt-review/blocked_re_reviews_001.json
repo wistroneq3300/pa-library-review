@@ -567,6 +567,60 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-011",
+      "code": "Wistron-HW-00056-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 52,
+        "physical_xlsx_row": 53
+      },
+      "test_name": "Capability and Inventory Reporting  APP_PROFILE_SUPPORT",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No clarification of capability-read versus fault-behavior intent, register/specification, target mapping, fixture, or recovery was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Fault behavior checking\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Fault behavior checking",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "i2c-tools ipmitool",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power' || echo no_pmbus_dev; echo ---i2c_buses---; sudo i2cdetect -l 2>/dev/null | grep -iE 'smbus|i2c' || echo no_i2c_tools; echo ---reg_APP_PROFILE_SUPPORT---; sudo i2cget -f -y ${PMBUS_BUS:?set PSU i2c bus} ${PMBUS_ADDR:?set PSU i2c addr} 0xEA 2>&1\"",
+        "ai_logs_output": "enumerate the hwmon PMBus + i2c buses on the DUT so the APP_PROFILE_SUPPORT register (0x0xEA, application-profile support flag) can be read; then, once the user supplies the PSU i2c bus+address, read the register with i2cget/i2ctransfer and return the FULL value. Agent returns the PMBus/i2c enumeration + the register value once bus/addr are given."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the intended APP_PROFILE_SUPPORT target, PSU identity, bus/address, and affected interface are not defined.",
+        "exact_operation_semantics": "FAIL: the item suggests a capability read while the procedure/criterion say only fault behavior checking.",
+        "parameters_and_acceptance_criteria": "FAIL: no register/bit layout and expected value or fault stimulus/response is supplied.",
+        "dependencies": "FAIL: i2c-tools/ipmitool alone cannot resolve the vendor specification, target map, or controlled fault fixture.",
+        "safety_and_recovery": "FAIL: raw bus access and fault injection could affect a BMC-owned PMBus/PSU; recovery is undefined.",
+        "evidence_mapping": "FAIL: a guessed 0xEA read would not prove the unspecified fault behavior.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek silently converts the ambiguous row into a guessed 0xEA capability read."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The row has a direct intent conflict between its capability-like item name and generic fault-behavior procedure. Do not use the DeepSeek 0xEA example or a forced i2c read until the owner resolves the contract.",
+      "unresolved_blockers": [
+        "Resolved test intent",
+        "PSU identity and interface mapping",
+        "Capability register/bit encoding and expected value, or fault stimulus/response",
+        "Approved package/fixture and operator role",
+        "Safe recovery and preserved evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-selected capability or fault test specification",
+        "Validated target map and read/stimulus procedure",
+        "Expected result and evidence format",
+        "Recovery path and explicit approval"
+      ],
+      "safety_decision": "Do not issue guessed i2cget/forced reads, write registers, inject faults, or clear logs. Passively inventory only if separately approved, preserving BMC/SEL/kernel evidence.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
