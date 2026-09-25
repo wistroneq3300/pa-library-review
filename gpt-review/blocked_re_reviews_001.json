@@ -402,6 +402,60 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-008",
+      "code": "Wistron-HW-00044-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 40,
+        "physical_xlsx_row": 41
+      },
+      "test_name": "Frequecy_0.5_to_8_Hz",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No corrected frequency specification, tolerance, LED mode, measurement method, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check LED Flashing 0.5、1、2、3、4、5、6、7、8 Frequency\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Check LED Flashing 0.5、1、2、3、4、5、6、7、8 Frequency",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED blink frequency falling in the 0.5 to 8 Hz spec band on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+        "ai_logs_output": "operator visually inspects and photographs the PSU LED blink frequency falling in the 0.5 to 8 Hz spec band and records it; agent cannot observe the physical PSU LED."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the target PSU LED/mode is not uniquely identified.",
+        "exact_operation_semantics": "FAIL: the malformed frequency expression does not define discrete points versus a range or how to measure it.",
+        "parameters_and_acceptance_criteria": "FAIL: tolerance, observation duration, LED mode/color, and exact frequency values are missing/corrupted.",
+        "dependencies": "FAIL: no approved calibrated optical/electrical measurement method or instrument is supplied.",
+        "safety_and_recovery": "FAIL: safe attachment/isolation and PSU recovery are undefined.",
+        "evidence_mapping": "FAIL: visual counting cannot prove a frequency value and no raw measurement format is specified.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek treats the corrupted criterion as a clean band and does not resolve the source encoding."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The frequency criterion is corrupted and the physical LED result requires calibrated measurement. Do not infer a range, tolerance, or frequency from visual inspection or camera frames.",
+      "unresolved_blockers": [
+        "Correct vendor frequency points/range and tolerance",
+        "Target PSU LED mode/color and observation duration",
+        "Approved calibrated measurement method/instrument",
+        "Safe optical/electrical attachment and recovery",
+        "Raw timing output and physical evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Corrected vendor criterion",
+        "Measurement method/instrument calibration and setup",
+        "Operator record and timestamped visual evidence",
+        "Pre/post PSU/BMC/power health evidence and recovery plan"
+      ],
+      "safety_decision": "Do not connect an unapproved instrument or claim a visual estimate as frequency evidence. Preserve logs and stop for abnormal PSU, power, LED, BMC, host, or instrument behavior.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
