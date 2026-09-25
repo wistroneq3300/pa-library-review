@@ -1067,6 +1067,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-020",
+      "code": "Wistron-HW-00076-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 72,
+        "physical_xlsx_row": 73
+      },
+      "test_name": "CPU Error LED",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No motherboard LED specification, CPU-fault injection method, recovery/clear procedure, or qualified operator evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check CPU error led in motherboard and sel in BMC.\n1. Check LED location in motherboard\n2. Inject CPU error to check LED display.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1.LED location should match motherboard spec.\n2.LED working mode need to match SPEC",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case verifies the CPU error/fault LED behavior - a visual check of the physical CPU error LED on the board/bezel (only meaningful when a CPU error condition exists). A person must be present to see the LED. Agent cannot observe the physical LED over SSH.",
+        "ai_logs_output": "operator visually inspects the CPU error LED (and triggers the CPU fault condition); agent cannot see the physical LED."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: motherboard/CPU LED location, target CPU/board, and BMC event mapping are not defined.",
+        "exact_operation_semantics": "FAIL: \"Inject CPU error\" does not identify a supported fault stimulus.",
+        "parameters_and_acceptance_criteria": "FAIL: LED color/blink/error semantics and recovery/clear criteria are absent.",
+        "dependencies": "FAIL: no approved injection fixture/method, operator, KVM/OOB, or recovery path is supplied.",
+        "safety_and_recovery": "FAIL: CPU/board fault injection may affect boot, thermal/power state, workloads, and management.",
+        "evidence_mapping": "FAIL: BMC/SEL text cannot substitute for direct LED location/mode observation.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the physical LED limit; it does not resolve the injection contract."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The physical LED and the CPU fault stimulus are both undefined. Do not remove/disable a CPU, change firmware, power-cycle, or use a guessed command to create an LED event.",
+      "unresolved_blockers": [
+        "LED location and error/color/blink specification",
+        "Supported CPU fault injection and clear/recovery method",
+        "Qualified operator and visual evidence",
+        "OOB/maintenance/known-good recovery plan",
+        "Correlated un-cleared SEL/host evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Motherboard/CPU LED fault table",
+        "Vendor-approved injection/recovery method",
+        "Qualified operator and maintenance approval",
+        "Timestamped visual evidence and raw SEL/host correlation",
+        "Known-good restoration evidence"
+      ],
+      "safety_decision": "Do not inject CPU faults, remove/disable CPUs, alter BIOS/BMC/firmware, power-cycle, or clear SEL. Preserve baseline and stop on boot, thermal, power, BMC, CPU, or recovery impact.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
