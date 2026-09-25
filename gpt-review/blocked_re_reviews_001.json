@@ -12,5 +12,61 @@
     "deepseek_json": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37"
   },
   "review_method": "One selected BLOCKED testcase at a time. Re-read exact source, matching DeepSeek reference, and original GPT record; apply every reopening gate independently; preserve original overlay.",
-  "cases": []
+  "cases": [
+    {
+      "review_id": "blocked-re-review-001",
+      "code": "Wistron-HW-00032-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 28,
+        "physical_xlsx_row": 29
+      },
+      "test_name": "Latch_on_fault_offset_To_Next_Block",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new vendor or product evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Offset in bytes from this location to the beginning of the next configuration block\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Offset in bytes from this location to the beginning of the next configuration block",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "PSU vendor config-block decode tool (operator/vendor)",
+        "ai_commands": "-- Latch_on_fault_offset_To_Next_Block: verify the offset-in-bytes field between consecutive configuration blocks per a PSU configuration layout. This is a PSU vendor documentation/VPD-parsing check; the agent has no vendor tool to dump the PSU PMBus config blocks and the value is compared against a printed spec table.",
+        "ai_logs_output": "operator reads the PSU configuration-block offset via the vendor tool and compares it to Table in the spec; agent cannot access the PSU PMBus config blocks."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the current field, current block, next block, and field location are not identified.",
+        "exact_operation_semantics": "FAIL: no approved read-only interface, command, or decoder invocation is defined.",
+        "parameters_and_acceptance_criteria": "FAIL: byte order and expected offset/value are missing; the criterion only repeats the field description.",
+        "dependencies": "FAIL: the vendor layout/specification and compatible decoder are not supplied.",
+        "safety_and_recovery": "FAIL: a safe recovery path for loss of PSU/BMC diagnostic access is not supplied.",
+        "evidence_mapping": "FAIL: no deterministic raw-field output can be compared with a documented expected value.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek is consistent with the source, but it does not fill the missing technical inputs."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. This is more than a package gap: the target field and block geometry, byte encoding, expected value, approved read-only method, and recovery path are undefined. A guessed PMBus/SMBus command or blind scan would not be a valid review procedure.",
+      "unresolved_blockers": [
+        "Vendor configuration-block layout",
+        "Field address and current/next block boundaries",
+        "Byte order and expected offset/value",
+        "Vendor-approved read-only decoder and access path",
+        "Safe recovery procedure",
+        "Deterministic raw evidence mapping"
+      ],
+      "required_evidence_to_reopen": [
+        "Vendor layout/specification naming the field and blocks",
+        "Validated decoder/tool version and read-only command",
+        "Documented expected offset and encoding",
+        "Approved recovery and operator confirmation procedure"
+      ],
+      "safety_decision": "Do not execute. Do not write, reflash, reset, or blind-scan the PSU interface; preserve BMC/SEL and host evidence.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    }
+  ]
 }
