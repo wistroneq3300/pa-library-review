@@ -180,6 +180,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-004",
+      "code": "Wistron-HW-00207-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 197,
+        "physical_xlsx_row": 198
+      },
+      "test_name": "Communication check",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new serial-port, electrical, protocol, payload, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check the communication function\n1.Pug the cable between serial port and client.\n2.Make the connection and input some useful command to check the communcation.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Make sure the communcation work normally.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "serial cable + a client terminal (operator)",
+        "ai_commands": "-- Communication check: serial-port communication check requires a person to physically plug the serial cable between the SUT COM port and a client and type commands to verify the link; the agent cannot physically wire the serial port nor observe the terminal.",
+        "ai_logs_output": "operator plugs the serial cable, makes the connection and confirms two-way communication works; the agent cannot physically wire or observe the serial link."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the SUT port, client port, electrical standard, and pinout are unspecified.",
+        "exact_operation_semantics": "FAIL: the source says to input some useful command but does not define the protocol, peer role, payload, or response.",
+        "parameters_and_acceptance_criteria": "FAIL: baud, data bits, parity, stop bits, flow control, timeout, expected response, and pass threshold are absent.",
+        "dependencies": "FAIL: the cable/client are mentioned but not identified by compatible standard, configuration, or approved test definition.",
+        "safety_and_recovery": "FAIL: no alternate console, session termination, cable restoration, or recovery boundary is defined.",
+        "evidence_mapping": "FAIL: the single criterion communication works cannot be proven without a defined bidirectional transcript and expected result.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the physical operator dependency; it does not resolve the source underspecification."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. This is not merely a manual cable step: the serial path, electrical standard, settings, peer behavior, payload, expected response, timeout, and recovery are missing. Do not connect an unknown serial path or type arbitrary commands.",
+      "unresolved_blockers": [
+        "SUT/client port and electrical/pinout mapping",
+        "Baud/data/parity/stop/flow settings",
+        "Client role and harmless bidirectional payload",
+        "Expected response, timeout, retry, and pass rule",
+        "Alternate console and restoration/recovery procedure",
+        "Timestamped raw transcript evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-approved port/electrical/pinout specification",
+        "Complete serial settings and peer role",
+        "Harmless payload/expected response/timeout",
+        "Operator and alternate-console plan",
+        "Raw transcript and post-test restoration criteria"
+      ],
+      "safety_decision": "Do not connect or send data while blocked. Preserve existing logs; stop for unknown electrical standards, framing errors, unexpected responses, console impact, or loss of recovery access.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
