@@ -1788,6 +1788,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-033",
+      "code": "Wistron-HW-00161-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 157,
+        "physical_xlsx_row": 158
+      },
+      "test_name": "Security mode",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No exact Secure Boot mode transition, CSM/TPM state, platform identity, key policy, physical-presence map, backup, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check security mode could be change\n1. Asserted TPM physical presence by on-board jumper or switch\n2. Power on SUT and enter into F1 setup.\n3. Navigate to Security page to enable secure boot and TPM function.\n4. Change Security Boot mode to another mode .\n5. Save and reboot system.\n6. Check Secyrity mode has been changed.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Security mode can be changed successfully.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "mokutil + tpm2-tools (for read-only state check)",
+        "ai_commands": "-- Security mode (sheet-A): change Secure Boot mode/TPM via the BIOS Security page. Agent can read the current secure-boot/TPM state from OS sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"mokutil --sb-state 2>&1; if [ -e /sys/class/tpm/tpm0 ]; then ls /sys/class/tpm/; fi 2>&1\"; the mode change requires an operator to assert TPM physical presence (jumper/switch), enter F1 setup, enable Secure Boot+TPM, change the mode and reboot.",
+        "ai_logs_output": "return the secure-boot state (mokutil --sb-state) + TPM device presence so the user confirms the current state before the operator changes the Security mode in BIOS."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: platform/BIOS/TPM identity, physical-presence path, and target security mode are not defined.",
+        "exact_operation_semantics": "FAIL: \"another mode\" does not define the from/to Secure Boot/TPM/CSM transition.",
+        "parameters_and_acceptance_criteria": "FAIL: key impact, boot/attestation criteria, reboot timing, and final state are missing.",
+        "dependencies": "FAIL: no validated BIOS/physical procedure, key backup, or OOB recovery recipe is supplied.",
+        "safety_and_recovery": "FAIL: security-mode changes can invalidate keys and prevent boot; rollback is undefined.",
+        "evidence_mapping": "FAIL: mokutil/TPM readback cannot prove the physical/BIOS transition or final mode alone.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek limits itself to read-only state checks and acknowledges operator action; it does not resolve the target mode."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. Secure Boot/TPM/CSM mode changes are high-consequence and the source provides no target mode, key consequences, or recovery. Do not toggle physical presence or change BIOS security settings.",
+      "unresolved_blockers": [
+        "Exact from/to Secure Boot mode",
+        "CSM/TPM/key policy and platform identity",
+        "Physical-presence/BIOS path",
+        "Key backup/enrollment and rollback",
+        "OOB/boot recovery and final evidence",
+        "Owner approval"
+      ],
+      "required_evidence_to_reopen": [
+        "Resolved mode specification",
+        "Validated BIOS/physical sequence",
+        "Key/image/backup/recovery plan",
+        "Qualified operator and maintenance authorization",
+        "Full before/after security/boot/SEL evidence"
+      ],
+      "safety_decision": "Do not assert physical presence, change Secure Boot/TPM/CSM, reboot, clear keys/TPM, or clear logs while blocked. Preserve security baseline and stop on boot, attestation, credential, or OOB anomalies.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
