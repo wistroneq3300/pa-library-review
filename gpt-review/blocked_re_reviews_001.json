@@ -1455,6 +1455,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-027",
+      "code": "Wistron-HW-00151-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 147,
+        "physical_xlsx_row": 148
+      },
+      "test_name": "TPM tool testing",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No signed/versioned vendor TPM tool, invocation, operation mode, function criteria, target, backup, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Test TPM function by vendor tool.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Test TPM function by vendor tool.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "vendor TPM tool (user provides; e.g. tpm2-tools / vendor diagnostic)",
+        "ai_commands": "-- TPM tool testing (vendor tool testing): the vendor TPM tool name/procedure is not specified in the library; agent needs the exact vendor tool + invocation from the user, then runs it and captures the function-test result.",
+        "ai_logs_output": "return the vendor tool output after the user supplies it; pass/fail judged by the user against the vendor criteria."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: TPM/platform identity and target state are not fully specified.",
+        "exact_operation_semantics": "FAIL: \"vendor tool\" does not identify a binary, command, mode, or side effect.",
+        "parameters_and_acceptance_criteria": "FAIL: function under test, expected output, timeout, and pass rule are absent.",
+        "dependencies": "FAIL: no verified tool/hash/license/procedure or TPM/security backup is supplied.",
+        "safety_and_recovery": "FAIL: tool may clear/own/write TPM, NV, or keys; lockout and boot/key recovery are undefined.",
+        "evidence_mapping": "FAIL: no approved before/after TPM/security evidence contract exists.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly flags the missing tool and possible destructive behavior; it does not make the operation executable."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. A vendor-tool label is not an executable contract. Do not substitute tpm2-tools or run an unknown binary because TPM ownership, NV, keys, secure boot, and encrypted-volume access may be affected.",
+      "unresolved_blockers": [
+        "Exact signed tool/version/hash and vendor procedure",
+        "Function, command, mode, target, and expected output",
+        "Required privileges/package/license",
+        "TPM/security backup and recovery",
+        "Owner approval and before/after evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Validated vendor package/procedure",
+        "Read-only or explicitly approved operation semantics",
+        "Functional acceptance criteria",
+        "Security/boot backup and OOB recovery",
+        "Raw output and state-delta evidence plan"
+      ],
+      "safety_decision": "Do not run a guessed vendor tool, generic tpm2 command, clear, ownership, key, or NV operation and do not clear logs. Preserve TPM/security baseline.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
