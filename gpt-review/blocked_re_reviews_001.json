@@ -1954,6 +1954,60 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-036",
+      "code": "Wistron-HW-00169-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 161,
+        "physical_xlsx_row": 162
+      },
+      "test_name": "FPGA",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No board-revision LED drawing, corrected FPGA/LPGA identity, exact location, expected color/blink/timing, or qualified visual operator evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check if FPGA LED works normally\n1. Power on server and check LPGA LED\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. LED working mode need to match SPEC",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: checking whether \"FPGA\" [Wistron-HW-00169-V003] (the onboard BMC heartbeat LED) shows the expected solid/blink GREEN color is a physical/visual LED observation (often inside the chassis), requiring a person at the machine; the agent cannot see it over SSH.",
+        "ai_logs_output": "LED color/state is a physical/visual check - a person at the machine must observe and photograph the LED color/blink/state; the agent cannot see an LED over SSH."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: FPGA versus LPGA indicator, board revision, and physical location are unresolved.",
+        "exact_operation_semantics": "PASS for powered-on visual inspection only; FAIL for target identity and source typo.",
+        "parameters_and_acceptance_criteria": "FAIL: expected color/steady/blink/timing and SPEC revision are absent.",
+        "dependencies": "FAIL: no platform board/LED drawing or operator visual evidence method is supplied.",
+        "safety_and_recovery": "PASS for non-invasive observation only; recovery remains undefined if the state is abnormal.",
+        "evidence_mapping": "FAIL: BMC power/health cannot prove LED mode or correct indicator identity.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek assumes a BMC heartbeat LED and green mode and does not resolve LPGA/FPGA."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The source contains an FPGA/LPGA identity conflict and no LED specification. Do not select an LED by label similarity, reset the board, or change FPGA firmware to make a state appear.",
+      "unresolved_blockers": [
+        "Correct FPGA versus LPGA identity",
+        "Board revision and exact LED location",
+        "Expected color/steady/blink/timing",
+        "Qualified operator and physical evidence",
+        "Powered-on state and approved recovery"
+      ],
+      "required_evidence_to_reopen": [
+        "Corrected board drawing/specification",
+        "Timestamped operator photo/observation",
+        "BMC power/health correlation",
+        "No-action/recovery plan and owner approval"
+      ],
+      "safety_decision": "Do not open/manipulate the chassis, toggle power, reset BMC/board, change FPGA firmware, or clear logs while blocked. Preserve read-only baseline.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
