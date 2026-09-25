@@ -236,6 +236,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-005",
+      "code": "Wistron-HW-00210-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 200,
+        "physical_xlsx_row": 201
+      },
+      "test_name": "Devcie detection",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new USB topology, device matrix, BIOS criteria, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check all usb port could detect device\nAll USB port can be detected  in BIOS/OS\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Make sure the devices can be detected under OS",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "usbutils + operator to attach the device",
+        "ai_commands": "-- Devcie detection: verify device detection in OS sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsusb 2>&1; ip link 2>&1 | grep -E '^[0-9]+:' | head 2>&1\" with the device present; physical setup is operator-owned.  -- USB device-detection instance across all USB ports (OS view; BIOS view by operator).",
+        "ai_logs_output": "return the lsusb/device list so the user confirms the devices are detected in OS."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the source does not identify all physical ports/controllers or the devices to be used.",
+        "exact_operation_semantics": "FAIL: BIOS/OS detection and the meaning of detected versus usable are not defined.",
+        "parameters_and_acceptance_criteria": "FAIL: there is no per-port coverage list, device ID/driver expectation, power/security policy, or pass threshold.",
+        "dependencies": "FAIL: usbutils and an operator are insufficient without the topology, BIOS method, approved device matrix, and KVM/OOB access.",
+        "safety_and_recovery": "FAIL: arbitrary USB media may mount, boot, affect input/security, or draw power; no restoration/recovery boundary is supplied.",
+        "evidence_mapping": "FAIL: one `lsusb` snapshot cannot prove physical all-port coverage or BIOS detection.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the OS/operator split, but assumes a generic device and does not resolve all-port/BIOS criteria."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The source leaves the port inventory, controller mapping, device set, BIOS method, detection semantics, driver/power/security constraints, and complete evidence coverage undefined. Do not attach arbitrary media or infer physical coverage from a generic OS inventory.",
+      "unresolved_blockers": [
+        "Complete physical USB port/controller topology",
+        "Approved per-port device and driver matrix",
+        "BIOS/KVM detection method and OS acceptance definition",
+        "Power, boot, storage, input, and security constraints",
+        "Per-port evidence and complete coverage rule",
+        "Restoration and OOB recovery procedure"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-approved port/controller map",
+        "Known-good device/driver/power/security matrix",
+        "BIOS and OS detection criteria",
+        "Per-port operator and machine evidence plan",
+        "Safe attach/remove/restoration and OOB recovery plan"
+      ],
+      "safety_decision": "Do not attach arbitrary USB devices or clear logs. Preserve baseline USB/controller/BIOS/BMC/SEL evidence; stop for overcurrent, unexpected mount/boot/input/security change, controller error, or incomplete coverage.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
