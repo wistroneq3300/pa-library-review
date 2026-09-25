@@ -1732,6 +1732,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-032",
+      "code": "Wistron-HW-00158-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 154,
+        "physical_xlsx_row": 155
+      },
+      "test_name": "Vendor Tool Testing",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No signed/versioned vendor TPM tool, menu/CLI, target, 0001FFFF semantics, side-effect profile, backup, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check vendor tool could be use\nUse vendor tool to check the TPM function\n1. Execute the tool.\n2. In the tool manu, perform a full TPM test.\n3. After test, select the get test result.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "The test result has completed and no error state shown. (0001FFFF)",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "tpm2-tools",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"ls -l /dev/tpm0 /dev/tpmrm0 2>&1; echo ---tpm_sysfs---; ls -l /sys/class/tpm/tpm0 2>&1; echo ---tpm_cap---; command -v tpm2_getcap >/dev/null && tpm2_getcap -c properties-fixed 2>&1 | grep -iE 'version|TPM2' | head -4 || echo 'tpm2-tools not installed' 2>&1\"",
+        "ai_logs_output": "return the TPM device nodes (/dev/tpm0, /dev/tpmrm0), the tpm sysfs class, and tpm2_getcap version so the user confirms TPM 2.0 is exposed and the vendor tool can bind; the vendor tool's interactive full-TPM-test menu and its 0001FFFF pass result must be run by the operator who has the vendor tool - agent provides only the OS TPM-presence evidence."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: TPM target/platform identity and vendor-tool binding are not fully specified.",
+        "exact_operation_semantics": "FAIL: interactive full TPM test is not identified by tool/menu/CLI or operation mode.",
+        "parameters_and_acceptance_criteria": "FAIL: 0001FFFF meaning, timeout, function coverage, and pass semantics are absent.",
+        "dependencies": "FAIL: no verified vendor binary/hash/license/procedure or TPM/security backup is supplied.",
+        "safety_and_recovery": "FAIL: full test may clear/own/write TPM, NV, keys, or lockout state; recovery is undefined.",
+        "evidence_mapping": "FAIL: OS device presence and tpm2_getcap cannot prove the vendor full test result.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek limits itself to read-only OS evidence and acknowledges operator menu use; it does not resolve the vendor contract."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The interactive vendor full test and result code are undefined. Do not substitute tpm2-tools or run an unknown menu because TPM state and security could change.",
+      "unresolved_blockers": [
+        "Exact signed vendor tool/version/hash/license",
+        "Interactive menu/CLI and TPM target",
+        "0001FFFF definition and function coverage",
+        "Side effects and safe/read-only mode",
+        "Backup, recovery, and approval",
+        "Raw transcript and TPM state delta evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Validated vendor package/procedure",
+        "Result-code definition",
+        "Safety/side-effect profile",
+        "Security/boot backup and OOB recovery",
+        "Qualified operator and explicit approval"
+      ],
+      "safety_decision": "Do not run an unknown vendor menu, generic tpm2-tools, TPM clear/ownership/key/NV operation, or clear logs while blocked. Preserve TPM/security baseline.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
