@@ -2119,6 +2119,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-039",
+      "code": "Wistron-HW-00208-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 198,
+        "physical_xlsx_row": 199
+      },
+      "test_name": "Bios update",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No board/current-target BIOS identity, signed image/hash, serial protocol, vendor tool, compatibility, stable-power, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check Bios could be update via serial port\n1. Make the connection between serial port and client.Up\n2. Use command to update bios to newest version.\n3. Restart the SUT and check the bios version.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Make sure bios could be update successfully.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "BIOS image + serial cable/client (operator); biosupdate tool",
+        "ai_commands": "-- Bios update: updating the BIOS via the serial port requires a physical serial connection to the client plus running the BIOS update over that serial console; the agent cannot physically attach the serial cable.",
+        "ai_logs_output": "operator connects the serial port, runs the BIOS update command to the newest version, restarts the SUT and checks the new BIOS version; agent cannot physically attach the serial link."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: board/SUT, current BIOS, target version, and serial target are not identified.",
+        "exact_operation_semantics": "FAIL: \"newest\" and \"use command\" do not define a validated firmware write.",
+        "parameters_and_acceptance_criteria": "FAIL: image/tool/protocol, compatibility, settings, reboot, and exact post-update version criteria are missing.",
+        "dependencies": "FAIL: no signed image/hash, vendor tool/version/serial settings, stable power, or recovery image is supplied.",
+        "safety_and_recovery": "FAIL: BIOS flash can brick the platform and alter boot/security; rollback/OOB recovery is undefined.",
+        "evidence_mapping": "FAIL: post-reboot BIOS version alone cannot prove target integrity, settings, or recovery.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek identifies physical serial/operator and firmware risk; it does not resolve the target/image/protocol contract."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. A BIOS write cannot be made safe from “newest version” and a generic serial command. Do not connect an unknown serial path or flash any image until identity, compatibility, recovery, and evidence are supplied.",
+      "unresolved_blockers": [
+        "Current/target board and BIOS identity",
+        "Signed image/hash/compatibility",
+        "Serial electrical/protocol/client mapping",
+        "Vendor tool/version/arguments",
+        "Stable power/OOB/rollback recovery",
+        "Pre/post settings and version evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner/FAE firmware manifest",
+        "Validated tool/serial procedure",
+        "Compatibility and recovery plan",
+        "Dedicated system/maintenance approval",
+        "Full update transcript and post-boot evidence"
+      ],
+      "safety_decision": "Do not connect/flash/reboot or clear firmware/SEL evidence while blocked. Preserve baseline and stop on identity/signature/transfer/boot/settings anomalies.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
