@@ -123,6 +123,63 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-003",
+      "code": "Wistron-HW-00153-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 149,
+        "physical_xlsx_row": 150
+      },
+      "test_name": "OS installing",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new TPM, OS image, storage target, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Verify can revise TPM setting or not.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Verify can revise TPM setting or not.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "OS installer media (user provides) + tpm2-tools (post-OS check)",
+        "ai_commands": "-- OS installing (OS install with TPM enabled): verifying a clean OS install with TPM on is a long OS-install task the agent can stage (boot to installer) but needs the installer media + interaction; agent can verify the installed OS sees the TPM via sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"ls /dev/tpm0 2>&1; dmesg 2>&1 | grep -i tpm; systemd-cryptenroll --tpm2-device list 2>&1\" afterwards.",
+        "ai_logs_output": "return the post-install OS TPM detection (tpm0, dmesg, cryptenroll device list) so the user confirms TPM works with the installed OS.",
+        "risk": "RISK: OS install repartitions the disk; run only on a dedicated SUT/drive the user designates."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the source does not identify the TPM setting, the OS image, the installation target, or the starting/final state.",
+        "exact_operation_semantics": "FAIL: the title says OS installing while the criterion asks whether a TPM setting can be revised; the actual operation and workflow are undefined.",
+        "parameters_and_acceptance_criteria": "FAIL: no TPM state transition, installation mode, boot/security state, or measurable acceptance criteria are given.",
+        "dependencies": "FAIL: installer media, tpm2-tools, a disposable target, backup, and recovery are not specified as a validated recipe.",
+        "safety_and_recovery": "FAIL: OS installation may repartition storage and TPM/secure-boot changes may affect keys and boot; no target or recovery path is defined.",
+        "evidence_mapping": "FAIL: the source gives no deterministic before/after evidence for the intended TPM revision or storage scope.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek copies a TPM-enabled OS-install flow and fixed Linux checks instead of resolving the source ambiguity."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The source does not define whether this is an OS installation, a BIOS TPM toggle, TPM ownership/key operation, or another revision. The storage target, image, final state, security impact, and acceptance evidence are absent. The DeepSeek procedure is not source-faithful and cannot be used as the answer.",
+      "unresolved_blockers": [
+        "Exact TPM setting/action and state transition",
+        "OS image/version and installation scope",
+        "Disposable storage target and backup/reimage plan",
+        "UEFI/secure-boot/key/ownership impact",
+        "Before/after acceptance evidence",
+        "Operator and OOB recovery path"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-defined TPM operation and starting/final state",
+        "Exact OS image and verified disposable target if installation is in scope",
+        "Storage backup and target-only recovery plan",
+        "Security-key/secure-boot impact and approved BIOS/OS procedure",
+        "Deterministic pre/post evidence and end-user authorization"
+      ],
+      "safety_decision": "Do not install, repartition, change TPM ownership/keys, alter secure boot, or clear logs/TPM. Preserve current storage, TPM, boot, security, BMC, host, and SEL evidence.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
