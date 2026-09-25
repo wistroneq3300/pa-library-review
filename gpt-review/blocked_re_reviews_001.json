@@ -2008,6 +2008,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-037",
+      "code": "Wistron-HW-00172-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 164,
+        "physical_xlsx_row": 165
+      },
+      "test_name": "Error",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No error-indicator map, reversible fan/power fault method, target/parameters, abort, recovery, or qualified operator evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    To check the error button function is normal.\n1. Triger a system level fault like fan or power fault.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Error button should lit.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none (physical - human)",
+        "ai_commands": "-- Error: the front error/status button/indicator is tested by observing/clearing the fault LED (visual) or pressing it physically; human observation required.",
+        "ai_logs_output": "operator observes the error button/LED behaviour + records; agent cannot see the panel."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: error indicator, target fan/power component, and fault path are not identified.",
+        "exact_operation_semantics": "FAIL: \"trigger a system level fault like fan or power fault\" is not an executable or bounded stimulus.",
+        "parameters_and_acceptance_criteria": "FAIL: magnitude, duration, abort, LED color/latch/clear, SEL mapping, and pass rule are absent.",
+        "dependencies": "FAIL: no platform/FAE-approved injection tool/procedure, operator, or OOB recovery is supplied.",
+        "safety_and_recovery": "FAIL: deliberate fan/power fault can cause thermal/power damage, shutdown, data loss, or persistent latch.",
+        "evidence_mapping": "FAIL: visual indicator and generic SEL cannot prove a defined fault without target and timestamps.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek identifies human visual observation but does not resolve injection/recovery semantics."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. An undefined system-level fault cannot be safely created or judged. Do not unplug power, stop a fan, overload a rail, or clear an error based on the item name.",
+      "unresolved_blockers": [
+        "Indicator identity/location and exact lit behavior",
+        "Fault target/method/magnitude/duration",
+        "Abort and recovery procedure",
+        "Dedicated isolated SUT and OOB",
+        "BMC/UEFI/SEL evidence contract",
+        "Explicit approval"
+      ],
+      "required_evidence_to_reopen": [
+        "Platform/FAE fault-injection specification",
+        "Validated reversible method and limits",
+        "Indicator/SEL acceptance criteria",
+        "Qualified operator and recovery plan",
+        "Pre/post health and visual evidence"
+      ],
+      "safety_decision": "Do not inject fan/power faults or clear logs while blocked. Preserve baseline; stop for unsafe temperature/power, shutdown, damage, data impact, or unexplained indicator/log state.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
