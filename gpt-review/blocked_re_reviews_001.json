@@ -956,6 +956,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-018",
+      "code": "Wistron-HW-00066-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 62,
+        "physical_xlsx_row": 63
+      },
+      "test_name": "Repair",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No clarification of repair versus cord-cycle intent, failed/replacement PSU identity, service procedure, compatibility, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Unplug the power cord of PSU 1\n2. Check PSU 1 status with vision\n3. Check PSU 1 status by BMC (sensor list and SEL)\n4. Plug back the power cord of PSU 1\n5. Check PSU 1 status again\n6. Repeat step 1 ~ 5 for the all the rest of PSU\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Power cord should be unplugged without any problem\n2. Power supply should be OFF when power cord is unplugged (FAN should be off. LED should be AMBER.)\n3. PSU information in sensor list and SEL of BMC should be correct when power cord is unplugged\n4. PSU information in sensor list and SEL of BMC should be correct when power cord is plugged back\n5. All the reset PSU should have the same behavior as PSU 1",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this PSU Function case (repairing/replacing a failed PSU and re-verifying PSU status) requires physically inserting/removing/cycling the PSU module and its power-cord at the machine and visually observing the PSU LED/status; a person must be present at the hardware. The agent can only read the post-operator BMC PSU sensors/SEL, which the operator records after the physical step.",
+        "ai_logs_output": "operator physically repairing/replacing a failed PSU and re-verifying PSU status then records PSU LED/status; after that the agent can run ipmitool (on agent host) sdr elist 2>&1 | grep -iE \"psu|power supply\" ; echo ---sel---; ipmitool (on agent host) sel list last 30 2>&1 | tail -30 ; echo ---psu_repairing/replacing_a_fa---; ipmitool (on agent host) sensor list 2>&1 | grep -iE \"psu|power supply\" to confirm BMC sees the PSU state, but the physical action must be human."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: failed PSU, replacement/service target, and all PSU slot/serial identities are not defined.",
+        "exact_operation_semantics": "FAIL: title says Repair while procedure describes cord unplug/replug, not a repair/replacement action.",
+        "parameters_and_acceptance_criteria": "FAIL: compatibility, hot-plug/isolation, service sequence, and repair-specific acceptance are missing.",
+        "dependencies": "FAIL: no approved service/replacement procedure or compatible replacement criteria is supplied.",
+        "safety_and_recovery": "FAIL: redundancy/load impact, connector safety, and recovery are undefined.",
+        "evidence_mapping": "FAIL: BMC sensor/SEL alone cannot prove mechanical repair or replacement identity.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies physical service; the title/procedure mismatch remains unresolved."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The row cannot be safely reclassified until the owner resolves whether it tests PSU repair/replacement or only a cord cycle. Do not remove, replace, or cycle a PSU based on the title alone.",
+      "unresolved_blockers": [
+        "Resolved repair/replacement versus cord-cycle intent",
+        "Failed and target PSU slot/serial",
+        "Approved service/isolation or hot-plug procedure",
+        "Replacement compatibility and visual/BMC/SEL acceptance",
+        "Redundancy/load and recovery plan"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-resolved test definition",
+        "PSU identity and service/replacement compatibility",
+        "Qualified operator procedure and safety limits",
+        "Pre/post physical and BMC/host evidence plan",
+        "Recovery/escalation path"
+      ],
+      "safety_decision": "Do not remove, replace, reconnect, or clear logs while the intent is unresolved. Preserve failure, redundancy, BMC/SEL, host, and service evidence; stop for damage, arcing, abnormal power, missing module, or loss of recovery.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
