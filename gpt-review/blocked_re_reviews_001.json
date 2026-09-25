@@ -511,6 +511,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-010",
+      "code": "Wistron-HW-00046-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 42,
+        "physical_xlsx_row": 43
+      },
+      "test_name": "PSON_power_cycling",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No PSON signal map, logic/timing profile, harness, expected fault/output criteria, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Fault behavior checking\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Fault behavior checking",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case verifies the PSU behavior across PSON power cycling, which requires toggling the PSON signal on the PSU and observing output/fault behavior; asserting/removing PSON on the physical PSU requires a person/harness at the machine and an observer to read the resulting PSU state.",
+        "ai_logs_output": "operator toggles PSON on the PSU and records output/fault behavior; agent cannot drive the PSON line on the physical PSU."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: PSON interface/pin, target PSU, and connected load are not identified.",
+        "exact_operation_semantics": "FAIL: \"Fault behavior checking\" does not define the assertion/deassertion sequence or control method.",
+        "parameters_and_acceptance_criteria": "FAIL: logic levels, timing, cycle count, expected output/fault states, and recovery criteria are absent.",
+        "dependencies": "FAIL: no approved PSON harness/fixture or measurement method is supplied.",
+        "safety_and_recovery": "FAIL: power-control impact, isolation, load limits, and safe restoration are undefined.",
+        "evidence_mapping": "FAIL: no deterministic output/power-good/fault measurement or pass threshold is defined.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the physical PSON harness; it does not resolve the missing signal profile and acceptance rules."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. PSON is a power-control signal, while the source supplies only a vague fault-checking label. Do not drive a guessed pin/register or use a generic relay.",
+      "unresolved_blockers": [
+        "PSON pin/interface and target PSU/load",
+        "Logic levels, timing, sequence, and cycle count",
+        "Approved harness/fixture and isolation",
+        "Expected output/power-good/fault states",
+        "Safe restoration and recovery path",
+        "Raw measurement and preserved log evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Vendor PSON specification",
+        "Validated harness and measurement setup",
+        "Approved cycle/stop profile and expected states",
+        "Qualified operator with recovery access",
+        "Pre/during/post telemetry and operator checklist"
+      ],
+      "safety_decision": "Do not assert or deassert PSON while blocked. Preserve baseline logs; stop for unexpected output, fault latch, power transition, heat, arcing, BMC/host loss, or signal outside the approved profile.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
