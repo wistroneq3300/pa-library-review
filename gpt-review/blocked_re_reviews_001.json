@@ -347,6 +347,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-007",
+      "code": "Wistron-HW-00041-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 37,
+        "physical_xlsx_row": 38
+      },
+      "test_name": "LED_behavior_from_PWM_Low_State",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new PWM interface, low-state electrical limit, fixture, expected LED response, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check LED status if PWM Low state\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Check LED status if PWM Low state",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED behavior driven from a PWM low state on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+        "ai_logs_output": "operator visually inspects and photographs the PSU LED behavior driven from a PWM low state and records it; agent cannot observe the physical PSU LED."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: the PSU LED and PWM signal path are not uniquely identified.",
+        "exact_operation_semantics": "FAIL: PWM low is named but the source gives no safe method to generate or apply the stimulus.",
+        "parameters_and_acceptance_criteria": "FAIL: logic-low voltage/current range, frequency, duty cycle, target pin, and expected LED response are absent.",
+        "dependencies": "FAIL: no approved PWM source, fixture, control tool, or interface specification is supplied.",
+        "safety_and_recovery": "FAIL: no safe signal connection, isolation, stop condition, or PSU recovery path is defined.",
+        "evidence_mapping": "FAIL: the physical LED result and expected low-state behavior are undefined for evidence comparison.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies the visual observation limit; it does not resolve the missing low-state stimulus definition."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. PWM Low State is an undefined physical stimulus and the acceptance result is a visual LED observation. Do not guess a low-level drive, register write, or remote LED result.",
+      "unresolved_blockers": [
+        "PWM signal location/interface and target PSU identity",
+        "Logic-low electrical range, timing, polarity, and isolation",
+        "Approved fixture/source/control method",
+        "Expected LED color/pattern and observation evidence",
+        "Safe removal and PSU/BMC/power recovery procedure"
+      ],
+      "required_evidence_to_reopen": [
+        "Vendor/platform PWM low-state specification",
+        "Validated fixture/tool and connection procedure",
+        "Expected LED response with photo/video evidence format",
+        "Qualified operator and recovery plan",
+        "Pre/post PSU/BMC/power evidence plan"
+      ],
+      "safety_decision": "Do not drive a guessed low-level pin, connector, GPIO, PMBus register, or undocumented control interface. Preserve logs and stop for abnormal PSU, power, LED, BMC, or host behavior.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
