@@ -1344,6 +1344,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-025",
+      "code": "Wistron-HW-00129-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 125,
+        "physical_xlsx_row": 126
+      },
+      "test_name": "System power / status LED",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No LED/power/AC/MB map, auto-power policy, per-fault stimulus/recovery, electrical controls, or qualified visual operator evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Remove AC power\n2. Check if system power LED is OFF\n3. Insert MB and plug AC power cord\n4. Check if system power LED is blinking with Green when AC on\n5. Check if system power LED is Green after system boot into OS\n6. Power off system and check if system power LED is Amber without blinking\n7. Check if power LED is Fast blinking with Amber when system with error  ( Include Memory error, PCI Error, CPU error, Post error, Temp event, Fan fail, Voltage event, Thermal event, PSU fault, HDD fault, Critical IRQ, CATERR, other system events )\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. System power LED should be OFF when removed AC power\n2. System power LED should be blinking with Green when AC on and system should auto power on.\n3. System power LED should be Green without blinking after boot into OS.\n4. System power LED should be Amber without blinking  when system is off\n5. System power LED should be Fast blinking with Amber when system have error",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case checks the system power/status LED behavior across AC on/off - a visual check of the physical LED (color/on/off/blink) at the machine plus an AC cycle. A person must be present. Agent cannot see the LED or cycle AC over SSH.",
+        "ai_logs_output": "operator cycles AC and visually records the system power/status LED state; agent cannot observe the physical LED."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: LED location, board/MB meaning, AC/board path, and affected platform state are not fully defined.",
+        "exact_operation_semantics": "FAIL: the source mixes AC removal, \"Insert MB\", boot states, and many fault classes without a resolved sequence.",
+        "parameters_and_acceptance_criteria": "FAIL: timing, auto-power policy, LED blink semantics, and per-fault thresholds/recovery are missing.",
+        "dependencies": "FAIL: no electrical/ESD procedure, visual operator, fault fixtures, or OOB recovery is supplied.",
+        "safety_and_recovery": "FAIL: AC/board handling and deliberate multi-domain fault injection can damage hardware, corrupt data, or leave the SUT unbootable.",
+        "evidence_mapping": "FAIL: BMC/SEL/console cannot prove LED color/blink without physical evidence and state correlation.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies AC/visual limits; it does not resolve the board step or fault matrix."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The test contains multiple state-changing and fault-injection branches but does not define the safe sequence or evidence for each. Do not remove AC, manipulate the board, or induce listed faults from the row alone.",
+      "unresolved_blockers": [
+        "LED/power/AC/MB map and auto-power policy",
+        "Normal state timing and color/blink table",
+        "Per-fault stimulus, scope, and recovery for all listed errors",
+        "Electrical/ESD controls and qualified operator",
+        "OOB/boot/recovery and physical evidence plan"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-resolved normal/fault matrix",
+        "Safe AC/board sequence",
+        "Per-fault approved procedures and recovery",
+        "Visual evidence and BMC/SEL correlation",
+        "Maintenance/electrical authorization"
+      ],
+      "safety_decision": "Do not remove AC, insert/manipulate the motherboard, induce faults, or clear logs. Preserve baseline; stop for unsafe power/board state, thermal/data/boot risk, BMC/OOB loss, or unclassified LED state.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
