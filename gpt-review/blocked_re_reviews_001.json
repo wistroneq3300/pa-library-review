@@ -1011,6 +1011,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-019",
+      "code": "Wistron-HW-00069-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 65,
+        "physical_xlsx_row": 66
+      },
+      "test_name": "Power supply fan failure",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No target PSU, approved fan-jam method, duration/thermal limits, redundancy approval, or replug/recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Stop a fan of the power supply. (WARNING: Use only a non-conductive, flexible object to stop the fan. Do not attempt to use any part of your body to stop the fan. )\n2. Remove the obstruction from the power supply fan and check power supply status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. PSU information in sensor list and SEL of BMC should be correct when PSU FAN is jammed\n2. PSU LED should be AMBER when FAN failure.\n3. PSU LED should be GREEN after removed the obstruction and replug power cord.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case physically stops/jams the power-supply fan (with a non-conductive object) to verify the PSU fault LED turns amber, then removes the obstruction to confirm recovery. This is a physical action (stopping a physical fan) at the machine with visual LED observation; a person must be present. Agent cannot stop the PSU fan or see the physical PSU LED over SSH.",
+        "ai_logs_output": "operator physically stops/jams the power-supply fan (non-conductive object), observes the amber fault LED + BMC PSU SEL, then removes the obstruction; agent cannot stop the fan or see the LED - it reads the BMC PSU SEL after the operator step."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: PSU slot/serial, fan, and power/redundancy path are not uniquely identified.",
+        "exact_operation_semantics": "FAIL: physical fan obstruction is described but safe tool, phase duration, and replug operation are not fully defined; Criteria/procedure conflict.",
+        "parameters_and_acceptance_criteria": "FAIL: thermal/abort limits and exact BMC/SEL/LED/fan recovery criteria are incomplete.",
+        "dependencies": "FAIL: no approved target-specific fan-fault/replug procedure or monitoring plan is supplied.",
+        "safety_and_recovery": "FAIL: fan/PSU thermal risk, redundancy, replug isolation, and recovery are unresolved.",
+        "evidence_mapping": "FAIL: BMC/SEL cannot prove physical jam/LED state; phase-linked operator evidence is required.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly identifies physical fan/LED dependence; it does not resolve the replug mismatch."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. Even though the source warns about a non-conductive flexible object, the target, duration, thermal boundaries, redundancy conditions, and required replug recovery are not defined. Do not jam the fan based on this row alone.",
+      "unresolved_blockers": [
+        "Target PSU/fan and power path",
+        "Approved non-conductive tool and obstruction duration",
+        "Thermal monitoring/abort limits",
+        "Procedure versus Criteria replug sequence",
+        "Expected LED/BMC/SEL/fan/power evidence",
+        "Qualified operator and recovery plan"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-approved target-specific injection/recovery procedure",
+        "Thermal/redundancy/abort limits",
+        "Operator evidence for baseline/fault/removal/replug phases",
+        "BMC/SEL/host/power post-checks",
+        "Explicit authorization"
+      ],
+      "safety_decision": "Do not stop or jam a powered PSU fan and do not clear logs. Preserve baseline; stop for contact risk, heat, smoke, noise, abnormal power, BMC/host loss, or failure to recover.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
