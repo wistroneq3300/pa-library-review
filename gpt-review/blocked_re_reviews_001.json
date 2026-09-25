@@ -1900,6 +1900,60 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-035",
+      "code": "Wistron-HW-00168-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 160,
+        "physical_xlsx_row": 161
+      },
+      "test_name": "ME",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No board-revision LED drawing, exact ME indicator identity/location, expected color/blink/timing, or qualified visual operator evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check if MB_ME LED works normally\n1. Power on server and check MB_ME LED\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. LED working mode need to match SPEC",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: checking whether \"ME\" [Wistron-HW-00168-V003] (the onboard BMC heartbeat LED) shows the expected solid/blink GREEN color is a physical/visual LED observation (often inside the chassis), requiring a person at the machine; the agent cannot see it over SSH.",
+        "ai_logs_output": "LED color/state is a physical/visual check - a person at the machine must observe and photograph the LED color/blink/state; the agent cannot see an LED over SSH."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: \"ME\" does not identify the physical indicator, board revision, or chassis location.",
+        "exact_operation_semantics": "PASS for a powered-on visual inspection but FAIL for the undefined LED target and working mode.",
+        "parameters_and_acceptance_criteria": "FAIL: color, steady/blink pattern, timing, and spec revision are absent.",
+        "dependencies": "FAIL: no board drawing/spec or operator visual evidence method is supplied.",
+        "safety_and_recovery": "PASS for a non-invasive observation only; recovery remains undefined if the platform state is abnormal.",
+        "evidence_mapping": "FAIL: BMC power/health cannot prove LED color/blink or target identity.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek assumes a BMC heartbeat LED and green state without source support."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The case can only be reclassified after the board-specific ME indicator is identified and its expected mode is defined. Do not assume it is a BMC heartbeat LED or change power/ME/firmware to force a state.",
+      "unresolved_blockers": [
+        "Board revision and exact ME LED identity/location",
+        "Expected color/steady/blink/timing",
+        "Qualified operator and physical evidence",
+        "Powered-on state and safe chassis procedure",
+        "OOB/recovery if abnormal state occurs"
+      ],
+      "required_evidence_to_reopen": [
+        "Board drawing/specification",
+        "Timestamped operator photo/observation",
+        "BMC power/health correlation",
+        "No-action/recovery plan and owner approval"
+      ],
+      "safety_decision": "Do not open/manipulate the chassis without procedure, reset ME/BMC, change firmware, toggle power, or clear logs while blocked. Preserve read-only baseline.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
