@@ -1177,6 +1177,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-022",
+      "code": "Wistron-HW-00108-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 104,
+        "physical_xlsx_row": 105
+      },
+      "test_name": "DUT node LED",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No DUT-node/LED map, bounded error stimulus, response timing, recovery path, or qualified visual operator evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    When SUT occur error/warning event, the fault LED will bright up.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "The fault LED will response the system fault status.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: the \"DUT node LED\" LED-behavior check is a physical/visual table lookup (Green Solid/Blink, Amber Solid/Blink, Off) requiring a person at the machine to observe the LED and compare to the SPEC table; the agent cannot see the LED or the physical cable-link state over SSH.",
+        "ai_logs_output": "LED color/state is a physical/visual check - a person at the machine must observe and photograph the LED color/blink/state; the agent cannot see an LED over SSH."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: DUT node, physical LED location, and platform mapping are not defined.",
+        "exact_operation_semantics": "FAIL: \"error/warning event\" has no supported stimulus or severity definition.",
+        "parameters_and_acceptance_criteria": "FAIL: color/blink/state table, timeout, and fault-to-LED mapping are absent.",
+        "dependencies": "FAIL: no node-specific fault/recovery procedure, visual operator, or evidence method is supplied.",
+        "safety_and_recovery": "FAIL: fault injection may offline a node, disrupt workloads, reset the SUT, or lose OOB access.",
+        "evidence_mapping": "FAIL: logs cannot substitute for direct physical LED observation and node mapping.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek invents a Green/Amber/Off table not present in the source and does not define the stimulus."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The source requires creating a DUT error/warning and observing a physical LED, but supplies no node map, fault injector, LED state table, timeout, or recovery. Do not invent a fault command or LED table.",
+      "unresolved_blockers": [
+        "DUT node/LED location and state table",
+        "Approved fault/warning stimulus and severity",
+        "Response timeout and BMC/SEL mapping",
+        "Qualified visual operator and camera evidence",
+        "OOB/maintenance/recovery plan"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-approved DUT node/LED specification",
+        "Vendor stimulus/recovery procedure",
+        "Expected response and timeout",
+        "Visual operator and timestamped evidence",
+        "Pre/during/post host/BMC/SEL evidence"
+      ],
+      "safety_decision": "Do not fault, offline, reset, or power-cycle a DUT node and do not clear logs. Preserve baseline and stop on wrong-node mapping, instability, loss of BMC/console/OOB, or inability to restore service.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
