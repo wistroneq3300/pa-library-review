@@ -1399,6 +1399,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-026",
+      "code": "Wistron-HW-00134-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 130,
+        "physical_xlsx_row": 131
+      },
+      "test_name": "System warm reboot test",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No exact warm-reboot mechanism, 500-cycle orchestration, timeout/recovery policy, or resolution of the 24-hour/1.73-second criterion was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Disable NTP function in OS\n2. Adjust SUT time to match with a standard time\n3. Start a system warm reboot for 500 times\n4. Check SUT time after reboot test completes\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "SUT should not hang during warm reboot.\nInformation of lspci should not have any change during warm reboot.\nSUT should be workable after warm reboot stress.\nSUT time should not over or less than 1.73 seconds (1.73 seconds / 24 hours) after idle over 24 hrs.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "util-linux (hwclock) systemd (timedatectl)",
+        "ai_commands": "-- RTC drift across warm reboots. Agent first disables NTP and reads the RTC via sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"timedatectl set-ntp false 2>&1; hwclock -r 2>&1; date -u 2>&1\", then the 24h AC/reboot dwell (operator part for AC) elapses and the agent re-reads to compute drift. The system_warm_reboot dwell is the long-running/operator step.",
+        "ai_logs_output": "return FULL RTC (`hwclock -r`) vs system UTC (`date -u`) timestamps at start and after the dwell so the user computes the drift (<=1.73s/day tolerance)."
+      },
+      "gate_results": {
+        "exact_target_identity": "PASS for the general SUT but FAIL for the exact warm-reboot mechanism and recovery scope.",
+        "exact_operation_semantics": "FAIL: warm reboot is not defined as an executable action and must not be replaced by AC/power cycling.",
+        "parameters_and_acceptance_criteria": "FAIL: 500-cycle sequencing, timeout/abort, lspci comparison, reboot evidence, and the 24-hour idle/time rule conflict are unresolved.",
+        "dependencies": "FAIL: no approved orchestration/reconnect/OOB mechanism or time/PCIe evidence recipe is supplied.",
+        "safety_and_recovery": "FAIL: repeated reboot stress can hang or leave the SUT unbootable; recovery and maintenance boundary are undefined.",
+        "evidence_mapping": "FAIL: DeepSeek time reads do not prove 500 reboots, lspci stability, hang behavior, or usability.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek introduces an AC/reboot dwell and omits the required reboot count, lspci, hang, and recovery evidence."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The 500 warm-reboot stress and the 24-hour RTC criterion are not a complete, consistent test contract. Do not run an AC cycle, disable NTP, or use a time read as a substitute for the undefined reboot sequence.",
+      "unresolved_blockers": [
+        "Exact warm-reboot mechanism and cycle orchestration",
+        "500-cycle counter, inter-cycle wait, boot/reconnect timeout, abort/recovery",
+        "PCIe/lspci identity comparison",
+        "24-hour idle versus 500-reboot time criterion reconciliation",
+        "OOB/maintenance/active-workload controls",
+        "Time/NTP restoration"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-approved warm-reboot command and orchestration",
+        "Cycle/timeout/recovery policy",
+        "Resolved time criterion and measurement points",
+        "PCIe/health evidence plan",
+        "Maintenance/OOB authorization"
+      ],
+      "safety_decision": "Do not start reboot stress, AC/power cycle, disable NTP, or clear logs while blocked. Preserve baseline; stop on hang, boot failure, device loss, topology change, management loss, or unapproved power action.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
