@@ -1566,6 +1566,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-029",
+      "code": "Wistron-HW-00154-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 150,
+        "physical_xlsx_row": 151
+      },
+      "test_name": "ROT(PFR) FW Flash",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No ROT/PFR identity, current/target versions, signed image/hash, SF600 parameters, compatibility, recovery image, or authorization was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Verify SUT status after using SF600 flash successfully .\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "Verify SUT status after using SF600 flash successfully .",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "SF600 ROT flash tool + signed PFR image (user-provided)",
+        "ai_commands": "-- ROT(PFR) FW Flash (ROT/PFR FW): flash the ROT PFR firmware via the SF600 flash tooling. Agent can verify post-flash SUT status from OS sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"dmesg -t 2>&1 | tail -n 30; echo \"---system status---\"; uptime; lspci 2>&1 | wc -l 2>&1\"; the ROT PFR flash itself uses the vendor SF600 tool + signed image and is a firmware write.",
+        "ai_logs_output": "return the post-flash system status (dmesg tail, uptime, device count) so the user confirms the SUT is stable after the ROT(PFR) FW flash succeeded."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: ROT/PFR device, board/SKU, current version, and SF600 target are not defined.",
+        "exact_operation_semantics": "FAIL: \"using SF600 flash\" lacks target selection, transport, parameters, and write sequence.",
+        "parameters_and_acceptance_criteria": "FAIL: target version, image identity, compatibility, power/reboot behavior, version readback, and health criteria are missing.",
+        "dependencies": "FAIL: no validated SF600 tool/license, signed image/hash, recovery image, or OOB access recipe is supplied.",
+        "safety_and_recovery": "FAIL: root-of-trust firmware write can brick boot/management; rollback and recovery are undefined.",
+        "evidence_mapping": "FAIL: dmesg/uptime/lspci counts cannot prove target integrity or firmware readback.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek flags signed image/SF600 mutation; its generic post-status checks do not resolve firmware safety gates."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. ROT/PFR flashing is a high-consequence firmware write and the source provides no target, image, version, command, compatibility, or recovery contract. Do not invoke SF600 or substitute post-flash health checks for write verification.",
+      "unresolved_blockers": [
+        "ROT/PFR identity/SKU and SF600 target",
+        "Current/target version and signed image/hash",
+        "Compatibility and flash parameters",
+        "Power/reboot/maintenance plan",
+        "Rollback/recovery image and OOB path",
+        "Pre/post firmware readback and health evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Validated target/image/tool manifest",
+        "Owner-approved flash procedure",
+        "Compatibility and recovery plan",
+        "Qualified operator/maintenance authorization",
+        "Full pre/post firmware and health evidence"
+      ],
+      "safety_decision": "Do not flash, reboot, power-cycle, or clear logs while blocked. Preserve BMC/host/ROT/BIOS/PCIe/SEL baseline and stop on target/signature/OOB/timeout/partial-write anomalies.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
