@@ -2175,6 +2175,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-040",
+      "code": "Wistron-HW-00209-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 199,
+        "physical_xlsx_row": 200
+      },
+      "test_name": "BMC update",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No board/current-target BMC identity, signed image/hash, serial protocol, vendor tool, compatibility, correct version-check target, stable-power, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check BMC could be update via serial port\n1. Make the connection between serial port and client.Up\n2. Use command to update BMC to newest version.\n3. Restart the SUT and check the bios version.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Make sure BMC could be update successfully.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "BMC image + serial cable/client (operator); bmcupdate tool",
+        "ai_commands": "-- BMC update: updating the BMC via the serial port requires a physical serial connection to the client plus running the BMC update over that serial console; the agent cannot physically attach the serial cable.",
+        "ai_logs_output": "operator connects the serial port, runs the BMC update to the newest version, restarts the SUT and checks the BMC version; agent cannot physically attach the serial link."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: board/SUT, current BMC, target version, and serial target are not identified.",
+        "exact_operation_semantics": "FAIL: \"newest\" and \"use command\" do not define a validated BMC firmware write; the post-restart check names BIOS rather than BMC.",
+        "parameters_and_acceptance_criteria": "FAIL: image/tool/protocol, compatibility, management interruption, post-update target/version, and health criteria are incomplete.",
+        "dependencies": "FAIL: no signed image/hash, vendor tool/version/serial settings, stable power, OOB/credential backup, or recovery image is supplied.",
+        "safety_and_recovery": "FAIL: BMC flash can remove management and leave the platform unrecoverable; rollback/OOB recovery is undefined.",
+        "evidence_mapping": "FAIL: a BIOS version check cannot prove BMC update or management restoration.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek identifies physical serial/operator and BMC reflash risk; it does not resolve target/image/protocol/version-check/recovery gates."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. BMC firmware update cannot be made safe from “newest version” and a generic serial command, especially when the source asks for a BIOS version check after a BMC update. Do not connect or flash until the complete target, evidence, and recovery contract is supplied.",
+      "unresolved_blockers": [
+        "Current/target BMC and board identity",
+        "Signed image/hash/compatibility",
+        "Serial electrical/protocol/client mapping",
+        "Vendor tool/version/arguments",
+        "Correct BMC post-update version/health checks",
+        "Stable power/OOB/credential/rollback recovery"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner/FAE BMC firmware manifest",
+        "Validated tool/serial procedure",
+        "Compatibility and recovery plan",
+        "Dedicated system/maintenance approval",
+        "Full management/version/SEL/network evidence"
+      ],
+      "safety_decision": "Do not connect, flash, reboot, or clear BMC/SEL/network evidence while blocked. Preserve baseline and stop on identity/signature/transfer/BMC/POST/management anomalies.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
