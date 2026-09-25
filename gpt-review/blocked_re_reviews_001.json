@@ -456,6 +456,61 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-009",
+      "code": "Wistron-HW-00045-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 41,
+        "physical_xlsx_row": 42
+      },
+      "test_name": "Input_power_cycling",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No vendor default/register map, PMBus target, approved AC switching, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    The_PSU_shall_reset_the_warning_and_fault_limits_to_default_values_for_the_following_case.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "The_PSU_shall_reset_the_warning_and_fault_limits_to_default_values_for_the_following_case.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case verifies the PSU resets its warning/fault limits to defaults after an input-power cycle, which requires physically cycling AC input to the PSU and then re-reading its limits over PMBus; the physical input-power cycle on the PSU must be done by a person at the machine, and the re-verification needs a PMBus master on the PSU after the cycle.",
+        "ai_logs_output": "operator physically cycles the PSU input power then, with a PMBus master, re-reads warning/fault limit registers to confirm default reset; agent cannot physically cycle PSU input power."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: PSU identity, PMBus address/master, and affected register set are not identified.",
+        "exact_operation_semantics": "FAIL: the source refers to \"the following case\" but does not define the input-power scenario or cycle procedure.",
+        "parameters_and_acceptance_criteria": "FAIL: default values, register addresses/format, comparison tolerance, timing, and restart criteria are missing.",
+        "dependencies": "FAIL: compatible read-only PMBus master and approved AC isolation/switching equipment are not supplied.",
+        "safety_and_recovery": "FAIL: host/load impact, outage window, and failed-restart recovery are undefined.",
+        "evidence_mapping": "FAIL: no deterministic pre/post register and power evidence can be compared to a defined default.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek identifies the physical cycle and PMBus re-read; it does not resolve the missing case/defaults."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The testcase combines a physical PSU input interruption with an undefined default-limit scenario. Do not cycle AC or guess PMBus registers, default values, or recovery criteria.",
+      "unresolved_blockers": [
+        "Exact input-power case and cycle/isolation method",
+        "PSU identity, PMBus address/master, register map and read semantics",
+        "Default limits, tolerance, timing, and restart criteria",
+        "Dedicated system/load and maintenance window",
+        "Failed PSU/host/BMC recovery procedure",
+        "Raw pre/post register and power evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Vendor test-case definition and default register table",
+        "Validated PMBus read-only tool/target",
+        "Approved AC switching and outage/recovery plan",
+        "Operator checklist and pre/post evidence format"
+      ],
+      "safety_decision": "Do not initiate AC input cycling or write limits. Preserve BMC/SEL/kernel and pre-cycle evidence; stop for abnormal PSU state, failed restart, BMC/host loss, or out-of-window power impact.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
