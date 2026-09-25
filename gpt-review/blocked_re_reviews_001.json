@@ -67,6 +67,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-002",
+      "code": "Wistron-HW-00070-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 66,
+        "physical_xlsx_row": 67
+      },
+      "test_name": "FW upgrade/downgrade",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No new PSU identity, firmware image, HPM method, sequence, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Enter BMC ip address into web browser. (Must use \"https://<BMC ip>\") and enter account/password.\n2. Select \"Maintenance/HPM firmware update\" page.\n3. Update the PSU firmware and click the button to do.\n4. Wait a minutes and reboot the system. Re-login the web page to ensure the PSU firmware update successfully.\n5. Repeat N & N-1 firmware update 5 times.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. Login BMC webUI successfully.\n2. Find the page.\n3. PSU firmware update successfully without issue.\n4. SUT can power cycle without issue.",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "ipmitool, PSU FW image (user-provided)",
+        "ai_commands": "-- PSU firmware upgrade/downgrade is a multi-step flash (place the user-supplied PSU FW image on the DUT, run the vendor/BMC flash command) that resets the PSU; needs the exact image + a maintenance window. After the flash, verify with sudo ipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" sensor list 2>&1 | grep -iE \"psu\" and the FW version readback.",
+        "ai_logs_output": "return FULL ipmitool PSU sensor/FW-version readback after the user completes the PSU FW flash, so the user confirms the new/downgraded FW version is active."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: PSU vendor/model/part number/slot, current firmware, and target image identities are not defined by the source.",
+        "exact_operation_semantics": "FAIL: the source names the BMC HPM page but does not define the validated vendor HPM method, image compatibility rules, or flash invocation.",
+        "parameters_and_acceptance_criteria": "FAIL: N/N-1 values, five-cycle ordering, per-cycle target, timing, retry/abort rules, and firmware readback criteria are undefined.",
+        "dependencies": "FAIL: exact signed images, hashes, downgrade authorization, HPM support, maintenance window, and recovery access are not supplied.",
+        "safety_and_recovery": "FAIL: PSU reset/output impact, redundancy topology, controlled power-cycle limits, and failed-flash recovery are not fully defined.",
+        "evidence_mapping": "FAIL: the criteria do not define per-cycle firmware evidence, final version targets, or deterministic recovery evidence.",
+        "source_reference_conflict_resolution": "PASS: DeepSeek correctly flags PARTIAL/image/maintenance dependencies, but its generic readback does not resolve the source gaps."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. This testcase performs a destructive PSU firmware mutation followed by repeated upgrade/downgrade cycles and a SUT power cycle. The source does not identify the hardware, images, exact sequence, HPM method, acceptance evidence, or recovery path. Package availability alone cannot make this safe or deterministic.",
+      "unresolved_blockers": [
+        "Exact PSU identity and slot map",
+        "Current and target N/N-1 signed images, hashes, compatibility, and downgrade authorization",
+        "Validated HPM method and five-cycle ordering/timing",
+        "Power topology, redundancy, maintenance window, and operator approval",
+        "Abort, rollback, PSU replacement, and SUT recovery procedure",
+        "Per-cycle firmware and power/boot evidence"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-approved PSU/BMC/SUT identity map",
+        "Validated images and compatibility manifest",
+        "Documented five-cycle sequence and controlled power-cycle criteria",
+        "Qualified operator, maintenance window, redundancy plan, and tested recovery path",
+        "Per-cycle readback and final acceptance definition"
+      ],
+      "safety_decision": "Do not upload, flash, downgrade, reset, reboot, or power-cycle. Preserve BMC/SEL/host/power evidence and stop on any missing identity, image, redundancy, or recovery input.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
