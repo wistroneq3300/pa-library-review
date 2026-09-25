@@ -1232,6 +1232,62 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "review_id": "blocked-re-review-023",
+      "code": "Wistron-HW-00118-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 114,
+        "physical_xlsx_row": 115
+      },
+      "test_name": "Hot plug/non hot plug FAN  exist  in BIOS/BMC log",
+      "original_automation_classification": "BLOCKED",
+      "logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+      "new_evidence_status": "No hot-plug versus cold-install scope, fan/slot map, power/ESD procedure, expected BIOS/BMC/SEL evidence, or recovery evidence was supplied; this is an independent gate re-check.",
+      "source_re_read": {
+        "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check Fan plug log in BIOS/BMC\n1. Insert required fan on SUT\n2. Power on\n3. Go to UEFI setup menu to check power information\n4. make sure system can boot without error\n5. Check power module exist in BMC\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+        "criteria": "1. No error during POST\n2. Check fan rule in Spec\n3. Check fan information in BMC",
+        "script": null
+      },
+      "deepseek_reference_re_read": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: this case hot-plugs/non-hot-plugs a physical fan module and checks it appears in BIOS/BMC log; inserting/removing the fan module is a physical action at the machine. Agent cannot hot-plug a fan or see the BIOS screen over SSH (it can read the BMC SEL after the operator act).",
+        "ai_logs_output": "operator physically hot-plugs the fan and confirms BIOS/BMC log shows it; agent can read the post-event BMC SEL but cannot do the physical fan insertion."
+      },
+      "gate_results": {
+        "exact_target_identity": "FAIL: fan/module/slot map and platform hot-plug capability are not defined.",
+        "exact_operation_semantics": "FAIL: title says hot/non-hot plug while procedure only inserts a fan before power-on; no event sequence is resolved.",
+        "parameters_and_acceptance_criteria": "FAIL: power state, expected BIOS/BMC/SEL fields, timing, fan rule, and restoration criteria are incomplete.",
+        "dependencies": "FAIL: no platform-specific hot-plug/power/ESD procedure, approved module, operator, or OOB recovery is supplied.",
+        "safety_and_recovery": "FAIL: wrong insertion/power state may damage hardware, remove cooling, prevent boot, or lose recovery.",
+        "evidence_mapping": "FAIL: generic BMC/BIOS output cannot prove a defined physical event without timestamps and mapping.",
+        "source_reference_conflict_resolution": "FAIL: DeepSeek assumes hot-plug and a post-event SEL check that the source does not define."
+      },
+      "re_review_classification": "BLOCKED",
+      "re_review_findings": "The original BLOCKED decision remains correct. The title, procedure, and criteria do not resolve hot-plug versus cold-install behavior, so no physical fan sequence or evidence contract can be approved. Do not insert/remove a fan or clear logs based on inference.",
+      "unresolved_blockers": [
+        "Hot-plug versus non-hot-plug scope",
+        "Fan/module/slot map and power state",
+        "Platform hot-plug/ESD procedure",
+        "Expected POST/UEFI/BMC/SEL evidence and timing",
+        "Qualified operator and OOB recovery",
+        "Safe restoration of fan population/boot state"
+      ],
+      "required_evidence_to_reopen": [
+        "Owner-resolved event scope",
+        "Platform-specific physical procedure",
+        "Fan map and approval",
+        "Expected firmware/BMC/SEL fields",
+        "Pre/during/post evidence and recovery plan"
+      ],
+      "safety_decision": "Do not install, remove, hot-plug, or power-cycle a fan while blocked, and do not clear logs. Preserve baseline; stop for electrical/thermal risk, POST/BMC errors, missing event correlation, or unsafe restoration.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
