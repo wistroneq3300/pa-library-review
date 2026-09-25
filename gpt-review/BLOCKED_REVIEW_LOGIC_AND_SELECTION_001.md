@@ -60,14 +60,14 @@ evidence.
 
 The first five selected cases provide different blocker patterns:
 
-### `Wistron-HW-00032-V002` - CRPS latch offset to next block
+### `Wistron-HW-00032-V004` - CRPS latch offset to next block
 
 Required evidence includes the vendor configuration layout, field/address,
 block boundaries, byte order, expected offset, read-only access method, and
 recovery if a write is involved. Without those details, a generic SMBus or
 IPMI read is not a valid implementation.
 
-### `Wistron-HW-00070-V002` - Firmware upgrade/downgrade
+### `Wistron-HW-00070-V004` - Firmware upgrade/downgrade
 
 Required evidence includes the exact PSU identity, current and target image
 versions, image hashes, signed-image rules, update method, the exact five-cycle
