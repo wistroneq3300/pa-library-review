@@ -1475,6 +1475,36 @@
       "manual_steps": ["Owner supplies expected NM state, platform, read-only utility and reboot approval.","Agent collects evidence while operator supervises reboot/recovery.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Validate the expected ME NM state and platform, confirm `mei-amt-check -N` is read-only, capture pre-reboot evidence, obtain explicit reboot approval, repeat after recovery and preserve management/OOB and BMC/SEL evidence. Do not infer status from dmesg alone; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00224-V002",
+      "source_ref": {"sheet":"Functionality","source_row":215},
+      "test_name": "BIOS booting mode",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Determine whether the identified SUT is booted in the owner-required UEFI or Legacy mode and confirm the same mode after an approved reboot.",
+      "preconditions": ["Owner supplies the expected boot mode, platform/BIOS identity and approved BIOS/KVM and OS read-only evidence method.","Confirm a maintenance/reboot window, active-workload status and OOB recovery; this is detection only, not a BIOS mode change.","Capture boot, EFI, kernel, BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Read platform/BIOS identity and OS boot-mode indicators such as `/sys/firmware/efi` using approved read-only tools; do not assume `dmidecode -s bios-mode` is valid.","Record active jobs and OOB connectivity and define the pre/post reboot comparison."],
+      "safety_checks": ["Do not change BIOS boot mode or boot-order settings under this case.","Reboot requires explicit approval and recovery; preserve existing boot/kernel/BMC/SEL evidence.","Do not treat a generic `dmesg|grep boot` as mode proof."],
+      "required_packages": ["Owner-approved BIOS/KVM access and platform boot-mode specification","OS read-only EFI/boot evidence tools; `dmidecode` only for supported fields","Reboot approval, maintenance window and OOB recovery"],
+      "test_command": "Collect read-only BIOS/KVM and OS evidence for the UEFI/Legacy boot mode, compare with the owner-defined expected mode, reboot only after approval, then repeat the evidence collection.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly recognizes a missing expected mode, but `dmidecode -s bios-mode` is not a reliable universal field and the command does not show BIOS/KVM correlation or post-reboot proof.","A mode change is outside scope and could make the OS unbootable; this record permits read-only verification only."],
+      "expected_evidence": ["Platform/BIOS identity, expected UEFI/Legacy mode and authorization.","BIOS/KVM observation plus OS EFI/boot evidence before and after approved reboot.","Boot/OOB/kernel/BMC/SEL health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["After recovery, repeat the approved BIOS/OS read-only mode checks and preserve boot/kernel/BMC/SEL evidence without clearing logs."],
+      "logs_to_collect": ["Platform/BIOS specification and expected mode","BIOS/KVM and OS EFI/boot outputs with reboot timestamps","Boot/kernel/BMC/SEL/OOB recovery evidence"],
+      "blocked_conditions": ["Expected mode, platform identity, BIOS/KVM path or reliable OS evidence method is missing.","Any request to change mode/boot order, unavailable OOB recovery or BIOS/OS disagreement occurs.","The proposed fixed dmidecode field or dmesg grep is the only evidence."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"intelmetool / mei-amt-check / dmidecode / coreutils","ai_commands":"ls /sys/class/mei/ 2>&1; echo ---; dmidecode -s bios-mode 2>&1 || echo \"BIOS booting mode tool not installed\"; echo ---; dmesg | grep -iE \"boot\" | tail -20","ai_logs_output":"read the UEFI/Legacy boot mode (BIOS booting mode) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected BIOS booting mode.","risk":"RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."},
+      "gpt_second_review_findings": "The boot-mode purpose is identifiable, but the source's `dmidecode -s bios-mode` is not a portable proof of UEFI/Legacy state and the dmesg grep is non-specific. DeepSeek correctly flags the missing expected mode, yet it misattributes the read to MEI/SPS and omits BIOS/KVM/OS correlation and post-reboot evidence. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION, retaining a read-only boundary and requiring owner-approved expected mode, reliable evidence methods and reboot approval.",
+      "risk_level": "HIGH",
+      "blast_radius": "BIOS/UEFI boot-state evidence, OS availability and reboot/OOB recovery; no intended configuration change.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not alter boot mode or order. If BIOS/OS evidence conflicts or reboot recovery fails, preserve KVM/OS/kernel/BMC/SEL output and use OOB recovery; escalate to the platform owner rather than changing settings.",
+      "manual_steps": ["Owner supplies expected mode, BIOS/KVM path and reboot authorization.","Operator/KVM provides the firmware-side observation while the agent collects OS read-only evidence and supervises approved reboot recovery.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep the test read-only: obtain the expected UEFI/Legacy mode, correlate BIOS/KVM with OS EFI evidence, do not rely on `dmidecode -s bios-mode` or dmesg alone, obtain reboot approval and repeat after recovery. Never change boot settings; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
