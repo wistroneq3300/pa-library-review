@@ -2015,6 +2015,36 @@
       "manual_steps": ["Operator performs the reversible BIOS TPM disable and observes the recovery boot.","Operator restores TPM and supplies recovery/normal-boot evidence; agent must not claim the screen result.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not remove or clear TPM and do not attempt this from Linux SSH. Request the exact BitLocker volume/protector, recovery key, reversible BIOS method, KVM/OOB plan and restoration evidence; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00242-V003",
+      "source_ref": {"sheet":"Functionality","source_row":233},
+      "test_name": "No TPM with bitlocker",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "On the approved Windows test volume, configure the owner-approved policy to permit BitLocker without TPM, encrypt with an approved password/startup-key protector, and verify BitLocker status and reboot recovery.",
+      "preconditions": ["Qualified Windows operator, exact test volume, Windows policy/build, approved password or USB startup key, recovery key and rollback plan are available.","Explicitly define encryption mode, volume scope and reboot/recovery window; never apply policy/encryption to an unknown or production disk.","Capture Windows/BitLocker/security/boot baseline without clearing event logs."],
+      "pre_check_commands": ["Operator verifies volume identity and existing protectors/status read-only; validate recovery key and startup credential backup before policy change.","Confirm Group Policy/BitLocker compatibility and KVM/OOB recovery; do not infer a safe target from `C:` alone."],
+      "safety_checks": ["Do not enable BitLocker or modify Group Policy without approval; protect passwords/USB startup keys and recovery material.","Stop on encryption/boot/recovery failure, wrong volume, policy conflict or missing recovery evidence; do not clear TPM/security logs."],
+      "required_packages": ["Windows Group Policy/BitLocker tools and approved test volume","Recovery key, password/startup USB key and backup/rollback","Qualified operator, maintenance approval and KVM/OOB recovery"],
+      "test_command": "MANUAL ONLY: operator configures the approved Windows policy for BitLocker without TPM, enables encryption on the approved test volume with the owner-approved protector, records `manage-bde -status`, reboots and validates recovery/boot.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek's NO conclusion is correct for Windows Group Policy, BitLocker GUI, credentials and reboot validation; GPT adds exact volume/protector, recovery-key and rollback gates.","The source's `manage-bde -on C:` example is not a safe target instruction and must not be used without owner validation."],
+      "expected_evidence": ["Windows build/policy, exact volume/protector, recovery key/startup credential backup and authorization.","Policy/BitLocker/encryption transcript, `manage-bde` status, reboot and recovery/boot evidence.","Windows security/event/BMC/OOB health, no data loss and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Operator verifies BitLocker status/protectors and approved boot/recovery path after encryption; preserve Windows security/event logs."],
+      "logs_to_collect": ["Policy/volume/protector/recovery identity","BitLocker/encryption/reboot/recovery transcript","Boot/security/event/BMC/OOB and restoration evidence"],
+      "blocked_conditions": ["No qualified Windows operator, exact test volume, recovery material, compatible policy or rollback path.","Production/unknown volume, encryption/boot failure, lost credential/recovery key or unapproved TPM/policy change."],
+      "deepseek_original_review": {"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"-- not runnable by agent: this No-TPM BitLocker case requires enabling BitLocker without a TPM via Windows Group-Policy (gpedit.msc) then encrypting a drive - interactive Windows GUI + policy + reboot validation. The agent cannot drive the Windows Group Policy editor or the BitLocker wizard.","ai_logs_output":"operator configures BitLocker-without-TPM via Windows Group Policy, encrypts, and validates over a reboot; agent cannot drive the Windows GUI.","risk":"RISK: physical/hardware operation at the machine - human only; agent must not attempt."},
+      "gpt_second_review_findings": "DeepSeek's NO boundary is correct because this case requires Windows Group Policy, BitLocker provisioning, credential/recovery-key handling, encryption and reboot validation. GPT keeps MANUAL ONLY and adds exact-volume, protector, policy compatibility, recovery and no-production-disk controls; the Linux agent must not emulate `manage-bde` or claim Windows GUI results.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "Windows policy, BitLocker protectors, encrypted volume/data access, boot/recovery credentials and OOB availability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on policy, encryption or boot anomalies, preserve recovery material and logs, use the approved Windows/OOB recovery/rollback path and do not retry on an unidentified volume or without credentials.",
+      "manual_steps": ["Operator configures the policy and BitLocker on the approved volume.","Operator supplies status, encryption, protector, reboot and recovery evidence; agent must not claim GUI work.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not run the Linux/SSH substitute or target `C:` by assumption. Request the exact test volume, policy, protector, recovery key/startup key and rollback plan; collect operator Windows/BitLocker/reboot evidence and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
