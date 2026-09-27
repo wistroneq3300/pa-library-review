@@ -2105,6 +2105,36 @@
       "manual_steps": ["Owner/FAE supplies target/image/procedure/recovery and approves deliberate corruption.","Operator performs DediProg programming and supervises AST1060 recovery/boot while agent captures approved readback.","Owner validates BIOS/boot/recovery evidence and decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not destroy the BIOS region or use DediProg without exact target/image/recovery approval. Require stable power, console/OOB and no power interruption during recovery; collect AST1060/BIOS/POST/boot evidence and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00251-V002",
+      "source_ref": {"sheet":"Functionality","source_row":236},
+      "test_name": "Reject BIOS Update with Corruptu pdate Image",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify AST1060 rejects a deliberately invalid BIOS capsule/update attempt without altering the active or recovery BIOS region.",
+      "preconditions": ["Owner supplies AST1060/BMC/BIOS identity, vendor-guaranteed corrupt/older negative fixture, update endpoint, expected rejection code and recovery plan.","Capture current BIOS/BMC/AST1060/POST/SEL baseline, ensure stable power/OOB and obtain explicit approval for the state-changing attempt.","Define how a rejected upload is distinguished from an accepted/partial flash and how to recover."],
+      "pre_check_commands": ["Verify image hash/type, target compatibility, BMC task endpoint and rejection semantics read-only; do not submit the image while mappings are uncertain.","Record firmware identity and recovery media before any attempt."],
+      "safety_checks": ["Do not assume corruption/older version will be rejected; stop on task acceptance, BMC loss, BIOS/POST change or ambiguous status.","Never clear BMC/SEL logs and never retry with a different image to force rejection."],
+      "required_packages": ["Vendor-approved negative BIOS fixture and AST1060 rejection specification","BMC update API/tool, protected credentials and BIOS recovery image","Stable power, maintenance approval and OOB/KVM recovery"],
+      "test_command": "BLOCKED: obtain the AST1060/BMC negative-test fixture, endpoint, expected rejection response and recovery plan, then re-review before a supervised submission.",
+      "user_confirmation_required": true,
+      "risk_notes": ["This row's acceptance is specifically AST1060 rejection; DeepSeek repeats the same unsafe assumption that any corrupt/older image will be rejected and uses `mc info` only as an indirect unchanged check.","Without a vendor guarantee, the negative image may be accepted or partially applied and damage BIOS."],
+      "expected_evidence": ["AST1060/BMC/BIOS identity, negative fixture hash/type, endpoint, expected rejection response and authorization.","Update-task request/error, unchanged BIOS identity, POST/OOB/SEL evidence and no active/recovery-region change.","Recovery readiness and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Do not run while blocked; after re-review, verify AST1060/BMC/BIOS/POST/OOB state and preserve logs without clearing."],
+      "logs_to_collect": ["Firmware/fixture/endpoint/recovery identity","Update task request/response and pre/post version/POST evidence","BMC/SEL/OOB/recovery evidence"],
+      "blocked_conditions": ["AST1060 rejection semantics, negative fixture, endpoint, compatibility or recovery is missing.","No stable power/OOB/approval exists or any firmware state changes/response is ambiguous.","`mc info` alone is the only evidence."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"a deliberately corrupt / older BIOS image (user-provided) + curl + BMC creds","ai_commands":"-- Reject BIOS Update with Corruptu pdate Image: attempt to update the BIOS with a corrupt update image / an older (downgrade) image and confirm the BMC rejects it (ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" mc info 2>&1 unchanged, update task returns an error). State-changing attempt that must be rejected.","ai_logs_output":"return the UpdateService POST error + the pre/post BIOS version (unchanged) so the user confirms the bad/downgrade image was rejected without changing firmware.","risk":"RISK: using a corrupt/older image is safe only because it must be rejected; never flash a working newer image in this test."},
+      "gpt_second_review_findings": "The source criterion is AST1060 rejection of a corrupt BIOS image, but the available material does not define the negative fixture, endpoint, expected rejection response or guarantee that the image cannot be partially applied. DeepSeek's PARTIAL command assumes rejection and uses unchanged `mc info` as insufficient proof. GPT changes it to BLOCKED until the vendor rejection semantics and recovery path are supplied; no image submission is safe before re-review.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "AST1060/BMC update path, BIOS active/recovery contents, bootability, POST/SEL and OOB management.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not submit the image while blocked. Preserve firmware/BMC/SEL evidence and recovery media; if later approved and status is ambiguous, stop and use the validated BIOS recovery/OOB path rather than retrying.",
+      "manual_steps": ["Owner/FAE supplies negative fixture, AST1060 endpoint/rejection code and recovery.","After re-review, operator supervises the controlled attempt and collects task/POST/OOB evidence.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep blocked. Do not infer that the corrupt/older capsule is safe or run it to force an error. Request the AST1060/BMC specification, negative fixture, expected rejection response and recovery path before re-review; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
