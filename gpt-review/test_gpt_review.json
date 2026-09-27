@@ -1715,6 +1715,36 @@
       "manual_steps": ["Owner supplies target/controller/address/specification and safe read-only method.","After re-review, agent collects only mapped FRU/EEPROM evidence over approved paths.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep blocked. Apply the Wistron BMC/I2C ownership rule, do not run the guessed `i2cget -y 2 0x50` command, and request the exact target map, address, vendor transaction semantics, expected fields and recovery path before re-review. The end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00232-V002",
+      "source_ref": {"sheet":"Functionality","source_row":223},
+      "test_name": "Update",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Update an owner-identified EEPROM from an approved UEFI/diagnostic tool, power-cycle the SUT and verify the intended field persists; the source does not identify the EEPROM, field, image, tool or recovery target.",
+      "preconditions": ["Owner supplies exact board/EEPROM/controller identity, field or image to write, diagnostic tool/version, expected before/after value and vendor procedure.","Provide backup/restore and brick recovery, explicit EEPROM-write and AC power-cycle approval, qualified operator and OOB/KVM path.","Capture FRU/EEPROM/BIOS/BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Read-only inventory may identify BMC/FRU/EEPROM, but do not infer that FRU record 2 or `Board Mfg=Wistron` is the source's EEPROM target.","Verify write-protection, image/hash, power-cycle sequence and recovery before any tool execution."],
+      "safety_checks": ["Do not run the DeepSeek `ipmitool fru edit` command: it writes persistent FRU data and is not the specified UEFI diagnostic EEPROM update.","Stop on ambiguous target/field, missing backup/recovery, identity/hash mismatch or failed verify; never clear logs as a baseline."],
+      "required_packages": ["Owner-supplied diagnostic tool/image and EEPROM/board specification","BMC/OOB read-only tools and protected credentials for identity only","EEPROM backup/recovery, qualified operator, AC-cycle approval and KVM/OOB path"],
+      "test_command": "BLOCKED: do not write EEPROM or FRU. Obtain the exact EEPROM target, field/image, diagnostic semantics, backup and recovery plan, then re-review before any approved write/power-cycle test.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly warns that FRU writes are persistent, but its `ipmitool fru edit` command changes a guessed BMC FRU field and does not test the source's UEFI-shell diagnostic EEPROM update.","EEPROM identity, write semantics, AC-cycle recovery and acceptance are unresolved; a wrong write can corrupt board identity or brick the platform."],
+      "expected_evidence": ["Board/EEPROM/controller identity, backup, approved image/field/hash, tool/procedure and authorization.","Pre/write/verify transcript, controlled shutdown/AC-cycle/reboot evidence and post-readback of the intended target.","BMC/BIOS/SEL/boot health, restoration/recovery evidence and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Do not run while blocked; after re-review, verify the intended target readback and platform/OOB health after the approved power cycle without clearing logs."],
+      "logs_to_collect": ["EEPROM/board/field/image identity, backup and authorization","Diagnostic write/verify and power-cycle transcript","Post-boot BIOS/BMC/SEL/OOB and recovery evidence"],
+      "blocked_conditions": ["EEPROM target, field/image, tool semantics, expected value, backup or recovery path is missing.","FRU versus UEFI EEPROM identity is ambiguous, write-protect/compatibility is unknown or AC/OOB recovery is unavailable.","Any write/verify/power-cycle anomaly or unexpected identity change occurs."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"ipmitool + BMC creds","ai_commands":"-- Update: update the board EEPROM (FRU) fields ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" fru edit 2 0 0 \"Board Mfg\"=\"Wistron\" 2>&1; ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" fru print 2>&1 | head -n 30; state-changing EEPROM write.","ai_logs_output":"return the FRU edit response + the re-read FRU so the user confirms the updated EEPROM field persisted after the write.","risk":"RISK: rewriting EEPROM/FRU is persistent and can affect warranty/serial data; write only user-specified fields and keep a backup."},
+      "gpt_second_review_findings": "The source describes a UEFI-shell diagnostic EEPROM update followed by shutdown/AC power cycle, but DeepSeek substitutes a guessed BMC FRU edit of `Board Mfg`. Because the EEPROM target, field/image, tool semantics, recovery and acceptance are not defined, GPT changes PARTIAL to BLOCKED; this is an irreducible identity/operation-safety problem, not merely a missing package. Do not write FRU/EEPROM or cycle power until the owner supplies the complete target and recovery plan.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "Persistent EEPROM/FRU identity, BIOS/board bootability, BMC/OOB state, AC power availability and warranty/service metadata.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not execute. Preserve baseline/backup evidence and obtain the vendor recovery/programming procedure; if a later approved write fails, stop, keep power controlled, use OOB/KVM and validated recovery media, and do not retry or substitute FRU editing.",
+      "manual_steps": ["Owner/FAE supplies exact EEPROM target/field/image, tool semantics, backup and recovery.","After re-review, qualified operator supervises the physical UEFI/AC-cycle operation while evidence is captured.","Owner validates readback/boot health and decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep blocked. Do not run `ipmitool fru edit`, do not guess an EEPROM target and do not AC-cycle the SUT. Request the exact diagnostic/tool/image, target field, backup, recovery and acceptance criteria, then re-review before any write; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
