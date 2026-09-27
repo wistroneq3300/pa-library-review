@@ -1565,6 +1565,36 @@
       "manual_steps": ["Owner supplies expected SKU, platform, read-only utility and reboot approval.","Agent collects raw evidence while operator supervises reboot/recovery.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Validate the expected ME SKU and platform identity, confirm `mei-amt-check -M` is read-only, capture pre-reboot output, obtain reboot approval, repeat after recovery and preserve firmware/BMC/SEL evidence. Never infer the SKU from dmesg or remediate a mismatch; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00227-V002",
+      "source_ref": {"sheet":"Functionality","source_row":218},
+      "test_name": "End-of-POST Status",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the identified platform's end-of-POST status, compare it with the owner-defined normal POST completion state and verify it after an approved reboot.",
+      "preconditions": ["Owner supplies platform/BIOS identity, expected POST status and approved MEI/BMC/BIOS evidence source; POST state may be firmware/BMC-specific.","Confirm tool compatibility, reboot window, active-workload impact and OOB/KVM recovery; no BIOS/ME remediation is allowed.","Preserve POST, kernel, BMC/SEL and firmware baseline without clearing logs."],
+      "pre_check_commands": ["Capture raw approved `mei-amt-check -P` output plus platform/BIOS/BMC identity; do not equate `dmesg|grep post` with a POST status record.","Record current boot and management state and define the pre/post reboot comparison."],
+      "safety_checks": ["Verify the `-P` utility is read-only and returns the correct platform status; stop on ambiguity or write-capable behavior.","Reboot requires explicit approval and recovery; preserve existing POST/SEL evidence."],
+      "required_packages": ["Compatible owner-approved read-only MEI/BMC/BIOS POST-status utility","Platform POST specification and decoder","Expected status, reboot approval and OOB/KVM recovery"],
+      "test_command": "Collect end-of-POST status with the approved read-only platform utility, compare with the owner-defined normal state, reboot only after approval and repeat the collection after recovery.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek identifies the missing baseline but its `-P` output is not independently tied to a POST status definition, and a dmesg grep cannot prove completion or health.","POST verification is read-only in intent, while reboot and any firmware diagnostic side effect affect availability."],
+      "expected_evidence": ["Platform/BIOS/BMC identity, expected POST state, decoder/tool and authorization.","Raw pre/post status, reboot/reconnect timestamps, KVM/SEL/boot evidence.","Kernel/BMC/OOB health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Repeat the approved status query after recovery and collect boot/KVM/kernel/BMC/SEL evidence without clearing logs."],
+      "logs_to_collect": ["POST/BIOS/BMC specification, expected state and approval","Raw status and reboot transcript","Boot/KVM/kernel/BMC/SEL/OOB evidence"],
+      "blocked_conditions": ["Expected POST state, platform identity, compatible read-only utility/decoder or KVM/OOB path is missing.","The tool may change firmware state, reboot recovery is unavailable or BIOS/ME/BMC identities conflict.","Pre/post status differs or only generic dmesg text is available."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"intelmetool / mei-amt-check / dmidecode / coreutils","ai_commands":"ls /sys/class/mei/ 2>&1; echo ---; mei-amt-check -P 2>&1 || echo \"End-of-POST Status tool not installed\"; echo ---; dmesg | grep -iE \"post\" | tail -20","ai_logs_output":"read the end-of-POST status (End-of-POST Status) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected End-of-POST Status.","risk":"RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."},
+      "gpt_second_review_findings": "The source's End-of-POST status purpose is identifiable, but the expected state and authoritative firmware/BMC source are unspecified. DeepSeek's package/baseline warning is valid; `mei-amt-check -P` and a generic post dmesg grep still do not establish status semantics, platform correlation or post-reboot evidence. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION with read-only tooling, owner decoder and approved reboot/KVM/OOB recovery.",
+      "risk_level": "HIGH",
+      "blast_radius": "POST/BIOS/ME/BMC status evidence, reboot/boot availability and OOB/KVM path; no intended firmware change.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not remediate firmware or POST state. Preserve raw status, KVM, boot, BMC/SEL and kernel evidence on anomalies, recover via OOB and escalate to the platform owner.",
+      "manual_steps": ["Owner supplies expected POST state, authoritative source and reboot approval.","Agent collects read-only output; operator/KVM supervises approved reboot and recovery.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Define the expected End-of-POST state and authoritative BIOS/ME/BMC source, validate `mei-amt-check -P` or an alternative is read-only, collect pre-reboot evidence, obtain approval, repeat after recovery and preserve KVM/SEL/boot evidence. Do not infer POST health from dmesg alone; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
