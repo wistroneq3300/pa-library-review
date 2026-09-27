@@ -2075,6 +2075,36 @@
       "manual_steps": ["Owner/FAE supplies negative fixture, endpoint, rejection guarantee and recovery.","After re-review, operator supervises the controlled update attempt while agent captures task/POST/OOB evidence.","Owner confirms unchanged firmware/boot health and decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep blocked. Do not post a corrupt/older BIOS image from inference. Request AST1060/BMC/BIOS identity, vendor-guaranteed negative fixture, endpoint/task semantics, stable power and recovery image; re-review before any supervised attempt and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00250-V002",
+      "source_ref": {"sheet":"Functionality","source_row":235},
+      "test_name": "BIOS FW Recovery",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Under a vendor-approved recovery plan, deliberately make the identified BIOS active region invalid with DediProg, boot the platform and verify AST1060 recovery restores the expected BIOS and bootability.",
+      "preconditions": ["Owner supplies AST1060/board/SPI/BIOS identity, approved bad-active fixture/procedure, recovery image/hash, DediProg settings and recovery specification.","Provide qualified hardware operator, stable power, serial/KVM/OOB console, backup/recovery image and explicit approval for deliberate BIOS corruption; never power-cut during recovery.","Capture pre-test BIOS/AST1060/BMC/POST/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Verify target SPI chip/board identity, recovery trigger, image compatibility and DediProg voltage/write protection offline; agent must not program or destroy the active region.","Confirm recovery timeout, POST/OOB evidence and rollback if AST1060 does not recover."],
+      "safety_checks": ["This is a deliberate destructive firmware test; do not run on production hardware or with an unverified image/tool.","Stop on wrong target, failed verify, unexpected power/POST/OOB state or recovery timeout; preserve evidence and do not power-cycle blindly."],
+      "required_packages": ["Vendor recovery image/procedure and signed BIOS/AST1060 specification","DediProg programmer/adapter, exact SPI target and recovery console","Stable power, qualified operator, maintenance approval and OOB/KVM/serial recovery"],
+      "test_command": "After explicit approval and validation, operator uses DediProg to program the approved bad-active BIOS fixture, boots the SUT and records AST1060 recovery/BIOS/POST evidence; agent collects only approved post-recovery readback.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly recognizes deliberate firmware corruption and operator-staged recovery, but PARTIAL must become REQUIRES PACKAGE / USER CONFIRMATION with exact SPI/AST1060/image/recovery gates.","The BMC `mc info` readback alone cannot prove BIOS recovery or boot success; never interrupt recovery power."],
+      "expected_evidence": ["Board/SPI/BIOS/AST1060 identity, bad-active fixture/image hash, DediProg settings, recovery procedure and authorization.","Programmer transcript, recovery trigger/timing, AST1060 verification, BIOS version and POST/boot/KVM evidence.","BMC/SEL/console/OOB health, no unexpected damage and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["After recovery completes, collect read-only BIOS/AST1060/BMC/POST/boot evidence and compare with baseline; preserve logs without clearing."],
+      "logs_to_collect": ["SPI/board/image/programmer/recovery identity and approval","DediProg/recovery/AST1060/POST/boot transcript","BMC/SEL/console/OOB and restoration evidence"],
+      "blocked_conditions": ["Exact SPI/board target, recovery image/procedure, AST1060 trigger, DediProg settings or rollback path is missing.","No stable power/operator/console/OOB approval exists, or recovery/POST/boot fails.","The target is production/unknown or a power interruption is required/likely."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"recovery image + BIOS recovery process (user-staged)","ai_commands":"-- BIOS FW Recovery: recover the BIOS from a forced corrupt/empty state using the recovery image/RoP (Recovery of Last Resort) mechanism; operator stages the image offline / via the BMC recovery flow. Agent only reads back BMC controller info after recovery (OOB, agent host): ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" mc info 2>&1 | head -20","ai_logs_output":"return the recovery flow output + the post-recovery BIOS version so the user confirms the BIOS came back from the forced-bad state.","risk":"RISK: firmware recovery deliberately breaks/interrupts the component; only run under user direction with the recovery image and console, never power-cut mid-recovery."},
+      "gpt_second_review_findings": "The BIOS recovery purpose is identifiable and DeepSeek correctly limits programming to an operator/recovery process. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and adds exact SPI/board/AST1060 identity, bad-active fixture, DediProg settings, stable power, console/OOB, rollback and post-boot evidence; recovery input/approval is mandatory and the agent must not corrupt firmware.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "SPI BIOS contents, AST1060 recovery logic, bootability, BMC/OOB/serial access and platform availability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If recovery fails, do not power-cut or repeat programming blindly; preserve DediProg/AST1060/console/BMC evidence, use the validated BIOS recovery/rollback path under hardware-owner supervision and escalate if POST/OOB is lost.",
+      "manual_steps": ["Owner/FAE supplies target/image/procedure/recovery and approves deliberate corruption.","Operator performs DediProg programming and supervises AST1060 recovery/boot while agent captures approved readback.","Owner validates BIOS/boot/recovery evidence and decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not destroy the BIOS region or use DediProg without exact target/image/recovery approval. Require stable power, console/OOB and no power interruption during recovery; collect AST1060/BIOS/POST/boot evidence and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
