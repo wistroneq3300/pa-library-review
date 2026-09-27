@@ -2045,6 +2045,36 @@
       "manual_steps": ["Operator configures the policy and BitLocker on the approved volume.","Operator supplies status, encryption, protector, reboot and recovery evidence; agent must not claim GUI work.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not run the Linux/SSH substitute or target `C:` by assumption. Request the exact test volume, policy, protector, recovery key/startup key and rollback plan; collect operator Windows/BitLocker/reboot evidence and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00249-V002",
+      "source_ref": {"sheet":"Functionality","source_row":234},
+      "test_name": "BIOS FW Update",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Validate that AST1060/BMC rejects an approved negative BIOS capsule (corrupt or unauthorized downgrade) and that BIOS identity/version and bootability remain unchanged.",
+      "preconditions": ["Owner supplies board/AST1060/BMC/BIOS identity, current version, signed negative-test fixture with documented rejection guarantee, update endpoint/procedure and recovery path.","Confirm stable power, BMC/OOB access, maintenance window and explicit approval for a state-changing update attempt; capture BIOS/BMC/POST/SEL baseline without clearing logs.","Define how rejection is distinguished from an in-progress or partially applied flash and how recovery is performed."],
+      "pre_check_commands": ["Read-only verify BMC/BIOS/AST1060 identity/version, image hash/signature/type and compatibility; do not post an image until vendor semantics are confirmed.","Validate update task endpoint, timeout, cancel/recovery behavior and pre/post boot evidence."],
+      "safety_checks": ["Do not assume a corrupt or older image is harmless; an invalid negative fixture can brick or downgrade the BIOS.","Stop on any accepted upload, state change, BMC loss, POST failure or ambiguous task result; never clear SEL/BMC evidence."],
+      "required_packages": ["Vendor-approved negative BIOS capsule/fixture and rejection specification","AST1060/BMC update tool/API, protected credentials and platform compatibility data","Stable power, OOB/KVM recovery, backup image and explicit firmware-write approval"],
+      "test_command": "BLOCKED: do not submit the corrupt/older BIOS image until the vendor supplies the exact negative fixture, AST1060/BMC endpoint, guaranteed rejection criteria and recovery plan; then re-review before a supervised rejection test.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly notes that the negative update is state-changing and must be rejected, but the source does not identify AST1060 provisioning, endpoint, image compatibility or a guaranteed-safe negative fixture.","`mc info` unchanged alone cannot prove the BIOS was not partially altered; POST/BIOS/SEL/OOB evidence and recovery are required."],
+      "expected_evidence": ["AST1060/BMC/BIOS identity, current version, negative fixture hash/type, endpoint/specification and authorization.","Update task request/response showing rejection, unchanged BIOS version and controlled POST/boot/OOB evidence.","BMC/SEL/host health and recovery evidence with no firmware change; end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Do not run while blocked; after re-review, verify BIOS/BMC/AST1060 version and boot health after the controlled rejection attempt without clearing logs."],
+      "logs_to_collect": ["Platform/firmware/image/endpoint identity and approval","Update task transcript/error and pre/post version/POST evidence","BMC/SEL/OOB/recovery evidence"],
+      "blocked_conditions": ["Negative fixture, AST1060/BMC endpoint, compatibility/rejection guarantee or recovery image is missing.","No stable power/OOB/maintenance approval, task result is ambiguous or any firmware state changes.","BIOS/POST/BMC/SEL evidence is incomplete or logs are cleared."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"a deliberately corrupt / older BIOS image (user-provided) + curl + BMC creds","ai_commands":"-- BIOS FW Update: attempt to update the BIOS with a corrupt update image / an older (downgrade) image and confirm the BMC rejects it (ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" mc info 2>&1 unchanged, update task returns an error). State-changing attempt that must be rejected.","ai_logs_output":"return the UpdateService POST error + the pre/post BIOS version (unchanged) so the user confirms the bad/downgrade image was rejected without changing firmware.","risk":"RISK: using a corrupt/older image is safe only because it must be rejected; never flash a working newer image in this test."},
+      "gpt_second_review_findings": "The negative BIOS-update purpose is understandable, but DeepSeek assumes that a corrupt/older image will be rejected and does not define AST1060 provisioning, endpoint, compatibility, task-state or recovery semantics. GPT changes PARTIAL to BLOCKED because safe rejection cannot be established from the available source; a bad fixture could alter or brick firmware. Obtain a vendor-guaranteed negative fixture and full recovery plan before re-review.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "BIOS firmware, AST1060/BMC update path, bootability, POST/SEL and OOB management availability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not submit the image while blocked. Preserve identity/version and BMC/SEL evidence; if a later approved negative test is accepted or leaves an ambiguous state, stop, use OOB/KVM and the validated BIOS recovery image, and do not retry blindly.",
+      "manual_steps": ["Owner/FAE supplies negative fixture, endpoint, rejection guarantee and recovery.","After re-review, operator supervises the controlled update attempt while agent captures task/POST/OOB evidence.","Owner confirms unchanged firmware/boot health and decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep blocked. Do not post a corrupt/older BIOS image from inference. Request AST1060/BMC/BIOS identity, vendor-guaranteed negative fixture, endpoint/task semantics, stable power and recovery image; re-review before any supervised attempt and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
