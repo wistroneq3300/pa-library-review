@@ -1685,6 +1685,36 @@
       "manual_steps": ["Owner supplies BMC package/release note, target identity and size definition.","Agent collects read-only BMC/package evidence with protected credentials.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Use `ipmitool mc info` only for BMC identity/version, not image size. Obtain the `.bin`/release note and exact size semantics, correlate target identity, inspect package metadata, keep BMC actions read-only and preserve SEL/network evidence; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00231-V002",
+      "source_ref": {"sheet":"Functionality","source_row":222},
+      "test_name": "Information check",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify readable/correct onboard-NIC or board FRU/EEPROM information, but the source does not identify the EEPROM owner, BMC/I2C controller, bus/address, field schema or expected values.",
+      "preconditions": ["Owner supplies the exact onboard NIC/FRU target, BMC/OOB path, controller/bus/address, vendor specification and expected fields/values.","Confirm whether the authoritative source is BMC FRU or a board EEPROM and provide read-only tooling/credentials; preserve logs without clearing them.","Do not attach or probe an unknown I2C target."],
+      "pre_check_commands": ["Collect BMC identity and approved read-only FRU inventory over OOB; do not assume host `i2c-2`, address `0x50` or that the device is the NIC.","Resolve the Wistron platform-management bus/controller and target address from the vendor spec before any raw read."],
+      "safety_checks": ["Under the Wistron rule, treat I2C as BMC/platform-management scope; `i2cget -y 2 0x50 0x00` is unsafe without ownership/address/transaction confirmation.","Do not use `-y` to bypass prompts, clear/write EEPROM, or infer FRU correctness from one byte."],
+      "required_packages": ["Owner-supplied BMC/I2C controller/address and EEPROM/FRU specification","`ipmitool` or approved OOB FRU tool; vendor-approved read-only I2C utility only after mapping","Protected BMC credentials and recovery path"],
+      "test_command": "BLOCKED: obtain the platform-specific BMC/EEPROM target, bus/address, field schema and expected values, then re-review before collecting approved read-only FRU/EEPROM evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek marks YES and combines BMC FRU with a guessed host I2C read, but the source says onboard NIC information while the command reads generic FRU/EEPROM; identity and semantics are unresolved.","A wrong I2C target or transaction can affect platform-management devices; Linux I2C listing alone is not proof of the required BMC target."],
+      "expected_evidence": ["SUT/BMC/NIC/EEPROM identity, controller/bus/address, vendor schema/expected fields and authorization.","BMC FRU plus approved raw read transcript tied to the mapped target, without writes.","No management/EEPROM change, preserved BMC/SEL evidence and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Do not run while blocked; after re-review, repeat read-only FRU/EEPROM evidence and verify BMC health without clearing logs."],
+      "logs_to_collect": ["Platform-management/I2C specification and mapping","FRU/raw EEPROM outputs and tool versions","BMC/SEL/OOB health and no-write evidence"],
+      "blocked_conditions": ["Target identity, BMC/I2C ownership, controller/bus/address, expected fields or vendor transaction semantics are missing.","No safe OOB path or read-only tool exists, or FRU/NIC/EEPROM sources disagree without owner interpretation.","Any write/clear action or unexplained BMC/I2C behavior is proposed."],
+      "deepseek_original_review": {"ai_can_execute":"YES","ai_packages_needed":"ipmitool + i2c-tools","ai_commands":"-- Information check: read the board EEPROM/FRU info ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" fru print 2>&1 | head -n 40 ; i2cget -y 2 0x50 0x00 2>&1.","ai_logs_output":"return the FRU fields + a raw EEPROM read so the user confirms the EEPROM holds valid FRU/product data.","risk":null},
+      "gpt_second_review_findings": "The source says onboard NIC information, while DeepSeek's command reads BMC FRU plus an unverified host I2C bus/address. Under the Wistron I2C rule, controller ownership, target address, transaction semantics and expected fields must be known; `i2cget -y 2 0x50` cannot be safely inferred from numbering. GPT changes YES to BLOCKED because target/operation/acceptance semantics remain unsafe and indeterminate, not merely because a package is missing. Re-review is required after the owner supplies the platform mapping and vendor specification.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "BMC/platform-management I2C devices, EEPROM/FRU contents, onboard NIC identity and OOB management availability.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not probe the unknown bus/address. Preserve existing BMC/SEL/OOB evidence and escalate the target mapping to the platform owner; do not write, clear or retry a guessed I2C transaction.",
+      "manual_steps": ["Owner supplies target/controller/address/specification and safe read-only method.","After re-review, agent collects only mapped FRU/EEPROM evidence over approved paths.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep blocked. Apply the Wistron BMC/I2C ownership rule, do not run the guessed `i2cget -y 2 0x50` command, and request the exact target map, address, vendor transaction semantics, expected fields and recovery path before re-review. The end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
