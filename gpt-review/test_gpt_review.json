@@ -789,6 +789,88 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00212-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 203
+      },
+      "test_name": "USB Stress testing",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify that the approved USB 3.0 Type-C test plug and owner-designated USB port sustain the source-defined PassMark BurnInTest USB test at 100% load for 3 hours without BurnInTest or test-plug errors, and remain usable after the run.",
+      "preconditions": [
+        "Owner identifies the SUT, exact USB connector/controller path, approved PassMark USB 3.0 Type-C test plug and its VID/PID/serial or equivalent identity; the source does not define the port matrix beyond an USB port.",
+        "Provide a licensed, OS-compatible PassMark BurnInTest version with the USB test and the vendor-approved test-plug procedure, plus a maintenance window, operator physical access and an alternate/OOB recovery path.",
+        "Confirm no active workload, boot media, console, security device or management path depends on the selected port; capture platform, USB, kernel, thermal, power and BMC/SEL baseline without clearing existing evidence."
+      ],
+      "pre_check_commands": [
+        "Collect read-only platform and USB topology/controller evidence with `lsusb`/`lsusb -t` or platform-equivalent tools, and correlate the owner-designated physical port with the approved test plug.",
+        "Verify BurnInTest version/license, USB-test availability and the vendor plug compatibility without starting the test; record the exact 100% load and 180-minute configuration.",
+        "Record active users/jobs, USB mounts/processes, kernel/system/BMC/SEL and thermal/power baseline; do not clear dmesg, syslog or SEL."
+      ],
+      "safety_checks": [
+        "Do not substitute `stress-ng --udp` or a generic USB key for the PassMark USB test and approved USB 3.0 Type-C test plug; those do not establish the source acceptance criterion.",
+        "A three-hour 100% USB load can raise controller/device temperature and power or disrupt users; isolate the port from boot, input, security and OOB functions and obtain explicit maintenance approval.",
+        "Stop on overcurrent, disconnect, enumeration/controller error, thermal or power excursion, unexpected mount/I/O or system impact; preserve all pre-existing logs and do not repeatedly reconnect a failing device."
+      ],
+      "required_packages": [
+        "Licensed PassMark BurnInTest with the USB test module and an owner-approved version",
+        "Vendor-approved PassMark USB 3.0 Type-C test plug and its compatibility/procedure specification",
+        "`usbutils` or equivalent read-only USB inventory tools, operator physical access, exact port/controller map and OOB/alternate-console recovery"
+      ],
+      "test_command": "With the approved USB 3.0 Type-C test plug on the owner-designated USB port, run the licensed PassMark BurnInTest USB Test under 100% load for 3 hours; preserve the complete BurnInTest and test-plug results.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "This is a hybrid physical/tool-driven stress test: the operator must attach the approved plug and the agent can assist with read-only host evidence, but the 100% three-hour load is service-impacting and not fully automatable.",
+        "The source names BurnInTest and the PassMark USB3 test plug but omits the exact port, tool/license version, plug identity, compatibility and recovery details; arbitrary USB media or an unverified port is unsafe.",
+        "DeepSeek's `stress-ng --udp 4 --timeout 300s` command is not a USB-port or BurnInTest test, uses the wrong stimulus and duration, and cannot prove the source's no-error criterion; GPT therefore changes the material execution conclusion while retaining the package/approval boundary."
+      ],
+      "expected_evidence": [
+        "SUT identity, exact USB port/controller mapping, approved test-plug identity, BurnInTest version/license and vendor compatibility/authorization.",
+        "Timestamped configuration showing the USB test at 100% load for 180 minutes, complete BurnInTest report and the PassMark USB3 test-plug result with no errors.",
+        "Pre/during/post USB enumeration, kernel/system/BMC/SEL, thermal and power evidence; no disconnect, overcurrent, unexpected mount or service impact; post-test plug/port health and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "After the approved run stops, collect read-only `lsusb`/`lsusb -t`, USB/controller and kernel/system evidence and verify the test plug/port is in the expected state.",
+        "Compare thermal, power, BMC/SEL, mount and process state with the baseline, preserve the full BurnInTest transcript/report and remove the plug only after the tool has stopped and any I/O is idle."
+      ],
+      "logs_to_collect": [
+        "SUT/port/controller map, test-plug identity, BurnInTest version/license, compatibility and authorization",
+        "BurnInTest USB configuration, 180-minute transcript/report, test-plug result and timestamps",
+        "Pre/during/post USB, kernel/system/BMC/SEL, thermal/power and recovery/restoration evidence"
+      ],
+      "blocked_conditions": [
+        "The approved BurnInTest package/license, compatible USB 3.0 Type-C test plug, exact port/controller identity or vendor test procedure is missing.",
+        "The selected port is part of boot, active input, security, OOB or another service, no maintenance/recovery path exists, or the tool cannot exercise the approved plug as specified.",
+        "Port identity is ambiguous, the test plug is unknown or unsupported, BurnInTest/test-plug results cannot be captured, or an error/overcurrent/thermal/power/controller event leaves the system state unexplained."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "usbutils stress-ng (loopback needs a USB-serial loopback adapter + pyserial)",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsusb 2>&1; echo ---dmesg---; dmesg | grep -iE 'usb' | tail -20; stress-ng --udp 4 --timeout 300s 2>&1 | tail 2>&1\"",
+        "ai_logs_output": "return FULL lsusb + dmesg USB lines + stress/loopback result so the user confirms the USB ports survived the stress/loopback; the full matrix over every physical port needs the operator to attach devices.",
+        "risk": "RISK: USB stress/loopback needs physical USB devices on the specific ports; agent runs the host-side stress/loopback probe and the physical port matrix is operator."
+      },
+      "gpt_second_review_findings": "The source purpose is identifiable: run the licensed PassMark BurnInTest USB test with a PassMark USB 3.0 Type-C test plug at 100% load for 3 hours and check both the tool and plug for errors. DeepSeek correctly recognizes that physical devices and host evidence are needed, but its stress-ng UDP command neither drives USB nor matches the named BurnInTest/test-plug stimulus, 100% load, three-hour duration or acceptance evidence. GPT changes the invalid PARTIAL conclusion to REQUIRES PACKAGE / USER CONFIRMATION, not BLOCKED, because the purpose can be made executable once the owner supplies the licensed tool, approved plug, exact port/controller mapping, compatibility and maintenance/recovery approval. The review must preserve logs, isolate service-sensitive ports and collect the complete 180-minute BurnInTest report plus USB, thermal, power and BMC/SEL evidence.",
+      "risk_level": "HIGH",
+      "blast_radius": "Selected USB port/controller and test plug, USB power/thermal state, host services and potentially boot, input, security or OOB connectivity during the three-hour stress run.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop BurnInTest on any error, disconnect, overcurrent, thermal/power excursion or service impact and preserve the transcript and pre/during/post logs. Allow the tool and any I/O to stop, safely remove the approved plug, restore the expected USB/service state and use the alternate/OOB path if access is affected; do not retry or substitute a different device without owner diagnosis and approval.",
+      "manual_steps": [
+        "Owner supplies the licensed BurnInTest package/version, approved USB 3.0 Type-C test-plug identity/procedure, exact port/controller map, maintenance window and recovery authorization.",
+        "Operator attaches the approved plug to the designated port while the agent collects read-only baseline and synchronized host/thermal/power evidence; the operator supervises the 100% three-hour BurnInTest run.",
+        "Owner reviews the complete BurnInTest/test-plug report and restoration evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not use the DeepSeek stress-ng UDP substitute. Before execution, request the licensed PassMark BurnInTest package, compatible USB 3.0 Type-C test plug, exact port/controller identity, 100%/180-minute configuration, maintenance approval and OOB recovery. Run read-only pre-checks, preserve existing logs, isolate service-sensitive ports, supervise the approved BurnInTest USB test, collect the full report plus USB/thermal/power/BMC evidence, stop safely on anomalies and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
