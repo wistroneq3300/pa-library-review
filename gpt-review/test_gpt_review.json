@@ -2255,6 +2255,1125 @@
       "manual_steps": ["Owner/FAE supplies fixture, endpoint/rejection code and recovery.","After re-review, operator supervises the controlled rejection attempt and captures task/POST/OOB evidence.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep blocked. Do not post a corrupt AST1060 image from inference. Request the vendor fixture, endpoint, rejection semantics and recovery before re-review; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00256-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 241
+      },
+      "test_name": "Reject AST1060 FW Downgrade",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify AST1060 blocks an invalid or revoked-SVN downgrade capsule without changing firmware or boot state.",
+      "preconditions": [
+        "Owner supplies AST1060/BMC/board identity, anti-rollback policy, signed invalid/revoked-SVN fixture, endpoint, rejection semantics and recovery image.",
+        "Capture current AST1060 version/SVN, POST/SEL/OOB baseline and obtain explicit approval for the state-changing security negative test."
+      ],
+      "pre_check_commands": [
+        "Verify capsule signature/SVN, target compatibility and endpoint semantics read-only; do not submit while anti-rollback behavior is unverified.",
+        "Record recovery readiness without clearing logs."
+      ],
+      "safety_checks": [
+        "Do not substitute a generic corrupt/older image; stop on acceptance, BMC loss, firmware/version change or ambiguous task state.",
+        "Never clear security/SEL evidence or retry arbitrary capsules."
+      ],
+      "required_packages": [
+        "Vendor anti-rollback specification and signed invalid/revoked-SVN AST1060 capsule",
+        "BMC update API/tool, protected credentials and recovery image",
+        "Stable power, OOB/KVM, maintenance approval and qualified operator"
+      ],
+      "test_command": "BLOCKED: obtain the anti-rollback policy, negative SVN fixture, endpoint, rejection code and recovery plan, then re-review before a supervised submission.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The criterion is security-specific anti-rollback, but DeepSeek substitutes a generic corrupt/older image and assumes rejection.",
+        "An unverified capsule could be accepted and alter AST1060 security/boot state; unchanged `mc info` is insufficient proof."
+      ],
+      "expected_evidence": [
+        "AST1060/BMC/board identity, current SVN/policy, fixture signature/SVN, endpoint and authorization.",
+        "Update-task rejection proving anti-rollback, unchanged version/SVN, POST/boot/OOB and BMC/SEL evidence.",
+        "Recovery readiness and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Do not run while blocked; after re-review, verify AST1060/SVN/POST/OOB health and preserve logs."
+      ],
+      "logs_to_collect": [
+        "Anti-rollback policy, firmware/fixture/SVN and endpoint identity",
+        "Update request/error and pre/post AST1060/SVN/POST evidence",
+        "BMC/SEL/OOB/recovery evidence"
+      ],
+      "blocked_conditions": [
+        "Policy, invalid/revoked-SVN fixture, endpoint/rejection semantics or recovery is missing.",
+        "No stable power/OOB/approval exists, status is ambiguous or firmware/security state changes.",
+        "Transport error or unchanged `mc info` is the only evidence."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "a deliberately corrupt / older AST1060 image (user-provided) + curl + BMC creds",
+        "ai_commands": "-- Reject AST1060 FW Downgrade: attempt to update the AST1060 with a corrupt update image / an older (downgrade) image and confirm the BMC rejects it (ipmitool -I lanplus -C 17 -U \"$BMC_USER\" -P \"$BMC_PASS\" -H \"$BMC_IP\" mc info 2>&1 unchanged, update task returns an error). State-changing attempt that must be rejected.",
+        "ai_logs_output": "return the UpdateService POST error + the pre/post AST1060 version (unchanged) so the user confirms the bad/downgrade image was rejected without changing firmware.",
+        "risk": "RISK: using a corrupt/older image is safe only because it must be rejected; never flash a working newer image in this test."
+      },
+      "gpt_second_review_findings": "The row specifically tests AST1060 anti-rollback rejection of an invalid/revoked SVN, but DeepSeek's generic corrupt/older image does not prove SVN validation or safe rejection. GPT changes PARTIAL to BLOCKED until the policy, signed negative fixture, endpoint, rejection semantics and recovery are supplied; no capsule submission is safe before re-review.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "AST1060 security/anti-rollback state, BMC update path, bootability, POST/SEL and OOB management.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not submit while blocked. Preserve current SVN/policy and recovery evidence; if a later approved attempt is ambiguous, stop and use the validated AST1060/OOB recovery path without retrying arbitrary images.",
+      "manual_steps": [
+        "Owner/FAE supplies anti-rollback policy, invalid-SVN fixture, endpoint/rejection code and recovery.",
+        "After re-review, operator supervises the controlled negative attempt and captures task/POST/OOB evidence.",
+        "Owner decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Keep blocked. Do not use a generic corrupt/older image as an invalid-SVN fixture. Request the AST1060 anti-rollback policy, signed revoked-SVN capsule, endpoint, rejection semantics and recovery before re-review; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00257-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 242
+      },
+      "test_name": "Mechanical Check",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "NO",
+      "purpose": "Verify M.2 controllers fit and plug into the chassis smoothly without mechanical interference.",
+      "preconditions": [
+        "Operator has the specified chassis, M.2 controllers, adapter/bracket and approved assembly procedure.",
+        "Power off and make the unit safe for insertion/removal; identify the exact slots and hardware."
+      ],
+      "pre_check_commands": [
+        "Agent may record asset/slot identifiers only; no command can verify mechanical fit or force application safely."
+      ],
+      "safety_checks": [
+        "Operator performs the physical insertion and removal; stop on resistance, interference, damaged connector, loose retention or unsafe force."
+      ],
+      "required_packages": [
+        "Physical M.2 controllers, chassis/adapter/bracket and qualified operator"
+      ],
+      "test_command": "MANUAL ONLY: operator installs and removes each M.2 controller, checks fit/interference and records photos and slot identifiers.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "This is a physical fit and interference inspection; SSH automation cannot observe force, alignment or chassis contact."
+      ],
+      "expected_evidence": [
+        "Operator checklist, photos/video as required, slot/controller identifiers and PASS/FAIL notes."
+      ],
+      "post_check_commands": [
+        "Agent may collect operator-supplied evidence and logs; no automated pass/fail inference."
+      ],
+      "logs_to_collect": [
+        "Assembly operator, hardware identifiers, slot mapping, photos and mechanical findings"
+      ],
+      "blocked_conditions": [
+        "Hardware, qualified operator, safe power-off state or visual evidence is missing.",
+        "Any connector damage, interference or uncertain fit."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: physical/visual inspection of the M.2 drive seat, bracket, and screws requires an operator at the machine; agent cannot assess mechanical fit over SSH.",
+        "ai_logs_output": "operator inspects M.2 mechanical seating; agent cannot produce this evidence over SSH.",
+        "risk": "RISK: physical/visual mechanical inspection requires an operator."
+      },
+      "gpt_second_review_findings": "DeepSeek correctly classifies this as physical/visual inspection. GPT keeps MANUAL ONLY and adds slot identity, safe power-off, qualified operator and evidence requirements; no remote command can establish smooth insertion or mechanical interference.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "M.2 connectors, adapter/bracket, chassis and possible hardware damage from forced insertion.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop immediately on resistance or damage, remove no component by force, document the condition and escalate to the hardware owner.",
+      "manual_steps": [
+        "Operator identifies controller/slot and inspects connector/bracket.",
+        "Operator installs/removes without force and records interference/fit evidence.",
+        "Owner decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not attempt mechanical inspection remotely. Ask a qualified operator to perform the M.2 fit check and provide evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00258-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 243
+      },
+      "test_name": "FIO",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Run the approved 12-hour random-read/write FIO stress on designated M.2 drives and verify system health, logs and IOPS against the platform specification.",
+      "preconditions": [
+        "Owner supplies exact M.2 target mapping, theory/spec IOPS, fio version/job file, workload limits and retention policy; target must be empty and non-system.",
+        "Capture drive/OS/filesystem/health/log baseline, ensure stable power and obtain approval for sustained write stress and possible data destruction."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate drives, mounts, serials, health and free space; require an operator-confirmed target allowlist before fio.",
+        "Validate fio package/job parameters, runtime, queue depth and monitoring/abort path."
+      ],
+      "safety_checks": [
+        "Never run against an OS/system or unconfirmed device; do not use inferred `${FIO_TARGET}`.",
+        "Stop on target mismatch, media errors, thermal/power alarms, unexpected logs or host instability; preserve results."
+      ],
+      "required_packages": [
+        "fio and approved job file/script",
+        "Empty designated M.2 target, baseline health data and performance specification",
+        "Stable power, monitoring, maintenance window and explicit write-stress approval"
+      ],
+      "test_command": "After target confirmation and approval, operator launches the approved fio job on the allowlisted M.2 device; agent monitors and collects output without selecting the target itself.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek uses a shortened 60-second randread job that does not match the source's 43,200-second randrw/write stress or IOPS criterion.",
+        "FIO can overwrite data and exhaust/heat the target; target selection and theory-value comparison require user-owned package/specification inputs."
+      ],
+      "expected_evidence": [
+        "Target serial/mount mapping, fio/job hash, runtime and authorization.",
+        "Complete fio output with IOPS/BW/latency/errors, drive health/thermal data and pre/post system logs.",
+        "Comparison to the approved theory/spec threshold and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify target identity/health, filesystem/system state and logs after completion; do not clear evidence."
+      ],
+      "logs_to_collect": [
+        "Drive/OS/fio/specification/approval identity",
+        "FIO stdout/stderr, performance and error output",
+        "SMART/health, thermal, dmesg/syslog and post-test state"
+      ],
+      "blocked_conditions": [
+        "Target is system/unknown/non-empty, mapping or theory IOPS is missing, or job parameters differ from approved recipe.",
+        "No write-stress approval/stable power/monitoring exists, or media/thermal/system errors occur.",
+        "FIO output or post-test logs are incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "fio (install)",
+        "ai_commands": "# DUT: pre-write fio job file, operator designates target, run + capture IOPS/BW\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"cat > /root/HW-00258.fio <<'EOF'\n[global]\nbs=512\nsize=512M\nruntime=60\ntime_based\ndirect=1\nioengine=libaio\n[test]\nrw=randread\niodepth=32\nEOF\nfio /root/HW-00258.fio --filename=${FIO_TARGET:?operator must designate an EMPTY M.2 test target, never OS/system disk}\" 2>&1",
+        "ai_logs_output": "return the fio result so user confirms throughput meets the M.2 spec. Long sustained run - approval.",
+        "risk": "RISK: stress/write workload can destroy data and requires an operator-designated empty target and approval."
+      },
+      "gpt_second_review_findings": "The test is executable only after package, target, specification and approval inputs are supplied. DeepSeek's command is materially different from the source (60-second randread versus 12-hour randrw with writes) and its target guard is not sufficient. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and requires exact recipe fidelity, allowlisting and post-test health/log evidence.",
+      "risk_level": "HIGH",
+      "blast_radius": "Designated M.2 drive data, storage endurance/temperature, host I/O and system stability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If the wrong target or instability is detected, abort the approved fio job, preserve output and health/log evidence, and have the owner restore/reimage only the designated test device; never repair an OS disk blindly.",
+      "manual_steps": [
+        "Owner maps and approves an empty M.2 target and exact fio recipe/spec.",
+        "Operator launches and supervises the sustained job while agent collects evidence.",
+        "Owner compares IOPS/log/health results and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not run fio or select a disk until the owner supplies and confirms the exact non-system target, recipe, specification and write-stress approval. Preserve complete output and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00259-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 244
+      },
+      "test_name": "OS Installation",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Install the approved supported OS to a single designated M.2 drive, reboot from it and verify M.2-related logs and front-panel HDD LED behavior.",
+      "preconditions": [
+        "Owner supplies supported OS media/version, exact M.2 target, boot mode/recipe and backup/restore plan.",
+        "Capture drive identity, current partition/data state, logs and LED capability; obtain explicit approval because installation formats the target."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate drives, serials, mounts and boot entries; require owner-confirmed target allowlist.",
+        "Validate installer media/hash, UEFI/boot settings and evidence plan."
+      ],
+      "safety_checks": [
+        "Never partition or install onto an OS/data disk or inferred target; stop on mapping ambiguity.",
+        "Do not clear logs; stop on install failure, boot failure, M.2 errors or unexpected LED behavior."
+      ],
+      "required_packages": [
+        "User-provided supported OS installer and activation/configuration inputs",
+        "Designated M.2 drive, backup/restore media and console/KVM",
+        "Stable power, maintenance window and explicit formatting approval"
+      ],
+      "test_command": "After owner confirmation, operator performs the supported OS installation on the allowlisted M.2, reboots and captures boot/log/LED evidence; agent may collect read-only evidence only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek correctly notes formatting risk but does not define target mapping, installer fidelity, boot mode or LED evidence.",
+        "Installation can destroy existing data and alter boot entries; the agent must not choose the disk or perform unattended installation."
+      ],
+      "expected_evidence": [
+        "Installer/version/hash, M.2 serial/slot and approval.",
+        "Install transcript, successful boot from M.2, M.2-related logs and LED observation with no I/O.",
+        "Post-install drive/boot/log state and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify boot device, M.2 identity, logs and system health; collect LED observation from operator without clearing logs."
+      ],
+      "logs_to_collect": [
+        "OS/media/drive/boot identity and approval",
+        "Installer/boot/console transcript",
+        "dmesg/syslog, drive health and front-panel LED evidence"
+      ],
+      "blocked_conditions": [
+        "Target, supported OS media, backup or boot recipe is missing/ambiguous.",
+        "No formatting approval/stable power/console exists, install or boot fails, or M.2 errors occur.",
+        "LED capability or post-install logs cannot be evidenced."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "OS installer media (user provides)",
+        "ai_commands": "-- M.2 OS installation is a multi-step installer/deployment; agent assists with non-interactive install args at user direction.",
+        "ai_logs_output": "return the install verification (OS boots from the M.2, drive visible) so user confirms success.",
+        "risk": "RISK: OS install partitions/formats the target M.2; only install on the drive the user designates."
+      },
+      "gpt_second_review_findings": "The test requires a user-staged OS and physical/boot validation. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and adds exact M.2 allowlisting, backup, installer/boot-mode validation, formatting approval, log evidence and manual LED observation; unattended disk selection is prohibited.",
+      "risk_level": "HIGH",
+      "blast_radius": "Designated M.2 data/partitions, boot entries, OS installation and system availability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If the wrong target or failed boot is detected, stop, preserve installer/boot/log evidence and have the owner restore the approved image/boot configuration; never reformat another drive to recover.",
+      "manual_steps": [
+        "Owner maps target and approves media, formatting and boot recipe.",
+        "Operator performs installation and reboot while agent collects read-only evidence.",
+        "Owner checks M.2 errors, logs and LED behavior and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not select or format an M.2 drive autonomously. Require owner-confirmed target, OS media, backup and approval; the operator supervises installation/boot and decides PASS/FAIL/BLOCKED with evidence.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00260-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 245
+      },
+      "test_name": "Mechanical Check w/ Drive Full Populated",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "NO",
+      "purpose": "Verify the chassis has no mechanical issue when all HDD slots are populated and one drive is removed.",
+      "preconditions": [
+        "Operator has the specified chassis, all approved drives, trays/levers and assembly procedure.",
+        "Make the system safe for physical insertion/removal and identify every slot/drive."
+      ],
+      "pre_check_commands": [
+        "Agent may record inventory and slot identifiers only; it cannot assess physical seating or force."
+      ],
+      "safety_checks": [
+        "Qualified operator inserts/removes drives without force; stop on binding, interference, damaged latch, unstable chassis or unsafe weight."
+      ],
+      "required_packages": [
+        "Full approved drive population, trays/levers and qualified operator"
+      ],
+      "test_command": "MANUAL ONLY: operator populates all HDD slots, inspects chassis clearance/seating, removes one drive and records physical evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "Mechanical fit, latch operation and full-population interference are physical observations unavailable to SSH automation."
+      ],
+      "expected_evidence": [
+        "Slot/drive inventory, operator checklist, photos and PASS/FAIL notes for full population and removal."
+      ],
+      "post_check_commands": [
+        "Agent may collect operator-supplied evidence and system logs; no automated physical pass/fail."
+      ],
+      "logs_to_collect": [
+        "Chassis/drive identifiers, slot map, operator, photos and mechanical findings"
+      ],
+      "blocked_conditions": [
+        "Full drive population, qualified operator, safe handling state or visual evidence is missing.",
+        "Any interference, damaged tray/latch or uncertain fit."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "ai_commands": "-- not runnable by agent: physical/visual inspection of drive seating, levers, and full-populated chassis requires an operator present at the machine; agent cannot assess mechanical fit over SSH.",
+        "ai_logs_output": "operator inspects drive seating + full-population mechanically; agent cannot produce this evidence over SSH.",
+        "risk": "RISK: physical/visual mechanical inspection requires an operator."
+      },
+      "gpt_second_review_findings": "DeepSeek correctly identifies a physical/visual chassis inspection. GPT keeps MANUAL ONLY and adds complete slot inventory, safe handling, qualified operator and evidence requirements; no remote command can verify full-population clearance or drive removal mechanics.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "Drive trays/connectors, chassis mechanics and possible hardware damage from forced handling.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on binding or damage, do not force a drive or latch, document the condition and escalate to the hardware owner.",
+      "manual_steps": [
+        "Operator maps all slots and inspects trays/levers.",
+        "Operator populates all slots, checks clearance, removes one drive and records evidence.",
+        "Owner decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not attempt this mechanical inspection remotely. A qualified operator must populate/remove the drives and provide evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00261-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 246
+      },
+      "test_name": "All SSD Information - NVMe",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify the approved NVMe switch adapter and SSD controllers are detected and displayed correctly in BIOS, with OS-side identity/health evidence.",
+      "preconditions": [
+        "Owner supplies exact adapter/SSD inventory, supported topology and BIOS version; qualified operator installs the adapter and powers on the system.",
+        "Capture baseline drive/BIOS/SEL state and ensure console/KVM access; do not alter firmware or storage data."
+      ],
+      "pre_check_commands": [
+        "After operator insertion, read-only collect `lsblk`/serial/model/size/transport and `smartctl` health for allowlisted devices.",
+        "Validate that BIOS screen evidence and OS inventory correspond to the same adapter/SSD serials."
+      ],
+      "safety_checks": [
+        "Physical insertion and BIOS inspection are operator actions; stop on wrong topology, unstable power, missing devices or unexpected storage changes.",
+        "Use read-only commands only and preserve logs."
+      ],
+      "required_packages": [
+        "Supported NVMe switch adapter/SSDs and platform topology",
+        "smartmontools/lsblk, console/KVM and qualified operator",
+        "BIOS access and approved evidence/identity checklist"
+      ],
+      "test_command": "Operator inserts the approved adapter, enters BIOS and records controller information; agent then runs read-only `lsblk`/`smartctl` checks on confirmed devices.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek's OS-side commands cannot prove BIOS entry or controller display correctness and may enumerate unintended disks.",
+        "Adapter installation and topology are hardware-dependent; exact serial mapping and operator BIOS evidence are required."
+      ],
+      "expected_evidence": [
+        "Adapter/SSD/BIOS identity and operator BIOS photos or transcript showing controller information.",
+        "Matching `lsblk`/`smartctl` model, serial, size and health for every approved SSD.",
+        "No unexpected logs/storage errors and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only collect OS inventory/health and relevant dmesg/syslog after the operator check; do not clear logs."
+      ],
+      "logs_to_collect": [
+        "Adapter/SSD/BIOS/topology identity and operator evidence",
+        "BIOS/KVM transcript or photos",
+        "lsblk/smartctl/dmesg/syslog output"
+      ],
+      "blocked_conditions": [
+        "Topology, adapter/SSD inventory, BIOS access or qualified operator is missing.",
+        "Serials do not match, OS sees unexpected devices, BIOS/controller information is unavailable or hardware is unstable.",
+        "Read-only evidence or logs are incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "YES",
+        "ai_packages_needed": "smartctl (smartmontools, install) + lsblk",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"for d in $(lsblk -dpno NAME | grep -E 'nvme|sd'); do echo === $d ===; smartctl -a $d 2>&1 | head -40; done 2>&1\"  ;  sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL,SIZE,TRAN 2>&1\"",
+        "ai_logs_output": "return `smartctl -a` + `lsblk` for every SSD so user confirms model/serial/size/health of all devices are reported correctly. No RISK (read-only)."
+      },
+      "gpt_second_review_findings": "The source includes physical adapter insertion and BIOS controller display, which DeepSeek's read-only OS commands cannot verify. GPT changes YES to REQUIRES PACKAGE / USER CONFIRMATION, adds operator BIOS evidence and exact serial/topology mapping, and limits agent work to read-only checks after user confirmation.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "NVMe switch adapter/SSD topology, storage visibility and possible connector/data impact.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "If topology or detection is wrong, stop read-only collection, power down under operator procedure, preserve identity/log evidence and have the hardware owner restore the approved adapter/drive configuration.",
+      "manual_steps": [
+        "Operator installs the approved adapter/SSDs and records BIOS controller information.",
+        "Agent collects read-only inventory/health for confirmed serials.",
+        "Owner reconciles BIOS/OS evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not install hardware or infer BIOS detection from SSH. Require operator-confirmed adapter/SSD serials and BIOS evidence, then run only read-only inventory/health checks; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00262-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 247
+      },
+      "test_name": "All SSD Plug test - Insert/Remove",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify approved SSDs can be physically inserted and removed from the backplane and enumerate cleanly across each cycle.",
+      "preconditions": [
+        "Owner supplies exact SSD/bay mapping, hot-swap capability and cycle count; qualified operator is present.",
+        "Capture baseline serial/enumeration/log state and confirm safe bay power/hot-plug procedure."
+      ],
+      "pre_check_commands": [
+        "Read-only collect `lsblk` serial/model and recent dmesg before each operator cycle; do not control bay power or insertion."
+      ],
+      "safety_checks": [
+        "Operator performs all physical insert/remove actions; stop on resistance, damaged connector, non-hot-swap bay, data loss or unsafe state.",
+        "Preserve logs and never infer physical fit from enumeration alone."
+      ],
+      "required_packages": [
+        "Approved SSDs/backplane, hot-swap procedure and qualified operator",
+        "lsblk and console/SSH access for read-only evidence"
+      ],
+      "test_command": "Operator executes approved insert/remove cycles; agent captures pre/post `lsblk -o NAME,SERIAL,MODEL` and `dmesg -T` evidence for the confirmed bay/drive.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek correctly limits physical actions to an operator, but PARTIAL must require confirmed hot-swap capability, bay/drive mapping and cycle count.",
+        "Enumeration cannot prove mechanical safety or data integrity; hot-plugging an unsupported bay can damage hardware or corrupt data."
+      ],
+      "expected_evidence": [
+        "Bay/SSD serial mapping and approved cycle procedure.",
+        "Enumeration and dmesg snapshots across every cycle with no errors, plus operator physical observations.",
+        "Data/health state and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify final enumeration, drive health and logs without clearing evidence."
+      ],
+      "logs_to_collect": [
+        "Bay/SSD/cycle/approval identity",
+        "lsblk snapshots and dmesg per cycle",
+        "Operator mechanical/data-integrity observations"
+      ],
+      "blocked_conditions": [
+        "Hot-swap capability, bay/drive mapping, operator or cycle procedure is missing.",
+        "Any mechanical resistance, unexpected enumeration, I/O error, data loss or non-hot-swap warning.",
+        "Per-cycle evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "lsblk (standard)",
+        "ai_commands": "-- SSD plug/test (repeated cycles): physical insert/remove is operator-action. Agent assists by watching enumeration before/after each cycle: sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL 2>&1\" and checking `dmesg -T | tail -30` for clean hot-plug (no errors).",
+        "ai_logs_output": "return the enumeration snapshot + `dmesg -T` tail across the plug/unplug cycles so user + operator confirm clean detection/removal each time.",
+        "risk": "RISK: physical hot-plug requires operator; agent must not power the bay. Confirm drive bay is hot-swap capable."
+      },
+      "gpt_second_review_findings": "DeepSeek appropriately separates operator hot-plug actions from read-only observation. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and adds exact bay/serial mapping, hot-swap capability, cycle evidence, mechanical/data-integrity gates and stop conditions.",
+      "risk_level": "HIGH",
+      "blast_radius": "SSD/backplane connectors, hot-swap power path, storage data and OS enumeration.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop the cycle on any error or resistance, leave the bay in a safe state, preserve enumeration/dmesg/data evidence and have the hardware owner inspect or restore the drive.",
+      "manual_steps": [
+        "Operator confirms hot-swap bay and maps SSD serial.",
+        "Operator performs each insert/remove cycle while agent captures read-only evidence.",
+        "Owner reconciles physical and logs evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not insert/remove or power a bay remotely. Require operator confirmation of hot-swap capability and mapping, collect only read-only evidence, and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00263-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 248
+      },
+      "test_name": "All SSD NVMe LED Check - Present",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Insert an approved NVMe SSD and verify the backplane present/drive LED behavior against the platform specification.",
+      "preconditions": [
+        "Owner supplies LED specification, exact bay/SSD mapping, supported management endpoint/tool and qualified operator.",
+        "Capture baseline device/LED/BMC state and confirm safe insertion procedure."
+      ],
+      "pre_check_commands": [
+        "Read-only identify the confirmed SSD/bay and query the approved BMC/RAID/HBA status command; do not toggle LEDs or insert hardware remotely."
+      ],
+      "safety_checks": [
+        "Operator performs physical insertion and observes the LED; stop on wrong bay, unexpected LED state, hardware fault or unsafe handling.",
+        "Use only approved read-only status queries and preserve logs."
+      ],
+      "required_packages": [
+        "NVMe SSD/backplane and LED specification",
+        "Approved storcli/sas3ircu/ssacli or BMC status tool, credentials and console",
+        "Qualified operator and safe insertion procedure"
+      ],
+      "test_command": "Operator inserts the confirmed NVMe SSD and records the physical present LED; agent collects read-only device and approved management status.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek's raw BMC command is platform-specific and does not prove physical LED behavior; an unsupported raw command could change state.",
+        "LED semantics require the owner specification and operator observation."
+      ],
+      "expected_evidence": [
+        "SSD/bay/LED specification and authorization.",
+        "Operator photo/video or checklist of present LED state matched to `lsblk`/management status.",
+        "No unexpected logs/faults and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify SSD identity, BMC/RAID/HBA status and relevant logs without clearing evidence."
+      ],
+      "logs_to_collect": [
+        "LED/bay/SSD/tool/approval identity",
+        "Operator LED observation and photos",
+        "Management status, lsblk and system/BMC logs"
+      ],
+      "blocked_conditions": [
+        "LED specification, bay/SSD mapping, supported tool or operator is missing.",
+        "Raw endpoint is unverified, LED state is ambiguous, device is unexpected or hardware fault occurs.",
+        "Physical or read-only evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "storcli/sas3ircu/ssacli (RAID/HBA tool) or ipmitool for BMC LED",
+        "ai_commands": "ipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" raw 0x3a 0x0e 0x00 0x00 0x00 2>&1\n---list devices on DUT---\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL 2>&1\"",
+        "ai_logs_output": "return the LED-command result + the affected device list; operator confirms the physical LED behavior for the present/power LED state."
+      },
+      "gpt_second_review_findings": "The test depends on a platform LED specification and physical observation. GPT keeps it at REQUIRES PACKAGE / USER CONFIRMATION, rejects unverified raw BMC control as evidence, and requires an approved read-only tool, exact bay/SSD mapping and operator LED proof.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "NVMe/backplane insertion and LED state, storage visibility and BMC/management endpoint.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "If insertion or LED behavior is abnormal, stop, leave hardware in a safe state, preserve management/log evidence and have the hardware owner inspect the bay/SSD.",
+      "manual_steps": [
+        "Owner supplies LED specification, mapping and approved read-only tool.",
+        "Operator inserts the SSD and records physical LED behavior while agent collects status.",
+        "Owner reconciles evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not use an unverified raw BMC command or perform physical insertion remotely. Require the LED spec, mapping, approved tool and operator observation; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00264-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 249
+      },
+      "test_name": "All SSD NVMe LED Check - Access /Busy",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify the approved NVMe SSD access/busy LED reflects storage activity according to the platform specification.",
+      "preconditions": [
+        "Owner supplies LED specification, exact bay/SSD mapping, approved activity workload and supported read-only management tool.",
+        "Qualified operator inserts the SSD and can observe the physical LED; capture baseline device/log state."
+      ],
+      "pre_check_commands": [
+        "Read-only identify the confirmed SSD and collect management status; do not toggle LEDs or select a workload without approval."
+      ],
+      "safety_checks": [
+        "Operator performs insertion and visual LED observation; stop on wrong bay, abnormal LED, hardware fault or unsafe state.",
+        "Do not treat an unverified raw BMC command as proof of access/busy behavior."
+      ],
+      "required_packages": [
+        "NVMe SSD/backplane, LED specification and approved activity workload",
+        "Approved storcli/sas3ircu/ssacli or BMC status tool, credentials and console",
+        "Qualified operator and observation checklist"
+      ],
+      "test_command": "Operator inserts the confirmed SSD, runs the approved non-destructive activity workload and records access/busy LED behavior; agent collects read-only device/status/log evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek's raw command and `lsblk` do not establish physical access/busy LED transitions or a safe workload.",
+        "An unapproved write workload may alter data; LED semantics must come from the owner specification."
+      ],
+      "expected_evidence": [
+        "SSD/bay/LED specification, workload and authorization.",
+        "Operator LED observations during idle/activity transitions, matching device identity and read-only logs/status.",
+        "No unexpected errors and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify SSD identity/health and dmesg/syslog after the approved workload without clearing logs."
+      ],
+      "logs_to_collect": [
+        "LED/bay/SSD/workload/tool identity and approval",
+        "Operator LED photos/checklist",
+        "Management status, lsblk and system/BMC logs"
+      ],
+      "blocked_conditions": [
+        "LED spec, mapping, workload, approved tool or operator is missing.",
+        "Workload is destructive/unapproved, LED behavior is ambiguous, device is unexpected or hardware fault occurs.",
+        "Activity-to-LED evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "storcli/sas3ircu/ssacli (RAID/HBA tool) or ipmitool for BMC LED",
+        "ai_commands": "ipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" raw 0x3a 0x0e 0x00 0x00 0x00 2>&1\n---list devices on DUT---\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL 2>&1\"",
+        "ai_logs_output": "return the LED-command result + the affected device list; operator confirms the physical LED behavior for the access/busy LED state."
+      },
+      "gpt_second_review_findings": "The criterion depends on physical access/busy LED transitions and a defined activity stimulus. GPT keeps REQUIRES PACKAGE / USER CONFIRMATION, rejects the unverified raw command as sufficient evidence, and adds the owner LED spec, approved workload, mapping and operator observation.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "NVMe/backplane LED behavior, storage activity and possible data changes from the workload.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop the activity on abnormal behavior, preserve LED/status/log evidence and have the owner return the SSD/bay to a known safe state; do not retry with arbitrary workloads.",
+      "manual_steps": [
+        "Owner supplies LED spec, mapping, approved workload and tool.",
+        "Operator observes LED while the approved workload runs; agent collects read-only evidence.",
+        "Owner decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not use an unverified raw BMC command or generate storage activity without approval. Require the LED spec, safe workload, mapping and operator observation; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00265-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 250
+      },
+      "test_name": "All SSD NVMe LED Check - Locate",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify the approved NVMe RAID/adapter locate command identifies the selected SSD and illuminates the correct locate LED.",
+      "preconditions": [
+        "Owner supplies exact adapter/SSD/bay mapping, locate-LED specification and supported management endpoint/tool.",
+        "Qualified operator can insert the SSD and visually identify bays; capture baseline status and obtain approval for any LED-control command."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate confirmed serials and validate endpoint syntax/permissions; do not issue an unverified raw locate command."
+      ],
+      "safety_checks": [
+        "Operator observes the physical LED and confirms the selected bay; stop on wrong-device indication, unexpected LED changes or hardware fault.",
+        "Use only vendor-approved command semantics and preserve logs."
+      ],
+      "required_packages": [
+        "NVMe adapter/SSD/backplane, locate-LED specification and approved tool",
+        "Console/KVM, protected credentials and qualified operator"
+      ],
+      "test_command": "After mapping and approval, operator selects the confirmed SSD with the vendor-approved locate function and records the physical LED; agent collects read-only identity/status evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek's generic raw BMC command does not prove the correct device is selected or that the physical locate LED responds.",
+        "An unverified LED-control endpoint could affect the wrong bay or change hardware state."
+      ],
+      "expected_evidence": [
+        "Adapter/SSD/bay serial mapping, endpoint/tool and authorization.",
+        "Command response plus operator photo/checklist showing only the intended locate LED.",
+        "Post-command device/status/log evidence and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify final LED/status state and device identity; restore locate state only through approved operator procedure and preserve logs."
+      ],
+      "logs_to_collect": [
+        "Adapter/SSD/bay/tool/approval identity",
+        "Locate request/response and operator LED evidence",
+        "Management status, lsblk and system/BMC logs"
+      ],
+      "blocked_conditions": [
+        "Mapping, LED specification, supported locate endpoint or operator is missing.",
+        "Endpoint is unverified, wrong LED responds, state is ambiguous or hardware fault occurs.",
+        "Physical identity/evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "storcli/sas3ircu/ssacli (RAID/HBA tool) or ipmitool for BMC LED",
+        "ai_commands": "ipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" raw 0x3a 0x0e 0x00 0x00 0x00 2>&1\n---list devices on DUT---\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL 2>&1\"",
+        "ai_logs_output": "return the LED-command result + the affected device list; operator confirms the physical LED behavior for the locate (UID) LED state."
+      },
+      "gpt_second_review_findings": "The locate test requires exact mapping and physical confirmation that the intended LED responds. GPT keeps REQUIRES PACKAGE / USER CONFIRMATION, rejects the generic raw command as sufficient proof, and adds vendor endpoint validation, operator observation and restoration controls.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "NVMe adapter/backplane LED-control path and risk of identifying the wrong storage device.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "If the wrong LED responds or state is ambiguous, stop issuing commands, preserve evidence and have the hardware owner return the locate indicator to its approved idle state.",
+      "manual_steps": [
+        "Owner maps SSD/bay and supplies the approved locate endpoint/spec.",
+        "Operator invokes locate under supervision and records the physical LED.",
+        "Owner reconciles command/identity/LED evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not send a generic raw LED command or infer locate success from `lsblk`. Require vendor mapping/specification and operator LED confirmation; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00266-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 251
+      },
+      "test_name": "All SSD Space-Fullness Test",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Fill only the approved dedicated storage targets, verify file integrity across reboot and collect full/near-full behavior and error evidence.",
+      "preconditions": [
+        "Owner supplies exact target mounts/devices, fullness target, file size/count, filesystem, retention/cleanup plan and reboot approval.",
+        "Capture drive/partition/mount/health/log baseline and confirm targets are dedicated and non-system."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate devices, mounts, free space and serials; require owner allowlist before any `dd`/`fallocate`.",
+        "Validate checksum method, cleanup space and reboot/recovery plan."
+      ],
+      "safety_checks": [
+        "Never fill an OS/system or unconfirmed volume; stop before target exhaustion, I/O errors, thermal alarms or system instability.",
+        "Do not reboot until checksums and recovery/cleanup plan are confirmed; preserve logs."
+      ],
+      "required_packages": [
+        "dd/fallocate, filesystem tools and checksum utility",
+        "Dedicated storage target, backup/cleanup capacity and console",
+        "Stable power, maintenance window and explicit data-write/reboot approval"
+      ],
+      "test_command": "After target confirmation and approval, operator runs the approved fill/checksum/reboot sequence on the dedicated target; agent collects output and read-only post-reboot evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek changes the source's fill-all-available-storage behavior to near-full and does not define a safe target/cleanup plan.",
+        "Filling storage can exhaust the filesystem, affect services and destroy/replace data; MD5 alone does not prove the intended files survived a reboot."
+      ],
+      "expected_evidence": [
+        "Target serial/mount/fullness plan, commands and authorization.",
+        "Fill progress, errors, file checksums before/after reboot, filesystem/health/log state and cleanup result.",
+        "End-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify target identity, free space, checksums, mount/boot health and logs after reboot; clean up only under owner-approved procedure."
+      ],
+      "logs_to_collect": [
+        "Storage/mount/filesystem/approval identity",
+        "Fill/checksum/reboot transcript",
+        "Drive health, dmesg/syslog, post-reboot and cleanup evidence"
+      ],
+      "blocked_conditions": [
+        "Target, fullness limit, checksum/cleanup plan or reboot approval is missing/ambiguous.",
+        "Target is system/non-dedicated, space reaches unsafe exhaustion, I/O/filesystem/thermal errors occur or reboot fails.",
+        "Pre/post checksums or logs are incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "dd/fallocate + filesystem tools",
+        "ai_commands": "-- Space-fullness test: fill the SSD to near-full then verify behavior/I/O. Agent fills a target partition to a user-chosen % and runs a write check. Needs a target mount + user-defined fullness target.",
+        "ai_logs_output": "return the fill progress + I/O result so user confirms the drive handles near-full state without issue.",
+        "risk": "RISK: filling a drive near-full affects normal operation; only fill a dedicated test volume the user specifies."
+      },
+      "gpt_second_review_findings": "The source requires filling available storage, checksumming files and rebooting, while DeepSeek silently changes it to near-full. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and requires exact dedicated targets, limits, checksum/cleanup/reboot plan and explicit write approval; no autonomous `dd` is permitted.",
+      "risk_level": "HIGH",
+      "blast_radius": "Designated storage data/filesystem, host services, reboot/boot state and available capacity.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If capacity or system health becomes unsafe, stop writes, preserve evidence, restore free space only under the approved cleanup plan and have the owner recover services/filesystem; never delete arbitrary files.",
+      "manual_steps": [
+        "Owner maps dedicated target and approves exact fullness/checksum/reboot/cleanup recipe.",
+        "Operator supervises fill and reboot while agent captures evidence.",
+        "Owner verifies integrity and system health, performs approved cleanup and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not fill disks or reboot autonomously. Require owner-confirmed dedicated targets, limits, checksum/cleanup plan and approval; preserve evidence and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00267-V003",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 252
+      },
+      "test_name": "All SSD Slot Number Check - NVMe",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify all approved NVMe SSDs map to the expected backplane/adapter slot numbers.",
+      "preconditions": [
+        "Owner supplies exact adapter/backplane topology, expected slot-to-serial mapping and supported BIOS/OS tooling.",
+        "Qualified operator inserts all approved SSDs; capture baseline inventory and ensure no unknown storage devices are present."
+      ],
+      "pre_check_commands": [
+        "Read-only collect `lsblk`, `/dev/nvme*` and `nvme id-ctrl` for confirmed devices; do not infer physical slot numbers without the owner mapping."
+      ],
+      "safety_checks": [
+        "Operator performs insertion and validates physical labels; stop on unexpected devices, duplicate/missing serials or unstable hardware.",
+        "Use read-only commands and preserve logs."
+      ],
+      "required_packages": [
+        "Approved NVMe SSDs/adapter/backplane and slot map",
+        "lsblk, nvme-cli, console/SSH and qualified operator"
+      ],
+      "test_command": "Operator populates the approved slots; agent runs read-only inventory and controller identity commands, then owner reconciles serials to physical slot labels.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek's commands are read-only but cannot prove physical slot numbering without a topology/serial map and operator confirmation.",
+        "Enumerating `/dev/nvme*` alone can misassociate controllers/namespaces with physical slots."
+      ],
+      "expected_evidence": [
+        "Adapter/backplane topology, expected serial/slot map and authorization.",
+        "lsblk/nvme identity output for every device plus operator slot photos/checklist.",
+        "No unexpected logs/errors and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify final device/serial/slot mapping and relevant dmesg/syslog without clearing logs."
+      ],
+      "logs_to_collect": [
+        "Topology/SSD/slot/tool identity and approval",
+        "lsblk/nvme id-ctrl output",
+        "Operator physical slot evidence and system logs"
+      ],
+      "blocked_conditions": [
+        "Expected mapping, complete SSD population, tool or qualified operator is missing.",
+        "Serials/slots do not match, devices are unexpected or hardware is unstable.",
+        "Physical or read-only evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "YES",
+        "ai_packages_needed": "lsblk + nvme-cli (install)",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL,TYPE 2>&1 ; ls /dev/nvme* 2>&1 ; for n in /dev/nvme*n1; do echo === $n ===; nvme id-ctrl $n 2>&1 | head -30; done 2>&1\"",
+        "ai_logs_output": "return device + serial + slot mapping for all SSD so user confirms each drive sits in the expected slot number. No RISK (read-only)."
+      },
+      "gpt_second_review_findings": "The OS commands can inventory controllers but cannot establish physical slot numbering or complete population. GPT changes YES to REQUIRES PACKAGE / USER CONFIRMATION and adds owner topology/serial mapping, operator insertion/slot evidence, allowlisting and read-only-only execution.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "NVMe adapter/backplane topology, storage identity and possible connector handling.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "If mapping is ambiguous, stop collection, preserve output and physical evidence and have the hardware owner power down/restore the approved SSD layout.",
+      "manual_steps": [
+        "Owner supplies topology and expected serial/slot map.",
+        "Operator inserts all approved SSDs and records physical slot labels.",
+        "Agent collects read-only identities; owner reconciles and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not infer physical slots from Linux names. Require owner topology/serial mapping and operator evidence, then run only read-only inventory; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00268-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 253
+      },
+      "test_name": "OS Installation",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Install the approved supported OS onto the designated SSD/M.2 target, verify boot/layout/logs and inspect the front-panel HDD LED behavior.",
+      "preconditions": [
+        "Owner supplies OS media/version, exact target drive, partition/boot recipe, driver inputs and backup/restore plan.",
+        "Capture target identity and current data state; obtain explicit formatting/reboot approval and qualified console operator."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate drives/serials/mounts/boot entries and require owner target allowlist; validate media/hash and UEFI settings."
+      ],
+      "safety_checks": [
+        "Never partition or install on an unconfirmed/system/data disk; stop on mapping ambiguity, install/boot error or unexpected LED/log state.",
+        "Do not clear logs or perform unattended target selection."
+      ],
+      "required_packages": [
+        "User-provided supported OS installer and drivers",
+        "Designated SSD/M.2, backup/restore media and console/KVM",
+        "Stable power, maintenance window and formatting approval"
+      ],
+      "test_command": "After owner confirmation, operator performs installation on the allowlisted target and reboot; agent collects read-only install/boot/log evidence and the operator records LED state.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek correctly notes operator/installer dependence but does not define target mapping, partition recipe or LED evidence.",
+        "Installation can destroy data and alter boot entries; OS boot visibility alone does not prove the front-panel LED criterion."
+      ],
+      "expected_evidence": [
+        "OS/media/drive/boot identity and authorization.",
+        "Installer and boot transcript, correct layout, M.2-related logs and operator LED observation.",
+        "Post-install health and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify boot device/layout, drive identity, logs and system health; preserve evidence without clearing."
+      ],
+      "logs_to_collect": [
+        "OS/media/drive/boot/approval identity",
+        "Installer/console/reboot transcript",
+        "dmesg/syslog, drive health and front-panel LED evidence"
+      ],
+      "blocked_conditions": [
+        "Target/media/boot recipe/backup or qualified operator is missing.",
+        "No formatting approval/stable power/console exists, target is wrong, install/boot fails or logs/LED are ambiguous.",
+        "Evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "OS installer media (user provides)",
+        "ai_commands": "-- OS installation on the SSD is a multi-step deployment (boot media, partitioning, drivers) normally operator/installer driven; agent can assist with non-interactive installer args only at the user's direction.",
+        "ai_logs_output": "return the install log/verification (OS boots, drive visible, correct layout) so user confirms successful install.",
+        "risk": "RISK: OS install repartitions/reformats the target drive; only run on the drive the user designates."
+      },
+      "gpt_second_review_findings": "This is a state-changing installer and boot/LED verification. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and requires exact target allowlisting, media/partition recipe, backup, formatting approval, operator boot/LED evidence and read-only post-checks.",
+      "risk_level": "HIGH",
+      "blast_radius": "Designated SSD/M.2 partitions/data, boot entries, OS availability and front-panel LED behavior.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If target or boot state is wrong, stop, preserve installer/log evidence and have the owner restore the approved image/boot configuration; never reformat another device.",
+      "manual_steps": [
+        "Owner maps target and approves OS/partition/boot recipe.",
+        "Operator supervises installation, reboot and LED observation while agent collects read-only evidence.",
+        "Owner verifies layout/logs/LED and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not choose or format an SSD/M.2 autonomously. Require owner-confirmed target, media, backup and approval; operator supervises install/boot/LED evidence and the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00269-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 254
+      },
+      "test_name": "FIO",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Run the approved 12-hour 4K randrw FIO stress on a designated SSD test volume and verify IOPS, logs and post-test health.",
+      "preconditions": [
+        "Owner supplies exact empty/non-system SSD target, fio recipe, theory IOPS and cooling/monitoring limits.",
+        "Capture drive/OS/health/log baseline and obtain explicit approval for sustained mixed read/write stress."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate devices, mounts, serials and health; require an owner allowlist and validate fio/job hash before launch."
+      ],
+      "safety_checks": [
+        "Never run on OS/system or unconfirmed volume; stop on media errors, thermal/power alarms or host instability.",
+        "Preserve output and do not infer the 80% threshold without the approved specification."
+      ],
+      "required_packages": [
+        "fio and approved 4K randrw job file",
+        "Dedicated SSD test volume, theory-performance spec and monitoring",
+        "Stable power/cooling, maintenance window and write-stress approval"
+      ],
+      "test_command": "After owner confirmation, operator launches the source-matching 43,200-second fio job on the allowlisted SSD; agent monitors and collects output only.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek changes the source's 43,200-second bs=4K/size=4G/randrw recipe to a 60-second bs=512/size=1G/randrw job, so its result is not equivalent.",
+        "Sustained writes can affect data, temperature and endurance; target and threshold are user-owned inputs."
+      ],
+      "expected_evidence": [
+        "Target serial/mount, exact job hash, runtime and authorization.",
+        "Complete IOPS/BW/latency/error output, thermal/health/log evidence and comparison to the theory threshold.",
+        "End-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify target identity/health, logs and system stability after completion; preserve all evidence."
+      ],
+      "logs_to_collect": [
+        "SSD/fio/spec/approval identity",
+        "FIO stdout/stderr and performance/error data",
+        "SMART/health, thermal, dmesg/syslog and post-test state"
+      ],
+      "blocked_conditions": [
+        "Target, recipe, theory IOPS, cooling or approval is missing/ambiguous.",
+        "Target is system/unknown, job differs from approved source, or errors/thermal/system instability occur.",
+        "Performance or post-test evidence is incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "fio (install) + mounted test target",
+        "ai_commands": "# DUT: pre-write fio job file, operator designates target, run + capture IOPS/BW\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"cat > /root/HW-00269.fio <<'EOF'\n[global]\nbs=512\nsize=1G\nruntime=60\ntime_based\ndirect=1\nioengine=libaio\n[test]\nrw=randrw\nrwmixread=70\niodepth=32\nEOF\nfio /root/HW-00269.fio --filename=${FIO_TARGET:?operator must designate an EMPTY SSD test target, never OS/system disk}\" 2>&1",
+        "ai_logs_output": "return the fio job output (IOPS, BW, latency) so user diffs vs the expected performance for this drive. Long sustained run - confirm approval.",
+        "risk": "RISK: fio runs sustained I/O; ensure adequate cooling and only against the user-designated test volume."
+      },
+      "gpt_second_review_findings": "This is a long destructive mixed-I/O stress with an explicit recipe and performance threshold. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION because DeepSeek's shortened/different job is not equivalent; exact target, recipe, monitoring, threshold and approval are mandatory.",
+      "risk_level": "HIGH",
+      "blast_radius": "Designated SSD data/endurance, thermal state, storage I/O and host stability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Abort on unsafe temperature, errors or wrong target, preserve fio/health/log evidence and have the owner restore/reimage only the approved test volume; never touch the OS disk.",
+      "manual_steps": [
+        "Owner maps and approves the empty SSD target, exact fio recipe, threshold and monitoring.",
+        "Operator supervises the sustained job while agent collects evidence.",
+        "Owner compares results and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not launch fio until the owner confirms the exact SSD target, source-matching job, cooling/monitoring and write approval. Preserve complete output and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    {
+      "code": "Wistron-HW-00270-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 255
+      },
+      "test_name": "IOmeter",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Run the approved 48-hour IOmeter storage stress across designated volumes and verify no errors, hangs or reboots.",
+      "preconditions": [
+        "Owner supplies IOmeter version/config, exact drive/volume allowlist, backup/reimage plan and success/abort criteria.",
+        "Capture all-drive identity/mount/health/log baseline, confirm formatting/write approval, cooling, monitoring and maintenance window."
+      ],
+      "pre_check_commands": [
+        "Read-only enumerate drives, volumes, serials and boot/system disks; require owner allowlist before bringing any device online/formatting.",
+        "Validate IOmeter config, outstanding I/O=16, result collection and watchdog/abort path."
+      ],
+      "safety_checks": [
+        "Never format or stress an OS/data disk or unknown volume; stop on target mismatch, errors, hang, reboot, thermal/power alarm or unstable host.",
+        "Preserve logs and do not reboot/restore blindly after a failed long run."
+      ],
+      "required_packages": [
+        "User-provided IOmeter and approved workload/config",
+        "Designated storage volumes, backup/reimage media and console",
+        "Stable power/cooling, monitoring, 48-hour window and explicit write/format approval"
+      ],
+      "test_command": "After owner validation, qualified operator configures and supervises IOmeter on the allowlisted volumes; agent collects approved logs/results and read-only health evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek only says a GUI worker may run headless and does not cover the source's all-drive online/format steps or 48-hour workload safety.",
+        "IOmeter writes test files and formatting can destroy data; a 48-hour run can hang/reboot the host and needs human monitoring."
+      ],
+      "expected_evidence": [
+        "IOmeter/config/drive-volume mapping, approval and baseline.",
+        "Complete CSV/log, error/hang/reboot timeline, drive health/thermal data and system logs for the full run.",
+        "Post-test state and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Read-only verify drive/volume identity, filesystem/system health and logs; cleanup/reimage only under owner-approved recovery."
+      ],
+      "logs_to_collect": [
+        "IOmeter/version/config/target/approval identity",
+        "48-hour result CSV/log and watchdog events",
+        "Drive health/thermal, dmesg/syslog, reboot/hang and post-test evidence"
+      ],
+      "blocked_conditions": [
+        "IOmeter/config, target allowlist, backup/reimage or write/format approval is missing.",
+        "Any target ambiguity, unsupported formatting, error, hang, reboot, thermal/power issue or incomplete monitoring.",
+        "Full-duration results or post-test logs are incomplete."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "IOmeter (user provides/configures)",
+        "ai_commands": "-- IOmeter benchmark is a GUI-driven tool typically run interactively; needs IOmeter installed + a workload config. Agent can launch the configured IOmeter worker headless if a scriptable config is provided.",
+        "ai_logs_output": "return the IOmeter result CSV/log so user diffs against expected performance. Long sustained run - confirm approval."
+      },
+      "gpt_second_review_findings": "The source is a 48-hour all-volume stress with online/format/write steps and a no-error/no-hang/no-reboot criterion. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and requires exact target allowlisting, backup, config fidelity, monitoring, abort/recovery and complete-duration evidence; headless launch alone is unsafe.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "All designated storage volumes, data/filesystems, PCIe/NVMe buses, host availability and reboot state.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Abort on wrong target or instability, preserve IOmeter/system evidence, keep power stable and have the owner restore/reimage only approved test volumes; escalate if the host hangs or reboots.",
+      "manual_steps": [
+        "Owner maps volumes and approves IOmeter config, formatting, monitoring and recovery.",
+        "Qualified operator supervises the 48-hour run while agent collects evidence.",
+        "Owner evaluates errors/hangs/reboots and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not bring disks online, format or launch IOmeter autonomously. Require owner target/config/backup approval and continuous operator monitoring; preserve the full run evidence and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
