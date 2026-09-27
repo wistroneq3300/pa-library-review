@@ -1363,6 +1363,88 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00222-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 213
+      },
+      "test_name": "ME FW Error Code",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the ME firmware error code for the identified platform, compare it with the owner-defined acceptable/no-error state and confirm that the state remains correct after an approved reboot.",
+      "preconditions": [
+        "Owner supplies platform identity, expected error-code semantics (including whether zero/no-error is required), approved read-only MEI utility and any vendor decoding table.",
+        "Verify MEI channel/tool compatibility, reboot approval, active-workload impact and OOB recovery; no error-clear, ME reset or firmware write is allowed.",
+        "Capture existing MEI/kernel/BMC/SEL evidence without clearing logs."
+      ],
+      "pre_check_commands": [
+        "Read `/sys/class/mei/` and platform/SKU identity and collect raw `mei-amt-check -E` or approved equivalent output without remediation.",
+        "Record existing error evidence before comparing it; do not clear logs or reset ME merely to obtain a clean code.",
+        "Define the pre/post reboot code comparison and recovery timeout before requesting approval."
+      ],
+      "safety_checks": [
+        "Do not interpret a generic `error|me.fw` dmesg grep as the ME error code, and do not clear an existing code as part of the test.",
+        "Use only a vendor-confirmed read-only diagnostic; stop if `-E` can clear, acknowledge or alter errors.",
+        "Reboot requires explicit approval and OOB recovery; preserve the original fault evidence."
+      ],
+      "required_packages": [
+        "Compatible owner-approved read-only `mei-amt-check -E`/Intel MEI tool and driver",
+        "Platform ME error-code specification/decoder and `dmidecode`/coreutils as applicable",
+        "Expected acceptable code, reboot approval, maintenance window and OOB recovery"
+      ],
+      "test_command": "Collect the ME error code with the approved read-only MEI utility, compare it with the owner-defined acceptable code/state, reboot only after approval, then collect and compare the code again.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek correctly notes that an expected code is required, but its `mei-amt-check -E` and dmesg grep do not prove decoder meaning, read-only behavior or persistence after reboot.",
+        "Existing ME errors are evidence and must not be cleared; a remediation or reset would change the testcase and potentially hide a fault.",
+        "The read itself is intended to be non-destructive, while the reboot and any vendor diagnostic side effect require approval and recovery."
+      ],
+      "expected_evidence": [
+        "Platform/SKU, vendor error-code meaning, expected acceptable state, tool/driver and authorization.",
+        "Raw pre/post error-code outputs, reboot/reconnect timestamps and preserved pre-existing error logs.",
+        "MEI/kernel/BMC/SEL health, no clear/reset/write action and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "After recovery, repeat the same read-only error-code query and collect MEI/kernel/BMC/SEL evidence without clearing or acknowledging errors.",
+        "Compare code and platform identity before/after and escalate any new or changed error rather than retrying."
+      ],
+      "logs_to_collect": [
+        "Platform/ME specification and error-code decoder, expected state, tool/driver and approval",
+        "Raw pre/post ME error-code output, reboot/reconnect transcript and timestamps",
+        "Preserved MEI/kernel/BMC/SEL and OOB recovery evidence"
+      ],
+      "blocked_conditions": [
+        "Error-code meaning/acceptable state, platform identity, compatible read-only tool or MEI channel is missing.",
+        "The tool may clear/acknowledge/reset errors, or reboot/OOB recovery is unavailable.",
+        "Code changes unexpectedly, recovery fails or only generic dmesg text is available."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "intelmetool / mei-amt-check / dmidecode / coreutils",
+        "ai_commands": "ls /sys/class/mei/ 2>&1; echo ---; mei-amt-check -E 2>&1 || echo \"ME FW Error Code tool not installed\"; echo ---; dmesg | grep -iE \"error|me.fw\" | tail -20",
+        "ai_logs_output": "read the ME error code (ME FW Error Code) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected ME FW Error Code.",
+        "risk": "RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."
+      },
+      "gpt_second_review_findings": "The source asks for an ME firmware error code and correctness after reboot, but “normal” is undefined and existing error evidence must be preserved. DeepSeek's package/baseline caveat is useful, yet `mei-amt-check -E` and a generic error grep do not establish the code's meaning, read-only behavior or post-reboot persistence. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION, requiring the vendor decoder, acceptable state, tool safety validation and approved reboot; it must never clear or acknowledge errors as a baseline.",
+      "risk_level": "HIGH",
+      "blast_radius": "ME error evidence and platform firmware observability, reboot availability and BMC/OOB connectivity; accidental clear/reset could hide a fault.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not clear, acknowledge, reset or modify ME errors. Preserve raw code/log evidence on any anomaly, recover through OOB after an approved reboot and escalate to the firmware owner; do not retry an unverified diagnostic.",
+      "manual_steps": [
+        "Owner supplies platform/error-code semantics, acceptable state, approved read-only utility and reboot/recovery approval.",
+        "Agent collects raw evidence while the operator supervises the approved reboot.",
+        "Owner evaluates the preserved error state and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Obtain the ME error-code decoder and acceptable state, validate `mei-amt-check -E` or an alternative is read-only and non-clearing, capture pre-reboot evidence, obtain reboot approval, repeat after recovery and preserve all existing errors/logs. Never use a generic dmesg grep or clear errors to create a baseline; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
