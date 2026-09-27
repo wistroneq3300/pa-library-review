@@ -1505,6 +1505,36 @@
       "manual_steps": ["Owner supplies expected mode, BIOS/KVM path and reboot authorization.","Operator/KVM provides the firmware-side observation while the agent collects OS read-only evidence and supervises approved reboot recovery.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep the test read-only: obtain the expected UEFI/Legacy mode, correlate BIOS/KVM with OS EFI evidence, do not rely on `dmidecode -s bios-mode` or dmesg alone, obtain reboot approval and repeat after recovery. Never change boot settings; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00225-V002",
+      "source_ref": {"sheet":"Functionality","source_row":216},
+      "test_name": "Core Disabled",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify the owner-defined CPU core enabled/disabled mask on the identified SUT and confirm the same mask after an approved reboot without changing CPU or BIOS settings.",
+      "preconditions": ["Owner supplies expected online/offline core count and mask, platform/BIOS identity and whether the criterion includes BIOS-disabled versus OS-offline cores.","Use read-only OS/BIOS evidence, a maintenance/reboot window and OOB recovery; no core enable/disable action is part of this case.","Capture CPU topology, online/offline state, kernel, BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Collect `lscpu`, `/sys/devices/system/cpu/online`/`offline`, topology and BIOS/KVM state read-only; correlate the same SUT.","Record active workloads and define the pre/post reboot mask comparison; `lscpu -e` alone does not explain disabled cores."],
+      "safety_checks": ["Do not change BIOS core settings, CPU hotplug state or online masks.","Reboot requires approval/recovery and preserved kernel/BMC/SEL evidence.","Do not infer the expected mask from observed CPU count."],
+      "required_packages": ["Coreutils and `lscpu`/util-linux plus platform CPU/BIOS specification","BIOS/KVM access if firmware-disabled state is required","Expected core mask, reboot approval and OOB recovery"],
+      "test_command": "Collect read-only BIOS/OS CPU topology and online/offline-mask evidence, compare with the owner-defined Core Disabled expectation, reboot only after approval and repeat the comparison.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek's `lscpu -e` is a useful inventory but does not prove the disabled mask, BIOS cause or persistence after reboot; its MEI/SPS framing is not supported by this command.","Core online/offline state affects workload capacity; no state change or log clearing is allowed."],
+      "expected_evidence": ["Platform/BIOS identity, expected core mask and authorization.","Before/after `lscpu`/sysfs/topology plus BIOS/KVM evidence and reboot timestamps.","Workload/boot/kernel/BMC/SEL health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["After recovery, repeat topology and online/offline-mask reads and preserve kernel/BMC/SEL evidence without clearing logs."],
+      "logs_to_collect": ["CPU/BIOS specification, expected mask and authorization","Pre/post lscpu/sysfs/topology and BIOS evidence","Reboot, kernel, BMC/SEL and OOB recovery evidence"],
+      "blocked_conditions": ["Expected mask, platform identity or BIOS/OS evidence scope is missing.","A core-setting change is requested, online-mask ownership is ambiguous or reboot/OOB recovery is unavailable.","Pre/post masks disagree or only a CPU list without disabled-state semantics is available."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"intelmetool / mei-amt-check / dmidecode / coreutils","ai_commands":"ls /sys/class/mei/ 2>&1; echo ---; lscpu -e 2>&1 || echo \"Core Disabled tool not installed\"; echo ---; dmesg | grep -iE \"cpu\" | tail -20","ai_logs_output":"read the enabled/disabled core mask (Core Disabled) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected Core Disabled.","risk":"RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."},
+      "gpt_second_review_findings": "The source asks for a core-disabled result that remains correct after reboot. DeepSeek's `lscpu -e` inventory is not enough to distinguish BIOS-disabled cores from OS-offline cores, and the expected mask is absent; its MEI/SPS description is also mismatched. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION, requiring an owner-supplied mask, correlated BIOS/OS evidence and approved reboot, while keeping all CPU state read-only.",
+      "risk_level": "HIGH",
+      "blast_radius": "CPU availability/topology evidence, workload capacity, reboot availability and BMC/OOB recovery; no intended state change.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not alter CPU or BIOS state. If masks differ or reboot recovery fails, preserve topology/kernel/BMC/SEL evidence, recover through OOB and escalate to the platform owner rather than changing online settings.",
+      "manual_steps": ["Owner supplies expected mask and BIOS/OS scope and approves reboot.","Agent collects read-only CPU evidence; operator/KVM provides firmware state and supervises recovery.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Obtain the expected core mask and define BIOS-disabled versus OS-offline scope, collect lscpu/sysfs/topology plus BIOS evidence, do not change core or online settings, obtain reboot approval and repeat after recovery. Preserve kernel/BMC/SEL evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
