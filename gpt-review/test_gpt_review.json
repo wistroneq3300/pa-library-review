@@ -1925,6 +1925,36 @@
       "manual_steps": ["Owner supplies PCH/board identity, expected version and signed read-only tool.","Agent collects raw mapped version evidence.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Verify the signed vendor PCH tool, target identity and expected mainboard version before reading. Keep the check read-only, preserve raw/platform evidence and report mismatches without flashing; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00239-V003",
+      "source_ref": {"sheet":"Functionality","source_row":230},
+      "test_name": "Vendor Tool Testing",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Run the approved vendor full TPM function test and verify its result, including the meaning of status code `0001FFFF`, while using host TPM2 evidence only as supplemental correlation.",
+      "preconditions": ["Owner supplies the exact licensed vendor TPM tool/version, TPM identity, full-test procedure and authoritative interpretation of `0001FFFF`.","Confirm whether the full test is read-only or changes TPM self-test/ownership/keys; provide security backup, operator/GUI access and recovery.","Capture TPM/secure-boot/kernel/BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Collect read-only TPM devices/properties and platform identity with approved tools; do not treat `tpm2_selftest` as equivalent to the vendor full test.","Verify vendor tool signature/license and acceptance code semantics before opening its test menu."],
+      "safety_checks": ["Do not clear TPM, change ownership, generate keys or accept an unexplained status code; stop if vendor full test can write security state.","Preserve existing TPM/security logs; avoid substituting a generic TPM2 self-test for the named vendor test."],
+      "required_packages": ["Licensed vendor TPM full-test tool and `tpm2-tools` for supplemental read-only evidence","TPM/secure-boot specification, status-code decoder and security backup/recovery","Qualified operator with GUI/access and maintenance authorization"],
+      "test_command": "BLOCKED: obtain the vendor TPM tool, full-test semantics and `0001FFFF` acceptance definition, then re-review before execution; collect TPM2 enumeration/self-test only as supplemental evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly separates the interactive vendor test from host TPM2 evidence, but neither source explains whether `0001FFFF` is pass/error nor whether the full test changes TPM state.","A generic `tpm2_selftest -f` cannot prove the licensed vendor menu test completed."],
+      "expected_evidence": ["TPM/platform identity, vendor tool/license/version, test semantics and code decoder.","Operator vendor-test transcript/result for the full test plus supplemental TPM2 raw evidence.","No TPM clear/ownership/key impact, preserved security/BMC/SEL evidence and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Do not run while blocked; after re-review, verify TPM properties/security state and dependent boot services without changing ownership or clearing logs."],
+      "logs_to_collect": ["TPM/security specification, vendor tool and status-code interpretation","Vendor full-test transcript/result and TPM2 supplemental outputs","Secure-boot/kernel/BMC/SEL/no-change evidence"],
+      "blocked_conditions": ["Vendor tool, license, TPM identity, full-test semantics or `0001FFFF` meaning is missing.","Test may clear/alter TPM security state, no backup/recovery exists or operator/GUI access is unavailable.","Vendor and TPM2 results conflict or security state changes unexpectedly."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"tpm2-tools","ai_commands":"sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"echo ---tpm2_getdev---; command -v tpm2_getdevices >/dev/null 2>&1 && tpm2_getdevices 2>&1 || echo 'no tpm2_getdevices'; echo ---tpm_dmesg---; dmesg | grep -iE 'tpm|trusted platform' | head -8; echo ---tpm2_selftest---; command -v tpm2_selftest >/dev/null 2>&1 && tpm2_selftest -f 2>&1 || echo 'tpm2-tools not installed' 2>&1\"","ai_logs_output":"return tpm2_getdevices enumeration, dmesg TPM lines, and a tpm2_selftest result so the user confirms the TPM answers TPM2 commands (this is the second/duplicate 'Vendor Tool Testing' row); the licensed vendor tool's full-TPM-test (0001FFFF) is run by the operator - agent provides only the TPM2 self-test/device evidence.","risk":"RISK: vendor TPM test is interactive licensed vendor tool; agent cannot drive its menu. Agent does the read-only TPM2 self-test/device check only."},
+      "gpt_second_review_findings": "The TPM purpose is understandable, but the acceptance criterion embeds unexplained code `0001FFFF`, the vendor tool/license is not supplied and the full test's effect on TPM security state is unknown. DeepSeek correctly says the operator must run the vendor menu and host TPM2 evidence is only supplemental; GPT changes PARTIAL to BLOCKED because the test result cannot be judged safely without the code semantics and state-change boundary. Re-review is required before execution.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "TPM security/ownership/keys, secure boot, vendor-test state, OS services and platform security evidence.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not run while semantics are blocked. Preserve TPM/security evidence, obtain vendor interpretation and backup/recovery, and if a later test changes state stop and use the approved security recovery path; never clear or re-own TPM as improvisation.",
+      "manual_steps": ["Owner/FAE supplies vendor tool, license, code meaning, TPM identity and state-impact procedure.","After re-review, operator runs the vendor menu test while the agent collects supplemental read-only evidence.","Owner validates the vendor result and decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep blocked until the vendor tool, `0001FFFF` semantics, TPM identity and security-impact/recovery plan are supplied. Do not substitute `tpm2_selftest`, clear TPM or change ownership; re-review before the full vendor test and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
