@@ -953,6 +953,88 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00216-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 207
+      },
+      "test_name": "USB loopback testing",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify every specified USB port with the approved PassMark USB3 test plug, current driver/firmware and PassMark BurnInTest USB test at 100% load for 3 hours, with no BurnInTest or plug errors.",
+      "preconditions": [
+        "Owner supplies the complete physical USB port/controller map, approved PassMark USB3 test plug identity, compatible driver and firmware packages, and the exact supported BurnInTest version.",
+        "Provide operator access to move the plug to each port, a maintenance window, thermal/power limits and OOB recovery; confirm the plug is not a boot, console or management dependency.",
+        "Capture USB, kernel, system, BMC/SEL, thermal and power baseline without clearing prior evidence; define how every port's 180-minute report is retained."
+      ],
+      "pre_check_commands": [
+        "Enumerate USB topology/controllers read-only and correlate each physical port to the approved test plug; do not assume `/dev/ttyUSB0` identifies a USB3 test plug.",
+        "Verify BurnInTest, USB3 plug driver and plug firmware versions/compatibility without changing firmware; record the 100%/180-minute configuration and per-port sequence.",
+        "Record active users/jobs, USB mounts, kernel/system/BMC/SEL and thermal/power state and confirm an OOB path before starting."
+      ],
+      "safety_checks": [
+        "Do not flash or update the plug firmware until identity, target version, compatibility, recovery and owner approval are explicit; do not use a generic USB-serial loopback substitute.",
+        "A 100% three-hour run repeated on every port can stress USB power/controller/plug thermals and affect service; isolate boot/input/security/OOB ports and obtain maintenance approval.",
+        "Stop on disconnect, overcurrent, thermal/power excursion, controller error or unexplained BurnInTest/plug result; preserve existing logs and do not clear them."
+      ],
+      "required_packages": [
+        "Licensed PassMark BurnInTest with USB test support",
+        "PassMark USB3 test plug, compatible driver and validated firmware image/tool",
+        "`usbutils` or equivalent read-only USB inventory tools, physical operator, per-port map and OOB recovery"
+      ],
+      "test_command": "For each owner-designated USB port, install the approved PassMark USB3 test plug with its validated driver/firmware and run PassMark BurnInTest USB Test at 100% load for 3 hours; retain the complete per-port reports.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The source is a physical per-port, vendor-tool stress test, not a host serial loopback. It needs package, firmware, operator and explicit approval before any 180-minute run or plug update.",
+        "DeepSeek repeats the source's `PARTIAL` label but its fixed `/dev/ttyUSB0`/`stty`/`cat` command is not the PassMark USB3 plug or BurnInTest stimulus, omits driver/firmware validation and does not repeat the complete port matrix.",
+        "Generic loopback writes to an assumed device path could target the wrong device; do not execute it as a substitute."
+      ],
+      "expected_evidence": [
+        "SUT and per-port/controller map, plug identity, driver/firmware versions and compatibility/approval.",
+        "Per-port timestamps and complete BurnInTest USB reports showing 100% load for 180 minutes with no tool or plug error.",
+        "USB/kernel/system/BMC/SEL, thermal/power and recovery evidence, final plug/port health and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "After each run, stop the tool cleanly, collect USB topology and kernel/controller evidence and verify the plug remains in the expected state before moving it.",
+        "After the final port, compare thermal/power/BMC/SEL and service state with baseline; remove the plug only after I/O is idle and preserve every report."
+      ],
+      "logs_to_collect": [
+        "Port/controller map, plug identity, driver/firmware/tool versions and approval",
+        "Per-port BurnInTest configuration, 180-minute transcript/report and plug result",
+        "Pre/during/post USB, kernel/system/BMC/SEL, thermal/power and restoration evidence"
+      ],
+      "blocked_conditions": [
+        "Exact port matrix, plug identity, compatible driver/firmware/tool or firmware recovery path is missing.",
+        "A port is service-sensitive, no operator/OOB/maintenance approval exists, or the plug cannot be mapped safely to the tested port.",
+        "Unsupported firmware/tool combination, incomplete per-port reports, overcurrent/thermal/power/controller error or unexplained device state occurs."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "usbutils stress-ng (loopback needs a USB-serial loopback adapter + pyserial)",
+        "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"echo ---dev---; ls /dev/ttyUSB* /dev/ttyACM* 2>&1; echo ---loop---; (stty -F /dev/ttyUSB0 115200 && cat /dev/ttyUSB0 > /tmp/loop.txt & pid=$!; sleep 5; printf \\\"USB loop\\\" > /dev/ttyUSB0; sleep 2; kill $pid; cat /tmp/loop.txt) 2>&1\"",
+        "ai_logs_output": "return FULL lsusb + dmesg USB lines + stress/loopback result so the user confirms the USB ports survived the stress/loopback; the full matrix over every physical port needs the operator to attach devices.",
+        "risk": "RISK: USB stress/loopback needs physical USB devices on the specific ports; agent runs the host-side stress/loopback probe and the physical port matrix is operator."
+      },
+      "gpt_second_review_findings": "The source is understandable as a PassMark USB3 test-plug loopback/stress case repeated on every USB port. DeepSeek's physical-device boundary is correct, but its assumed `/dev/ttyUSB0` serial loopback writes to an unverified path and does not execute the named PassMark USB3 driver/firmware or BurnInTest at 100% for 3 hours. GPT changes the material execution conclusion to the allowed REQUIRES PACKAGE / USER CONFIRMATION classification, requiring validated plug identity, driver/firmware compatibility, per-port coverage, thermal/power controls and complete reports; the package/parameter gaps do not make the purpose irreducibly blocked.",
+      "risk_level": "HIGH",
+      "blast_radius": "Every tested USB port/controller, test-plug firmware/driver, USB power and thermal state, host service availability and possible OOB/input paths.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop the current port run on any anomaly, let BurnInTest and I/O quiesce, preserve the report and host/BMC evidence, and do not move or reflash the plug until its state is understood. Safely restore the USB/service state, use OOB recovery if needed and obtain owner diagnosis before retrying.",
+      "manual_steps": [
+        "Owner supplies the port map, approved plug, compatible driver/firmware/tool and recovery/maintenance authorization.",
+        "Operator moves the approved plug to each port and supervises the validated 100% three-hour BurnInTest run while the agent gathers read-only evidence.",
+        "Owner reviews every per-port report and restoration evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Do not run the DeepSeek serial-loopback substitute. Request the exact per-port map, approved PassMark USB3 plug, validated driver/firmware/tool versions, thermal/power limits, maintenance window and OOB recovery. Run only the approved BurnInTest USB test at 100% for 180 minutes per port, preserve reports/logs, stop safely on anomalies and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
