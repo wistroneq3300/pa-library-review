@@ -1895,6 +1895,36 @@
       "manual_steps": ["Owner supplies the signed tool, PCH identity, expected PASS semantics and read-only authorization.","Operator/KVM runs the approved diagnostic while the agent captures permitted raw evidence.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Obtain the signed PCH diagnostic and exact PASS definition, verify target identity and read-only behavior in BIOS/KVM, never program fuses, preserve security/BMC/SEL evidence and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00238-V003",
+      "source_ref": {"sheet":"Functionality","source_row":229},
+      "test_name": "PCH version",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the PCH version for the identified platform and compare it with the owner-supplied mainboard/firmware expectation using an approved read-only vendor tool.",
+      "preconditions": ["Owner supplies board/mainboard and PCH identity, expected version and signed/compatible PCH version utility.","Confirm OS/tool permissions and that the utility cannot update PCH/fuses; no firmware change is part of this case.","Preserve platform/BIOS/BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Verify tool hash/version and correlate its reported device with the board/PCH identity before accepting output.","Record firmware/board inventory and expected mainboard version source; do not infer a match from a version string alone."],
+      "safety_checks": ["Use read-only version query only; stop if the vendor tool can write or target identity is unclear.","Do not remediate or flash a mismatch and do not clear logs."],
+      "required_packages": ["Owner-provided signed PCH version tool","Board/PCH/mainboard specification and expected version","Read-only OS access and protected platform/BMC evidence"],
+      "test_command": "Run the approved read-only PCH version query, record raw output and compare the mapped PCH version with the owner-defined mainboard expectation.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly marks the vendor tool dependency, but its PARTIAL label becomes REQUIRES PACKAGE / USER CONFIRMATION and needs target identity, tool safety and expected-version evidence.","A wrong PCH tool or mismatch must not trigger an improvised firmware update."],
+      "expected_evidence": ["Board/PCH identity, expected mainboard version, tool hash/version and authorization.","Raw version output tied to the correct PCH and comparison result.","No write/remediation, preserved platform/BMC/SEL evidence and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Re-read PCH/platform identity if needed and verify no state change; preserve logs without clearing."],
+      "logs_to_collect": ["Board/PCH specification, expected version and tool identity","Raw PCH version transcript","Platform/BIOS/BMC/SEL health and no-write evidence"],
+      "blocked_conditions": ["PCH/board identity, expected mainboard version or compatible read-only tool is missing.","Tool write behavior is uncertain or mismatch remediation is requested.","Reported target is ambiguous or output cannot be correlated to the mainboard."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"PCH version tool (user-provided)","ai_commands":"-- PCH version: run the vendor tool to read the PCH version and check it matches the MB. Requires the vendor PCH tool installed; the agent can then run it and return the reported version.","ai_logs_output":"return the vendor tool PCH version output so the operator compares it with the MB expectation.","risk":null},
+      "gpt_second_review_findings": "The PCH version readback purpose is identifiable and DeepSeek correctly requires the vendor tool and owner comparison. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and adds board/PCH identity, signed tool compatibility, read-only behavior and an explicit expected-version source; a mismatch must be reported, not remediated.",
+      "risk_level": "MEDIUM",
+      "blast_radius": "PCH/board firmware identity and platform observability; no intended state change.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not modify PCH. Preserve raw output and platform/BMC/SEL evidence on mismatch or tool failure and escalate to the platform owner; do not retry an unverified utility.",
+      "manual_steps": ["Owner supplies PCH/board identity, expected version and signed read-only tool.","Agent collects raw mapped version evidence.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Verify the signed vendor PCH tool, target identity and expected mainboard version before reading. Keep the check read-only, preserve raw/platform evidence and report mismatches without flashing; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
