@@ -1955,6 +1955,36 @@
       "manual_steps": ["Owner/FAE supplies vendor tool, license, code meaning, TPM identity and state-impact procedure.","After re-review, operator runs the vendor menu test while the agent collects supplemental read-only evidence.","Owner validates the vendor result and decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep blocked until the vendor tool, `0001FFFF` semantics, TPM identity and security-impact/recovery plan are supplied. Do not substitute `tpm2_selftest`, clear TPM or change ownership; re-review before the full vendor test and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00240-V003",
+      "source_ref": {"sheet":"Functionality","source_row":231},
+      "test_name": "Bitlocker Testing",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify TPM 2.0/BIOS/Windows BitLocker integration by enabling encryption on the approved Windows volume, completing encryption and confirming the system boots with the approved TPM/PIN policy and recovery material.",
+      "preconditions": ["Qualified Windows operator, approved test OS/volume, TPM/secure-boot policy, BitLocker recovery key and backup/restore plan are available.","Explicitly define volume/partition scope, shrink target, PIN/unlock expectation and service window; do not touch the production/boot disk without owner approval.","Capture TPM/BIOS/Windows/device-manager/BitLocker baseline without clearing security logs."],
+      "pre_check_commands": ["Operator verifies TPM identity/status and Windows BitLocker policy read-only; do not run `tpm2_takeownership` or create TPM keys merely to prepare.","Validate recovery key, volume identity, boot/OOB/KVM path and rollback before encryption."],
+      "safety_checks": ["Do not clear/re-own TPM, shrink an unspecified disk, or encrypt a production volume; `manage-bde -on C:` is state-changing and requires explicit approval.","Stop on TPM/secure-boot/recovery-key mismatch, storage error, boot failure or inability to restore the approved state."],
+      "required_packages": ["Windows TPM/BitLocker management and approved Windows OS/volume","TPM/secure-boot specification, recovery key/backup and qualified operator","BIOS/KVM/OOB recovery and maintenance authorization"],
+      "test_command": "MANUAL ONLY: operator verifies TPM/BIOS/Windows state, uses the approved test volume to enable BitLocker with the owner-approved protector, completes encryption and validates recovery/boot; do not run the Linux TPM ownership commands as a substitute.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek's NO conclusion is correct for the Windows/BIOS/BitLocker GUI and reboot flow; GPT adds strict volume identity, recovery-key, TPM-state and no-ownership-clear controls.","The source's `tpm2_takeownership`, key creation, C: shrink and encryption can destroy access or data if applied to the wrong system/volume."],
+      "expected_evidence": ["Windows/TPM/BIOS/secure-boot and exact test-volume identity, protector/recovery-key backup and authorization.","Operator TPM/BitLocker status, encryption completion, recovery/boot evidence and no unexpected data loss.","Security/event/BMC/host evidence, restored/approved final state and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Operator verifies `manage-bde` status, protector/recovery path and boot after encryption; preserve Windows/security evidence and do not clear TPM logs."],
+      "logs_to_collect": ["TPM/secure-boot/BitLocker policy, volume/protector identity and approval","Windows BitLocker/encryption/reboot/recovery transcript","Boot/security/event/BMC/OOB and restoration evidence"],
+      "blocked_conditions": ["No qualified Windows operator, exact approved volume, recovery key/backup, TPM/BIOS policy or rollback path.","Production/unknown volume, TPM ownership/key conflict, encryption/shrink/boot failure or recovery evidence missing.","Any request to clear/re-own TPM or infer a safe disk from `C:`/device numbering."],
+      "deepseek_original_review": {"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"-- not runnable by agent: this BitLocker (TPM 2.0, Linux checklist) case requires TPM 2.0 presence+status checks plus Windows BitLocker enable/shrink/encrypt steps across the criteria; the encryption + boot-without-unlock validation is a Windows GUI/reboot sequence the agent cannot drive from a Linux SSH session, and a TPM/BIOS change is involved.","ai_logs_output":"operator verifies TPM 2.0, enables BitLocker (Windows), shrinks C:, encrypts, and confirms boot without unlock; agent cannot drive the Windows BitLocker wizard or BIOS change.","risk":"RISK: physical/hardware operation at the machine - human only; agent must not attempt."},
+      "gpt_second_review_findings": "DeepSeek's NO boundary is correct: the complete case requires Windows BitLocker/GUI, BIOS/TPM state, volume shrink/encryption and reboot/recovery evidence unavailable to the reviewing agent. GPT keeps MANUAL ONLY and materially improves the review with exact-volume, recovery-key, TPM ownership, secure-boot, rollback and no-production-disk safeguards; Linux `tpm2-tools` self-tests cannot substitute for the full criteria.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "TPM keys/ownership, secure boot, Windows volume/data, BitLocker protectors, bootability and recovery/OOB access.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on any storage, TPM, protector or boot anomaly, preserve recovery keys/logs, use the approved Windows/OOB recovery path and do not clear/re-own TPM or retry encryption on an unidentified volume.",
+      "manual_steps": ["Operator performs BIOS/Windows TPM and BitLocker actions on the approved test volume.","Operator supplies encryption, protector, recovery and boot evidence; agent must not claim the physical/GUI work.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not run the Linux ownership/key commands or touch an unspecified C:/boot volume. Request the operator's exact volume, recovery-key backup, TPM/secure-boot policy, BitLocker transcript and boot evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
