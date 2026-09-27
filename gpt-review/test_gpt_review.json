@@ -1035,6 +1035,88 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00218-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 209
+      },
+      "test_name": "SPS Version",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the Intel SPS/ME firmware version, compare it with the owner-supplied expected value, and verify the same value remains correct after an approved reboot.",
+      "preconditions": [
+        "Owner supplies the expected SPS version and platform/SKU identity, the approved read-only Intel MEI/SPS tool and the BIOS/firmware source of truth.",
+        "Confirm the MEI driver/channel is present, tools are compatible and a maintenance window/OOB recovery path exists for the required reboot; no ME/SPS write or reset is part of this case.",
+        "Capture platform, BIOS, MEI/SPS, kernel, BMC/SEL baseline without clearing logs."
+      ],
+      "pre_check_commands": [
+        "Enumerate `/sys/class/mei/` and platform/BIOS identity read-only; verify the expected SPS target before invoking any vendor utility.",
+        "Run only the owner-approved read-only version query and preserve raw output; do not treat an absent dmesg string as proof of version.",
+        "Confirm reboot approval, active-workload status, timeout/reconnect and OOB recovery before the post-reboot comparison."
+      ],
+      "safety_checks": [
+        "Do not use Intel ME tools that can write or alter ME/SPS state; stop if the selected utility lacks a read-only mode or target identity is ambiguous.",
+        "A reboot is service-impacting and needs explicit approval, before/after evidence and recovery; preserve existing dmesg/SEL/BMC evidence.",
+        "Do not infer correctness without the expected version and platform match."
+      ],
+      "required_packages": [
+        "Owner-approved compatible `intelmetool`/`mei-amt-check` or equivalent read-only SPS query tool",
+        "MEI kernel driver, `dmidecode`/coreutils as applicable and platform firmware specification",
+        "Expected SPS baseline, reboot approval, maintenance window and OOB recovery"
+      ],
+      "test_command": "Read the SPS version through the approved read-only MEI/SPS tool, compare it with the owner-supplied expected value, reboot only after approval, then repeat the read and compare the result.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek's readout is directionally aligned but leaves correctness to an unspecified baseline and does not make the reboot verification or tool read-only boundary explicit.",
+        "`dmesg | grep sps` and `/sys/class/mei` are not sufficient version proof; vendor output must be tied to the correct platform and expected value.",
+        "ME/SPS tooling can be platform-sensitive; an unsupported command or reboot can affect management/boot, so no execution starts without package, target and approval."
+      ],
+      "expected_evidence": [
+        "Platform/SKU and BIOS/ME/SPS identity, expected version source and tool/driver versions.",
+        "Raw pre-reboot SPS query, approved reboot timestamps/reconnect evidence and raw post-reboot query showing the same expected value.",
+        "BMC/SEL/kernel health and no ME/SPS state change, with end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "After the approved reboot, re-run the same read-only SPS query and collect platform/MEI/kernel/BMC/SEL evidence without clearing logs.",
+        "Compare pre/post version and management/boot health; stop on mismatch or unexpected ME/BMC event."
+      ],
+      "logs_to_collect": [
+        "Platform/SKU, expected SPS version, tool/driver and authorization",
+        "Pre/post raw MEI/SPS version output, reboot/reconnect transcript and timestamps",
+        "BIOS/kernel/BMC/SEL health and recovery evidence"
+      ],
+      "blocked_conditions": [
+        "Expected SPS version, platform identity, compatible read-only tool or MEI channel is missing.",
+        "The utility may write ME/SPS state, reboot/OOB recovery is unavailable or the returned device identity is ambiguous.",
+        "Pre/post versions disagree, the system fails to recover or evidence is only an uncorrelated dmesg/sysfs string."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "intelmetool / mei-amt-check / dmidecode / coreutils",
+        "ai_commands": "ls /sys/class/mei/ 2>&1; echo ---; intelmetool  2>&1 || echo \"SPS Version tool not installed\"; echo ---; dmesg | grep -iE \"sps\" | tail -20",
+        "ai_logs_output": "read the SPS firmware version (SPS Version) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected SPS Version.",
+        "risk": "RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."
+      },
+      "gpt_second_review_findings": "The source purpose is identifiable as SPS version readback plus persistence across reboot. DeepSeek correctly calls out the missing expected baseline and package, but its generic `intelmetool` invocation does not establish read-only behavior, platform identity or the required after-reboot comparison. GPT changes the unsupported PARTIAL classification to REQUIRES PACKAGE / USER CONFIRMATION, requiring an owner-supplied expected value, compatible read-only tool, explicit reboot approval and correlated pre/post evidence; the missing baseline is a prerequisite rather than an irreducible semantic blocker.",
+      "risk_level": "HIGH",
+      "blast_radius": "Intel MEI/SPS observability, firmware/platform identity, OS reboot availability and BMC/OOB recovery path; no intended firmware write.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not write ME/SPS state. If the query fails or pre/post versions disagree, preserve raw outputs and platform/BMC/SEL evidence, stop the reboot sequence, reconnect through OOB and escalate to the firmware owner; do not retry an unverified vendor command.",
+      "manual_steps": [
+        "Owner provides the expected SPS version, platform identity, approved read-only tool and reboot/recovery authorization.",
+        "Agent collects read-only pre/post output; operator supervises the approved reboot and recovery window.",
+        "Owner compares the version and health evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Request the exact SPS baseline and platform identity, verify an approved read-only MEI/SPS utility, capture pre-reboot evidence, obtain explicit reboot approval, repeat the query after recovery and preserve BMC/SEL/kernel evidence. Never infer correctness from dmesg alone or run a tool that may write ME/SPS state; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
