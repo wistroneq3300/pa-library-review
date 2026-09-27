@@ -1535,6 +1535,36 @@
       "manual_steps": ["Owner supplies expected mask and BIOS/OS scope and approves reboot.","Agent collects read-only CPU evidence; operator/KVM provides firmware state and supervises recovery.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Obtain the expected core mask and define BIOS-disabled versus OS-offline scope, collect lscpu/sysfs/topology plus BIOS evidence, do not change core or online settings, obtain reboot approval and repeat after recovery. Preserve kernel/BMC/SEL evidence; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00226-V002",
+      "source_ref": {"sheet":"Functionality","source_row":217},
+      "test_name": "ME FW SKU Information",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the Intel ME firmware SKU for the identified platform, compare it with the owner-provided expected SKU and verify persistence after an approved reboot.",
+      "preconditions": ["Owner supplies platform/SKU identity, expected ME FW SKU and approved read-only `mei-amt-check -M`/MEI utility or vendor decoder.","Confirm MEI/tool compatibility, reboot approval, active-workload impact and OOB recovery; no SKU/ME write is allowed.","Preserve firmware, MEI, kernel, BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Read `/sys/class/mei/` and platform identity, then capture raw approved SKU output; do not infer SKU from a generic dmesg `sku` line.","Record active jobs and management connectivity and define the pre/post reboot comparison."],
+      "safety_checks": ["Verify `mei-amt-check -M` is read-only and targets the correct ME; stop on ambiguous/write-capable behavior.","Reboot requires explicit approval and preserved OOB/BMC/SEL evidence.","Do not call a returned SKU correct without the expected platform value."],
+      "required_packages": ["Compatible MEI driver and owner-approved read-only ME SKU utility","Platform/ME SKU specification or decoder","Expected SKU, maintenance/reboot approval and OOB recovery"],
+      "test_command": "Collect ME FW SKU with the approved read-only MEI utility, compare with the owner-defined expected SKU, reboot only after approval and repeat the read after recovery.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek flags the missing baseline and package, but its `-M` output and dmesg grep do not establish platform correlation, read-only behavior or post-reboot persistence.","SKU mismatch can indicate wrong firmware/platform identity; do not remediate or flash under this check."],
+      "expected_evidence": ["Platform/SKU identity, expected ME SKU, utility/driver/decoder and authorization.","Raw pre/post SKU output, reboot/reconnect timestamps and matching ME identity.","Firmware/kernel/BMC/SEL/OOB health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Repeat the approved read-only SKU query after recovery and collect MEI/kernel/BMC/SEL evidence without clearing logs."],
+      "logs_to_collect": ["Platform/ME SKU specification and approval","Raw pre/post SKU and reboot transcript","Firmware/kernel/BMC/SEL/OOB evidence"],
+      "blocked_conditions": ["Expected SKU, platform identity, compatible read-only utility or decoder is missing.","Tool target/write behavior or reboot/OOB recovery is uncertain.","Pre/post SKU differs or only generic dmesg text is available."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"intelmetool / mei-amt-check / dmidecode / coreutils","ai_commands":"ls /sys/class/mei/ 2>&1; echo ---; mei-amt-check -M 2>&1 || echo \"ME FW SKU tool not installed\"; echo ---; dmesg | grep -iE \"sku\" | tail -20","ai_logs_output":"read the ME SKU (ME FW SKU) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected ME FW SKU.","risk":"RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."},
+      "gpt_second_review_findings": "The source's ME FW SKU readback is identifiable, but correctness depends on an owner-provided platform/SKU value and reboot persistence. DeepSeek's generic `-M`/dmesg approach does not prove the tool's read-only contract or correlate the returned SKU to the SUT. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION, requiring the vendor/ME decoder, expected SKU and approved reboot/recovery while forbidding firmware remediation.",
+      "risk_level": "HIGH",
+      "blast_radius": "ME/firmware identity evidence, reboot availability and BMC/OOB connectivity; no intended firmware write.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not alter or flash firmware. Preserve raw SKU and BMC/SEL/kernel evidence on mismatch or reboot failure, recover via OOB and escalate to the firmware owner; do not retry an unverified utility.",
+      "manual_steps": ["Owner supplies expected SKU, platform, read-only utility and reboot approval.","Agent collects raw evidence while operator supervises reboot/recovery.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Validate the expected ME SKU and platform identity, confirm `mei-amt-check -M` is read-only, capture pre-reboot output, obtain reboot approval, repeat after recovery and preserve firmware/BMC/SEL evidence. Never infer the SKU from dmesg or remediate a mismatch; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
