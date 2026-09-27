@@ -1445,6 +1445,36 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00223-V002",
+      "source_ref": {"sheet":"Functionality","source_row":214},
+      "test_name": "ME NM FW Status Value",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the Intel ME network-manageability firmware status, compare it with the platform-specific expected state, and verify it persists after an approved reboot.",
+      "preconditions": ["Owner supplies platform/SKU, expected ME NM state, approved read-only `mei-amt-check -N`/MEI tool and any vendor decoder.","Confirm MEI/tool compatibility, active-network/OOB impact, reboot approval and recovery; no ME/NM setting change is allowed.","Preserve MEI, network, kernel, BMC and SEL baseline without clearing logs."],
+      "pre_check_commands": ["Read `/sys/class/mei/` and platform identity, then capture raw approved read-only NM-status output.","Record management interfaces/routes and OOB recovery before reboot; generic `nm|network.mgmt` dmesg text is supplemental only."],
+      "safety_checks": ["Do not run `mei-amt-check -N` unless read-only behavior and target are confirmed.","Reboot and any NM diagnostic impact require explicit approval; preserve existing management evidence."],
+      "required_packages": ["Compatible MEI driver and owner-approved read-only NM-status utility","Platform ME/NM specification/decoder","Expected state, maintenance/reboot approval and OOB recovery"],
+      "test_command": "Collect ME NM FW status with the approved read-only MEI utility, compare with the owner-defined state, reboot only after approval and repeat the query after recovery.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek identifies the missing baseline and package, but the command does not prove read-only behavior, platform correlation or post-reboot persistence.","NM status can affect management-path interpretation; do not treat a generic dmesg grep as authoritative."],
+      "expected_evidence": ["Platform/SKU, expected NM state, tool/driver/decoder and approval.","Raw pre/post NM status, reboot/reconnect timestamps and matching ME identity.","Network/OOB, kernel/BMC/SEL health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Repeat the approved read-only NM query after recovery and collect network/MEI/kernel/BMC/SEL evidence without clearing logs."],
+      "logs_to_collect": ["Platform/NM specification and authorization","Raw pre/post NM status and reboot transcript","Network/OOB, kernel/BMC/SEL evidence"],
+      "blocked_conditions": ["Expected NM state, platform identity, compatible read-only tool or decoder is missing.","Tool write behavior or reboot/OOB recovery is uncertain, or management identity is ambiguous.","Pre/post state differs or recovery/network evidence is unexplained."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"intelmetool / mei-amt-check / dmidecode / coreutils","ai_commands":"ls /sys/class/mei/ 2>&1; echo ---; mei-amt-check -N 2>&1 || echo \"ME NM FW Status tool not installed\"; echo ---; dmesg | grep -iE \"nm|network.mgmt\" | tail -20","ai_logs_output":"read the ME NM firmware status (ME NM FW Status) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected ME NM FW Status.","risk":"RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."},
+      "gpt_second_review_findings": "The source is an ME network-manageability status readback with reboot persistence, but its normal value and platform context are absent. DeepSeek's package/baseline warning is correct; its `-N` command and dmesg grep still lack a verified read-only contract, NM-path correlation and post-reboot evidence. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION, not BLOCKED, once those owner inputs and recovery controls are supplied.",
+      "risk_level": "HIGH",
+      "blast_radius": "ME/NM status evidence, management network interpretation, reboot availability and OOB connectivity; no intended state change.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not alter NM/ME state. Preserve raw output and network/BMC/SEL/kernel evidence on anomalies, recover through OOB and escalate; do not retry an unverified diagnostic.",
+      "manual_steps": ["Owner supplies expected NM state, platform, read-only utility and reboot approval.","Agent collects evidence while operator supervises reboot/recovery.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Validate the expected ME NM state and platform, confirm `mei-amt-check -N` is read-only, capture pre-reboot evidence, obtain explicit reboot approval, repeat after recovery and preserve management/OOB and BMC/SEL evidence. Do not infer status from dmesg alone; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
