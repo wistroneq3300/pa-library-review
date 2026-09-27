@@ -1775,6 +1775,36 @@
       "manual_steps": ["Owner supplies command revision, target, response decoder and read-only authorization.","After re-review, agent sends only the specified command and captures raw/decoded evidence.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep blocked. Apply the Wistron BMC/I2C rule, do not run `raw 0x30 0x22` from inference, and request the current BMC/CPLD specification, exact request/response bytes, target mapping and recovery path before re-review. The end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00234-V004",
+      "source_ref": {"sheet":"Functionality","source_row":225},
+      "test_name": "Update",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Flash the approved CPLD image to the identified on-board CPLD, reboot, and verify the expected CPLD version is present and the platform remains healthy.",
+      "preconditions": ["Owner supplies board/CPLD identity, current and target versions, signed/approved image/hash, vendor flash tool and compatibility/recovery procedure.","Confirm active workload, maintenance window, explicit firmware-write/reboot approval, stable power and OOB/KVM recovery.","Capture pre-flash CPLD/BIOS/BMC/SEL/kernel/management evidence without clearing logs."],
+      "pre_check_commands": ["Read current CPLD version using platform-specific approved paths; do not trust a wildcard `/sys/devices/platform/*/cpld_ver` without mapping the device.","Validate image-to-CPLD compatibility, rollback/recovery and post-reboot target before writing."],
+      "safety_checks": ["CPLD flashing is a firmware write that can break power/reset/board logic; never use a ‘latest’ image without identity and compatibility proof.","Stop on image/hash/identity mismatch, transfer/verify failure, power loss or lost OOB; preserve logs and do not retry blindly."],
+      "required_packages": ["Vendor CPLD flash tool and signed/approved target image","Board/CPLD specification, current/target versions and recovery/rollback artifacts","Stable power, maintenance approval and OOB/KVM recovery"],
+      "test_command": "After read-only identity/version checks and explicit approval, use the vendor CPLD tool and validated image to flash the target, reboot as required, then collect the post-flash CPLD version and health evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly separates version readback from the firmware write, but its PARTIAL label needs the allowed REQUIRES PACKAGE / USER CONFIRMATION classification and stronger hardware identity/recovery gates.","Do not clear dmesg/SEL and do not rely on a generic cpld grep as proof of target/version."],
+      "expected_evidence": ["Board/CPLD identity, current/target versions, image hash/signature, tool/procedure and approval.","Pre/post version, flash transcript/return status, reboot/POST/OOB recovery and health evidence.","BMC/SEL/kernel/management state, rollback readiness and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["After approved reboot, verify the target CPLD version and platform/BMC/OS health using mapped read-only tools; preserve logs without clearing."],
+      "logs_to_collect": ["CPLD/board identity, image/tool/hash and authorization","Flash transcript, return status and reboot/POST evidence","Post-version, BMC/SEL/kernel/OOB and recovery evidence"],
+      "blocked_conditions": ["CPLD identity, target version/image/tool compatibility or recovery path is missing.","No stable power/maintenance approval/OOB path exists, or flash verification/boot/management recovery fails.","A wildcard or ‘latest’ image is proposed without hardware matching."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"CPLD flash tool + latest CPLD image (user-provided)","ai_commands":"-- Update: flash and update the CPLD to the latest version. Agent can read the current CPLD version sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"cat /sys/devices/platform/*/cpld_ver 2>&1; dmesg 2>&1 | grep -i cpld | tail -n 10 2>&1\" ; the actual flash uses the vendor CPLD tool + image and is a firmware write.","ai_logs_output":"return the pre-flash CPLD version + the post-flash version after reboot so the user confirms the CPLD flashed successfully and the version is correct.","risk":"RISK: CPLD flash updates on-board CPLD logic; use the approved image and never auto-run mid-system."},
+      "gpt_second_review_findings": "The CPLD update purpose is identifiable and DeepSeek correctly marks the flash as a vendor-tool firmware write requiring approval. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and adds board/CPLD identity, signed image/hash, current/target compatibility, stable power, OOB recovery and mapped readback requirements; the missing package is a prerequisite, not an irreducible purpose blocker.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "On-board CPLD logic, power/reset/thermal/control behavior, bootability, BMC/OOB access and platform availability.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If flashing or reboot fails, stop and preserve transcript/version/SEL/BMC evidence, use only the validated CPLD recovery/rollback path over OOB/KVM, and do not retry or power-cycle blindly.",
+      "manual_steps": ["Owner supplies identity/image/tool/recovery and approves the maintenance/reboot window.","Operator supervises the vendor flash and reboot while the agent collects approved read-only evidence.","Owner validates post-version/health and decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not flash until board/CPLD identity, current/target version, signed image/hash, tool compatibility, stable power, recovery and explicit approval are confirmed. Map the version readback, preserve BMC/SEL/kernel/OOB evidence, stop on anomalies and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
