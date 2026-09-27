@@ -1199,6 +1199,88 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00220-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 211
+      },
+      "test_name": "ME Firmware Status",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the Intel ME firmware state through the identified MEI channel, compare it with the owner-defined normal state and verify persistence after an approved reboot.",
+      "preconditions": [
+        "Owner supplies the platform/SKU, expected ME state and approved read-only utility/version; “normal” is not defined by the source.",
+        "Confirm MEI driver/channel and tool compatibility, active-workload impact, reboot approval and OOB recovery; no ME firmware modification is allowed.",
+        "Preserve BIOS/MEI/kernel/BMC/SEL baseline without clearing logs."
+      ],
+      "pre_check_commands": [
+        "Read `/sys/class/mei/` and platform identity, then collect the raw output of the approved read-only ME status query; correlate it to this SUT.",
+        "Record active jobs and management reachability and define the pre/post reboot evidence before changing availability.",
+        "Treat `dmesg | grep me.fw` only as supplemental evidence, not the state criterion."
+      ],
+      "safety_checks": [
+        "Do not invoke `intelmetool -m` unless its read-only behavior and exact target are vendor-confirmed; stop on any write-capable or ambiguous tool.",
+        "Reboot needs explicit approval and a recovery plan; retain existing kernel/SEL/BMC evidence.",
+        "Do not call ME state normal without an owner-supplied expected state."
+      ],
+      "required_packages": [
+        "Compatible owner-approved read-only `intelmetool -m`/`mei-amt-check` and MEI driver",
+        "`dmidecode`/coreutils as needed and platform ME specification",
+        "Expected state, maintenance/reboot approval and OOB recovery"
+      ],
+      "test_command": "Use the approved read-only MEI utility to collect ME Firmware Status, compare it with the owner-defined normal state, reboot only after approval, and repeat the same read after recovery.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "DeepSeek identifies the missing baseline and package but its command does not show a verified read-only boundary or a post-reboot state comparison.",
+        "ME Firmware Status is broader than a single `me.fw` dmesg line; raw vendor output and platform identity are needed to avoid misattribution.",
+        "The read intent is non-destructive, but ME diagnostics and reboot can affect firmware/availability and must be supervised."
+      ],
+      "expected_evidence": [
+        "Platform/SKU, expected ME state, utility/driver version and authorization.",
+        "Raw pre-reboot and post-reboot ME status output with reboot/reconnect timestamps and matching platform identity.",
+        "BIOS/kernel/BMC/SEL health, no ME state change and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "Repeat the same approved read-only ME status query after recovery and collect MEI/kernel/BMC/SEL evidence without clearing logs.",
+        "Compare state and platform identity before/after and stop on any mismatch or recovery error."
+      ],
+      "logs_to_collect": [
+        "Platform/ME specification, expected state, tool/driver and approval",
+        "Pre/post raw ME status, reboot/reconnect transcript and timestamps",
+        "BIOS/kernel/BMC/SEL and OOB recovery evidence"
+      ],
+      "blocked_conditions": [
+        "Expected ME state, platform identity, compatible read-only tool or MEI channel is absent.",
+        "Tool write behavior or target identity is uncertain, or reboot/OOB recovery is unavailable.",
+        "Pre/post state differs, recovery fails or only uncorrelated dmesg text is available."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "intelmetool / mei-amt-check / dmidecode / coreutils",
+        "ai_commands": "ls /sys/class/mei/ 2>&1; echo ---; intelmetool -m 2>&1 || echo \"ME Firmware Status tool not installed\"; echo ---; dmesg | grep -iE \"me.fw\" | tail -20",
+        "ai_logs_output": "read the ME firmware state (ME Firmware Status) via the MEI/SPS channel. The agent collects whatever MEI/SPS registers/dmesg lines are reachable; confirming the value is CORRECT requires knowing the expected value (a user-supplied baseline), so this is PARTIAL: agent returns the raw readout, user judges it against the expected ME Firmware Status.",
+        "risk": "RISK: read-only attempt against Intel MEI/SPS registers using vendor tools (intelmetool / mei-amt-check) that may not be installed on the SUT; install/availability must be confirmed first, and the expected baseline value must be provided by the user."
+      },
+      "gpt_second_review_findings": "The source requests ME Firmware Status, not merely a log grep, and also requires correctness after reboot. DeepSeek's baseline/package warning is valid, but its generic `intelmetool -m` call lacks a verified read-only contract, platform correlation and the required post-reboot evidence. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION because the purpose is identifiable once the owner supplies the expected state, tool and reboot/recovery approval; no ME write is permitted.",
+      "risk_level": "HIGH",
+      "blast_radius": "Intel ME state observability, platform firmware identity, reboot availability and BMC/OOB path; no intended state change.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not modify ME. If status collection or reboot recovery fails, preserve raw output and platform/BMC/SEL/kernel evidence, reconnect over OOB and escalate; do not repeat an unverified utility invocation.",
+      "manual_steps": [
+        "Owner specifies the expected ME state, platform, approved read-only utility and reboot/recovery window.",
+        "Agent performs read-only collection while the operator supervises the approved reboot.",
+        "Owner reviews before/after state and health and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Confirm the expected ME Firmware Status and platform identity, validate a read-only MEI utility, capture raw pre-reboot state, obtain explicit reboot approval, repeat after recovery and preserve BMC/SEL/kernel evidence. Do not infer normality from `me.fw` dmesg text alone; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
