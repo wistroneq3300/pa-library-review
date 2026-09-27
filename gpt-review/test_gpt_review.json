@@ -871,6 +871,88 @@
         "FAIL",
         "BLOCKED"
       ]
+    },
+    {
+      "code": "Wistron-HW-00214-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 205
+      },
+      "test_name": "Devcie detection",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify that every specified USB port detects the approved device set in the running OS; the source does not define the devices, physical port inventory, controller mapping or whether detection means enumeration, driver binding or usable operation.",
+      "preconditions": [
+        "Owner supplies the SUT/board USB port inventory, physical-to-controller map, approved device/driver matrix and the OS-only acceptance definition; the source's BIOS mention conflicts with its OS-only criterion and needs scope clarification.",
+        "Provide known-good non-boot devices appropriate to each port, an operator with physical access, maintenance authorization and an alternate/OOB path; do not use arbitrary storage, input or security devices.",
+        "Capture USB/controller, OS, kernel, BMC/SEL and mount baseline without clearing existing evidence, and identify port power/security policies before attachment."
+      ],
+      "pre_check_commands": [
+        "Collect read-only USB controller/tree and current device/mount state with platform-appropriate tools; do not infer all physical ports from one `lsusb` listing.",
+        "Resolve each owner-supplied physical port to its controller/path and validate the approved device identity, driver expectation and detection definition before insertion.",
+        "Confirm physical coverage and recovery without touching boot media, active input, security keys or the management/OOB path."
+      ],
+      "safety_checks": [
+        "Do not attach an unknown, bootable, sensitive or service-owned USB device; insertion can mount storage, change input/security state, trigger policy or exceed port power.",
+        "Do not clear dmesg, syslog or SEL as a baseline. Preserve pre-existing USB/controller and platform evidence and stop on overcurrent, unexpected mount or controller/OS error.",
+        "Do not claim complete coverage from the DeepSeek sibling-row assertion; this source's own port/device scope must be supplied and evidenced per port."
+      ],
+      "required_packages": [
+        "Owner-supplied USB port/controller map, approved device/driver matrix and OS detection criteria",
+        "`usbutils` or equivalent read-only USB inventory tools and platform driver utilities",
+        "Approved non-sensitive test devices, operator physical access, maintenance authorization and OOB/alternate-console recovery"
+      ],
+      "test_command": "BLOCKED: do not attach arbitrary devices or infer all-port coverage from `lsusb`; obtain the physical port/controller map, approved device matrix and OS detection criterion, then re-review before performing the per-port OS detection check.",
+      "user_confirmation_required": true,
+      "risk_notes": [
+        "The source purpose is not safely executable as written because “all USB port,” “devices” and “detected” have no operational identity or acceptance scope; the OS-only criterion does not resolve physical coverage.",
+        "DeepSeek correctly identifies that an operator must attach devices and that `lsusb` can provide host evidence, but its assumed sibling-row coverage and generic command do not establish the selected source row's complete port/device matrix.",
+        "A read-only OS snapshot is low write-risk, but arbitrary USB attachment can affect storage, input, security, power, boot or OOB state; existing logs must be preserved."
+      ],
+      "expected_evidence": [
+        "SUT identity, physical USB port/controller map, approved device/driver/power matrix, OS detection definition and authorization.",
+        "For every specified port, operator device identity/connection record and timestamped OS enumeration, driver and relevant kernel evidence.",
+        "No unexpected mount, power, controller or service impact; restored device state, preserved BMC/SEL/host evidence and end-user PASS/FAIL/BLOCKED decision."
+      ],
+      "post_check_commands": [
+        "After a validated per-port run, collect read-only USB topology/device/driver and kernel evidence and safely remove only the approved devices.",
+        "Verify no unexpected mount, input/security change, controller error or BMC/SEL event remains; preserve all logs without clearing the baseline."
+      ],
+      "logs_to_collect": [
+        "USB physical/controller map, approved device/driver/power matrix, detection criterion and authorization",
+        "Per-port operator timestamps, OS enumeration/driver/kernel transcripts and device identity",
+        "Pre/post USB, mount, system, BMC/SEL and restoration evidence"
+      ],
+      "blocked_conditions": [
+        "The device set, physical port inventory/controller mapping, OS acceptance definition or recovery path is missing.",
+        "No qualified operator, approved device, maintenance authorization or alternate/OOB access exists, or an attached device is bootable, sensitive or required by another service.",
+        "Port coverage is incomplete or identity is ambiguous, or unexpected mount, overcurrent, controller/OS error, security/input change or unexplained device state occurs."
+      ],
+      "deepseek_original_review": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "usbutils + operator to attach the device",
+        "ai_commands": "-- Devcie detection: verify device detection in OS sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsusb 2>&1; ip link 2>&1 | grep -E '^[0-9]+:' | head 2>&1\" with the device present; physical setup is operator-owned.  -- USB device-detection sibling row; the OS USB tree check covers the SAME set of ports as the partner row.",
+        "ai_logs_output": "return the lsusb/device list so the user confirms the devices are detected in OS.",
+        "risk": null
+      },
+      "gpt_second_review_findings": "The source requests OS detection on all USB ports, but it supplies neither the device inventory nor the physical port/controller map and says only that devices should be detected. DeepSeek's operator/`lsusb` split is directionally useful, yet the sibling-row assumption is not evidence for this row and a single generic `lsusb`/`ip link` command cannot prove port coverage or device identity. GPT changes the invalid PARTIAL classification to BLOCKED because the target set and acceptance semantics must be defined before safe physical attachment; this is not merely a missing package. Re-review is required after the owner supplies the per-port device/driver matrix, OS criterion and recovery boundary.",
+      "risk_level": "HIGH",
+      "blast_radius": "USB ports/controllers, device power and storage/input/security state, OS enumeration and possible boot or OOB connectivity.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not attach devices while blocked. After re-review, use only approved non-sensitive devices, stop on any unexpected mount/power/controller/security event, remove devices safely after I/O is idle, restore the expected state, preserve USB/kernel/BMC/SEL evidence and use OOB recovery if access is affected.",
+      "manual_steps": [
+        "Owner supplies the physical port/controller map, approved device/driver/power matrix, OS acceptance definition and authorization.",
+        "After re-review, the operator attaches the approved device per port while the agent collects read-only OS evidence and the operator records complete physical coverage.",
+        "Owner validates the per-port evidence and decides PASS, FAIL or BLOCKED."
+      ],
+      "openhands_instruction": "Keep this testcase blocked. Do not rely on the DeepSeek sibling-row claim or attach arbitrary media. Request the complete physical USB port/controller map, approved device/driver/power matrix, OS detection definition and recovery path; re-review before any per-port attachment and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
     }
   ]
 }
