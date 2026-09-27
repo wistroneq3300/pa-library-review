@@ -1745,6 +1745,36 @@
       "manual_steps": ["Owner/FAE supplies exact EEPROM target/field/image, tool semantics, backup and recovery.","After re-review, qualified operator supervises the physical UEFI/AC-cycle operation while evidence is captured.","Owner validates readback/boot health and decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Keep blocked. Do not run `ipmitool fru edit`, do not guess an EEPROM target and do not AC-cycle the SUT. Request the exact diagnostic/tool/image, target field, backup, recovery and acceptance criteria, then re-review before any write; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00233-V004",
+      "source_ref": {"sheet":"Functionality","source_row":224},
+      "test_name": "IPMI Command",
+      "automation_classification": "BLOCKED",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Read the CPLD/I2C data through the BMC IPMI raw command and compare the returned bytes with the current platform specification and corresponding system data.",
+      "preconditions": ["Owner supplies the current BMC specification for netfn `0x30`, command `0x22`, request/response bytes, CPLD target and expected data/units.","Confirm BMC identity, IPMI channel/credentials, command is read-only and OOB recovery; preserve SEL/BMC evidence without clearing.","Do not infer the command semantics from the hex values or old script URL."],
+      "pre_check_commands": ["Read-only `ipmitool mc info`/BMC identity and spec/version check; verify the command/parameter mapping before sending any raw request.","Correlate the specified CPLD target and expected return fields with system data; no guessed bytes or retries."],
+      "safety_checks": ["Under the Wistron rule, treat the CPLD/I2C path as BMC/platform-management scope; a raw IPMI command whose parameters may change is not safe to guess.","Do not clear SEL, write CPLD/I2C, or claim success from a zero return code alone."],
+      "required_packages": ["`ipmitool` and protected BMC credentials","Current BMC/CPLD specification, command revision and expected response decoder","BMC identity, OOB recovery and owner authorization"],
+      "test_command": "BLOCKED: obtain the current BMC specification and exact read-only raw-command request/response mapping for CPLD data, then re-review before sending `ipmitool ... raw 0x30 0x22`.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek marks YES and repeats the raw command, but the source explicitly says the parameter may change and provides no expected bytes/decoder; a successful IPMI transport response does not prove CPLD data correctness.","Raw BMC commands can target management hardware; wrong semantics can alter state or produce misleading evidence."],
+      "expected_evidence": ["BMC/CPLD identity, spec revision, exact request/response mapping and authorization.","Raw command transcript, decoded CPLD bytes and independent system-data comparison.","No state change/SEL clear, preserved BMC/OOB health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Do not run while blocked; after re-review, collect the mapped read-only response and verify BMC/SEL health without clearing logs."],
+      "logs_to_collect": ["BMC/CPLD spec, command revision and target mapping","IPMI raw transcript and decoded response","BMC/SEL/OOB health and no-write evidence"],
+      "blocked_conditions": ["Current spec, command parameters, CPLD target, expected response or decoder is missing.","BMC identity/channel/credentials or read-only semantics are uncertain, or the raw command may write.","Response cannot be correlated to CPLD/system data or BMC health changes."],
+      "deepseek_original_review": {"ai_can_execute":"YES","ai_packages_needed":"ipmitool","ai_commands":"# agent host: read CPLD I2C data via IPMI raw (lanplus)\nipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" raw 0x30 0x22 2>&1","ai_logs_output":"return the ipmitool raw 0x30 0x22 output (CPLD I2C bytes) so the user confirms the command sent without error and the returned parameter aligns with the expected CPLD data.","risk":null},
+      "gpt_second_review_findings": "The source purpose is a BMC-mediated CPLD/I2C read, but it explicitly warns that parameters may change and supplies no request/response mapping or expected value. DeepSeek's YES conclusion assumes `raw 0x30 0x22` is correct and treats transport success as evidence. GPT changes YES to BLOCKED under the Wistron BMC/I2C rule because command semantics, target identity and acceptance cannot be established safely without the current specification; re-review is required before any raw command.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "BMC/platform-management raw command path, CPLD/I2C target, returned hardware state and OOB management availability.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not send the guessed raw command. Preserve BMC/SEL/OOB evidence, obtain the current spec/decoder and escalate to the platform owner; never retry with altered bytes or clear errors to create a baseline.",
+      "manual_steps": ["Owner supplies command revision, target, response decoder and read-only authorization.","After re-review, agent sends only the specified command and captures raw/decoded evidence.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Keep blocked. Apply the Wistron BMC/I2C rule, do not run `raw 0x30 0x22` from inference, and request the current BMC/CPLD specification, exact request/response bytes, target mapping and recovery path before re-review. The end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
