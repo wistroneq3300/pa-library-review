@@ -1985,6 +1985,36 @@
       "manual_steps": ["Operator performs BIOS/Windows TPM and BitLocker actions on the approved test volume.","Operator supplies encryption, protector, recovery and boot evidence; agent must not claim the physical/GUI work.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not run the Linux ownership/key commands or touch an unspecified C:/boot volume. Request the operator's exact volume, recovery-key backup, TPM/secure-boot policy, BitLocker transcript and boot evidence; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00241-V003",
+      "source_ref": {"sheet":"Functionality","source_row":232},
+      "test_name": "Bitlocker OS boot",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "With an approved Windows BitLocker volume and recovery key, deliberately remove TPM availability through the owner-approved BIOS method and verify the next boot presents BitLocker recovery rather than direct OS boot.",
+      "preconditions": ["Qualified Windows/BIOS operator, exact BitLocker volume and protector identity, recovery key, secure-boot/TPM policy and rollback plan are available.","Clarify disable versus physical removal; prefer the approved reversible BIOS method, obtain explicit reboot approval and ensure KVM/OOB access.","Capture pre-change TPM/BitLocker/boot/BMC/SEL evidence without clearing logs."],
+      "pre_check_commands": ["Read BitLocker protector/status and recovery-key availability; do not remove or clear TPM state before approval.","Verify active users/jobs, boot path, recovery screen observation and restoration sequence."],
+      "safety_checks": ["Do not physically remove a TPM or clear/re-own it; disable only the owner-approved reversible setting.","Stop if recovery key is missing, wrong volume is selected, boot/OOB recovery fails or unexpected key/security impact occurs."],
+      "required_packages": ["Windows BitLocker/TPM management and approved test volume","Recovery key/backup, BIOS/KVM access, qualified operator and OOB recovery","Secure-boot/TPM policy and maintenance/reboot authorization"],
+      "test_command": "MANUAL ONLY: operator captures BitLocker/TPM baseline, disables TPM using the approved reversible BIOS method, reboots under KVM, records the BitLocker recovery screen, restores the approved TPM setting and verifies normal recovery.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek's NO conclusion is correct for BIOS/Windows recovery-screen observation; GPT adds exact volume/protector/recovery-key, reversible-disable, KVM/OOB and restoration gates.","The source's ‘disable or remove TPM’ is unsafe if interpreted as physical removal or TPM clear, and a wrong recovery key/volume can cause data loss or lockout."],
+      "expected_evidence": ["TPM/BitLocker/protector/volume identity, recovery-key backup, BIOS method and authorization.","Pre/post TPM state, KVM boot/recovery-screen evidence, timestamps and restored normal boot.","Windows/security/BMC/SEL/OOB health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Operator restores the approved TPM setting, verifies BitLocker protector/recovery and normal boot, and preserves security/event/BMC evidence without clearing logs."],
+      "logs_to_collect": ["TPM/BitLocker/secure-boot/volume/protector and recovery evidence","BIOS/KVM disable/reboot/recovery-screen transcript","Restoration, Windows/security/BMC/SEL/OOB health"],
+      "blocked_conditions": ["No qualified operator/KVM, exact volume/protector, recovery key, reversible method or restoration path.","Physical TPM removal/clear is requested, boot/recovery fails or the system cannot restore the approved security state."],
+      "deepseek_original_review": {"ai_can_execute":"NO","ai_packages_needed":"none","ai_commands":"-- not runnable by agent: this BitLocker-OS-boot case (BitLocker-OS-boot (TPM 2.0/Linux checklist)) requires disabling the TPM device so the OS must fall back to the BitLocker recovery menu on next boot (TPM 2.0 / Linux checklist flavor), then a reboot to confirm the OS cannot boot directly and shows the BitLocker recovery menu. Disabling TPM and driving the Windows recovery-boot is interactive OS/BIOS work only an operator can do.","ai_logs_output":"operator TPM removed from boot; BitLocker recovery screen appears; agent cannot disable TPM or observe the boot screen.","risk":"RISK: physical/hardware operation at the machine - human only; agent must not attempt."},
+      "gpt_second_review_findings": "DeepSeek's NO boundary is correct because the test depends on BIOS/TPM state, Windows BitLocker recovery UI and reboot observation. GPT keeps MANUAL ONLY and materially clarifies that “disable or remove” must mean an approved reversible BIOS disable, not physical removal or TPM clear; recovery key/volume identity, KVM evidence and restoration are mandatory.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "TPM/security state, BitLocker protectors and data access, Windows bootability and OOB/KVM recovery.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "If recovery does not appear or the system cannot boot, stop, preserve KVM/BitLocker/TPM/BMC evidence, restore the approved TPM setting through BIOS/OOB and use the backed-up recovery key; never clear TPM or repeatedly reboot blindly.",
+      "manual_steps": ["Operator performs the reversible BIOS TPM disable and observes the recovery boot.","Operator restores TPM and supplies recovery/normal-boot evidence; agent must not claim the screen result.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not remove or clear TPM and do not attempt this from Linux SSH. Request the exact BitLocker volume/protector, recovery key, reversible BIOS method, KVM/OOB plan and restoration evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
