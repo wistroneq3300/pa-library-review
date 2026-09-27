@@ -1625,6 +1625,36 @@
       "manual_steps": ["Owner supplies BIOS packet, release note, board/SKU and size definition.","Agent performs read-only metadata/inventory comparison.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not use chassis `dmidecode -t 3` or dmesg grep as ROM proof. Obtain the vendor packet/release note and exact size semantics, correlate board/SKU and read-only firmware identity, distinguish image payload from flash capacity, never flash, and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00229-V002",
+      "source_ref": {"sheet":"Functionality","source_row":220},
+      "test_name": "SF100",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Physically use an approved SF100 in-circuit flash/debug tool to write the approved BIOS code to the identified SPI ROM 50 times, reinstall the ROM if removed, and verify the platform still boots BIOS normally.",
+      "preconditions": ["Qualified hardware operator, exact SPI flash/board identity, approved BIOS image, SF100 adapter/software and vendor procedure are present.","Obtain explicit approval for 50 firmware writes and any ROM removal/reinstallation; provide stable power, ESD controls, backup/recovery image and OOB/KVM recovery.","Preserve pre-test BIOS/ROM/SPI/BMC/SEL evidence; do not clear logs."],
+      "pre_check_commands": ["Operator verifies board/flash identity, image/hash, SF100 compatibility and write-protect/voltage settings offline before connection; agent must not guess or attach the probe.","Record baseline BIOS/firmware/BMC/SEL and recovery media; after the physical operation, the agent may collect read-only POST/BIOS evidence."],
+      "safety_checks": ["Do not execute or simulate the SF100 write remotely; wrong voltage, chip or image can brick the board.","Stop on write/verify failure, unexpected ID, power/ESD issue or inability to restore the validated image; preserve all evidence and do not continue the 50-cycle count blindly.","Never clear existing logs as a baseline."],
+      "required_packages": ["Approved SF100 physical programmer/adapter and software","Exact SPI ROM/board identity, signed/approved BIOS image, recovery image and vendor procedure","Qualified operator, ESD/stable-power controls, maintenance approval and OOB/KVM recovery"],
+      "test_command": "MANUAL ONLY: operator uses the validated SF100 setup to write the approved BIOS image to the identified ROM 50 times, reinstalls the ROM if applicable, powers the SUT and records BIOS/POST recovery evidence.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek's NO conclusion is correct because the SF100 probe, ROM handling and repeated flash writes are physical and cannot be performed or verified by the agent; GPT adds identity, image, voltage, recovery and per-cycle evidence gates.","This is a destructive/service-impacting firmware endurance action with a real brick risk; the agent must not claim the physical writes occurred."],
+      "expected_evidence": ["Board/SPI ROM/SF100 identity, image hash, tool/procedure, write count and authorization.","Per-cycle write/verify log, physical ROM handling record and post-operation BIOS/POST/KVM evidence.","BMC/SEL/kernel/firmware health, recovery readiness and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Only after operator completion, collect read-only BIOS/POST/firmware/BMC/SEL evidence and verify boot/recovery; do not perform another write."],
+      "logs_to_collect": ["SF100/ROM/board/image identity and operator checklist","Per-cycle write/verify transcript and physical photos","Post-boot BIOS/POST/KVM, BMC/SEL and recovery evidence"],
+      "blocked_conditions": ["No qualified operator, physical access, exact ROM/board identity, approved image, SF100 compatibility or recovery path.","Any write verification/identity/voltage mismatch, damaged ROM, boot failure or unexplained post-write state occurs."],
+      "deepseek_original_review": {"ai_can_execute":"NO","ai_packages_needed":"SF100 physical device (hardware)","ai_commands":"-- SF100: SF100 is a physical in-circuit flash/debug tool used to read/write the SPI flash; requires the SF100 adapter physically on the board - the agent cannot attach hardware.","ai_logs_output":"operator uses the SF100 to read the flash and records the result; agent cannot connect a physical probe.","risk":"RISK: SF100 is a hardware debug tool; human-only operation."},
+      "gpt_second_review_findings": "DeepSeek's NO classification is correct for the physical SF100 probe and ROM handling. GPT keeps this MANUAL ONLY rather than treating a later BIOS readback as automation of the flash endurance test, and materially strengthens the required board/ROM/image identity, voltage/ESD, 50-cycle write/verify log, stable power, recovery image and post-boot evidence. The reviewing agent must not perform or claim any SF100 write.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "SPI ROM/BIOS firmware, board bootability, physical hardware, service availability and OOB recovery.",
+      "destructive_actions": true,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on any identity, write/verify or boot anomaly, preserve the programmer transcript and physical evidence, isolate power safely and use the validated recovery/programming path under the hardware owner's supervision. Do not continue cycles or guess a recovery image.",
+      "manual_steps": ["Operator performs all SF100 connections, ROM handling and approved writes with per-cycle evidence.","Operator restores/reinstalls the ROM and supplies BIOS/POST/KVM evidence; agent may collect only approved read-only post-checks.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not attempt SF100 operations remotely or claim completion. Request the operator's per-cycle write/verify log, image/ROM identity, photos and post-boot BIOS/POST/BMC evidence; preserve recovery artifacts and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
