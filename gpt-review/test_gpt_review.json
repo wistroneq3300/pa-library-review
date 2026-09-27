@@ -1595,6 +1595,36 @@
       "manual_steps": ["Owner supplies expected POST state, authoritative source and reboot approval.","Agent collects read-only output; operator/KVM supervises approved reboot and recovery.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Define the expected End-of-POST state and authoritative BIOS/ME/BMC source, validate `mei-amt-check -P` or an alternative is read-only, collect pre-reboot evidence, obtain approval, repeat after recovery and preserve KVM/SEL/boot evidence. Do not infer POST health from dmesg alone; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00228-V002",
+      "source_ref": {"sheet":"Functionality","source_row":219},
+      "test_name": "ROM Size",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify that the owner-approved BIOS ROM/image size for the identified platform matches the vendor release note, distinguishing image payload size from the physical flash capacity.",
+      "preconditions": ["Owner supplies the exact BIOS packet, release note field/units, board/SKU and whether the criterion is image size, ROM capacity or both.","Use read-only package/hash/metadata and approved firmware/flash inventory tools; no BIOS update is part of this check.","Preserve firmware identity and system/BMC evidence without clearing logs."],
+      "pre_check_commands": ["Record BIOS/board/SKU and package filename/hash/metadata read-only; obtain the vendor-defined ROM-size field and units.","Do not treat `dmidecode -t 3` chassis fields or a dmesg ROM string as proof of flash capacity; correlate any flash inventory to the correct device."],
+      "safety_checks": ["Do not flash, write or unzip to a system path; compare the supplied artifact/release note only.","Stop on image/SKU mismatch, ambiguous units or unknown physical flash target."],
+      "required_packages": ["Owner-supplied BIOS packet and release note","`dmidecode`/coreutils and approved read-only firmware/flash inventory tool if capacity is required","Platform/SKU identity and approval"],
+      "test_command": "Read the approved BIOS packet metadata and platform firmware/ROM identity, compare the vendor-defined size field with the release note, and report image size versus physical ROM capacity separately.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek marks this YES, but `dmidecode -t 3` describes chassis information and dmesg ROM/flash text is not a reliable capacity source; neither proves the release-note mapping.","The source's ‘zip the packet’ instruction can confuse archive size with BIOS image payload or flash capacity; exact semantics and units must be confirmed."],
+      "expected_evidence": ["Board/SKU, BIOS packet/hash, release note size field/units and approved tool versions.","Raw packet metadata and read-only platform/flash identity, with image size and capacity explicitly distinguished.","No firmware write, preserved baseline and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Reconfirm artifact/hash and firmware identity after the read-only comparison; do not clear logs or flash as a remediation."],
+      "logs_to_collect": ["BIOS packet/hash, release note and platform identity","Metadata/firmware inventory outputs and units","No-write verification and system/BMC evidence"],
+      "blocked_conditions": ["Packet, release note, board/SKU or size semantics/units are missing.","Image-to-hardware mapping is ambiguous or any firmware write is proposed.","Only chassis SMBIOS/dmesg text is available or the observed size conflicts without owner interpretation."],
+      "deepseek_original_review": {"ai_can_execute":"YES","ai_packages_needed":"dmidecode + coreutils","ai_commands":"# DUT: SMBIOS BIOS/ROM type-3 + dmesg ROM/flash size\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t 3 2>&1 | grep -iE 'Size|ROM'; dmesg 2>/dev/null | grep -iE 'ROM|flash' | grep -iE 'MB|KB' | head\"","ai_logs_output":"return the BIOS/ROM size from SMBIOS + dmesg so the user confirms the flash ROM size is as expected.","risk":null},
+      "gpt_second_review_findings": "The purpose is a BIOS ROM-size/release-note comparison, but DeepSeek's YES command is materially mismatched: SMBIOS type 3 is chassis data and dmesg text does not identify a flash device or vendor size field. The source also conflates zipped packet size, image payload and physical ROM capacity. GPT changes YES to REQUIRES PACKAGE / USER CONFIRMATION, requiring the exact vendor artifact, size semantics, board/SKU correlation and read-only evidence; no firmware write is allowed.",
+      "risk_level": "HIGH",
+      "blast_radius": "BIOS artifact/firmware identity and potentially flash-device interpretation; no intended write, but wrong identity could lead to unsafe firmware action.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not flash or modify firmware. Preserve package/hash/release-note and platform evidence on mismatch, stop and obtain vendor/owner interpretation rather than guessing the size field.",
+      "manual_steps": ["Owner supplies BIOS packet, release note, board/SKU and size definition.","Agent performs read-only metadata/inventory comparison.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not use chassis `dmidecode -t 3` or dmesg grep as ROM proof. Obtain the vendor packet/release note and exact size semantics, correlate board/SKU and read-only firmware identity, distinguish image payload from flash capacity, never flash, and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
