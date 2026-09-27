@@ -1655,6 +1655,36 @@
       "manual_steps": ["Operator performs all SF100 connections, ROM handling and approved writes with per-cycle evidence.","Operator restores/reinstalls the ROM and supplies BIOS/POST/KVM evidence; agent may collect only approved read-only post-checks.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not attempt SF100 operations remotely or claim completion. Request the operator's per-cycle write/verify log, image/ROM identity, photos and post-boot BIOS/POST/BMC evidence; preserve recovery artifacts and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00230-V002",
+      "source_ref": {"sheet":"Functionality","source_row":221},
+      "test_name": "ROM Size",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Verify that the owner-approved BMC firmware package/image size or BMC flash-capacity field matches the vendor release-note value for the identified BMC/platform, without updating firmware.",
+      "preconditions": ["Owner supplies BMC identity, `.bin` package, release note size field/units and whether the criterion is image payload or physical ROM capacity.","Provide read-only IPMI/Redfish access, protected credentials and an OOB path; no BMC update/reset is part of this check.","Preserve BMC/SEL/network/firmware baseline without clearing logs."],
+      "pre_check_commands": ["Collect read-only `ipmitool mc info`/approved Redfish identity and package hash/metadata; correlate BMC target and release note.","Do not treat `mc info` firmware version as image byte size, and do not confuse a zipped archive with payload or flash capacity."],
+      "safety_checks": ["Use read-only BMC queries only; do not invoke flash, reset, clear-SEL or configuration commands.","Protect credentials and stop on ambiguous BMC identity, image/SKU mismatch or uncertain size units."],
+      "required_packages": ["BMC `.bin` package and vendor release note","`ipmitool`/Redfish read-only BMC access with correct controller identity","Protected credentials, BMC/OOB recovery and platform specification"],
+      "test_command": "Collect read-only BMC identity/firmware details, inspect the approved `.bin` metadata and compare image size versus the vendor release-note field, explicitly separating payload size from BMC flash capacity.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly identifies the package/release note and partial host/BMC split, but `ipmitool mc info` does not measure `.bin` size or prove flash capacity; the source's zip instruction is semantically ambiguous.","BMC credentials and any accidental write/reset could affect OOB management, so keep the operation read-only."],
+      "expected_evidence": ["BMC/platform identity, package/hash, release-note field/units and approved tool/credentials.","Raw read-only BMC output plus package metadata with image/payload/capacity distinguished.","No BMC write/reset/SEL clear, preserved management health and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Re-read BMC identity and health after the comparison and preserve SEL/network evidence without clearing or changing BMC state."],
+      "logs_to_collect": ["BMC identity, package/hash and release note","ipmitool/Redfish and package metadata transcript","BMC/SEL/network health and no-write verification"],
+      "blocked_conditions": ["Package, release note, BMC identity or size semantics/units are missing.","BMC target/credentials are ambiguous, read-only path unavailable or any update/reset is proposed.","`mc info` is the only evidence or size comparison conflicts without owner/vendor interpretation."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"BMC FW package .bin + release note","ai_commands":"# agent host: BMC firmware/controller info (lanplus)\nipmitool -I lanplus -C 17 -H \"$BMC_IP\" -U \"$BMC_USER\" -P \"$BMC_PASS\" mc info 2>&1","ai_logs_output":"return ipmitool mc info firmware details; operator compares the .bin image size to the release-note recorded BMC FW size.","risk":null},
+      "gpt_second_review_findings": "The BMC ROM-size purpose is identifiable, but DeepSeek's `mc info` returns controller/version details rather than the `.bin` payload size or physical flash capacity, and the source does not define which size the release note records. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION, requiring exact BMC/package identity, release-note semantics and read-only OOB evidence; no BMC update, reset or SEL clear is permitted.",
+      "risk_level": "HIGH",
+      "blast_radius": "BMC firmware/package identity, OOB management evidence and BMC/SEL/network state; no intended write.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not update or reset the BMC. On identity/size mismatch or access anomaly, preserve package and BMC/SEL/network evidence, use the known OOB path and obtain vendor interpretation.",
+      "manual_steps": ["Owner supplies BMC package/release note, target identity and size definition.","Agent collects read-only BMC/package evidence with protected credentials.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Use `ipmitool mc info` only for BMC identity/version, not image size. Obtain the `.bin`/release note and exact size semantics, correlate target identity, inspect package metadata, keep BMC actions read-only and preserve SEL/network evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
