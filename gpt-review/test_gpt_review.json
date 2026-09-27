@@ -1865,6 +1865,36 @@
       "manual_steps": ["Operator performs the Windows setup and reboot.","Operator supplies version, signer, device and error evidence; agent reports only supplied artifacts.","Owner decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not attempt this Windows GUI flow from Linux SSH or claim completion. Request the operator's signed package/version evidence, setup/reboot transcript, Infinst/Device Manager version and Microsoft signer proof, plus rollback evidence; the end user decides PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00237-V002",
+      "source_ref": {"sheet":"Functionality","source_row":228},
+      "test_name": "PCH fuse",
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "Use the owner-approved vendor PCH security/fuse diagnostic in BIOS context to report whether the identified PCH security/fuse state passes.",
+      "preconditions": ["Owner supplies exact platform/PCH identity, vendor tool/version, status schema and expected PASS criteria; confirm the tool is read-only.","Provide BIOS/KVM access, qualified operator, maintenance/OOB path and any reboot approval; do not program or burn fuses.","Capture BIOS/PCH/BMC/SEL baseline without clearing logs."],
+      "pre_check_commands": ["Verify board/PCH identity and vendor tool signature/compatibility before launching; map the BIOS/KVM path and preserve raw output.","Confirm the tool performs status read only and does not offer a fuse-programming default."],
+      "safety_checks": ["Never change, burn or repair PCH fuses as part of this check; stop if the tool can write or status semantics are unclear.","Do not treat a generic PASS string without target identity as sufficient; preserve security/SEL evidence."],
+      "required_packages": ["Owner-supplied signed PCH vendor security/fuse diagnostic","Exact PCH/board/security specification and BIOS/KVM access","Qualified operator, maintenance authorization and OOB recovery"],
+      "test_command": "Run only the vendor-approved read-only PCH security/fuse status diagnostic in the approved BIOS/KVM context and return raw status plus target identity for owner comparison.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek correctly identifies the missing vendor tool, but its PARTIAL label needs REQUIRES PACKAGE / USER CONFIRMATION and a read-only/fuse-programming safety gate.","PCH security/fuse state is hardware security material; an incorrect tool or write action can permanently alter the platform."],
+      "expected_evidence": ["Platform/PCH identity, tool signature/version, expected PASS definition and authorization.","BIOS/KVM transcript/screenshot and raw read-only status output tied to the correct target.","No fuse/security state change, preserved BMC/SEL evidence and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["After the read-only check, verify BIOS/PCH/BMC health and preserve security/SEL evidence without clearing or changing fuses."],
+      "logs_to_collect": ["PCH/security specification and tool identity","BIOS/KVM diagnostic transcript and raw status","BMC/SEL/OOB health and no-write evidence"],
+      "blocked_conditions": ["PCH/board identity, vendor tool/status schema, expected PASS criteria or read-only semantics are missing.","No BIOS/KVM/operator/OOB path exists, or tool can program/alter fuses.","Status target is ambiguous or security evidence is changed/lost."],
+      "deepseek_original_review": {"ai_can_execute":"PARTIAL","ai_packages_needed":"PCH vendor security/fuse tool (user-provided)","ai_commands":"-- PCH fuse: run the vendor PCH security check tool to verify the PCH fuse/security status reports PASS. The vendor tool is not installed; once it is, the agent can run it and return its status output.","ai_logs_output":"return the vendor tool status output so the operator confirms the fuse/security status is PASS.","risk":null},
+      "gpt_second_review_findings": "The PCH fuse purpose is identifiable as a BIOS/vendor security-status read, so the missing vendor tool is a prerequisite rather than a semantic blocker. DeepSeek correctly says the tool is unavailable, but it does not require target identity, status schema, BIOS/KVM evidence or protection against fuse programming. GPT changes PARTIAL to REQUIRES PACKAGE / USER CONFIRMATION and restricts the test to an approved read-only diagnostic; no fuse write or remediation is allowed.",
+      "risk_level": "CRITICAL",
+      "blast_radius": "PCH security/fuse state, BIOS/platform security configuration and possible permanent hardware security changes.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Do not alter fuses. If the diagnostic errors or offers a write path, stop, preserve BIOS/KVM/BMC/SEL evidence and escalate to the platform/security owner; do not retry with an unverified tool.",
+      "manual_steps": ["Owner supplies the signed tool, PCH identity, expected PASS semantics and read-only authorization.","Operator/KVM runs the approved diagnostic while the agent captures permitted raw evidence.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Obtain the signed PCH diagnostic and exact PASS definition, verify target identity and read-only behavior in BIOS/KVM, never program fuses, preserve security/BMC/SEL evidence and let the end user decide PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
