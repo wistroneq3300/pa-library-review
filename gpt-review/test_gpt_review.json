@@ -1835,6 +1835,36 @@
       "manual_steps": ["Owner supplies image/tool/cycle/recovery plan and approves the 100-cycle window.","Operator supervises power/OOB while the controller performs only validated flash/reboot/version steps.","Owner reviews every cycle and decides PASS, FAIL or BLOCKED."],
       "openhands_instruction": "Do not run the supplied fixed-sleep loop. Validate CPLD identity/image/tool/recovery, stable power, per-cycle POST/reconnect checks and explicit approval; preserve BMC/SEL and stop on any anomaly. Execute only the approved 100-cycle sequence and let the end user decide PASS/FAIL/BLOCKED.",
       "end_user_decides": ["PASS","FAIL","BLOCKED"]
+    },
+    {
+      "code": "Wistron-HW-00236-V002",
+      "source_ref": {"sheet":"Functionality","source_row":227},
+      "test_name": "Driver Function Test",
+      "automation_classification": "MANUAL ONLY",
+      "second_review_outcome": "IMPROVED",
+      "pa_manager_display": "PARTIAL",
+      "purpose": "On the specified Windows SUT, install the approved chipset driver through the vendor setup flow, reboot, verify the expected version and confirm the driver has the required Microsoft hardware-compatible digital signature without installation errors.",
+      "preconditions": ["Qualified Windows operator, exact chipset driver package/version and driver-version list are available; preserve a restore point/rollback path.","Confirm maintenance/reboot approval and no active workload; capture current Device Manager/driver/event/system state without clearing logs.","The reviewing agent cannot drive the Windows GUI or claim registry/WHQL evidence remotely from Linux SSH."],
+      "pre_check_commands": ["Operator verifies package hash/publisher/signature and target Windows build/chipset identity before setup; no unsigned or mismatched installer.","Record baseline driver/device state and recovery before installation."],
+      "safety_checks": ["Do not install an unapproved chipset driver or accept an invalid signature; stop on setup error, device disappearance, BSOD or reboot failure.","Do not clear Windows event evidence as a baseline."],
+      "required_packages": ["Windows OS and approved chipset driver installer/version list","Qualified operator with Windows GUI/registry/device access and rollback/recovery","Maintenance/reboot approval"],
+      "test_command": "MANUAL ONLY: operator runs the approved Windows chipset-driver Setup.exe, completes the license/setup flow, reboots, checks the Infinst/driver version against the list and verifies Microsoft hardware-compatible signing.",
+      "user_confirmation_required": true,
+      "risk_notes": ["DeepSeek's NO conclusion is correct for the Windows GUI installation and registry/device verification; GPT adds package hash/signature, exact version, reboot/rollback and error evidence requirements.","A chipset driver can affect device enumeration and boot stability; the agent must not simulate or claim the installation."],
+      "expected_evidence": ["Windows build/chipset identity, installer hash/publisher/signature and expected version list.","Operator setup transcript/screenshots, installation errors, reboot result, Device Manager/driver/registry version and digital signer.","Post-install device/system health, rollback readiness and end-user PASS/FAIL/BLOCKED decision."],
+      "post_check_commands": ["Operator verifies driver/device state after reboot and preserves Windows setup/event/Device Manager evidence; no remote claim without supplied artifacts."],
+      "logs_to_collect": ["Installer/package/signature/version list","Setup/reboot/Device Manager/registry evidence","Windows event/system health and rollback evidence"],
+      "blocked_conditions": ["No qualified Windows operator/access, approved package/version list, signature evidence or rollback path.","Installer is unsigned/mismatched, setup/reboot fails, device errors appear or evidence cannot be produced."],
+      "deepseek_original_review": {"ai_can_execute":"NO","ai_packages_needed":"Windows OS + chipset driver installer (operator)","ai_commands":"-- Driver Function Test: install the chipset driver on a Windows system and verify the version + Microsoft digital signer. This is a Windows GUI/OS driver installation flow the agent cannot run from a Linux SSH session.","ai_logs_output":"operator installs the chipset driver in Windows, verifies the version matches the driver list and the digital signer is Microsoft WHQL; agent cannot drive Windows driver setup.","risk":null},
+      "gpt_second_review_findings": "DeepSeek's NO boundary is correct: the source requires a Windows GUI installer, reboot, registry/device verification and Microsoft signature evidence unavailable to the reviewing Linux agent. GPT classifies it MANUAL ONLY and materially strengthens the required package hash, target/version, signature, rollback, reboot and Windows evidence gates; no remote agent should simulate or claim the install.",
+      "risk_level": "HIGH",
+      "blast_radius": "Windows chipset driver/device state, boot/reboot availability and system hardware enumeration.",
+      "destructive_actions": false,
+      "requires_human_approval": true,
+      "recovery_procedure": "Stop on setup/device/reboot failure, preserve installer and Windows event evidence, use the approved driver rollback/recovery path and escalate to the Windows/platform owner; do not retry an unsigned or mismatched package.",
+      "manual_steps": ["Operator performs the Windows setup and reboot.","Operator supplies version, signer, device and error evidence; agent reports only supplied artifacts.","Owner decides PASS, FAIL or BLOCKED."],
+      "openhands_instruction": "Do not attempt this Windows GUI flow from Linux SSH or claim completion. Request the operator's signed package/version evidence, setup/reboot transcript, Infinst/Device Manager version and Microsoft signer proof, plus rollback evidence; the end user decides PASS/FAIL/BLOCKED.",
+      "end_user_decides": ["PASS","FAIL","BLOCKED"]
     }
   ]
 }
