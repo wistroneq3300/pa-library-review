@@ -3148,6 +3148,15 @@
       "last_valid_checkpoint": "Compatibility/row-407/Wistron-AMD GPU-00127-V002",
       "status": "ROLLED_BACK_AND_REVIEW_REQUIRED",
       "detected_at": "2026-10-03T05:34:00+08:00"
+    },
+    {
+      "reason": "The row 417 source fields were read before the row 416 overlay had been written, violating the required one-row-at-a-time write-before-next-row order. The uncheckpointed row 416 overlay was removed; progress remains at the valid row 415 checkpoint and row 416 must be independently re-reviewed before row 417 is selected again.",
+      "affected_from": "Compatibility/row-416/Wistron-AMD GPU-00135-V002",
+      "affected_through": "Compatibility/row-416/Wistron-AMD GPU-00135-V002",
+      "discarded_count": 1,
+      "last_valid_checkpoint": "Compatibility/row-415/Wistron-AMD GPU-00134-V002",
+      "status": "ROLLED_BACK_AND_REVIEW_REQUIRED",
+      "detected_at": "2026-10-03T06:00:00+08:00"
     }
   ],
   "source_sha256": {
