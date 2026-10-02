@@ -2891,7 +2891,7 @@
     "Compatibility/row-426/Wistron-L12 Cluster-00008-V002",
     "Compatibility/row-427/Wistron-L12 Cluster-00009-V002"
   ],
-  "next_key": "Compatibility/row-427/Wistron-L12 Cluster-00009-V002",
+  "next_key": "Compatibility/row-428/Wistron-Memory-00001-V002",
   "last_reviewed_key": "Compatibility/row-427/Wistron-L12 Cluster-00009-V002",
   "status": "IN_PROGRESS",
   "blocking_question": null,
@@ -3178,6 +3178,15 @@
       "last_valid_checkpoint": "Compatibility/row-418/Wistron-L12 Cluster-00001-V002",
       "status": "ROLLED_BACK_AND_REVIEW_REQUIRED",
       "detected_at": "2026-10-03T06:30:00+08:00"
+    },
+    {
+      "reason": "The row 428 overlay was appended before the row 427 checkpoint next_key was corrected and before row 428 was checkpointed; a row 429 overlay was also written before the row 428 checkpoint. Both uncheckpointed overlays were removed and progress is restored to the valid row 427 checkpoint; row 428 must be independently re-reviewed one at a time.",
+      "affected_from": "Compatibility/row-428/Wistron-Memory-00001-V002",
+      "affected_through": "Compatibility/row-429/Wistron-Processor-00011-V002",
+      "discarded_count": 2,
+      "last_valid_checkpoint": "Compatibility/row-427/Wistron-L12 Cluster-00009-V002",
+      "status": "ROLLED_BACK_AND_REVIEW_REQUIRED",
+      "detected_at": "2026-10-03T07:02:21+08:00"
     }
   ],
   "source_sha256": {
