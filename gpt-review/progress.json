@@ -3160,6 +3160,15 @@
       "last_valid_checkpoint": "Compatibility/row-415/Wistron-AMD GPU-00134-V002",
       "status": "ROLLED_BACK_AND_REVIEW_REQUIRED",
       "detected_at": "2026-10-03T06:00:00+08:00"
+    },
+    {
+      "reason": "Rows 419-460 were appended to the overlay before the row 419 checkpoint was recorded and before each subsequent row was checkpointed. All uncheckpointed overlays were removed and progress remains at the valid row 418 checkpoint; rows 419 onward must be independently re-reviewed and checkpointed one at a time.",
+      "affected_from": "Compatibility/row-419/Wistron-L12 Cluster-00002-V002",
+      "affected_through": "Compatibility/row-460/Wistron-NV GPU-00067-V003",
+      "discarded_count": 42,
+      "last_valid_checkpoint": "Compatibility/row-418/Wistron-L12 Cluster-00001-V002",
+      "status": "ROLLED_BACK_AND_REVIEW_REQUIRED",
+      "detected_at": "2026-10-03T06:30:00+08:00"
     }
   ],
   "source_sha256": {
