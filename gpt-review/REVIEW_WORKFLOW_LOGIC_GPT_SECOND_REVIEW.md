@@ -10,6 +10,15 @@ it does not replace or modify the original test library.
 
 - `data/REVISED_commands_merged_with_raw.xlsx` is the original testcase source.
 - `data/tests.json` contains the previous DeepSeek review and is reference data.
+- For every selected testcase, GPT must directly reopen the matching row in the
+  original XLSX with an XLSX/XML reader and read its original `Items`,
+  `Procedure`, `Criteria`, and matching DeepSeek columns from that row.
+  `data/tests.json` may locate or cross-check the record, but it cannot replace
+  the direct XLSX read.
+- Reading only the derived `tests.json` row, even when the text is identical to
+  the XLSX, is a process deviation and integrity failure. The affected case
+  must not be claimed as strictly compliant; preserve the deviation in audit
+  metadata and re-review from the last valid checkpoint directly from the XLSX.
 - The original testcase fields are `Code`, `Items`, `Procedure`, and `Criteria`
   in the XLSX, corresponding to `code`, `items`, `procedure`, and `criteria`
   in `data/tests.json`.
@@ -25,6 +34,10 @@ it does not replace or modify the original test library.
 - The atomic review unit is exactly one source testcase row.
 - Review each testcase independently from its own `Items`, `Procedure`,
   `Criteria`, and matching DeepSeek record before writing its overlay record.
+- The fixed overlay schema is allowed, but the purpose, command fit, risks,
+  evidence, blocked conditions, and GPT findings must be freshly reasoned for
+  each row. Reusing a common analysis scaffold or copied wording as a shortcut
+  is a template violation and requires invalidation and re-review.
 - Do not review by batch, category, keyword rule, regex, copy-forward template,
   or generated classification table.
 - Do not infer that similar-looking testcases have the same purpose, command,
@@ -279,6 +292,47 @@ For each testcase, answer these questions:
 8. What must be confirmed before execution, and what conditions require
    BLOCKED?
 
+## Second-review outcome field
+
+Every new overlay record must include `second_review_outcome` with exactly one
+of the following fixed values. This field describes the result of comparing
+GPT's independent second review with the DeepSeek review; it does not replace
+`automation_classification`.
+
+### AGREE
+
+DeepSeek's conclusion is accepted as-is. Optional explanatory context may be
+recorded, but it does not materially change the decision.
+
+### IMPROVED
+
+The conclusion and automation classification remain the same, but GPT adds
+material procedure, evidence, safety, recovery, thermal, blackbox, interface,
+or fault-stimulus detail needed to make the review stronger or more actionable.
+
+### CHANGED
+
+GPT changes the automation classification or another material execution
+conclusion after reading the exact source row and matching DeepSeek record.
+
+### BLOCKED
+
+The second review concludes that the testcase still cannot be safely executed
+because an irreducible semantic, identity, acceptance-criteria, or recovery
+blocker remains. A missing package, vendor artifact, or operator confirmation
+alone is not sufficient for this outcome.
+
+### UNRESOLVED
+
+The available source/reference material is insufficient to determine whether
+DeepSeek should be accepted, improved, or changed, but there is not enough
+evidence to assert that execution itself is unsafe.
+
+Select exactly one outcome for each new record. Keep the outcome rationale in
+the testcase-specific `GPT Second Review Findings` or equivalent finding
+field. Do not backfill completed historical records solely to add this field;
+the next newly written record must contain it.
+
 ## Mandatory safety rules
 
 ### Storage and destructive I/O
@@ -351,6 +405,8 @@ Test Code
 Test Name
 
 Automation Classification
+
+Second-review Outcome
 
 Purpose
 

@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0",
+  "review_id": "blocked-feedback-rereview-001",
+  "review_date": "2026-09-26",
+  "source_logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+  "source_files": {
+    "xlsx": "data/REVISED_commands_merged_with_raw.xlsx",
+    "deepseek_json": "data/tests.json"
+  },
+  "source_sha256": {
+    "xlsx": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_json": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37"
+  },
+  "review_method": "Each selected testcase was re-read independently from its exact source row and matching DeepSeek record. User feedback was applied as a classification-boundary correction; no neighboring-case reasoning or copied verdict was used.",
+  "historical_result_preserved": true,
+  "cases": [
+    {
+      "sequence": 1,
+      "code": "Wistron-HW-00032-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 28,
+        "physical_xlsx_row": 29
+      },
+      "test_name": "Latch_on_fault_offset_To_Next_Block",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Latch_on_fault_offset_To_Next_Block",
+        "procedure": "[Before Test] Check SUT configuration against the specification/recipe and clear dmesg, syslog, and SEL. [During Test] Offset in bytes from this location to the beginning of the next configuration block. [After Test] Collect test results and photos and check for unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Offset in bytes from this location to the beginning of the next configuration block",
+        "script": "",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "PSU vendor config-block decode tool (operator/vendor)",
+        "ai_commands": "Verify the offset-in-bytes field between consecutive configuration blocks per a PSU configuration layout; the agent has no vendor tool to dump the PSU PMBus config blocks and the value is compared against a printed spec table.",
+        "ai_logs_output": "Operator reads the PSU configuration-block offset via the vendor tool and compares it to the spec; the agent cannot access the PSU PMBus config blocks."
+      },
+      "user_feedback_applied": "A CRPS PMBus Application Note or Firmware Spec can define the field, block layout, expected value, and correct read method. The absence of that vendor artifact in the current review workspace is a prerequisite gap, not a permanent semantic blocker.",
+      "purpose": "Read the CRPS latch-on-fault configuration-block offset and compare the decoded value with the vendor-defined configuration layout.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "test_command": "No executable command is present in the source. Use the vendor-approved read-only config-block decoder or PMBus read command supplied through ${PSU_VENDOR_TOOL} or an equivalent vendor-defined interface; do not invent a generic scan.",
+      "required_inputs": [
+        "Exact CRPS model and PSU identity",
+        "Vendor PMBus Application Note or Firmware Spec",
+        "Vendor-approved decoder/tool and version, or the exact PMBus read command",
+        "Field address, current/next block boundaries, byte order, and expected offset"
+      ],
+      "safety_and_evidence": "Use a read-only vendor-defined access path. Capture the raw block/readback, decoded offset, and the exact specification reference used for comparison. Do not write, reflash, reset, or blind-scan the PSU interface.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The previous review over-classified an obtainable vendor documentation/tool dependency as a semantic blocker."
+    },
+    {
+      "sequence": 2,
+      "code": "Wistron-HW-00070-V004",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 66,
+        "physical_xlsx_row": 67
+      },
+      "test_name": "FW upgrade/downgrade",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "FW upgrade/downgrade",
+        "procedure": "[Before Test] Check SUT configuration against the specification/recipe and clear dmesg, syslog, and SEL. [During Test] Log in to the BMC over HTTPS, open Maintenance/HPM firmware update, update the PSU firmware, wait and reboot, log in again, and repeat N and N-1 firmware update five times. [After Test] Collect results and photos and check for unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "1. Login BMC webUI successfully. 2. Find the page. 3. PSU firmware update successfully without issue. 4. SUT can power cycle without issue.",
+        "script": "",
+        "attended_time": "60",
+        "machine_time": "240"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "ipmitool, PSU FW image (user-provided)",
+        "ai_commands": "Place the user-supplied PSU FW image on the DUT, run the vendor/BMC flash command, then verify PSU sensors and the firmware version readback.",
+        "ai_logs_output": "Return full ipmitool PSU sensor and firmware-version readback after the user completes the PSU FW flash.",
+        "risk": "PSU FW flash resets the PSU and may momentarily drop its output; use a maintenance window with a confirmed image and recovery plan."
+      },
+      "user_feedback_applied": "The vendor supplies the firmware and flash command. Their absence from the current evidence set is an execution prerequisite and user-confirmation gate, not proof that the testcase is semantically blocked.",
+      "purpose": "Perform the specified PSU firmware N/N-1 upgrade and downgrade cycle through the BMC HPM path and verify firmware, power-cycle, and system recovery after each required step.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "test_command": "Use the vendor-approved PSU/BMC HPM flash command with the supplied image and exact PSU variables; preserve the source requirement to repeat the N and N-1 sequence five times. Do not invent a flash command.",
+      "required_inputs": [
+        "Exact PSU model, serial/slot identity, and current firmware",
+        "Vendor-provided signed N and N-1 images, hashes, and compatibility statement",
+        "Vendor-approved HPM/flash command and supported update path",
+        "Exact five-cycle order, timing, and abort rules",
+        "Maintenance window, redundancy/power confirmation, recovery plan, and explicit user approval"
+      ],
+      "safety_and_evidence": "This is a state-changing PSU firmware operation that can drop PSU output. Before execution, verify target identity, image compatibility, redundancy, and recovery access. Capture per-cycle firmware readback, BMC/SEL evidence, power-cycle result, and final system health.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The previous review correctly identified the risks and missing inputs but incorrectly promoted those prerequisites to a permanent BLOCKED verdict."
+    },
+    {
+      "sequence": 3,
+      "code": "Wistron-HW-00153-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 149,
+        "physical_xlsx_row": 150
+      },
+      "test_name": "OS installing",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "OS installing",
+        "procedure": "[Before Test] Check SUT configuration against the specification/recipe and clear dmesg, syslog, and SEL. [During Test] Verify can revise TPM setting or not. [After Test] Collect test results and photos and check for unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Verify can revise TPM setting or not.",
+        "script": "",
+        "attended_time": "5",
+        "machine_time": "20"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "OS installer media (user provides) + tpm2-tools (post-OS check)",
+        "ai_commands": "Stage a clean OS install with TPM enabled using the user-provided installer media, then verify /dev/tpm0, TPM kernel messages, and the systemd-cryptenroll TPM device list over SSH.",
+        "ai_logs_output": "Return post-install OS TPM detection evidence.",
+        "risk": "OS install repartitions the disk; run only on a dedicated SUT/drive designated by the user."
+      },
+      "user_feedback_applied": "The intended flow is a new OS installation, a BIOS TPM setting change or confirmation, and a post-install TPM function check. The manual BIOS and installer interaction limits automation but does not make the testcase BLOCKED.",
+      "purpose": "Install the specified OS, verify or change the TPM BIOS setting as required, and confirm that the installed OS detects and can use the TPM.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "test_command": "No complete installation command is present in the source. The operator performs the BIOS and installer interaction on the confirmed target; after installation, use the post-install TPM readback defined by the approved OS/tooling procedure.",
+      "required_inputs": [
+        "OS image/version and installer media",
+        "Dedicated installation disk and confirmed boot mode",
+        "Exact TPM BIOS setting and required state transition",
+        "Backup/key handling and recovery plan for the installation target",
+        "tpm2-tools or the approved post-install TPM verification tool"
+      ],
+      "safety_and_evidence": "The OS installation may repartition the target and BIOS changes affect boot/security behavior. The user must identify the dedicated target and perform or approve the BIOS/installer steps. Capture BIOS TPM state, OS version, /dev/tpm0, TPM kernel messages, and the approved TPM capability/function evidence.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [
+        "The source Items says OS installing while the Procedure and Criteria only say to revise the TPM setting. Before execution, the testcase text should explicitly state the OS image, installation target, TPM state transition, and acceptance evidence. This is a source-definition clarification, not a BLOCKED automation verdict."
+      ],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The earlier review treated manual installation and an underspecified source row as an automation blocker; the correct treatment is a human-confirmed setup with an automated post-install verification boundary."
+    },
+    {
+      "sequence": 4,
+      "code": "Wistron-HW-00207-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 197,
+        "physical_xlsx_row": 198
+      },
+      "test_name": "Communication check",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Communication check",
+        "procedure": "[Before Test] Check SUT configuration against the specification/recipe and clear dmesg, syslog, and SEL. [During Test] Check the communication function. 1. Pug the cable between serial port and client. 2. Make the connection and input some useful command to check the communcation. [After Test] Collect results and photos and check for unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "1. Make sure the communcation work normally.",
+        "script": "",
+        "attended_time": "10",
+        "machine_time": "0"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "serial cable + a client terminal (operator)",
+        "ai_commands": "A person physically plugs the serial cable between the SUT COM port and a client and types commands to verify the link; the agent cannot physically wire or observe the terminal.",
+        "ai_logs_output": "The operator plugs the serial cable, makes the connection, and confirms two-way communication works."
+      },
+      "user_feedback_applied": "The cable connection and terminal interaction are intentionally manual. Lack of an automated substitute is a MANUAL ONLY boundary, not a BLOCKED condition.",
+      "purpose": "Verify that the designated SUT serial port communicates bidirectionally with the client terminal using an operator-supplied test command or payload.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "test_command": "No executable command is present in the source. The operator connects the serial cable, establishes the client terminal session, sends the approved test payload, and records the response.",
+      "required_inputs": [
+        "Designated SUT serial port and client endpoint",
+        "Serial electrical standard and cable/pin mapping",
+        "Baud rate, data bits, parity, stop bits, and flow control",
+        "Approved test command or payload and expected response"
+      ],
+      "safety_and_evidence": "This case is physical/manual. Record the port identity, client terminal settings, exact payload, transmitted and received output, timeout/retry behavior, and operator observation of two-way communication. Do not claim automated execution.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [
+        "The source says only 'some useful command' and 'work normally'. The operator should provide the serial settings, payload, and expected response before execution. This is a test-definition improvement, not a reason to classify the case as BLOCKED."
+      ],
+      "independent_conclusion": "Reclassify from BLOCKED to MANUAL ONLY. The previous review confused inability to perform the physical cable action with inability to define or execute the testcase manually."
+    },
+    {
+      "sequence": 5,
+      "code": "Wistron-HW-00210-V002",
+      "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 200,
+        "physical_xlsx_row": 201
+      },
+      "test_name": "Devcie detection",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Devcie detection",
+        "procedure": "[Before Test] Check SUT configuration against the specification/recipe and clear dmesg, syslog, and SEL. [During Test] Check all USB ports could detect a device. All USB ports can be detected in BIOS/OS. [After Test] Collect results and photos and check for unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Make sure the devices can be detected under OS",
+        "script": "",
+        "attended_time": "20",
+        "machine_time": "20"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "usbutils + operator to attach the device",
+        "ai_commands": "With the device present, run lsusb over SSH and also included an ip link filter; the physical setup is operator-owned, with BIOS view by the operator.",
+        "ai_logs_output": "Return the lsusb/device list so the user confirms detection in OS."
+      },
+      "user_feedback_applied": "BIOS port checks can be performed by the user while OS enumeration and logs can be checked by the agent. This is a hybrid manual-plus-automated testcase, not BLOCKED.",
+      "purpose": "Verify that the designated USB device is detected through the required USB ports in BIOS and in the installed OS.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "test_command": "The operator attaches the approved USB device and records BIOS detection for each required port. After boot, the agent collects USB-specific OS evidence such as the complete lsusb output, USB topology, and kernel enumeration logs. Do not use ip link as proof of USB detection.",
+      "required_inputs": [
+        "Complete USB port and controller matrix to be tested",
+        "Exact USB device identity, VID/PID or serial identity, and required driver/power state",
+        "Operator to attach or move the device through the required ports and record BIOS results",
+        "usbutils and SSH access for OS-side evidence"
+      ],
+      "safety_and_evidence": "The physical device placement and BIOS observation are user-owned. The agent can perform the OS-side readback after each placement. Capture port-by-port BIOS evidence, complete lsusb output, USB topology, kernel enumeration logs, and the device identity matched to each port.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [
+        "The source says all USB ports in BIOS/OS but the Criteria only states OS detection and does not identify the device or port matrix. Add those execution inputs before running. This is a required test definition/confirmation step, not a BLOCKED verdict."
+      ],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The previous review incorrectly treated the manual BIOS portion as blocking the automatable OS verification portion."
+    }
+  ]
+}

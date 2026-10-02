@@ -1,0 +1,977 @@
+{
+  "schema_version": "1.0",
+  "review_id": "blocked-feedback-rereview-002",
+  "review_date": "2026-09-28",
+  "source_logic_version": "BLOCKED_REVIEW_LOGIC_AND_SELECTION_001",
+  "source_files": {
+    "xlsx": "data/REVISED_commands_merged_with_raw.xlsx",
+    "deepseek_json": "data/tests.json"
+  },
+  "source_sha256": {
+    "xlsx": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_json": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37"
+  },
+  "review_method": "Review each remaining historical BLOCKED testcase independently from its exact source row and matching DeepSeek record. Missing execution inputs are classified as prerequisites when the testcase purpose is identifiable; physical-only work is MANUAL ONLY; only irreducible semantic, identity, criteria, or recovery uncertainty remains BLOCKED.",
+  "historical_result_preserved": true,
+  "cases": [
+    {
+      "sequence": 1,
+      "code": "Wistron-HW-00040-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 36, "physical_xlsx_row": 37},
+      "test_name": "LED_behavior_from_PWM_High_State",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "LED_behavior_from_PWM_High_State",
+        "procedure_summary": "Check LED status if PWM High state; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check LED status if PWM High state",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physical PSU bezel LED visual inspection and photograph; agent cannot observe it over SSH.",
+        "risk": "Physical/visual PSU check; human only."
+      },
+      "purpose": "Visually verify the PSU LED behavior while the specified PWM-high state is applied.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "execution_boundary": "An operator must establish or confirm the PWM-high condition, observe the PSU bezel LED color/blink/state, and photograph the result. The agent must not claim remote visual verification.",
+      "required_inputs": ["Exact PSU/PWM-high setup procedure", "Expected LED state/color/blink pattern", "Operator and camera/physical access"],
+      "evidence_and_risk": "Record the physical PSU identity, applied state, timestamped photo, operator observation, and any post-test logs. Do not infer an LED result from host or BMC logs alone.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [],
+      "independent_conclusion": "Reclassify from BLOCKED to MANUAL ONLY. The source purpose is clear; the limitation is physical visual execution, not an irreducible semantic blocker."
+    },
+    {
+      "sequence": 2,
+      "code": "Wistron-HW-00041-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 37, "physical_xlsx_row": 38},
+      "test_name": "LED_behavior_from_PWM_Low_State",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "LED_behavior_from_PWM_Low_State",
+        "procedure_summary": "Check LED status if PWM Low state; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check LED status if PWM Low state",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physical PSU bezel LED visual inspection and photograph; agent cannot observe it over SSH.",
+        "risk": "Physical/visual PSU check; human only."
+      },
+      "purpose": "Visually verify the PSU LED behavior while the specified PWM-low state is applied.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "execution_boundary": "An operator must establish or confirm the PWM-low condition, observe the PSU bezel LED color/blink/state, and photograph the result. The agent must not claim remote visual verification.",
+      "required_inputs": ["Exact PSU/PWM-low setup procedure", "Expected LED state/color/blink pattern", "Operator and camera/physical access"],
+      "evidence_and_risk": "Record the physical PSU identity, applied state, timestamped photo, operator observation, and any post-test logs. Do not infer an LED result from host or BMC logs alone.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [],
+      "independent_conclusion": "Reclassify from BLOCKED to MANUAL ONLY. The source purpose is clear; the limitation is physical visual execution, not an irreducible semantic blocker."
+    },
+    {
+      "sequence": 3,
+      "code": "Wistron-HW-00044-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 40, "physical_xlsx_row": 41},
+      "test_name": "Frequecy_0.5_to_8_Hz",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Frequecy_0.5_to_8_Hz",
+        "procedure_summary": "Check LED flashing at the listed frequencies from 0.5 through 8 Hz; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check LED flashing 0.5 through 8 Hz frequency",
+        "attended_time": "40",
+        "machine_time": "40"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physical PSU bezel LED blink-frequency observation and photograph; agent cannot observe it over SSH.",
+        "risk": "Physical/visual PSU check; human only."
+      },
+      "purpose": "Visually verify that the PSU LED blink behavior matches each specified frequency point from 0.5 through 8 Hz.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "execution_boundary": "An operator must apply or select each specified LED/PWM frequency, observe and measure the physical blink pattern, and photograph the result. The agent must not infer frequency from host logs.",
+      "required_inputs": ["Exact frequency-generation procedure", "Expected tolerance and LED pattern for each point", "Operator, measurement method, and camera/physical access"],
+      "evidence_and_risk": "Record the PSU identity, frequency setting, measured period/frequency, timestamped photo/video, operator observation, and post-test logs. A visual LED test has physical observation risk but no remote command substitute in this environment.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source text is mojibake around the frequency list; confirm the exact frequency points and acceptance tolerance before execution."],
+      "independent_conclusion": "Reclassify from BLOCKED to MANUAL ONLY. The physical visual measurement is manual, while the test purpose is identifiable."
+    },
+    {
+      "sequence": 4,
+      "code": "Wistron-HW-00045-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 41, "physical_xlsx_row": 42},
+      "test_name": "Input_power_cycling",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Input_power_cycling",
+        "procedure_summary": "Verify that the PSU resets warning and fault limits to default values after the specified input-power cycle; collect results/photos and unexpected logs.",
+        "criteria": "The PSU shall reset the warning and fault limits to default values for the following case.",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator physically cycles PSU input power, then a PMBus master rereads warning/fault limit registers.",
+        "risk": "Physical PSU input-power cycle; human only."
+      },
+      "purpose": "Perform the approved PSU input-power cycle and verify through PMBus that the defined warning and fault limits return to their documented defaults.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The physical input-power cycle is operator-owned; the post-cycle PMBus readback and comparison can be automated once the CRPS identity, register map, defaults, and approved read path are supplied.",
+      "required_inputs": ["Exact PSU/CRPS identity and power topology", "Approved input-power cycle procedure and maintenance approval", "PMBus master/tool and register map", "Documented default warning/fault values and recovery criteria"],
+      "evidence_and_risk": "Power cycling can interrupt PSU output and dependent systems. Capture pre/post PMBus registers, cycle timestamps, power/SEL/BMC evidence, and confirmation that all defined limits match the vendor defaults. Do not cycle unknown or active production power paths.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source says 'the following case' but gives no specific input-power sequence or list of warning/fault registers; these must be supplied before execution."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The physical cycle is a manual prerequisite and the PMBus verification is an automatable follow-up."
+    },
+    {
+      "sequence": 5,
+      "code": "Wistron-HW-00046-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 42, "physical_xlsx_row": 43},
+      "test_name": "PSON_power_cycling",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "PSON_power_cycling",
+        "procedure_summary": "During test: Fault behavior checking. Collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Fault behavior checking",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator toggles the physical PSU PSON signal and observes resulting output/fault behavior; agent cannot drive the PSON line.",
+        "risk": "Physical PSU signal manipulation; human/harness required."
+      },
+      "purpose": "Verify the CRPS fault behavior when the defined PSON signal power-cycle sequence is asserted and removed.",
+      "automation_classification_after_rereview": "BLOCKED",
+      "execution_boundary": "The physical PSON operation can be manual, but the source does not define the PSON target/interface, signal levels, timing/sequence, expected output/fault response, or safe recovery. A manual-only label would still leave an unsafe non-deterministic test.",
+      "required_inputs": ["Exact PSU/PSON connector or harness and signal levels", "Assertion/deassertion timing and cycle sequence", "Expected output and fault behavior", "Power topology, limits, abort and recovery procedure", "Evidence mapping for PSU telemetry and physical observation"],
+      "evidence_and_risk": "Do not toggle an unknown PSON line. The action can change PSU output and affect dependent equipment. Reopen only with vendor/platform procedure, expected behavior, controlled harness, and recovery ownership.",
+      "actual_blocked_conditions": ["The source criteria only says 'Fault behavior checking' and provides no deterministic PSON sequence or expected response."],
+      "discussion_needed": ["This is a genuine remaining BLOCKED case unless the owner supplies the PSON sequence, expected behavior, and recovery procedure."],
+      "independent_conclusion": "Keep BLOCKED. The physical nature alone would not justify BLOCKED, but the testcase semantics and acceptance criteria are too incomplete to define a safe manual execution."
+    },
+    {
+      "sequence": 6,
+      "code": "Wistron-HW-00056-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 52, "physical_xlsx_row": 53},
+      "test_name": "Capability and Inventory Reporting APP_PROFILE_SUPPORT",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Capability and Inventory Reporting APP_PROFILE_SUPPORT",
+        "procedure_summary": "During test only says 'Fault behavior checking'; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Fault behavior checking",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "i2c-tools ipmitool",
+        "command_summary": "Enumerate hwmon/PMBus and I2C buses, then read an APP_PROFILE_SUPPORT register using a user-supplied PMBus bus and address.",
+        "risk": "Read-only raw PMBus access, but exact bus/address must be verified against the board."
+      },
+      "purpose": "Read the CRPS APP_PROFILE_SUPPORT capability field and compare it with the vendor-defined expected capability value.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The source item identifies a capability-reporting purpose. The read-only PMBus/I2C operation can be automated after the vendor register map, exact bus/address, encoding, and expected value are supplied. Do not use a guessed raw I2C target.",
+      "required_inputs": ["CRPS identity and vendor PMBus specification", "Exact APP_PROFILE_SUPPORT field/register and encoding", "Verified PSU I2C bus/address and approved read command", "i2c-tools and expected capability value"],
+      "evidence_and_risk": "Capture full bus enumeration, verified target identity, raw register readback, decoded capability value, and vendor comparison. Raw I2C reads are read-only but can hit the wrong device if bus/address is guessed.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source Procedure and Criteria say only 'Fault behavior checking', which conflicts with the APP_PROFILE_SUPPORT item. Correct the testcase wording and acceptance value before execution; the classification remains a prerequisite/user-confirmation case rather than BLOCKED."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The register purpose is identifiable from the source item; missing vendor mapping and parameters are prerequisites, while the generic criteria require source clarification."
+    },
+    {
+      "sequence": 7,
+      "code": "Wistron-HW-00057-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 53, "physical_xlsx_row": 54},
+      "test_name": "General fault",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "General fault",
+        "procedure_summary": "During test: Check data is saved to blackbox in this status; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Inject a general/unknown PSU fault with physical hardware/throttle/AC action, then read the PSU blackbox/fault log.",
+        "risk": "Physical/destructive PSU fault injection; operator-only."
+      },
+      "purpose": "Inject a defined PSU fault condition and verify that the CRPS blackbox records the corresponding fault event.",
+      "automation_classification_after_rereview": "BLOCKED",
+      "execution_boundary": "The injection may be manual and blackbox extraction may be tool-assisted, but 'General fault' does not identify the fault stimulus, target, safe trigger, expected event record, blackbox access method, or recovery.",
+      "required_inputs": ["Specific fault condition and injection method", "PSU identity and fault/blackbox interface", "Expected blackbox record fields and timestamp correlation", "Abort, power/redundancy, and recovery procedure"],
+      "evidence_and_risk": "Do not inject an unknown fault or interrupt PSU power. A fault injection can drop output or damage the test setup. Reopen only after the vendor/platform procedure defines the trigger and recovery, then capture raw blackbox data plus BMC/host correlation.",
+      "actual_blocked_conditions": ["The source uses the undefined phrase 'General fault' and gives no deterministic fault trigger or acceptance record."],
+      "discussion_needed": ["Please provide the intended fault stimulus and vendor blackbox readout procedure; without those, this is a genuine BLOCKED case rather than merely MANUAL ONLY."],
+      "independent_conclusion": "Keep BLOCKED. The remaining issue is undefined fault semantics and evidence mapping, not just the physical action."
+    },
+    {
+      "sequence": 8,
+      "code": "Wistron-HW-00058-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 54, "physical_xlsx_row": 55},
+      "test_name": "Over voltage on output",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Over voltage on output",
+        "procedure_summary": "During test: Check data is saved to blackbox in this status; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physically force an over-voltage condition on the PSU output, then extract the PSU blackbox fault record.",
+        "risk": "Destructive physical PSU fault injection; operator-only."
+      },
+      "purpose": "Apply the approved over-voltage fault stimulus to the PSU output and verify the corresponding blackbox record.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The fault stimulus is operator/vendor-fixture work; blackbox extraction and log correlation can be automated after the exact fixture, threshold, access tool, and expected record are supplied.",
+      "required_inputs": ["Exact PSU identity and output rail", "Vendor-approved over-voltage injection fixture/method and threshold", "Blackbox readout tool/register map", "Expected event fields, abort limits, power topology, and recovery"],
+      "evidence_and_risk": "Over-voltage injection can damage the PSU or dependent hardware. Use only the vendor-approved fixture and protected test setup. Capture pre/post voltage, trigger timing, blackbox raw record, BMC/SEL/host correlation, and recovery state.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not state the over-voltage threshold, injection method, or blackbox readout. These must be obtained from the vendor before execution, but they are prerequisites rather than an automatic BLOCKED verdict."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The fault purpose is identifiable; vendor method, parameters, and recovery are required before any physical injection."
+    },
+    {
+      "sequence": 9,
+      "code": "Wistron-HW-00059-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 55, "physical_xlsx_row": 56},
+      "test_name": "Over current on output",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Over current on output",
+        "procedure_summary": "During test: Check data is saved to blackbox in this status; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physically force an over-current condition on the PSU output, then extract the PSU blackbox fault record.",
+        "risk": "Destructive physical PSU fault injection; operator-only."
+      },
+      "purpose": "Apply the approved over-current fault stimulus to the PSU output and verify the corresponding blackbox record.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The fault stimulus is operator/vendor-fixture work; blackbox extraction and log correlation can be automated after the exact fixture, current threshold, access tool, and expected record are supplied.",
+      "required_inputs": ["Exact PSU identity and output rail", "Vendor-approved over-current injection fixture/method and threshold", "Blackbox readout tool/register map", "Expected event fields, current/power limits, abort rules, and recovery"],
+      "evidence_and_risk": "Over-current injection can trip protection or damage the PSU and dependent hardware. Use only the vendor-approved fixture and protected test setup. Capture pre/post current, trigger timing, blackbox raw record, BMC/SEL/host correlation, and recovery state.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not state the current threshold, injection method, or blackbox readout. Obtain these from the vendor before execution; they are prerequisites rather than an automatic BLOCKED verdict."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The fault purpose is identifiable; vendor method, parameters, and recovery are required before any physical injection."
+    },
+    {
+      "sequence": 10,
+      "code": "Wistron-HW-00061-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 57, "physical_xlsx_row": 58},
+      "test_name": "Input voltage fault",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Input voltage fault",
+        "procedure_summary": "During test: Check data is saved to blackbox in this status; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Inject a bad/out-of-range input voltage through physical fault-injection hardware, then extract the PSU blackbox fault record.",
+        "risk": "Destructive physical PSU fault injection; operator-only."
+      },
+      "purpose": "Apply the approved out-of-range input-voltage stimulus and verify that the CRPS blackbox records the corresponding input-voltage fault.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The input-voltage stimulus is operator/vendor-fixture work; blackbox extraction and correlation can be automated after the exact voltage range, fixture, access tool, and expected event are supplied.",
+      "required_inputs": ["Exact PSU input identity and power topology", "Vendor-approved voltage source/fixture and voltage threshold/timing", "Blackbox readout tool/register map", "Expected fault fields, abort limits, and recovery procedure"],
+      "evidence_and_risk": "An out-of-range input can damage equipment or drop PSU output. Use a protected vendor-approved setup. Capture input waveform/level, trigger timestamp, blackbox raw record, BMC/SEL/host evidence, and recovery status.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not state the input-voltage threshold, stimulus method, or blackbox readout. These are vendor prerequisites before execution, not an automatic BLOCKED verdict."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The fault purpose is identifiable; the physical stimulus and recovery require vendor/operator inputs."
+    },
+    {
+      "sequence": 11,
+      "code": "Wistron-HW-00062-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 58, "physical_xlsx_row": 59},
+      "test_name": "Fan failure",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Fan failure",
+        "procedure_summary": "During test: Check data is saved to blackbox in this status; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Force PSU fan failure with physical fault-injection hardware, then extract the PSU blackbox record.",
+        "risk": "Physical/destructive PSU fault injection; operator-only."
+      },
+      "purpose": "Apply the approved PSU fan-failure stimulus and verify that the CRPS blackbox records the fan fault.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "Fan-failure injection is operator/vendor-fixture work; blackbox extraction and telemetry correlation can be automated after the exact fan target, injection method, access tool, and expected event are supplied.",
+      "required_inputs": ["Exact PSU and fan identity", "Vendor-approved fan-failure simulation or fixture", "Blackbox readout method and expected event fields", "Thermal/power abort limits and recovery procedure"],
+      "evidence_and_risk": "A failed fan can cause overheating, PSU protection, output interruption, or hardware damage. Use only a protected vendor test method. Capture fan telemetry, temperature/output state, raw blackbox event, BMC/SEL/host logs, and recovery.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not define how fan failure is induced or which blackbox record is expected. Obtain the vendor procedure and thresholds before execution; this is not automatically BLOCKED."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The fault purpose is identifiable, but the physical stimulus and safety controls require vendor/operator inputs."
+    },
+    {
+      "sequence": 12,
+      "code": "Wistron-HW-00063-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 59, "physical_xlsx_row": 60},
+      "test_name": "Over temperature",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Over temperature",
+        "procedure_summary": "During test: Check data is saved to blackbox in this status; collect results/photos and unexpected dmesg, syslog, and SEL logs.",
+        "criteria": "Check data is saved to blackbox is this status",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Force an over-temperature condition inside the PSU, then extract the PSU blackbox fault record.",
+        "risk": "Destructive physical PSU fault injection; operator-only."
+      },
+      "purpose": "Apply the approved over-temperature stimulus and verify that the CRPS blackbox records the thermal fault.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "Thermal fault injection is operator/vendor-fixture work; telemetry and blackbox extraction can be automated after the exact sensor/zone, stimulus method, temperature threshold, access tool, and expected event are supplied.",
+      "required_inputs": ["Exact PSU thermal zone/sensor", "Vendor-approved heating or fault-simulation method and threshold", "Blackbox readout tool/register map", "Thermal abort limits, power protection, expected event, and recovery"],
+      "evidence_and_risk": "Over-temperature testing can damage the PSU or cause output interruption. Use a protected vendor-approved method and continuous temperature/power observation. Capture temperature trace, trigger time, raw blackbox event, BMC/SEL/host evidence, and recovery.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not state the thermal threshold, stimulus method, sensor, or blackbox readout. Obtain these vendor/operator inputs before execution; the purpose is still identifiable."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The thermal fault purpose is identifiable; the safe stimulus and recovery require vendor/operator inputs."
+    },
+    {
+      "sequence": 13,
+      "code": "Wistron-HW-00066-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 62, "physical_xlsx_row": 63},
+      "test_name": "Repair",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Repair",
+        "procedure_summary": "Unplug PSU 1 power cord, visually check status, check BMC sensors/SEL, plug the cord back, check again, and repeat for all remaining PSUs.",
+        "criteria": "Power cord unplug/plug succeeds; PSU is off with fan off and amber LED when unplugged; BMC sensor/SEL states are correct before and after reconnect; all other PSUs behave like PSU 1.",
+        "attended_time": "15",
+        "machine_time": "15"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physical PSU power-cord/module handling and visual observation are operator-owned; agent can read BMC PSU sensors and SEL afterward.",
+        "risk": "Physical PSU insertion/removal and AC operation; human only."
+      },
+      "purpose": "Verify per-PSU isolation and recovery behavior when each PSU input cord is removed and restored, using visual and BMC evidence.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The cord removal, reconnection, and LED observation are manual; the BMC sensor/SEL readbacks and comparison can be automated after the PSU identity/slot map and safe redundancy conditions are confirmed.",
+      "required_inputs": ["PSU slot/cord identity map", "Redundancy and load-safety confirmation", "Operator physical access and maintenance approval", "BMC credentials and approved sensor/SEL evidence commands"],
+      "evidence_and_risk": "Removing a PSU cord can affect redundancy and output. Capture pre/post BMC sensors, SEL, host power state, operator photos, and per-PSU recovery evidence. Never remove an unknown or sole-active power path.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The Items label 'Repair' does not match the unplug/replug recovery procedure. Clarify whether this is a power-cord isolation test or a physical PSU replacement/repair test."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. This is a manual-plus-automated hybrid with explicit steps and criteria, not BLOCKED."
+    },
+    {
+      "sequence": 14,
+      "code": "Wistron-HW-00069-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 65, "physical_xlsx_row": 66},
+      "test_name": "Power supply fan failure",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Power supply fan failure",
+        "procedure_summary": "Use a non-conductive flexible object to stop a PSU fan, remove the obstruction, and check PSU status; collect results/photos and unexpected logs.",
+        "criteria": "BMC sensor/SEL correct while fan is jammed; PSU LED amber during failure; LED green after obstruction removal and power-cord replug.",
+        "attended_time": "15",
+        "machine_time": "15"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator physically jams and releases the PSU fan, observes LED state, and agent can read BMC SEL afterward.",
+        "risk": "Physical fan obstruction and PSU power operation; human-only physical step."
+      },
+      "purpose": "Verify PSU fault indication and recovery when a designated PSU fan is safely obstructed and then released.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The fan obstruction/removal and LED observation are manual; BMC sensor/SEL readback and before/after comparison can be automated. Use only the specified non-conductive flexible object and the approved PSU/slot.",
+      "required_inputs": ["PSU/fan slot identity and redundancy state", "Approved non-conductive flexible obstruction method", "BMC credentials and sensor/SEL evidence commands", "Power-cord recovery procedure and maintenance approval"],
+      "evidence_and_risk": "Fan obstruction can cause overheating or PSU shutdown. Operator must control the physical step and remove the obstruction promptly. Capture fan/temperature/sensor/SEL output, amber/green LED photos, timestamps, and post-replug recovery.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": [],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The physical step is manual, but the source gives an identifiable sequence and the BMC verification is automatable."
+    },
+    {
+      "sequence": 15,
+      "code": "Wistron-HW-00076-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 72, "physical_xlsx_row": 73},
+      "test_name": "CPU Error LED",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "CPU Error LED",
+        "procedure_summary": "Check the motherboard CPU error LED and BMC SEL; verify LED location and inject a CPU error to check the LED display.",
+        "criteria": "LED location matches motherboard spec and LED working mode matches spec.",
+        "attended_time": "5",
+        "machine_time": "0"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator triggers the CPU fault condition and visually inspects the physical CPU error LED; agent cannot observe the LED over SSH.",
+        "risk": "Physical visual inspection and fault injection."
+      },
+      "purpose": "Verify the motherboard CPU error LED location and behavior after an approved CPU error stimulus, with BMC SEL correlation.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "CPU fault injection and LED observation are manual; BMC SEL and post-event system evidence can be collected automatically after the operator performs the approved stimulus.",
+      "required_inputs": ["Motherboard/CPU identity and LED location/mode specification", "Vendor-approved CPU error injection method", "Expected LED pattern and BMC SEL event", "Dedicated SUT, recovery path, and operator approval"],
+      "evidence_and_risk": "A CPU fault stimulus can crash or disable the SUT. Capture pre/post CPU/BIOS/BMC/SEL state, operator LED photos, exact trigger, and recovery/boot evidence. Do not invent a CPU error injection method.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not define the CPU error stimulus or LED working-mode value. Obtain the motherboard specification and approved fault-injection procedure before execution; this is a prerequisite, not automatically BLOCKED."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The case is a manual fault stimulus plus visual check with automatable BMC evidence."
+    },
+    {
+      "sequence": 16,
+      "code": "Wistron-HW-00107-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 103, "physical_xlsx_row": 104},
+      "test_name": "CPU node LED",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "CPU node LED",
+        "procedure_summary": "When the SUT has an error/warning event, verify that the fault LED lights; collect results/photos and unexpected logs.",
+        "criteria": "The fault LED responds to system fault status.",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator observes the CPU node LED color/blink state and compares it with the specification table.",
+        "risk": "Physical/visual LED check."
+      },
+      "purpose": "Visually verify the CPU node fault LED response for the approved SUT error/warning condition.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "execution_boundary": "The LED observation and any physical fault-state setup are manual. The operator records the LED color/blink/state and compares it with the motherboard specification; the agent must not claim remote visual evidence.",
+      "required_inputs": ["CPU node LED location and state table", "Approved error/warning event or pre-existing controlled fault state", "Operator and camera/physical access"],
+      "evidence_and_risk": "Capture the event identity, timestamped LED photo/video, operator observation, and relevant BMC/host logs if available. Do not inject an unspecified CPU fault merely to illuminate the LED.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not identify which error/warning event or exact LED state table is used; provide those before execution. This does not change the manual-only automation boundary."],
+      "independent_conclusion": "Reclassify from BLOCKED to MANUAL ONLY. The physical visual purpose is clear; missing event detail is an execution input, not a reason to block the entire review."
+    },
+    {
+      "sequence": 17,
+      "code": "Wistron-HW-00108-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 104, "physical_xlsx_row": 105},
+      "test_name": "DUT node LED",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "DUT node LED",
+        "procedure_summary": "When the SUT has an error/warning event, verify that the fault LED lights; collect results/photos and unexpected logs.",
+        "criteria": "The fault LED responds to system fault status.",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator observes the DUT node LED color/blink state and compares it with the specification table.",
+        "risk": "Physical/visual LED check."
+      },
+      "purpose": "Visually verify the DUT node fault LED response for the approved SUT error/warning condition.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "execution_boundary": "The LED observation and any physical fault-state setup are manual. The operator records the LED color/blink/state and compares it with the platform specification; the agent must not claim remote visual evidence.",
+      "required_inputs": ["DUT node LED location and state table", "Approved error/warning event or controlled existing fault state", "Operator and camera/physical access"],
+      "evidence_and_risk": "Capture the event identity, timestamped LED photo/video, operator observation, and relevant BMC/host logs if available. Do not inject an unspecified fault merely to illuminate the LED.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source does not identify which error/warning event or exact LED state table is used; provide those before execution. This does not change the manual-only classification."],
+      "independent_conclusion": "Reclassify from BLOCKED to MANUAL ONLY. The physical visual purpose is clear; missing event detail is an execution input, not an irreducible blocker."
+    },
+    {
+      "sequence": 18,
+      "code": "Wistron-HW-00118-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 114, "physical_xlsx_row": 115},
+      "test_name": "Hot plug/non hot plug FAN exist in BIOS/BMC log",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Hot plug/non hot plug FAN exist in BIOS/BMC log",
+        "procedure_summary": "Insert the required fan, power on, inspect UEFI power information, confirm clean boot, and check fan information in BMC.",
+        "criteria": "No POST error; fan rule matches specification; fan information appears correctly in BMC.",
+        "attended_time": "1",
+        "machine_time": "1"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator physically hot-plugs/non-hot-plugs the fan and checks BIOS/BMC; agent can read post-event BMC SEL.",
+        "risk": "Physical fan insertion/removal and BIOS inspection."
+      },
+      "purpose": "Verify that the specified hot-plug and non-hot-plug fan configurations boot cleanly and are represented correctly in UEFI/BMC evidence.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "Fan insertion/removal, power-on, and UEFI observation are manual; BMC inventory/SEL and post-boot evidence can be collected automatically.",
+      "required_inputs": ["Exact fan modules and hot/non-hot configuration matrix", "Fan rule specification", "Dedicated SUT, operator access, and recovery path", "BMC credentials and post-event evidence commands"],
+      "evidence_and_risk": "Physical fan changes and boot cycles affect cooling and system availability. Capture per-configuration fan identity, UEFI screen/photo, POST result, BMC inventory/SEL, and OS health. Do not infer BIOS evidence from BMC alone.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["The source says 'required fan' but does not provide the fan/configuration matrix or define which BIOS/BMC fields prove detection. Supply those before execution."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. This is a manual setup plus automatable BMC/OS evidence workflow."
+    },
+    {
+      "sequence": 19,
+      "code": "Wistron-HW-00122-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 118, "physical_xlsx_row": 119},
+      "test_name": "Heating temperature sensor",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Heating temperature sensor",
+        "procedure_summary": "Install the required fan, power on and boot OS, heat the temperature sensor using a BMC/tool method, check warning popup and fan-speed increase.",
+        "criteria": "Fan speed increases; system restarts; system boots again.",
+        "script": "Vendor script URL is present in the source.",
+        "attended_time": "20",
+        "machine_time": "10"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "thermal control equipment (physical)",
+        "command_summary": "Apply external heat/thermal source and observe sensor response; agent cannot apply physical heat over SSH.",
+        "risk": "External heating requires thermal safety precautions; human-only physical control."
+      },
+      "purpose": "Apply a controlled thermal stimulus and verify sensor warning, fan response, expected restart behavior, and successful recovery boot.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "Physical heat application and fan installation are manual; BMC/OS sensor, warning, fan-speed, reboot, and boot evidence can be collected by the agent after the thermal procedure is approved.",
+      "required_inputs": ["Exact sensor/zone and approved heat source or BMC thermal-control method", "Temperature ramp, threshold, duration, and abort limits", "Expected warning/fan behavior and whether restart is intentional", "Recovery/boot plan and maintenance approval", "Access to the referenced vendor script/tool"],
+      "evidence_and_risk": "External heating and an intentional restart can damage hardware or interrupt services. Capture temperature trace, warning event, fan RPM, restart/POST/OS recovery, and BMC/SEL/host evidence. Do not apply heat or trigger restart with undefined limits.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the approved thermal method, thresholds, and whether 'System will restart' is expected or a failure condition. The vendor script reference should also be validated before execution."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The physical thermal step is a prerequisite and the remaining verification can be automated."
+    },
+    {
+      "sequence": 20,
+      "code": "Wistron-HW-00129-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 125, "physical_xlsx_row": 126},
+      "test_name": "System power / status LED",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "System power / status LED",
+        "procedure_summary": "Remove AC and check LED off; restore AC and check green blink/green solid through boot; power off and check amber solid; check fast amber blink for listed system-error events.",
+        "criteria": "LED states match the specified AC-on, booted, off, and system-error patterns.",
+        "attended_time": "10",
+        "machine_time": "20"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Operator cycles AC and visually records physical system power/status LED state; agent cannot observe LED or cycle AC over SSH.",
+        "risk": "AC cycle and physical visual check."
+      },
+      "purpose": "Verify the system power/status LED transitions across AC removal, AC restoration, OS boot, power-off, and approved error-event states.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "AC operation, power-off, error-state setup, and LED observation are manual; host/BMC/POST/OS evidence and timestamps can be collected automatically around each operator step.",
+      "required_inputs": ["Dedicated SUT and AC/power topology", "Exact LED state specification and event matrix", "Approved error-event injection methods", "Operator approval, recovery path, and BMC/host evidence access"],
+      "evidence_and_risk": "AC cycling and error injection can interrupt service or damage an unprotected setup. Capture per-state LED photos/video, AC/power timestamps, POST/OS/BMC/SEL evidence, and recovery. Do not inject the listed errors generically without approved methods.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm which of the listed error events are in scope and how each is safely induced; the source lists many events without per-event procedure or evidence."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The procedure and criteria define a manual AC/LED workflow with automatable supporting evidence."
+    },
+    {
+      "sequence": 21,
+      "code": "Wistron-HW-00134-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 130, "physical_xlsx_row": 131},
+      "test_name": "System warm reboot test",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "System warm reboot test",
+        "procedure_summary": "Disable NTP, align SUT time to a standard, perform 500 warm reboots, and check time afterward.",
+        "criteria": "No hang; lspci unchanged; system workable; time drift within 1.73 seconds per 24 hours after more than 24 hours idle.",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "util-linux (hwclock) systemd (timedatectl)",
+        "command_summary": "Disable NTP and collect hwclock/date, then perform the long warm-reboot/24-hour dwell and reread timestamps.",
+        "risk": "Disabling NTP and repeated reboots are state-changing; restore NTP and handle the operator dwell."
+      },
+      "purpose": "Stress warm reboot recovery 500 times and measure RTC/system time drift after the specified idle period.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The agent can run read-only baseline/post checks and a controlled reboot loop after approval; the long dwell, recovery supervision, and any physical/AC portion require operator confirmation. NTP must be restored afterward.",
+      "required_inputs": ["Dedicated SUT and 500-reboot approval", "Exact standard-time source and idle/dwell duration", "Recovery/OOB access and reboot timeout policy", "util-linux/systemd tools and NTP restore procedure"],
+      "evidence_and_risk": "Disabling NTP and repeated reboots can disrupt the OS and management access. Capture pre/post lspci, boot/reboot results, RTC/UTC timestamps, timeout/recovery events, and restore NTP after the test.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm whether the 24-hour idle is required after the 500 reboots and whether any AC-cycle step is actually part of this source row; the source procedure itself says warm reboot only."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. The procedure and acceptance criteria are identifiable; duration, state change, and recovery require explicit approval."
+    },
+    {
+      "sequence": 22,
+      "code": "Wistron-HW-00151-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 147, "physical_xlsx_row": 148},
+      "test_name": "TPM tool testing",
+      "historical_classification": "BLOCKED",
+      "source_reread": {"items": "TPM tool testing", "procedure_summary": "Test TPM function by vendor tool; collect results/photos and unexpected logs.", "criteria": "Test TPM function by vendor tool.", "attended_time": "5", "machine_time": "20"},
+      "deepseek_reference_reread": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "vendor TPM tool (user provides; e.g. tpm2-tools / vendor diagnostic)", "command_summary": "Exact vendor TPM tool and invocation are not specified; run only after user supplies them.", "risk": "Vendor tool may perform destructive TPM operations."},
+      "purpose": "Run the approved vendor TPM diagnostic and verify the TPM function against its vendor-defined criteria.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The vendor tool, exact invocation, and safety mode are user/vendor prerequisites. The agent can run a confirmed read-only or approved diagnostic and capture output; it must not invent TPM operations.",
+      "required_inputs": ["Exact TPM tool/version and command", "Vendor criteria and expected output", "TPM state/ownership/lockout pre-check", "Confirmation that the tool does not clear or alter TPM state, or an approved recovery plan"],
+      "evidence_and_risk": "TPM commands can alter ownership, keys, NV data, or lockout state. Capture pre/post TPM state and full vendor output; execute only after explicit user confirmation.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Provide the vendor tool, invocation, and whether the test is read-only or changes TPM state."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. Missing vendor tool details are an obtainable prerequisite, not a permanent blocker."
+    },
+    {
+      "sequence": 23,
+      "code": "Wistron-HW-00152-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 148, "physical_xlsx_row": 149},
+      "test_name": "TPM linux command",
+      "historical_classification": "BLOCKED",
+      "source_reread": {"items": "TPM linux command", "procedure_summary": "Verify that OS installation with the TPM device enabled succeeds; collect results/photos and unexpected logs.", "criteria": "Verify can install OS with TPM device enabled.", "attended_time": "5", "machine_time": "20"},
+      "deepseek_reference_reread": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "OS installer media (user provides) + tpm2-tools (post-OS check)", "command_summary": "Operator-assisted OS install with TPM enabled, followed by /dev/tpm0, TPM dmesg, and systemd-cryptenroll checks.", "risk": "OS installation repartitions the disk; use a dedicated user-designated target."},
+      "purpose": "Install the approved OS with TPM enabled and verify the installed Linux environment detects the TPM device and supports the required TPM function.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "BIOS/installer interaction and target selection are manual/user-confirmed; post-install TPM detection and Linux evidence can be automated.",
+      "required_inputs": ["OS image/media and version", "Dedicated installation target and boot mode", "TPM BIOS state and required setting", "tpm2-tools or approved post-install commands", "Backup/recovery and user approval"],
+      "evidence_and_risk": "OS installation can destroy the selected disk and change boot state. Capture target identity, BIOS TPM state, install result, /dev/tpm0, TPM kernel logs, approved TPM command output, and recovery/NTP not applicable.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the dedicated installation target and exact TPM success criterion before execution."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. This is the same automation boundary as a user-confirmed OS install with an automatable TPM post-check, independently applied to this row."
+    },
+    {
+      "sequence": 24,
+      "code": "Wistron-HW-00154-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 150, "physical_xlsx_row": 151},
+      "test_name": "ROT(PFR) FW Flash",
+      "historical_classification": "BLOCKED",
+      "source_reread": {"items": "ROT(PFR) FW Flash", "procedure_summary": "Verify SUT status after using SF600 flash successfully; collect results/photos and unexpected logs.", "criteria": "Verify SUT status after using SF600 flash successfully.", "attended_time": "5", "machine_time": "20"},
+      "deepseek_reference_reread": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "SF600 ROT flash tool + signed PFR image (user-provided)", "command_summary": "Vendor SF600 tool performs the ROT/PFR firmware write; agent can collect post-flash dmesg, uptime, and lspci evidence.", "risk": "Destructive ROT/PFR firmware flash; use approved image and no production execution."},
+      "purpose": "Flash the approved ROT/PFR firmware with SF600 and verify the SUT returns to a stable, expected state.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "execution_boundary": "The SF600 firmware write requires vendor tooling, signed image, exact target identity, and explicit approval; post-flash OS/BMC/PCIe health checks can be automated.",
+      "required_inputs": ["Exact ROT/PFR and board identity/current version", "Signed target image/hash and compatibility data", "SF600 tool/version and approved invocation", "Maintenance window, stable power, recovery image/programmer, and rollback ownership"],
+      "evidence_and_risk": "ROT/PFR flashing can brick the platform or change security/boot behavior. Preserve pre-flash firmware/PCIe/BMC/SEL evidence, validate image/signature, and capture flash transcript, post-flash firmware identity, boot/OS/BMC health, and recovery readiness.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Provide the exact target ROT/PFR image and SF600 procedure plus recovery path before execution. The need for these vendor artifacts is not itself BLOCKED."],
+      "independent_conclusion": "Reclassify from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION. This is a vendor firmware prerequisite plus automated post-flash verification."
+    },
+    {
+      "sequence": 25,
+      "code": "Wistron-HW-00155-V004",
+      "source_ref": {"sheet": "Functionality", "source_row": 151, "physical_xlsx_row": 152},
+      "test_name": "Security mode",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Security mode",
+        "procedure_summary": "Assert TPM physical presence with an on-board jumper or switch, enter BIOS F1 Security settings, enable secure boot and TPM, change Security Boot mode, save/reboot, and verify the mode changed.",
+        "criteria": "Security mode can be changed successfully.",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "mokutil (read-only state check)",
+        "command_summary": "Read mokutil secure-boot state and ROT/PFR/secure-related dmesg lines over SSH; an operator must assert TPM physical presence and navigate BIOS F1 to change the security mode.",
+        "risk": "ROT security-mode change requires a physical TPM-presence assertion and BIOS setup interaction; operator required."
+      },
+      "purpose": "Change the approved security mode with TPM physical presence asserted, then verify the resulting secure-boot/TPM/ROT state after the BIOS change and reboot.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "IMPROVED",
+      "execution_boundary": "The TPM physical-presence jumper or switch and BIOS F1 navigation are manual and require an operator. The agent can perform read-only pre/post state collection and verify the resulting OS-visible security state after the approved change and reboot.",
+      "required_inputs": ["Exact source and destination security modes", "Approved TPM physical-presence jumper/switch procedure and reset state", "Exact BIOS menu path and secure-boot/TPM dependency", "mokutil and approved ROT/PFR state evidence method", "Recovery plan if the platform fails to boot or the security mode change is not reversible"],
+      "evidence_and_risk": "A BIOS security-mode change can alter boot policy and prevent the expected OS from starting. Capture the pre-change secure-boot/TPM/ROT state, BIOS screenshots or operator record, reboot/POST result, post-change mokutil output, relevant dmesg/SEL/BMC evidence, and recovery status. Do not clear existing logs merely to create a baseline.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the exact source and destination security modes, whether secure boot and TPM must both be enabled for the transition, and the approved recovery path before execution."],
+      "independent_conclusion": "The DeepSeek partial/hybrid assessment is directionally correct. Improve it to explicitly require the target mode, TPM physical-presence and BIOS transition procedure, pre/post state evidence, and recovery planning. The missing parameters are user/vendor prerequisites, not a permanent BLOCKED condition."
+    },
+    {
+      "sequence": 26,
+      "code": "Wistron-HW-00157-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 153, "physical_xlsx_row": 154},
+      "test_name": "TPM disbled",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "TPM disbled",
+        "procedure_summary": "The source says to check TPM in BIOS and check the TPM device in the OS, with the stated intent that TPM be disabled; Windows Device Manager and Linux lspci absence are listed as evidence.",
+        "criteria": "TPM can be disabled in BIOS and the device is absent; Windows expects no TPM device in Device Manager, while Linux expects no TPM device in lspci.",
+        "attended_time": "2",
+        "machine_time": "2"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "tpm2-tools (tpm2_getcap) + pciutils",
+        "command_summary": "An operator disables TPM in the BIOS Security/TPM page; the agent checks /dev/tpm*, lspci TPM output, and /sys/class/tpm/tpm0 over SSH.",
+        "risk": "The BIOS change is manual; the reference does not provide a physical recovery path or distinguish authoritative Linux TPM evidence from lspci output."
+      },
+      "purpose": "Disable TPM through the approved BIOS setting and verify, on the selected operating system, that no usable TPM device is exposed after reboot.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "execution_boundary": "The BIOS setting change and reboot are operator-controlled. After the operator confirms the target BIOS setting, the agent can collect Linux device-node/sysfs evidence and approved TPM capability/readiness evidence; Windows Device Manager remains an operator or Windows-agent check. lspci alone is not authoritative for TPM absence.",
+      "required_inputs": ["Exact BIOS menu path and target TPM-disabled state", "Selected OS and its authoritative TPM absence check", "Dedicated SUT, reboot approval, and recovery path to re-enable TPM", "Approved post-reboot commands and expected absence semantics", "Preserved pre-change TPM/boot/security evidence"],
+      "evidence_and_risk": "Disabling TPM can affect measured boot, encryption, attestation, and OS security policy. Preserve pre-change state and do not clear logs. Capture BIOS setting evidence, reboot/POST result, Linux /dev/tpm* and /sys/class/tpm evidence or Windows Device Manager evidence, relevant dmesg/SEL/BMC output, and the re-enable/recovery result. Do not use lspci absence alone as proof because TPM is not generally a PCIe device.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the exact BIOS TPM control, selected OS, authoritative absence criterion, and whether any disk encryption or measured-boot dependency must be suspended before the change."],
+      "independent_conclusion": "Change the historical NO/BLOCKED interpretation to REQUIRES PACKAGE / USER CONFIRMATION. The manual BIOS operation is identifiable and the OS post-check is automatable, but the source criteria need an OS-specific evidence method and an explicit recovery path. The missing confirmation is a prerequisite, not an irreducible blocker."
+    },
+    {
+      "sequence": 27,
+      "code": "Wistron-HW-00158-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 154, "physical_xlsx_row": 155},
+      "test_name": "Vendor Tool Testing",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Vendor Tool Testing",
+        "procedure_summary": "Use a vendor tool to test TPM, execute the tool, run its full TPM test menu, retrieve the result, and expect no error with result code 0001FFFF.",
+        "criteria": "The test completes with no error state and result 0001FFFF.",
+        "attended_time": "30",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "tpm2-tools",
+        "command_summary": "Read-only SSH checks for /dev/tpm0, /dev/tpmrm0, TPM sysfs, and tpm2_getcap; the interactive licensed vendor full-TPM test and 0001FFFF result must be run by an operator.",
+        "risk": "The vendor TPM test is interactive and may be licensed or state-changing; the agent cannot drive its menu."
+      },
+      "purpose": "Run the approved vendor TPM diagnostic in its full-test mode and verify the vendor-defined successful result code 0001FFFF without altering TPM ownership or protected state unexpectedly.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "IMPROVED",
+      "execution_boundary": "The vendor tool, license, interactive menu, and final result selection require an operator or supported vendor automation interface. The agent can verify TPM presence before the test, collect the vendor transcript or screenshot supplied by the operator, and run read-only post-test OS/TPM evidence checks.",
+      "required_inputs": ["Exact vendor tool name/version, license, and supported invocation", "Tool documentation defining full TPM test and result code 0001FFFF", "Confirmation whether the diagnostic writes NV data, changes ownership, or affects lockout state", "TPM pre-check and post-check commands", "Recovery/abort procedure and operator approval"],
+      "evidence_and_risk": "Do not substitute tpm2-tools presence checks for the vendor diagnostic result. Capture the tool version, selected menu/test, complete result including 0001FFFF, operator screenshot or transcript, pre/post TPM state, and unexpected dmesg/SEL/BMC evidence. A diagnostic that changes TPM state requires backup/ownership and recovery controls.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Provide the exact vendor tool and confirm the meaning of 0001FFFF and whether the full test is read-only before execution."],
+      "independent_conclusion": "Retain the hybrid/partial conclusion but improve the record with the vendor-tool identity, exact success code, state-change boundary, and evidence requirements. The absent tool and invocation are obtainable prerequisites, not a permanent BLOCKED condition."
+    },
+    {
+      "sequence": 28,
+      "code": "Wistron-HW-00161-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 157, "physical_xlsx_row": 158},
+      "test_name": "Security mode",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Security mode",
+        "procedure_summary": "Assert TPM physical presence, enter BIOS F1 Security settings, enable secure boot and TPM, change Secure Boot mode, save/reboot, and verify the security mode changed.",
+        "criteria": "Security mode can be changed successfully.",
+        "attended_time": "5",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "mokutil + tpm2-tools (for read-only state check)",
+        "command_summary": "Read mokutil secure-boot state and TPM sysfs presence over SSH; an operator asserts TPM physical presence, navigates BIOS F1, changes the mode, and reboots.",
+        "risk": "Secure Boot mode change requires TPM physical presence and BIOS setup access; do not auto-run."
+      },
+      "purpose": "Change the approved Secure Boot/security mode with the required TPM state and verify the new mode after reboot using OS-visible secure-boot and TPM evidence.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "IMPROVED",
+      "execution_boundary": "The TPM physical-presence action, BIOS navigation, mode transition, and reboot are manual/operator-controlled. The agent can perform read-only pre/post checks with mokutil and TPM sysfs evidence and collect BMC/SEL/OS recovery evidence.",
+      "required_inputs": ["Exact source and destination Secure Boot/security modes", "Approved BIOS menu path and TPM physical-presence procedure", "mokutil/tpm2-tools versions and expected state output", "Dedicated SUT, reboot approval, and recovery path if boot policy prevents startup", "Defined post-change evidence and log-preservation procedure"],
+      "evidence_and_risk": "Changing Secure Boot or TPM policy can prevent the installed OS from booting and can affect measured boot or key use. Capture pre/post mokutil state, TPM presence, BIOS/operator evidence, POST/OS boot result, BMC/SEL and relevant host logs. Do not clear existing logs; do not infer a mode transition from a single command without the target-mode record.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the exact source and destination modes, whether Secure Boot Standard Mode is required, and the approved recovery path before the operator changes the BIOS setting."],
+      "independent_conclusion": "The DeepSeek partial/hybrid conclusion is directionally correct. Improve it with explicit source/destination modes, BIOS/TPM prerequisites, recovery ownership, and pre/post state evidence. The operator step and parameters are execution prerequisites, not an irreducible BLOCKED condition."
+    },
+    {
+      "sequence": 29,
+      "code": "Wistron-HW-00162-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 158, "physical_xlsx_row": 159},
+      "test_name": "Install OS",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Install OS",
+        "procedure_summary": "Assert TPM physical presence, enable Secure Boot and TPM in BIOS, install Windows Server 2012/R2 with RAID support, install the required drivers, run confirm-SecureBootUEFI, perform UEFI/BMC checks, inspect UEFI/BMC logs, reboot, and verify normal boot.",
+        "criteria": "The SUT installs the OS, DD/FW successfully with Secure Boot enabled; CSM is disabled, Secure Boot is Standard Mode, and the SUT reboots into the OS without warning/error.",
+        "attended_time": "60",
+        "machine_time": "10"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "Windows Server ISO + install media; mokutil (for pre-check)",
+        "command_summary": "Pre-check Secure Boot/Setup Mode over SSH; an operator performs BIOS/TPM setup, selects the installation target, loads the RAID driver, installs Windows and drivers, and collects confirm-SecureBootUEFI and post-reboot evidence.",
+        "risk": "OS installation can wipe the boot disk; use an approved ISO and a user-designated backup/recovery plan."
+      },
+      "purpose": "Install the approved Windows Server image on a dedicated SUT with TPM and Secure Boot configured, install the approved platform/RAID drivers, verify Secure Boot and UEFI/BMC health, and confirm recovery after reboot.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "IMPROVED",
+      "execution_boundary": "BIOS setup, physical TPM presence, installation-media interaction, RAID-driver loading, target selection, and driver installation are operator-controlled or require an approved Windows automation channel. Pre-install state checks and post-install/reboot/UEFI/BMC/SEL evidence can be collected automatically once the user supplies the exact target and image.",
+      "required_inputs": ["Approved Windows Server image/version and installation media", "Exact dedicated installation disk/RAID virtual disk identity with backup and recovery plan", "CSM-disabled/Secure Boot Standard/TPM BIOS configuration and recovery path", "Approved RAID, chipset, NIC, VGA, storage, and PCIe driver/firmware set", "Exact UEFI/BMC checks and warning/error acceptance criteria", "Maintenance-window and reboot approval"],
+      "evidence_and_risk": "OS installation is destructive to the selected boot target and can change boot policy, storage layout, drivers, and BMC/UEFI behavior. Never infer or choose the target disk. Preserve pre-install storage/boot/BMC evidence; capture installer result, driver status, confirm-SecureBootUEFI output, UEFI/BMC/SEL logs, reboot/POST, and normal OS recovery. The source instruction to clear logs must be replaced by evidence preservation and timestamped collection.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the dedicated installation target, exact Windows image, the meaning of 'DD and FW', approved driver/firmware versions, and the required UEFI/BMC post-checks before execution."],
+      "independent_conclusion": "The DeepSeek partial/hybrid conclusion is directionally correct. Improve it with destructive-target identity, exact image/driver inputs, Secure Boot/TPM recovery, and explicit post-install evidence. The OS-install and BIOS steps require confirmation but are not a permanent BLOCKED condition because the purpose and hybrid verification path are identifiable."
+    },
+    {
+      "sequence": 30,
+      "code": "Wistron-HW-00168-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 160, "physical_xlsx_row": 161},
+      "test_name": "ME",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "ME",
+        "procedure_summary": "Power on the server and visually check whether the motherboard ME LED works normally; collect photos and unexpected logs.",
+        "criteria": "The LED working mode matches the product specification.",
+        "attended_time": "5",
+        "machine_time": "10"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physical/visual observation and photograph of the onboard ME/BMC-related LED; SSH cannot verify the LED state.",
+        "risk": "Physical visual inspection; human presence at the machine is required."
+      },
+      "purpose": "Visually verify the specified motherboard ME LED state while the server is powered on.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "second_review_outcome": "CHANGED",
+      "execution_boundary": "A qualified operator must identify the correct ME LED, establish the specified power state, observe its color/blink pattern, and capture the physical evidence. There is no reliable automated substitute for the acceptance criterion; host/BMC logs must not be treated as proof of LED state.",
+      "required_inputs": ["Exact board/LED location and label", "Product specification defining the allowed color and blink pattern", "Required power/boot state", "Operator physical access and timestamped photo/video method"],
+      "evidence_and_risk": "Capture a timestamped photo or video showing the LED and the DUT identity, plus the operator's observed color/blink state and power/boot condition. Preserve existing logs rather than clearing them; logs may be supplemental only. Do not infer the physical LED result from BMC heartbeat or host connectivity.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Provide the exact ME LED specification and observation state so the operator can distinguish a pass from an unrecognized color or blink pattern."],
+      "independent_conclusion": "The DeepSeek physical-only conclusion is correct, but the second-review taxonomy maps it to MANUAL ONLY rather than leaving it as an unqualified NO/BLOCKED label. The missing LED specification is an execution input to confirm, not a reason to claim remote automation or a permanent semantic blocker."
+    },
+    {
+      "sequence": 31,
+      "code": "Wistron-HW-00169-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 161, "physical_xlsx_row": 162},
+      "test_name": "FPGA",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "FPGA",
+        "procedure_summary": "Power on the server and visually check whether the FPGA LED works normally; the procedure says to check the LPGA LED and collect photos/logs.",
+        "criteria": "The LED working mode matches the product specification.",
+        "attended_time": "5",
+        "machine_time": "10"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none",
+        "command_summary": "Physical/visual observation and photograph of the onboard FPGA-related LED; SSH cannot verify the LED state.",
+        "risk": "Physical visual inspection; human presence at the machine is required."
+      },
+      "purpose": "Visually verify the specified FPGA LED state while the server is powered on.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "second_review_outcome": "CHANGED",
+      "execution_boundary": "A qualified operator must identify the FPGA LED, confirm whether the source's LPGA wording is a typo or a distinct LED, establish the required power/boot state, observe the color/blink pattern, and capture physical evidence. No reliable automated substitute exists for the LED criterion.",
+      "required_inputs": ["Exact board/LED label and confirmation of the FPGA versus LPGA wording", "Product specification defining the allowed color and blink pattern", "Required power/boot state", "Operator physical access and timestamped photo/video method"],
+      "evidence_and_risk": "Capture a timestamped photo or video showing the identified FPGA LED and DUT identity, plus the observed state and power/boot condition. Preserve existing logs instead of clearing them; logs are supplemental and cannot prove the physical LED result. Do not assume the LED label from the testcase typo.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm whether 'LPGA LED' is a typo for the FPGA LED and provide the exact FPGA LED state specification before execution."],
+      "independent_conclusion": "The DeepSeek physical-only conclusion is correct, but the second-review taxonomy maps it to MANUAL ONLY rather than an unqualified NO/BLOCKED label. The LPGA/FPGA naming issue and missing LED specification require confirmation, but they do not create an automatable or permanent semantic blocker."
+    },
+    {
+      "sequence": 32,
+      "code": "Wistron-HW-00172-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 164, "physical_xlsx_row": 165},
+      "test_name": "Error",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Error",
+        "procedure_summary": "Trigger a system-level fault such as a fan or power fault and verify that the front error button/indicator lights; collect photos and logs.",
+        "criteria": "The error button should light.",
+        "attended_time": "10",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "none (physical - human)",
+        "command_summary": "An operator induces or observes the fan/power fault and visually observes or presses the front error/status indicator; the agent cannot see the panel over SSH.",
+        "risk": "Fault injection and front-panel visual inspection require human control and safe recovery."
+      },
+      "purpose": "Verify that the specified front error button/indicator lights when an approved system-level fault is induced.",
+      "automation_classification_after_rereview": "MANUAL ONLY",
+      "second_review_outcome": "CHANGED",
+      "execution_boundary": "An operator must select and safely induce the approved fan or power fault, observe the front-panel indicator, and capture the physical result. The agent may collect supporting BMC/SEL/host evidence afterward, but those logs cannot substitute for the visual acceptance criterion.",
+      "required_inputs": ["Exact front-panel button/indicator identity and expected state", "Approved fault stimulus and injection method", "Abort threshold, redundancy/power constraints, and recovery procedure", "Operator physical access and timestamped photo/video method", "Post-fault BMC/SEL/host evidence plan"],
+      "evidence_and_risk": "Fan or power fault injection can interrupt service, overheat hardware, or leave the platform in a degraded state. Capture the fault stimulus, LED/button photo or video, timestamps, BMC/SEL/host evidence, and restored normal state. Do not clear existing logs, and do not induce a generic fault without an approved recovery method.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the exact fault type, safe injection method, expected indicator behavior, and recovery sequence before execution."],
+      "independent_conclusion": "The DeepSeek correctly recognized the physical visual boundary, but the second-review taxonomy maps the case to MANUAL ONLY. The generic fan/power fault wording needs an approved stimulus and recovery input; it is not by itself a permanent BLOCKED condition because the test purpose is identifiable."
+    },
+    {
+      "sequence": 33,
+      "code": "Wistron-HW-00174-V003",
+      "source_ref": {"sheet": "Functionality", "source_row": 166, "physical_xlsx_row": 167},
+      "test_name": "System warm reboot test",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "System warm reboot test",
+        "procedure_summary": "Disable NTP, align SUT time with a standard, perform 1000 warm reboots, and check the final time accuracy.",
+        "criteria": "NTP is disabled, SUT time is adjusted, and final time accuracy is within 5 seconds.",
+        "attended_time": "15",
+        "machine_time": "0"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "PARTIAL",
+        "ai_packages_needed": "coreutils",
+        "command_summary": "Trigger one warm reboot over SSH and collect post-boot uptime; the reference does not implement the source's 1000-reboot loop or final time-accuracy measurement.",
+        "risk": "Disabling NTP and repeated reboots are state-changing and can interrupt the SUT or management connection."
+      },
+      "purpose": "Run the approved 1000-cycle warm-reboot test with NTP disabled and measure final clock accuracy against a defined standard while confirming recovery after every cycle.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "IMPROVED",
+      "execution_boundary": "The agent can automate the approved reboot loop and read-only time/recovery evidence after explicit approval, but it must not start until the SUT is dedicated, NTP restoration and reboot timeout/recovery are defined, and the reference time source is confirmed.",
+      "required_inputs": ["Dedicated SUT and approval for 1000 reboots", "Exact standard time source and clock-difference measurement method", "NTP disable/restore commands and service ownership", "Reboot timeout, reconnect, failure-abort, and OOB recovery policy", "Required sample/evidence format for every cycle or aggregated result"],
+      "evidence_and_risk": "Disabling NTP and performing 1000 reboots can disrupt workloads and leave time synchronization disabled. Capture pre/post NTP state, initial and final reference/SUT times, reboot count, each timeout/failure, boot/uptime evidence, and restored NTP state. The DeepSeek one-reboot command does not satisfy the source's 1000-cycle or 5-second accuracy criteria.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Confirm the standard time source, whether the 5-second tolerance is measured immediately after the 1000th reboot or after a defined dwell, and the required NTP restoration procedure."],
+      "independent_conclusion": "Keep the hybrid partial conclusion but improve it materially: the source requires 1000 reboots and a clock-accuracy measurement, while DeepSeek only supplied one reboot and uptime. With the exact time/recovery parameters and approval, the activity is executable; the mismatch is not a permanent BLOCKED condition."
+    },
+    {
+      "sequence": 34,
+      "code": "Wistron-HW-00208-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 198, "physical_xlsx_row": 199},
+      "test_name": "Bios update",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "Bios update",
+        "procedure_summary": "Connect the serial port to a client, use a command to update BIOS to the newest version, restart the SUT, and check the BIOS version.",
+        "criteria": "BIOS updates successfully.",
+        "attended_time": "10",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "BIOS image + serial cable/client (operator); biosupdate tool",
+        "command_summary": "An operator physically connects the serial client and runs the BIOS update; the reference does not provide an executable flash command or automated post-flash readback.",
+        "risk": "BIOS firmware reflash can brick the platform; use an approved image and do not auto-run."
+      },
+      "purpose": "Flash the approved BIOS image through the designated serial update path and verify the target BIOS version and platform recovery after restart.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "execution_boundary": "Serial cable/client setup and any vendor-console interaction require an operator. Once the exact target, vendor tool/flash command, image, and recovery plan are supplied, the agent can perform read-only pre/post identity and version checks where the platform exposes them.",
+      "required_inputs": ["Exact motherboard/SUT identity and current BIOS version", "Approved target BIOS version, image hash/signature, compatibility and downgrade/upgrade intent", "Vendor biosupdate tool, serial settings, exact flash command and confirmation prompts", "Stable power/maintenance window and backup/recovery/reflash path", "Post-restart BIOS version and hardware-health evidence method"],
+      "evidence_and_risk": "A BIOS flash can render the SUT unbootable and can change firmware settings. Preserve current version, hardware identity, settings, BMC/SEL and boot evidence; capture the complete flash transcript, target image identity, post-restart BIOS version, POST/OS/BMC health, and recovery readiness. Do not clear logs to create a baseline. Never replace the missing vendor flash command with a guessed generic command.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Provide the exact BIOS image/tool/flash command, serial parameters, target board identity, and recovery procedure before execution."],
+      "independent_conclusion": "Change the historical NO/BLOCKED interpretation to REQUIRES PACKAGE / USER CONFIRMATION. The serial connection is a manual prerequisite and the post-flash verification can be automated or operator-supplied; the missing firmware package and command are vendor inputs, not a permanent BLOCKED condition."
+    },
+    {
+      "sequence": 35,
+      "code": "Wistron-HW-00209-V002",
+      "source_ref": {"sheet": "Functionality", "source_row": 199, "physical_xlsx_row": 200},
+      "test_name": "BMC update",
+      "historical_classification": "BLOCKED",
+      "source_reread": {
+        "items": "BMC update",
+        "procedure_summary": "Connect the serial port to a client, use a command to update BMC to the newest version, restart the SUT, and check the version; the source specifically says to check the BIOS version after a BMC update.",
+        "criteria": "BMC updates successfully.",
+        "attended_time": "10",
+        "machine_time": "5"
+      },
+      "deepseek_reference_reread": {
+        "ai_can_execute": "NO",
+        "ai_packages_needed": "BMC image + serial cable/client (operator); bmcupdate tool",
+        "command_summary": "An operator physically connects the serial client and runs the BMC update; the reference does not provide an executable flash command or automated post-flash readback.",
+        "risk": "BMC firmware reflash can interrupt management access or leave the platform unrecoverable; use an approved image and do not auto-run."
+      },
+      "purpose": "Flash the approved BMC firmware through the designated serial update path and verify the target BMC version, BMC availability, and platform recovery after restart.",
+      "automation_classification_after_rereview": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "second_review_outcome": "CHANGED",
+      "execution_boundary": "Serial cable/client setup and any vendor-console interaction require an operator. Once the exact BMC target, vendor tool/flash command, image, and recovery plan are supplied, the agent can perform read-only BMC version, connectivity, SEL, and host-health checks. The post-update check must verify BMC firmware, not BIOS firmware.",
+      "required_inputs": ["Exact BMC/controller and board identity with current version", "Approved target BMC image, hash/signature, compatibility and upgrade/downgrade intent", "Vendor bmcupdate tool, serial settings, exact flash command and confirmation prompts", "Stable power/maintenance window and BMC recovery/reflash path", "Post-update BMC version, connectivity, SEL, and host-health evidence method"],
+      "evidence_and_risk": "A BMC flash can interrupt OOB management, reset sensors, affect host service, or require recovery programming. Preserve current BMC/BIOS/SEL and connectivity evidence; capture the complete flash transcript, target image identity, post-update BMC version, reconnect result, SEL/health state, and host recovery. Do not clear logs and do not substitute the source's BIOS-version check for BMC-version evidence.",
+      "actual_blocked_conditions": [],
+      "discussion_needed": ["Provide the exact BMC image/tool/flash command, serial parameters, target controller identity, expected BMC downtime, and recovery procedure before execution."],
+      "independent_conclusion": "Change the historical NO/BLOCKED interpretation to REQUIRES PACKAGE / USER CONFIRMATION. The serial connection is a manual prerequisite, while BMC post-flash verification is automatable or operator-supplied. The source's BIOS-version readback is a concrete mismatch that must be corrected; missing vendor artifacts remain prerequisites, not a permanent BLOCKED condition."
+    }
+  ]
+}

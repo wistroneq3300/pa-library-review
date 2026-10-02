@@ -57,6 +57,68 @@ numbering you mean in every handoff. See `references/sheets_layout.md`.
 
 Full locked table + 3 boundary rulings + archetypes: `references/verdict_rules.md`.
 
+## Required GPT second-review outcome field
+
+Every new GPT second-review overlay record must include the fixed enum field
+`second_review_outcome`:
+
+- `AGREE`: accept the DeepSeek conclusion as-is; optional explanation does not
+  materially alter the decision.
+- `IMPROVED`: keep the same conclusion/classification, but add material
+  procedure, evidence, safety, recovery, thermal, blackbox, interface, or
+  fault-stimulus detail.
+- `CHANGED`: change the automation classification or another material
+  execution conclusion after the independent source-row review.
+- `BLOCKED`: the second review concludes that safe execution is still
+  impossible because an irreducible semantic, identity, criteria, or recovery
+  blocker remains. A missing package or operator input alone is not enough.
+- `UNRESOLVED`: the available material is insufficient to decide whether the
+  DeepSeek result should be accepted, improved, or changed, without enough
+  evidence to claim a safety blocker.
+
+This field records the relationship between DeepSeek and GPT's second review;
+it is separate from `automation_classification`, which records execution
+feasibility. Keep both fields and choose them independently. Apply this field
+to new records from the next testcase onward; do not rewrite completed
+historical records only to backfill it.
+
+## GPT second-review classification boundary
+
+When producing the separate GPT review overlay, distinguish prerequisites and
+execution boundaries from true `BLOCKED` conditions:
+
+- Missing a vendor PMBus Application Note/Firmware Spec, vendor tool, decoder,
+  firmware image, flash command, package, license, or operator parameter is
+  normally `REQUIRES PACKAGE / USER CONFIRMATION` if the testcase purpose and
+  operation are identifiable. Do not mark it `BLOCKED` only because the
+  artifact has not yet been supplied.
+- A physical cable action, BIOS interaction, OS installation, or manual visual
+  check is not automatically `BLOCKED`. Use `MANUAL ONLY` when no reasonable
+  automated portion exists. Use `REQUIRES PACKAGE / USER CONFIRMATION` when
+  manual setup is followed by an automatable readback or verification.
+- Firmware, BIOS, OS-installation, reboot, reset, and power-cycle risks require
+  exact target confirmation and recovery planning, but are not automatically
+  `BLOCKED`.
+- Use `BLOCKED` only when purpose, target, operation semantics, acceptance
+  criteria, or recovery remain unsafe or indeterminate after the expected
+  vendor artifact or user input has been identified as a prerequisite.
+
+Apply this boundary independently to every row. Never copy the classification
+or reasoning from a neighboring case.
+
+## GPT second-review run quota and continuation
+
+- A manually requested GPT review run defaults to at least 200 sequentially
+  unreviewed testcases unless the user explicitly sets another quota.
+- The daily automation quota is 50 testcases per day. It must continue until
+  50 cases are independently reviewed, the source is exhausted, or a genuine
+  review-time user decision or hard safety blocker occurs.
+- `REQUIRES PACKAGE / USER CONFIRMATION` and `MANUAL ONLY` are classifications,
+  not automatic reasons to stop reviewing. Record the missing execution input
+  or manual boundary and continue to the next source row.
+- Never silently stop after one case. If a run stops early, persist the exact
+  reason and the next source key in the handoff and progress checkpoint.
+
 ## Command-quality rules (the real defects to catch)
 
 Executed on the **agent host**; DUT-side tools go through
