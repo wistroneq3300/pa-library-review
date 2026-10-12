@@ -380,3 +380,25 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   `PLATFORM_HANDOFF_DEFECT`; inventing either would be a
   `MODEL_PLANNING_ERROR`. This is not independent-model validation and is not
   DUT hardware validation.
+
+## ECC leaky-bucket hybrid RAS validation: sequence 93
+
+Status: `PASSED AFTER ONE DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|3|Wistron-System RAS-00377-V003`.
+- The first pass found a genuine contract defect: a one-reset scope conflicted
+  with an optional threshold restoration that may require another BIOS
+  save/reset.
+- The contract was corrected to allow one test-setting save/reset and, only
+  after stimulus evidence is preserved, one separately approved restoration
+  save/reset when required by the signed final-state policy.
+- Revalidation recovered the exact threshold/register, physical/logical
+  DIMM_B, bounded event count/spacing/decay/timeout, system plus BMC SEL
+  evidence, manual BIOS boundary, automated correlation and final health.
+- Failure attribution after correction: absent recipe, map, register semantics,
+  injection capability, timing and approvals are `PLATFORM_HANDOFF_DEFECT`;
+  guessing values, wrong-DIMM injection, premature restoration, extra reset or
+  partial PASS would be `MODEL_PLANNING_ERROR`. No material document defect
+  remains. This is not independent-model validation and is not DUT hardware
+  validation.
