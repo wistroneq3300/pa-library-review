@@ -615,3 +615,25 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   `PLATFORM_HANDOFF_DEFECT`; selecting a mechanism, target or command by analogy
   would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This
   is not independent-model validation and is not DUT hardware validation.
+
+## NVIDIA CPU memory UCE non-fatal definition gate: sequence 104
+
+Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|103|Wistron-System RAS-00823-V003`.
+- It preserved host-memory UCE non-fatal intent while refusing to assume a
+  removable DIMM/channel topology, Grace, BlueField, generic EINJ or any target
+  address before an exact product and memory architecture are signed.
+- It identified protected address ownership, the trigger/consumer, required
+  targets/iterations and the prescribed page/process/service containment as
+  necessary inputs, and did not treat inventory or a generic event as execution.
+- It confirmed BLOCKED is correct while Procedure and Criteria remain TBD and
+  that a completed replacement contract still requires fresh review rather than
+  completing or passing the testcase.
+- Failure attribution: literal TBD fields are `DOCUMENT_DEFECT`; missing
+  topology, tool, address ownership, consumer, coverage, event and recovery are
+  `PLATFORM_HANDOFF_DEFECT`; inferred DIMMs/addresses, copied recipes, generic
+  injection or partial-evidence PASS would be `MODEL_PLANNING_ERROR`. No
+  proposed-contract defect was found. This is not independent-model validation
+  and is not DUT hardware validation.
