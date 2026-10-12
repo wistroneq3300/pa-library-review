@@ -193,3 +193,21 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   `PLATFORM_HANDOFF_DEFECT`, not a testcase-document defect. Ignoring the
   explicit gates would be a model-planning error; no such execution occurred.
   This is not independent-model validation and is not DUT hardware validation.
+
+## BLOCKED/manual-boundary validation: sequence 80
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|1827|Wistron-HW-00449-V002`.
+- It recovered that `FIO_BD` plus TBD procedure/criteria does not define a
+  physical continuity test, an I2C scan or any other executable operation.
+- It allowed only non-invasive identity and documentation intake and explicitly
+  rejected I2C enumeration/probing/register reads, continuity measurement,
+  connector/cable manipulation, power changes and an assumed execution side.
+- It defined current completion as a traceable BLOCKED handoff, not testcase
+  PASS/FAIL, and reserved operation type and manual-versus-machine boundary to
+  the owner after a complete platform-specific definition is supplied.
+- Failure attribution: `DOCUMENT_DEFECT` and `PLATFORM_HANDOFF_DEFECT`; no
+  model-planning error occurred. This is not independent-model validation and
+  is not DUT hardware validation.
