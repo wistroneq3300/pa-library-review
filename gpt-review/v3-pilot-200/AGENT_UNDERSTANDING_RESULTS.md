@@ -510,3 +510,23 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   reboot as proof of a wrong target would be `MODEL_PLANNING_ERROR`. No proposed
   contract defect was found. This is not independent-model validation and is
   not DUT hardware validation.
+
+## AMD PCIe correctable LCRC slot/locus validation: sequence 99
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|55|Wistron-System RAS-00775-V003`.
+- It recovered every owner-required slot/locus entry and kept endpoint and
+  upstream-root-port BDFs distinct; a row requiring both could not be satisfied
+  by one locus or one representative slot.
+- It required fresh enumeration, verified `errortype 0` correctable-LCRC
+  semantics, target-correlated Linux AER/counter evidence and preserved
+  link/device/platform health with no unexpected SyncFlood or reset.
+- It rejected copied/stale BDFs, arithmetic topology inference, tool-only PASS,
+  automatic looping/retry and the 30/60-minute estimates as timeout values.
+- Failure attribution: absent matrix, OS/kernel, package, BIOS/HDT, evidence,
+  timeout and recovery data are `PLATFORM_HANDOFF_DEFECT`; guessing loci/BDFs,
+  reducing coverage or accepting reset/degradation would be
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
+  independent-model validation and is not DUT hardware validation.

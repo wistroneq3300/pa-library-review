@@ -1,0 +1,81 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 99,
+  "calibration": false,
+  "source_key": "Reliability|55|Wistron-System RAS-00775-V003",
+  "case_variant_id": "9536aa72b9d20107",
+  "source_ref": {"sheet": "Reliability", "source_row": 55, "code": "Wistron-System RAS-00775-V003"},
+  "source_integrity": {"original_row_sha256": "f2c564749cfa5d0313e7557d00c1a5bd4fb3c6a9d76e11f57efe05357e31fd5d", "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"},
+  "source_snapshot": {
+    "test_name": "PCIe slot 1~N",
+    "test_set": "AMD CPU RAS -Correctable Error",
+    "purpose_facts": "Use the AMD RAS tool under Linux to enumerate PCIe slot BDFs, inject `errortype 0` correctable LCRC at an end device and a root port, and verify tool PASS plus an OS report within timeout.",
+    "procedure_facts": ["Verify the recipe and establish a log boundary.", "Apply six NBIO/AMD PBS/FCH settings, including AER and SyncFlood controls.", "Unlock via HDT and boot Ubuntu 20.04 or the ambiguous `RHEL 2022` label.", "Run `--listpcieslotsbdfinfo`.", "Run one fixed example end-device BDF and one fixed example root-port BDF with `--einjbiopcie ... --errortype 0`."],
+    "criteria_facts": ["The correctable injection tool reports PASS.", "The OS reports the error within a defined timeout.", "dmesg and the injection report match the AMD RAS specification.", "The note says EINJ correctable injection is completed by an LCRC at the root port or end device."],
+    "attended_time_minutes": "30",
+    "machine_time_minutes": "60",
+    "source_conflicts": ["The procedure supplies both end-device and root-port injections, while the acceptance note says root port or end device; required loci per slot are not defined.", "The source labels one supported environment `RHEL 2022`, which is not a precise RHEL release identifier."],
+    "missing_source_information": ["N and the complete physical-slot/end-device/upstream-root-port BDF matrix.", "Whether each slot requires endpoint, root port or both injection loci.", "Exact supported RHEL release/kernel if RHEL is selected.", "Tool build, timeout, expected AER fields/counters and restoration policy.", "Whether the private script link is the authoritative implementation and its immutable revision/hash."]
+  },
+  "original_test_intent": {
+    "statement": "Validate AMD PCIe correctable LCRC handling for every required PCIe slot using approved BDF targets, with successful tool completion, timely Linux AER reporting and unchanged device/link/platform health.",
+    "must_preserve": ["AMD correctable PCIe error, `errortype 0` and LCRC behavior.", "PCIe slots 1~N, not one example slot.", "Enumeration before target selection.", "The source's endpoint and root-port operations without assuming whether both are mandatory until resolved.", "Tool PASS and OS report within timeout as independent gates.", "30/60 minutes as planning estimates."],
+    "must_not_infer": ["That segment 0 buses 65/64 and device/function values apply beyond the source example platform.", "That root-port and endpoint BDFs can be derived by subtracting one bus number.", "That both or only one locus is required without owner clarification.", "That a correctable result permits SyncFlood, reset or link degradation."]
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "second_review_outcome": "CHANGED",
+    "risk_level": "HIGH",
+    "summary": "V2 correctly keeps a gated hybrid, treats the shown BDFs as requiring enumeration/validation, distinguishes endpoint and root port, and requires recovery.",
+    "specific_gap": "V2 unconditionally requires both loci without exposing the procedure-versus-note conflict, does not make per-slot 1~N iteration explicit, and does not resolve the ambiguous RHEL release or authoritative private script revision."
+  },
+  "applicable_history": {
+    "locked_user_decisions": [],
+    "related_records": ["Same-title Intel and AMD non-fatal/fatal/LCRC/ECRC/ACS/poisoned-TLP cases are separate variants."],
+    "precedence_application": "Only Reliability row 55 controls this AMD correctable `errortype 0` case; adjacent recipes cannot resolve its target-locus ambiguity."
+  },
+  "v3_review_conclusion": {
+    "review_outcome": "SOURCE_CONFLICT",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": ["SOURCE_CONFLICT", "NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_APPROVAL"],
+    "summary": "Keep the gated hybrid capability, but require a signed per-slot matrix that explicitly selects endpoint, root port or both loci, validates every BDF after enumeration, identifies the exact Linux release and defines correctable AER evidence and recovery before injection."
+  },
+  "execution_readiness_detail": {
+    "conditions_present": ["The correctable LCRC intent, enumeration command, injection API shape, Linux evidence family and high-level PASS/timeout criteria are known."],
+    "missing": ["Complete slot/path matrix; locus policy; exact OS/kernel; tool/script version/hash; expected AER record/counters and timeout; device traffic/health, approval and restoration rules."],
+    "provider": ["Test owner resolves both-versus-either locus and exact OS release.", "Platform owner supplies physical slot/device/root-port mapping and acceptable device workload.", "AMD/ODM FAE supplies the signed tool, correctable LCRC evidence and recovery recipe."],
+    "safe_read_only_work": ["Inventory each slot/device/serial/BDF/link/driver and upstream bridge ancestry.", "Run approved non-mutating BDF enumeration and reconcile it with physical labels.", "Export dmesg/journal, AER counters, rasdaemon/BMC/firmware baselines and read current BIOS values without clearing or changing them."],
+    "prohibited_until_resolved": ["BIOS changes, HDT unlock, log clear, endpoint/root-port injection, device reset, link manipulation, retry or restoration."],
+    "closure_evidence": ["Signed matrix states required locus or loci for every slot and reconciles fresh enumeration.", "Exact OS/kernel and tool/script revision/hash are approved.", "Expected correctable LCRC record/counter, timeout, health gate, authorization and final-state plan are signed."]
+  },
+  "revision_candidate": {
+    "test_name": "AMD PCIe Correctable LCRC Injection Across Slots 1~N",
+    "purpose": "For every required PCIe slot, inject the approved correctable LCRC at each owner-required endpoint and/or root-port locus and verify correct target attribution, tool PASS, timely Linux AER evidence and preserved device/link/platform health.",
+    "applicable_platform_environment": "Only the AMD server, BIOS/BMC/firmware, exact Ubuntu 20.04 or owner-specified RHEL release/kernel, PCIe devices/drivers, HDT method and AMD RAS tool/script revision covered by the signed recipe.",
+    "target_scope": "Every populated and explicitly required PCIe slot 1~N in the signed matrix. Each row binds physical label, endpoint identity/serial/BDF and upstream root-port BDF and states endpoint, root port or both as required loci. Test each locus separately. Exclude OCP-only, Intel, non-fatal, fatal, ECRC, ACS and poisoned-TLP variants. Treat 30/60 minutes as estimates.",
+    "required_inputs": "N and signed slot/path/locus matrix; fresh `--listpcieslotsbdfinfo`; device idle/test-traffic policy; exact tool and private-script revision/hash; `errortype 0`/LCRC semantics; six BIOS values and restore plan; exact Linux/kernel; expected dmesg/journal/AER/rasdaemon fields and counter deltas; timeout; go/no-go, approval and recovery.",
+    "test_command_procedure_intent": "Preserve and hash Linux, AER, BMC and firmware baselines before any approved clear or establish a timestamp marker. A qualified operator applies the six approved BIOS settings and HDT unlock. Boot the signed Linux build, enumerate all slot BDFs and reconcile each endpoint/upstream path. For each slot and each required locus, create a unique full log, verify identity/link/traffic, run one exact `--einjbiopcie --segment <s> --bus <b> --device <d> --function <f> --errortype 0`, collect tool and native AER evidence within timeout, and confirm link/device health before the next go/no-go. Restore BIOS/HDT/tool state after all approved loci.",
+    "preconditions": "Locus conflict and OS label resolved; exact slot/BDF matrix and package approved; dedicated non-production SUT; expected correctable/no-reset behavior defined; device workload quiesced or recipe-controlled; baselines, clocks/storage, console/OOB and recovery proven; every BIOS, HDT, clear, injection, recovery and restoration action approved.",
+    "expected_evidence": "Platform/OS/kernel/tool/script identity and hashes; signed slot/path/locus matrix; fresh enumeration; device/driver/link/function before and after; BIOS/HDT before/during/after; baseline/clear audit; exact per-locus command and full tool report with PASS; timestamped Linux AER/LCRC record and expected counter delta tied to the target BDF within timeout; rasdaemon/BMC/firmware evidence when required; anomalies, recovery and restored-final-state proof.",
+    "acceptance_reference": "The signed AMD/ODM correctable LCRC recipe plus owner-resolved per-slot locus matrix. Each required locus independently needs tool PASS, target-correlated Linux evidence within timeout and unchanged or recipe-defined healthy link/device/system state.",
+    "safety_restrictions": "High-risk PCIe injection on a dedicated SUT only. Do not copy example BDFs, infer topology arithmetically, select an unapproved locus, reuse another fault type, target production/boot/management-critical devices, expose secrets, truncate evidence, auto-loop, trigger or accept unexpected SyncFlood/reset, retry or continue after wrong target, link/device degradation, error storm or instability.",
+    "human_approval_requirements": "Test owner approves the locus policy and OS; platform owner approves every physical/path row and device impact; AMD/ODM FAE approves tool, LCRC behavior and target. Qualified operator applies BIOS/HDT and handles recovery. Each locus injection, next-target go/no-go and final restoration require signed authorization.",
+    "manual_boundaries": "Qualified staff own BIOS/HDT, physical slot confirmation and exceptional recovery. After exact handoff, an authorized Agent may perform fresh enumeration, execute each bounded approved tool command and correlate evidence; engineering decides anomaly and final PASS/FAIL status.",
+    "recovery_requirements": "On wrong BDF/locus, tool failure, absent/late AER record, unexpected uncorrectable/fatal severity, SyncFlood/reset, link/device loss or persistent counter/error state, stop the matrix, preserve evidence and use only the signed per-device/platform recovery. Restore BIOS/HDT/tool state and prove final link/device/system health before any separately approved rerun.",
+    "stop_conditions": "Unresolved locus/OS or mapping; enumeration mismatch; tool/script/BIOS/HDT mismatch; missing approval, baseline, timeout, health policy, recovery or evidence; wrong BDF/fault/severity; missing tool PASS or timely target-correlated AER record; unexpected reset/SyncFlood, link retrain/downshift/loss, device/function degradation, error storm or thermal/power instability; or failed recovery/restoration/final health."
+  },
+  "identified_defects": ["The procedure requires endpoint and root-port commands while the criteria say root port or endpoint; V2 silently chooses both.", "V2 does not explicitly repeat the selected locus/loci for every slot 1~N.", "The source BDFs are fixed examples, not a complete slot matrix.", "The RHEL release label is ambiguous and the private script revision was not available for audit.", "V2 does not explicitly make unexpected SyncFlood/reset a failure of this correctable case."],
+  "changed_fields": ["Review Outcome", "Execution Readiness", "Target Scope", "Required Inputs", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference", "Safety Restrictions", "Human Approval Requirements", "Manual Boundaries", "Recovery Requirements", "Stop Conditions"],
+  "reason_for_change": "Preserve full slot coverage without inventing endpoint/root-port scope, prevent example-BDF reuse and make correctable no-reset health behavior auditable.",
+  "new_technical_evidence": [
+    {"source_url": "https://docs.kernel.org/next/PCI/pcieaer-howto.html", "title": "Linux Kernel: PCI Express Advanced Error Reporting Driver Guide HOWTO", "version": "Linux kernel documentation retrieved 2026-10-13", "applicability": "The source selects Linux and requires dmesg/AER evidence", "supports": "PCIe correctable errors are hardware-corrected, logged by AER and do not require recovery action; uncorrectable errors have different non-fatal/fatal handling. Unexpected reset or link loss is therefore not normal evidence for this correctable case.", "remaining_uncertainty": "Exact LCRC record fields, counters and firmware-versus-OS AER ownership remain platform/kernel-specific."},
+    {"source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Reliability!row-55", "title": "Source testcase Wistron-System RAS-00775-V003", "version": "Baseline workbook SHA-256 e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "applicability": "Only the AMD PCIe correctable slot row", "supports": "The six BIOS settings, enumeration, endpoint/root-port commands, errortype 0, LCRC note and PASS/timeout gates.", "remaining_uncertainty": "Both-versus-either locus, N, full BDF map, RHEL release and timeout are unresolved."}
+  ],
+  "removed_ambiguities": ["Requires owner resolution of endpoint, root port or both per slot.", "Turns examples into a freshly enumerated signed slot/path matrix.", "Requires exact Linux/kernel and tool/script revision.", "Treats unexpected SyncFlood/reset or device/link degradation as a stop for the correctable case and excludes adjacent fault variants."],
+  "resolved_blockers": ["Package, mapping and approval dependencies remain provider-closable; capability stays REQUIRES rather than BLOCKED."],
+  "remaining_blockers": ["Execution awaits locus-policy resolution, complete slot/BDF matrix, exact OS/tool/script, expected AER/timeout, authorization and recovery."],
+  "objective_improvement_over_v2": "V3 exposes the endpoint-versus-root-port conflict, makes every slot/locus auditable, prevents copied BDF targeting and adds a source-specific correctable no-reset health gate.",
+  "agent_understanding_result": {"status": "PASSED", "validation_scope": "ISOLATED_SAME_MODEL_FAMILY", "independent_model_validation": false, "notes": "Contract-only validation recovered every signed slot/locus entry, exact endpoint and upstream BDF separation, verified errortype-0/LCRC semantics, Linux target-correlated AER/counter evidence and correctable no-reset health gates. It rejected example/stale BDFs, representative coverage, automatic looping and tool-only completion."},
+  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"},
+  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "Reliability row 55 enumerates AMD PCIe paths, uses errortype 0 LCRC at endpoint/root port and requires tool PASS plus timely Linux reporting.", "source_specific_v2_comparison": "V2 correctly validates BDFs and retains REQUIRES, but assumes both loci, underdefines 1~N iteration and does not gate unexpected reset.", "source_specific_safety_evidence_decision": "Allow read-only inventory/enumeration/baseline work; forbid BIOS/HDT/injection until per-slot loci, fresh BDFs and evidence/recovery rules are signed.", "template_violation_detected": false}
+}
