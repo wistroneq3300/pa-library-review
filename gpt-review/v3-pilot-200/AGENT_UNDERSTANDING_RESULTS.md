@@ -171,3 +171,25 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
 - No document, platform-handoff or model-planning failure was identified. The
   hybrid reclassification did not relax execution readiness or safety. This is
   not independent-model validation and is not DUT hardware validation.
+
+## High-risk/source-conflict validation: sequence 75
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|1677|Wistron-BMC-00949-V003`.
+- It recovered one approved three-byte tuple, one verified SUT/BMC pair and the
+  separate in-band and out-of-band command paths without interpreting the title
+  as proof of a BIOS setup or NVRAM operation.
+- It identified the OEM request/response definition, byte encoding, affected
+  state, first-send result, duplicate-send safety, readback and recovery as
+  missing platform handoff inputs. It performed no raw command and allowed only
+  identity, tool, interface, reachability, health and documentation checks.
+- It correctly required a known first-send result before the second path,
+  rejected shell exit status or unrelated LAN output as proof, and reserved
+  command semantics, idempotency, readback, restoration and final judgment to
+  the OEM/BIOS engineer.
+- Failure attribution: the unresolved vendor-specific inputs are a
+  `PLATFORM_HANDOFF_DEFECT`, not a testcase-document defect. Ignoring the
+  explicit gates would be a model-planning error; no such execution occurred.
+  This is not independent-model validation and is not DUT hardware validation.
