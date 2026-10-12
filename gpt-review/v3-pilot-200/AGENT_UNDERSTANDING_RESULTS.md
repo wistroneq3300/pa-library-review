@@ -467,3 +467,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   matrix, retrying automatically or declaring partial PASS would be
   `MODEL_PLANNING_ERROR`. No intrinsic proposed-contract defect was found.
   This is not independent-model validation and is not DUT hardware validation.
+
+## Intel OCP non-fatal UCE matrix validation: sequence 97
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|33|Wistron-System RAS-00753-V003`.
+- It recovered every signed OCP 1~N matrix row and required physical slot,
+  device/serial/BDF, root-port and ITP socket/port correlation rather than one
+  representative slot or numerical inference.
+- It did not infer non-fatal severity from `errType='uce'`; it required the
+  signed subtype/severity recipe and Windows WHEA/CPER evidence decoded as
+  recoverable/non-fatal for the exact target.
+- It preserved per-platform BMC/uEFI/LED expectations: conditional evidence
+  cannot be made universal or silently omitted, and API success alone cannot
+  prove target, severity, recovery or completion.
+- Failure attribution: absent matrices, recipe, BIOS values, expected records,
+  timing and recovery are `PLATFORM_HANDOFF_DEFECT`; guessed topology or
+  severity, automatic iteration/retry and partial PASS are
+  `MODEL_PLANNING_ERROR`. No material proposed-contract defect was found. This
+  is not independent-model validation and is not DUT hardware validation.
