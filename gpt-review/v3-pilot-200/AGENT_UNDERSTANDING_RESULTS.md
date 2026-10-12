@@ -530,3 +530,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   reducing coverage or accepting reset/degradation would be
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
   independent-model validation and is not DUT hardware validation.
+
+## AMD OCP ACS-fatal reset/BERT validation: sequence 100
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|66|Wistron-System RAS-00786-V002`.
+- It recovered every signed OCP matrix row, required powered-off manual phases
+  for NIC relocation and required revalidation of BDF and AMD target tuple
+  after each move rather than copying the source example.
+- It preserved the immediate warm reset, but required a fresh current-slot
+  BERT/CPER fatal record and healthy NIC/link/network/system recovery; reset or
+  a stale record alone could not complete a slot.
+- It required ACS capability at the recipe-defined locus, verified tool-build
+  `errortype 4` semantics, per-slot approvals and no production, boot-critical
+  or management-critical networking.
+- Failure attribution: missing matrices, ACS expectations, tool semantics,
+  BIOS/HDT values, timeout and recovery are `PLATFORM_HANDOFF_DEFECT`; inferred
+  tuples/ACS, stale BERT, reset-only PASS or automatic iteration/retry are
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
+  independent-model validation and is not DUT hardware validation.
