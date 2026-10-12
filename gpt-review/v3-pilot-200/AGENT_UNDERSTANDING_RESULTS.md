@@ -572,3 +572,26 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   mixed OS evidence, link expansion or automatic continuation/retry would be
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
   independent-model validation and is not DUT hardware validation.
+
+## AMD DDR5 PMIC SWB fatal matrix validation: sequence 102
+
+Status: `PASSED AFTER DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|89|Wistron-System RAS-00809-V002`.
+- It recovered the complete `2 × approved-DIMM-count` matrix, rejected reuse of
+  the source example tuple and required signed SWB, rail-type and voltage-type
+  semantics before any injection.
+- It preserved one approved native OS branch, independent approval and evidence
+  for every fatal-reset row, post-reset recipe-state revalidation and final
+  PMIC, memory and system health restoration.
+- The first pass found a document defect: the contract mentioned a BMC record
+  without defining whether it was mandatory, conditional or supporting-only.
+  Required Inputs, Expected Evidence, Acceptance and Stop Conditions were
+  corrected so the signed platform recipe controls that applicability and its
+  fields/timeout. Revalidation found no remaining document defect.
+- Failure attribution: missing matrix, semantics, BMC applicability, OS query,
+  timeout, health limits, approvals or recovery are `PLATFORM_HANDOFF_DEFECT`;
+  guessed targets, reduced coverage, automatic looping/retry, mixed OS evidence
+  or partial-evidence PASS would be `MODEL_PLANNING_ERROR`. This is not
+  independent-model validation and is not DUT hardware validation.
