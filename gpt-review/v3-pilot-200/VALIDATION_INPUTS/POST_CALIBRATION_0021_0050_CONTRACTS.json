@@ -1,0 +1,606 @@
+{
+  "schema_version": "agent-understanding-input-1.0",
+  "input_boundary": "revision_candidate only; reviewer findings and source snapshots excluded",
+  "cases": [
+    {
+      "sequence": 21,
+      "source_key": "Functionality|2|Wistron-HW-00001-V006",
+      "contract": {
+        "test_name": "System Component Seating Accuracy Inspection",
+        "purpose": "Verify that every component required by the approved SUT assembly recipe is physically seated and retained in its correct location, with traceable operator, photo and blackbox evidence.",
+        "applicable_platform_environment": "The exact server configuration identified by serial/asset identity and approved BOM/assembly recipe, in a controlled lab with qualified physical access, correct power isolation and ESD protection.",
+        "target_scope": "Every component on the owner-approved seating checklist for this SUT. OS/BMC enumeration may support identity and health checks but does not replace physical inspection.",
+        "required_inputs": "SUT identity, exact recipe/BOM and assembly drawing, complete component checklist and seating indicators, safe chassis-access/ESD procedure, operator authorization, required photo views, blackbox definition/expected state, evidence location and anomaly/recovery owner.",
+        "test_command_procedure_intent": "No remote test command performs the acceptance inspection. The qualified operator safely accesses the SUT, inspects each listed component and its connector/latch/retainer without forcing or unapproved reseating, records item-level observations and required photos, captures the defined blackbox status, restores the approved chassis/power state, and hands the evidence to the agent for packaging.",
+        "preconditions": "Target and recipe matched; SUT placed in the approved safe power state; ESD and access controls active; checklist/photo/blackbox requirements defined; evidence storage ready; operator and recovery owner present.",
+        "expected_evidence": "Signed item-level checklist; SUT/recipe/operator/timestamp identity; required photos mapped to each component; blackbox record and provenance; preserved before/after inventory and unexpected kernel/system/BMC evidence where applicable; chassis restoration and anomaly disposition.",
+        "acceptance_reference": "The mechanical/platform owner's approved BOM, assembly drawing, service procedure and component-specific seating/retention criteria for the exact SUT revision.",
+        "safety_restrictions": "Do not handle an energized chassis when the platform procedure requires isolation; do not force or silently reseat a component, clear logs, use unmatched photos, expose restricted internal images, or treat software visibility as proof of mechanical seating.",
+        "human_approval_requirements": "A qualified operator must be authorized to access and inspect the chassis. The hardware owner approves any reseat/removal/repair and makes the final seating disposition.",
+        "manual_boundaries": "The physical/visual/tactile inspection and photo capture are manual. The agent may prepare the checklist, preserve read-only evidence, verify file provenance and assemble the report, but must not claim first-hand inspection or final PASS.",
+        "recovery_requirements": "If damage, loose seating, obstruction or ambiguous retention is found, stop, preserve the as-found evidence, keep the affected hardware in the approved safe state, and follow only the component-specific owner-approved reseat/repair and post-restoration health procedure.",
+        "stop_conditions": "Wrong or unidentified SUT/recipe, incomplete checklist, unsafe power/ESD/access state, missing operator authorization, untraceable evidence, suspected damage, a component requiring force or unapproved reseating, undefined blackbox status, or inability to restore the chassis safely."
+      }
+    },
+    {
+      "sequence": 22,
+      "source_key": "Functionality|22|Wistron-HW-00021-V003",
+      "contract": {
+        "test_name": "Per-Slot Mechanical Cable Adapter Fit Check",
+        "purpose": "Verify that every approved cable adapter can be removed from and reinstalled into its designated SUT slot normally, with correct seating/retention and no binding or damage.",
+        "applicable_platform_environment": "The exact server and approved adapter population in a controlled lab with qualified physical access, platform-defined power/hot-plug state and ESD controls.",
+        "target_scope": "Every adapter/slot pair in the owner-approved slot map. Do not substitute another slot, adapter revision or generic connector, and do not expand the case into unspecified cable electrical performance.",
+        "required_inputs": "SUT identity; adapter part/serial list; slot map and orientation; removal/installation and retention procedure; acceptable-fit criteria; power/hot-plug and ESD rules; operator approval; photos/evidence plan; optional post-action detection; recovery owner.",
+        "test_command_procedure_intent": "No remote command performs the acceptance action. For each listed slot, the operator verifies identity and as-found state, follows the approved latch/tool sequence to remove and reinstall the adapter once, stops on abnormal resistance or damage, verifies seating/retention, photographs the result and reports completion before the agent collects any approved post-action device/log evidence.",
+        "preconditions": "Exact adapter-to-slot mapping confirmed; correct safe power/hot-plug state and ESD controls active; tools/latches and fit criteria known; evidence path ready; qualified operator and anomaly/recovery owner present.",
+        "expected_evidence": "Per-slot checklist with adapter and slot identities; before/after photos; operator record of removal/insertion fit, retention and physical condition; restored population; and defined post-action enumeration plus kernel/BMC/SEL deltas where required.",
+        "acceptance_reference": "The exact platform's cable-adapter BOM, slot map, assembly/service procedure and owner-approved mechanical fit/retention criteria.",
+        "safety_restrictions": "Never hot-remove unless explicitly supported, force a binding adapter, touch contacts unnecessarily, swap slots, continue after damage, clear logs, or claim mechanical acceptance from software enumeration.",
+        "human_approval_requirements": "A qualified operator performs every physical action. The hardware owner approves the target matrix, any hot-plug condition and every repair, reseat outside the planned cycle or final subjective fit disposition.",
+        "manual_boundaries": "Identification at the chassis, removal/reinstallation, tactile fit assessment and photography are manual. The agent may prepare the manifest and collect defined post-action evidence only after operator confirmation.",
+        "recovery_requirements": "On binding, bent contact, damaged guide, wrong-slot discovery or device loss, stop and preserve the as-found state/evidence; do not retry or force. Follow only the owner-approved inspection/repair and restore/health procedure.",
+        "stop_conditions": "Unidentified adapter or slot, missing procedure/fit criterion, unapproved power or hot-plug state, absent ESD/operator approval, abnormal resistance, physical damage, incorrect keying, device loss, new platform error, incomplete evidence or unavailable recovery owner."
+      }
+    },
+    {
+      "sequence": 23,
+      "source_key": "Functionality|31|Wistron-HW-00034-V004",
+      "contract": {
+        "test_name": "CRPS Latch-on-Fault Configuration Block Type Verification",
+        "purpose": "Decode the latch-on-fault block's `configBlockType` field and verify it equals the latch-on-fault type defined by the exact specification revision applicable to the target CRPS PSU.",
+        "applicable_platform_environment": "Owner-mapped CRPS PSU models and firmware/configuration revisions with a matching vendor decoder and approved read-only management interface. OCP M-CRPS v1.00 RC4 constants apply only after explicit applicability confirmation.",
+        "target_scope": "Each designated PSU's latch-on-fault configuration block and its block-type field only; no configuration write, other-block validation, fault injection, firmware update or generic PMBus scan.",
+        "required_inputs": "PSU identity list; authoritative spec title/version/table; configuration format/block location; field offset/width/endianness and expected type; vendor decoder build/hash/license; exact read-only command/target; credentials; approvals; abort and recovery procedure.",
+        "test_command_procedure_intent": "Verify PSU identity and the governing spec, preserve health/log baselines, run only the approved read-only decoder against the specified latch-on-fault block, capture raw bytes and decoded `configBlockType`, compare with the authoritative table, repeat the identical read once, then verify PSU/BMC reachability and evidence deltas. If OCP M-CRPS v1.00 RC4 is confirmed, check block offset `0002h` against Table 12-48 value `0008h`.",
+        "preconditions": "Exact PSU/spec mapping approved; target and interface verified; decoder integrity/license and read-only semantics confirmed; field encoding reviewed; credentials protected; evidence destination and recovery owner ready; existing logs preserved.",
+        "expected_evidence": "Target PSU identity and firmware/VPD/config revision; governing document/version/table; decoder version/hash and command; raw block bytes; field location/encoding; decoded and expected values; repeat-read comparison; exit status; and unchanged PSU/BMC/SEL health.",
+        "acceptance_reference": "The PSU owner's approved configuration-format specification. For a confirmed OCP M-CRPS v1.00 RC4 target: Section 12.8.3, Table 12-48 Configuration block types and Table 12-57 Power supply latch on fault condition configuration block.",
+        "safety_restrictions": "Never infer spec applicability, guess address/encoding, scan blindly, use write mode, modify/reflash/reset/power-cycle the PSU, clear logs or expose credentials. A raw value is not PASS until its target, field and table provenance are proven.",
+        "human_approval_requirements": "The PSU/platform owner approves the specification mapping and expected value; the BMC/lab owner approves the exact resolved read-only command before live access.",
+        "manual_boundaries": "Owners/vendor provide proprietary spec/tool applicability and adjudicate mismatches. After approval, decoding, comparison, repeat read and evidence collection can be automated.",
+        "recovery_requirements": "On tool error, unexpected traffic, interface degradation or PSU/BMC health loss, stop immediately, preserve raw/tool/SEL evidence, make no retry/write/reset/power action and follow only the documented management recovery path with separate approval.",
+        "stop_conditions": "Unproven spec revision, PSU or block mismatch, unknown encoding, unverified or write-capable tool, target ambiguity, inconsistent repeated value, decoder/raw mismatch, authentication anomaly, new PSU/BMC/SEL fault, reachability loss or incomplete evidence."
+      }
+    },
+    {
+      "sequence": 24,
+      "source_key": "Functionality|37|Wistron-HW-00040-V004",
+      "contract": {
+        "test_name": "CRPS LED Behavior During Approved PWM-High State",
+        "purpose": "Directly observe and record the target PSU LED while the platform-defined PWM-high phase/state is active, then compare its color and temporal behavior with the exact approved specification.",
+        "applicable_platform_environment": "The exact CRPS PSU model/firmware and platform implementation with an owner-approved PWM definition/setup, qualified physical operator and synchronized observation path.",
+        "target_scope": "Only the identified PSU LED and the defined PWM-high condition. Do not substitute BMC telemetry for visual evidence or infer an undocumented electrical/control interface.",
+        "required_inputs": "PSU identity; governing LED/PWM spec; definition and proof of high state; approved state-generation/confirmation method; expected LED response and timing tolerance; fixture/tool/configuration details; operator/camera; protected evidence path; approval; restoration/recovery.",
+        "test_command_procedure_intent": "No remote command alone completes this test. Preserve health evidence, have the qualified operator establish or confirm the exact approved PWM-high condition without guessing the interface, capture synchronized setup/state proof and direct LED video/photo for the required interval, remove or restore the condition through the approved method, and collect post-health/log evidence.",
+        "preconditions": "Target/spec/state semantics and expected response approved; setup verified and calibrated where applicable; qualified operator and direct view available; safe power/isolation and restoration defined; evidence timing synchronized; logs preserved; recovery owner ready.",
+        "expected_evidence": "PSU/spec/setup identity; approved high-state parameters or descriptor interpretation; fixture/configuration output proving the interval; timestamped direct LED photo/video showing color/state/timing; operator record; pre/post PSU/BMC/SEL/host evidence; nominal restoration.",
+        "acceptance_reference": "The exact PSU/platform LED PWM specification and approved setup procedure. OCP M-CRPS v1.00 RC4 Table 12-49 may be used only if the owner confirms applicability to the target implementation.",
+        "safety_restrictions": "Never invent the PWM source or parameters, make undocumented control writes, probe blindly, expose credentials, clear logs, claim visual evidence from telemetry, continue after abnormal power/PSU behavior or perform unapproved reset/reflash/power-cycle recovery.",
+        "human_approval_requirements": "The platform owner approves the PWM meaning/setup/expected response. A qualified operator performs or confirms the physical state and direct visual observation; the end user adjudicates PASS/FAIL/BLOCKED.",
+        "manual_boundaries": "Establishing any physical setup and directly observing/attesting LED behavior are manual. The agent may prepare the evidence plan and collect approved read-only PSU/BMC telemetry after operator confirmation.",
+        "recovery_requirements": "On unexpected LED, PSU, BMC, host or power behavior, stop the approved stimulus/configuration only as documented, preserve synchronized evidence, restore nominal state, verify health and escalate; do not improvise reset or power recovery.",
+        "stop_conditions": "Unresolved PWM meaning, wrong PSU/spec, missing expected response, unverified setup, absent operator/direct view, unsafe or unstable power, state-correlation loss, unexpected PSU/BMC/host behavior, incomplete video/trace, failed nominal restoration or unavailable recovery."
+      }
+    },
+    {
+      "sequence": 25,
+      "source_key": "Functionality|74|Wistron-HW-00077-V002",
+      "contract": {
+        "test_name": "CPU Socket Installation and Firmware Setup Recognition",
+        "purpose": "Install the approved CPU in the specified motherboard socket without mechanical or thermal damage and verify that the firmware setup menu reports the expected processor information.",
+        "applicable_platform_environment": "The exact server motherboard/socket revision and approved CPU package/stepping/BIOS combination in an ESD-safe service environment with qualified physical handling, KVM/OOB and recovery.",
+        "target_scope": "Only the owner-designated CPU and socket/population position. Firmware setup-menu recognition is mandatory; BMC/OS identity and health are supporting evidence rather than substitutes.",
+        "required_inputs": "SUT/board/socket identity; CPU model/stepping/package/serial and compatibility matrix; population/BIOS baseline; installation, tool/torque, retention, TIM/heatsink and chassis procedure; operator/ESD/maintenance approval; expected setup-menu fields; first-power/thermal limits; KVM/OOB and known-good recovery plan.",
+        "test_command_procedure_intent": "No remote command performs installation. Preserve the pre-state; isolate power; have the qualified operator inspect, orient and install the exact CPU with the approved socket/TIM/retention sequence and no force; restore cooling/chassis; perform one controlled first power-on; enter the specified firmware setup page and record CPU identity/topology; then collect supporting POST, BMC/OS, thermal/power and log evidence.",
+        "preconditions": "Exact compatibility and package keying confirmed; socket/CPU visually clean and undamaged; correct tools/TIM/retention procedure; ESD and power isolation active; workload/window approved; cooling/chassis restoration checklist, setup-menu expectations, KVM/OOB and recovery owner ready; logs preserved.",
+        "expected_evidence": "Compatibility approval and identities; before/after socket/CPU/retention/TIM/heatsink photos/records; operator/tool/ESD trace; first-power/POST timeline; named firmware setup page with expected CPU information; supporting BMC/OS identity; thermal/power and SEL/host deltas; restored chassis and recovery readiness.",
+        "acceptance_reference": "The exact motherboard/socket service manual, platform CPU support/population matrix, CPU package handling specification, thermal assembly procedure and owner-approved firmware setup fields.",
+        "safety_restrictions": "Never force or drag the package, touch/bend contacts, improvise orientation/tool/torque/TIM, power without completed cooling/retention, clear logs, repeat reseats blindly or claim success from physical fit or OS inventory alone.",
+        "human_approval_requirements": "A qualified hardware operator performs all chassis/socket/CPU/TIM/cooling actions. The platform owner approves the exact CPU/board/BIOS match and first power-on; the end user adjudicates the setup and health evidence.",
+        "manual_boundaries": "Physical inspection, installation, retention, TIM/cooling assembly and chassis closure are manual. The agent may prepare evidence and collect approved read-only firmware/BMC/OS/health data around the operator action but cannot claim first-hand socket inspection.",
+        "recovery_requirements": "On pin/contact/package damage, abnormal fit, POST/boot/thermal/power failure or wrong recognition, remove power through the approved procedure, preserve the as-found physical/log state, avoid repeated reseating, and have the qualified owner restore the known-good CPU/configuration and verify health.",
+        "stop_conditions": "Identity/compatibility uncertainty, socket or package damage/contamination, missing tool/TIM/torque procedure, abnormal fit or retention, incomplete cooling/chassis restoration, unavailable KVM/OOB/recovery, POST code or power/thermal anomaly, wrong setup-menu identity, new BMC/SEL fault or incomplete evidence."
+      }
+    },
+    {
+      "sequence": 26,
+      "source_key": "Functionality|105|Wistron-HW-00108-V003",
+      "contract": {
+        "test_name": "DUT Node Fault LED Response",
+        "purpose": "Verify by direct observation that the mapped DUT-node fault LED displays the platform-defined state for one approved node error/warning condition and restores correctly after recovery.",
+        "applicable_platform_environment": "The exact multi-node/server platform revision with an owner-approved node-to-LED map, fault-state table, bounded existing or controlled event, qualified observer and tested node/service recovery.",
+        "target_scope": "One named DUT node, its mapped physical LED and the selected approved event only. Do not generalize another node/color table or expand into unspecified fault injection.",
+        "required_inputs": "Node and LED map; selected event identity/severity/source; approved establishment or existing-state proof; expected LED color/state/blink and timeout; recovered state; operator/camera; synchronized clocks; maintenance/OOB; abort, recovery and service-health criteria.",
+        "test_command_procedure_intent": "Preserve the normal node/LED/log baseline; have the qualified operator establish or confirm only the approved bounded condition; record the exact event and synchronized direct LED video/photo while the agent collects read-only same-node host/BMC/SEL evidence; recover using the documented procedure; confirm LED restoration and full node/service health.",
+        "preconditions": "Node/LED/event identities and expected table approved; event impact bounded or existing condition controlled; target workloads protected; response timeout/abort/recovery known; operator has direct safe view; clocks and evidence path ready; BMC/console/OOB available; logs preserved.",
+        "expected_evidence": "Approved mapping/table/event/recovery; node identity; normal baseline; exact event timestamp/source/severity; direct mapped-LED photo/video showing state and timing; correlated host/BMC/SEL data; recovery actions; restored LED, node, management and service health.",
+        "acceptance_reference": "The exact platform revision's node/LED location map and owner-approved fault-indicator table, plus the selected event and recovery procedure.",
+        "safety_restrictions": "Never invent or broaden a fault, target the wrong node, remove/reset/power-cycle hardware without approval, accept logs as visual evidence, use an unverified color table, clear history or continue after unexpected service/OOB impact.",
+        "human_approval_requirements": "The platform/RAS/service owners approve the node, event, maintenance impact, expected response and recovery. A qualified operator directly observes the physical LED; the end user decides the result.",
+        "manual_boundaries": "Physical LED mapping, direct observation and any physical fault-state setup are manual. The agent may collect approved read-only corroborating evidence only and must not claim first-hand visual verification.",
+        "recovery_requirements": "Stop on unexpected severity, wrong-node response, service loss, management degradation or unclassified LED state; preserve the event/visual/log timeline, execute only the tested node recovery, confirm LED and service restoration, and quarantine unresolved degradation.",
+        "stop_conditions": "Unresolved node/LED/event map, absent expected state/timeout, unbounded or guessed fault, active unprotected workload, unavailable operator/OOB/recovery, wrong-node or unexpected LED response, monitoring/evidence loss, service/management impact beyond approval or failed recovery."
+      }
+    },
+    {
+      "sequence": 27,
+      "source_key": "Functionality|139|Wistron-HW-00142-V002",
+      "contract": {
+        "test_name": "Motherboard Jumper Physical Location Audit",
+        "purpose": "Verify that every specified motherboard jumper reference is physically located where the exact board-revision drawing defines it, without changing any jumper position or state.",
+        "applicable_platform_environment": "The exact motherboard/planar revision in a powered-off/discharged, ESD-controlled service environment with the matching owner-approved drawing and complete jumper inventory.",
+        "target_scope": "All reference designators in the approved location checklist, including specified populated or unpopulated footprints. Configuration state, electrical function and correction are outside scope.",
+        "required_inputs": "Board identity/revision; drawing/version; complete jumper reference list with population expectation and landmarks; safe access/ESD procedure; qualified operator; lighting/photo/evidence convention; mismatch owner and separate correction process.",
+        "test_command_procedure_intent": "No software command proves physical location. Confirm the board/drawing revision, safely expose the board, visually locate each checklist reference without touching it, capture overview and readable detail photos with orientation, record expected versus observed location/population, close the chassis and attest that no jumper moved.",
+        "preconditions": "Board/drawing/inventory matched; safe power discharge and ESD controls active; access and imaging adequate; evidence path ready; operator authorized; mismatch escalation and restoration defined; logs preserved.",
+        "expected_evidence": "Board/drawing identities; signed complete checklist; per-reference expected/observed location and population; timestamped overview/detail photos with orientation; mismatch/obstruction notes; no-movement attestation; restored chassis and supporting unchanged health evidence.",
+        "acceptance_reference": "The motherboard/platform owner's exact revision-controlled layout/assembly drawing and approved jumper-location/population list.",
+        "safety_restrictions": "Never move or bridge a jumper, touch board components unnecessarily, inspect an energized board when disallowed, use a mismatched drawing, clear logs, infer location from software or make corrective changes in this audit.",
+        "human_approval_requirements": "A qualified operator performs and attests the visual inspection. The board owner resolves any drawing, label, population or location discrepancy and approves separate correction if needed.",
+        "manual_boundaries": "Physical access, reference identification, visual comparison and photos are manual. The agent may prepare the matrix, validate file provenance and collect supporting read-only health evidence, but cannot claim first-hand location verification.",
+        "recovery_requirements": "If the board/drawing mismatches or a jumper is missing, damaged or misplaced, stop and preserve the as-found evidence, leave all hardware unchanged, close the chassis safely and use a separate owner-approved correction and health-verification procedure.",
+        "stop_conditions": "Unknown or mismatched board revision, incomplete inventory, ambiguous/population-undefined reference, obstructed or unsafe view, inadequate ESD/power state, request to move hardware, damaged/missing label, untraceable photo, evidence loss or inability to restore the chassis safely."
+      }
+    },
+    {
+      "sequence": 28,
+      "source_key": "Functionality|153|Wistron-HW-00156-V002",
+      "contract": {
+        "test_name": "TPM Enabled State and OS Visibility",
+        "purpose": "Verify that TPM is enabled in the platform firmware and that the selected Windows or Linux OS exposes the same TPM through its approved driver and read-only capability interface.",
+        "applicable_platform_environment": "The exact SUT/BIOS and owner-selected installed Windows or Linux OS with its platform-approved discrete or firmware TPM and read-only management tooling.",
+        "target_scope": "Firmware enabled-state and OS presence/basic fixed properties only. Do not modify TPM, Secure Boot, ownership, provisioning, keys, PCRs or authorization state, and do not require both OS families unless separately requested.",
+        "required_inputs": "SUT/BIOS/OS identity; TPM type/generation and expected properties; firmware setup path/label; approved KVM/reboot; OS driver/tool/package expectations; protected access; evidence and discrepancy owner.",
+        "test_command_procedure_intent": "Record the TPM enabled state in the approved BIOS/UEFI setup page, then in the selected OS collect read-only native evidence: Windows Device Manager plus `Get-Tpm`, or Linux discovered TPM class/device nodes, driver evidence and `tpm2_getcap properties-fixed` when approved. Correlate platform identity and preserve raw output; do not remediate state.",
+        "preconditions": "Exact target and OS selected; expected TPM/BIOS fields defined; BIOS/KVM/reboot authorized; OS driver and tools trusted; commands reviewed read-only; credentials/evidence protected; logs preserved.",
+        "expected_evidence": "Platform/BIOS/OS/tool versions; firmware setup page/path and enabled state; Windows `Get-Tpm` or Linux TPM class/device/driver plus fixed-properties output; expected-versus-observed identity/generation; timestamps; unchanged security state; kernel/BMC/SEL discrepancy evidence.",
+        "acceptance_reference": "The exact platform firmware/TPM specification and OS support baseline. Use Microsoft `Get-Tpm` documentation for supported Windows status fields and the installed Linux kernel/tpm2-tools documentation for the approved Linux interface.",
+        "safety_restrictions": "Never clear, initialize, enable/disable, own/provision or reconfigure TPM/Secure Boot; avoid state-changing TPM cmdlets; do not expose authorization, clear logs or treat one hard-coded enumeration path as universal proof.",
+        "human_approval_requirements": "Owner approval is required for BIOS/KVM access and any reboot. The security/platform owner selects expected state and decides any BIOS/OS disagreement; the agent executes only approved read-only OS queries.",
+        "manual_boundaries": "Firmware setup observation and any reboot navigation may require an operator. OS-side collection can be automated after target/OS/tool approval; remediation remains outside this testcase.",
+        "recovery_requirements": "No mutation is intended. On access/tool error or BIOS/OS disagreement, preserve both views, return from firmware setup without saving changes, maintain the original boot/security state and escalate; never clear or re-own TPM as recovery.",
+        "stop_conditions": "Wrong SUT/OS, unknown expected TPM, missing BIOS view, unapproved reboot/tool, request for mutation, driver/device ambiguity, inaccessible or authorization-sensitive capability query, BIOS/OS identity disagreement, security-state delta, evidence loss or unexpected platform fault."
+      }
+    },
+    {
+      "sequence": 29,
+      "source_key": "Functionality|165|Wistron-HW-00172-V002",
+      "contract": {
+        "test_name": "Front Error Indicator Response to Approved System Fault",
+        "purpose": "Induce one bounded owner-approved fan or power fault and verify by direct observation that the mapped front error button/indicator lights as specified, then prove complete restoration.",
+        "applicable_platform_environment": "The exact server/front-panel revision on an isolated or protected maintenance SUT with verified cooling/power redundancy, qualified physical operator, synchronized visual evidence and tested OOB recovery.",
+        "target_scope": "One identified illuminated error button/indicator and one explicitly selected fan-or-power fault target. Button press/clear behavior and a second fault type are outside scope unless separately required.",
+        "required_inputs": "SUT/indicator map; selected target and exact approved reversible stimulus; magnitude/state/dwell/timeout; redundancy/workload constraints; expected indicator and management-event states; operator/camera; approval; abort; restoration and service-health recovery.",
+        "test_command_procedure_intent": "Preserve the normal indicator, sensor and log baseline; verify target/redundancy/abort/recovery; have the qualified operator apply only the approved fault for the bounded interval; capture stimulus proof and synchronized direct indicator video/photo while collecting read-only BMC/host/SEL evidence; remove the fault as documented; verify the component, indicator, redundancy, cooling/power, boot and service return to normal.",
+        "preconditions": "Exact indicator/fault/expected state defined; dedicated or protected workload; safe redundancy and thermal/power headroom verified; operator and visual path ready; sensor/SEL/OOB monitoring live; abort/recovery tested; logs preserved; final approval active.",
+        "expected_evidence": "Approved method/target/limits and identities; baseline; exact stimulus start/stop and measured state; direct indicator state/timing video/photo; correlated sensors/SEL/host data; abort events if any; removal/restoration; normal indicator, redundancy, thermal/power, management, boot and service health.",
+        "acceptance_reference": "The exact platform front-panel fault-indicator table and owner/FAE-approved fan or power fault-injection and recovery procedure for the selected component/configuration.",
+        "safety_restrictions": "Never use a guessed fan/power action, exceed approved dwell/limits, defeat required redundancy, expose active workloads/data, clear evidence, press/clear the indicator without requirement, accept logs as visual proof or improvise reset/power recovery.",
+        "human_approval_requirements": "Thermal/power/platform/service owners approve the exact fault and impact; a qualified operator controls physical setup and observes the panel; separate approval is required for any unplanned reset/power action; end user decides the result.",
+        "manual_boundaries": "Fault selection/physical setup, direct indicator observation and any physical restoration are manual. The agent may collect approved read-only corroborating telemetry/logs only after the operator gates the action.",
+        "recovery_requirements": "On unexpected temperature, power, shutdown, wrong indicator, management/service loss or failed restoration, terminate the stimulus only by the documented abort method, preserve evidence, restore the selected component and redundancy, verify full platform/service health and quarantine unresolved degradation.",
+        "stop_conditions": "Unresolved indicator/fault semantics, wrong target, inadequate redundancy/headroom, active unprotected workload, missing operator/OOB/recovery, monitoring or visual loss, response timeout, unexpected shutdown/thermal/power/SEL state, impact beyond approval, failed component/indicator/service restoration or incomplete evidence."
+      }
+    },
+    {
+      "sequence": 30,
+      "source_key": "Functionality|220|Wistron-HW-00229-V002",
+      "contract": {
+        "test_name": "SF100 BIOS SPI ROM 50-Cycle Program Durability",
+        "purpose": "Program and verify the same approved BIOS image on the same target SPI ROM exactly 50 times with the qualified SF100 setup, then restore the ROM to the SUT and verify normal BIOS boot and platform health.",
+        "applicable_platform_environment": "The exact board/SPI NOR/BIOS combination with owner-approved SF100 hardware, firmware, software and adapter/profile, stable isolated power, ESD controls, qualified operator, KVM/OOB and independent recovery.",
+        "target_scope": "One specified ROM and one immutable image across all 50 cycles. Physical removal/reinstallation or in-system connection must follow the selected board procedure; no other firmware/device is in scope.",
+        "required_inputs": "Board/ROM identity and support; programming topology; adapter/pinout/orientation; SF100 hardware/firmware/software/profile; VCC/VPP/SPI/write-protect and operation settings; image/baseline/recovery hashes; exact 50-cycle semantics and retry policy; operator/ESD/power/approval; evidence, reinstall, boot and recovery procedures.",
+        "test_command_procedure_intent": "After manual target isolation and qualified SF100/ROM setup, preserve the ROM baseline, run the approved local SF100 Program/Verify sequence for cycle 1 through 50 with immutable image/settings and cycle-numbered raw logs, abort on any discrepancy, obtain final readback verification, have the operator reinstall/restore the ROM as specified, perform one controlled SUT boot and record BIOS/POST/version/configuration plus platform health.",
+        "preconditions": "Exact ROM/image/profile/settings two-person verified; backup and independent recovery proven; programmer/tool integrity and device support confirmed; stable power/ESD/board isolation; operator and evidence storage ready; failure/retry rule approved; SUT workloads isolated; KVM/OOB available; logs preserved.",
+        "expected_evidence": "Approval manifest; board/ROM IDs; pre-read backup/hash; image hash; SF100 hardware/firmware/software/profile/settings; cycle 1-50 raw erase/program/verify status, timestamps and durations; all failures/retries; final readback/hash; physical setup/restoration photos; BIOS/POST/version/configuration; BMC/SEL and health/recovery evidence.",
+        "acceptance_reference": "The board/BIOS owner's SPI programming and recovery procedure, ROM manufacturer limits/support data, and the exact DediProg SF100 hardware/software/device-profile documentation approved for the target.",
+        "safety_restrictions": "Never guess ROM/profile/voltage/pinout/image, energize conflicting board/programmer supplies, enable VPP unless explicitly supported, continue after any anomaly, hide retries, substitute devices/images, clear logs or claim final success from a programmer PASS without reinstall/BIOS boot/health evidence.",
+        "human_approval_requirements": "Qualified personnel perform all ROM/chassis/programmer connection and restoration. BIOS/board owners approve the exact image/settings, irreversible 50-cycle start and any recovery; the agent may automate only the preapproved software loop and evidence capture.",
+        "manual_boundaries": "ROM removal/reinstallation or probe connection, physical identity/orientation, board power isolation and final restoration are manual. The 50-cycle SF100 software sequence and raw log collection may be automated after the manual gate; recovery remains operator-controlled.",
+        "recovery_requirements": "On identification, erase/program/verify, communication, voltage or boot anomaly, stop the campaign at the recorded cycle, preserve the ROM and logs, isolate power safely, avoid blind retries, use only the validated backup/recovery image/device path, then verify BIOS/POST/platform health or quarantine the board/ROM.",
+        "stop_conditions": "Board/ROM/image/profile mismatch, unsupported device, uncertain voltage/pinout/topology, unstable or conflicting power, write/verify/readback difference, unrecorded retry, operator/monitoring/evidence loss, physical damage, failed reinstall, POST/BIOS mismatch, management/SEL fault or unavailable recovery."
+      }
+    },
+    {
+      "sequence": 31,
+      "source_key": "Functionality|241|Wistron-HW-00256-V002",
+      "contract": {
+        "test_name": "AST1060 Invalid or Revoked SVN Downgrade Rejection",
+        "purpose": "Submit the owner-approved AST1060 negative firmware fixture for the specified invalid/revoked SVN condition and verify an explicit anti-rollback rejection with no firmware, SVN, policy or boot-state change.",
+        "applicable_platform_environment": "The exact board/BMC/AST1060 firmware and anti-rollback policy implementation with owner-generated signed negative fixture, documented update route, stable power, isolated maintenance and independent OOB recovery.",
+        "target_scope": "AST1060 anti-rollback/SVN enforcement only. Generic corruption, signature rejection, BMC firmware downgrade and arbitrary older images are different tests and cannot substitute.",
+        "required_inputs": "AST1060/board/BMC identity; current image/version/SVN/policy floor/revocations; authoritative policy; applicable signed fixture(s) and hashes; exact update endpoint/tool/task schema; expected SVN-policy rejection code/stage/timeout; credentials/TLS; approval; power/window/OOB; recovery/no-retry procedure.",
+        "test_command_procedure_intent": "Preserve complete state, verify the negative fixture offline, pause for final approval, submit it once through the exact documented AST1060 update route, capture the raw request/task lifecycle and policy-specific rejection, abort on acceptance or ambiguous staging, then independently re-read AST1060 version/SVN/policy and verify POST/boot/BMC/OOB/SEL health without clearing evidence or retrying.",
+        "preconditions": "Target and current policy proven; fixture target/signature/format/SVN provenance peer reviewed; exact endpoint and rejection semantics qualified; stable power and protected credentials/TLS; maintenance isolation; monitoring/evidence path; no-retry/abort and recovery tested; final approval active.",
+        "expected_evidence": "Approval and identity manifest; current AST1060 version/SVN/policy; fixture hash/signature/target/SVN/revocation record; exact tool/endpoint/request; complete task/status and policy rejection code/stage/timestamps; no activation/reboot; unchanged post-state; POST/boot/BMC/OOB/SEL health; recovery readiness.",
+        "acceptance_reference": "The platform/RoT owner's AST1060 anti-rollback and SVN policy, negative-fixture definition and platform-qualified update/recovery specification. Public AST1060 product material is contextual, not the policy acceptance source.",
+        "safety_restrictions": "Never use arbitrary corrupt/old images, assume transport failure proves anti-rollback, invent an endpoint, expose credentials, clear logs, automate retries, accept any staging/activation ambiguity or power-cycle/reset outside the approved recovery plan.",
+        "human_approval_requirements": "RoT/security and firmware owners approve the fixture, target and expected rejection; BMC/lab/service owners approve the exact submission, power/window and recovery; explicit final confirmation is required immediately before the one allowed submission.",
+        "manual_boundaries": "Owners create and adjudicate the security fixture/policy and supervise recovery. Once fully qualified, the single submission, task monitoring and read-only evidence collection may be automated; no automatic retry or recovery is allowed.",
+        "recovery_requirements": "If the fixture is accepted, state changes, the task is ambiguous or management/boot health degrades, stop without retry, preserve all request/task/security evidence, maintain stable power, invoke only the validated AST1060/platform recovery under qualified control, verify protected firmware and quarantine unresolved security state.",
+        "stop_conditions": "Target/policy/fixture mismatch, unproven SVN-gate reachability, invalid signature/format for the intended case, unqualified endpoint, missing final approval/recovery, unstable power, transport-only error, acceptance/staging/activation indication, version/SVN/policy delta, BMC/OOB/POST/boot loss, incomplete security evidence or recovery failure."
+      }
+    },
+    {
+      "sequence": 32,
+      "source_key": "Functionality|254|Wistron-HW-00269-V004",
+      "contract": {
+        "test_name": "All-Drive 12-Hour 4K Random Mixed-I/O Fio Stress",
+        "purpose": "Run the approved source-matching fio workload for twelve hours on every required SSD and verify per-drive performance, media/controller health, system stability and the owner-defined 80% specification threshold.",
+        "applicable_platform_environment": "The exact server storage topology with every required SSD mapped by stable identity to a disposable approved test target, protected system/data devices excluded, qualified fio build/job, stable cooling/power and continuous storage/platform monitoring.",
+        "target_scope": "All owner-listed SSDs, with each physical drive/namespace/logical target relationship explicit. Do not reduce to one volume or infer physical coverage through RAID/LVM without an approved mapping.",
+        "required_inputs": "Stable drive/controller/namespace matrix; disposable per-drive targets/ranges; protected-device exclusions; exact fio build and reviewed job; 43,200 s, 4K, randrw, 4g, iodepth 32 and resolved CPU-specific numjobs; file/raw, mix, engine/direct, clone offsets and schedule; comparable IOPS reference; destructive approval; monitoring/abort/recovery/evidence plan.",
+        "test_command_procedure_intent": "Preserve inventory/health/log baselines, render and peer-review the complete drive-to-fio-job map, pause for final destructive approval, run the exact approved simultaneous or sequential schedule so every target receives its full 43,200-second profile, capture per-drive structured output and continuous health/thermal/controller evidence, abort only under defined thresholds, and verify every drive plus the SUT after completion.",
+        "preconditions": "All targets and ranges two-person verified; no OS/boot/swap/RAID/LVM/valuable mount dependency; backups and data-loss/endurance approval; source parameters and clone layout validated; fio/tool/evidence hash; matched threshold; maintenance isolation; cooling/power/OOB and recovery ready; logs preserved.",
+        "expected_evidence": "Signed target/protected-device matrix; job file/hash and fio/version; rendered per-drive filenames/ranges/clones; exact start/end/runtime per target; complete JSON/stdout/stderr; per-drive IOPS/BW/latency/errors; matched 80% calculation; SMART/NVMe/controller/thermal/power/kernel/BMC deltas; abort/recovery events; final drive/system health.",
+        "acceptance_reference": "The exact SSD/platform performance specification and approved fio profile with matching block size, read/write mix, queue depth, jobs, cache/direct mode, capacity/range, topology and metric aggregation, plus storage-health/error limits.",
+        "safety_restrictions": "Never write an unverified or protected target, reduce all-drive scope, mutate source duration/block/mix/depth/size/jobs without owner revision, overlap ranges unintentionally, store sole evidence on tested media, clear logs or declare PASS from incomplete targets or unmatched theory.",
+        "human_approval_requirements": "Storage/data/platform owners approve every stable target/range, data loss/endurance, exact job and threshold; final confirmation is required after rendered-target review and immediately before launch. End user judges performance and anomalies.",
+        "manual_boundaries": "Owners resolve physical/logical mapping, destructive boundary, numjobs CPU rule and theoretical reference. Once approved, launch, monitoring, structured collection and safe abort can be automated; reimage/recovery remains owner-controlled.",
+        "recovery_requirements": "On wrong target, fio/media/controller error, thermal/power breach, host/management instability or evidence loss, stop affected/all jobs per the approved policy, preserve outputs and device state, avoid automatic rerun, restore/reimage only allowlisted test targets and quarantine degraded media/controllers until owner disposition.",
+        "stop_conditions": "Any identity/range/protected-device ambiguity, unresolved clone overlap or threshold, missing approval/backup/monitoring, target mismatch, fio error, media/SMART/NVMe/controller/kernel fault, unsafe thermal/power, host/OOB instability, incomplete per-drive coverage/evidence or recovery failure."
+      }
+    },
+    {
+      "sequence": 33,
+      "source_key": "Functionality|295|Wistron-HW-00311-V003",
+      "contract": {
+        "test_name": "ConnectX-7 PCIe Identity and Negotiated Link Check",
+        "purpose": "Verify every required ConnectX-7 PCIe function's numeric identity, physical/topology mapping and negotiated link speed/width against the approved platform specification.",
+        "applicable_platform_environment": "The specified Linux server and ConnectX-7 population with an authoritative hardware recipe, domain-qualified PCIe/slot map, accessible host OS and pciutils.",
+        "target_scope": "All ConnectX-7 functions listed by the platform owner. Identify each by domain:BDF, numeric vendor/device/subsystem identity and approved slot/topology; never use first-match enumeration order.",
+        "required_inputs": "Required CX7 population and slot map; expected numeric IDs; required/minimum PCIe generation and width; installed pciutils version; owner clarification if a separate throughput measurement is intended.",
+        "test_command_procedure_intent": "Preserve baseline logs; collect a domain-qualified numeric machine-readable PCI inventory; resolve every approved CX7 target; retain full `lspci -Dnn` and per-target `lspci -s <domain:BDF> -vvv` output; compare identity, LnkCap and LnkSta with the platform recipe; capture driver and PCIe/AER state before reporting.",
+        "preconditions": "Exact SUT/recipe selected, every required target mapped, expected IDs/link criteria supplied, pciutils available and command privilege sufficient for the required readable fields. Existing logs are preserved rather than cleared.",
+        "expected_evidence": "Timestamped complete inventory, target-to-slot/BDF matrix, numeric vendor/device/subsystem IDs, full verbose output for each target, LnkCap/LnkSta comparison, driver state, relevant PCIe/AER log evidence and explicit unresolved fields.",
+        "acceptance_reference": "The exact platform owner's ConnectX-7 bill of materials, topology/slot map and PCIe link acceptance specification for this SUT configuration.",
+        "safety_restrictions": "Use read-only pciutils and log commands only. Do not clear logs, write configuration space, reset/unbind/remove a device, alter link settings, hide mismatches through filtered output or describe link fields as measured throughput.",
+        "human_approval_requirements": "No approval is required for ordinary read-only collection. The platform/test owner must supply and approve target/acceptance inputs and judge any undocumented downgrade or error; a new approval and procedure are required for an actual traffic benchmark.",
+        "manual_boundaries": "The owner resolves physical slot identity, expected values and exceptions. After those inputs are machine-consumable, enumeration, comparison and evidence packaging can run automatically.",
+        "recovery_requirements": "No recovery is expected for read-only collection. On access errors, ambiguous identity or unexpected link/error state, preserve outputs and escalate without reset or configuration change.",
+        "stop_conditions": "Stop PASS evaluation on missing/duplicate targets, ambiguous BDF/slot mapping, absent expected values, inaccessible required fields, identity mismatch, unresolved link downgrade, PCIe/AER error or any request to mutate device state under this read-only case."
+      }
+    },
+    {
+      "sequence": 34,
+      "source_key": "Functionality|329|Wistron-HW-00345-V003",
+      "contract": {
+        "test_name": "DCGM GPU Memory Pattern Diagnostic",
+        "purpose": "Run the supported DCGM `memtest` once on every required NVIDIA GPU and verify per-GPU PASS with no unexplained memory, ECC, XID, thermal, driver or platform error.",
+        "applicable_platform_environment": "An NVIDIA GPU server whose exact GPU model/UUID population, driver and DCGM diagnostic plugin/configuration are qualified, with host and OOB telemetry available and all in-scope workloads quiesced.",
+        "target_scope": "Every NVIDIA GPU in the approved SUT recipe. Use explicit entity selection and expected-count validation when supported; retain a result for each UUID. A subset is not equivalent unless the test owner revises scope.",
+        "required_inputs": "GPU UUID/entity map; compatible driver/DCGM/plugin/configuration; workload/MIG disposition; diagnostic authorization; timeout, thermal/power and ECC/XID response limits; original per-GPU persistence states; evidence and recovery plan.",
+        "test_command_procedure_intent": "Capture immutable baselines and target map; verify `dcgmi diag -r memtest` support; after approval, apply only required persistence changes to explicit GPUs; run one verbose/structured named memtest for all approved entities under monitoring; preserve complete output and logs; restore each GPU's recorded persistence state; verify every entity and final host/GPU health.",
+        "preconditions": "Expected GPU count/UUIDs match inventory; no unauthorized compute/MIG client remains; DCGM/driver/plugin/configuration is supported; adequate memory/resources and thermal/power headroom exist; persistence baseline, timeout, stop rules, evidence paths and OOB recovery are ready.",
+        "expected_evidence": "Version/package provenance; UUID/entity/BDF/MIG/client map; persistence/ECC/page-remap/XID/thermal baseline; exact command/config/hash; full per-entity verbose or JSON output, timestamps, duration and exit code; synchronized host/BMC logs; post-state and per-GPU persistence restoration proof.",
+        "acceptance_reference": "The qualified NVIDIA DCGM documentation/configuration for the installed release plus the exact platform owner's GPU inventory, diagnostic coverage and ECC/XID/thermal/error policy.",
+        "safety_restrictions": "Treat memtest as an active resource-consuming diagnostic. Do not run with live workloads, guess entities, alter MIG/ECC, clear counters/logs, ignore skipped entities, reset GPUs automatically or leave persistence different from its per-GPU baseline.",
+        "human_approval_requirements": "GPU/platform and workload owners approve the target set, quiescence, active diagnostic and state transitions before launch. The engineer judges warnings/counter deltas and final PASS/FAIL/BLOCKED.",
+        "manual_boundaries": "Owners resolve qualification, workload isolation and anomalous diagnostic results. Once approved, explicit targeting, execution, monitoring, evidence collection, stop handling and exact state restoration can be automated.",
+        "recovery_requirements": "On timeout, unexpected client, thermal/power breach, ECC/XID/driver/DCGM failure or host instability, stop through the supported diagnostic path, preserve state/evidence, restore only recorded persistence settings, avoid automatic reset/rerun and use approved OOB/quarantine escalation if normal control is lost.",
+        "stop_conditions": "Target count/UUID mismatch, unsupported or unavailable memtest, active unauthorized client, insufficient memory/headroom, missing approval/baseline/recovery, timeout, thermal/power violation, ECC/XID/driver/DCGM/host failure, incomplete per-GPU output or failed persistence restoration."
+      }
+    },
+    {
+      "sequence": 35,
+      "source_key": "Functionality|355|Wistron-BIOS-00022-V003",
+      "contract": {
+        "test_name": "POST/BIOS Enter-Key Selection",
+        "purpose": "Verify that Enter activates the owner-designated highlighted item in the intended pre-OS interface and produces the specified response without committing an unauthorized setting.",
+        "applicable_platform_environment": "The exact board and BIOS build in a controlled boot window, using a validated local keyboard/display or owner-approved remote KVM that exposes the intended POST/BIOS screen and records visual evidence.",
+        "target_scope": "Only the named screen and selectable item for Functionality row 355 / case variant 56ff73c8e8fd32dc. The same code's SMBIOS Type 42 row is out of scope.",
+        "required_inputs": "Board/BIOS build, exact screen/item, expected Enter response, console path, safe item or cancel/restoration method, approved boot window, operator and visual evidence destination.",
+        "test_command_procedure_intent": "Capture the highlighted target and current state; have the operator press Enter once through the validated console; capture the resulting screen/state; verify the response against the run card; cancel or restore any unapproved pending change; exit and verify normal boot/configuration.",
+        "preconditions": "Correct source variant and SUT selected; expected response documented; console input/video proven; item and restoration path assessed safe; boot interruption approved; current BIOS/configuration context and logs preserved.",
+        "expected_evidence": "Source key and board/build; console type; timestamped image/video of the highlighted item before input, Enter action record and resulting screen/state; before/after setting status; clean exit and normal boot/health evidence.",
+        "acceptance_reference": "The board-specific BIOS/POST menu specification or engineer-approved run card naming the screen, item and correct Enter-key response.",
+        "safety_restrictions": "Never press Enter on an unidentified item, commit an unapproved BIOS/boot/security change, clear logs, improvise a recovery action or substitute SMBIOS output for interactive evidence.",
+        "human_approval_requirements": "The BIOS/system owner approves the target, expected response, boot window and restoration path; a human operator performs/observes the key action and judges visual correctness.",
+        "manual_boundaries": "The key action and visual usability judgment are manual. An agent may collect supporting inventory, coordinate capture and verify post-boot state but cannot replace the required observed interaction with an OS query.",
+        "recovery_requirements": "If an unexpected dialog/change/reset appears, stop further input, capture the screen, use only the approved cancel/restore route, preserve logs and recover normal boot under BIOS-owner control before retry.",
+        "stop_conditions": "Wrong source variant, undefined screen/item/result, unvalidated console, missing operator/window/restoration, unexpected setting prompt, reset/write request, misdirected input, loss of visual feedback or inability to return to the approved boot/configuration state."
+      }
+    },
+    {
+      "sequence": 36,
+      "source_key": "Functionality|386|Wistron-BIOS-00053-V002",
+      "contract": {
+        "test_name": "BIOS Administrator Password Lifecycle",
+        "purpose": "Verify creation, negative authentication, correct authentication and clearing of the BIOS Administrator Password, ending at the original passwordless state.",
+        "applicable_platform_environment": "The exact SUT and BIOS build in an approved maintenance window with a secure local or remote pre-OS console, documented security rules and working BMC/OOB recovery.",
+        "target_scope": "Only the BIOS Administrator Password control and BIOS-entry authentication flow; exactly three wrong attempts and two required save/reset cycles, with no OS or BMC credential changes.",
+        "required_inputs": "Password length/character rules; retry/lockout behavior; documented blank-password clear flow; approved non-production temporary secret held securely; console/operator/window; OOB/vendor recovery and final-state checklist.",
+        "test_command_procedure_intent": "Verify passwordless BIOS entry; set the approved temporary Administrator Password; save/reset; record the rejection outcome of exactly three wrong attempts; authenticate with the correct password; clear it through the documented empty-new-password flow; save/reset; verify passwordless BIOS entry and normal system health.",
+        "preconditions": "Correct SUT/BIOS and passwordless baseline verified; security owner approval; secret custody and redacted capture configured; retry/lockout/clear rules known; console and OOB recovery tested; maintenance window active; logs preserved.",
+        "expected_evidence": "Build/rule/approval and baseline identifiers; redacted outcome and timestamp for password set, each reset, each of three wrong attempts, correct entry and clear; final passwordless entry plus normal boot/OOB health; no password value or keystroke capture.",
+        "acceptance_reference": "The exact platform BIOS security specification for supported password syntax, retry/lockout and clear behavior, together with the eight-step source procedure.",
+        "safety_restrictions": "Never expose or reuse the temporary secret, exceed three wrong attempts, continue after unexpected lockout, improvise firmware/NVRAM recovery, omit final clearing or treat a saved password as an acceptable final state.",
+        "human_approval_requirements": "The BIOS/security owner approves the temporary-secret process, negative attempts, resets and recovery. A human operator performs secret entry and judges prompts; the owner accepts final redacted evidence.",
+        "manual_boundaries": "All BIOS password entry, prompt interpretation and security-state changes are manual. An agent may coordinate non-secret checkpoints and read-only health evidence but must never receive or enter the password.",
+        "recovery_requirements": "On unexpected lockout, correct-secret rejection, clear failure or boot/management loss, stop all guesses, preserve redacted state, invoke only the approved owner/vendor recovery procedure, re-establish the passwordless baseline and verify health before any retry.",
+        "stop_conditions": "Unknown rules or baseline, missing approval/secret custody/console/OOB recovery, unexpected prompt or lockout, any secret exposure, correct-password rejection, clear/save/reset failure, fourth wrong attempt, or inability to prove final passwordless and healthy state."
+      }
+    },
+    {
+      "sequence": 37,
+      "source_key": "Functionality|414|Wistron-BIOS-00081-V003",
+      "contract": {
+        "test_name": "Advanced USB Configuration Persistence and Default Restoration",
+        "purpose": "Verify approved Advanced USB settings persist after save/reboot and return to exact platform defaults after the authorized Load Default action, without losing required USB, console, boot, storage or management functionality.",
+        "applicable_platform_environment": "The exact board and BIOS revision in a maintenance window with a complete BIOS baseline, validated pre-OS console, alternate input/recovery media, BMC/OOB access and a platform-specific USB/default specification.",
+        "target_scope": "The engineer-approved complete or sampled Advanced USB field list. Also track every collateral BIOS setting changed by Load Default; do not assume the action is limited to the USB page.",
+        "required_inputs": "Signed field coverage rule; legal non-default and SPEC-default value for each field; BIOS baseline/export; Load Default scope; critical USB/boot/storage map; deployed final recipe; operator, approval, OOB/alternate recovery, stable power and evidence plan.",
+        "test_command_procedure_intent": "Record all target and collateral baselines; manually apply only the signed non-default matrix; save/reboot and prove each target persisted plus system health; manually invoke the approved Load Default; save/reboot and compare targets and collateral settings with SPEC; restore and verify the deployed recipe when it differs from defaults.",
+        "preconditions": "Coverage and values resolved; exact firmware/default reference available; current configuration recoverable; critical USB paths and alternative control identified; global default impact approved; boot window, operator, power and OOB recovery ready; logs preserved.",
+        "expected_evidence": "Identity and signed matrix; baseline/export; visual per-field non-default, persisted and default states; both save/reboot records; console/USB/boot/storage/OS/BMC health; complete collateral setting diff; error-log delta; final deployed configuration proof.",
+        "acceptance_reference": "The exact platform BIOS specification/default table and owner-approved coverage matrix for this firmware revision, plus the deployed system recipe for final restoration.",
+        "safety_restrictions": "Never use random values, mutate unspecified fields, invoke unscoped defaults without approval, rely on one USB control path, clear evidence, omit collateral setting checks or leave the SUT in an unapproved default/deployed state.",
+        "human_approval_requirements": "BIOS and system owners approve field coverage, every non-default value, both reboots, global Load Default impact and final recipe. A human operator performs and observes pre-OS changes.",
+        "manual_boundaries": "BIOS navigation, value changes, visual persistence/default judgment and recovery remain manual. An agent may collect read-only inventories, compare signed matrices and verify OS/BMC/device health.",
+        "recovery_requirements": "On keyboard/KVM, boot/media/storage, management or reboot failure, stop further changes, preserve console/state evidence, use independent BMC/OOB or approved recovery media, restore the captured configuration or vendor baseline, then verify the complete deployed recipe before retry.",
+        "stop_conditions": "Unresolved all-versus-sample scope, missing field/default/global-impact data, no independent console/recovery, unexpected field or collateral change, lost input/boot/storage/management, reboot hang/crash, error log, failed persistence/default comparison or inability to restore the approved final recipe."
+      }
+    },
+    {
+      "sequence": 38,
+      "source_key": "Functionality|441|Wistron-BIOS-00108-V003",
+      "contract": {
+        "test_name": "AMD Advanced CRB Board Defaults and Persistence",
+        "purpose": "Verify platform-specified CRB Board defaults after Load Default, then verify approved non-default CRB values persist through save/reboot with no field-related platform regression.",
+        "applicable_platform_environment": "The exact AMD server board, BIOS/AGESA build and hardware recipe in a maintenance environment with platform documentation, a recoverable BIOS baseline, console, BMC/OOB access and stable power.",
+        "target_scope": "Only the owner-named Advanced CRB Board fields and their documented dependencies. The owner must declare complete or sampled coverage; unrelated memory/PCIe/power checks are not added without a field dependency.",
+        "required_inputs": "Board/BIOS/AGESA identity; signed coverage decision; per-field default/non-default/dependency matrix; Load Default collateral map; backup; reboot/cold-boot rule; final-state decision; approvals, console/operator, OOB recovery and evidence plan.",
+        "test_command_procedure_intent": "Archive the deployed baseline; manually load defaults, save/reboot and compare each named field with SPEC; manually apply only signed non-default values, save and perform the specified reboot type; verify persistence and each field-linked system effect; restore/retain exactly the owner-approved final configuration and verify health.",
+        "preconditions": "Field semantics and values documented; correct AMD platform/build selected; deployed configuration recoverable; global default impact and final state approved; field-specific expected evidence defined; boot window, operator, OOB/recovery and power ready; logs preserved.",
+        "expected_evidence": "Identity and signed matrix; recoverable baseline; default-phase captures and comparisons; non-default and post-reboot captures; exact reboot timeline; per-field linked inventory/health/log evidence; collateral-default diff; final configuration and normal boot/BMC/OS proof.",
+        "acceptance_reference": "The exact AMD platform/vendor BIOS specification for the named CRB Board fields and firmware revision, plus the approved hardware recipe and final configuration record.",
+        "safety_restrictions": "Never use random or guessed values, generalize another AMD platform's defaults, mutate unnamed fields, invoke global defaults without collateral approval, continue after boot/topology/management loss, clear logs or release an unspecified final configuration.",
+        "human_approval_requirements": "Platform/BIOS and system owners approve every field/value, global default operation, reboot type and final state. A human operator performs the pre-OS changes; owners judge field-specific exceptions.",
+        "manual_boundaries": "BIOS navigation, Load Default, field editing and visual value readback are manual. Automated support is limited to approved inventory, topology, health, log and configuration comparisons around those phases.",
+        "recovery_requirements": "On failed boot/training, device loss, management outage or unexpected setting effect, stop changes, preserve console/state evidence, use the documented BMC/OOB/vendor recovery and captured configuration, then verify the entire approved hardware and BIOS recipe before retry.",
+        "stop_conditions": "Unresolved coverage/field semantics/defaults/dependencies/final state; missing backup/approval/OOB; unexpected collateral default; value rejection or failed persistence; incorrect reboot behavior; boot/training/device/management/health regression; or inability to restore the approved configuration."
+      }
+    },
+    {
+      "sequence": 39,
+      "source_key": "Functionality|503|Wistron-BIOS-00170-V005",
+      "contract": {
+        "test_name": "SMBIOS Type 2 Baseboard Product Name Persistence",
+        "purpose": "Verify the Product Name of every applicable SMBIOS Type 2 Baseboard record against the approved platform identity before and after one reboot.",
+        "applicable_platform_environment": "The exact server/board/BIOS build with an owner-approved per-baseboard identity matrix, Linux access to validated dmidecode, an approved reboot window and working console/BMC/OOB recovery.",
+        "target_scope": "All owner-required SMBIOS Type 2 structures. Map each by structure handle and companion baseboard identity/role; exclude Type 1 System Information and do not silently choose the first Product Name.",
+        "required_inputs": "Expected Product Name per baseboard/role; structure mapping and comparison-normalization rule; dmidecode version/package and sudo access; SUT credentials; workload/reboot approval; stable power, OOB recovery and evidence destination.",
+        "test_command_procedure_intent": "Capture SUT/SMBIOS/tool identity and complete raw Type 2 output; map all applicable handles and compare their Product Names with the signed matrix; after explicit approval reboot once; repeat identical collection/mapping; compare correctness and persistence and verify host/BMC health.",
+        "preconditions": "Exact SUT and expected matrix selected; all Type 2 roles resolvable; dmidecode validated; authenticated least-privilege access available; workload quiesced; reboot window, power and OOB recovery ready; pre-existing logs preserved.",
+        "expected_evidence": "Signed per-handle/role expected matrix; dmidecode/SMBIOS versions; unfiltered pre/post Type 2 records and hashes; extracted companion fields/Product Names; exact comparison results; reboot start/return timeline; host/OS/BMC health and exception record.",
+        "acceptance_reference": "The exact platform/baseboard product-identity specification for this SUT plus DMTF SMBIOS Type 2 field semantics; DMTF defines the field location, not the vendor-specific expected string.",
+        "safety_restrictions": "Use read-only SMBIOS collection only; never write firmware data, clear logs, accept the wrong structure, discard duplicate records, reboot without approval or infer physical identity solely from firmware-reported strings.",
+        "human_approval_requirements": "Platform owner approves the expected identity/mapping and resolves discrepancies; system/workload owner approves reboot. No approval is needed for ordinary pre-reboot read-only collection.",
+        "manual_boundaries": "Owner supplies/accepts identity and authorizes reboot. Once inputs are machine-readable, collection, structure parsing, comparison, reboot orchestration within approval and health checks can be automated.",
+        "recovery_requirements": "If reboot, host or management recovery fails, stop and use approved console/BMC/OOB recovery. On identity drift or ambiguity, preserve both complete dumps and firmware context; do not flash or rewrite SMBIOS under this case.",
+        "stop_conditions": "Missing expected mapping, unresolved multiple Type 2 records, invalid/incomplete dump, ambiguous/placeholder Product Name, pre-test mismatch, absent reboot approval/recovery, boot/management failure, post-reboot record drift or incomplete evidence."
+      }
+    },
+    {
+      "sequence": 40,
+      "source_key": "Functionality|558|Wistron-BIOS-00225-V005",
+      "contract": {
+        "test_name": "SMBIOS Type 7 Cache Speed Persistence",
+        "purpose": "Verify the DMTF-defined Type 7 Cache Speed value for every required cache record and confirm the mapped values remain correct after one reboot.",
+        "applicable_platform_environment": "The exact multi-socket CPU/server recipe and BIOS/SMBIOS build with an approved Type 4/Type 7 cache map, validated dmidecode, host access, reboot window and BMC/OOB recovery.",
+        "target_scope": "All required Type 7 structures, mapped by handle/designation/configuration level and Type 4 L1/L2/L3 handle references. Interpret Cache Speed only as the SMBIOS byte in nanoseconds; zero is Unknown.",
+        "required_inputs": "Per-cache expected nanosecond value or approved Unknown policy; CPU/socket/cache and Type 4/Type 7 map; dmidecode version/package and sudo access; SUT credentials; reboot approval, workload isolation, power/OOB recovery and evidence destination.",
+        "test_command_procedure_intent": "Collect complete pre-reboot Type 4 and Type 7 output and map all required caches; preserve and compare each Cache Speed raw/decoded nanosecond value; after explicit approval reboot once; repeat the identical collection/mapping/comparison and verify host/BMC health.",
+        "preconditions": "Correct SUT/CPU/BIOS selected; expected cache map and values signed; dmidecode validated; least-privilege host access available; workload quiesced; reboot window, power and OOB recovery ready; logs preserved.",
+        "expected_evidence": "Signed per-cache matrix; SUT/CPU/BIOS/SMBIOS/dmidecode identity; unfiltered pre/post Type 4 and Type 7 output; handle/link table; raw and decoded nanosecond values; comparison results; reboot timeline; OS/BMC health and exceptions.",
+        "acceptance_reference": "DMTF DSP0134 SMBIOS 3.9.0 Type 7 Cache Speed encoding plus the exact platform/CPU/BIOS specification supplying the expected value for each cache instance.",
+        "safety_restrictions": "Use read-only SMBIOS queries only. Do not alter CPU/cache/firmware settings, infer frequency/performance from the field, accept zero without policy, omit cache instances, clear logs or reboot without approval and recovery.",
+        "human_approval_requirements": "Platform owner supplies/accepts the cache matrix and Unknown policy; system/workload owner approves reboot and resolves mismatches. Ordinary pre-reboot read-only collection needs no additional approval.",
+        "manual_boundaries": "Owners provide platform expectations and authorize reboot. Once supplied, collection, handle mapping, byte decoding, comparison and approved reboot orchestration can be automated.",
+        "recovery_requirements": "If reboot or management recovery fails, stop and use approved console/BMC/OOB recovery. On missing, duplicate, unknown or changed cache records, preserve complete dumps and firmware context and do not change performance/firmware settings under this case.",
+        "stop_conditions": "Missing expected cache map/value policy, unresolved Type 4/Type 7 links, incomplete/invalid output, unapproved zero/Unknown, pre-test mismatch, missing reboot approval/recovery, boot/management failure or any post-reboot handle/value drift."
+      }
+    },
+    {
+      "sequence": 41,
+      "source_key": "Functionality|560|Wistron-BIOS-00227-V005",
+      "contract": {
+        "test_name": "SMBIOS Type 7 System Cache Type Persistence",
+        "purpose": "Verify the standard SMBIOS Type 7 System Cache Type enum for every required cache record and confirm the mapped values remain correct after one reboot.",
+        "applicable_platform_environment": "The exact CPU/server recipe and BIOS/SMBIOS build with an approved cache topology, validated dmidecode access, an approved reboot window and working console/BMC/OOB recovery.",
+        "target_scope": "All required Type 7 offset-11h System Cache Type fields, mapped by structure handle, designation, cache level and Type 4 L1/L2/L3 references. Do not search for a nonexistent `Cache System Cache Type` output label.",
+        "required_inputs": "Expected enum per cache instance; CPU/socket/cache and Type 4/Type 7 mapping; policy for Other/Unknown; dmidecode version/package and sudo access; host credentials; reboot approval, workload isolation, power/OOB recovery and evidence destination.",
+        "test_command_procedure_intent": "Collect complete pre-reboot Type 4 and Type 7 structures; map all required caches; extract and compare each standard System Cache Type raw/decoded value; after explicit approval reboot once; repeat the identical collection/mapping/comparison and verify OS/BMC health.",
+        "preconditions": "Correct SUT/CPU/BIOS selected; expected cache enum map signed; dmidecode validated; least-privilege access available; workload quiesced; reboot window, power and OOB recovery ready; existing logs preserved.",
+        "expected_evidence": "Signed per-cache expected map; platform and tool versions; unfiltered pre/post Type 4/Type 7 output; handle/link table; raw and decoded System Cache Type enums; exact comparison; reboot timeline; OS/BMC health and exceptions.",
+        "acceptance_reference": "DMTF DSP0134 SMBIOS 3.9.0 Type 7 offset 11h and Table 39 enum semantics, plus the exact platform CPU/cache topology specification supplying each expected value.",
+        "safety_restrictions": "Use read-only SMBIOS collection only. Do not change cache/CPU/firmware state, run the known-wrong grep, omit instances, invent topology, clear logs or reboot without approval and recovery.",
+        "human_approval_requirements": "Platform owner supplies and accepts the enum map; system/workload owner approves reboot and resolves discrepancies. Ordinary pre-reboot read-only collection needs no additional approval.",
+        "manual_boundaries": "Owners provide acceptance data and reboot authorization. Once supplied, collection, structure linking, enum decoding, comparison and approved reboot orchestration can be automated.",
+        "recovery_requirements": "If reboot or management recovery fails, stop and use approved console/BMC/OOB recovery. On missing, duplicate, Other/Unknown or changed records, preserve complete dumps and firmware context; do not alter cache settings under this case.",
+        "stop_conditions": "Missing expected enum/map, unresolved Type 4/Type 7 link, incomplete output, unapproved Other/Unknown, pre-test mismatch, absent reboot approval/recovery, boot/management failure or post-reboot handle/enum drift."
+      }
+    },
+    {
+      "sequence": 42,
+      "source_key": "Functionality|613|Wistron-BIOS-00280-V005",
+      "contract": {
+        "test_name": "SMBIOS Type 17 Device Locator Persistence",
+        "purpose": "Verify every required SMBIOS Type 17 Device Locator against the physical memory-slot map and confirm the complete mapping persists after one reboot.",
+        "applicable_platform_environment": "The exact server board, CPU/memory population and BIOS/SMBIOS build with an owner-approved socket map, validated dmidecode, host access, an approved reboot window and console/BMC/OOB recovery.",
+        "target_scope": "All Type 17 records for populated and empty memory sockets plus any soldered-memory record, linked by Type 16 Memory Array Handle and physical slot identity; not a locator-only grep list.",
+        "required_inputs": "Per-socket expected locator/population map; normalization and uniqueness rules; board/memory recipe; optional approved BMC/SPD correlation; dmidecode/parser version and sudo access; reboot approval, workload isolation, power/OOB recovery and evidence destination.",
+        "test_command_procedure_intent": "Collect complete pre-reboot Type 16/17 structures; map each handle/array/device locator and population state to the signed physical slot map; compare every record; after explicit approval reboot once; repeat identical collection/mapping and verify persistence plus OS/BMC health.",
+        "preconditions": "Correct SUT/board/BIOS/memory recipe selected; full socket map signed; dmidecode/parser validated; least-privilege access available; workload quiesced; reboot window, power and OOB recovery ready; logs preserved.",
+        "expected_evidence": "Signed slot/locator/population matrix; platform/tool versions; complete unfiltered pre/post Type 16/17 output; handle/array/slot/size/serial table; optional BMC/SPD corroboration; exact comparison; reboot timeline; OS/BMC health and exceptions.",
+        "acceptance_reference": "DMTF DSP0134 SMBIOS 3.9.0 Type 17 data requirements plus the exact platform memory-slot naming/population specification.",
+        "safety_restrictions": "Use read-only inventory only. Do not move DIMMs, alter firmware/memory settings, omit empty sockets, infer physical order, clear logs or reboot without approval and recovery.",
+        "human_approval_requirements": "Platform/memory owner supplies and accepts the physical map; system/workload owner approves reboot and resolves discrepancies. Ordinary pre-reboot read-only collection needs no additional approval.",
+        "manual_boundaries": "Owners provide physical slot truth and reboot authorization. Once supplied, record extraction, mapping, comparison and approved reboot orchestration can be automated; physical inspection is only needed to resolve disputed mapping.",
+        "recovery_requirements": "If reboot or management recovery fails, stop and use approved console/BMC/OOB recovery. On locator/population mismatch, preserve complete SMBIOS and corroborating evidence; do not manipulate memory hardware under this case.",
+        "stop_conditions": "Missing slot map/policy, unresolved handle/array/physical mapping, blank/duplicate/ambiguous locator, incomplete record set, pre-test mismatch, missing reboot approval/recovery, boot/management failure or post-reboot mapping drift."
+      }
+    },
+    {
+      "sequence": 43,
+      "source_key": "Functionality|671|Wistron-BIOS-00338-V005",
+      "contract": {
+        "test_name": "SMBIOS Type 39 Cooling Device Handle Persistence",
+        "purpose": "Verify every applicable System Power Supply Cooling Device Handle resolves to the correct Type 27 Cooling Device or approved no-device representation and persists after reboot.",
+        "applicable_platform_environment": "The exact server PSU/cooling topology and BIOS/SMBIOS build with an owner-approved association map, validated dmidecode/raw parser, host access, an approved reboot window and BMC/OOB recovery.",
+        "target_scope": "All platform-required Type 39 records whose structure length includes offset 12h, linked to Type 27 handles or an approved no-device value. BMC telemetry is supplemental, not a replacement relationship.",
+        "required_inputs": "PSU-to-Type 27/no-device/shared map; Type 39 PSU identity mapping; SMBIOS/version-aware length semantics; dmidecode/parser and sudo access; reboot approval, workload isolation, stable power, OOB recovery and evidence destination.",
+        "test_command_procedure_intent": "Collect complete pre-reboot Type 27/39 structures; verify Type 39 lengths; map every PSU identity and resolve each cooling handle under the signed policy; collect read-only health corroboration; after explicit approval reboot once; repeat and compare all mappings and health.",
+        "preconditions": "Correct SUT/BIOS/PSU recipe selected; complete association policy signed; parser and access validated; adequate PSU redundancy/stable power confirmed for ordinary reboot; workload quiesced; OOB recovery ready; logs preserved.",
+        "expected_evidence": "Signed topology/policy; platform/tool/SMBIOS identity; unfiltered pre/post Type 27/39 structures; lengths and raw handles; PSU-to-cooling resolution table; supplemental BMC PSU/fan/thermal status; reboot timeline; OS/BMC health and exceptions.",
+        "acceptance_reference": "DMTF DSP0134 SMBIOS Type 39 offset-12h and Type 27 semantics for the implemented SMBIOS version, plus the exact platform PSU/cooling topology specification.",
+        "safety_restrictions": "Use read-only SMBIOS and telemetry collection only. Do not change fan/thermal/PSU state, infer association from a sensor name, read beyond structure length, clear logs or reboot without approval and recovery.",
+        "human_approval_requirements": "Platform/power owner supplies and accepts the association/no-device policy; system/workload owner approves reboot and resolves discrepancies. Ordinary pre-reboot read-only collection needs no additional approval.",
+        "manual_boundaries": "Owners provide physical topology and reboot authorization. Once supplied, structure-length validation, handle resolution, comparison and approved reboot orchestration can be automated; physical inspection is reserved for disputed topology.",
+        "recovery_requirements": "If reboot, power, thermal/fan or management recovery fails, stop and use approved BMC/OOB recovery. On dangling/wrong/ambiguous references, preserve raw structures and telemetry and do not alter cooling or PSU controls.",
+        "stop_conditions": "Missing topology/policy, unresolved PSU identity, absent-by-length field, dangling/invalid handle, unexplained no-device/shared reference, incomplete data, missing reboot approval/recovery, power/thermal/fan fault, boot/management failure or post-reboot mapping drift."
+      }
+    },
+    {
+      "sequence": 44,
+      "source_key": "Functionality|723|Wistron-BMC-00013-V004",
+      "contract": {
+        "test_name": "Host-Up GPUBB Web Upgrade and Downgrade with AC Activation",
+        "purpose": "Validate each approved GPUBB upgrade and downgrade transition through the BMC web UI while the host is booted, then confirm activation and complete GPU/platform recovery after the required controlled AC cycle.",
+        "applicable_platform_environment": "The exact ODM GPU server/baseboard/BMC release with a qualified GPUBB web-update procedure, signed compatible images, isolated maintenance window, stable controlled AC source, serial/BMC/OOB access and tested recovery.",
+        "target_scope": "Every owner-specified GPUBB component instance and both approved version directions. Do not substitute BMC, GPU VBIOS, ERoT, MCU or another firmware target, and do not merge direction-specific evidence.",
+        "required_inputs": "Component inventory; current/upgrade/downgrade versions and order; signed images/hashes/compatibility/release notes; vendor web steps and task states; credentials/session rules; per-direction activation/diagnostic criteria; AC timing/controller; approvals; stable power; workload quiescence; known-good recovery image/procedure and evidence paths.",
+        "test_command_procedure_intent": "For one approved direction at a time, capture immutable baselines, peer-verify component and image, obtain immediate pre-write approval, perform the documented web upload/update without interruption, wait for the authoritative terminal state, capture evidence, execute exactly the approved AC cycle, verify active target version and independent GPU/host/BMC health, and stop for owner disposition before the next direction.",
+        "preconditions": "Correct platform/component and signed transition selected; image integrity/compatibility verified; host is booted but workloads quiesced; web session and evidence capture qualified; stable AC/PDU and off/on timing approved; console/OOB/recovery/known-good image ready; all logs preserved; two-person final target check complete.",
+        "expected_evidence": "Signed transition manifest and image provenance; pre/post versions and GPUBB/GPU/BMC/host inventory; full web selection/task/progress/completion/error evidence; AC/PDU timestamps/state; GPU UUID/BDF/topology/approved diagnostic results; POST/boot/OS/BMC/SEL/kernel/GPU logs; recovery/final-state record per direction.",
+        "acceptance_reference": "The exact platform vendor's GPUBB release manifest, compatibility matrix, BMC web procedure, activation/AC requirements and recovery document for the tested hardware and versions.",
+        "safety_restrictions": "Never guess image/target/order, automate past a confirmation gate, interrupt an in-progress write, power-cycle early or extra, retry uncertainty, use another platform's instructions, clear logs or declare PASS from UI completion without active-version and GPU/platform-health proof.",
+        "human_approval_requirements": "Firmware/release/platform owners approve each transition and image; system/workload owner approves downtime; lab power owner authorizes and controls AC. Immediate confirmation is required after final target/image review before each write and before each AC cycle.",
+        "manual_boundaries": "Image release/compatibility judgment, final write authorization, physical or protected PDU AC control and anomaly disposition remain human-controlled. Qualified browser steps, monitoring and read-only evidence collection can be automated within those gates.",
+        "recovery_requirements": "On update error, lost session with uncertain task state, power instability, missing target version, GPU enumeration/diagnostic failure or host/BMC recovery failure, do not retry or cycle again; preserve evidence/state, maintain safe power, invoke the exact vendor recovery with authorized known-good image and quarantine the platform until owner disposition.",
+        "stop_conditions": "Any component/image/version ambiguity, failed signature/hash/compatibility, active workload, missing approval/stable power/OOB/recovery, unexpected web warning/task state, interruption risk, update timeout without authoritative status, AC deviation, wrong/missing active version, GPU/host/BMC/SEL error or incomplete direction-specific evidence."
+      }
+    },
+    {
+      "sequence": 45,
+      "source_key": "Functionality|746|Wistron-BMC-00036-V002",
+      "contract": {
+        "test_name": "BMC HTTP Virtual Media Attachment and Host Visibility — Intent Decision Required",
+        "purpose": "Pending owner decision: validate reversible HTTP virtual-media attachment/visibility, or define a separate authorized boot/install workflow. Do not infer installation from media mounting.",
+        "applicable_platform_environment": "An isolated test server and exact BMC release with a documented network virtual-media flow, approved remote console, immutable HTTP(S) image, host read-only device access and independent BMC/OOB recovery.",
+        "target_scope": "Safe provisional scope is one virtual CD/DVD attach, host visibility/content identity and eject cycle. Booting, autorun and OS installation remain out of scope until explicitly specified and approved.",
+        "required_inputs": "Owner end-state decision; supported BMC network-media procedure; exact URI/image/hash/type/size and TLS/auth policy; expected BMC/media/host identity; isolation, console/OOB and cleanup; if installation is required, target disk, data-loss approval, installer configuration, boot path, completion and recovery.",
+        "test_command_procedure_intent": "After the conflict is resolved, capture baselines, verify image provenance and selected transport, attach through the approved BMC mechanism with write protection where supported, confirm inserted state and exact host-visible media/content, perform only the approved terminal action, eject/deactivate and verify final host/BMC state.",
+        "preconditions": "One unambiguous end state and one transport path approved; isolated SUT; exact immutable image verified; secrets protected; virtual-media state clean; host boot/storage baseline and target protection ready; console/OOB and eject/recovery available; approval appropriate to any destructive scope.",
+        "expected_evidence": "Owner intent decision; BMC/version/capability; image URI metadata/hash and security policy; remote-console and insert state; exact virtual device/content identity; no unauthorized boot/write; terminal-state evidence; eject/cleanup; final host/BMC/boot/storage health.",
+        "acceptance_reference": "The exact BMC vendor virtual-media procedure and owner-approved test end state; DMTF Redfish VirtualMedia semantics may be used only when implemented by this BMC and do not authorize installation.",
+        "safety_restrictions": "Never infer install authority from mount authority, use example/mutable/unverified media, place secrets in evidence, alter boot/storage, launch an installer, write an unallowlisted disk or leave media inserted after a mount-only test.",
+        "human_approval_requirements": "BMC/system owner approves media insertion and cleanup after intent resolution. Any boot or installation requires separate immediate system/storage/data-loss approval and a human confirmation gate.",
+        "manual_boundaries": "The owner resolves test meaning and destructive boundary; an operator may handle vendor Web UI confirmation. Capability queries, evidence and host device comparisons can be automated; installation judgment/recovery cannot be inferred by the agent.",
+        "recovery_requirements": "On unexpected autorun, boot change, installer, device mismatch, loss of console or failed eject, stop all input/writes, preserve state, detach media through the approved path, recover boot/storage under owner control and do not reboot or retry until disposition.",
+        "stop_conditions": "Unresolved end state, unsupported/ambiguous transport, unverified image or certificate/auth, non-isolated host, missing console/eject/recovery, unexpected device/content/autorun/boot/install behavior, any unapproved storage write or failed cleanup."
+      }
+    },
+    {
+      "sequence": 46,
+      "source_key": "Functionality|762|Wistron-BMC-00052-V003",
+      "contract": {
+        "test_name": "BMC Standard Equipment MIB Data over SNMPv3",
+        "purpose": "Verify a finite owner-approved Standard Equipment MIB object set is securely readable from the BMC through SNMPv3 and returns complete, correctly typed and expected values.",
+        "applicable_platform_environment": "The exact BMC firmware and vendor MIB release, an isolated authorized management host with approved Net-SNMP and/or iReasoning client, least-privilege SNMPv3 user/VACM/ACL and a documented setup/restore path.",
+        "target_scope": "Only the signed `$target` numeric OID subtrees/object instances and required equipment fields. Redfish is out of scope unless an explicit mapped cross-check is added; SNMP SET and traps are out of scope.",
+        "required_inputs": "MIB file/hash/version; finite symbolic/numeric OID-instance manifest; syntax/access/index and expected/dynamic-value/completeness rules; client-path decision; SNMPv3 auth/privacy/VACM/ACL and secret handling; BMC procedure; query limits; approval and cleanup state.",
+        "test_command_procedure_intent": "Capture redacted baseline; after approval configure the least-privilege SNMPv3 agent/user/view/source ACL; validate MIB translation; execute only bounded GET/GETNEXT/WALK queries for the manifest; retain numeric and decoded output; compare types/instances/values; inspect audit/health; restore or retain configuration exactly as approved.",
+        "preconditions": "Correct BMC/MIB/manifest selected; all target objects read-only; expected values/instance counts defined; isolated host and approved clients ready; credentials injected through a protected channel; rate/bounds/abort and cleanup defined; owner approval active; logs preserved.",
+        "expected_evidence": "BMC/MIB/client identifiers; signed OID manifest; redacted SNMPv3 security/VACM/ACL before/during/after; complete bounded numeric and decoded results with return status/timestamps; type/index/value/completeness comparison; BMC audit/health and cleanup proof.",
+        "acceptance_reference": "The exact owner/vendor Standard Equipment MIB and platform equipment inventory/value contract, with Net-SNMP behavior used only for query mechanics and not as the source of expected BMC data.",
+        "safety_restrictions": "Never use SET, v1/v2c fallback, unbounded roots, plaintext secrets, unauthorized OIDs, assumed Redfish substitutes, TLS bypass, excessive query rate or persistent temporary access.",
+        "human_approval_requirements": "BMC/security owner approves agent/user/VACM/ACL changes and secret handling; test owner approves target manifest and client acceptance. Read-only queries can run automatically only inside those bounds.",
+        "manual_boundaries": "WebUI account/agent setup may require an operator; owners decide schema/value exceptions and cleanup state. MIB validation, bounded retrieval, comparison and health evidence can be automated.",
+        "recovery_requirements": "On authentication/VACM mismatch, unexpected writable object, out-of-scope instance, sensitive output, BMC load/health issue or failed cleanup, stop queries, revoke/disable temporary access through the approved path, preserve redacted audit evidence and do not broaden permissions for retry.",
+        "stop_conditions": "Unresolved `$target`/client path, invalid MIB, non-read-only object, undefined expected/instance count, insecure or exposed credentials, missing approval/ACL, out-of-bound response, repeated timeout/BMC degradation, unauthorized sensitive data or failed configuration restoration."
+      }
+    },
+    {
+      "sequence": 47,
+      "source_key": "Functionality|777|Wistron-BMC-00067-V003",
+      "contract": {
+        "test_name": "NVMe Temperature Sensors 1–16 Threshold and SEL Validation",
+        "purpose": "Validate normal tracking, SDR/threshold configuration, SEL assert/deassert and documented protection behavior for every TEMP_NVME_1–16 sensor under an approved bounded thermal stimulus.",
+        "applicable_platform_environment": "The exact 16-slot NVMe/BMC/firmware recipe in an isolated thermal-capable lab with a signed sensor-device map, qualified stimulus, independent NVMe/BMC/fan/power monitoring, protected storage and recovery access.",
+        "target_scope": "Every TEMP_NVME_1 through TEMP_NVME_16 individually, including an explicit PASS/FAIL/NOT_APPLICABLE decision for each empty or unsupported slot under owner rules; no first-match or aggregate substitute.",
+        "required_inputs": "16-sensor/slot/device map; SDR sensor numbers/types/units/thresholds/hysteresis/tolerance; SEL event/assert/deassert map; safe stimulus/ramp/hold/cooldown; expected fan/throttle/shutdown per threshold; drive/data limits; approvals; monitoring/abort/SEL/recovery plan and tools.",
+        "test_command_procedure_intent": "Preserve complete SDR/SEL/NVMe/host baselines; after final approval apply the qualified stimulus to one approved target/schedule; continuously capture BMC and independent temperature plus health/fan/power; record normal ramp and each allowed threshold/event/response; abort within signed limits; cool down and prove deassertion/recovery; repeat independently for every required sensor.",
+        "preconditions": "All sensors mapped and baselines plausible; standard read-only commands validated; thresholds/events/protection specified; drives/data protected; no conflicting workload; stimulus and monitoring calibrated; maintenance, shutdown risk, SEL capacity, abort/cooldown and recovery approved; logs preserved.",
+        "expected_evidence": "Signed per-sensor matrix; raw SDR and thresholds; synchronized BMC/independent/NVMe temperature and health traces; stimulus profile; warning/critical crossing and exact SEL assert/deassert raw records; fan/throttle/shutdown response; aborts; cooldown; unchanged storage and final system health for all 16.",
+        "acceptance_reference": "The exact platform/BMC SDR and thermal-protection specification plus each qualified NVMe device's thermal/health limits; upstream ipmitool only defines collection mechanics.",
+        "safety_restrictions": "Never invent raw bytes, alter thresholds/fans, clear SEL, heat an unmapped drive, exceed safe maximum, perform unapproved shutdown, write protected data, omit targets or declare PASS from static readings alone.",
+        "human_approval_requirements": "BMC/thermal/storage/system owners approve mapping, stimulus, limits, protection response and potential shutdown. A human safety operator supervises each active stimulus and retains abort authority.",
+        "manual_boundaries": "Stimulus setup, physical thermal control and shutdown disposition require an operator. Standard IPMI/NVMe telemetry collection, time correlation, threshold/SEL comparison and evidence packaging can be automated after approval.",
+        "recovery_requirements": "On thermal overshoot, NVMe/media/controller error, unexpected shutdown/fan response, sensor divergence, SEL saturation or host/BMC loss, terminate stimulus, maximize only the approved cooling state, preserve evidence, avoid auto-retry/SEL clear, verify namespaces/data/drive health and quarantine the target until owner disposition.",
+        "stop_conditions": "Unmapped/implausible sensor, missing spec/approval/monitor/abort, unsafe baseline or workload, threshold/event mismatch, temperature divergence/overshoot, NVMe/media/controller/kernel error, unexpected protection action, SEL capacity loss, host/BMC instability or failed cooldown/deassert/recovery."
+      }
+    },
+    {
+      "sequence": 48,
+      "source_key": "Functionality|793|Wistron-BMC-00083-V003",
+      "contract": {
+        "test_name": "GPU Board Power `_M` Sensors 1–8 Load-Response Validation",
+        "purpose": "Validate the load response, configured thresholds and documented protection/event behavior of every PWR_GB_GPU1_M–PWR_GB_GPU8_M sensor under an approved bounded GPU workload.",
+        "applicable_platform_environment": "The exact GPU server recipe whose BMC exposes these eight `_M` sensors, with the vendor-supported host GPU driver/runtime, a signed sensor-to-GPU/module map, qualified workload, synchronized BMC/host monitoring and recovery access.",
+        "target_scope": "All eight named sensors individually, mapped to physical GPU/module/slot and BDF/UUID; absent or unsupported channels require an owner-approved NOT_APPLICABLE result rather than omission.",
+        "required_inputs": "`_M` definition; eight-channel mapping; SDR units/scaling/normal range/tolerance/thresholds/hysteresis/event map; GPU stack and bounded workload; target/duration/sample cadence/power limits; expected fan/throttle/shutdown behavior; approvals; abort, logging and recovery plan.",
+        "test_command_procedure_intent": "Capture SDR, SEL, GPU identity and synchronized power/thermal/clock/throttle baselines. After approval, run the qualified workload only on the mapped target/schedule while recording every BMC and host-side channel; verify the specified rise, steady-state, event/protection response and fall; stop within signed limits, then prove recovery and preserve evidence. Repeat until every applicable sensor has an independent result.",
+        "preconditions": "Correct platform recipe; `_M` and all mappings resolved; plausible read-only baselines; supported GPU driver/runtime and telemetry; workload target and power envelope qualified; thresholds/protection behavior specified; no conflicting load; monitoring, maintenance window, abort, log capacity and recovery approved.",
+        "expected_evidence": "Signed eight-channel matrix; raw SDR records/readings/thresholds; GPU UUID/BDF/module identity; driver/runtime/workload versions; synchronized per-channel BMC and host power plus temperature/clock/throttle/fan/host data; workload timing; event/protection records; aborts; return-to-baseline and final GPU/host/BMC health.",
+        "acceptance_reference": "The exact platform BMC SDR/power-protection specification and qualified GPU vendor telemetry/workload documentation; generic ipmitool or nvidia-smi documentation defines collection mechanics, not platform limits.",
+        "safety_restrictions": "Never invent raw bytes or sensor order, alter power limits/fans/thresholds, clear evidence, exceed the signed power/thermal envelope, run an unapproved workload, omit channels or infer PASS from aggregate/static telemetry.",
+        "human_approval_requirements": "BMC, GPU, power/thermal and lab owners approve mapping, workload, limits, any threshold/protection transition and recovery. An authorized operator supervises active loading and retains immediate abort authority.",
+        "manual_boundaries": "Workload approval, protection/shutdown disposition and physical recovery remain human-controlled. Read-only inventory, synchronized telemetry, correlation, comparison and evidence packaging can be automated after inputs are approved.",
+        "recovery_requirements": "On power/thermal overshoot, XID/driver/kernel fault, unexpected throttle/fan/shutdown, sensor divergence, BMC/host loss or failed recovery, stop the workload, retain safe approved cooling, preserve SEL and host/GPU logs, avoid automatic retry or evidence clearing, restore the approved baseline and quarantine the affected target pending owner disposition.",
+        "stop_conditions": "Unknown `_M`/mapping, unsupported or implausible reading, missing approval/monitor/abort, wrong GPU target, limit overshoot, unexpected event/protection response, XID/ECC/driver/kernel fault, telemetry loss, BMC/host instability or failure to return to the approved baseline."
+      }
+    },
+    {
+      "sequence": 49,
+      "source_key": "Functionality|823|Wistron-BMC-00113-V005",
+      "contract": {
+        "test_name": "BMC Shared and Dedicated LAN Three-State Connectivity",
+        "purpose": "Verify independent BMC connectivity through the shared and dedicated management ports in both-connected, shared-only and dedicated-only cable states.",
+        "applicable_platform_environment": "The exact platform/BMC recipe in an isolated two-path management network with signed physical-port, BMC-channel, MAC/IP, VLAN, switch-port and client-interface mappings plus alternate recovery.",
+        "target_scope": "Both labeled physical BMC LAN paths and the same authenticated target BMC across all three source-defined cable states; neither a generic management ping nor one surviving path substitutes for per-port proof.",
+        "required_inputs": "End-to-end two-port map; expected dual-port/failover/IP behavior; client path-pinning method; identity protocol; convergence, timeout and retry values; isolated topology; cache/session handling; operator transition record; final topology; approvals and recovery access.",
+        "test_command_procedure_intent": "Capture the read-only configuration baseline. For each state in order—both connected, shared only, dedicated only—the operator establishes and attests the cables; after the specified convergence interval the agent opens fresh path-pinned connections, authenticates the target BMC, tests both expected-positive and expected-negative paths, and correlates results with link/switch counters and read-only channel data. Restore and verify the approved final topology.",
+        "preconditions": "Correct BMC and physical labels verified; client routes/interfaces and switch ports mapped; both paths proven recoverable; topology isolated from loops/duplicate addressing; expected simultaneous-port behavior and timeouts specified; protected credentials, local/OOB recovery, operator and approvals available; no unrelated management changes in progress.",
+        "expected_evidence": "BMC/firmware and signed path map; redacted LAN/channel baseline; operator cable-state and timestamps; per-state client source/path, fresh connection transcript, authenticated BMC identity, link state and switch counters for both paths; timeout results for expected-negative paths; logs, anomalies and restored final reachability.",
+        "acceptance_reference": "The exact platform BMC networking specification and approved lab VLAN/routing topology; ipmitool documentation supports read-only channel collection but does not define this platform's shared/dedicated behavior.",
+        "safety_restrictions": "Never move cables without the onsite operator, alter LAN/VLAN/routing during this test, connect both ports where a loop is possible, expose credentials, use cached sessions, remove the last recovery path or infer physical-path success from unpinned traffic.",
+        "human_approval_requirements": "BMC and network owners approve mapping, simultaneous-port behavior and isolated topology. An onsite operator confirms and changes each physical cable state and can restore management access immediately.",
+        "manual_boundaries": "Cable insertion/removal and physical-state attestation are manual. Fresh reachability, BMC identity, channel/link/counter correlation, timeout enforcement, log capture and result packaging are automated after each transition.",
+        "recovery_requirements": "On loop, duplicate address, wrong BMC identity, unexpected route, switch instability or management loss, stop testing, restore the approved cable topology through onsite/local access, clear only approved client caches/sessions, verify both intended interfaces and preserve all diagnostic evidence before retry approval.",
+        "stop_conditions": "Unresolved port/path map, no isolated topology/recovery/operator, ambiguous traffic path, wrong target, loop/storm/duplicate address, unexplained reachability through a disconnected path, failure of an expected active path, BMC/network instability or inability to restore the final topology."
+      }
+    },
+    {
+      "sequence": 50,
+      "source_key": "Functionality|831|Wistron-BMC-00121-V003",
+      "contract": {
+        "test_name": "BMC Callout Delivery Across All Required Notification Methods",
+        "purpose": "Verify that an approved BMC event is logged and delivered through every callout method required by the platform recipe, with end-to-end event and receiver correlation.",
+        "applicable_platform_environment": "The exact BMC/firmware and approved alert-policy recipe, connected only to isolated test receivers for every required notification transport, with synchronized clocks, protected secrets and OOB recovery.",
+        "target_scope": "Every method and event-policy row in the signed platform callout matrix; an unlisted example such as email or SMS is not automatically applicable, and a single successful destination cannot stand in for other required methods.",
+        "required_inputs": "Callout-method/event-policy/receiver matrix; safe reversible stimuli; expected event identity/severity/code/message fields; receiver endpoints and security materials; timeout/retry/deduplication limits; clock tolerance; package/vendor commands; approvals; config backup, cleanup and recovery plan.",
+        "test_command_procedure_intent": "Preserve configuration, clocks, SEL and receiver baselines. For each matrix row, arm the isolated receiver, trigger only the approved reversible event, capture the new source event and BMC callout record, then prove receiver-side delivery and required fields within the specified timeout/retry policy. Correlate by identity and timestamps, prevent uncontrolled repeats, restore temporary settings and verify final health.",
+        "preconditions": "Correct BMC and firmware identified; all required methods enumerated; isolated non-production receivers reachable; time sources synchronized; secrets protected; event mapping and reversible stimuli validated; log capacity, rate limits, backup/rollback, OOB recovery, maintenance window and explicit approval available.",
+        "expected_evidence": "Signed matrix and redacted alert policy; time-sync baseline; exact stimulus/approval; pre/post SEL and BMC/OS callout logs; per-method outbound status and receiver receipt/message with identity, severity, code and timestamps; timeout/retry/deduplication observations; restored configuration and no residual alerts.",
+        "acceptance_reference": "The exact platform BMC alert/callout specification and approved notification-service policy; upstream ipmitool defines test-event mechanics but does not define platform routing or delivery acceptance.",
+        "safety_restrictions": "Never alter SEL time or clear evidence, inject an unvalidated event, trigger real hardware/service faults without separate approval, send to production recipients, expose secrets, exceed rate limits or treat configuration/SEL presence as proof of receiver delivery.",
+        "human_approval_requirements": "BMC, notification-service, network/security and lab owners approve the matrix, stimuli, test receivers, rate limits, impact, rollback and cleanup before any event is generated.",
+        "manual_boundaries": "Owners select applicable methods and safe events and judge any external provider behavior. After approval, the agent can trigger supported stimuli, collect logs/receipts, correlate the end-to-end chain, enforce timeouts and package evidence.",
+        "recovery_requirements": "On wrong recipient/event, alert storm, credential exposure, BMC/network/host impact or failed cleanup, stop stimuli, preserve all logs, disable only the approved temporary test path, restore the backed-up policy, revoke exposed secrets if needed, verify BMC/OOB and receiver health, and require owner disposition before retry.",
+        "stop_conditions": "Incomplete method matrix, unsafe/ambiguous stimulus, production destination, unavailable receiver evidence, clock mismatch beyond tolerance, wrong or duplicate notification, rate-limit breach, missing event-to-receipt correlation, BMC/OOB loss, platform impact or failed rollback/cleanup."
+      }
+    }
+  ]
+}
