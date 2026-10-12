@@ -231,3 +231,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   gaps are `PLATFORM_HANDOFF_DEFECT`. No document defect or model-planning error
   occurred. This is not independent-model validation and is not DUT hardware
   validation.
+
+## Critical eight-GPU thermal-soak validation: sequence 85
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|2064|Wistron-AMD SVM-00018-V002`.
+- It recovered eight exact UUID/BDF/ROCR/AGT-mapped GPUs, at least one minute
+  of pre-idle, eight separately supervised 2400-second Coralgemm processes,
+  synchronized AMD-SMI/AGT/Redfish/system telemetry and post-idle recovery.
+- It rejected numeric index equivalence, launch-only completion, guessed limits
+  or GFLOP rules, ignored sampling gaps, continued load after monitoring loss,
+  overly broad process kills and automatic reset/reboot/rerun.
+- It required per-process timing/status, complete thermal/power/cooling/RAS
+  evidence, quantitative stop rules and all GPUs/services healthy before
+  successful completion; an orderly safety abort remains an incident, not a
+  completed soak.
+- Failure attribution: missing mappings, rules, infrastructure certification
+  and approvals are `PLATFORM_HANDOFF_DEFECT`; inventing or bypassing them would
+  be `MODEL_PLANNING_ERROR`. No document defect occurred. This is not
+  independent-model validation and is not DUT hardware validation.
