@@ -273,3 +273,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   or threshold would be `MODEL_PLANNING_ERROR`. No contract-document defect
   occurred. This is not independent-model validation and is not DUT hardware
   validation.
+
+## Proprietary CPU DVFS validation: sequence 88
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|2198|Wistron-HW-00479-V002`.
+- It recovered an exact recipe-defined CPU package/core/frequency-policy scope,
+  one bounded run and complete MODS/DVFS/log evidence without assuming Intel,
+  AMD or Arm semantics or treating the 10-minute estimates as active duration.
+- It preserved or timestamped baseline logs before any separately authorized
+  clear, required host-key-verified access and rejected the tool name, exit
+  status, one frequency transition or a vendor PASS label as sufficient proof.
+- It required supplied criteria, complete domain coverage, telemetry, log
+  deltas, restoration and final platform health and prohibited automatic rerun.
+- Failure attribution: source `Criteria=TBD` is a
+  `TEST_CASE_DOCUMENT_DEFECT`; absent recipe, command, mappings, limits and
+  approval are `PLATFORM_HANDOFF_DEFECT`. The validator's statement that active
+  execution is currently blocked is readiness gating, not an Automation
+  Classification of `BLOCKED`. This is not independent-model validation and is
+  not DUT hardware validation.
