@@ -1,0 +1,81 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 114,
+  "calibration": false,
+  "source_key": "Reliability|149|Wistron-HW Robust-00027-V002",
+  "case_variant_id": "5459e3a524340076",
+  "source_ref": {"sheet": "Reliability", "source_row": 149, "code": "Wistron-HW Robust-00027-V002"},
+  "source_integrity": {"original_row_sha256": "729ce1240d309318f3085d0c3eae1bfedbca779a2325ba3092217a20cd134aeb", "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"},
+  "source_snapshot": {
+    "test_name": "CPU Temperature",
+    "test_set": "CPU",
+    "purpose_facts": "On the BMC, introspect two EntityManager inventory objects named M0_CPUTempAvg0 and M1_CPUTempAvg0 and check that each object exists and responds with the configured settings.",
+    "procedure_facts": ["Run `busctl introspect xyz.openbmc_project.EntityManager /xyz/openbmc_project/inventory/system/bmc/HMC_0/M0_CPUTempAvg0`.", "Run the equivalent introspection for `/HMC_0/M1_CPUTempAvg0`."],
+    "criteria_facts": ["Check that each device/object exists and responds with user settings.", "Collect outputs/photos and review unexpected logs."],
+    "attended_time_minutes": "15",
+    "machine_time_minutes": "15",
+    "source_conflicts": ["The title says CPU Temperature, but the procedure introspects EntityManager inventory/configuration objects; it does not explicitly read a live temperature sensor, validate units, compare thermal thresholds or qualify accuracy."],
+    "missing_source_information": ["Expected interfaces, properties, signatures and configured values for each object.", "Confirmation that M0 and M1 are the two required modules on this exact platform and that the paths are stable for the BMC firmware version.", "Whether photos mean terminal screenshots and which log deltas are allowed."]
+  },
+  "original_test_intent": {
+    "statement": "Verify that both platform-defined CPU average-temperature configuration objects for HMC module M0 and M1 exist on the BMC EntityManager service and expose the expected D-Bus members/settings.",
+    "must_preserve": ["BMC execution location.", "EntityManager service name.", "Both exact M0_CPUTempAvg0 and M1_CPUTempAvg0 paths.", "Read-only D-Bus introspection of both objects.", "Object existence plus expected configuration/member comparison.", "15/15-minute planning estimates."],
+    "must_not_infer": ["That introspection alone measures current CPU temperature.", "That object existence proves thermal accuracy or threshold compliance.", "That M0 and M1 cover all CPUs on any other platform.", "That success of only the second command proves both objects passed."]
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "FULLY AUTOMATABLE",
+    "second_review_outcome": "AGREE",
+    "risk_level": "LOW",
+    "summary": "V2 correctly treats this as a read-only object-existence/configuration check and explicitly refuses to claim numeric thermal-limit or sensor-accuracy validation.",
+    "specific_gap": "The proposed compound SSH command uses a semicolon and exposes only the remote shell's final status while the text asks to capture both exit statuses. It also does not require a signed per-object member/value reference, so successful introspection can be mistaken for matching `user settings`."
+  },
+  "applicable_history": {
+    "locked_user_decisions": [],
+    "related_records": ["No other sensor path or platform can supply the expected M0/M1 configuration for this row."],
+    "precedence_application": "Keep V2's narrow configuration-object interpretation because it matches the actual commands; the broad title does not authorize adding live thermal stress, threshold or accuracy testing."
+  },
+  "v3_review_conclusion": {
+    "review_outcome": "IMPROVED",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT"],
+    "summary": "Retain FULLY AUTOMATABLE and the read-only scope. Actual introspection can be collected immediately on the identified BMC, but final PASS needs a per-object expected interface/property/value matrix; run the paths as independently status-tracked commands so one success cannot hide the other's failure."
+  },
+  "execution_readiness_detail": {
+    "conditions_present": ["Service, two exact object paths, read-only command family, execution plane and basic existence criterion are supplied."],
+    "missing": ["BMC/platform identity, expected members/settings for each object, firmware/path applicability and evidence/log rules."],
+    "provider": ["BMC/thermal configuration owner supplies the signed M0/M1 object schema/value matrix and platform applicability.", "Test owner defines allowed additional members, screenshot requirement and PASS/FAIL treatment for mismatches."],
+    "safe_read_only_work": ["Record BMC/firmware identity and busctl version.", "Run each exact `busctl introspect` separately and preserve its own stdout, stderr and exit status.", "Collect relevant D-Bus service status/logs only if an object is absent or the call fails."],
+    "prohibited_until_resolved": ["Changing properties, calling mutating methods, restarting EntityManager, inventing alternate paths, claiming live temperature/thermal compliance or declaring PASS without expected settings."],
+    "closure_evidence": ["Signed reference maps both paths to required M0/M1 modules and lists expected interfaces/properties/types/values.", "Both separate commands return successfully and each output matches the allowed matrix."]
+  },
+  "revision_candidate": {
+    "test_name": "Verify M0 and M1 CPU Temperature Configuration Objects on BMC D-Bus",
+    "purpose": "Confirm that the BMC EntityManager service exposes both required M0_CPUTempAvg0 and M1_CPUTempAvg0 inventory/configuration objects and that each object's interfaces, properties, types and configured values match the platform-approved reference.",
+    "applicable_platform_environment": "The BMC firmware and HMC topology whose signed configuration uses the two supplied `/xyz/openbmc_project/inventory/system/bmc/HMC_0/...` object paths. Execute on the BMC system D-Bus; do not run on the host OS or transfer these paths to another platform.",
+    "target_scope": "Exactly the M0_CPUTempAvg0 and M1_CPUTempAvg0 EntityManager objects. This is object/configuration validation only; live sensor value, Celsius conversion, temperature threshold behavior, accuracy, stress response and thermal protection are not tested. Treat 15/15 minutes as estimates.",
+    "required_inputs": "BMC identity/firmware; expected HMC module count; approved service/object paths; per-object interface, property, signature, access and configured-value matrix; allowed additional members; BMC read-only access; busctl version; evidence location; screenshot and failure-log rules.",
+    "test_command_procedure_intent": "On the BMC, record identity and `busctl --version`. Run the two source `busctl introspect xyz.openbmc_project.EntityManager <object-path>` commands separately, preserving individual stdout, stderr and exit status. Compare each complete member listing and displayed property value with its signed M0 or M1 matrix; do not collapse results into one final shell status. On failure only, collect EntityManager/systemd D-Bus diagnostics without restarting services.",
+    "preconditions": "Correct BMC and firmware are identified; both paths and expected matrices are approved for this HMC topology; EntityManager and system D-Bus are available; credentials permit read-only introspection; no service restart or property mutation is planned.",
+    "expected_evidence": "BMC/firmware identity, busctl version, service ownership, full M0 and M1 introspection outputs, separate stderr and exit status for each, timestamp, object-to-module mapping, field-by-field expected/actual comparison, allowed-extra treatment, screenshot if required and relevant D-Bus logs only for failure; engineer disposition for each object and overall.",
+    "acceptance_reference": "The platform-approved EntityManager configuration matrix for the exact BMC firmware. Pass requires both objects to exist, both introspection calls to succeed and all required members/settings to match; it makes no claim about live CPU temperature or thermal limits.",
+    "safety_restrictions": "Use only `busctl introspect` and other approved read-only metadata queries. Do not use `set-property`, mutating `call`, service restart or alternate guessed paths. Do not expose credentials, treat one object's success as both, or infer sensor accuracy/thermal health from configuration metadata.",
+    "human_approval_requirements": "No per-run destructive approval is required. The configuration owner must supply/approve the expected matrices and judges unresolved path or value differences.",
+    "manual_boundaries": "An Agent can execute and compare both read-only calls. A human is needed only to provide protected access/reference data and adjudicate an undocumented platform variant; no physical action is required.",
+    "recovery_requirements": "No state recovery is expected. If introspection fails, preserve the error and service status, stop without restart or mutation, and have the BMC owner resolve service/path/reference applicability before a controlled retry.",
+    "stop_conditions": "Wrong BMC/firmware, missing expected matrix, unavailable system D-Bus/EntityManager, access failure, either object absent, command error, required member/type/value mismatch or need for a mutating diagnostic. These conditions prevent PASS but do not represent a measured CPU over-temperature event."
+  },
+  "identified_defects": ["The source title can be misread as live temperature validation although only configuration-object introspection is performed.", "V2's compound remote shell does not inherently preserve each command's exit status.", "Expected `user settings` are absent, preventing objective value comparison.", "The prior SSH wrapper uses a generic DUT target variable without making the BMC endpoint explicit."],
+  "changed_fields": ["Review Outcome", "Execution Readiness", "Test Name", "Required Inputs", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference", "Stop Conditions"],
+  "reason_for_change": "Preserve V2's correct narrow intent while making both object results independently auditable and separating safe actual-value collection from the missing expected configuration needed for PASS.",
+  "new_technical_evidence": [
+    {"source_url": "https://man7.org/linux/man-pages/man1/busctl.1.html", "title": "busctl(1)", "version": "systemd manual retrieved 2026-10-14", "applicability": "BMC systemd busctl implementation compatible with the documented command", "supports": "`introspect` shows an object's interfaces, methods, properties and signals, whereas `get-property` explicitly retrieves current properties; therefore the source is an object/member/configuration inspection and does not by itself define a live CPU thermal qualification.", "remaining_uncertainty": "The BMC's exact systemd version and expected EntityManager members/settings remain platform inputs."},
+    {"source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Reliability!row-149", "title": "Source testcase Wistron-HW Robust-00027-V002", "version": "Baseline workbook SHA-256 e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "applicability": "Only this M0/M1 BMC D-Bus case", "supports": "The two exact objects, EntityManager service, introspection method, object-existence/configured-settings criterion and timing.", "remaining_uncertainty": "The expected settings and platform mapping are absent."}
+  ],
+  "removed_ambiguities": ["States explicitly that this is configuration-object validation, not live thermal qualification.", "Requires a separate result and exit status for M0 and M1.", "Makes the BMC execution endpoint explicit.", "Separates collectable actual introspection data from the missing expected matrix."],
+  "resolved_blockers": ["No package or manual operation blocks safe read-only evidence collection when busctl and the two paths are available."],
+  "remaining_blockers": ["Final PASS awaits the platform-approved per-object member/value matrices and path applicability."],
+  "objective_improvement_over_v2": "V3 keeps V2's correct classification but fixes its unauditable compound-command status handling and prevents successful object introspection from being mistaken for either matching unspecified settings or validating live CPU temperature.",
+  "agent_understanding_result": {"status": "NOT_SELECTED", "validation_scope": "NOT_RUN_LOW_RISK_NON_MATERIAL_CLASSIFICATION", "independent_model_validation": false, "notes": "This low-risk read-only case retained V2's automation classification and narrow intent; isolated validation was not selected for this record."},
+  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASSED_STATIC"},
+  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "Reliability row 149 introspects exactly M0_CPUTempAvg0 and M1_CPUTempAvg0 under HMC_0 on the BMC EntityManager service.", "source_specific_v2_comparison": "V2 correctly narrows the claim but combines both calls in a shell while promising distinct statuses and does not require the missing user-settings reference.", "source_specific_safety_evidence_decision": "Allow both read-only introspection calls and per-command evidence now; withhold PASS and all live-temperature claims until both expected configuration matrices are provided and matched.", "template_violation_detected": false}
+}
