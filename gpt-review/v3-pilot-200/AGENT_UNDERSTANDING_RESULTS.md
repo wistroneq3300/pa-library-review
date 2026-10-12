@@ -637,3 +637,25 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   injection or partial-evidence PASS would be `MODEL_PLANNING_ERROR`. No
   proposed-contract defect was found. This is not independent-model validation
   and is not DUT hardware validation.
+
+## NVIDIA CPU PCIe Bad TLP definition gate: sequence 105
+
+Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|106|Wistron-System RAS-00826-V003`.
+- It independently kept the traffic endpoint/origin, receiving component and
+  AER reporting Root Port/RCEC distinct and required all corresponding BDFs in
+  a signed per-hierarchy matrix.
+- It rejected substituting Bad LCRC, selecting `aer-inject`/EINJ/vendor tools,
+  assuming representative or all-slot coverage, or treating existing AER
+  capability/counter data as completion.
+- It preserved correctable severity and the no-unexpected-reset/retrain plus
+  link/device/service health gate, while limiting current work to non-mutating
+  topology, ownership, counter and health discovery.
+- Failure attribution: label-only Procedure and TBD Criteria are
+  `DOCUMENT_DEFECT`; missing topology, generator, locus map, timing, recovery
+  and approvals are `PLATFORM_HANDOFF_DEFECT`; inferred tools/BDFs, wrong-locus
+  injection or unjustified PASS would be `MODEL_PLANNING_ERROR`. No proposed-
+  contract defect was found. This is not independent-model validation and is
+  not DUT hardware validation.
