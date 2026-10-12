@@ -702,6 +702,29 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This
   is not independent-model validation and is not DUT hardware validation.
 
+## AMD GPU SDMA Type-4 UE recovery validation: sequence 118
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|181|Wistron-GPU RAS-00010-V002`.
+- It preserved exactly one SDMA block-1/sub-block-0/type-4 uncorrectable
+  injection on one UUID/BDF/serial/OAM/DRM/tool-index-mapped GPU and rejected
+  Device-0 guessing, a UMC block-0 query or address/command parity as a
+  substitute.
+- It required the actual loaded `ras_enable`, `ras_mask` and SDMA feature state,
+  kept the UMC query only as a separate control baseline, and required a target
+  SDMA UE baseline plus a fresh SDMA ACA record and counter delta.
+- It preserved the complete reset/MODE1/resume/VRAM-handling sequence and final
+  enumeration, memory, compute and telemetry health gate; tool success, reset
+  text, a UMC counter or re-enumeration alone were rejected as completion.
+- Failure attribution: missing signed semantics, target/default mapping,
+  version-specific ACA/reset expectations, recovery and approvals are
+  `PLATFORM_HANDOFF_DEFECT`; guessing a target, substituting another fault,
+  changing the loaded driver unsafely, retrying or declaring partial-evidence
+  PASS would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found.
+  This is not independent-model validation and is not DUT hardware validation.
+
 ## BMC I2C-7 fan, leak and PDB endpoint validation: sequence 112
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
