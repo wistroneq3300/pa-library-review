@@ -5,6 +5,18 @@ description: Use when reviewing the Wistron AI test-case library (REVISED_comman
 
 # PA Test-Library Review
 
+## V3 review routing
+
+When the requested work explicitly names Review Logic V3 or the V3 pilot,
+read `gpt-review/REVIEW_WORKFLOW_LOGIC_V3.md` first and use it as the
+prospective review contract. Also read this skill's historical references and
+`gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md` for comparison and
+safety context. Store V3 records separately under the requested V3 workspace;
+do not overwrite the V2 overlay or source files.
+
+For V2, legacy xlsx-edit, or production merge tasks, continue using the
+existing workflow below. The V3 route does not change or remove those modes.
+
 One-case-at-a-time review of the Wistron test-case library so every case has a **unique,
 directly-runnable command** (or an explicit reason it cannot be automated), with **zero
 regression** against the rest of the library.
