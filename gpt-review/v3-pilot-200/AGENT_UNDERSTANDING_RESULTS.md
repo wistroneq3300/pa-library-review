@@ -109,3 +109,27 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
 | 41-44 | 4 clear | SMBIOS cache/memory/PSU references and destructive GPUBB firmware plus AC activation remained distinct and complete. |
 | 45 | Ambiguity handled | Mount-only and boot/install interpretations remained blocked pending owner correction. |
 | 46-50 | 5 clear | SNMP MIB scope, NVMe thermal, GPU power, three BMC cable states and every callout method were recovered without unsafe expansion. |
+
+## Material-change validation: sequence 67
+
+Status: `PASSED AFTER DOCUMENT REPAIR IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed PA execution contract for
+  `Functionality|1352|Wistron-BMC-00642-V004`; it did not receive the source,
+  V2 conclusion or root review rationale.
+- First-pass understanding correctly prohibited `InsertMedia` POST and limited
+  current work to VirtualMedia/ActionInfo GET discovery. It also exposed three
+  contract defects: an occupied slot was over-broadly listed as a discovery
+  stop condition, discovery completion was underspecified, and post-decision
+  wording could be misread as permission to execute.
+- The document was repaired so an occupied slot is discovery evidence but a
+  future insertion blocker; discovery has explicit completion criteria; and
+  owner resolution may only close discovery or lead to a separate execution
+  contract, never authorize POST under this contract.
+- Revalidation recovered the exact purpose, resource-instance scope, missing
+  inputs, safe GETs, mutation approval boundary, evidence, stop conditions and
+  completion. The validator returned `PASS` and stated that no POST is part of
+  completion.
+- Failure attribution: first-pass testcase-document defects, corrected. No
+  remaining platform-handoff or model-planning failure was identified. This is
+  not independent-model validation and is not DUT hardware validation.
