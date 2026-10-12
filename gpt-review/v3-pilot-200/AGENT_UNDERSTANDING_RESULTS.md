@@ -359,3 +359,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   them would be `MODEL_PLANNING_ERROR`. Current execution gating does not alter
   the `MANUAL ONLY` capability class. This is not independent-model validation
   and is not DUT hardware validation.
+
+## Genuine semantic blocker validation: sequence 92
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed blocked contract for
+  `Functionality|2292|Wistron-HW-00451-V002`.
+- It recovered definition closure as the sole current activity and did not
+  select a cable, board, bus, address, pins, controller, power state, physical
+  continuity test or software probe.
+- It prohibited manipulation, measurement, enumeration, register access,
+  voltage injection, analyzer use and power transition while preserving the
+  2/2-minute values only as non-executable planning estimates.
+- It correctly treated signed owner clarification as completion of definition
+  work only; a new execution contract and capability review remain mandatory,
+  and no testcase PASS/FAIL is possible.
+- Failure attribution: the underlying TBD target/procedure/criteria are a
+  `TEST_CASE_DOCUMENT_DEFECT`; absent platform/cable mapping is a
+  `PLATFORM_HANDOFF_DEFECT`; inventing either would be a
+  `MODEL_PLANNING_ERROR`. This is not independent-model validation and is not
+  DUT hardware validation.
