@@ -745,3 +745,25 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   inferred address/index, mixed paths or partial-evidence PASS would be
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
   independent-model validation and is not DUT hardware validation.
+
+## BMC I2C-6 to Mezzanine Network Board 1 validation: sequence 110
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|127|Wistron-HW Robust-00005-V002`.
+- It understood a BMC-side functional routed-bus check through MUX 0x72 port 1
+  and explicitly excluded physical continuity, signal integrity, probing,
+  soldering and host-OS execution.
+- It required the exact I2C-6 adapter mapping, driver ownership, PID endpoint
+  matrix, both IO-expander and FRU responses, one bounded MUX transition and
+  exact restoration of the recorded original state.
+- It rejected broad or quick-write scanning, forced access, an inferred 0x02
+  meaning, one-endpoint or MUX-only completion and address presence as proof of
+  electrical continuity; scan/MUX safety was judged clear after handoff.
+- Failure attribution: missing adapter/MUX/endpoint/safe-operation/recovery data
+  are `PLATFORM_HANDOFF_DEFECT`; guessed buses, broad scans, forced access,
+  continuity claims or PASS before restoration would be `MODEL_PLANNING_ERROR`.
+  No proposed-contract defect was found, and the gated reclassification from
+  MANUAL ONLY was clear. This is not independent-model validation and is not
+  DUT hardware validation.
