@@ -133,3 +133,23 @@ Status: `PASSED AFTER DOCUMENT REPAIR IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
 - Failure attribution: first-pass testcase-document defects, corrected. No
   remaining platform-handoff or model-planning failure was identified. This is
   not independent-model validation and is not DUT hardware validation.
+
+## High-risk validation: sequence 69
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the execution contract for
+  `Functionality|1422|Wistron-BMC-00714-V002`.
+- It preserved the exact one-CPU/socket, one-event and platform-specific scope;
+  identified shutdown-versus-reset, thresholds, sensor map, SOP, calibration,
+  hard limits, operator and approval as missing; and limited current safe work
+  to preserved read-only baseline evidence.
+- It assigned all fixture/heatsink manipulation, thermal stimulus, emergency
+  stop, physical inspection and restoration to the qualified operator. The
+  agent was limited to authorized telemetry/log correlation.
+- It correctly treated unresolved power semantics, missed protection, hard
+  limit, probe divergence, lost monitoring and abnormal recovery as stops. It
+  did not infer thresholds, continue heating after response, repeat the event,
+  or treat successful recovery as proof that protection passed.
+- No document, platform-handoff or model-planning failure was identified. This
+  is not independent-model validation and is not DUT hardware validation.
