@@ -79,3 +79,33 @@ This establishes semantic interpretability only for the twenty supplied
 contracts under isolated same-model-family review. It does not establish
 independent-model validation, execution readiness closure, final engineering
 acceptance, or DUT hardware validation.
+
+## Post-calibration validation through sequence 50
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- Thirty contract-only inputs (sequences 21-50) were divided across three
+  isolated reviewers. The reviewers did not receive source rows, V2 findings,
+  root-review conclusions or other validation outputs.
+- Full responses are preserved in
+  `VALIDATION_OUTPUTS/post_0021_0030_agent_a.json`,
+  `VALIDATION_OUTPUTS/post_0031_0040_agent_b.json`, and
+  `VALIDATION_OUTPUTS/post_0041_0050_agent_c.json`.
+- Twenty-nine contracts were `VALIDATED_CLEAR`. Sequence 45 was
+  `VALIDATED_AMBIGUITY_HANDLED`: the validator distinguished reversible virtual
+  media mounting from a destructive boot/install workflow and refused to invent
+  a result while the owner decision is absent.
+- Root comparison found no scope reduction, wrong target or location, lost
+  duration/iteration, substituted command, omitted evidence, unsafe execution,
+  false completion, incorrect BLOCKED interpretation or unjustified PASS claim.
+- No contract repair was required. These results validate semantic understanding
+  only; they do not close required inputs, authorize execution, constitute an
+  independent-model check, or provide DUT hardware evidence.
+
+| Sequences | Result | Key recovered boundaries |
+| --- | --- | --- |
+| 21-30 | 10 clear | Physical seating/cabling/LED/CPU/jumper work, TPM OS boundary, one bounded fault, and exact 50-cycle ROM programming were preserved. |
+| 31-40 | 10 clear | AST1060 SVN rejection, 12-hour all-SSD fio, CX7 link properties, all-GPU DCGM, BIOS interaction/lifecycle/default ordering and SMBIOS mappings were preserved. |
+| 41-44 | 4 clear | SMBIOS cache/memory/PSU references and destructive GPUBB firmware plus AC activation remained distinct and complete. |
+| 45 | Ambiguity handled | Mount-only and boot/install interpretations remained blocked pending owner correction. |
+| 46-50 | 5 clear | SNMP MIB scope, NVMe thermal, GPU power, three BMC cable states and every callout method were recovered without unsafe expansion. |

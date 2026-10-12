@@ -1,0 +1,322 @@
+[
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 21,
+    "source_key": "Functionality|2|Wistron-HW-00001-V006",
+    "answers": {
+      "exact_test_purpose": "Verify by qualified physical inspection that every component required by the exact SUT assembly recipe is in the prescribed location and is fully seated and retained, with traceable checklist, photographic, operator, and defined blackbox evidence.",
+      "target_and_scope": "One serial/asset-identified SUT and every component on its owner-approved seating checklist. Physical seating and retention are the acceptance scope; OS/BMC inventory is corroboration only, and unapproved reseating or repair is outside scope.",
+      "missing_information": ["Exact SUT identity and matching BOM, drawing, and revision-controlled assembly recipe.", "Complete component checklist, seating/retention indicators, required photo views, and the meaning and expected state of blackbox evidence.", "Qualified operator authorization, safe power/isolation and ESD procedure, evidence destination, and anomaly/recovery owner."],
+      "read_only_checks_possible_now": ["Validate recipe, BOM, drawing, checklist, and evidence-file provenance offline.", "Capture existing OS/BMC component inventory and health/log baselines without clearing logs or opening the chassis.", "Confirm SUT serial/asset identity, maintenance state, evidence storage, and operator/recovery assignments without changing hardware."],
+      "intended_test_operation": "Place the identified SUT in the approved safe power state, apply ESD controls, and have a qualified operator expose the chassis and inspect every checklist item, connector, latch, and retainer without forcing or reseating it. Record item-level observations, mapped photos, and defined blackbox state; restore the chassis/power state and collect approved before/after health evidence.",
+      "actions_requiring_authorization": ["Power isolation, chassis access, and physical handling by a qualified operator.", "Any reseat, removal, repair, or change to a component, even if looseness is found.", "Use or disclosure of restricted internal photographs and any recovery action."],
+      "evidence_required": ["SUT, recipe/BOM/drawing revision, operator, and timestamp identities.", "A signed complete item-level checklist with seating/retention observations and photos mapped to each component.", "Defined blackbox record with provenance, preserved before/after inventory and unexpected host/BMC evidence, anomaly disposition, and chassis restoration proof."],
+      "stop_conditions": ["SUT or recipe mismatch, incomplete checklist, undefined blackbox requirement, or untraceable evidence.", "Unsafe power, ESD, access, or operator state.", "Damage, obstruction, ambiguous retention, need for force or unapproved reseating, or inability to restore the chassis safely."],
+      "what_constitutes_completion": "Every approved checklist item has traceable first-hand operator inspection, required mapped photos, blackbox evidence, and a disposition; the chassis and approved power state are restored and health evidence is preserved. The agent's packaged report is not a PASS decision.",
+      "what_remains_for_engineer_judgment": "The hardware owner must define the checklist and seating criteria, approve recipe applicability and any restricted images, judge ambiguous mechanical findings, authorize correction, and make the final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "The authoritative checklist is absent, so components could be omitted or software-visible devices could be treated as the whole scope."},
+      "wrong_device_selection": {"value": true, "note": "The SUT serial/asset and exact recipe are not supplied; a similar chassis or revision cannot be substituted."},
+      "wrong_execution_location": {"value": true, "note": "Remote OS/BMC enumeration cannot replace controlled physical inspection inside the identified chassis."},
+      "missing_iterations": {"value": true, "note": "One inspection is required per checklist item, but the checklist and therefore the required item count are missing."},
+      "modified_duration": {"value": false, "note": "No duration requirement is specified."},
+      "wrong_test_command": {"value": false, "note": "The contract correctly states that no remote command performs acceptance; software checks are supporting evidence only."},
+      "missing_evidence": {"value": true, "note": "No signed checklist, mapped photos, blackbox record, or restoration evidence is present."},
+      "unsafe_interpretation": {"value": true, "note": "Opening an energized chassis, bypassing ESD controls, forcing parts, or silently reseating a suspect component would exceed the contract."},
+      "false_completion": {"value": true, "note": "Inventory visibility, generic chassis photos, or an unsigned summary cannot establish mechanical seating of every listed component."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing recipe, operator, or photos are resolvable owner inputs and do not alone make the testcase irreducibly BLOCKED."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires owner adjudication of complete first-hand mechanical evidence, which has not been collected."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 22,
+    "source_key": "Functionality|22|Wistron-HW-00021-V003",
+    "answers": {
+      "exact_test_purpose": "For each approved cable-adapter/slot pair, remove and reinstall the adapter once using the specified method and verify normal mechanical fit, seating, retention, and absence of binding or damage.",
+      "target_and_scope": "Every adapter/slot pair in the owner-approved map on one exact SUT. The test is mechanical; other slots, adapter revisions, electrical performance, extra reseats, and unsupported hot removal are outside scope.",
+      "missing_information": ["Exact SUT, adapter part/serial inventory, slot map, orientation, and population baseline.", "Approved removal/insertion/latch/tool procedure, power or hot-plug state, ESD rules, and objective fit/retention criteria.", "Qualified operator, photo plan, any required post-action enumeration, and recovery owner/procedure."],
+      "read_only_checks_possible_now": ["Review adapter BOM, slot map, keying, service procedure, and hot-plug support offline.", "Capture existing device enumeration, kernel/BMC/SEL baseline, and SUT identity without changing adapters.", "Verify operator, tools, ESD controls, evidence path, and recovery availability."],
+      "intended_test_operation": "For each mapped pair, the qualified operator confirms as-found identity and condition, applies the approved safe power state and latch/tool sequence, removes and reinstalls the adapter exactly once, stops on abnormal resistance, verifies retention, and captures before/after evidence. Only after operator confirmation may approved read-only enumeration and log deltas be collected.",
+      "actions_requiring_authorization": ["Every physical removal and reinstallation and any hot-plug condition.", "Chassis access, power-state change, and use of service tools.", "Any retry, extra reseat, repair, slot swap, or recovery action."],
+      "evidence_required": ["Per-slot adapter and slot identities, orientation, operator, timestamp, and before/after photos.", "Per-cycle tactile fit, insertion/removal, retention, and physical-condition observations.", "Restored population and any required post-action enumeration plus kernel/BMC/SEL deltas and anomaly disposition."],
+      "stop_conditions": ["Unknown adapter/slot mapping, procedure, fit criterion, hot-plug state, or operator authorization.", "Abnormal resistance, incorrect keying, bent contact, guide or adapter damage, device loss, or new platform fault.", "Incomplete evidence or unavailable recovery owner."],
+      "what_constitutes_completion": "Every mapped adapter/slot pair has one traceable approved remove/reinstall cycle, mechanical fit and retention evidence, restored population, and any required post-action health evidence. Subjective fit acceptance remains with the hardware owner.",
+      "what_remains_for_engineer_judgment": "The owner must approve the map, hot-plug/power state, tools and fit criteria, assess tactile or damage findings, authorize any retry/repair, and decide final acceptance."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "The absent slot map allows silent omission of pairs or representative-slot testing instead of every approved pair."},
+      "wrong_device_selection": {"value": true, "note": "Adapter serials, revisions, and designated slots are unresolved; a similar adapter or alternate slot is non-equivalent."},
+      "wrong_execution_location": {"value": true, "note": "Software enumeration or a different connector cannot substitute for the mapped physical slot action."},
+      "missing_iterations": {"value": true, "note": "The contract requires one cycle per map row, but the row count is unknown until the owner supplies the map."},
+      "modified_duration": {"value": false, "note": "No fixed duration or dwell is required."},
+      "wrong_test_command": {"value": false, "note": "No remote command can perform the mechanical test; optional enumeration is appropriately subordinate."},
+      "missing_evidence": {"value": true, "note": "No per-slot checklist, physical observations, photos, restored population, or health deltas exist."},
+      "unsafe_interpretation": {"value": true, "note": "Assuming hot-plug support, forcing a binding part, swapping slots, or retrying after damage would be unsafe."},
+      "false_completion": {"value": true, "note": "Successful re-enumeration or one representative adapter does not prove normal fit for every mapped pair."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing maps, procedures, or operator confirmation are prerequisites; BLOCKED is justified only if safe identity, criteria, or recovery cannot be resolved."},
+      "unjustified_PASS": {"value": true, "note": "No complete mechanical evidence or owner fit judgment exists."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 23,
+    "source_key": "Functionality|31|Wistron-HW-00034-V004",
+    "answers": {
+      "exact_test_purpose": "Read and decode the `configBlockType` field from each designated CRPS latch-on-fault configuration block and verify that it matches the type value in the exact specification revision governing that PSU, with an identical repeat read for consistency.",
+      "target_and_scope": "Only the latch-on-fault block-type field on each owner-designated PSU. No writes, other-block validation, fault injection, update, reset, power cycle, or generic PMBus scan is included. The RC4 offset/value applies only after explicit applicability confirmation.",
+      "missing_information": ["PSU identity list, firmware/VPD/config revisions, and exact PSU-to-specification mapping.", "Authoritative document/table, block address, field offset/width/endianness, and expected type.", "Approved decoder build/hash/license, exact read-only management target/command, credentials, and recovery procedure."],
+      "read_only_checks_possible_now": ["Validate the specification, table, field encoding, decoder integrity, and license offline.", "Inventory PSU identity, revisions, reachability, and baseline health through already approved read-only interfaces.", "Review the proposed command/tool mode to prove it cannot write or scan blindly; do not access the live bus until approved."],
+      "intended_test_operation": "After target/spec/decoder approval, preserve health evidence, run the exact non-writing decoder against the named latch-on-fault block, capture raw bytes and decoded field, compare with the governing table, repeat the identical read once, and verify unchanged PSU/BMC/SEL health.",
+      "actions_requiring_authorization": ["Live management access to each resolved PSU and the exact read-only command.", "Use of proprietary decoder/specification and protected credentials.", "Any retry after anomaly, write, scan, reset, reflash, power cycle, or recovery action; none is implicit."],
+      "evidence_required": ["PSU identity and firmware/VPD/config revision plus governing specification/table provenance.", "Decoder version/hash, exact command/target, raw block bytes, field location/encoding, decoded and expected values, both read results, timestamps, and exit status.", "Unchanged reachability, PSU/BMC health, and SEL evidence."],
+      "stop_conditions": ["Spec applicability, target, block, encoding, expected value, or read-only semantics is unproven.", "Repeated values differ, raw and decoded output disagree, or authentication/tool behavior is anomalous.", "New PSU/BMC/SEL fault, reachability loss, or incomplete evidence occurs."],
+      "what_constitutes_completion": "For every designated PSU, two consistent target-specific reads are preserved with raw/decoded provenance and the authoritative expected value, followed by unchanged health evidence. The end user decides whether the comparison passes.",
+      "what_remains_for_engineer_judgment": "The PSU/platform owner must approve applicability and expected value, decide the designated PSU set, validate the decoder and any mismatch, and issue the final verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "The number of designated PSUs is not supplied; testing one PSU could under-cover an owner-intended set."},
+      "wrong_device_selection": {"value": true, "note": "No PSU identity list or firmware mapping is present, so the wrong slot/model/revision could be decoded."},
+      "wrong_execution_location": {"value": true, "note": "The approved management target/interface is unresolved; host-side enumeration or a generic bus path is non-equivalent."},
+      "missing_iterations": {"value": false, "note": "The contract explicitly requires an initial read and one identical repeat per designated PSU."},
+      "modified_duration": {"value": false, "note": "No duration requirement is specified."},
+      "wrong_test_command": {"value": true, "note": "The exact decoder invocation and target are missing; generic PMBus scanning or a guessed RC4 address is prohibited."},
+      "missing_evidence": {"value": true, "note": "No identity/spec mapping, raw bytes, repeated read, comparison, or health delta is available."},
+      "unsafe_interpretation": {"value": true, "note": "Applying RC4 constants without proof or using a write-capable/scanning tool could target the wrong format or device."},
+      "false_completion": {"value": true, "note": "A single raw value or decoder label without target, field, table, and repeat-read provenance is incomplete."},
+      "incorrect_BLOCKED": {"value": true, "note": "A missing vendor tool, license, spec, or owner mapping normally requires package/user confirmation, not an automatic irreducible BLOCKED result."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires proven applicability and matching repeated decoded evidence; neither exists yet."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 24,
+    "source_key": "Functionality|37|Wistron-HW-00040-V004",
+    "answers": {
+      "exact_test_purpose": "Directly observe the identified CRPS LED during a precisely defined, approved PWM-high state and compare its color, state, and timing with the applicable PSU/platform LED specification, then restore nominal operation.",
+      "target_and_scope": "One identified PSU LED and one owner-defined PWM-high condition. Telemetry may corroborate state but cannot replace direct visual evidence; undocumented PWM interfaces, unrelated LEDs, writes, reset, reflash, and power cycling are outside scope.",
+      "missing_information": ["Exact PSU/model/firmware identity and applicable LED/PWM specification.", "Meaning of PWM-high, approved generation or confirmation method, fixture/tool/configuration, parameters, interval, and synchronized proof.", "Expected LED color/state/blink/timing tolerance, operator/camera, approval, restoration, and recovery procedure."],
+      "read_only_checks_possible_now": ["Review PSU/spec applicability and expected LED table offline.", "Inventory PSU identity and collect existing read-only PSU/BMC/SEL/host health baseline without changing PWM state.", "Verify camera clock, evidence path, fixture calibration records, operator, and recovery readiness."],
+      "intended_test_operation": "After owner approval, preserve baseline health, have the qualified operator establish or confirm only the approved PWM-high condition, capture synchronized proof of that interval and direct LED video/photo, restore nominal state by the approved method, and collect post-health/log evidence.",
+      "actions_requiring_authorization": ["Any physical fixture connection or active PWM-state generation.", "Any control write, configuration change, or stimulus parameter/duration.", "Restoration actions and any reset, reflash, or power recovery, which require separate approval."],
+      "evidence_required": ["PSU/spec/setup identities and owner-approved PWM-high definition and parameters.", "Timestamped state proof plus direct LED video/photo showing color and temporal behavior for the required interval.", "Operator record and pre/post PSU/BMC/SEL/host health with nominal restoration proof."],
+      "stop_conditions": ["PWM meaning, target/spec, expected response, setup, interval, or timing correlation is unresolved.", "Operator/direct view is absent, power is unsafe/unstable, or the fixture is unverified.", "Unexpected LED, PSU, BMC, host, or power behavior, evidence loss, or failed restoration occurs."],
+      "what_constitutes_completion": "Synchronized evidence proves the approved high state and directly shows the mapped LED for the full required interval, followed by documented nominal restoration and healthy post-state. Telemetry-only evidence is not completion.",
+      "what_remains_for_engineer_judgment": "The platform owner must define PWM-high and its safe setup, approve the applicable LED response and tolerance, judge the direct visual record, and decide the final result."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The scope is deliberately one LED under one state; replacing direct observation with telemetry would be a method failure, not an allowed reduction."},
+      "wrong_device_selection": {"value": true, "note": "The physical PSU/LED identity and firmware/spec mapping are absent."},
+      "wrong_execution_location": {"value": true, "note": "BMC telemetry or observation of another PSU cannot substitute for direct view of the mapped physical LED."},
+      "missing_iterations": {"value": false, "note": "One bounded high-state observation is specified; no repeated cycle count is required."},
+      "modified_duration": {"value": true, "note": "The required observation interval and timing tolerance are unresolved, so a shorter or arbitrarily long stimulus could be non-equivalent or unsafe."},
+      "wrong_test_command": {"value": true, "note": "The exact approved state-generation/confirmation method is missing; no generic remote command or guessed control write is valid."},
+      "missing_evidence": {"value": true, "note": "No synchronized high-state proof, direct LED record, or restoration/health evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Inventing a PWM source, electrical interface, or control value could damage the PSU or destabilize power."},
+      "false_completion": {"value": true, "note": "Telemetry, a still image without state correlation, or an un-timed visual report cannot prove the required behavior."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing setup/spec/operator inputs are normally resolvable prerequisites; BLOCKED is warranted only if PWM semantics or safe recovery remain indeterminate."},
+      "unjustified_PASS": {"value": true, "note": "No applicable expected response or direct synchronized observation has been adjudicated."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 25,
+    "source_key": "Functionality|74|Wistron-HW-00077-V002",
+    "answers": {
+      "exact_test_purpose": "Install one approved CPU package in the designated motherboard socket using the exact mechanical and thermal procedure, perform one controlled first power-on, and verify that the named firmware setup page reports the expected processor identity and topology without mechanical, thermal, power, or platform faults.",
+      "target_and_scope": "One owner-designated CPU, socket/population position, motherboard revision, and compatible BIOS. Physical installation and firmware setup recognition are mandatory; OS/BMC identity is corroborating only, and other sockets or repeated reseats are outside scope.",
+      "missing_information": ["Exact SUT/board/socket identity and CPU model, stepping, package, serial, compatibility/population matrix, and BIOS baseline.", "Approved socket, orientation, retention, tool/torque, TIM, heatsink, cooling, and chassis procedures.", "Expected firmware setup fields, first-power thermal/power limits, operator/maintenance approval, KVM/OOB, and known-good recovery plan."],
+      "read_only_checks_possible_now": ["Validate CPU-board-BIOS compatibility, population rules, service documents, tools, and TIM requirements offline.", "Capture current SUT/BMC/BIOS inventory, POST/SEL/host baseline, power state, and KVM/OOB reachability without opening the socket.", "Inspect externally available packaging/serial records and recovery readiness without touching CPU contacts."],
+      "intended_test_operation": "Preserve pre-state, isolate power, and have a qualified operator inspect and install the exact CPU using approved orientation, retention, torque, TIM, and cooling steps without force. Close the chassis, perform one approved first power-on, capture the specified firmware setup CPU fields, then collect supporting POST, BMC/OS, thermal/power, and log evidence.",
+      "actions_requiring_authorization": ["Chassis/socket access, CPU handling and installation, TIM/heatsink/retention assembly, and first power-on.", "Any BIOS change, retry, reseat, component substitution, or restoration to a known-good CPU.", "Power removal or recovery after a POST, thermal, or power anomaly."],
+      "evidence_required": ["Compatibility approval and SUT/board/socket/CPU/BIOS identities.", "Before/after socket, CPU, orientation, retention, TIM, heatsink, and chassis evidence with operator/tool/ESD trace.", "First-power/POST timeline, named firmware setup page and expected fields, supporting BMC/OS identity, thermal/power data, log deltas, and restored chassis state."],
+      "stop_conditions": ["Any identity/compatibility uncertainty, damage/contamination, missing tool/TIM/torque procedure, abnormal fit, or incomplete cooling/retention.", "KVM/OOB or recovery is unavailable.", "POST, boot, power, or thermal anomaly, wrong firmware identity, new BMC/SEL fault, or incomplete evidence occurs."],
+      "what_constitutes_completion": "The exact CPU is installed with traceable mechanical/thermal evidence, the single controlled first power-on succeeds, the required firmware page reports the expected identity/topology, supporting health remains acceptable, and the chassis is restored. OS inventory alone is insufficient.",
+      "what_remains_for_engineer_judgment": "The platform owner must approve compatibility, population, tools/torque/TIM, first-power limits, expected setup fields, any abnormal physical finding, recovery, and the final result."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The contract clearly requires both correct installation and firmware setup recognition; omitting either is incomplete."},
+      "wrong_device_selection": {"value": true, "note": "The CPU serial/package/stepping, socket, board, and BIOS are not concretely identified."},
+      "wrong_execution_location": {"value": true, "note": "OS or BMC inventory cannot replace observation on the specified BIOS setup page of the physically modified SUT."},
+      "missing_iterations": {"value": false, "note": "One installation and one controlled first power-on are explicitly intended; blind repeated reseats are prohibited."},
+      "modified_duration": {"value": false, "note": "No fixed duration is specified, though thermal/POST timeouts must be owner-defined."},
+      "wrong_test_command": {"value": false, "note": "No remote command performs installation; the contract correctly treats firmware/BMC/OS collection as evidence rather than the operation."},
+      "missing_evidence": {"value": true, "note": "No compatibility, installation, setup-page, first-power, thermal, or health evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Guessing package orientation, torque, TIM, or compatibility, or powering without cooling, could damage CPU/socket/board."},
+      "false_completion": {"value": true, "note": "Physical fit, POST alone, or OS CPU inventory cannot prove approved installation and mandatory setup-menu recognition."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing procedure, operator, or maintenance approval is normally a confirmation prerequisite, not by itself an irreducible blocker."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires complete physical, firmware, and health evidence and owner adjudication."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 26,
+    "source_key": "Functionality|105|Wistron-HW-00108-V003",
+    "answers": {
+      "exact_test_purpose": "For one named DUT node and one approved bounded error or warning condition, directly verify that the physically mapped node fault LED enters the platform-defined state within the expected time and returns to its recovered state after documented recovery.",
+      "target_and_scope": "One exact node, its mapped physical LED, and one selected event. Other nodes, other fault classes, broader injection, or logs used as a substitute for visual proof are outside scope.",
+      "missing_information": ["Exact platform/node identity and node-to-LED physical map.", "Selected event source/severity, whether it is existing or actively established, approved method, bounded impact, and expected LED color/blink/timeout/recovered state.", "Protected workload plan, operator/camera, synchronized clocks, maintenance approval, OOB, abort, recovery, and service-health criteria."],
+      "read_only_checks_possible_now": ["Validate the node/LED map and fault-state table offline.", "Capture normal node, LED-attested operator baseline, host/BMC/SEL state, workloads, and management reachability without creating a fault.", "Verify clock synchronization, evidence path, OOB access, event/recovery procedure, and operator readiness."],
+      "intended_test_operation": "Preserve normal baseline, have the qualified operator establish or confirm only the approved bounded event, directly record the mapped LED while the agent collects same-node read-only host/BMC/SEL correlation, then execute the documented recovery and confirm LED, node, management, and service restoration.",
+      "actions_requiring_authorization": ["Creating or maintaining the selected event and any physical setup.", "Any action with node, workload, or service impact.", "Recovery, reset, removal, or power cycle; only the preapproved bounded method is authorized."],
+      "evidence_required": ["Approved node/LED mapping, event definition, expected state/timeout, and recovery procedure.", "Normal baseline, exact event timestamp/source/severity, synchronized direct LED video/photo, and same-node host/BMC/SEL correlation.", "Recovery actions and proof of restored LED, node, management, and service health."],
+      "stop_conditions": ["Node/LED/event mapping, expected state/timeout, impact bound, or recovery is unresolved.", "Workload is unprotected or operator/OOB/monitoring/direct view is unavailable.", "Wrong-node/unexpected LED response, excessive severity, service/management loss, evidence loss, or failed recovery occurs."],
+      "what_constitutes_completion": "The approved event and direct mapped-LED response are time-correlated, followed by documented recovery and full LED/node/management/service restoration. Log correlation without visual evidence is incomplete.",
+      "what_remains_for_engineer_judgment": "RAS/platform/service owners must select and bound the event, approve impact and response criteria, interpret the visual state and correlated logs, validate recovery, and decide the verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The case intentionally covers one node, one LED, and one event; testing another node or omitting recovery is not equivalent."},
+      "wrong_device_selection": {"value": true, "note": "The node and LED map are not supplied, so a neighboring node or shared indicator could be observed."},
+      "wrong_execution_location": {"value": true, "note": "Direct observation at the mapped physical LED is required; BMC or host events alone cannot complete the test."},
+      "missing_iterations": {"value": false, "note": "One bounded event/recovery cycle is specified."},
+      "modified_duration": {"value": true, "note": "The event dwell, response timeout, and observation interval are missing and must not be improvised."},
+      "wrong_test_command": {"value": true, "note": "The event establishment method is unresolved; no guessed fault-injection command is authorized."},
+      "missing_evidence": {"value": true, "note": "No event, direct LED, correlated node logs, or restoration evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Broadening or inventing a fault could affect the wrong node, workload, service, or recovery path."},
+      "false_completion": {"value": true, "note": "A SEL entry, remote LED status, or photograph without mapped event timing and recovery does not complete the test."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing owner-selected event, operator, or maintenance approval is a resolvable prerequisite; BLOCKED is appropriate only if safe event semantics or recovery cannot be established."},
+      "unjustified_PASS": {"value": true, "note": "PASS lacks direct mapped-LED evidence and proven service recovery."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 27,
+    "source_key": "Functionality|139|Wistron-HW-00142-V002",
+    "answers": {
+      "exact_test_purpose": "Audit, without touching or changing hardware, that every specified jumper reference designator is physically located at the position defined by the exact motherboard-revision drawing, including required populated and unpopulated footprints.",
+      "target_and_scope": "All references on the approved checklist for one exact powered-off/discharged motherboard revision. Only location and expected population are audited; electrical function, configuration state, movement, bridging, or correction is outside scope.",
+      "missing_information": ["Exact board identity/revision and matching revision-controlled drawing.", "Complete jumper reference list, population expectations, landmarks, and photo/orientation convention.", "Safe power-discharge/ESD/access procedure, qualified operator, mismatch owner, and separate correction/restoration procedure."],
+      "read_only_checks_possible_now": ["Validate drawing version, checklist completeness, and evidence conventions offline.", "Capture external SUT/board identity and unchanged health/log baseline without opening or touching the board.", "Confirm safe power state, operator, lighting, evidence storage, and mismatch escalation readiness."],
+      "intended_test_operation": "Confirm board/drawing match, safely expose the discharged board under ESD control, and have the qualified operator visually locate every reference without touching it. Capture oriented overview and legible detail photos, record expected versus observed location/population, close the chassis, and attest no jumper moved.",
+      "actions_requiring_authorization": ["Power isolation/discharge and chassis access by a qualified operator.", "Internal photography and handling needed only to gain safe view.", "Any correction, jumper movement, bridging, replacement, or repair requires a separate procedure and approval."],
+      "evidence_required": ["Board and drawing identities and a signed complete reference checklist.", "Per-reference expected/observed location and population with timestamped oriented overview/detail photos.", "Mismatch or obstruction notes, no-movement attestation, restored chassis, and supporting unchanged health evidence."],
+      "stop_conditions": ["Board/drawing mismatch, incomplete or ambiguous inventory, or undefined population expectation.", "Unsafe power/ESD/access, obstructed view, damaged/missing label, or request to move hardware.", "Untraceable photo/evidence loss or inability to restore the chassis safely."],
+      "what_constitutes_completion": "Every approved reference has an operator-attested location/population comparison and traceable oriented photos, no hardware was moved, mismatches are preserved for separate handling, and the chassis is safely restored.",
+      "what_remains_for_engineer_judgment": "The board owner must approve drawing applicability and the full inventory, resolve ambiguous labels/population or discrepancies, authorize separate correction, and make the final audit disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "The reference list is absent, so jumpers or unpopulated footprints could be omitted."},
+      "wrong_device_selection": {"value": true, "note": "The exact board revision is unknown; a drawing for a nearby revision can mislocate references."},
+      "wrong_execution_location": {"value": true, "note": "Software inventory or schematic-only review cannot replace visual audit on the exact physical board."},
+      "missing_iterations": {"value": true, "note": "One visual check is needed per reference, but the complete reference count is unknown."},
+      "modified_duration": {"value": false, "note": "No timing requirement is specified."},
+      "wrong_test_command": {"value": false, "note": "The contract correctly excludes software commands as proof of physical location."},
+      "missing_evidence": {"value": true, "note": "No complete signed checklist, oriented photos, no-movement attestation, or restoration evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Inspecting an energized board, touching or moving jumpers, or using a mismatched drawing would invalidate or endanger the audit."},
+      "false_completion": {"value": true, "note": "A drawing review, partial photos, or software results cannot prove all physical reference locations."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing drawing/checklist/operator inputs are normally resolvable prerequisites, not automatic irreducible blockers."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires complete first-hand evidence and owner resolution of any discrepancies."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 28,
+    "source_key": "Functionality|153|Wistron-HW-00156-V002",
+    "answers": {
+      "exact_test_purpose": "Verify that TPM is shown enabled in the exact SUT firmware and that one owner-selected installed OS exposes the same TPM through its approved driver and read-only native capability interface.",
+      "target_and_scope": "One SUT/BIOS and either the selected Windows or Linux installation, not both unless separately requested. Firmware enabled-state, OS presence, identity/generation, and basic fixed properties are in scope; TPM/Secure Boot/key/PCR/ownership/provisioning mutation is excluded.",
+      "missing_information": ["Exact SUT, BIOS, selected OS, TPM type/generation, and expected fixed properties.", "Firmware setup path/label, approved KVM/reboot path, and expected OS driver/tool/package baseline.", "Protected access, evidence owner, and process for BIOS/OS disagreement."],
+      "read_only_checks_possible_now": ["Identify the selected OS and inventory existing TPM device/class, driver, tool versions, and current security state without state-changing commands.", "Review BIOS/TPM and OS support documentation and proposed OS commands for read-only behavior.", "Verify KVM/OOB availability, evidence protection, and existing kernel/BMC/SEL data without clearing logs."],
+      "intended_test_operation": "With BIOS/KVM/reboot approval, record the firmware TPM enabled state without saving changes, then collect the selected OS branch: Windows Device Manager and `Get-Tpm`, or Linux TPM class/device/driver evidence and approved `tpm2_getcap properties-fixed`. Correlate identity and preserve raw output; do not remediate discrepancies.",
+      "actions_requiring_authorization": ["Any reboot and BIOS/UEFI/KVM navigation.", "Installation of missing OS tooling or drivers, if needed.", "Any TPM, Secure Boot, ownership, provisioning, key, PCR, or authorization-state change is outside this contract and requires separate explicit authority."],
+      "evidence_required": ["SUT, BIOS, OS, TPM, driver, and tool identities/versions.", "Firmware setup page/path and enabled-state capture plus the applicable raw Windows or Linux evidence.", "Expected-versus-observed TPM identity/generation/properties, timestamps, proof of unchanged security state, and discrepancy-related kernel/BMC/SEL evidence."],
+      "stop_conditions": ["Wrong/unknown SUT, OS, TPM expectation, firmware view, or unapproved reboot/tool.", "A requested query may mutate state or expose authorization-sensitive data.", "Driver/device ambiguity, BIOS/OS identity disagreement, security-state delta, evidence loss, or unexpected platform fault."],
+      "what_constitutes_completion": "Firmware evidence shows the expected enabled state and the selected OS independently exposes and identifies the same TPM through approved read-only evidence, with unchanged security state. Any disagreement is preserved and escalated rather than remediated.",
+      "what_remains_for_engineer_judgment": "The security/platform owner must choose the OS and expected TPM properties, approve BIOS/reboot/tooling, interpret firmware/OS discrepancies, decide whether observed status meets policy, and issue the verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "One owner-selected OS is explicitly sufficient; requiring both is expansion, while omitting either firmware or selected-OS evidence is incomplete."},
+      "wrong_device_selection": {"value": true, "note": "The SUT, TPM type, and selected OS are unresolved; firmware TPM and discrete TPM must not be conflated."},
+      "wrong_execution_location": {"value": true, "note": "Both firmware setup and the selected installed OS must be checked; querying another OS, VM, or only one layer is non-equivalent."},
+      "missing_iterations": {"value": false, "note": "One firmware observation and one selected-OS evidence collection are required; no repetition is specified."},
+      "modified_duration": {"value": false, "note": "No duration requirement is specified."},
+      "wrong_test_command": {"value": true, "note": "The OS branch is not selected; Windows and Linux require different evidence, and hard-coded paths or state-changing cmdlets are not valid substitutes."},
+      "missing_evidence": {"value": true, "note": "No BIOS page, OS TPM output, identity correlation, or unchanged-security-state evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Treating visibility testing as permission to clear, initialize, provision, enable, or alter Secure Boot/keys would create security impact."},
+      "false_completion": {"value": true, "note": "OS device presence alone or a BIOS setting alone does not prove consistent firmware-and-OS visibility of the same TPM."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing OS selection, KVM approval, or tool package is a user/package prerequisite; unresolved identity disagreement after collection may justify a blocker."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires correlated firmware and selected-OS evidence with owner-approved expectations."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 29,
+    "source_key": "Functionality|165|Wistron-HW-00172-V002",
+    "answers": {
+      "exact_test_purpose": "Apply one precisely bounded, owner-approved fan or power fault to one identified target and directly verify that the mapped front error button/indicator illuminates as specified, then remove the fault and prove complete component, indicator, redundancy, platform, and service restoration.",
+      "target_and_scope": "One exact SUT/front-panel revision, one mapped illuminated indicator, and one selected fan-or-power fault target. The alternate fault type, pressing/clearing the button, broader fault injection, and improvised recovery are outside scope.",
+      "missing_information": ["Exact SUT/front indicator mapping and selected fan or power component identity.", "Approved reversible stimulus, magnitude/state, dwell, timeout, abort limits, redundancy/headroom, workload constraints, and expected indicator and management-event states.", "Qualified operator/camera, synchronized timing, maintenance approval, OOB, restoration, and service-health criteria."],
+      "read_only_checks_possible_now": ["Validate indicator map, fault table, and owner/FAE procedure offline.", "Inventory target component, redundancy, sensor state, workloads, thermal/power headroom, indicator baseline, BMC/SEL/host state, and OOB reachability without injecting a fault.", "Verify monitoring, camera timing, abort path, restoration plan, and approvals."],
+      "intended_test_operation": "Preserve normal visual/sensor/log baseline, verify target and redundancy, have the qualified operator apply only the approved bounded fault, capture measured stimulus and synchronized direct panel video/photo while collecting read-only BMC/host/SEL evidence, remove the fault by the documented method, and verify full component, indicator, redundancy, thermal/power, boot, management, and service recovery.",
+      "actions_requiring_authorization": ["The exact physical or controlled fan/power fault and its dwell/magnitude.", "Any component disconnection, load/redundancy impact, or workload/service exposure.", "Fault removal/restoration and any unplanned reset or power action, which requires separate approval."],
+      "evidence_required": ["Approved target/method/limits, SUT/indicator/component identities, redundancy/headroom, and normal baseline.", "Exact stimulus start/stop and measured state, synchronized direct indicator video/photo, and correlated sensor/SEL/host evidence.", "Abort events, fault removal, restored component/indicator/redundancy, and normal thermal/power/boot/management/service health."],
+      "stop_conditions": ["Indicator/fault semantics, target, limits, redundancy, headroom, or recovery is unresolved.", "Unprotected active workload, missing operator/OOB/monitoring/direct view, or unsafe baseline.", "Response timeout, unexpected shutdown/thermal/power/SEL behavior, impact beyond approval, evidence loss, or failed restoration."],
+      "what_constitutes_completion": "The approved bounded fault is directly and temporally correlated with the mapped front indicator response, then removed with complete proof that the component, indicator, redundancy, thermal/power, management, boot, and service states returned to normal.",
+      "what_remains_for_engineer_judgment": "Thermal/power/platform/service owners must select and bound the fault, approve redundancy and impact, define expected response/timing and recovery health, interpret anomalies, and decide the final outcome."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "One selected fan-or-power fault is the defined scope; a second fault type is explicitly excluded unless separately required."},
+      "wrong_device_selection": {"value": true, "note": "The exact fan/PSU/power target and front indicator mapping are missing."},
+      "wrong_execution_location": {"value": true, "note": "Direct observation of the mapped front-panel indicator is mandatory; BMC events or another panel LED are not substitutes."},
+      "missing_iterations": {"value": false, "note": "One bounded fault-and-recovery cycle is intended."},
+      "modified_duration": {"value": true, "note": "Fault dwell, response timeout, and limits are unresolved; extending or shortening them can change both validity and safety."},
+      "wrong_test_command": {"value": true, "note": "The exact reversible stimulus is not supplied; no guessed fan or power command/action is authorized."},
+      "missing_evidence": {"value": true, "note": "No stimulus, direct indicator, sensor/log correlation, or full-restoration evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Guessing a fan/power action or defeating redundancy could cause overheating, power loss, shutdown, or service impact."},
+      "false_completion": {"value": true, "note": "An illuminated LED or SEL event alone does not prove correct target correlation and complete post-fault restoration."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing fault selection, operator, or maintenance approval is a resolvable prerequisite; irreducible BLOCKED requires unresolved safe semantics or recovery."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires synchronized direct evidence and verified full recovery, neither of which is available."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 30,
+    "source_key": "Functionality|220|Wistron-HW-00229-V002",
+    "answers": {
+      "exact_test_purpose": "Using one qualified SF100 setup, program and verify the same immutable approved BIOS image on the same identified SPI ROM exactly 50 times, preserve cycle-level durability evidence, restore the ROM to the SUT, and verify normal BIOS/POST/configuration and platform health.",
+      "target_and_scope": "One exact board/SPI NOR/BIOS combination, one ROM, one image, one approved programmer/profile/settings set, and cycles 1 through 50. Other ROMs, images, firmware, retries disguised as cycles, or programmer-only acceptance are outside scope.",
+      "missing_information": ["Exact board/ROM identity, support data, programming topology, adapter/pinout/orientation, and board isolation method.", "SF100 hardware/firmware/software/profile and VCC/VPP/SPI/write-protect/operation settings.", "Immutable image and backup hashes, exact cycle and retry semantics, approval, evidence storage, reinstall/boot procedure, and independently proven recovery path."],
+      "read_only_checks_possible_now": ["Validate board/ROM/device-profile compatibility, SF100 versions, pinout, voltage limits, image/recovery hashes, and manufacturer endurance/support documents offline.", "Inventory current SUT BIOS/board identity and health, confirm KVM/OOB and recovery resources, and preserve logs without touching the ROM.", "Review the proposed local automation for immutable settings, cycle numbering, raw-log retention, immediate abort, and no hidden retry; do not connect or program hardware."],
+      "intended_test_operation": "After two-person verification and qualified manual isolation/connection, take a baseline ROM backup/read hash, run the approved local SF100 erase/program/verify sequence for cycles 1-50 with unchanged target/image/profile/settings and cycle-numbered raw logs, abort on any discrepancy, perform final readback/hash verification, have the operator restore/reinstall the ROM, and perform one controlled SUT boot with BIOS/POST/configuration and platform-health evidence.",
+      "actions_requiring_authorization": ["ROM removal/reinstallation or probe connection, chassis access, board power isolation, and programmer connection.", "The irreversible 50-cycle erase/program campaign and exact voltage/profile/settings.", "Any retry, changed image/settings/device, VPP use, recovery programming, or controlled SUT boot after restoration."],
+      "evidence_required": ["Approval manifest, board/ROM identities, topology, adapter/orientation, SF100 hardware/firmware/software/profile/settings, pre-read backup/hash, and immutable image hash.", "Raw numbered erase/program/verify output, timestamps, durations, failures, and explicitly accounted retries for cycles 1-50.", "Final readback/hash, setup/restoration photos, BIOS/POST/version/configuration evidence, BMC/SEL deltas, boot health, and recovery readiness."],
+      "stop_conditions": ["Any board/ROM/image/profile/pinout/voltage/topology mismatch, unsupported device, unstable/conflicting power, or unavailable recovery.", "Any erase/program/verify/readback difference, communication/voltage anomaly, unrecorded retry, evidence/monitoring/operator loss, or physical damage.", "Failed reinstall, POST/BIOS mismatch, new management/SEL fault, or inability to restore health."],
+      "what_constitutes_completion": "Exactly 50 accepted, sequentially numbered program/verify cycles on the same ROM and immutable image are evidenced with no hidden retry, final readback matches, the ROM is correctly restored, and one controlled SUT boot proves expected BIOS/POST/configuration and platform health. Programmer PASS alone is incomplete.",
+      "what_remains_for_engineer_judgment": "BIOS/board owners must approve compatibility, electrical/profile settings, what constitutes a cycle and how retries are counted, endurance acceptability, recovery, any anomaly, and the final verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The scope explicitly fixes one ROM, one immutable image, 50 cycles, and final restored boot; fewer cycles or programmer-only testing is non-equivalent."},
+      "wrong_device_selection": {"value": true, "note": "The exact ROM, board, profile, adapter, and image are not supplied; a wrong match can permanently corrupt hardware."},
+      "wrong_execution_location": {"value": true, "note": "The cycle loop belongs on the qualified local SF100 setup, while final acceptance also requires the ROM restored in the exact SUT; either location alone is insufficient."},
+      "missing_iterations": {"value": true, "note": "Although exactly 50 cycles are required, the definition of a cycle and whether/how a retry counts are unresolved and can corrupt the iteration total."},
+      "modified_duration": {"value": false, "note": "No campaign duration is specified; cycle count and verified operations, not elapsed time, govern completion."},
+      "wrong_test_command": {"value": true, "note": "The exact SF100 profile/settings and Program/Verify invocation are missing; a generic or guessed programmer command is unsafe."},
+      "missing_evidence": {"value": true, "note": "No baseline backup, cycle 1-50 logs, final readback, restoration, boot, BIOS, or health evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Guessing voltage, VPP, pinout, power topology, ROM profile, or image, or continuing after a discrepancy, can damage or brick the board/ROM."},
+      "false_completion": {"value": true, "note": "A final programmer PASS, an aggregate success count without raw cycle logs, or 50 attempts including hidden failures does not prove completion or restored SUT health."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing programmer assets, approvals, or operator setup require package/user confirmation; BLOCKED is appropriate only if identity, compatibility, electrical safety, or recovery cannot be resolved."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires all 50 valid cycle records plus matching final readback and successful restored SUT boot/health evidence."}
+    },
+    "overall_understanding": "CLEAR"
+  }
+]

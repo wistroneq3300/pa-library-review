@@ -1,0 +1,322 @@
+[
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 41,
+    "source_key": "Functionality|560|Wistron-BIOS-00227-V005",
+    "answers": {
+      "exact_test_purpose": "Verify the standard SMBIOS Type 7 System Cache Type enum for every required cache instance and prove that the complete handle-linked mapping is unchanged after exactly one approved reboot.",
+      "target_and_scope": "All required Type 7 offset 11h fields on the exact CPU/server/BIOS recipe, correlated by Type 7 handle, designation and cache level to Type 4 L1/L2/L3 references. A nonexistent display label and partial grep output are outside scope.",
+      "missing_information": "The signed per-cache expected enum map; CPU/socket/cache and Type 4-to-Type 7 mapping; approved treatment of Other/Unknown; exact SUT and BIOS identity; validated dmidecode version, package, access and parser behavior; reboot approval, workload isolation, evidence destination, stable power and OOB recovery.",
+      "safe_read_only_checks": "Confirm SUT, CPU, BIOS, SMBIOS and dmidecode identities; collect complete Type 4 and Type 7 structures; validate structure lengths and raw/decoded offset-11h values; build the handle/link table; compare against a supplied signed map; inspect workload and OS/BMC health without clearing logs.",
+      "intended_operation": "Collect and compare a complete pre-reboot Type 4/7 baseline, obtain explicit reboot authorization, reboot once, repeat the identical full collection and mapping, compare all values and links for persistence, and verify OS/BMC health.",
+      "actions_requiring_authorization": "The reboot, workload quiescence or service interruption, and any console/BMC/OOB recovery action. The platform owner must also authorize the acceptance map and resolve discrepancies.",
+      "evidence": "Signed expected map; SUT, CPU, BIOS, SMBIOS and tool versions; unfiltered pre/post Type 4/7 data; handle/designation/level/link table; raw and decoded enum values; exact comparisons; one-reboot timeline; OS/BMC health and documented exceptions.",
+      "stop_conditions": "Stop for missing or unsigned expectations, unresolved Type 4/7 links, incomplete structures, unapproved Other/Unknown, pre-test mismatch, absent reboot approval or recovery, boot/management failure, or post-reboot handle/value drift.",
+      "completion": "Every required cache instance is mapped and compared before and after one authorized reboot, all evidence is complete, values satisfy the signed topology contract, and OS/BMC health is restored. Evidence completion does not itself assign PASS.",
+      "engineer_judgment": "Owners must define the expected cache topology and enum policy, decide whether Other/Unknown or mapping drift is acceptable, direct recovery for reboot failures, and make the final PASS/FAIL/BLOCKED decision."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The contract requires all required cache instances and rejects partial or label-only output."},
+      "wrong_device_selection": {"value": false, "note": "The exact SUT, CPU recipe, BIOS and handle mappings must be verified before comparison."},
+      "wrong_execution_location": {"value": false, "note": "Collection and reboot are bound to the identified server with working OOB recovery."},
+      "missing_iterations": {"value": false, "note": "Exactly one reboot and both pre/post collections are specified."},
+      "modified_duration": {"value": false, "note": "No duration requirement is stated or altered."},
+      "wrong_test_command": {"value": false, "note": "The contract correctly calls for full Type 4/7 collection and explicitly rejects the known-wrong grep label."},
+      "missing_evidence": {"value": false, "note": "Raw and decoded structures, mappings, reboot timeline and health evidence are required."},
+      "unsafe_interpretation": {"value": false, "note": "Only read-only SMBIOS access is allowed before a separately approved reboot."},
+      "false_completion": {"value": false, "note": "A single decoded value cannot complete the case; every mapped instance must persist."},
+      "incorrect_BLOCKED": {"value": false, "note": "Missing owner inputs are execution gates, not an asserted irreducible semantic blocker."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted and final disposition remains with the owner."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 42,
+    "source_key": "Functionality|613|Wistron-BIOS-00280-V005",
+    "answers": {
+      "exact_test_purpose": "Verify every SMBIOS Type 17 Device Locator, including populated, empty and applicable soldered-memory records, against the signed physical slot map and prove the full mapping persists after one approved reboot.",
+      "target_and_scope": "All Type 17 records on the exact board/CPU/memory/BIOS recipe, linked through Type 16 Memory Array Handle to physical slot identity and population state. A locator-only grep or omission of empty sockets is insufficient.",
+      "missing_information": "Signed per-socket locator and population matrix; normalization and uniqueness rules; board and memory recipe; any approved BMC/SPD corroboration method; dmidecode/parser version and privileges; exact SUT identity; reboot approval, workload isolation, evidence destination, stable power and OOB recovery.",
+      "safe_read_only_checks": "Confirm platform, BIOS and memory population identity; collect complete Type 16/17 records; extract array handle, locator, size, serial and population state; build the physical mapping against a supplied matrix; optionally collect approved read-only BMC/SPD data; inspect current OS/BMC health and workload without clearing logs.",
+      "intended_operation": "Collect the complete pre-reboot Type 16/17 mapping, compare every record to the signed slot truth, obtain authorization, reboot once, repeat the identical collection and mapping, verify persistence and then verify OS/BMC health.",
+      "actions_requiring_authorization": "The reboot, workload quiescence or downtime, optional privileged inventory access where policy requires it, and any physical inspection or recovery. The platform/memory owner must approve the physical map and exceptions.",
+      "evidence": "Signed slot/locator/population matrix; platform, BIOS, SMBIOS and tool versions; complete unfiltered pre/post Type 16/17 output; handle/array/slot/size/serial table; approved BMC/SPD corroboration; exact diff; one-reboot timeline; OS/BMC health and exceptions.",
+      "stop_conditions": "Stop for missing map or policy, unresolved array-to-slot mapping, blank/duplicate/ambiguous locator, incomplete record set, pre-test mismatch, missing reboot approval/recovery, boot/management failure, or post-reboot mapping drift.",
+      "completion": "Every required populated, empty and soldered-memory record is reconciled to the signed physical map before and after one authorized reboot, evidence is complete, and the system returns healthy. Final disposition is not automated.",
+      "engineer_judgment": "Owners must establish physical slot truth and normalization, resolve ambiguous or duplicate locators, decide whether physical inspection is needed, direct recovery, and make the final verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The contract explicitly includes populated, empty and soldered-memory records."},
+      "wrong_device_selection": {"value": false, "note": "Board, memory recipe, Type 16 handle and physical slot identity must all agree."},
+      "wrong_execution_location": {"value": false, "note": "The test is tied to the exact selected SUT and its OOB recovery path."},
+      "missing_iterations": {"value": false, "note": "One reboot with complete pre/post inventories is explicit."},
+      "modified_duration": {"value": false, "note": "No duration is specified."},
+      "wrong_test_command": {"value": false, "note": "The intended full Type 16/17 collection is fit for purpose and avoids a locator-only shortcut."},
+      "missing_evidence": {"value": false, "note": "The required record, mapping, corroboration, reboot and health evidence is comprehensive."},
+      "unsafe_interpretation": {"value": false, "note": "DIMM movement and firmware changes are prohibited; disputed topology is escalated."},
+      "false_completion": {"value": false, "note": "A list of locator strings is not sufficient; physical mapping and persistence are required."},
+      "incorrect_BLOCKED": {"value": false, "note": "Normal owner inputs and reboot approval are treated as prerequisites rather than BLOCKED."},
+      "unjustified_PASS": {"value": false, "note": "The contract does not claim PASS."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 43,
+    "source_key": "Functionality|671|Wistron-BIOS-00338-V005",
+    "answers": {
+      "exact_test_purpose": "Verify that every applicable SMBIOS Type 39 power-supply Cooling Device Handle resolves to the correct Type 27 record or approved no-device representation and remains stable after one reboot.",
+      "target_and_scope": "All required Type 39 records whose implemented structure length includes offset 12h, mapped by verified PSU identity to Type 27 cooling handles or a signed no-device/shared policy. BMC telemetry is corroborative only.",
+      "missing_information": "Signed PSU-to-Type 27/no-device/shared association map; Type 39 PSU identity mapping; exact SMBIOS-version and structure-length semantics; SUT/BIOS/PSU recipe; validated dmidecode/raw parser and privileges; reboot approval, workload isolation, stable power, evidence destination and OOB recovery.",
+      "safe_read_only_checks": "Confirm SUT, BIOS, SMBIOS and PSU identities; collect full Type 27/39 raw and decoded records; verify lengths before reading offset 12h; resolve handles under the supplied policy; collect read-only PSU/fan/thermal telemetry; inspect workload and current OS/BMC health without changing controls or clearing logs.",
+      "intended_operation": "Build and compare the complete pre-reboot Type 39-to-Type 27 association table, obtain reboot approval, reboot once under stable redundant power, repeat the identical collection, compare all associations, and verify power, cooling, OS and BMC health.",
+      "actions_requiring_authorization": "The reboot, workload quiescence, any physical topology inspection, and all recovery actions. Platform/power owners approve association and no-device/shared semantics.",
+      "evidence": "Signed topology policy; SUT, BIOS, SMBIOS and tool identities; unfiltered pre/post Type 27/39 structures; structure lengths and raw handles; PSU-to-cooling resolution table; BMC PSU/fan/thermal corroboration; reboot timeline; OS/BMC health and exceptions.",
+      "stop_conditions": "Stop for missing policy, unresolved PSU identity, field absent by structure length, dangling/invalid handle, unexplained no-device/shared reference, incomplete data, missing reboot approval/recovery, power/thermal/fan fault, boot/management failure, or post-reboot drift.",
+      "completion": "Every applicable Type 39 record is length-validated and resolved under the signed topology policy before and after one authorized reboot, with full evidence and healthy power, cooling, OS and BMC state. No automated PASS follows.",
+      "engineer_judgment": "Owners must define physical association and no-device/shared rules, assess ambiguous or dangling references and telemetry discrepancies, direct recovery, and decide the final result."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "Every applicable Type 39 record is included, with applicability determined by structure length."},
+      "wrong_device_selection": {"value": false, "note": "PSU identity and Type 27 handle resolution must follow the signed map."},
+      "wrong_execution_location": {"value": false, "note": "The contract is limited to the exact server PSU/cooling topology."},
+      "missing_iterations": {"value": false, "note": "Exactly one reboot with complete pre/post comparison is required."},
+      "modified_duration": {"value": false, "note": "No duration is specified."},
+      "wrong_test_command": {"value": false, "note": "Full raw Type 27/39 parsing with length checks is the correct operation."},
+      "missing_evidence": {"value": false, "note": "Raw structures, handle resolutions, telemetry, reboot and health evidence are all requested."},
+      "unsafe_interpretation": {"value": false, "note": "The contract forbids reads beyond structure length and prohibits inferred association from sensor names."},
+      "false_completion": {"value": false, "note": "Supplemental telemetry or one handle cannot replace complete relationship validation."},
+      "incorrect_BLOCKED": {"value": false, "note": "Missing topology input is a prerequisite, not an unjustified permanent blocker."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 44,
+    "source_key": "Functionality|723|Wistron-BMC-00013-V004",
+    "answers": {
+      "exact_test_purpose": "Validate every owner-approved GPUBB firmware upgrade and downgrade transition through the BMC web UI while the host is booted, activate each transition with exactly the approved AC cycle, and prove the intended active version plus complete GPU/platform recovery.",
+      "target_and_scope": "Every specified GPUBB component instance and both approved version directions on the exact platform. BMC, GPU VBIOS, ERoT, MCU and other firmware are excluded, and evidence must remain separate for each direction.",
+      "missing_information": "Exact component inventory and stable identity; current, upgrade and downgrade versions and order; signed images, hashes, signatures, compatibility and release notes; vendor WebUI steps and authoritative task states; credentials/session rules; per-direction activation and diagnostic criteria; AC controller/timing; approvals, workload window, power design, known-good recovery image/procedure and evidence paths.",
+      "safe_read_only_checks": "Inventory platform, GPUBB/GPU/BMC/host identities and versions; verify supplied image hashes/signatures and compatibility documents without upload; confirm workloads are quiesced; inspect WebUI capability, AC/PDU status, OOB access, baseline logs and GPU topology/health without changing firmware or power.",
+      "intended_operation": "Process one direction at a time: preserve baselines, peer-verify component/image, obtain immediate write approval, perform the exact WebUI update without interruption, wait for authoritative terminal status, preserve evidence, obtain AC approval, execute exactly one approved AC cycle, verify active target version and independent GPU/host/BMC health, then stop for owner disposition before the next direction.",
+      "actions_requiring_authorization": "Each image upload/write and final confirmation; the required host-up maintenance impact; every AC off/on cycle; each transition direction; workload drain; any retry, rollback, recovery image, reset or additional power cycle.",
+      "evidence": "Signed per-direction transition manifest and image provenance; pre/post component, GPUBB, GPU, BMC and host versions/inventory; full WebUI selection, progress, task and error evidence; AC/PDU states and timestamps; GPU UUID/BDF/topology and approved diagnostics; POST, boot, OS, BMC, SEL, kernel and GPU logs; recovery and final state for each direction.",
+      "stop_conditions": "Stop for component/image/version/order ambiguity, failed integrity or compatibility, active workload, missing approval, unstable power, absent OOB/recovery, unexpected warning or task state, uncertain status after session loss, premature or extra AC cycle, wrong/missing active version, GPU/host/BMC/SEL error, or incomplete direction-specific evidence.",
+      "completion": "Every approved component instance completes both separately authorized directions in the specified order; each write reaches authoritative success, exactly the required AC activation occurs, the active target version is independently verified, GPU/platform diagnostics and health succeed, and evidence/recovery records are complete per direction. UI completion alone is insufficient.",
+      "engineer_judgment": "Firmware owners decide image compatibility, transition order, task-state meaning and anomaly disposition; power owners control AC; engineers determine recovery/quarantine and whether to proceed to the opposite direction; the end user assigns the verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "All specified GPUBB instances and both directions are explicitly required."},
+      "wrong_device_selection": {"value": false, "note": "Two-person component/image verification and exclusion of adjacent firmware targets guard device selection."},
+      "wrong_execution_location": {"value": false, "note": "The operation is constrained to the exact platform BMC WebUI and controlled AC source."},
+      "missing_iterations": {"value": false, "note": "Both upgrade and downgrade are required separately for every owner-specified instance."},
+      "modified_duration": {"value": false, "note": "No test duration is changed; task timeouts and AC timing must come from the vendor plan."},
+      "wrong_test_command": {"value": false, "note": "The WebUI update plus controlled AC activation matches the GPUBB purpose and forbids substitute firmware targets."},
+      "missing_evidence": {"value": false, "note": "Per-direction update, activation, version, GPU/platform and recovery evidence is comprehensive."},
+      "unsafe_interpretation": {"value": false, "note": "Writes, AC cycles and retries are individually gated, and uncertain status triggers a stop."},
+      "false_completion": {"value": false, "note": "UI completion is explicitly insufficient without active-version and health proof."},
+      "incorrect_BLOCKED": {"value": false, "note": "Missing packages and approvals are execution gates; the operation itself is understandable."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is claimed from the WebUI or any single direction."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 45,
+    "source_key": "Functionality|746|Wistron-BMC-00036-V002",
+    "answers": {
+      "exact_test_purpose": "The exact purpose is unresolved: the owner must choose either a reversible HTTP(S) virtual CD/DVD attachment, host visibility, content identity and eject test, or a separately specified and authorized boot/install workflow.",
+      "target_and_scope": "While unresolved, only read-only capability and state discovery is allowed. The provisional safe execution scope is one approved virtual CD/DVD attach/visibility/eject cycle on an isolated server; booting, autorun, installation and storage writes are excluded.",
+      "missing_information": "Owner end-state decision; exact BMC/release and supported network-media method; one approved transport; immutable image URI, hash, type, size, TLS/auth policy and expected BMC/host identity; isolation, console, eject and recovery. If install is selected, exact target disk, data-loss approval, installer configuration, boot path, completion criteria and recovery are additionally required.",
+      "safe_read_only_checks": "Identify the BMC/firmware and virtual-media capability; inspect current virtual-media, host boot and storage state; verify console/OOB and eject paths; validate supplied image metadata/hash and certificate policy without insertion; protect secrets; confirm isolation and that no media is currently active.",
+      "intended_operation": "Only after intent resolution, preserve baselines, verify image and transport, attach through the approved BMC path with write protection where supported, confirm BMC inserted state and exact host-visible device/content, perform only the explicitly approved terminal action, eject/deactivate, and verify final BMC, host, boot and storage health.",
+      "actions_requiring_authorization": "Media insertion and cleanup require BMC/system approval after intent resolution. Any boot, boot-order change, autorun, installer launch, target-disk write, reboot, installation or recovery requires separate immediate system/storage/data-loss authorization and a human gate.",
+      "evidence": "Owner intent decision; BMC version and capability; immutable image URI metadata/hash and security policy; remote-console and insertion states; exact virtual device and content identity; proof of no unauthorized boot/write; authorized terminal-state evidence; eject/cleanup; final BMC, host, boot and storage health.",
+      "stop_conditions": "Remain stopped for unresolved end state, ambiguous or unsupported transport, unverified image/certificate/auth, non-isolated host, missing console/eject/recovery, or missing destructive authorization. During an approved mount-only flow stop for unexpected autorun, boot/install behavior, wrong device/content, storage write, console loss or failed eject.",
+      "completion": "For a mount-only decision, one approved image is attached, exactly identified at BMC and host, no unauthorized boot or write occurs, it is ejected, and final state is clean and healthy. For an install decision, completion cannot be defined until the owner supplies a separate full workflow and storage acceptance contract.",
+      "engineer_judgment": "The owner must select the end state and destructive boundary. BMC/system/storage engineers must approve transport, image, boot/install target and recovery as applicable, judge anomalies, and assign the final result."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The mount-only scope is explicitly provisional, not a substitute for an owner-required installation."},
+      "wrong_device_selection": {"value": false, "note": "No media or disk target may be inferred; exact identity is required after intent resolution."},
+      "wrong_execution_location": {"value": false, "note": "The eventual flow is limited to the exact isolated test server and documented BMC path."},
+      "missing_iterations": {"value": false, "note": "A single attach/eject cycle is defined only for the provisional mount test; install iterations are not inferable."},
+      "modified_duration": {"value": false, "note": "No duration is specified or altered."},
+      "wrong_test_command": {"value": false, "note": "No command is invented while the terminal action remains unresolved."},
+      "missing_evidence": {"value": false, "note": "Evidence is adequate for mount-only; install evidence is correctly deferred until the install contract exists."},
+      "unsafe_interpretation": {"value": false, "note": "The contract explicitly prohibits inferring installation authority from mount authority."},
+      "false_completion": {"value": false, "note": "A successful mount cannot complete an installation requirement; the distinction is explicit."},
+      "incorrect_BLOCKED": {"value": false, "note": "Stopping is justified because purpose, destructive boundary and completion differ materially between the two possible workflows."},
+      "unjustified_PASS": {"value": false, "note": "No outcome is asserted while intent is unresolved."}
+    },
+    "overall_understanding": "AMBIGUOUS"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 46,
+    "source_key": "Functionality|762|Wistron-BMC-00052-V003",
+    "answers": {
+      "exact_test_purpose": "Verify that every object instance in a finite signed Standard Equipment MIB manifest is securely readable from the exact BMC over SNMPv3 and returns the required type, indexing, completeness and expected value.",
+      "target_and_scope": "Only the approved numeric OID subtrees and instances represented by the contract's target placeholder and required equipment fields. SNMP SET, v1/v2c, traps and Redfish are excluded unless a separately approved mapped cross-check is added.",
+      "missing_information": "Exact vendor MIB file/hash/version; resolved finite symbolic/numeric OID-instance manifest replacing the target placeholder; syntax, access, index, dynamic-value and completeness rules; approved client path; SNMPv3 auth/privacy/VACM/ACL and protected secret delivery; BMC setup/restore method; query rate/bounds; approval and final cleanup state.",
+      "safe_read_only_checks": "Identify BMC firmware and MIB/client versions; validate MIB parsing and numeric translation offline; inspect existing SNMP/VACM/ACL state in redacted form; confirm every selected object is read-only; confirm the isolated source host and expected instance counts. Do not query until credentials, ACL, bounds and approval are in place.",
+      "intended_operation": "After approval, configure least-privilege SNMPv3 agent/user/view/source ACL as specified, validate translation, issue only bounded GET/GETNEXT/WALK requests for the signed manifest, retain numeric and decoded results, compare types, indexes, values and completeness, inspect audit/health, then restore or retain configuration exactly as approved.",
+      "actions_requiring_authorization": "Creation or modification of the SNMPv3 agent, user, VACM view and source ACL; protected credential use; execution of bounded queries; and retention, restoration, revocation or cleanup of temporary access.",
+      "evidence": "BMC, MIB and client identifiers; signed numeric/symbolic OID manifest; redacted before/during/after SNMPv3/VACM/ACL state; complete bounded numeric and decoded responses with status and timestamps; type/index/value/completeness comparisons; BMC audit/health and cleanup proof.",
+      "stop_conditions": "Stop for unresolved target or client path, invalid MIB, any writable object, undefined expectations or instance count, insecure/exposed credentials, missing approval/ACL, out-of-scope response, repeated timeout, BMC degradation, sensitive data exposure or failed restoration.",
+      "completion": "Every manifest object/instance is retrieved only through approved SNMPv3 bounds, numeric and decoded outputs agree, types/indexes/values/completeness satisfy the signed contract, audit and health remain acceptable, and temporary access reaches the approved final state. Retrieval alone does not assign PASS.",
+      "engineer_judgment": "BMC/security owners must define the target manifest, least-privilege policy, expected dynamic values and cleanup state; judge exceptions and sensitive output; decide recovery; and make the final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The required finite manifest must be complete; a convenient subtree sample is not sufficient."},
+      "wrong_device_selection": {"value": false, "note": "The exact BMC, firmware, MIB release and OID instances must be identified."},
+      "wrong_execution_location": {"value": false, "note": "Queries originate from an isolated authorized management host to the exact BMC."},
+      "missing_iterations": {"value": false, "note": "Coverage is every required object instance; no repeat count is specified."},
+      "modified_duration": {"value": false, "note": "No duration is stated; rate and timeout bounds are owner inputs."},
+      "wrong_test_command": {"value": false, "note": "Bounded SNMPv3 GET/GETNEXT/WALK is appropriate, while SET and insecure versions are prohibited."},
+      "missing_evidence": {"value": false, "note": "Configuration, numeric/decoded responses, comparisons, audit, health and cleanup are covered."},
+      "unsafe_interpretation": {"value": false, "note": "Least privilege, secret protection, bounds and no-fallback rules prevent unsafe broad querying."},
+      "false_completion": {"value": false, "note": "One readable OID cannot stand in for manifest completeness and correct types/values."},
+      "incorrect_BLOCKED": {"value": false, "note": "The unresolved target placeholder is a required input, not an incorrectly asserted permanent blocker."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted from successful transport alone."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 47,
+    "source_key": "Functionality|777|Wistron-BMC-00067-V003",
+    "answers": {
+      "exact_test_purpose": "For each TEMP_NVME_1 through TEMP_NVME_16 sensor, validate normal tracking, configured thresholds, SEL assertion/deassertion and the documented protection response under a bounded approved thermal stimulus, followed by cooldown and system/storage recovery.",
+      "target_and_scope": "All 16 named sensors individually on the exact NVMe/BMC recipe, each mapped to a slot and device or given an explicit owner-approved NOT_APPLICABLE result. Aggregate or first-match validation is excluded.",
+      "missing_information": "Signed 16-sensor/slot/device map; SDR numbers, types, units, scaling, thresholds, hysteresis and tolerances; SEL assert/deassert map; calibrated stimulus, ramp, hold and cooldown profile; expected fan/throttle/shutdown behavior; drive/data limits; exact schedule and applicable slots; approvals, monitoring, abort, SEL capacity and recovery plan.",
+      "safe_read_only_checks": "Inventory all slots, NVMe identities/namespaces and health; collect complete SDRs, thresholds and existing SEL without clearing; map sensors to slots/devices; compare BMC and independent idle temperatures; inspect fan, power, BMC, host and workload health; validate tools, log capacity, time sync and calibration records without applying heat.",
+      "intended_operation": "Preserve complete baselines, obtain final approval, apply the qualified bounded stimulus to one approved target/schedule while continuously recording independent and BMC temperatures plus NVMe, fan, power and host health; capture each allowed threshold crossing, SEL event and protection response; abort within limits, cool down, prove deassertion/recovery, and repeat independently for all required sensors.",
+      "actions_requiring_authorization": "Every active thermal stimulus, ramp/hold/cooldown schedule, potential threshold/protection transition or shutdown, maintenance/data-risk window, and all physical cooling, shutdown and recovery actions. A human operator retains abort authority.",
+      "evidence": "Signed per-sensor matrix; raw SDRs and thresholds; synchronized BMC, independent and NVMe temperature/health traces; exact stimulus profile; warning/critical crossings; raw SEL assert/deassert records; fan/throttle/shutdown response; aborts and cooldown; namespace/data integrity; and final health for all 16 dispositions.",
+      "stop_conditions": "Stop for unmapped or implausible sensor, missing spec/approval/monitor/abort, unsafe baseline or workload, threshold/event mismatch, temperature divergence or overshoot, NVMe/media/controller/kernel error, unexpected protection action, SEL capacity loss, host/BMC instability, or failed cooldown/deassert/recovery.",
+      "completion": "All 16 sensors receive an independent PASS/FAIL/NOT_APPLICABLE evidence package under the approved policy; every applicable channel is tested through the required safe thermal phases, events and protection behavior are reconciled, cooldown/deassertion succeeds, storage remains intact, and final platform health is verified. The agent does not assign final PASS.",
+      "engineer_judgment": "Thermal, BMC, storage and system owners must approve mapping, stimulus, thresholds and protection behavior; judge empty/unsupported slots and discrepancies; decide shutdown/recovery/quarantine; and determine the final result."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "Each of the 16 named sensors requires an explicit independent disposition."},
+      "wrong_device_selection": {"value": false, "note": "Thermal stimulus is prohibited until each sensor is mapped to the exact slot/device."},
+      "wrong_execution_location": {"value": false, "note": "The flow is restricted to the exact thermal-capable isolated lab and platform recipe."},
+      "missing_iterations": {"value": false, "note": "The procedure explicitly repeats independently for every required sensor."},
+      "modified_duration": {"value": false, "note": "No fixed duration is supplied; ramp, hold and cooldown must be owner-approved."},
+      "wrong_test_command": {"value": false, "note": "No raw-byte fabrication or static-only shortcut is permitted; the intended bounded stimulus matches the purpose."},
+      "missing_evidence": {"value": false, "note": "Per-sensor traces, thresholds, SEL, protection, storage and recovery evidence are complete."},
+      "unsafe_interpretation": {"value": false, "note": "Calibrated limits, human supervision, abort authority and no threshold/fan changes are explicit."},
+      "false_completion": {"value": false, "note": "Static readings or one sensor cannot complete the case; dynamic assert/deassert and all 16 dispositions are required."},
+      "incorrect_BLOCKED": {"value": false, "note": "Required mappings and approvals are prerequisites, not an asserted irreducible blocker."},
+      "unjustified_PASS": {"value": false, "note": "No aggregate or automatic PASS is allowed."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 48,
+    "source_key": "Functionality|793|Wistron-BMC-00083-V003",
+    "answers": {
+      "exact_test_purpose": "Validate the dynamic load response, configured thresholds and documented event/protection behavior of every PWR_GB_GPU1_M through PWR_GB_GPU8_M sensor under an approved bounded GPU workload, followed by recovery.",
+      "target_and_scope": "All eight named BMC sensors individually, each mapped to a physical GPU/module/slot and BDF/UUID; absent or unsupported channels require an owner-approved NOT_APPLICABLE outcome. Aggregate power is not a substitute.",
+      "missing_information": "Definition of the _M suffix; signed eight-channel map; SDR units, scaling, normal range, tolerance, thresholds, hysteresis and event policy; supported GPU stack and exact bounded workload; target schedule, duration, cadence and power/thermal limits; expected fan/throttle/shutdown behavior; approvals, abort, logging and recovery.",
+      "safe_read_only_checks": "Inventory GPU UUID/BDF/module/slot, driver/runtime and BMC identities; collect SDR records, thresholds and existing SEL without clearing; compare idle BMC readings with supported host telemetry; inspect power, temperature, clocks, throttle reasons, fans, workloads and log capacity; validate mapping and tool/package versions without launching load.",
+      "intended_operation": "Preserve synchronized baselines, obtain approval, run the qualified workload only on the mapped target/schedule while recording every BMC and host power channel plus temperature, clock, throttle, fan and host state; verify rise, steady state, any approved event/protection transition and fall; stop inside limits, prove return to baseline, and repeat until every applicable sensor has an independent result.",
+      "actions_requiring_authorization": "The GPU stress workload, exact targets, duration and power envelope; any threshold/protection transition or potential shutdown; maintenance impact; manual abort, physical recovery, reset or reboot. Authorized supervision is required throughout active loading.",
+      "evidence": "Signed eight-channel matrix and _M definition; raw SDRs/readings/thresholds; GPU UUID/BDF/module identities; driver/runtime/workload versions; synchronized BMC and host power, temperature, clock, throttle, fan and host data; workload timing; event/protection evidence; aborts; return-to-baseline and final GPU/host/BMC health.",
+      "stop_conditions": "Stop for unknown _M semantics or mapping, unsupported/implausible baseline, missing approval/monitor/abort, wrong GPU target, power or thermal overshoot, unexpected event/protection response, XID/ECC/driver/kernel fault, telemetry loss, BMC/host instability, or failed baseline recovery.",
+      "completion": "Every applicable channel has a separately mapped and evidenced workload response satisfying the signed rise/steady/fall and threshold/protection contract, every absent channel has approved disposition, limits are respected, the system returns to baseline, and final GPU/host/BMC health is verified. Final PASS is not automatic.",
+      "engineer_judgment": "BMC/GPU/power/thermal owners must define _M, mapping, workload, duration, tolerances and expected protection; judge telemetry divergence and exceptions; direct recovery/quarantine; and make the final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "All eight channels require an independent result or approved NOT_APPLICABLE status."},
+      "wrong_device_selection": {"value": false, "note": "Workload targets must be bound to verified UUID/BDF/module/slot mappings."},
+      "wrong_execution_location": {"value": false, "note": "The workload is restricted to the exact qualified GPU server recipe."},
+      "missing_iterations": {"value": false, "note": "The schedule must repeat until every applicable sensor is independently validated."},
+      "modified_duration": {"value": false, "note": "Duration is an unresolved required input, not silently modified."},
+      "wrong_test_command": {"value": false, "note": "The intended approved bounded GPU workload is fit for dynamic sensor-response validation."},
+      "missing_evidence": {"value": false, "note": "Per-channel BMC/host correlation, workload, protection, recovery and health evidence are specified."},
+      "unsafe_interpretation": {"value": false, "note": "The contract forbids power/fan/threshold changes and requires strict limits and abort authority."},
+      "false_completion": {"value": false, "note": "Aggregate or static telemetry cannot complete the case; all channels and dynamic phases are required."},
+      "incorrect_BLOCKED": {"value": false, "note": "Missing definitions and workload inputs are preconditions, not an asserted permanent blocker."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is inferred from aggregate readings or workload completion."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 49,
+    "source_key": "Functionality|823|Wistron-BMC-00113-V005",
+    "answers": {
+      "exact_test_purpose": "Verify authenticated connectivity to the same target BMC independently through shared and dedicated management paths in three physical states: both connected, shared only and dedicated only, including expected positive and negative behavior.",
+      "target_and_scope": "Both labeled physical BMC LAN ports and their complete client-to-switch-to-channel paths on the exact platform, tested in all three source-defined cable states. Generic ping, unpinned traffic or one surviving route cannot substitute for per-path proof.",
+      "missing_information": "Signed physical port, BMC channel, MAC/IP, VLAN, switch-port and client-interface map; expected simultaneous-port/failover/IP behavior; route/source path-pinning and authenticated identity method; convergence, timeout and retry values; isolated topology, cache/session handling, state order, final topology, approvals, onsite operator and alternate recovery.",
+      "safe_read_only_checks": "Confirm BMC identity, firmware and read-only LAN/channel configuration; map client routes/interfaces and switch ports; observe current link/counter state; test authenticated reachability only in the present approved cable state with fresh sessions and pinned sources; verify alternate/local recovery and loop/duplicate-address protections without moving cables or changing network configuration.",
+      "intended_operation": "For both connected, shared only and dedicated only in order, an onsite operator establishes and attests the cable state; after the specified convergence period, the agent opens fresh path-pinned sessions, authenticates the same BMC, exercises expected-positive and expected-negative paths, correlates link/switch counters and channel data, then restores and verifies the approved final topology.",
+      "actions_requiring_authorization": "Every physical cable insertion/removal and state transition; the dual-port topology; management traffic from each pinned client path; any approved cache/session clearing; and restoration or recovery actions. An onsite operator must retain immediate physical control.",
+      "evidence": "BMC/firmware identity and signed end-to-end path map; redacted LAN/channel baseline; operator state attestations and timestamps; per-state client source/path, fresh connection transcript and authenticated BMC identity; link state and switch counters for both paths; expected-negative timeout evidence; logs, anomalies and restored final reachability.",
+      "stop_conditions": "Stop for unresolved map, missing isolated topology/operator/recovery, ambiguous traffic path, wrong BMC identity, loop/storm/duplicate address, unexplained reachability through a disconnected path, failure of an expected active path, BMC/network instability, or inability to restore final topology.",
+      "completion": "All three cable states are physically attested and independently tested using fresh pinned authenticated connections; expected active and inactive results correlate with both physical/link evidence and switch counters; no loop or target ambiguity occurs; and the approved final topology is restored and verified.",
+      "engineer_judgment": "BMC/network owners must define simultaneous-port and failover behavior, convergence/timeouts and final topology; the onsite operator validates physical state; engineers assess anomalous routing or reachability, approve retries/recovery, and decide the verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "Both ports, all three states, and positive plus negative path tests are required."},
+      "wrong_device_selection": {"value": false, "note": "Every connection must authenticate the same target BMC and correlate to the signed path map."},
+      "wrong_execution_location": {"value": false, "note": "Testing is restricted to the isolated mapped two-path lab network."},
+      "missing_iterations": {"value": false, "note": "The three required cable states are enumerated explicitly."},
+      "modified_duration": {"value": false, "note": "No duration is stated; convergence and timeout values must be supplied."},
+      "wrong_test_command": {"value": false, "note": "Fresh source-pinned authenticated connections and counter correlation correctly test path-specific connectivity."},
+      "missing_evidence": {"value": false, "note": "Physical state, identity, path, counters, negative timeouts and restoration are all evidenced."},
+      "unsafe_interpretation": {"value": false, "note": "Cable work is manual, network changes are prohibited, and the last recovery path may not be removed unsafely."},
+      "false_completion": {"value": false, "note": "Generic ping or one surviving route is explicitly insufficient."},
+      "incorrect_BLOCKED": {"value": false, "note": "The contract is executable when mapping, operator, isolation and recovery inputs are present."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is inferred from cached or unpinned connectivity."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 50,
+    "source_key": "Functionality|831|Wistron-BMC-00121-V003",
+    "answers": {
+      "exact_test_purpose": "Verify that each owner-required BMC callout method delivers an approved generated event end to end to its isolated test receiver with correct identity, severity, code, message, timing, retry and deduplication behavior.",
+      "target_and_scope": "Every row in the signed platform callout-method/event-policy/receiver matrix on the exact BMC. An example method, SEL entry, configured destination or one successful receiver cannot substitute for the complete required matrix.",
+      "missing_information": "Signed method/event-policy/receiver matrix; reversible safe stimuli; expected identity, severity, code and message fields; isolated receiver endpoints and protected security material; time synchronization and tolerance; timeout, retry, deduplication and rate limits; exact packages/vendor commands; approvals, configuration backup, cleanup, rollback and recovery.",
+      "safe_read_only_checks": "Identify BMC firmware and current redacted alert policy; inventory configured methods without exposing secrets; verify isolated receiver reachability and clock synchronization; preserve SEL, BMC and receiver baselines without clearing; validate proposed stimuli and log/rate capacity from documentation without generating an event.",
+      "intended_operation": "For each signed matrix row, preserve baselines, arm the isolated receiver, trigger only the approved reversible event, capture the new source event and BMC outbound callout, prove receiver-side receipt and required fields within the specified retry/timeout policy, correlate identities and timestamps, prevent uncontrolled repeats, restore temporary settings and verify final health.",
+      "actions_requiring_authorization": "Any event generation or fault stimulus; alert-policy, receiver, credential or temporary-path configuration; outbound notifications; maintenance impact; and rollback/cleanup. BMC, notification, network/security and lab owners must approve before the first stimulus.",
+      "evidence": "Signed matrix and redacted alert policy; clock-sync baseline; exact stimulus and approval; pre/post SEL and BMC/OS callout logs; per-method outbound status and receiver-side receipt/message with identity, severity, code and timestamps; timeout/retry/deduplication observations; restored configuration, no residual alerts and final health.",
+      "stop_conditions": "Stop for incomplete matrix, unsafe or ambiguous stimulus, production destination, missing receiver evidence, excessive clock skew, wrong or duplicate notification, rate-limit breach, missing event-to-receipt correlation, BMC/OOB or platform impact, secret exposure, alert storm, or failed rollback/cleanup.",
+      "completion": "Every signed matrix row has a uniquely correlated source event, BMC callout and receiver receipt satisfying content, timing, retry and deduplication rules; no production recipient or uncontrolled repeat is affected; temporary configuration is restored; no residual alert remains; and BMC/OOB/receiver health is verified. Configuration or SEL presence alone is insufficient.",
+      "engineer_judgment": "Owners must select applicable methods, reversible events, expected fields, provider policy and tolerances; judge external provider behavior and anomalies; approve secret rotation or recovery; and make the final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "Every row in the signed method matrix requires independent end-to-end evidence."},
+      "wrong_device_selection": {"value": false, "note": "The exact BMC and isolated receiver for each method are explicit mapping inputs."},
+      "wrong_execution_location": {"value": false, "note": "Callouts are constrained to isolated test receivers, never production destinations."},
+      "missing_iterations": {"value": false, "note": "The operation repeats once per approved matrix row under defined retry/deduplication policy."},
+      "modified_duration": {"value": false, "note": "No duration is specified; timeouts and clock tolerance must be supplied."},
+      "wrong_test_command": {"value": false, "note": "Approved reversible stimuli plus end-to-end correlation fit the purpose; configuration checks alone are rejected."},
+      "missing_evidence": {"value": false, "note": "Source, outbound and receiver evidence with timing, fields, retries and cleanup is required."},
+      "unsafe_interpretation": {"value": false, "note": "Production recipients, unsafe events, secret exposure and uncontrolled repeats are expressly prohibited."},
+      "false_completion": {"value": false, "note": "SEL presence or configured policy cannot substitute for receiver delivery."},
+      "incorrect_BLOCKED": {"value": false, "note": "The operation is clear once the owner supplies the finite matrix and safe stimuli."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted from a single method or configuration state."}
+    },
+    "overall_understanding": "CLEAR"
+  }
+]

@@ -1,0 +1,322 @@
+[
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 31,
+    "source_key": "Functionality|241|Wistron-HW-00256-V002",
+    "answers": {
+      "test_purpose": "Verify that the specified owner-approved AST1060 negative firmware fixture reaches the anti-rollback SVN policy gate and is explicitly rejected, while firmware version, SVN, policy, activation state, and platform boot/management health remain unchanged.",
+      "target_and_scope": "One exactly identified AST1060 on the approved board/BMC/firmware combination, using the documented AST1060 update path. Only the specified invalid or revoked SVN condition is tested; generic corruption, signature failure, BMC downgrade, or an arbitrary old image is not equivalent.",
+      "missing_information": ["Exact board, BMC, AST1060 identity and current firmware/SVN/policy state", "Authoritative anti-rollback policy and revocation data", "Owner-generated signed negative fixture, hash, target, SVN provenance, and peer review", "Qualified update endpoint/tool/task schema and expected policy rejection code, stage, and timeout", "Protected credentials, TLS rules, maintenance/power window, explicit one-shot approval, and validated recovery/no-retry procedure"],
+      "read_only_checks_possible_now": ["Inventory the board, BMC, AST1060, current image/version/SVN/policy floor, boot state, and health", "Verify fixture hash, signature, target, format, SVN/revocation metadata, and provenance offline without submitting it", "Review the documented update endpoint, request/task schema, expected rejection semantics, timeout, and no-retry rule", "Validate power stability, OOB reachability, evidence paths, credential/TLS handling, and recovery readiness", "Preserve baseline BMC/OOB/SEL/POST/boot evidence without clearing logs"],
+      "intended_test_operation": "After final approval, submit the qualified negative fixture exactly once through the documented AST1060 update route, capture the raw request and complete task lifecycle, prove a policy-specific SVN rejection rather than a transport or format failure, then independently re-read firmware/SVN/policy and verify no activation, reboot, state change, or health regression.",
+      "actions_requiring_authorization": ["Use of the security fixture and protected update credentials", "The exact one-time firmware submission", "Any maintenance isolation or service-impacting update window", "Any recovery action, reset, power cycle, or security-state remediation if the fixture is accepted or state becomes ambiguous"],
+      "evidence_required": ["Approval and target identity manifest", "Pre/post AST1060 version, SVN, policy, activation, and boot state", "Fixture hash, signature, target, SVN, and revocation record", "Exact endpoint/tool/request plus complete task/status, rejection code, stage, timestamps, and timeout handling", "Proof of no activation/reboot/state delta and final POST/boot/BMC/OOB/SEL health"],
+      "stop_conditions": "Stop before submission for any target, policy, fixture, signature, format, endpoint, expected-rejection, approval, power, TLS, credential, or recovery ambiguity. After submission, stop without retry on transport-only error, any acceptance/staging/activation signal, any version/SVN/policy delta, management/POST/boot degradation, incomplete evidence, or recovery failure.",
+      "completion": "Completion requires one and only one approved submission, explicit policy-specific SVN rejection at the expected stage, complete task evidence, independently proven unchanged protected state, no activation or reboot, healthy platform management and boot, and no retry. A generic update failure is not completion.",
+      "engineer_judgment": "RoT/security and firmware owners must determine fixture validity, policy applicability, expected rejection semantics, whether the SVN gate was truly reached, and final disposition of any ambiguous response or state delta. Qualified owners control recovery."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "A generic bad-image rejection or transport failure cannot substitute for the specified invalid/revoked SVN policy case."},
+      "wrong_device_selection": {"value": true, "note": "The fixture and update endpoint must match the exact AST1060, board, BMC, and policy instance."},
+      "wrong_execution_location": {"value": true, "note": "Submission must use the qualified AST1060 update route; a BMC update path or generic firmware endpoint tests something else."},
+      "missing_iterations": {"value": false, "note": "Exactly one submission is intended; automatic retry is prohibited."},
+      "modified_duration": {"value": true, "note": "The task timeout and expected rejection stage are owner-defined and cannot be shortened or extended silently."},
+      "wrong_test_command": {"value": true, "note": "No submission command is valid until the precise endpoint, schema, target, fixture, credentials, and rejection semantics are qualified."},
+      "missing_evidence": {"value": true, "note": "No request/task lifecycle, policy rejection, unchanged-state proof, or health evidence exists before execution."},
+      "unsafe_interpretation": {"value": true, "note": "Using an arbitrary image, retrying, treating transport failure as success, or invoking unapproved reset/recovery could damage or obscure protected state."},
+      "false_completion": {"value": true, "note": "A failed request alone is not completion without proof that the anti-rollback gate rejected the fixture and no state changed."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing owner fixture, endpoint details, approval, or recovery plan are resolvable prerequisites, not automatically an irreducible testcase block."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires the precise SVN-policy rejection and complete unchanged-state and health evidence; generic failure cannot justify it."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 32,
+    "source_key": "Functionality|254|Wistron-HW-00269-V004",
+    "answers": {
+      "test_purpose": "Run the approved source-matching 4K random mixed-I/O fio profile for 43,200 seconds on every required SSD, then evaluate per-drive performance against the owner-defined 80% threshold while verifying storage and platform health.",
+      "target_and_scope": "Every owner-listed SSD, with explicit mapping among physical drive, controller, namespace, logical target, and disposable write range. RAID/LVM or one aggregate volume does not prove per-drive coverage unless the owner supplies an accepted mapping.",
+      "missing_information": ["Signed stable drive/controller/namespace/target and protected-device exclusion matrix", "Exact disposable ranges, backup/data-loss/endurance acceptance, and evidence destination", "Pinned fio build and immutable job semantics including mix, engine, direct/cache, clone offsets, schedule, and CPU-specific numjobs", "Comparable per-drive IOPS reference, aggregation method, and 80% calculation", "Destructive approval, monitoring thresholds, abort policy, recovery/reimage plan, cooling/power/OOB readiness"],
+      "read_only_checks_possible_now": ["Inventory stable IDs, models, firmware, controllers, namespaces, mounts, swap, RAID/LVM/device-mapper, OS/boot dependencies, capacity, and topology", "Capture SMART/NVMe/controller/kernel/BMC/thermal/power health baselines without clearing logs", "Verify fio binary/version/hash and statically review the full job and target rendering", "Calculate all ranges, clone offsets, overlap, footprint, concurrency, endurance, and evidence-device separation", "Verify backup, recovery, OOB, workload isolation, cooling, and power readiness"],
+      "intended_test_operation": "Render and peer-review the complete per-drive fio map, obtain final destructive approval, execute the exact approved simultaneous or sequential schedule so each target receives its full 43,200-second profile, continuously monitor health and thresholds, capture structured per-drive results, then verify every drive and the SUT after orderly cleanup.",
+      "actions_requiring_authorization": ["Every destructive target and exact write range", "Data loss, endurance consumption, backup sufficiency, and reimage policy", "Exact fio job, CPU-specific numjobs, concurrency, and schedule", "Twelve-hour load, abort thresholds, and recovery actions", "Final launch after rendered-target review"],
+      "evidence_required": ["Signed target/protected-device matrix and stable identity/topology mapping", "Fio/version/job/hash and rendered filenames, ranges, clone offsets, concurrency, and schedule", "Per-target start/end timestamps proving 43,200 seconds plus complete JSON/stdout/stderr", "Per-drive IOPS, bandwidth, latency, errors, and auditable matched 80% calculation", "Pre/post SMART/NVMe/controller/kernel/BMC/thermal/power evidence, abort events, cleanup, and final health"],
+      "stop_conditions": "Stop before writes for identity, range, protected-device, clone-overlap, threshold, backup, approval, monitoring, cooling, power, or recovery ambiguity. During the run stop according to policy for target mismatch, fio error, media/SMART/NVMe/controller/kernel fault, thermal/power breach, host/OOB instability, evidence loss, or incomplete coverage; do not auto-rerun.",
+      "completion": "Completion requires every signed SSD target to receive the full approved 43,200-second profile over only its authorized range, complete per-drive structured evidence, the matched 80% calculation, acceptable health and stability, stopped fio processes, and verified final drive/system state.",
+      "engineer_judgment": "Storage/platform owners decide physical-logical mapping, disposable boundaries, CPU-specific numjobs, concurrency/schedule, theoretical or measured reference equivalence, threshold anomalies, endurance acceptability, and recovery or quarantine."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "One volume, a sampled drive, aggregate output, or incomplete duration cannot represent all required SSDs."},
+      "wrong_device_selection": {"value": true, "note": "Destructive writes to an unstable or mis-mapped target could affect OS, boot, swap, RAID/LVM, user data, or sole evidence storage."},
+      "wrong_execution_location": {"value": true, "note": "Fio must run on the exact SUT against signed targets, while sole evidence resides off the tested media."},
+      "missing_iterations": {"value": true, "note": "The coverage iteration is every listed SSD; the drive matrix and simultaneous/sequential schedule remain unresolved."},
+      "modified_duration": {"value": true, "note": "Every target must receive 43,200 seconds; runtime cannot be shortened, shared ambiguously, or inferred without per-target timestamps."},
+      "wrong_test_command": {"value": true, "note": "Core parameters alone are insufficient; unresolved mix, engine, direct/cache, filenames, offsets, numjobs, and schedule can change both risk and meaning."},
+      "missing_evidence": {"value": true, "note": "No signed target map, exact job, full per-drive results, health deltas, or matched threshold calculations exist yet."},
+      "unsafe_interpretation": {"value": true, "note": "Guessing devices or fio defaults, overlapping ranges, reducing scope, or auto-rerunning after a storage fault is unsafe."},
+      "false_completion": {"value": true, "note": "A successful process or aggregate result is incomplete without all targets, full runtime, per-drive evidence, health, and cleanup."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing targets, job details, references, or destructive approval are resolvable prerequisites; they require no execution now but are not inherently irreducible."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires complete all-drive coverage, matched 80% results, and acceptable media/controller/platform health."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 33,
+    "source_key": "Functionality|295|Wistron-HW-00311-V003",
+    "answers": {
+      "test_purpose": "Verify the numeric PCIe identity, physical/topology mapping, and negotiated link speed and width of every required ConnectX-7 function against the exact platform recipe.",
+      "target_and_scope": "All owner-listed ConnectX-7 PCIe functions on the selected Linux server, keyed by domain-qualified BDF, numeric vendor/device/subsystem IDs, and approved slot mapping. This is PCIe identity/link-state inspection, not a throughput benchmark.",
+      "missing_information": ["Required ConnectX-7 population and authoritative slot/topology map", "Expected numeric vendor, device, and subsystem IDs", "Required or minimum PCIe generation and width per function", "Validated pciutils version and sufficient read privilege", "Owner decision whether a separate traffic benchmark is also desired"],
+      "read_only_checks_possible_now": ["Capture SUT identity, pciutils version, complete domain-qualified numeric PCI inventory, and existing PCIe/AER logs", "Resolve candidate functions by numeric IDs and domain:BDF without relying on order", "Collect full lspci -Dnn and per-target verbose data including LnkCap, LnkSta, subsystem, kernel driver, and NUMA/topology fields", "Compare enumerated population for duplicates or omissions", "Preserve all raw output without filtering mismatches"],
+      "intended_test_operation": "Run read-only pciutils and log collection, map every approved ConnectX-7 function to its slot and domain:BDF, compare numeric identity and LnkCap/LnkSta to the platform specification, and report driver and relevant AER state.",
+      "actions_requiring_authorization": ["Ordinary authorized host access and any privilege elevation needed only to read verbose PCI fields", "Owner approval of expected target and acceptance matrices", "A separate approval and procedure for any actual traffic benchmark or state-mutating diagnosis"],
+      "evidence_required": ["Timestamped complete lspci -Dnn inventory", "Target-to-slot/domain:BDF mapping for every required function", "Numeric vendor/device/subsystem IDs and full per-target lspci -vvv output", "Explicit LnkCap and LnkSta comparison plus driver state", "Contextual PCIe/AER logs and a list of unresolved fields or mismatches"],
+      "stop_conditions": "Stop PASS evaluation for missing or duplicate targets, ambiguous BDF/slot mapping, absent expected values, inaccessible fields, numeric identity mismatch, unresolved negotiated-link downgrade, PCIe/AER error, or any request to reset, unbind, remove, reconfigure, or benchmark a device under this case.",
+      "completion": "Completion requires every owner-listed function to be uniquely mapped and evidenced, all numeric identities and negotiated link criteria compared, driver and AER context captured, and unresolved mismatches reported. Enumeration of one matching device is insufficient.",
+      "engineer_judgment": "The platform owner defines the required population, physical slot mapping, exact IDs, acceptable link capability/state, and whether a downgrade is expected. A performance engineer separately defines any throughput test."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "First-match enumeration or a single function can silently omit required ConnectX-7 functions."},
+      "wrong_device_selection": {"value": true, "note": "Enumeration order and abbreviated BDFs are unsafe identifiers; numeric IDs, domain:BDF, and slot mapping must agree."},
+      "wrong_execution_location": {"value": true, "note": "Collection must occur on the selected SUT whose PCIe topology is being accepted, not on a management node or copied output."},
+      "missing_iterations": {"value": true, "note": "The required per-function iteration count equals the owner-listed population, which is not yet supplied."},
+      "modified_duration": {"value": false, "note": "No timed operation is part of this read-only inspection."},
+      "wrong_test_command": {"value": true, "note": "Filtered lspci, missing -D/-nn, first-match pipelines, or a throughput command would not implement the contract."},
+      "missing_evidence": {"value": true, "note": "The owner matrix and complete per-function inventory, verbose link fields, driver state, and AER evidence are not yet present."},
+      "unsafe_interpretation": {"value": true, "note": "Resetting, unbinding, writing config space, changing link state, clearing logs, or calling LnkSta measured throughput violates scope."},
+      "false_completion": {"value": true, "note": "Finding a ConnectX-7 string is not completion without all functions, numeric identity, physical mapping, and link comparison."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing recipe inputs or pciutils access are normally resolvable prerequisites; ambiguous identity after supplied mapping may stop evaluation but is not assumed irreducible."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires every required function and all specified link criteria to match with no unresolved AER condition."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 34,
+    "source_key": "Functionality|329|Wistron-HW-00345-V003",
+    "answers": {
+      "test_purpose": "Run the supported DCGM memtest once across every required NVIDIA GPU and verify a per-GPU passing diagnostic with no unexplained memory, ECC, XID, thermal, driver, DCGM, host, or platform error.",
+      "target_and_scope": "Every GPU UUID/entity in the approved SUT recipe, explicitly selected and count-checked. Each UUID requires its own result; a subset, skipped entity, or implicit index list is not equivalent. MIG and workloads must be dispositioned before execution.",
+      "missing_information": ["Signed GPU UUID/entity/BDF population and expected count", "Qualified driver, DCGM, memtest plugin/configuration, and exact supported invocation", "Workload and MIG disposition plus required free resources", "Diagnostic timeout and thermal, power, ECC, page-remap, XID, and driver response limits", "Per-GPU persistence baselines, execution approval, evidence path, OOB recovery, and stop procedure"],
+      "read_only_checks_possible_now": ["Inventory GPU UUIDs, BDFs, entities, MIG configuration, clients, driver/DCGM/plugin versions, and support for named memtest", "Capture per-GPU persistence, ECC, page-remap, XID, memory use, temperature, power, clocks, and host/BMC log baselines without clearing them", "Verify expected count, target mapping, workload quiescence, available resources, evidence capacity, and OOB control", "Validate the intended command/configuration and structured-output capability without starting the diagnostic", "Record exact per-GPU state required for restoration"],
+      "intended_test_operation": "After target, quiescence, and approval checks, change only explicitly required persistence settings on named GPUs, run one verbose or structured DCGM memtest covering all approved entities under monitoring, preserve full per-entity output and synchronized logs, restore each GPU's original persistence state, and verify final host/GPU health.",
+      "actions_requiring_authorization": ["Quiescing or evicting GPU workloads and the chosen MIG disposition", "The active, resource-consuming memtest on all targets", "Any required per-GPU persistence-state transition", "Supported stop operation and owner-controlled recovery if diagnostic control is lost", "Any GPU reset or rerun, which is not automatically authorized"],
+      "evidence_required": ["Driver/DCGM/plugin/configuration provenance", "UUID/entity/BDF/MIG/client map and expected-count reconciliation", "Pre/post persistence, ECC, page-remap, XID, thermal, power, and health state", "Exact command/config/hash, timestamps, duration, exit code, and complete per-entity verbose or JSON result", "Synchronized host/BMC logs, skipped-entity accounting, cleanup, and per-GPU persistence restoration proof"],
+      "stop_conditions": "Stop before launch for target mismatch, unsupported memtest, unauthorized clients, insufficient resources/headroom, missing approval, unknown persistence baseline, or unready recovery. Stop execution through the supported path for timeout, thermal/power limit, ECC/XID/driver/DCGM/host failure, or unexpected client; do not auto-reset or rerun.",
+      "completion": "Completion requires one supported run covering every approved GPU, explicit per-UUID results with no unexplained errors or skips, complete telemetry/log evidence, final host/GPU health, and exact restoration of each GPU's original persistence state.",
+      "engineer_judgment": "GPU/platform owners decide qualification, target population, MIG/workload handling, warning and counter-delta significance, timeout and stop limits, whether any failure warrants quarantine or approved reset, and the final verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Default selection, a subset, or ignored skipped entities can falsely reduce the all-GPU requirement."},
+      "wrong_device_selection": {"value": true, "note": "GPU indices are unstable; explicit UUID/entity/BDF reconciliation is required."},
+      "wrong_execution_location": {"value": true, "note": "The diagnostic must run on the selected SUT/DCGM environment against its local approved GPUs, not a different host or management service."},
+      "missing_iterations": {"value": false, "note": "One diagnostic run is specified, provided it explicitly covers every required entity and returns one result per UUID."},
+      "modified_duration": {"value": true, "note": "The owner-defined timeout is unresolved; it must not be silently shortened or treated as diagnostic duration success."},
+      "wrong_test_command": {"value": true, "note": "A generic diagnostic level, implicit entities, unsupported memtest name, or incomplete structured output would not satisfy the contract."},
+      "missing_evidence": {"value": true, "note": "No full per-GPU diagnostic, synchronized logs, state baselines, or restoration proof exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Running with live clients, altering MIG/ECC, clearing counters, guessing targets, auto-resetting, or leaving persistence changed is unsafe."},
+      "false_completion": {"value": true, "note": "Exit code zero is insufficient if entities were skipped, per-GPU evidence is incomplete, warnings are unexplained, or state was not restored."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing plugin/configuration, owner limits, quiescence, or approval are resolvable prerequisites, not inherently an irreducible block."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires every required UUID to pass with complete health evidence and exact persistence restoration."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 35,
+    "source_key": "Functionality|355|Wistron-BIOS-00022-V003",
+    "answers": {
+      "test_purpose": "Verify that pressing Enter once on the specifically highlighted item in the designated pre-OS POST/BIOS screen activates that item and produces the board-approved response without committing an unauthorized change.",
+      "target_and_scope": "Only the named screen and selectable item for this exact source variant on the specified board/BIOS build. An SMBIOS Type 42 check or any other row sharing a code is outside scope.",
+      "missing_information": ["Exact board and BIOS build", "Exact screen, highlighted item, and expected response", "Validated local console or approved KVM path", "Proof the item is safe plus cancel/restoration steps", "Approved boot window, human operator, and visual evidence destination"],
+      "read_only_checks_possible_now": ["Verify source key, board, BIOS build, console/KVM identity, and current boot/configuration state", "Test console video and input routing without pressing Enter on an unidentified menu item", "Review the approved run card, expected result, safety of the selected item, and cancel/restoration path", "Prepare timestamped visual capture and post-boot health collection", "Preserve existing logs and establish normal-boot baseline"],
+      "intended_test_operation": "A human operator captures the correctly highlighted item, presses Enter exactly once through the validated console, captures the resulting screen or state, compares it with the approved run card, cancels or restores any unapproved pending change, exits, and verifies normal boot and configuration.",
+      "actions_requiring_authorization": ["Interrupting boot and entering the pre-OS interface", "The exact Enter action on the named item", "Any cancellation or restoration action if a pending setting is created", "Any reboot or recovery required to regain normal boot"],
+      "evidence_required": ["Exact source key, board, BIOS build, and console type", "Timestamped image/video before input showing screen and highlighted item", "Operator record of the single Enter press and immediate resulting screen/state", "Before/after setting or pending-change status", "Clean exit, unchanged approved configuration, and normal boot/health evidence"],
+      "stop_conditions": "Stop for wrong source variant, undefined screen/item/expected response, unvalidated console, missing operator/window/restoration, misdirected input, unexpected setting/write/reset prompt, loss of visual feedback, or inability to return to the approved boot/configuration state.",
+      "completion": "Completion requires direct visual evidence of the correct highlighted item, exactly one observed Enter action, the expected response, no unauthorized committed change, safe exit or restoration, and normal boot/health. An OS query cannot substitute for the interaction.",
+      "engineer_judgment": "The BIOS owner defines the exact screen, item, expected visual response, acceptable interaction latency, safe cancellation/restoration, and whether observed behavior is correct. A human judges usability and visual correctness."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Substituting an OS/SMBIOS query or testing a different menu item omits the required observed pre-OS interaction."},
+      "wrong_device_selection": {"value": true, "note": "The exact board and BIOS build determine the menu and response; a different SUT is not representative."},
+      "wrong_execution_location": {"value": true, "note": "The action must occur in the designated pre-OS screen through the validated console, not in the OS or an unrelated UI."},
+      "missing_iterations": {"value": false, "note": "Exactly one Enter action is intended."},
+      "modified_duration": {"value": false, "note": "No fixed duration is specified; timing may be observational but must follow the run card."},
+      "wrong_test_command": {"value": true, "note": "There is no shell-command substitute; automated keystroke injection or SMBIOS output would be the wrong operation."},
+      "missing_evidence": {"value": true, "note": "No before/action/after visual record or final boot/configuration evidence exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Pressing Enter on an unidentified item, improvising recovery, or accepting a BIOS/security/boot write is unsafe."},
+      "false_completion": {"value": true, "note": "Normal boot alone does not prove the named item responded correctly, and a visual response alone does not prove safe restoration."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing run-card details, operator, console, or window are normally resolvable prerequisites; the case is manual, not inherently BLOCKED."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires the exact observed interaction and expected response with no unauthorized change."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 36,
+    "source_key": "Functionality|386|Wistron-BIOS-00053-V002",
+    "answers": {
+      "test_purpose": "Validate the complete BIOS Administrator Password lifecycle: begin passwordless, set an approved temporary password, reject exactly three incorrect attempts, accept the correct password, clear it through the documented method, and end passwordless and healthy.",
+      "target_and_scope": "Only the Administrator Password control and BIOS-entry authentication flow on the exact SUT/BIOS build. Exactly three wrong attempts and two save/reset cycles are required; OS and BMC credentials are excluded.",
+      "missing_information": ["Platform password syntax, retry/lockout behavior, and blank-password clear procedure", "Securely held non-production temporary secret and custody process", "Verified passwordless baseline and final-state checklist", "Approved console, human operator, maintenance window, two save/reset approvals, and OOB access", "Documented vendor recovery for lockout or clear failure and redacted evidence method"],
+      "read_only_checks_possible_now": ["Verify SUT/BIOS identity, current passwordless entry, normal boot/BMC/OOB health, and preserved logs", "Review password rules, retry/lockout semantics, clear flow, recovery procedure, and exact eight-step sequence", "Validate console/video/input and OOB recovery without exposing or entering the secret", "Prepare redacted checkpoint capture that excludes keystrokes and password values", "Confirm human secret custody and that the agent will never receive the password"],
+      "intended_test_operation": "A human operator verifies passwordless entry, sets the approved temporary Administrator Password, saves and resets, performs exactly three recorded wrong attempts, authenticates with the correct password, clears it via the documented empty-new-password flow, saves and resets again, and verifies passwordless BIOS entry and normal system health.",
+      "actions_requiring_authorization": ["Creating, handling, and entering the temporary BIOS secret", "Changing and clearing the BIOS Administrator Password", "Exactly three negative authentication attempts", "Both save/reset cycles", "Any lockout or vendor recovery action"],
+      "evidence_required": ["BIOS build, security rules, approvals, and verified passwordless baseline", "Redacted timestamped outcomes for password set, first reset, each of exactly three wrong attempts, correct authentication, clear action, and second reset", "No captured secret value or keystrokes", "Final passwordless BIOS entry and normal boot/BMC/OOB health", "Exception or recovery record if any step deviates"],
+      "stop_conditions": "Stop for unknown rules/baseline, missing secure custody, approval, console, OOB recovery, or redaction controls; unexpected prompt or lockout; any secret exposure; correct-password rejection; clear/save/reset failure; a requested fourth wrong attempt; or inability to prove the final passwordless healthy state.",
+      "completion": "Completion requires all lifecycle steps in order, exactly three rejected wrong attempts, successful correct authentication, documented clearing, two successful save/reset cycles, no secret disclosure, and a proven return to the original passwordless and healthy state.",
+      "engineer_judgment": "BIOS/security owners decide password rules, lockout interpretation, correct clearing behavior, acceptable prompts, whether recovery is required, and acceptance of redacted evidence. Only the human custodian handles the secret."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Testing only set/authenticate or omitting final clear and passwordless verification leaves a dangerous incomplete lifecycle."},
+      "wrong_device_selection": {"value": true, "note": "Applying the password to the wrong SUT could lock an unintended system and invalidate evidence."},
+      "wrong_execution_location": {"value": true, "note": "This concerns the BIOS Administrator Password and pre-OS entry flow, not OS or BMC credentials."},
+      "missing_iterations": {"value": true, "note": "Exactly three wrong attempts and exactly two save/reset cycles are required; fewer or more changes the case and lockout risk."},
+      "modified_duration": {"value": false, "note": "No timed duration is specified."},
+      "wrong_test_command": {"value": true, "note": "No shell or automated secret-entry command is appropriate; manual prompt handling and documented BIOS flow are required."},
+      "missing_evidence": {"value": true, "note": "The lifecycle, three negative outcomes, resets, clear, and final passwordless evidence have not occurred."},
+      "unsafe_interpretation": {"value": true, "note": "Exposing/reusing the secret, exceeding three attempts, improvising NVRAM recovery, or leaving the password set is unsafe."},
+      "false_completion": {"value": true, "note": "Successful correct authentication is not completion unless the password is cleared and the passwordless healthy baseline is re-proven."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing rules, secure secret process, operator, or recovery are resolvable prerequisites; the case is manual rather than inherently blocked."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires the exact attempt count, correct authentication, successful clear, final passwordless state, and no secret exposure."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 37,
+    "source_key": "Functionality|414|Wistron-BIOS-00081-V003",
+    "answers": {
+      "test_purpose": "Verify that owner-approved non-default Advanced USB BIOS settings persist through save/reboot, then verify the authorized Load Default action restores exact platform defaults without losing required USB, console, boot, storage, or management functions, and finally leave the approved deployed recipe.",
+      "target_and_scope": "The signed complete or sampled Advanced USB field list for the exact board/BIOS, plus every collateral BIOS field affected by global Load Default. Scope is not limited to the visible USB page after defaults are loaded.",
+      "missing_information": ["Owner decision for complete versus sampled field coverage", "Per-field legal non-default and exact specification-default values", "Recoverable full BIOS baseline/export and Load Default collateral-impact map", "Critical USB/console/boot/storage dependencies and independent recovery controls", "Approved final deployed recipe, operator, reboots, stable power, evidence, and recovery plan"],
+      "read_only_checks_possible_now": ["Inventory board/BIOS, current target fields, full recoverable configuration, USB devices, boot/storage paths, console, BMC/OOB, and system health", "Compare the proposed signed field matrix with the platform default specification and identify dependencies", "Assess global Load Default collateral impact and diff strategy without invoking it", "Verify alternate input, recovery media, OOB control, power stability, and configuration restore method", "Prepare visual capture and OS/BMC/device/log health checks while preserving history"],
+      "intended_test_operation": "A human records target and collateral baselines, applies only signed non-default USB values, saves/reboots and proves persistence and health, invokes approved global Load Default, saves/reboots and compares target plus collateral settings to specification, then restores and verifies the deployed recipe when it differs from defaults.",
+      "actions_requiring_authorization": ["Every BIOS field/value change", "Both save/reboot phases", "Global Load Default and all collateral effects", "Restoration to the deployed recipe", "Use of recovery media, CMOS/vendor recovery, or other exceptional recovery"],
+      "evidence_required": ["Exact identity, signed coverage/value matrix, default reference, and baseline/export", "Per-field visual evidence for baseline, applied non-default, post-reboot persistence, and restored default", "Both save/reboot timelines", "Complete collateral configuration diff after Load Default", "USB/console/boot/storage/OS/BMC health, log deltas, and final deployed-configuration proof"],
+      "stop_conditions": "Stop for unresolved coverage or values, missing default/global-impact data, no independent console/recovery, unexpected field or collateral change, loss of input/boot/storage/management, reboot hang/crash, new error log, failed persistence/default comparison, or inability to restore the approved final recipe.",
+      "completion": "Completion requires all signed fields to show the approved non-default persistence, then exact defaults, complete collateral-diff review, healthy required functions after both reboots, and verified final deployed configuration. Leaving defaults when the deployed recipe differs is incomplete.",
+      "engineer_judgment": "BIOS/system owners choose complete versus sample coverage, legal test values, exact defaults, acceptable collateral changes, required field-linked health evidence, and final deployed recipe. Human observation remains necessary."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Silent sampling, checking only one USB field, or ignoring collateral Load Default changes would reduce required scope."},
+      "wrong_device_selection": {"value": true, "note": "The field/default matrix is board- and BIOS-specific; a different SUT or critical USB path can lead to loss of control."},
+      "wrong_execution_location": {"value": true, "note": "Values must be changed and visually verified in the intended BIOS UI; OS inventory is supporting evidence only."},
+      "missing_iterations": {"value": true, "note": "The coverage count remains unresolved until the owner signs complete or sampled fields; both save/reboot phases are mandatory."},
+      "modified_duration": {"value": false, "note": "No fixed test duration is specified."},
+      "wrong_test_command": {"value": true, "note": "There is no shell substitute for the manual BIOS changes; generic Load Default without a signed collateral plan is the wrong operation."},
+      "missing_evidence": {"value": true, "note": "No signed matrix, phase captures, collateral diff, reboot/health evidence, or final recipe proof exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Random values, unscoped defaults, reliance on one USB control path, or leaving the system in an unapproved state can cause loss of boot or management."},
+      "false_completion": {"value": true, "note": "Seeing defaults on the USB page is incomplete without persistence phase, collateral review, health checks, and final recipe restoration."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing field matrices, owner coverage choice, or recovery inputs are resolvable prerequisites; they do not alone make the contract irreducible."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires both phase comparisons, collateral review, functional health, and the correct final deployed state."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 38,
+    "source_key": "Functionality|441|Wistron-BIOS-00108-V003",
+    "answers": {
+      "test_purpose": "Verify specified Advanced CRB Board fields equal their platform defaults after Load Default, then verify approved non-default values persist through the required reboot with no field-related regression, ending in the owner-approved configuration.",
+      "target_and_scope": "Only owner-named CRB Board fields and documented dependencies on the exact AMD board/BIOS/AGESA/hardware recipe. Coverage must be declared complete or sampled; unrelated memory, PCIe, or power checks are included only when tied to a named field.",
+      "missing_information": ["Exact board, BIOS, AGESA, and hardware recipe", "Signed complete-versus-sampled coverage decision", "Per-field default, non-default, dependency, and expected-system-effect matrix", "Global Load Default collateral map, recoverable deployed baseline, and final-state decision", "Required warm/cold reboot rule, approvals, operator, console, OOB, stable power, evidence, and recovery plan"],
+      "read_only_checks_possible_now": ["Inventory platform identity, current CRB fields where viewable, hardware topology, deployed configuration, BIOS/AGESA, and health", "Review vendor specifications and signed field/dependency/effect matrix without changing settings", "Assess Load Default collateral impact, reboot-type need, and final restoration diff", "Verify console, BMC/OOB, power, backup, and vendor recovery", "Prepare field-linked inventory/log/health comparisons while preserving logs"],
+      "intended_test_operation": "A human archives the deployed baseline, loads defaults, saves/reboots and compares every named field to specification, then applies only signed non-default values, saves and performs the specified reboot type, verifies persistence and field-linked effects, and restores or retains exactly the owner-approved final configuration.",
+      "actions_requiring_authorization": ["Global Load Default and collateral configuration changes", "Every named non-default CRB field/value change", "Each save and required warm/cold reboot", "Final-state restoration or retention decision", "Any recovery action after boot, training, device, or management loss"],
+      "evidence_required": ["Platform identity, signed coverage/value/dependency matrix, and recoverable baseline", "Default-phase visual captures and comparisons", "Non-default input and post-reboot persistence captures", "Exact reboot type and timeline", "Per-field linked inventory/health/log evidence, collateral-default diff, and final configuration plus normal boot/BMC/OS proof"],
+      "stop_conditions": "Stop for unresolved coverage, field meaning, values, dependencies, reboot rule, or final state; missing backup, approval, console, or OOB; unexpected collateral change; rejected value or failed persistence; incorrect reboot behavior; boot/training/device/management regression; or inability to restore the approved configuration.",
+      "completion": "Completion requires all signed fields to match specification defaults after the default phase, all signed non-defaults to persist after the correct reboot, expected field-linked effects and health to be evidenced, collateral changes reviewed, and the exact approved final configuration restored or retained.",
+      "engineer_judgment": "AMD platform/BIOS owners define field semantics, coverage, values, dependencies, reboot type, expected linked effects, acceptable exceptions, collateral-default behavior, and final state. A human judges BIOS readback."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Undeclared sampling or ignoring field dependencies and collateral defaults can silently reduce coverage."},
+      "wrong_device_selection": {"value": true, "note": "CRB fields and defaults are specific to the exact AMD board, BIOS/AGESA, and hardware recipe."},
+      "wrong_execution_location": {"value": true, "note": "Load Default and field editing occur in BIOS on the target SUT; OS inventory cannot replace pre-OS value readback."},
+      "missing_iterations": {"value": true, "note": "Every signed field requires both default and non-default/persistence evaluation, but coverage is not yet fixed."},
+      "modified_duration": {"value": false, "note": "No wall-clock duration is specified, though the correct reboot type and completion must be observed."},
+      "wrong_test_command": {"value": true, "note": "Generic defaults or guessed field edits are invalid; this is a manual, field-specific BIOS procedure."},
+      "missing_evidence": {"value": true, "note": "No baseline, signed matrix, phase captures, linked-effect checks, collateral diff, or final-state proof exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Importing another AMD platform's values, mutating unnamed fields, or continuing after training/device/management loss can destabilize the SUT."},
+      "false_completion": {"value": true, "note": "Persistence alone is insufficient without the default phase, linked effects, collateral review, health, and approved final state."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing vendor matrices, coverage choice, reboot rule, or approval are resolvable prerequisites rather than inherently irreducible."},
+      "unjustified_PASS": {"value": true, "note": "PASS needs correct defaults, non-default persistence, expected effects, no regression, and verified final configuration."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 39,
+    "source_key": "Functionality|503|Wistron-BIOS-00170-V005",
+    "answers": {
+      "test_purpose": "Verify the Product Name of every applicable SMBIOS Type 2 Baseboard record against the approved per-baseboard identity matrix and prove the mapped values persist unchanged and correct after one reboot.",
+      "target_and_scope": "All owner-required Type 2 structures on the exact SUT, mapped by handle and companion baseboard identity or role. Type 1 System Information and the first Product Name found are not substitutes.",
+      "missing_information": ["Signed expected Product Name for every required baseboard/role", "Handle/role mapping and permitted string-normalization rules", "Validated dmidecode package/version, host access, and sudo method", "SUT identity and protected credentials", "Workload/reboot approval, stable power, OOB recovery, and evidence destination"],
+      "read_only_checks_possible_now": ["Verify SUT, board, BIOS, SMBIOS, OS, dmidecode version, access, and OOB health", "Collect complete unfiltered Type 2 output and map every handle using companion fields", "Compare all pre-reboot Product Names if the signed matrix is available", "Capture and preserve pre-existing logs and host/BMC health without clearing them", "Validate reboot recovery and evidence storage without rebooting"],
+      "intended_test_operation": "Collect complete pre-reboot Type 2 data, map all applicable structures to signed roles, compare Product Names, obtain explicit reboot approval, reboot once, repeat the identical full collection and mapping, compare correctness and persistence, and verify host/BMC recovery and health.",
+      "actions_requiring_authorization": ["Authenticated host access and any read-only privilege elevation", "The single reboot and workload quiescence", "Any OOB recovery if the host does not return", "Owner adjudication of placeholders, normalization, duplicates, or identity discrepancy"],
+      "evidence_required": ["Signed per-handle/role expected matrix and normalization rules", "SUT, board, BIOS, SMBIOS, and dmidecode identity", "Complete unfiltered pre/post Type 2 dumps and hashes with companion fields and extracted Product Names", "Exact per-record comparison and persistence result", "Reboot start/return timeline, host/OS/BMC health, and exceptions"],
+      "stop_conditions": "Stop PASS evaluation for missing expected mapping, unresolved multiple Type 2 records, incomplete or invalid dump, ambiguous/placeholder Product Name, or pre-test mismatch. Do not reboot without approval and recovery readiness; stop and recover on boot/management failure or post-reboot handle/value drift.",
+      "completion": "Completion requires every applicable Type 2 record to be uniquely role-mapped, match its approved Product Name before reboot, remain mapped and correct after exactly one approved reboot, and finish with healthy host and management state. Selecting one record is incomplete.",
+      "engineer_judgment": "The platform owner defines physical roles, expected vendor strings, normalization, placeholder acceptance, and disposition of duplicate, missing, or drifting records. Firmware strings alone do not prove physical identity."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Choosing the first Product Name or omitting duplicate Type 2 records reduces all-baseboard scope."},
+      "wrong_device_selection": {"value": true, "note": "The wrong SUT or an incorrect Type 2 handle-to-role mapping can yield a plausible but invalid result."},
+      "wrong_execution_location": {"value": true, "note": "Dmidecode must read the target host's SMBIOS; Type 1 data, copied dumps, or another server do not satisfy the live pre/post check."},
+      "missing_iterations": {"value": true, "note": "Every required Type 2 structure must be checked in both pre- and post-reboot phases; the owner matrix determines the count."},
+      "modified_duration": {"value": false, "note": "No timed duration is specified; exactly one reboot is required."},
+      "wrong_test_command": {"value": true, "note": "Filtered output, first-match extraction, Type 1 queries, or a firmware write tool would be the wrong operation."},
+      "missing_evidence": {"value": true, "note": "No signed mapping, complete pre/post dumps, reboot timeline, or comparison evidence exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Rebooting without approval, clearing logs, discarding duplicate records, or rewriting SMBIOS to fix a mismatch violates scope."},
+      "false_completion": {"value": true, "note": "A correct pre-reboot string does not complete the persistence test without all records, one reboot, post-comparison, and health evidence."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing identity matrix, dmidecode, access, or reboot approval are resolvable prerequisites rather than inherently irreducible."},
+      "unjustified_PASS": {"value": true, "note": "PASS needs every mapped Type 2 Product Name to match before and after reboot with no unexplained drift."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "post50_agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 40,
+    "source_key": "Functionality|558|Wistron-BIOS-00225-V005",
+    "answers": {
+      "test_purpose": "Verify the DMTF Type 7 Cache Speed byte, interpreted in nanoseconds, for every required cache record and prove the correctly mapped values persist after one reboot.",
+      "target_and_scope": "All required SMBIOS Type 7 structures on the exact multi-socket SUT, mapped by Type 7 handle, designation/configuration level, and Type 4 L1/L2/L3 references. Cache Speed is not cache frequency or performance; zero means Unknown and requires an approved policy.",
+      "missing_information": ["Signed per-cache expected nanosecond value or approved Unknown policy", "CPU/socket/cache topology and Type 4-to-Type 7 handle map", "Exact SUT/CPU/BIOS/SMBIOS identity and validated dmidecode version", "Authenticated least-privilege host access and sudo method", "Workload isolation, one-reboot approval, stable power, OOB recovery, and evidence destination"],
+      "read_only_checks_possible_now": ["Inventory SUT, CPUs, sockets, caches, BIOS, SMBIOS, dmidecode, host access, and management health", "Collect complete unfiltered Type 4 and Type 7 output", "Build the handle/reference table and decode raw Cache Speed bytes as nanoseconds", "Identify missing, duplicate, zero/Unknown, and unresolved records without changing settings", "Preserve logs and verify reboot/OOB readiness without rebooting"],
+      "intended_test_operation": "Collect and map complete pre-reboot Type 4 and Type 7 structures, compare every raw and decoded Cache Speed value with the signed per-cache matrix, obtain explicit approval, reboot once, repeat the identical collection/mapping/comparison, and verify host/BMC health and record persistence.",
+      "actions_requiring_authorization": ["Authenticated host access and any read-only privilege elevation", "The single reboot and workload quiescence", "Any OOB recovery if reboot fails", "Owner adjudication of Unknown, duplicate, missing, changed, or platform-specific values"],
+      "evidence_required": ["Signed per-cache expectation/Unknown matrix", "SUT, CPU, socket, BIOS, SMBIOS, and dmidecode identity", "Complete unfiltered pre/post Type 4 and Type 7 dumps", "Handle/link table plus raw and decoded nanosecond values for every required cache", "Per-cache comparison, reboot timeline, OS/BMC health, and exception record"],
+      "stop_conditions": "Stop PASS evaluation for missing expected cache map/value policy, unresolved Type 4/Type 7 links, incomplete/invalid output, unapproved zero/Unknown, or pre-test mismatch. Do not reboot without approval/recovery; stop and recover for boot/management failure or any post-reboot handle/value drift.",
+      "completion": "Completion requires every required cache record to be uniquely mapped, correctly byte-decoded and compared before reboot, remain mapped and correct after exactly one approved reboot, and finish with healthy OS/BMC state. A cache-frequency tool or one record is insufficient.",
+      "engineer_judgment": "Platform owners define the complete cache map, expected nanosecond values, approved Unknown policy, acceptable firmware representation, and disposition of duplicate/missing/drifting handles. They must avoid interpreting this field as measured performance."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Checking one cache level, one socket, or only the first Type 7 record can omit required instances."},
+      "wrong_device_selection": {"value": true, "note": "Multi-socket handle mapping can associate a Type 7 record with the wrong CPU/cache unless Type 4 references and topology agree."},
+      "wrong_execution_location": {"value": true, "note": "The target host's live SMBIOS must be read; cache-frequency utilities, copied dumps, or another SUT do not implement this check."},
+      "missing_iterations": {"value": true, "note": "Every required Type 7 record must be checked in both phases, and the owner cache matrix determines the count."},
+      "modified_duration": {"value": false, "note": "No duration is specified; exactly one approved reboot separates the two collections."},
+      "wrong_test_command": {"value": true, "note": "A frequency/performance command, filtered Type 7-only output without Type 4 links, or first-match parsing would be wrong."},
+      "missing_evidence": {"value": true, "note": "No signed cache matrix, complete mapped dumps, raw-byte decoding, reboot timeline, or comparison evidence exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Treating nanoseconds as frequency, accepting zero without policy, changing CPU/cache settings, clearing logs, or rebooting without approval violates scope."},
+      "false_completion": {"value": true, "note": "A decoded pre-reboot value is not completion without all records, Type 4 links, post-reboot persistence, and health evidence."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing cache matrix, dmidecode, access, or reboot approval are normally resolvable prerequisites, not inherently irreducible."},
+      "unjustified_PASS": {"value": true, "note": "PASS requires all mapped Cache Speed values to meet the approved per-cache policy before and after reboot with no drift."}
+    },
+    "overall_understanding": "CLEAR"
+  }
+]
