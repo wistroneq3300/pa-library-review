@@ -659,3 +659,25 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   injection or unjustified PASS would be `MODEL_PLANNING_ERROR`. No proposed-
   contract defect was found. This is not independent-model validation and is
   not DUT hardware validation.
+
+## NVIDIA CPU PCIe Replay Number Rollover definition gate: sequence 106
+
+Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|108|Wistron-System RAS-00828-V003`.
+- It kept Replay Number Rollover distinct from Bad TLP and required traffic
+  origin, transmitter, receiver, AER reporter and every BDF to be mapped for
+  each approved hierarchy locus.
+- It refused to transfer NVIDIA GPU telemetry semantics to an unidentified CPU
+  PCIe component or decide that link retraining was universally required or
+  forbidden; the signed component recipe must define the transition.
+- It rejected a counter increment, AER bit, retrain or restored link alone as
+  completion and required full target correlation, prescribed transition and
+  restored link/device/traffic/service/system health for every signed locus.
+- Failure attribution: label-only Procedure and TBD Criteria are
+  `DOCUMENT_DEFECT`; missing components, traffic, generator, counter semantics,
+  retrain rule and recovery are `PLATFORM_HANDOFF_DEFECT`; reused Bad TLP logic,
+  inferred BDFs/GPU semantics or partial-evidence PASS would be
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
+  independent-model validation and is not DUT hardware validation.
