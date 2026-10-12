@@ -616,6 +616,27 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This
   is not independent-model validation and is not DUT hardware validation.
 
+## BMC I2C-7 fan, leak and PDB endpoint validation: sequence 112
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|138|Wistron-HW Robust-00016-V002`.
+- It preserved independent evidence for every PID-listed fan-controller,
+  leak-sensor and PDB endpoint on both boards; it rejected one 0x2c byte, ACK or
+  generic bus presence as completion of that matrix.
+- It treated `i2ctransfer -f` as exactly one conditionally authorized operation
+  after endpoint ownership, selector safety, necessity and quiesce are proven,
+  and preferred the bound driver's supported telemetry when sufficient.
+- It rejected adapter-number assumptions, broad scans, control writes,
+  automatic retries and physical probing, and required restored ownership plus
+  final cooling, leak, power and BMC health.
+- Failure attribution: missing topology, endpoint matrix, protocol, expected
+  values, ownership, thresholds, approvals and recovery are
+  `PLATFORM_HANDOFF_MISSING`; shortcut coverage or unsafe forced access would be
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
+  independent-model validation and is not DUT hardware validation.
+
 ## NVIDIA CPU memory UCE non-fatal definition gate: sequence 104
 
 Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
