@@ -298,6 +298,27 @@ Status: `PASSED AFTER REVISION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   document defect remains. This is not independent-model validation and is not
   DUT hardware validation.
 
+## Intel GNR single-device multi-bit CE validation: sequence 117
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|170|Wistron-System RAS-00127-V002`.
+- It preserved exactly one CScripts `halt()`/injection/`go()` sequence at the
+  source coordinates, confirmed that zero-masked `dev1` is not a second
+  injected device and required signed physical/API device-DQ mapping.
+- It required 128b ECC, clean baseline, `uc=0`, `mscod=0x80`, the signed runtime
+  demand-log set, address/parity correlation and exact logical-rank counter +1;
+  it rejected generic CE, injector return or counter-only completion.
+- It stopped rather than switching retry-log sets when `en_patspr` differs and
+  required no UE/fatal/unrelated event, successful resume, final health and
+  complete injector/BIOS/GRUB restoration.
+- Missing recipe, topology/device semantics, register decodes, retry set,
+  counter index, settings and recovery are `PLATFORM_HANDOFF_MISSING`; guessing
+  them or changing mask/set/coordinates would be `MODEL_PLANNING_ERROR`. No
+  document defect was found. This is not independent-model validation and is
+  not DUT hardware validation.
+
 ## Proprietary BlueField network-suite validation: sequence 86
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
