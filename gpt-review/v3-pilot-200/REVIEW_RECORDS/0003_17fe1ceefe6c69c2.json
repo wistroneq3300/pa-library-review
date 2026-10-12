@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 3,
+  "calibration": true,
+  "source_key": "Functionality|150|Wistron-HW-00153-V002",
+  "case_variant_id": "17fe1ceefe6c69c2",
+  "source_ref": {"sheet": "Functionality", "source_row": 150, "code": "Wistron-HW-00153-V002"},
+  "source_integrity": {
+    "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+    "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+    "original_row_sha256": "285cc41f19c43c47b5231528b5147588c870bb637c274cc268bb22d1b3862816"
+  },
+  "source_snapshot": {
+    "test_name": "OS installing",
+    "test_set": "TPM",
+    "items": "OS installing",
+    "procedure": "Verify whether the TPM setting can be revised.",
+    "criteria": "Verify whether the TPM setting can be revised.",
+    "attended_time": "5",
+    "machine_time": "20",
+    "deepseek_classification": "PARTIAL",
+    "deepseek_package": "OS installer media (user provides) + tpm2-tools (post-OS check)",
+    "deepseek_finding": "Stage a clean OS install with TPM enabled and then check TPM visibility in the installed OS."
+  },
+  "original_test_intent": {
+    "purpose": "The source does not state one coherent purpose: Items names OS installation, while Procedure and Criteria ask only whether an unspecified TPM setting can be revised.",
+    "target": "Potentially an OS installation target and a BIOS/TPM setting, neither identified by the row.",
+    "scope": "Unresolved until the owner states whether OS installation, TPM-setting mutability, or both are the requested activity.",
+    "operation": "The locked user decision permits a hybrid interpretation—engineer-controlled BIOS/OS installation followed by automated TPM verification—but the source text itself does not define the TPM transition or installation target.",
+    "duration_and_iterations": "Five minutes attended and 20 minutes machine time; no loop. These values appear inconsistent with a normal full OS installation and require confirmation.",
+    "expected_result": "Unresolved in the source. A future revision must state the required TPM start/end state and the OS installation/TPM acceptance evidence.",
+    "required_evidence": "Source-owner clarification, OS image and dedicated target if installation is in scope, before/after BIOS TPM state, installed OS identity, TPM device/capability evidence, storage scope, and boot/recovery health.",
+    "ambiguities": ["No TPM setting or state transition", "No OS image, installation target, boot mode, or installation acceptance criteria", "Five/20-minute timing is not credible for an unspecified full installation"],
+    "source_conflicts": ["Items says OS installing, but Procedure and Criteria only ask whether a TPM setting can be revised."]
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "BLOCKED",
+    "second_review_outcome": "CHANGED",
+    "finding": "V2 correctly exposed the title-versus-procedure conflict and rejected DeepSeek's invented TPM-enabled installation flow, but treated the row as a permanent automation blocker rather than a gated hybrid candidate with a source decision outstanding."
+  },
+  "applicable_history": [{"path": "gpt-review/BLOCKED_FEEDBACK_REREVIEW_001.json", "decision": "BIOS/OS installation may be manual while post-install TPM verification is automated; this is a hybrid case, not BLOCKED. The source definition still needs explicit correction."}],
+  "v3_review_conclusion": {
+    "review_outcome": "SOURCE_CONFLICT",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": ["SOURCE_CONFLICT", "NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+    "summary": "The locked boundary establishes a technically executable hybrid workflow, but the source owner must first resolve whether the requested test is OS installation, TPM-setting revision, or both. No execution or PASS claim is valid until that source conflict is closed."
+  },
+  "execution_readiness_detail": {
+    "available_now": ["The row belongs to the TPM test set and the user-confirmed boundary allows manual BIOS/installer work plus automated post-install verification."],
+    "missing_inputs": ["Authoritative corrected purpose", "Exact TPM BIOS control and start/end states", "OS/version/image and dedicated installation disk if installation is in scope", "Boot mode, Secure Boot/key impact, backup/reimage recovery", "OS-specific TPM acceptance method and expected evidence"],
+    "input_owner": "The testcase owner resolves the source conflict; the platform/security engineer defines the TPM transition; the OS owner supplies the image, target, and recovery plan.",
+    "safe_read_only_work_before_closure": ["Inventory current TPM device/capability exposure, BIOS/UEFI security state where read-only interfaces exist, current OS/boot mode, and storage topology without selecting a target."],
+    "prohibited_until_closed": ["No OS installation, partitioning, TPM clear/ownership/key operation, BIOS security change, or reboot", "Do not present /dev/tpm0 or inventory output as completion of an OS-install or TPM-transition test"],
+    "closure_verification": "The owner issues a corrected requirement that names the operation, target, TPM transition, timing, and acceptance evidence; storage and security recovery are reviewed before the command is planned."
+  },
+  "revision_candidate": {
+    "test_name": "OS Installation with Defined TPM State Verification (Engineer Decision Required)",
+    "purpose": "After the source owner confirms that both activities are intended, install the approved OS on the dedicated target with the specified TPM BIOS state and verify the installed OS exposes the required TPM function.",
+    "applicable_platform_environment": "The identified SUT, BIOS/TPM implementation, approved OS image, boot mode, and dedicated disposable installation target.",
+    "target_scope": "Only the engineer-designated installation disk and named TPM control; all other storage and security state are out of scope.",
+    "required_inputs": "Corrected source requirement, OS image/hash, target disk, boot mode, exact TPM start/end state, Secure Boot/key policy, installer/driver inputs, TPM verification method, backup, and recovery plan.",
+    "test_command_procedure_intent": "An operator performs or approves the BIOS and installer steps on the confirmed target. After installation, collect the approved TPM device, capability, kernel, and OS evidence. Do not substitute post-install inventory for the required installation and state transition.",
+    "preconditions": "Resolve the source conflict, isolate the dedicated target, protect keys/data, capture before-state evidence, and verify OOB/reimage recovery.",
+    "expected_evidence": "Corrected intent, image/target identity, before/after TPM BIOS state, installer result, OS identity, TPM device and capability evidence, target-only storage changes, boot health, and preserved BMC/host logs.",
+    "acceptance_reference": "The corrected testcase requirement plus the applicable platform TPM/BIOS and OS validation specification.",
+    "safety_restrictions": "Never guess a disk or TPM action. Do not clear TPM, alter keys, or change Secure Boot unless explicitly required and recoverable. Preserve logs.",
+    "human_approval_requirements": "Engineer decision on intent, then explicit approval for the resolved disk, BIOS/security transition, installation, and reboot.",
+    "manual_boundaries": "BIOS and interactive installer operations may require an operator; post-install evidence collection can be automated.",
+    "recovery_requirements": "Restore the approved BIOS/security state or reimage only the designated target; preserve keys and non-target storage; use OOB access if boot fails.",
+    "stop_conditions": "Unresolved source purpose, unidentified target, ambiguous TPM transition, unavailable backup/recovery, unapproved key impact, or any non-target storage risk."
+  },
+  "identified_defects": ["The original row has an Items-versus-Procedure/Criteria conflict.", "DeepSeek invents a TPM-enabled OS-install flow and fixed post-checks not specified by the row.", "V2 correctly finds the conflict but does not represent the confirmed hybrid capability separately from readiness."],
+  "changed_fields": ["Review Outcome", "Automation Classification", "Execution Readiness", "Purpose", "Blocked Conditions", "Agent Execution Contract"],
+  "reason_for_change": "Preserve the explicit source conflict while honoring the locked user decision that the resolved OS/TPM workflow is hybrid and technically executable rather than permanently BLOCKED.",
+  "new_technical_evidence": [{"source": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 150", "supports": "The title/procedure/criteria conflict and timing."}, {"source": "gpt-review/BLOCKED_FEEDBACK_REREVIEW_001.json", "supports": "The confirmed hybrid automation boundary."}],
+  "removed_ambiguities": ["Prevents DeepSeek's proposed flow from becoming an invented source requirement.", "Separates the source-owner decision from later package, manual, and approval gates."],
+  "resolved_blockers": ["Manual BIOS/installer work is no longer treated as proof of permanent non-automability."],
+  "remaining_blockers": ["The source owner must resolve the requested operation and acceptance criteria before execution."],
+  "objective_improvement_over_v2": "V3 retains V2's stop condition for the contradictory source, but also records the user-confirmed hybrid capability and supplies an explicit decision/closure path. It prevents both unsafe execution and the false claim that manual installation makes the case permanently BLOCKED.",
+  "agent_understanding_result": {"status": "PENDING_INDEPENDENT_VALIDATION", "notes": null},
+  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS_WITH_SOURCE_CONFLICT"},
+  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "Items says OS installing while Procedure and Criteria only ask to revise an unnamed TPM setting.", "source_specific_v2_comparison": "V2 identified the same conflict and rejected an invented fixed installation flow.", "source_specific_safety_evidence_decision": "Read-only inventory is allowed, but no storage or TPM state change is allowed until the owner resolves the conflict and names the target.", "template_violation_detected": false}
+}
