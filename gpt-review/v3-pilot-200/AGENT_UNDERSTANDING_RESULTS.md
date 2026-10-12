@@ -681,3 +681,25 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   inferred BDFs/GPU semantics or partial-evidence PASS would be
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
   independent-model validation and is not DUT hardware validation.
+
+## NVIDIA CPU PCIe Surprise Down fatal definition gate: sequence 107
+
+Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|111|Wistron-System RAS-00831-V002`.
+- It required proof that a future stimulus exercises the requested Surprise
+  Down path and did not equate a synthetic fatal AER bit with actual/equivalent
+  link disappearance and containment.
+- It independently separated endpoint, affected link, upstream/downstream
+  ports, DPC containment port and AER Root Port/RCEC, with all BDFs and critical
+  data/traffic dependencies mapped per hierarchy.
+- It rejected DPC disablement, an AER message, reset, reboot or crash alone as
+  success and required target correlation, prescribed containment, integrity,
+  approved recovery and restored topology/device/service/system health.
+- Failure attribution: label-only Procedure and TBD Criteria are
+  `DOCUMENT_DEFECT`; missing topology, stimulus fidelity, fatal response,
+  containment and recovery are `PLATFORM_HANDOFF_DEFECT`; inferred link actions,
+  critical-path targeting or reset-only PASS would be `MODEL_PLANNING_ERROR`.
+  No proposed-contract defect was found. This is not independent-model
+  validation and is not DUT hardware validation.
