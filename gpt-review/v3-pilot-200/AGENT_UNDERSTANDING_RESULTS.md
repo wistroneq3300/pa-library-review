@@ -277,6 +277,27 @@ Status: `PASSED AFTER REVISION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   No document defect remains. This is not independent-model validation and is
   not DUT hardware validation.
 
+## Intel GNR SPDI3C/I3C HALT recovery validation: sequence 116
+
+Status: `PASSED AFTER REVISION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|159|Wistron-System RAS-00116-V002`.
+- It correctly kept `halt()` and `go()` inside the CScripts target-control
+  context, preserved exactly one err_type 0x13 injection and rejected generic
+  SMBus recovery, other controllers, automatic retry or partial-evidence PASS.
+- The first validation found a document ambiguity: `transfer_err_stat bit 9`
+  and `intr_status bit 9` could appear to name different registers.
+- V3 was revised to use the single fully qualified field
+  `sb_i3c_0.intr_status.transfer_err_stat[9]` for the pre-injection,
+  post-injection and owner-defined post-recovery reads. Revalidation confirmed
+  that `intr_status` is the register and `transfer_err_stat[9]` its field.
+- Missing SMBus/I3C scope resolution, target map, recipe, settings, signatures,
+  states and recovery remain `PLATFORM_HANDOFF_MISSING`; selecting a different
+  field, using OS halt/go or generic logs would be `MODEL_PLANNING_ERROR`. No
+  document defect remains. This is not independent-model validation and is not
+  DUT hardware validation.
+
 ## Proprietary BlueField network-suite validation: sequence 86
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
