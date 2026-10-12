@@ -240,6 +240,28 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   defect was found. This is not independent-model validation and is not DUT
   hardware validation.
 
+## SPEC CPU2017 performance-contract validation: sequence 121
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Performance|2|Wistron-Performance CPU-00001-V003`.
+- It preserved licensed SPEC CPU2017, the selected canonical
+  intrate/fprate/intspeed/fpspeed scope, base tuning, exactly three measured
+  iterations and the 120/2880-minute planning estimates.
+- It rejected test-size, individual-benchmark, peak-only, one-iteration,
+  legacy `buildspec`/`runspectest` and unlike-metric substitutions.
+- It required `runcpu` build/integrity evidence, raw `.rsf` and reports, the
+  complete SUT/copies/threads/affinity state and long-run health telemetry; it
+  allowed Actual collection but withheld PASS without same-metric reference
+  IDs and tolerance.
+- Failure attribution: missing licensed media, canonical profile, config,
+  thresholds, references and approvals are `PLATFORM_HANDOFF_DEFECT`
+  conditions; shortening the run, changing the metric/profile or claiming
+  unmatched PASS would be `MODEL_PLANNING_ERROR`. No proposed-contract defect
+  was found. This is not independent-model validation and is not DUT hardware
+  validation.
+
 ## BLOCKED/manual-boundary validation: sequence 80
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
