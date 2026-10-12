@@ -217,6 +217,29 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   was found. This is not independent-model validation and is not DUT hardware
   validation.
 
+## AMD GPU GFX poison-consumption validation: sequence 120
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|203|Wistron-GPU RAS-00013-V003`.
+- It preserved exactly one ordered producer-to-GFX-consumer transaction on one
+  UUID/BDF/DRM/tool-selector-mapped GPU and rejected independent execution,
+  reordering, splitting, OOB injection and retry.
+- It required distinct fresh producer evidence before the consumer, bounded
+  poison lifetime, the same target GPU, GFX CRC-write consumer/PASID
+  correlation and the prescribed ACA/CPER/counter/client/reset evidence.
+- It treated the Device-0 UMC query only as a separate control, stopped before
+  the consumer after a failed or uncorrelated producer, and rejected injection
+  success or generic dmesg output as completion.
+- Failure attribution: missing signed block/mode semantics, poison identity,
+  lifetime, consumer, event matrix and recovery are provider-closable
+  `PLATFORM_HANDOFF_DEFECT` conditions; guessing them or running a partial pair
+  would be `MODEL_PLANNING_ERROR`. If the owner determines independent variants,
+  the testcase must be revised/split before execution. No proposed-contract
+  defect was found. This is not independent-model validation and is not DUT
+  hardware validation.
+
 ## BLOCKED/manual-boundary validation: sequence 80
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
