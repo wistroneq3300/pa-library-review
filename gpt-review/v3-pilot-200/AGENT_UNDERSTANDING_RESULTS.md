@@ -725,3 +725,23 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found, and the gated
   reclassification from BLOCKED was judged clear. This is not independent-model
   validation and is not DUT hardware validation.
+
+## AMD GPU UMC Replay AC Parity validation: sequence 109
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|115|Wistron-GPU RAS-00839-V004`.
+- It preserved exactly one Replay AC Parity correctable injection on the signed
+  GPU/UMC and explicitly rejected ODECC, an unsigned `0x800` address, an OOB-only
+  variant or another ASIC generation's flags as substitutes.
+- It required UUID/BDF/serial-to-tool-index and UMC mapping, stopped on a nonzero
+  baseline unless a signed freshness/delta rule exists, and required a fresh
+  subtype-specific event plus prescribed counter delta.
+- It rejected tool success, a generic log or a stale nonzero counter as
+  completion and preserved the no-reset/no-GPU-HBM-link-degradation health gate.
+- Failure attribution: missing signed ASIC/tool/target/address/path/counter data
+  are provider-closable `PLATFORM_HANDOFF_DEFECT` conditions; ODECC substitution,
+  inferred address/index, mixed paths or partial-evidence PASS would be
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
+  independent-model validation and is not DUT hardware validation.
