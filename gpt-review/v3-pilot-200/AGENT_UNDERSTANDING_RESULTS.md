@@ -402,3 +402,24 @@ Status: `PASSED AFTER ONE DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONT
   partial PASS would be `MODEL_PLANNING_ERROR`. No material document defect
   remains. This is not independent-model validation and is not DUT hardware
   validation.
+
+## Critical multi-socket UPI CRC validation: sequence 94
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|5|Wistron-System RAS-00725-V003`.
+- It preserved the unresolved Windows-WHEA versus Linux-dmesg source conflict
+  and required one owner-selected native OS evidence path before execution.
+- It recovered one `num_crcs=1` invocation for every signed
+  socket/port/link/peer tuple, controlled-client ITP execution, unique full logs
+  and halt/inject/resume plus health go/no-go before the next tuple.
+- It excluded adjacent same-title infinite CRC, failover, link-layer,
+  Three-Strike, MCERR, IERR and I3C patterns and rejected partial matrix, BMC-only
+  evidence or normal boot alone as completion.
+- Failure attribution: mixed OS requirements are an underlying
+  `TEST_CASE_DOCUMENT_DEFECT`; absent topology, tool semantics, BIOS values and
+  approvals are `PLATFORM_HANDOFF_DEFECT`; selecting or inventing them would be
+  `MODEL_PLANNING_ERROR`. Current execution gating does not alter the
+  `REQUIRES PACKAGE / USER CONFIRMATION` class. This is not independent-model
+  validation and is not DUT hardware validation.
