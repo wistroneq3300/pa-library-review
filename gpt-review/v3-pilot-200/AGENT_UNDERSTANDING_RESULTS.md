@@ -294,3 +294,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   execution is currently blocked is readiness gating, not an Automation
   Classification of `BLOCKED`. This is not independent-model validation and is
   not DUT hardware validation.
+
+## Physical-topology BMC KVM validation: sequence 89
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|2206|Wistron-BMC-00486-V002`.
+- It recovered one session on the exact SUT/BMC, the owner-defined USB
+  hub/peripheral chain, separate physical VGA reference, remote live video and
+  harmless input, without treating five minutes as an acceptance duration.
+- It required a trusted operator for the physical and visual boundary,
+  preserved logs, demanded complete capture/restoration evidence and rejected
+  reachability, enumeration or one visible frame as completion.
+- It kept power, reset, virtual media, firmware actions and unapproved input out
+  of scope and required stops on wrong target/topology, video/input/USB faults,
+  evidence loss or failed restoration.
+- Failure attribution: missing identities, topology, fixtures, checklist and
+  dwell rule are `PLATFORM_HANDOFF_DEFECT`; guessing them or reducing the test
+  to remote reachability would be `MODEL_PLANNING_ERROR`. No contract-document
+  defect occurred. This is not independent-model validation and is not DUT
+  hardware validation.
