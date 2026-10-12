@@ -595,3 +595,23 @@ Status: `PASSED AFTER DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   guessed targets, reduced coverage, automatic looping/retry, mixed OS evidence
   or partial-evidence PASS would be `MODEL_PLANNING_ERROR`. This is not
   independent-model validation and is not DUT hardware validation.
+
+## NVIDIA CPU processor-correctable definition gate: sequence 103
+
+Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|100|Wistron-System RAS-00820-V002`.
+- It did not infer Grace, BlueField, generic EINJ, a target identifier, command,
+  target count or iteration count from the test title. It correctly identified
+  all of those as owner-authored inputs that must replace the source TBD fields.
+- It separated non-mutating platform/capability inventory from execution and
+  rejected inventory, a generic corrected event or tool discovery as completion.
+- It confirmed that BLOCKED is appropriate because the source document lacks
+  executable and acceptance semantics; after a signed replacement, the case
+  requires a fresh review rather than automatic unblocking.
+- Failure attribution: literal TBD Procedure/Criteria are `DOCUMENT_DEFECT`;
+  missing platform, injector, target coverage, event and recovery are
+  `PLATFORM_HANDOFF_DEFECT`; selecting a mechanism, target or command by analogy
+  would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This
+  is not independent-model validation and is not DUT hardware validation.
