@@ -211,3 +211,23 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
 - Failure attribution: `DOCUMENT_DEFECT` and `PLATFORM_HANDOFF_DEFECT`; no
   model-planning error occurred. This is not independent-model validation and
   is not DUT hardware validation.
+
+## PCIe automation reclassification validation: sequence 83
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|1972|Wistron-AMD SVM-00138-V004`.
+- It recovered a software `amdxio` Receiver Lane Margining workflow over every
+  actual lane of approved AMD/OAM links and did not require or substitute an
+  external analyzer.
+- It treated example BDFs and 128 CSV rows as non-executable illustrations,
+  required the physical-to-BDF/lane/receiver map and six metric thresholds, and
+  limited pre-gate work to read-only topology, link, ASPM and AER evidence.
+- It preserved approval before ASPM changes, one bounded margin run, per-lane
+  CSV reconciliation, threshold/no-downtrain checks, no automatic retry and
+  restoration of every prior ASPM value before completion.
+- Failure attribution: remaining `amdxio`, topology, receiver and threshold
+  gaps are `PLATFORM_HANDOFF_DEFECT`. No document defect or model-planning error
+  occurred. This is not independent-model validation and is not DUT hardware
+  validation.
