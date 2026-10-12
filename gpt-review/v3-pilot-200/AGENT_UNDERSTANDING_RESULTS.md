@@ -703,3 +703,25 @@ Status: `PASSED BLOCKER RECOGNITION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   critical-path targeting or reset-only PASS would be `MODEL_PLANNING_ERROR`.
   No proposed-contract defect was found. This is not independent-model
   validation and is not DUT hardware validation.
+
+## AMD GPU error-injection capability enablement validation: sequence 108
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|114|Wistron-GPU RAS-00835-V004`.
+- It understood this as capability enablement for exactly one mapped OAM/GPU,
+  one approved state-application transition, OOB state persistence, host RAS
+  feature verification and explicit final-state custody or restoration.
+- It repeatedly excluded every fault stimulus and rejected literal BMC/OAM
+  examples, invented OEM actions, silent TLS bypass, both reset alternatives or
+  assuming `modprobe` changes an already loaded driver.
+- It required POST success, fresh persistent `EINJState=Enabled`, verified host
+  parameters/features, no unintended injection, health and final-state
+  disposition together; any subset was correctly identified as false completion.
+- Failure attribution: missing live schema/mapping, driver/reset plan, feature
+  expectations and final-state custody are `PLATFORM_HANDOFF_DEFECT`; injecting,
+  bypassing TLS, using wrong targets or declaring state-only PASS would be
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found, and the gated
+  reclassification from BLOCKED was judged clear. This is not independent-model
+  validation and is not DUT hardware validation.
