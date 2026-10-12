@@ -252,3 +252,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   and approvals are `PLATFORM_HANDOFF_DEFECT`; inventing or bypassing them would
   be `MODEL_PLANNING_ERROR`. No document defect occurred. This is not
   independent-model validation and is not DUT hardware validation.
+
+## Proprietary BlueField network-suite validation: sequence 86
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|2123|Wistron-GB NV PVP HW-00042-V002`.
+- It recovered the exact BlueField, port/function, host-or-embedded execution
+  location and peer scope and treated 180 minutes as a planning estimate, not
+  as a substitute for manifest-defined durations or iterations.
+- It allowed secure read-only identity, mode, package, topology, link, health,
+  monitoring and recovery checks, but rejected traffic before the package,
+  signed manifest, mappings, isolation and approvals are supplied.
+- It rejected help/capability output, a partial suite, an aggregate PASS line
+  or elapsed machine time as completion and required complete per-subtest
+  evidence, manifest reconciliation and healthy post-test restoration.
+- Failure attribution: missing proprietary artifacts, mappings and approvals
+  are `PLATFORM_HANDOFF_DEFECT`; inventing a command, port, execution location
+  or threshold would be `MODEL_PLANNING_ERROR`. No contract-document defect
+  occurred. This is not independent-model validation and is not DUT hardware
+  validation.
