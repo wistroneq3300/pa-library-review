@@ -1,0 +1,82 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 101,
+  "calibration": false,
+  "source_key": "Reliability|77|Wistron-System RAS-00797-V002",
+  "case_variant_id": "e6cf510e369e29e1",
+  "source_ref": {"sheet": "Reliability", "source_row": 77, "code": "Wistron-System RAS-00797-V002"},
+  "source_integrity": {"original_row_sha256": "928475ae0ff1820ba2e61ffda0dbb6dbe5a89beb2aa0d1d5784ac9503fc358c2", "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"},
+  "source_snapshot": {
+    "test_name": "WAFL Correctable Error",
+    "test_set": "AMD CPU RAS -WAFL Error",
+    "purpose_facts": "Enumerate TWIX/WAFL links, inject WAFL correctable `errortype 0` at source-defined Socket 1/errorlocation 0 and Socket 0/errorlocation 1, and verify tool PASS plus timely OS evidence.",
+    "procedure_facts": ["Verify the recipe and establish a log boundary.", "Apply five CPU/FCH settings, provide ECC RDIMM and HDT, and unlock the CPU.", "Boot Ubuntu 20.04, RHEL 9.0 or Windows Server 2022.", "Run `--listtwixwafllinks` and replace the link-number placeholder.", "Run Socket 1 with errorlocation 0, then Socket 0 with errorlocation 1, both errortype 0."],
+    "criteria_facts": ["The tool reports PASS for each correctable error.", "The OS reports the error within a defined timeout.", "The AMD RAS specification governs dmesg and injection-report interpretation."],
+    "attended_time_minutes": "15",
+    "machine_time_minutes": "10",
+    "source_conflicts": ["Windows Server 2022 is an allowed execution environment, but the acceptance text universally requires Linux dmesg.", "The source labels errorlocation 0 as Socket 1 and errorlocation 1 as Socket 0 without documenting that non-intuitive mapping or whether one link number is valid for both locations."],
+    "missing_source_information": ["Exact WAFL/TWIX link topology and link-number coverage.", "Tool-build semantics for linknumber, errorlocation and errortype 0.", "Selected OS-native event query and expected severity/identity fields.", "Timeout, expected link counters/health and no-reset behavior.", "Whether more than one enumerated link must be tested." ]
+  },
+  "original_test_intent": {
+    "statement": "Validate correctable AMD WAFL off-package-link handling at both source-defined socket locations for the approved WAFL link, with separate tool PASS, timely native-OS evidence and healthy link/system state after each injection.",
+    "must_preserve": ["WAFL correctable `errortype 0`, not fatal or another fabric type.", "Both Socket 1/errorlocation 0 and Socket 0/errorlocation 1 source operations.", "Fresh link enumeration and actual link number instead of the placeholder.", "Independent tool PASS and OS-report-within-timeout gates per location.", "15/10 minutes as planning estimates."],
+    "must_not_infer": ["That errorlocation numerically equals socket number.", "That one link number can be reused at both locations without topology confirmation.", "That every enumerated link is in scope when the source does not define link iteration.", "That Linux evidence applies to Windows or tool PASS alone proves completion.", "That reset/crash is acceptable for a correctable result." ]
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "second_review_outcome": "CHANGED",
+    "risk_level": "HIGH",
+    "summary": "V2 correctly preserves both source locations, fresh link enumeration, placeholder resolution, separate evidence, manual BIOS/HDT boundary and recovery gating.",
+    "specific_gap": "V2 does not resolve the Windows-versus-dmesg conflict, treats the unusual errorlocation/socket association as established without tool-version evidence, and does not state whether the selected link number is common or location-specific."
+  },
+  "applicable_history": {
+    "locked_user_decisions": [],
+    "related_records": ["WAFL fatal and other AMD fabric-link cases are distinct variants and cannot supply this correctable mapping or evidence."],
+    "precedence_application": "The exact row controls the two location calls; external/public terminology confirms WAFL is an off-package link class but not the private tool's mapping."
+  },
+  "v3_review_conclusion": {
+    "review_outcome": "SOURCE_CONFLICT",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": ["SOURCE_CONFLICT", "NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_APPROVAL"],
+    "summary": "Keep the gated hybrid class, but require a tool-version-specific link/location/socket map and one selected OS-native evidence branch. Execute the two source-defined locations sequentially with separate approval, PASS, timeout, link-health and restoration evidence."
+  },
+  "execution_readiness_detail": {
+    "conditions_present": ["The two source operations, candidate API, five BIOS settings, supported OS families and top-level correctable acceptance are known."],
+    "missing": ["Signed link/location/socket map; link coverage; exact tool build; selected OS evidence; expected record/counters, timeout, approval and recovery."],
+    "provider": ["AMD/ODM FAE supplies tool semantics, WAFL topology, event expectations and recovery.", "Test owner selects the supported OS branch and required link coverage.", "Platform/lab owner supplies the dedicated SUT, approved BIOS profile and authorization."],
+    "safe_read_only_work": ["Inventory sockets, WAFL/TWIX link topology, firmware, OS and current BIOS values.", "Run signed non-mutating `--listtwixwafllinks` and preserve the full output.", "Export current OS-native/BMC/firmware records and link health without clearing or injecting."],
+    "prohibited_until_resolved": ["BIOS changes, HDT unlock, log clear, either injection, reset, power cycle, retry or restoration."],
+    "closure_evidence": ["Signed map binds each required socket/location to its current link number and expected identity.", "Exact tool/hash and OS-native event query are approved with severity, timeout and link-health rules.", "Per-location go/no-go, recovery and restoration approvals are recorded." ]
+  },
+  "revision_candidate": {
+    "test_name": "AMD WAFL Correctable Error at Both Source-Defined Socket Locations",
+    "purpose": "Inject one approved correctable WAFL error at each of the two source-defined socket locations for the signed link target and verify independent tool PASS, timely native-OS reporting and preserved WAFL/system health.",
+    "applicable_platform_environment": "Only the AMD platform/stepping, BIOS/BMC/firmware, ECC RDIMM population, selected Ubuntu 20.04, RHEL 9.0 or Windows Server 2022 branch, HDT method and AMD RAS tool build covered by the signed recipe.",
+    "target_scope": "The owner-approved WAFL link target(s) returned by fresh enumeration, with Socket 1/errorlocation 0 and Socket 0/errorlocation 1 tested separately exactly as the signed tool map defines. Do not expand to every link unless the recipe explicitly requires it. Exclude fatal WAFL, XGMI and other fabric or memory faults. Treat 15/10 minutes as estimates.",
+    "required_inputs": "Signed socket/location/link-number/topology map and coverage; exact tool build/hash and `twixwafl`, `errorlocation`, `errortype 0` semantics; five BIOS values/restore plan; HDT procedure; selected OS-native event query; expected corrected severity, link/event identity and counters; timeout; no-reset/link-health gate; per-location approval and recovery.",
+    "test_command_procedure_intent": "Retain and hash the selected OS, BMC and firmware baselines before any approved clear or establish a timestamp marker. A qualified operator applies the five BIOS settings and HDT unlock and boots one approved OS. Run and retain full `--listtwixwafllinks`, then reconcile the exact link number separately for both signed locations. After approval, execute one `--twixwafl --linknumber <signed> --errorlocation 0 --errortype 0` for Socket 1, collect complete tool/native-OS/link-health evidence and obtain go/no-go; then execute the separately approved errorlocation-1 Socket-0 case and collect its independent evidence. Restore BIOS/HDT/tool state.",
+    "preconditions": "Tool-specific mapping and link coverage resolved; exact platform/package/OS/profile approved; dedicated non-production SUT; link traffic quiesced or recipe-controlled; baselines, clocks/storage, console/OOB and recovery proven; every BIOS, HDT, clear, injection, next-location and restoration action authorized.",
+    "expected_evidence": "Platform/OS/tool identities and hashes; signed topology/location map; ECC RDIMM and firmware identity; BIOS/HDT before/during/after; baseline/clear audit; full link enumeration; selected link number and mapping rationale; separate exact commands, complete reports and PASS for errorlocation 0 and 1; timestamped native-OS corrected WAFL record tied to the expected socket/link within timeout; expected counter delta; link/system health, anomalies, recovery and restored final state.",
+    "acceptance_reference": "The signed AMD/ODM WAFL correctable recipe for the exact platform/tool. Public AMD terminology classifies WAFL under off-package-link errors whose severity may be Corrected through Fatal; this case accepts only the recipe-defined Corrected result at both source locations, each with independent tool and native-OS evidence.",
+    "safety_restrictions": "High-risk fabric injection on a dedicated SUT only. Do not guess link number or socket/location mapping, assume one number applies to both locations, expand link coverage, reuse fatal/XGMI recipes, mix OS evidence, target production traffic, expose secrets, truncate logs, auto-loop/retry or continue after wrong target/severity, reset/crash, link degradation, error storm or instability.",
+    "human_approval_requirements": "AMD/ODM FAE approves the mapping, tool, target and corrected outcome; platform owner approves link impact and BIOS state; qualified operator performs BIOS/HDT and exceptional recovery. Each location's injection, second-location go/no-go and final restoration require signed approval.",
+    "manual_boundaries": "Qualified staff own BIOS/HDT, physical/platform confirmation and exceptional recovery. After exact handoff, an authorized Agent may enumerate links, execute each bounded approved command and correlate native OS/link evidence; engineering retains final anomaly and PASS/FAIL judgment.",
+    "recovery_requirements": "On ambiguous/wrong link, wrong severity, tool failure, absent/late event, reset/crash, link down/degradation or persistent error, stop before the next location, preserve all evidence and use only the signed WAFL/platform recovery. Restore BIOS/HDT/tool state and prove final health before any separately approved rerun.",
+    "stop_conditions": "Unresolved link/location/socket or OS branch; enumeration/map mismatch; tool/BIOS/HDT mismatch; missing approval, baseline, timeout, recovery or evidence; wrong target or severity; missing tool PASS or timely native record; unexpected reset/crash, link retrain/downshift/loss, error storm, thermal/power instability; or failed recovery/restoration/final health."
+  },
+  "identified_defects": ["The Windows execution option conflicts with source/V2 Linux-only dmesg evidence.", "The non-intuitive errorlocation-to-socket mapping is not supported by tool-version evidence.", "The source and V2 do not state whether the placeholder link number is common or distinct across locations or whether multiple enumerated links are in scope.", "V2 does not explicitly reject reset/crash as an incorrect outcome for this correctable case."],
+  "changed_fields": ["Review Outcome", "Execution Readiness", "Target Scope", "Required Inputs", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference", "Safety Restrictions", "Human Approval Requirements", "Manual Boundaries", "Recovery Requirements", "Stop Conditions"],
+  "reason_for_change": "Preserve both source-defined socket operations without guessing the private location map, mixing OS evidence or accepting a fatal outcome for a correctable WAFL case.",
+  "new_technical_evidence": [
+    {"source_url": "https://docs.amd.com/r/en-US/AMD_Field_ID_70122_v1.0/AFID-Event-List", "title": "AMD Field ID, AFID Event List", "version": "UG-70122 v1.0", "applicability": "General WAFL event classification only", "supports": "AMD categorizes WAFL with off-package-link errors and documents severities ranging from Corrected to Fatal; this source-specific test must distinguish its Corrected outcome.", "remaining_uncertainty": "The document does not define this private tool's linknumber/errorlocation mapping or expected platform event fields."},
+    {"source_url": "https://learn.microsoft.com/en-us/windows-hardware/drivers/whea/querying-the-system-event-log-for-hardware-error-events", "title": "Querying the System Event Log for Hardware Error Events", "version": "Microsoft Windows driver documentation retrieved 2026-10-13", "applicability": "Windows Server 2022 branch allowed by the source", "supports": "Windows WHEA hardware errors are queried from Windows Event Log providers; Linux dmesg is not a Windows-native evidence path.", "remaining_uncertainty": "The required Windows WAFL provider/record fields remain platform-specific."},
+    {"source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Reliability!row-77", "title": "Source testcase Wistron-System RAS-00797-V002", "version": "Baseline workbook SHA-256 e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "applicability": "Only this WAFL correctable row", "supports": "The BIOS profile, OS alternatives, link enumeration, two location calls and PASS/timeout criteria.", "remaining_uncertainty": "Mapping, link coverage, native event signatures and timeout are absent."}
+  ],
+  "removed_ambiguities": ["Requires signed proof of errorlocation 0/1 to Socket 1/0 rather than numeric inference.", "Defines one selected native OS evidence branch.", "Separates both source locations and does not silently expand to every enumerated link.", "Makes correctable no-reset/link-health behavior an explicit gate."],
+  "resolved_blockers": ["Tool, map, OS branch and approval are provider-closable; capability remains REQUIRES rather than BLOCKED."],
+  "remaining_blockers": ["Execution awaits tool-specific topology/location mapping, link coverage, OS-native evidence, timeout, authorization and recovery."],
+  "objective_improvement_over_v2": "V3 preserves V2's correct two-location flow while removing mixed-OS evidence, proving the inverse location mapping and preventing undefined link expansion or fatal behavior acceptance.",
+  "agent_understanding_result": {"status": "PASSED", "validation_scope": "ISOLATED_SAME_MODEL_FAMILY", "independent_model_validation": false, "notes": "Contract-only validation recovered Socket 1/location 0 and Socket 0/location 1 as separate asymmetric cases for each signed target, without expanding to every enumerated link or assuming a common link number. It required one OS branch, verified tool semantics, independent PASS/native-event/counter/health evidence and stopped before location 1 on any first-location anomaly."},
+  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"},
+  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "Reliability row 77 enumerates WAFL links and injects correctable errortype 0 at Socket 1/errorlocation 0 and Socket 0/errorlocation 1.", "source_specific_v2_comparison": "V2 preserves the two operations and placeholder gate but mixes Linux evidence into Windows and leaves the inverse mapping and link coverage unproven.", "source_specific_safety_evidence_decision": "Allow read-only topology/enumeration/baseline work; prohibit BIOS/HDT/injection until mapping, OS evidence, approvals and recovery are signed.", "template_violation_detected": false}
+}

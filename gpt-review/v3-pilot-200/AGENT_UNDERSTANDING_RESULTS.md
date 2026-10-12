@@ -551,3 +551,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   tuples/ACS, stale BERT, reset-only PASS or automatic iteration/retry are
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
   independent-model validation and is not DUT hardware validation.
+
+## AMD WAFL correctable dual-location validation: sequence 101
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|77|Wistron-System RAS-00797-V002`.
+- It recovered Socket 1/`errorlocation 0` and Socket 0/`errorlocation 1` as
+  separate asymmetric source cases and required signed proof rather than
+  normalizing the location numbers to their socket numbers.
+- It did not expand scope to every enumerated WAFL link or assume the same link
+  number applied to both locations; signed coverage and per-location mapping
+  remain mandatory.
+- It selected one native OS evidence branch and required separate tool PASS,
+  corrected event, counter and link-health evidence; any first-location anomaly
+  prevented the second injection.
+- Failure attribution: absent mapping, tool semantics, OS branch, BIOS values,
+  timeout and recovery are `PLATFORM_HANDOFF_DEFECT`; inferred/reversed mapping,
+  mixed OS evidence, link expansion or automatic continuation/retry would be
+  `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
+  independent-model validation and is not DUT hardware validation.
