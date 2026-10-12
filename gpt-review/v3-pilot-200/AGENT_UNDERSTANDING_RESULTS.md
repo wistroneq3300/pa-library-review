@@ -253,6 +253,30 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   be `MODEL_PLANNING_ERROR`. No document defect occurred. This is not
   independent-model validation and is not DUT hardware validation.
 
+## Physical CPU swap traceability validation: sequence 115
+
+Status: `PASSED AFTER REVISION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|156|Wistron-System RAS-00113-V002`.
+- The first validation preserved the manual physical boundary, firmware gate,
+  single swap, BIOS/OS evidence and full socket/core/thread/NUMA comparison, but
+  found a document contradiction: unique CPU traceability was required while
+  physical identifiers were requested only “where available.”
+- V3 was revised before acceptance. Exchange now requires proof that both CPUs
+  moved to the specified opposite sockets; replacement distinguishes removed
+  and installed parts; reseat proves the same part returned to the same socket.
+  When unique serials are unavailable, socket-labelled package photos plus a
+  witnessed or owner-controlled chain-of-custody are mandatory.
+- Revalidation found Required Inputs, Expected Evidence, Acceptance Reference
+  and Stop Conditions consistent, and rejected model-name output or operator
+  recollection as proof of the physical operation.
+- Missing concrete matrix, identifiers/photos, witnesses/labels, compatibility,
+  firmware, topology and recovery remain `PLATFORM_HANDOFF_MISSING`; guessing
+  identity or declaring partial-evidence PASS would be `MODEL_PLANNING_ERROR`.
+  No document defect remains. This is not independent-model validation and is
+  not DUT hardware validation.
+
 ## Proprietary BlueField network-suite validation: sequence 86
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
