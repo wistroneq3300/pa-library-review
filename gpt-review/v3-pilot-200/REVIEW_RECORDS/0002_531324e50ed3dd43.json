@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 2,
+  "calibration": true,
+  "source_key": "Functionality|67|Wistron-HW-00070-V004",
+  "case_variant_id": "531324e50ed3dd43",
+  "source_ref": {"sheet": "Functionality", "source_row": 67, "code": "Wistron-HW-00070-V004"},
+  "source_integrity": {
+    "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+    "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+    "original_row_sha256": "87ecc925fdc630311b41cb6504c3f51d1fa93634e5a66bbdadaa46fddfaca141"
+  },
+  "source_snapshot": {
+    "test_name": "FW upgrade/downgrade",
+    "test_set": "Power Supply - L10 : Function",
+    "items": "FW upgrade/downgrade",
+    "procedure": "Use the BMC HTTPS Maintenance/HPM firmware update page to update PSU firmware, reboot and re-login, and repeat the N and N-1 firmware update five times.",
+    "criteria": "BMC WebUI login and HPM page access succeed; PSU firmware updates without issue; the SUT power-cycles without issue.",
+    "attended_time": "60",
+    "machine_time": "240",
+    "deepseek_classification": "PARTIAL",
+    "deepseek_package": "ipmitool, PSU FW image (user-provided)",
+    "deepseek_finding": "Use the vendor/BMC flash path and perform sensor and firmware-version readback after the user completes the flash."
+  },
+  "original_test_intent": {
+    "purpose": "Exercise PSU firmware upgrade and downgrade through the BMC HPM workflow and prove firmware activation plus SUT recovery.",
+    "target": "The explicitly identified PSU instance or approved PSU set in the SUT.",
+    "scope": "Both N and N-1 PSU firmware states, repeated for five update cycles as required by the source.",
+    "operation": "A state-changing PSU firmware flash, reboot/power-cycle recovery, BMC re-login, and firmware/readiness verification after each defined transition.",
+    "duration_and_iterations": "Sixty minutes attended, 240 minutes machine time, and exactly five N/N-1 repetitions; the source does not define the transition order within each repetition.",
+    "expected_result": "Each approved firmware transition completes, the intended version activates, the BMC remains recoverable, and the SUT completes the required power cycle without issue.",
+    "required_evidence": "Per-cycle target and image identity, hashes, flash result, before/after firmware readback, PSU power/sensor state, BMC reconnect, SEL/host logs, and final SUT recovery.",
+    "ambiguities": ["The exact N/N-1 versions, cycle order, target PSU scope, flash command, timing, abort rules, and recovery method are absent."],
+    "source_conflicts": []
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "BLOCKED",
+    "second_review_outcome": "CHANGED",
+    "finding": "V2 preserved the five-cycle firmware intent and identified the missing identity, images, sequence, power topology, approval, and recovery controls, but converted those execution prerequisites into a permanent BLOCKED classification."
+  },
+  "applicable_history": [{"path": "gpt-review/BLOCKED_FEEDBACK_REREVIEW_001.json", "decision": "Vendor firmware and the validated flash command are prerequisites; firmware risk requires confirmation and recovery rather than automatic BLOCKED."}],
+  "v3_review_conclusion": {
+    "review_outcome": "RECLASSIFIED",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": ["NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_APPROVAL"],
+    "summary": "The firmware mutation and five-cycle reliability purpose are identifiable. The test is technically executable only after model-matched images, the vendor HPM procedure, an exact sequence, a maintenance window, and a recovery plan are approved."
+  },
+  "execution_readiness_detail": {
+    "available_now": ["The intended HPM update path, N/N-1 directionality, five-cycle requirement, and recovery checks are stated."],
+    "missing_inputs": ["PSU model/slot/serial and current version", "Signed N and N-1 images with hashes and compatibility/downgrade authorization", "Vendor-approved HPM command or WebUI procedure", "Exact five-cycle order, timing, target scope, timeout and abort criteria", "Redundancy/power topology, maintenance window, workload evacuation, OOB/KVM access, and recovery/replacement procedure"],
+    "input_owner": "The PSU/platform owner and vendor provide the images, compatibility statement, procedure, sequence, and recovery instructions; the service owner approves the window and target.",
+    "safe_read_only_work_before_closure": ["Inventory every PSU FRU/slot and current firmware", "Capture BMC reachability, PSU input/output/sensor/redundancy state, active workload status, and uncleared SEL/host logs"],
+    "prohibited_until_closed": ["No image upload, flash, downgrade, PSU reset, reboot, or power cycle", "No claim of test completion from version inventory alone"],
+    "closure_verification": "All images and targets are matched and approved, the five-transition schedule and recovery checkpoints are documented, redundancy and OOB recovery are available, and the exact first-cycle command is reviewed before execution."
+  },
+  "revision_candidate": {
+    "test_name": "PSU Firmware N/N-1 Upgrade and Downgrade, Five Cycles",
+    "purpose": "Perform five approved PSU firmware N/N-1 transition cycles through the BMC HPM path and verify firmware activation, PSU health, BMC recovery, and SUT power-cycle recovery after each required transition.",
+    "applicable_platform_environment": "Only the PSU model, BMC/HPM implementation, and firmware family covered by the supplied compatibility statement and recovery procedure.",
+    "target_scope": "The engineer-identified PSU slot or PSU set for each transition; record whether redundant PSUs are updated sequentially or together.",
+    "required_inputs": "Exact PSU identity/current version, signed N/N-1 images and hashes, vendor HPM method, five-cycle order/timing, maintenance approval, redundancy plan, OOB/KVM access, and recovery/replacement path.",
+    "test_command_procedure_intent": "Use only the vendor-approved HPM flash procedure for the resolved target and image. Execute the defined N/N-1 order for five cycles, collecting firmware and health evidence after every transition. Do not substitute a version query for the flash test.",
+    "preconditions": "Dedicated maintenance window, evacuated workloads, stable redundant power where required, verified image compatibility, captured baseline, and tested recovery access.",
+    "expected_evidence": "Per-cycle image/hash/target, flash status and timing, activated version, BMC reconnect, PSU sensors and output state, SEL/host delta, SUT boot and power-cycle recovery, and final firmware state.",
+    "acceptance_reference": "The approved vendor compatibility/update procedure plus the source requirement for five N/N-1 cycles and successful SUT power-cycle recovery.",
+    "safety_restrictions": "Never infer the PSU target or image. Preserve logs. Stop on output loss, image mismatch, abnormal redundancy, management loss, flash error, or incomplete recovery.",
+    "human_approval_requirements": "Explicit approval is required before the firmware sequence and again if the target, image, order, or recovery plan changes.",
+    "manual_boundaries": "An engineer supplies/approves proprietary images and the vendor procedure and may operate a WebUI-only step; the agent may collect read-only pre/post evidence and follow an approved automatable interface.",
+    "recovery_requirements": "Stop subsequent cycles, preserve evidence, use the vendor recovery/reflash or PSU replacement procedure through OOB/KVM/local access, and verify stable redundant power and SUT recovery before resuming.",
+    "stop_conditions": "Any unresolved identity, compatibility, sequence, approval, redundancy, active-workload, OOB, flash, power-output, or recovery condition."
+  },
+  "identified_defects": ["V2 over-classified missing vendor artifacts and approval gates as BLOCKED.", "DeepSeek's sensor grep is insufficient evidence for five firmware transitions and can omit relevant raw PSU data.", "The source instruction to clear logs would destroy baseline evidence."],
+  "changed_fields": ["Automation Classification", "Execution Readiness", "Purpose", "Required Inputs", "Test Command / Procedure Intent", "Expected Evidence", "Stop Conditions"],
+  "reason_for_change": "Separate technical capability from present readiness while retaining all firmware, power, and recovery gates.",
+  "new_technical_evidence": [{"source": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 67", "supports": "The HPM path, N/N-1 operation, exact five-cycle count, reboot, and power-cycle criteria."}, {"source": "gpt-review/BLOCKED_FEEDBACK_REREVIEW_001.json", "supports": "The locked prerequisite-versus-BLOCKED boundary."}],
+  "removed_ambiguities": ["Preserves five cycles instead of treating a single version read as completion.", "Makes transition order, per-cycle evidence, target ownership, and recovery closure explicit."],
+  "resolved_blockers": ["Missing images, command, and approval are represented as readiness gates rather than a permanent classification blocker."],
+  "remaining_blockers": ["Execution cannot start until the exact images, target map, sequence, power constraints, and recovery plan are supplied and approved."],
+  "objective_improvement_over_v2": "V3 keeps V2's firmware safety controls and five-cycle scope but correctly classifies the activity as technically executable with supplied vendor inputs. It also distinguishes safe baseline collection from the prohibited flash and defines per-cycle completion evidence.",
+  "agent_understanding_result": {"status": "PENDING_INDEPENDENT_VALIDATION", "notes": null},
+  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"},
+  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The source requires N and N-1 PSU firmware updates repeated five times through BMC HPM.", "source_specific_v2_comparison": "V2 preserved the five cycles but called absent inputs BLOCKED.", "source_specific_safety_evidence_decision": "Only read-only inventory is allowed before image/target/sequence/recovery approval; no flash or power action is authorized.", "template_violation_detected": false}
+}
