@@ -767,3 +767,24 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   No proposed-contract defect was found, and the gated reclassification from
   MANUAL ONLY was clear. This is not independent-model validation and is not
   DUT hardware validation.
+
+## BMC-to-HMC/FPGA-2 I2C path validation: sequence 111
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|132|Wistron-HW Robust-00010-V002`.
+- It understood exactly one BMC-side combined write-then-read transaction to
+  the signed adapter-1 endpoint at 0x11 and preserved the three-byte response,
+  one-transaction limit and 15/5-minute estimates.
+- It limited the result to the hops that PID 1114953 explicitly attributes to
+  that endpoint and rejected ACK, exit status or arbitrary bytes as proof of
+  the complete HMC/EROT/FPGA-2 chain or of physical continuity.
+- It correctly prohibited broad quick-write scanning, forced access, automatic
+  retry, inferred state neutrality and unapproved recovery, while allowing
+  adapter listing, sysfs topology, binding and baseline-health collection.
+- Failure attribution: missing PID, target mapping, reply semantics, ownership,
+  state/restoration, timeout and recovery are `PLATFORM_HANDOFF_MISSING`;
+  guessing them, widening the path claim or declaring partial-evidence PASS
+  would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This
+  is not independent-model validation and is not DUT hardware validation.
