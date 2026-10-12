@@ -315,3 +315,26 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   to remote reachability would be `MODEL_PLANNING_ERROR`. No contract-document
   defect occurred. This is not independent-model validation and is not DUT
   hardware validation.
+
+## PDB multi-interface sensor validation: sequence 90
+
+Status: `PASSED AFTER ONE DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|2274|Wistron-HW-00483-V002`.
+- The first pass found a genuine contract defect: treating every cross-path
+  disagreement as a collection stop could prevent acquisition of the remaining
+  safe IB, OOB or Web evidence.
+- The contract was corrected to stop collection immediately only for wrong
+  target, credential, health, availability or mutation hazards. Missing,
+  ambiguous, stale or disagreeing data now stops PASS interpretation while the
+  other bounded read-only views continue when target/security/health are sound.
+- Revalidation recovered complete IB/OOB SDR and Sensor List plus BMC Web,
+  every mapped PDB sensor, one collection per interface, raw-evidence retention,
+  SPEC-dependent acceptance, secret safety and no-write/no-reset boundaries.
+- Failure attribution after correction: absent target data, PDB SPEC/map,
+  equivalence rules, endpoints or Web path are `PLATFORM_HANDOFF_DEFECT`;
+  filtering away evidence, guessing aliases, premature collection stop or
+  partial PASS would be `MODEL_PLANNING_ERROR`. No material document defect
+  remains. This is not independent-model validation and is not DUT hardware
+  validation.
