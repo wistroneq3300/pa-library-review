@@ -531,6 +531,26 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This is not
   independent-model validation and is not DUT hardware validation.
 
+## Immediate GPIO power-off and recovery validation: sequence 113
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|146|Wistron-HW Robust-00024-V002`.
+- It placed `/usr/bin/powerctrl.sh power_off` in the signed BMC/platform
+  management shell and explicitly rejected the prior host-SSH assumption.
+- It preserved exactly one immediate power-off and one separately authorized
+  power-on; 15/15 minutes remained estimates and any minimum Off dwell was
+  correctly treated as a platform handoff value.
+- It rejected command submission, session loss, UART text, Off state alone or
+  successful boot alone as completion, requiring independent Off proof plus
+  restored storage, devices, network/GPU, services and expected logs.
+- Failure attribution: missing script semantics, GPIO target, shell, timeouts,
+  power-on method, dwell and health matrix are `PLATFORM_HANDOFF_MISSING`;
+  guessing host SSH, substituting actions, retrying or early PASS would be
+  `MODEL_PLANNING_ERROR`. No intrinsic document defect was found. This is not
+  independent-model validation and is not DUT hardware validation.
+
 ## AMD OCP ACS-fatal reset/BERT validation: sequence 100
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
