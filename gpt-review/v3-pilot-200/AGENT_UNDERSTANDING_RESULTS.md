@@ -488,3 +488,25 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   severity, automatic iteration/retry and partial PASS are
   `MODEL_PLANNING_ERROR`. No material proposed-contract defect was found. This
   is not independent-model validation and is not DUT hardware validation.
+
+## AMD fatal DRAM slot/address validation: sequence 98
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|44|Wistron-System RAS-00764-V002`.
+- It recovered the unresolved DRAM-versus-MCA profile contradiction and would
+  not combine the conflicting settings; both profiles require separate signed
+  phases if the owner determines both are in scope.
+- It selected exactly one native OS evidence branch and required every memory
+  slot to have an independently proven UMC/channel/DIMM/rank/address/mask row;
+  fixed `0x1000`, cross-OS evidence and representative coverage were rejected.
+- It preserved tool PASS, timely native-OS fatal evidence and the specified
+  shutdown/restart as three independent per-slot gates, followed by restoration
+  and a health gate before the next separately approved target.
+- Failure attribution: absent profile resolution, OS branch, address matrix,
+  tool semantics, timeout and recovery remain `PLATFORM_HANDOFF_DEFECT`;
+  combining settings, guessing/reusing an address, auto-looping or accepting a
+  reboot as proof of a wrong target would be `MODEL_PLANNING_ERROR`. No proposed
+  contract defect was found. This is not independent-model validation and is
+  not DUT hardware validation.
