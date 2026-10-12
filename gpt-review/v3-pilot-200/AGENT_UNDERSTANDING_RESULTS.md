@@ -153,3 +153,21 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   or treat successful recovery as proof that protection passed.
 - No document, platform-handoff or model-planning failure was identified. This
   is not independent-model validation and is not DUT hardware validation.
+
+## Reclassification validation: sequence 71
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed hybrid execution contract for
+  `Functionality|1533|Wistron-HW-00350-V002`.
+- It recovered one connector zone and one wet/assert/dry/recover cycle, all
+  missing vendor/SOP/policy/timer inputs and the current safe dry-baseline work.
+- It reserved stimulus application/removal, physical inspection, isolation,
+  objective dry/electrical clearance and recovery approval to the qualified
+  operator. The agent was limited to read-only sensor/event/timing correlation.
+- It rejected universal use of the source's one-minute example, agent safety
+  certification, visual wiping or sensor deassertion as proof of dryness,
+  alarm-only completion, log clearing and automatic retry.
+- No document, platform-handoff or model-planning failure was identified. The
+  hybrid reclassification did not relax execution readiness or safety. This is
+  not independent-model validation and is not DUT hardware validation.
