@@ -423,3 +423,26 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   `MODEL_PLANNING_ERROR`. Current execution gating does not alter the
   `REQUIRES PACKAGE / USER CONFIRMATION` class. This is not independent-model
   validation and is not DUT hardware validation.
+
+## Correctable x4 SDDC controller-matrix validation: sequence 95
+
+Status: `PASSED AFTER ONE DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|16|Wistron-System RAS-00736-V003`.
+- It recovered one rank-0 `x4sddc` injection for every signed controller tuple,
+  Windows-native rather than Linux evidence, exact logical-to-physical x4 DIMM
+  mapping, per-target go/no-go, both LED-off criteria and full restoration.
+- The first pass found a genuine contract defect: Acceptance Reference made
+  uEFI SEL conditional on platform support, but Stop Conditions made any
+  absent uEFI record an unconditional stop.
+- V3 corrected the rule so missing or mismatched uEFI SEL stops only when the
+  signed platform matrix declares that evidence supported and required. Fresh
+  isolated revalidation recovered this distinction and rejected treating mere
+  record absence as proof that the capability is unsupported.
+- Failure attribution after correction: absent topology/population, BIOS,
+  proprietary command, event and approval data are `PLATFORM_HANDOFF_DEFECT`;
+  guessing them, auto-looping, importing an adjacent fault pattern or claiming
+  partial-matrix PASS would be `MODEL_PLANNING_ERROR`. No material document
+  defect remains in the proposed contract. This is not independent-model
+  validation and is not DUT hardware validation.
