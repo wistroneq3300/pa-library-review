@@ -1,0 +1,175 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 1,
+  "calibration": true,
+  "source_key": "Functionality|29|Wistron-HW-00032-V004",
+  "case_variant_id": "eb1edb1375e32b56",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 29,
+    "code": "Wistron-HW-00032-V004"
+  },
+  "source_integrity": {
+    "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+    "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+    "original_row_sha256": "2da6bb953c41394c0d431982cac18d68aa3042591c7cf313a4394646a990f892"
+  },
+  "source_snapshot": {
+    "test_name": "Latch_on_fault_offset_To_Next_Block",
+    "sub_function": "HW",
+    "test_set": "Power Supply - L10 : CRPS -Latch on fault",
+    "items": "Latch_on_fault_offset_To_Next_Block",
+    "procedure": "Before Test: verify the SUT configuration against the specification/recipe and clear logs. During Test: offset in bytes from this location to the beginning of the next configuration block. After Test: collect results/photos and check dmesg, syslog, and SEL for unexpected logs.",
+    "criteria": "Offset in bytes from this location to the beginning of the next configuration block",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "PSU vendor config-block decode tool (operator/vendor)",
+      "ai_commands": "Verify the offset-in-bytes field between consecutive configuration blocks using the PSU vendor layout/VPD parser; no vendor tool is supplied in the library.",
+      "ai_logs_output": "The operator reads the PSU configuration-block offset through the vendor tool and compares it with the specification table.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "original_test_intent": {
+    "purpose": "Read the CRPS latch-on-fault configuration field that encodes the byte offset from the current configuration block to the next block, then compare the decoded value with the applicable vendor layout.",
+    "target": "The identified CRPS PSU configuration-block data and the specific latch-on-fault offset field.",
+    "scope": "One applicable CRPS model/firmware instance; no cross-model value is implied.",
+    "operation": "A vendor-defined read-only configuration-block decode followed by a specification comparison.",
+    "duration_and_iterations": "The source states five minutes attended and five minutes machine time; it does not define a loop.",
+    "expected_result": "The raw and decoded offset corresponds to the beginning of the next configuration block under the applicable vendor definition.",
+    "required_evidence": "CRPS identity and firmware, raw field/block bytes, decoded offset, block boundaries, byte order, decoder/tool version, and the exact applicable specification reference.",
+    "ambiguities": [
+      "The row does not identify the CRPS model, field address, current block, next-block boundary, byte order, expected numeric offset, or approved read command."
+    ],
+    "source_conflicts": []
+  },
+  "deepseek_review_conclusion": {
+    "legacy_classification": "NO",
+    "agreement": "It correctly identifies that a PSU vendor decoder and specification are required.",
+    "defect": "It describes operator comparison but does not separate missing vendor inputs from automation capability or define safe pre-collection evidence."
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "BLOCKED",
+    "second_review_outcome": "CHANGED",
+    "finding": "V2 treated the missing field map, byte order, expected offset, read-only tool, and recovery information as a semantic blocker and prohibited guessed PMBus access."
+  },
+  "applicable_history": [
+    {
+      "path": "gpt-review/BLOCKED_FEEDBACK_REREVIEW_001.json",
+      "decision": "The vendor PMBus Application Note/Firmware Spec and decoder are execution prerequisites; their absence alone is not a permanent BLOCKED condition."
+    }
+  ],
+  "v3_review_conclusion": {
+    "review_outcome": "RECLASSIFIED",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": [
+      "NEEDS_SPEC",
+      "NEEDS_PACKAGE",
+      "NEEDS_INPUT",
+      "NEEDS_APPROVAL"
+    ],
+    "summary": "The test purpose and read-only operation are identifiable. Execution depends on model-specific vendor artifacts and parameters, but those dependencies are obtainable prerequisites rather than proof that the testcase is permanently undefined."
+  },
+  "execution_readiness_detail": {
+    "available_now": [
+      "The source identifies the CRPS capability field and the relationship to be checked.",
+      "Read-only CRPS/PSU identity, firmware, and BMC inventory evidence may be collected through an already approved management interface."
+    ],
+    "missing_inputs": [
+      "Exact CRPS model, slot, firmware/VPD identity, and applicable firmware family",
+      "Vendor PMBus Application Note or Firmware Specification",
+      "Field address, current and next block boundaries, byte order, encoding, and expected offset",
+      "Vendor-approved read-only decoder/tool and exact invocation"
+    ],
+    "input_owner": "The platform/PSU engineer or PSU vendor supplies and approves the model-specific specification, decoder, parameters, and expected value.",
+    "safe_read_only_work_before_closure": [
+      "Collect CRPS FRU/model/slot identity and current firmware through an approved read-only BMC or vendor inventory path.",
+      "Preserve existing SEL and management evidence; do not clear logs."
+    ],
+    "prohibited_until_closed": [
+      "Do not blind-scan PMBus/SMBus, guess a register, write configuration, reset the PSU, or flash firmware.",
+      "Do not claim PASS from identity or inventory data alone."
+    ],
+    "closure_verification": "An engineer confirms the specification applies to the detected CRPS identity and firmware, supplies a read-only command that returns the defined field, and provides the documented expected offset and decoding rules."
+  },
+  "revision_candidate": {
+    "test_name": "CRPS Latch-on-Fault Offset to Next Configuration Block",
+    "purpose": "Verify that the CRPS latch-on-fault configuration field contains the vendor-defined byte offset from the current configuration block to the next block.",
+    "applicable_platform_environment": "Only the CRPS model and firmware revision covered by the supplied vendor PMBus configuration-block specification.",
+    "target_scope": "The identified CRPS slot and the single vendor-defined offset field; do not apply the expected value to other PSU models or firmware families.",
+    "required_inputs": "CRPS identity and slot, firmware/VPD revision, applicable vendor specification, field address, block boundaries, byte order/encoding, expected offset, and approved read-only decoder or command.",
+    "test_command_procedure_intent": "Run the vendor-approved read-only configuration-block decode for the identified CRPS and capture the raw field and decoded byte offset. Do not substitute a generic PMBus scan.",
+    "preconditions": "Confirm the specification-to-CRPS identity match, management access path, tool compatibility, and non-writing mode. Preserve existing logs.",
+    "expected_evidence": "CRPS identity/firmware, tool and specification version, raw field bytes, decoded offset, current and next block boundaries, byte order, and timestamped read output.",
+    "acceptance_reference": "The expected offset and encoding in the applicable vendor PMBus Application Note or Firmware Specification. The end user performs the final comparison.",
+    "safety_restrictions": "Read-only access only. No blind bus scan, configuration write, PSU reset, firmware operation, or log clearing.",
+    "human_approval_requirements": "The platform/PSU engineer must approve the specification, detected target, and resolved read-only command before access.",
+    "manual_boundaries": "The engineer supplies proprietary artifacts and confirms applicability; the agent may collect the approved readback and evidence.",
+    "recovery_requirements": "If the management path becomes unavailable, stop, preserve error/SEL evidence, and follow the approved BMC/PSU access recovery procedure without writing or resetting the PSU.",
+    "stop_conditions": "Stop if the CRPS identity, specification applicability, field map, expected value, read-only property, or management target cannot be confirmed."
+  },
+  "identified_defects": [
+    "V2 conflates missing vendor artifacts and expected parameters with an irreducible semantic blocker even though the field relationship and required read-only operation are identifiable.",
+    "The source log-clear instruction would remove diagnostic evidence and is not part of the offset validation."
+  ],
+  "changed_fields": [
+    "Automation Classification",
+    "Execution Readiness",
+    "Required Inputs",
+    "Test Command / Procedure Intent",
+    "Expected Evidence",
+    "Blocked Conditions",
+    "Safety Restrictions"
+  ],
+  "reason_for_change": "Apply the locked user boundary that model-specific vendor specifications and decoders are prerequisites when the purpose and operation can be identified.",
+  "new_technical_evidence": [
+    {
+      "source": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 29",
+      "supports": "The exact offset relationship requested by the original row."
+    },
+    {
+      "source": "gpt-review/BLOCKED_FEEDBACK_REREVIEW_001.json",
+      "supports": "The confirmed prerequisite-versus-BLOCKED boundary for this case."
+    }
+  ],
+  "removed_ambiguities": [
+    "Separates target identity collection from the gated vendor-field decode.",
+    "States that inventory collection is not completion or PASS.",
+    "Defines who supplies each proprietary input and how applicability is closed."
+  ],
+  "resolved_blockers": [
+    "The missing vendor document and decoder no longer create a permanent automation-classification blocker."
+  ],
+  "remaining_blockers": [
+    "Execution remains gated until the applicable field map, expected value, and read-only tool are supplied and matched to the detected CRPS."
+  ],
+  "objective_improvement_over_v2": "V3 preserves V2's prohibition on guessed PMBus access while replacing the permanent BLOCKED label with explicit prerequisite, ownership, safe pre-collection, prohibited-action, and closure criteria. The agent can now collect identity evidence without falsely claiming that the offset was validated.",
+  "agent_understanding_result": {
+    "status": "PENDING_INDEPENDENT_VALIDATION",
+    "notes": null
+  },
+  "regression_status": {
+    "test_intent_preserved": true,
+    "scope_preserved": true,
+    "duration_preserved": true,
+    "iteration_preserved": true,
+    "safety_relaxed": false,
+    "pass_claimed": false,
+    "hardware_tested": false,
+    "status": "PASS"
+  },
+  "per_case_integrity_check": {
+    "exact_xlsx_row_read": true,
+    "matching_deepseek_read": true,
+    "matching_v2_read": true,
+    "history_read": true,
+    "source_specific_purpose_fact": "The field is the byte offset from the current configuration block to the beginning of the next block.",
+    "source_specific_v2_comparison": "V2 required the same vendor field details but elevated their absence to BLOCKED.",
+    "source_specific_safety_evidence_decision": "Only an approved read-only decode is permitted; blind bus access and any write/reset are prohibited.",
+    "template_violation_detected": false
+  }
+}
