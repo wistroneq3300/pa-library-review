@@ -8,6 +8,7 @@ revise, or write testcase review decisions.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 from typing import Any
@@ -57,21 +58,18 @@ def main() -> None:
     args = parser.parse_args()
 
     workbook = openpyxl.load_workbook(XLSX, read_only=True, data_only=False)
-    headers_by_sheet = {
-        name: [cell.value for cell in workbook[name][1]] for name in workbook.sheetnames
-    }
     matches: list[dict[str, Any]] = []
     for name in workbook.sheetnames:
         if args.sheet and name != args.sheet:
             continue
         sheet = workbook[name]
-        headers = headers_by_sheet[name]
-        for physical_row in range(2, sheet.max_row + 1):
+        rows = sheet.iter_rows(values_only=True)
+        headers = list(next(rows))
+        for physical_row, values in enumerate(rows, start=2):
             if args.row and physical_row != args.row:
                 continue
-            if str(sheet.cell(physical_row, 1).value or "").strip() != args.code:
+            if str(values[0] or "").strip() != args.code:
                 continue
-            values = [sheet.cell(physical_row, column).value for column in range(1, 19)]
             matches.append(
                 {
                     "source_key": {
@@ -80,6 +78,15 @@ def main() -> None:
                         "code": args.code,
                     },
                     "xlsx": dict(zip(headers, values, strict=True)),
+                    "original_row_sha256": hashlib.sha256(
+                        json.dumps(
+                            dict(zip(headers, values, strict=True)),
+                            ensure_ascii=False,
+                            sort_keys=True,
+                            separators=(",", ":"),
+                            default=str,
+                        ).encode("utf-8")
+                    ).hexdigest(),
                 }
             )
 
