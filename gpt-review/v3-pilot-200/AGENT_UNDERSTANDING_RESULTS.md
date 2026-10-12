@@ -217,6 +217,27 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   was found. This is not independent-model validation and is not DUT hardware
   validation.
 
+## fio QD1 destructive sequential-write validation: sequence 122
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Performance|7|Wistron-Performance Storage-00006-V004`.
+- It preserved one bounded sacrificial target, 100% sequential write, 512-byte
+  blocks, one job, effective QD1 and a full 43200-second measured window.
+- It rejected bare `/dev/sdX` or `/dev/nvmeXnY` identity, omitted or widened
+  range, QD64, a 60-minute substitute, unverified `./fio`, package/cache/
+  preconditioning changes and automatic rerun.
+- It required two-view target exclusion, achieved-depth distribution, exact
+  fio/job evidence, full runtime, performance thresholds, health/endurance
+  telemetry and restore/reprovision completion; fio exit success alone was not
+  completion.
+- Failure attribution: missing target/range/profile/spec/approval are
+  provider-closable `PLATFORM_HANDOFF_DEFECT` gates; choosing a device,
+  shortening duration or widening scope would be `MODEL_PLANNING_ERROR`. No
+  proposed-contract defect was found. This is not independent-model validation
+  and is not DUT hardware validation.
+
 ## AMD GPU GFX poison-consumption validation: sequence 120
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
