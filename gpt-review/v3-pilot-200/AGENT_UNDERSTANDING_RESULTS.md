@@ -446,3 +446,24 @@ Status: `PASSED AFTER ONE DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONT
   partial-matrix PASS would be `MODEL_PLANNING_ERROR`. No material document
   defect remains in the proposed contract. This is not independent-model
   validation and is not DUT hardware validation.
+
+## ADDDC rank-with-plus1 hybrid validation: sequence 96
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|26|Wistron-System RAS-00746-V003`.
+- It recovered the exact rank-with-plus1 variant, the signed 64 GB x4
+  population and argument map, and one authorized harasser invocation for each
+  explicit recipe target rather than inventing rank, controller or plus1 values.
+- It preserved the manual DIMM/BIOS/LED boundaries while recognizing that the
+  exact bounded Cscript invocation and evidence correlation can be automated
+  after package, recipe and approval handoff.
+- It required Windows-native evidence, a complete unfiltered harness log,
+  independent slot/LED/health criteria, conditional uEFI evidence and final
+  restoration; `sparing_harasser PASSED` alone was insufficient.
+- Failure attribution: missing platform, package, target, argument, event and
+  timing values are `PLATFORM_HANDOFF_DEFECT`; guessing them, reducing a target
+  matrix, retrying automatically or declaring partial PASS would be
+  `MODEL_PLANNING_ERROR`. No intrinsic proposed-contract defect was found.
+  This is not independent-model validation and is not DUT hardware validation.
