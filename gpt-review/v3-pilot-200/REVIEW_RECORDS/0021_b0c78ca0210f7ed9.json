@@ -1,0 +1,168 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 21,
+  "calibration": false,
+  "source_key": "Functionality|2|Wistron-HW-00001-V006",
+  "case_variant_id": "b0c78ca0210f7ed9",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2,
+    "code": "Wistron-HW-00001-V006"
+  },
+  "source_integrity": {
+    "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+    "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+    "original_row_sha256": "ce0b9008551ff20d8af5b468f222d0bb5c7e773f3abbeb7d4ce8984a4ead1dee"
+  },
+  "source_snapshot": {
+    "test_name": "Mechanical_Seat_accuracy",
+    "test_set": "Mechanical -System",
+    "items": "Mechanical_Seat_accuracy",
+    "procedure": "Confirm the SUT configuration against the recipe, check that data is saved to the blackbox in this status, then collect results/photos and inspect unexpected dmesg, syslog and SEL evidence. The source also says to clear logs before the test.",
+    "criteria": "All components should be seated properly",
+    "attended_time": "5",
+    "machine_time": "5",
+    "deepseek_classification": "NO",
+    "deepseek_finding": "The physical/visual component-seating inspection requires an on-site person; photos and blackbox evidence cannot be produced by an SSH-only agent."
+  },
+  "original_test_intent": {
+    "purpose": "Verify by direct physical and visual inspection that every component required by the exact approved SUT assembly recipe is fully seated and retained in its intended connector, socket, latch or guide position.",
+    "target": "One positively identified SUT and the complete component checklist for its exact hardware configuration; not a generic server or a subset inferred from OS inventory.",
+    "scope": "A single on-site inspection of all recipe-listed components, associated seating/retention indicators and required blackbox status, followed by traceable photos/checklist and preserved platform evidence.",
+    "operation": "A qualified operator applies the approved power-isolation and ESD procedure, gains physical access, inspects each checklist item without forcing or silently reseating it, records the observed state and photos, obtains the required blackbox status, closes/restores the chassis as authorized, and supplies the evidence for engineering judgment.",
+    "duration_and_iterations": "One inspection; the source lists five attended and five machine minutes but gives no repeat count.",
+    "expected_result": "Every required component is visibly and physically seated and retained according to the approved assembly reference, all checklist/photo/blackbox evidence is complete, and no unexpected damage or platform-health delta is observed.",
+    "required_evidence": "SUT and recipe identity, complete component checklist, operator identity/time, item-level observations, required views of connectors/latches/retainers, blackbox record with provenance, chassis restore state, and preserved before/after system and BMC evidence when applicable.",
+    "ambiguities": [
+      "The source does not identify the SUT, component/BOM checklist, assembly drawing, seating indicators, photo viewpoints or allowable access procedure.",
+      "The phrase 'data is saved to blackbox is this status' does not define the blackbox producer, record, path, expected value or correlation to the physical inspection.",
+      "The source says to clear dmesg, syslog and SEL but does not require preservation of pre-existing evidence; clearing is not necessary to inspect seating."
+    ],
+    "source_conflicts": []
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "MANUAL ONLY",
+    "second_review_outcome": "IMPROVED",
+    "finding": "V2 correctly treats physical seating acceptance as manual, requires a qualified operator, recipe/checklist and photos, preserves rather than clears existing logs, prohibits forced reseating and limits the agent to evidence organization."
+  },
+  "applicable_history": [
+    {
+      "path": "review_round_01_pilot_functionality.md",
+      "decision": "The prior manual review confirmed physical/visual execution, operator photos and blackbox evidence, with no agent-run DUT command."
+    },
+    {
+      "path": "review_round_02_functionality.md",
+      "decision": "The one-by-one review retained the physical/NO boundary and required operator-supplied evidence rather than an agent claim."
+    },
+    {
+      "path": "SESSION_HANDOFF_T4_STATE_AFTER_AllBatches_2125.md",
+      "decision": "This code was listed as locked in the historical command dataset; V3 preserves the confirmed physical/manual boundary and does not consume the later discarded automated batches."
+    }
+  ],
+  "v3_review_conclusion": {
+    "review_outcome": "KEEP",
+    "automation_classification": "MANUAL ONLY",
+    "execution_readiness": [
+      "NEEDS_INPUT",
+      "NEEDS_SPEC",
+      "NEEDS_APPROVAL",
+      "NEEDS_MANUAL_ACTION"
+    ],
+    "summary": "V2's technical conclusion is correct. Physical seating cannot be established by remote software inventory or by an agent claiming to inspect supplied photos; a qualified operator must perform and attest the item-level inspection while the agent may prepare and organize evidence."
+  },
+  "execution_readiness_detail": {
+    "available_now": [
+      "The source clearly requires physical seating of all components and operator photo/blackbox evidence.",
+      "The remote agent can prepare an evidence manifest and preserve existing read-only system/BMC inventory and logs without opening or changing the SUT."
+    ],
+    "missing_inputs": [
+      "Exact SUT identity, approved configuration recipe/BOM, assembly drawing and item-by-item seating/retention checklist",
+      "Power-state/isolation, chassis-access and ESD procedure; qualified operator and approval to open the chassis",
+      "Required photo viewpoints, evidence folder/naming, blackbox record definition/path/expected status and provenance",
+      "Disposition and recovery procedure for a loose, damaged, obstructed or ambiguous component"
+    ],
+    "input_owner": "The mechanical/platform hardware owner supplies the exact recipe, drawings, checklist and acceptance indicators; the lab owner supplies the qualified operator, ESD/power-isolation method and access approval; the test owner defines blackbox and evidence requirements.",
+    "safe_read_only_work_before_closure": [
+      "Confirm the requested platform/recipe identifiers and prepare the component/evidence manifest without asserting physical state",
+      "Collect non-invasive inventory and preserve existing kernel, system, blackbox and BMC/SEL evidence without clearing logs or treating enumeration as proof of seating",
+      "Receive, checksum, timestamp and organize operator-provided photos/checklist while retaining source provenance"
+    ],
+    "prohibited_until_closed": [
+      "Do not open, touch, press, force, remove or reseat any component without the approved physical procedure, safe power state, ESD controls and authorized operator",
+      "Do not clear dmesg, syslog, SEL or blackbox history; do not infer seating from device enumeration, use photos from another build, or claim that a remote agent performed the inspection"
+    ],
+    "closure_verification": "The exact SUT and complete recipe checklist are signed in, the operator and safe-access controls are approved, every item has traceable observation/photo evidence, the blackbox record is defined and captured, the chassis is restored, and the hardware owner adjudicates any anomaly."
+  },
+  "revision_candidate": {
+    "test_name": "System Component Seating Accuracy Inspection",
+    "purpose": "Verify that every component required by the approved SUT assembly recipe is physically seated and retained in its correct location, with traceable operator, photo and blackbox evidence.",
+    "applicable_platform_environment": "The exact server configuration identified by serial/asset identity and approved BOM/assembly recipe, in a controlled lab with qualified physical access, correct power isolation and ESD protection.",
+    "target_scope": "Every component on the owner-approved seating checklist for this SUT. OS/BMC enumeration may support identity and health checks but does not replace physical inspection.",
+    "required_inputs": "SUT identity, exact recipe/BOM and assembly drawing, complete component checklist and seating indicators, safe chassis-access/ESD procedure, operator authorization, required photo views, blackbox definition/expected state, evidence location and anomaly/recovery owner.",
+    "test_command_procedure_intent": "No remote test command performs the acceptance inspection. The qualified operator safely accesses the SUT, inspects each listed component and its connector/latch/retainer without forcing or unapproved reseating, records item-level observations and required photos, captures the defined blackbox status, restores the approved chassis/power state, and hands the evidence to the agent for packaging.",
+    "preconditions": "Target and recipe matched; SUT placed in the approved safe power state; ESD and access controls active; checklist/photo/blackbox requirements defined; evidence storage ready; operator and recovery owner present.",
+    "expected_evidence": "Signed item-level checklist; SUT/recipe/operator/timestamp identity; required photos mapped to each component; blackbox record and provenance; preserved before/after inventory and unexpected kernel/system/BMC evidence where applicable; chassis restoration and anomaly disposition.",
+    "acceptance_reference": "The mechanical/platform owner's approved BOM, assembly drawing, service procedure and component-specific seating/retention criteria for the exact SUT revision.",
+    "safety_restrictions": "Do not handle an energized chassis when the platform procedure requires isolation; do not force or silently reseat a component, clear logs, use unmatched photos, expose restricted internal images, or treat software visibility as proof of mechanical seating.",
+    "human_approval_requirements": "A qualified operator must be authorized to access and inspect the chassis. The hardware owner approves any reseat/removal/repair and makes the final seating disposition.",
+    "manual_boundaries": "The physical/visual/tactile inspection and photo capture are manual. The agent may prepare the checklist, preserve read-only evidence, verify file provenance and assemble the report, but must not claim first-hand inspection or final PASS.",
+    "recovery_requirements": "If damage, loose seating, obstruction or ambiguous retention is found, stop, preserve the as-found evidence, keep the affected hardware in the approved safe state, and follow only the component-specific owner-approved reseat/repair and post-restoration health procedure.",
+    "stop_conditions": "Wrong or unidentified SUT/recipe, incomplete checklist, unsafe power/ESD/access state, missing operator authorization, untraceable evidence, suspected damage, a component requiring force or unapproved reseating, undefined blackbox status, or inability to restore the chassis safely."
+  },
+  "identified_defects": [
+    "The original source does not define the complete component list or component-specific seating indicators.",
+    "The original blackbox instruction is not operationally defined.",
+    "The source log-clearing step would erase potentially relevant history and is unnecessary for a physical seating inspection."
+  ],
+  "changed_fields": [
+    "Execution Readiness Metadata",
+    "Agent Execution Contract Structure"
+  ],
+  "reason_for_change": "No material V2 technical correction is warranted. V3 retains the locked physical/manual boundary and expresses ownership, safe preparatory work, blackbox clarification and completion evidence in the new contract format.",
+  "new_technical_evidence": [
+    {
+      "repo_path": "review_round_01_pilot_functionality.md",
+      "title": "Functionality pilot manual review",
+      "supports": "The case requires an on-site physical inspection, operator photos and blackbox evidence; there is no agent-run DUT command."
+    },
+    {
+      "repo_path": "review_round_02_functionality.md",
+      "title": "Functionality one-by-one review",
+      "supports": "The physical/manual boundary and operator evidence requirement were independently retained in the historical review."
+    }
+  ],
+  "removed_ambiguities": [
+    "Clarifies that software enumeration is supporting evidence rather than proof of seating.",
+    "Separates operator inspection and final hardware judgment from agent evidence packaging."
+  ],
+  "resolved_blockers": [],
+  "remaining_blockers": [
+    "Physical execution remains unavailable until the exact checklist, safe-access procedure, qualified operator and blackbox definition are supplied."
+  ],
+  "objective_improvement_over_v2": "No material technical conclusion is changed because V2 is already correct. V3 adds auditable readiness ownership and explicit completion/stop boundaries while preserving V2's manual classification, evidence requirements and no-log-clearing safety control.",
+  "agent_understanding_result": {
+    "status": "PENDING_RISK_WEIGHTED_VALIDATION",
+    "notes": "The case is high-risk/manual in V2 and is queued for the later risk-weighted isolated contract validation set."
+  },
+  "regression_status": {
+    "test_intent_preserved": true,
+    "scope_preserved": true,
+    "duration_preserved": true,
+    "iteration_preserved": true,
+    "safety_relaxed": false,
+    "pass_claimed": false,
+    "hardware_tested": false,
+    "status": "PASS"
+  },
+  "per_case_integrity_check": {
+    "exact_xlsx_row_read": true,
+    "matching_deepseek_read": true,
+    "matching_v2_read": true,
+    "history_read": true,
+    "source_specific_purpose_fact": "The source criterion is that all components are seated properly and requires physical photos plus an undefined blackbox status.",
+    "source_specific_v2_comparison": "V2 already preserves the physical/manual boundary, component checklist, photos and no-log-clearing rule; V3 does not manufacture a different automation path.",
+    "source_specific_safety_evidence_decision": "Only non-invasive inventory/evidence preparation is permitted remotely; physical access requires the approved power/ESD procedure and a qualified operator, and any reseat requires separate owner approval.",
+    "template_violation_detected": false
+  }
+}
