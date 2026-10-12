@@ -194,6 +194,29 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   explicit gates would be a model-planning error; no such execution occurred.
   This is not independent-model validation and is not DUT hardware validation.
 
+## AMD GPU UMC OD-ECC replay-correctable validation: sequence 119
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Reliability|192|Wistron-GPU RAS-00837-V004`.
+- It preserved one host-side UMC block-0/sub-block-2/type-4 replay-correctable
+  injection on one stable-identity-mapped GPU and rejected another GPU, host
+  DDR, OOB injection, another subtype or any retry.
+- It refused to infer Device 0 or choose among source `0x800`, command
+  `0x800000000` and the decoded ACA address until the signed recipe reconciles
+  the address domains.
+- It required a zero source baseline, fresh target-correlated UMC CE/ACA
+  evidence, the approved query/new/total relationship, no UE/poison/reset and
+  final HBM/compute/telemetry health; tool success, a generic error line or a
+  stale total were rejected as completion.
+- Failure attribution: missing mapping, private subtype/address semantics,
+  counter/ACA matrix and approvals are provider-closable
+  `PLATFORM_HANDOFF_DEFECT` conditions; guessing them or declaring partial
+  evidence PASS would be `MODEL_PLANNING_ERROR`. No proposed-contract defect
+  was found. This is not independent-model validation and is not DUT hardware
+  validation.
+
 ## BLOCKED/manual-boundary validation: sequence 80
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
