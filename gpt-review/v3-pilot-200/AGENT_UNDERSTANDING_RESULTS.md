@@ -338,3 +338,24 @@ Status: `PASSED AFTER ONE DOCUMENT CORRECTION IN ISOLATED SAME-MODEL-FAMILY CONT
   partial PASS would be `MODEL_PLANNING_ERROR`. No material document defect
   remains. This is not independent-model validation and is not DUT hardware
   validation.
+
+## High-risk board-jumper validation: sequence 91
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Functionality|2286|Wistron-HW-00164-V003`.
+- It limited scope to the exact recipe-enumerated jumper(s) and recovered one
+  alternate-position power-on/function observation plus one photographed
+  restored-default power-on/log verification for each named target.
+- It rejected another board revision's diagram, nearby unlisted headers,
+  energized movement, alternate-only completion, unexported log clearing and
+  the 5/5-minute estimates as discharge, dwell or boot timing.
+- It required physical position evidence, exact function/page, configuration
+  and security/boot/storage comparison, safe power/ESD handling, final healthy
+  deployed state and no improvised retry/recovery.
+- Failure attribution: absent board recipe, pin/function/state/timing data,
+  operator and approvals are `PLATFORM_HANDOFF_DEFECT`; inventing or expanding
+  them would be `MODEL_PLANNING_ERROR`. Current execution gating does not alter
+  the `MANUAL ONLY` capability class. This is not independent-model validation
+  and is not DUT hardware validation.
