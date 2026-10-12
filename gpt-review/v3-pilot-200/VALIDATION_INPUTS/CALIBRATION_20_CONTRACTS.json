@@ -1,0 +1,406 @@
+{
+  "schema_version": "agent-understanding-input-1.0",
+  "input_boundary": "revision_candidate only; reviewer findings and source snapshots excluded",
+  "cases": [
+    {
+      "sequence": 1,
+      "source_key": "Functionality|29|Wistron-HW-00032-V004",
+      "contract": {
+        "test_name": "CRPS Latch-on-Fault Offset to Next Configuration Block",
+        "purpose": "Verify that the CRPS latch-on-fault configuration field contains the vendor-defined byte offset from the current configuration block to the next block.",
+        "applicable_platform_environment": "Only the CRPS model and firmware revision covered by the supplied vendor PMBus configuration-block specification.",
+        "target_scope": "The identified CRPS slot and the single vendor-defined offset field; do not apply the expected value to other PSU models or firmware families.",
+        "required_inputs": "CRPS identity and slot, firmware/VPD revision, applicable vendor specification, field address, block boundaries, byte order/encoding, expected offset, and approved read-only decoder or command.",
+        "test_command_procedure_intent": "Run the vendor-approved read-only configuration-block decode for the identified CRPS and capture the raw field and decoded byte offset. Do not substitute a generic PMBus scan.",
+        "preconditions": "Confirm the specification-to-CRPS identity match, management access path, tool compatibility, and non-writing mode. Preserve existing logs.",
+        "expected_evidence": "CRPS identity/firmware, tool and specification version, raw field bytes, decoded offset, current and next block boundaries, byte order, and timestamped read output.",
+        "acceptance_reference": "The expected offset and encoding in the applicable vendor PMBus Application Note or Firmware Specification. The end user performs the final comparison.",
+        "safety_restrictions": "Read-only access only. No blind bus scan, configuration write, PSU reset, firmware operation, or log clearing.",
+        "human_approval_requirements": "The platform/PSU engineer must approve the specification, detected target, and resolved read-only command before access.",
+        "manual_boundaries": "The engineer supplies proprietary artifacts and confirms applicability; the agent may collect the approved readback and evidence.",
+        "recovery_requirements": "If the management path becomes unavailable, stop, preserve error/SEL evidence, and follow the approved BMC/PSU access recovery procedure without writing or resetting the PSU.",
+        "stop_conditions": "Stop if the CRPS identity, specification applicability, field map, expected value, read-only property, or management target cannot be confirmed."
+      }
+    },
+    {
+      "sequence": 2,
+      "source_key": "Functionality|67|Wistron-HW-00070-V004",
+      "contract": {
+        "test_name": "PSU Firmware N/N-1 Upgrade and Downgrade, Five Cycles",
+        "purpose": "Perform five approved PSU firmware N/N-1 transition cycles through the BMC HPM path and verify firmware activation, PSU health, BMC recovery, and SUT power-cycle recovery after each required transition.",
+        "applicable_platform_environment": "Only the PSU model, BMC/HPM implementation, and firmware family covered by the supplied compatibility statement and recovery procedure.",
+        "target_scope": "The engineer-identified PSU slot or PSU set for each transition; record whether redundant PSUs are updated sequentially or together.",
+        "required_inputs": "Exact PSU identity/current version, signed N/N-1 images and hashes, vendor HPM method, five-cycle order/timing, maintenance approval, redundancy plan, OOB/KVM access, and recovery/replacement path.",
+        "test_command_procedure_intent": "Use only the vendor-approved HPM flash procedure for the resolved target and image. Execute the defined N/N-1 order for five cycles, collecting firmware and health evidence after every transition. Do not substitute a version query for the flash test.",
+        "preconditions": "Dedicated maintenance window, evacuated workloads, stable redundant power where required, verified image compatibility, captured baseline, and tested recovery access.",
+        "expected_evidence": "Per-cycle image/hash/target, flash status and timing, activated version, BMC reconnect, PSU sensors and output state, SEL/host delta, SUT boot and power-cycle recovery, and final firmware state.",
+        "acceptance_reference": "The approved vendor compatibility/update procedure plus the source requirement for five N/N-1 cycles and successful SUT power-cycle recovery.",
+        "safety_restrictions": "Never infer the PSU target or image. Preserve logs. Stop on output loss, image mismatch, abnormal redundancy, management loss, flash error, or incomplete recovery.",
+        "human_approval_requirements": "Explicit approval is required before the firmware sequence and again if the target, image, order, or recovery plan changes.",
+        "manual_boundaries": "An engineer supplies/approves proprietary images and the vendor procedure and may operate a WebUI-only step; the agent may collect read-only pre/post evidence and follow an approved automatable interface.",
+        "recovery_requirements": "Stop subsequent cycles, preserve evidence, use the vendor recovery/reflash or PSU replacement procedure through OOB/KVM/local access, and verify stable redundant power and SUT recovery before resuming.",
+        "stop_conditions": "Any unresolved identity, compatibility, sequence, approval, redundancy, active-workload, OOB, flash, power-output, or recovery condition."
+      }
+    },
+    {
+      "sequence": 3,
+      "source_key": "Functionality|150|Wistron-HW-00153-V002",
+      "contract": {
+        "test_name": "OS Installation with Defined TPM State Verification (Engineer Decision Required)",
+        "purpose": "After the source owner confirms that both activities are intended, install the approved OS on the dedicated target with the specified TPM BIOS state and verify the installed OS exposes the required TPM function.",
+        "applicable_platform_environment": "The identified SUT, BIOS/TPM implementation, approved OS image, boot mode, and dedicated disposable installation target.",
+        "target_scope": "Only the engineer-designated installation disk and named TPM control; all other storage and security state are out of scope.",
+        "required_inputs": "Corrected source requirement, OS image/hash, target disk, boot mode, exact TPM start/end state, Secure Boot/key policy, installer/driver inputs, TPM verification method, backup, and recovery plan.",
+        "test_command_procedure_intent": "An operator performs or approves the BIOS and installer steps on the confirmed target. After installation, collect the approved TPM device, capability, kernel, and OS evidence. Do not substitute post-install inventory for the required installation and state transition.",
+        "preconditions": "Resolve the source conflict, isolate the dedicated target, protect keys/data, capture before-state evidence, and verify OOB/reimage recovery.",
+        "expected_evidence": "Corrected intent, image/target identity, before/after TPM BIOS state, installer result, OS identity, TPM device and capability evidence, target-only storage changes, boot health, and preserved BMC/host logs.",
+        "acceptance_reference": "The corrected testcase requirement plus the applicable platform TPM/BIOS and OS validation specification.",
+        "safety_restrictions": "Never guess a disk or TPM action. Do not clear TPM, alter keys, or change Secure Boot unless explicitly required and recoverable. Preserve logs.",
+        "human_approval_requirements": "Engineer decision on intent, then explicit approval for the resolved disk, BIOS/security transition, installation, and reboot.",
+        "manual_boundaries": "BIOS and interactive installer operations may require an operator; post-install evidence collection can be automated.",
+        "recovery_requirements": "Restore the approved BIOS/security state or reimage only the designated target; preserve keys and non-target storage; use OOB access if boot fails.",
+        "stop_conditions": "Unresolved source purpose, unidentified target, ambiguous TPM transition, unavailable backup/recovery, unapproved key impact, or any non-target storage risk."
+      }
+    },
+    {
+      "sequence": 4,
+      "source_key": "Functionality|198|Wistron-HW-00207-V002",
+      "contract": {
+        "test_name": "Serial Port Bidirectional Communication Check",
+        "purpose": "Verify bidirectional communication over the designated SUT serial port using the approved cable, client endpoint, serial settings, and harmless test payload.",
+        "applicable_platform_environment": "The identified board/serial interface and client whose electrical standard and pinout are documented as compatible.",
+        "target_scope": "Only the named SUT serial port and client endpoint; do not substitute a different console or network path.",
+        "required_inputs": "Port map, RS-232/RS-422/RS-485 or other standard, pinout, cable, baud/data/parity/stop/flow settings, client role, payload, expected response, timeout/retry, operator, and alternate console.",
+        "test_command_procedure_intent": "The operator connects the approved cable, configures both endpoints, sends the approved payload, records the complete transmit/receive transcript, and disconnects or restores the original console state.",
+        "preconditions": "Verify electrical and pin compatibility, confirm the link is not an active production console, and ensure alternate/OOB recovery.",
+        "expected_evidence": "Connection record, endpoint/settings table, exact payload and response, timestamped transcript, observed errors/timeouts, and post-test console/system health.",
+        "acceptance_reference": "The platform serial-interface specification and the owner-defined expected response for the approved payload.",
+        "safety_restrictions": "No unknown cable, voltage standard, pinout, peer, or arbitrary terminal command. Preserve logs and stop on unexpected output or console impact.",
+        "human_approval_requirements": "The platform owner approves the resolved link definition; the operator approves and performs the physical connection and terminal interaction.",
+        "manual_boundaries": "Cable handling, terminal observation, and the physical acceptance criterion are manual. The agent may organize supplied transcript and supporting health logs only.",
+        "recovery_requirements": "Terminate the session, restore the original cable/console state, use OOB access if the serial console is lost, and verify BMC/SUT health.",
+        "stop_conditions": "Missing or mismatched electrical/pinout data, unknown console ownership, absent expected response, framing/electrical errors, unexpected peer behavior, or unavailable alternate console."
+      }
+    },
+    {
+      "sequence": 5,
+      "source_key": "Functionality|201|Wistron-HW-00210-V002",
+      "contract": {
+        "test_name": "All USB Port Device Detection in BIOS and OS",
+        "purpose": "Verify each required physical USB port detects the approved known-good device in BIOS and the installed OS, with complete port-by-port coverage.",
+        "applicable_platform_environment": "The identified platform revision, BIOS/BMC/OS, USB controller topology, and approved test-device/driver matrix.",
+        "target_scope": "Every port in the supplied matrix, including front, rear, and internal ports as applicable; map each port to its controller/hub path.",
+        "required_inputs": "Port/controller map, device identity and power/driver requirements, BIOS/KVM evidence method, definition of detected/usable, operator sequence, usbutils, and recovery plan.",
+        "test_command_procedure_intent": "For each matrix row, the operator connects the approved device and records BIOS detection when required. After OS boot, collect complete lsusb output, USB topology, device/driver details, and kernel enumeration evidence for that placement.",
+        "preconditions": "Approve the device, confirm no boot/security/storage risk, capture baseline topology/logs, and ensure OOB/alternate-console access.",
+        "expected_evidence": "Completed coverage matrix with port/device identity, BIOS capture, OS enumeration/topology/driver evidence, kernel timestamps/errors, and restored final state.",
+        "acceptance_reference": "The corrected BIOS/OS acceptance statement and platform USB port/device matrix. The engineer decides whether enumeration alone or usable operation is required.",
+        "safety_restrictions": "No arbitrary or sensitive USB media, no unexpected mounts, no log clearing, and no coverage claim without per-port evidence.",
+        "human_approval_requirements": "Approve the matrix/device and every physical attachment sequence; an operator performs placement and BIOS observation.",
+        "manual_boundaries": "Physical attachment/movement and BIOS visual evidence are manual; OS enumeration and logs are automatable after each placement.",
+        "recovery_requirements": "Safely remove the device, unmount if explicitly permitted and required, restore boot/input/security state, and use OOB access if console or boot is affected.",
+        "stop_conditions": "Unknown port/device identity, unexpected mount or boot behavior, over-current/power error, controller reset, security impact, incomplete coverage, or unresolved BIOS/OS acceptance conflict."
+      }
+    },
+    {
+      "sequence": 6,
+      "source_key": "Functionality|79|Wistron-HW-00082-V004",
+      "contract": {
+        "test_name": "Eight-Hour CPU Stress with 225 stress-ng Workers",
+        "purpose": "Run 225 stress-ng CPU workers for eight hours on the approved SUT and verify the system remains workable without unexpected platform errors.",
+        "applicable_platform_environment": "Linux SUT with the detected CPU topology, approved stress-ng build, adequate cooling/power, dedicated maintenance window, and OOB recovery.",
+        "target_scope": "The SUT CPU complex; 225 workers and eight hours are fixed source parameters unless the testcase owner formally revises the source.",
+        "required_inputs": "Worker/topology approval, stress-ng version/package, maintenance window, workload evacuation, stop thresholds, monitoring sources, workable/recovery checks, and OOB/KVM plan.",
+        "test_command_procedure_intent": "Run `stress-ng --cpu 225 -t 8h` on the SUT after an evidence-preserving baseline. Capture complete output and health telemetry; do not substitute `--cpu 0 --timeout 600s`.",
+        "preconditions": "Approved package, idle/dedicated SUT, confirmed cooling/power margin, baseline logs/telemetry, tested stop command, and OOB access.",
+        "expected_evidence": "Topology and approval, full stress-ng output/exit status, eight-hour timestamps, continuous thermal/power/frequency/throttle data, kernel/MCE/EDAC and BMC/SEL deltas, remaining process check, and post-run management/workload recovery.",
+        "acceptance_reference": "The source's 225-worker/eight-hour requirement and engineer-supplied platform health/error/thermal/power thresholds.",
+        "safety_restrictions": "No log clearing, no unapproved package or parameter change, and no active production workload. Stop on approved thermal/current/power, error, hang, or management-loss thresholds.",
+        "human_approval_requirements": "Explicit approval is required before package installation and before starting the eight-hour high-load run.",
+        "manual_boundaries": "The engineer supplies topology/threshold decisions and approves the window; execution and evidence collection can then be automated.",
+        "recovery_requirements": "Stop all stress workers, preserve evidence, use OOB/KVM on management loss, verify normal thermal/power state and process termination, and do not retry without review.",
+        "stop_conditions": "Unapproved worker oversubscription, inadequate cooling/power, active users/jobs, abnormal baseline, thermal/power/throttle limit, kernel/MCE/EDAC/BMC error, hang, management loss, or incomplete evidence."
+      }
+    },
+    {
+      "sequence": 7,
+      "source_key": "Functionality|87|Wistron-HW-00090-V004",
+      "contract": {
+        "test_name": "Eight-Hour Host Memory Stress with stress-ng",
+        "purpose": "Run the engineer-approved stress-ng virtual-memory workload at the source-required 90% memory target for eight hours and verify host-memory and platform health.",
+        "applicable_platform_environment": "Approved Linux server SUT with host DDR memory, a validated stress-ng version, sufficient cooling/power margin, and OOB recovery. This case does not test GPU HBM.",
+        "target_scope": "All host-memory resources intentionally covered by the approved virtual-memory workers; the source's conflicting 15-versus-9 worker count must be resolved before execution.",
+        "required_inputs": "One approved worker count, verified `--vm-bytes 90%` semantics for the installed version, DIMM/NUMA/swap/cgroup inventory, memory-error acceptance definition, maintenance approval, monitoring limits, stop thresholds, and recovery owner.",
+        "test_command_procedure_intent": "After preserving a baseline, run `stress-ng --vm <APPROVED_WORKER_COUNT> --vm-bytes 90% --timeout 8h` using exactly one approved virtual-memory worker option. Do not execute the conflicting source command unchanged or substitute DeepSeek's generic `--mem-alloc/all` description.",
+        "preconditions": "Approved package and corrected command, dedicated/idle SUT, capacity and allocation-risk review, baseline ECC/EDAC/MCE/kernel/BMC/SEL evidence, tested abort command, and working OOB/KVM access.",
+        "expected_evidence": "Owner-approved command and version semantics, DIMM/NUMA/memory/swap baseline, full eight-hour stress-ng output and exit status, allocation/swap/OOM and thermal/power telemetry, ECC/EDAC/MCE/kernel/BMC/SEL deltas, process termination, and post-run manageability/workload recovery.",
+        "acceptance_reference": "The source's eight-hour and 90% memory-stress intent plus engineer-supplied worker count, `badblock` evidence mapping, acceptable error thresholds, and workable/recovery criteria.",
+        "safety_restrictions": "Never clear evidence logs or guess duplicate-option precedence. Do not run on an active service host or exceed approved allocation, OOM, swap, thermal, power, ECC, or management thresholds.",
+        "human_approval_requirements": "Explicit approval is required for package installation, the corrected command, maintenance window, high-memory workload, stop thresholds, and recovery plan.",
+        "manual_boundaries": "Engineering must resolve command and acceptance semantics; after approval, workload control and evidence collection can be automated while final platform judgment remains with the engineer.",
+        "recovery_requirements": "Stop all stress-ng workers, preserve evidence, use OOB/KVM if the host becomes unresponsive, verify memory pressure and swap normalize, confirm no worker remains, and do not retry until abnormal events are reviewed.",
+        "stop_conditions": "Unresolved worker count or allocation semantics, unsafe available capacity, active workloads, abnormal baseline, OOM or swap storm, new uncorrectable/corrected errors beyond the approved threshold, kernel/BMC fault, thermal/power breach, hang, management loss, or incomplete evidence."
+      }
+    },
+    {
+      "sequence": 8,
+      "source_key": "Functionality|2260|Wistron-BMC-00848-V003",
+      "contract": {
+        "test_name": "BMC Firmware Version Cross-Interface Verification",
+        "purpose": "Confirm that the approved BMC firmware revision is reported consistently by BIOS Server Management, in-band IPMI, out-of-band IPMI, the BMC web UI, and Redfish.",
+        "applicable_platform_environment": "The identified server and BMC with authorized host, management-network, browser/KVM, and Redfish access. Manager URI, certificate policy, IPMI cipher, and UI paths are platform-specific.",
+        "target_scope": "One verified SUT/BMC instance across all five source-required interfaces; do not substitute a different management controller or reduce the check to one CLI path.",
+        "required_inputs": "Expected BMC version, permitted display normalization, BMC identity/address, protected credentials, TLS trust policy, Redfish Manager URI or discovery access, supported IPMI settings, UI/KVM method, and BIOS-access approval/window.",
+        "test_command_procedure_intent": "Collect in-band and out-of-band `ipmitool mc info`; discover the target under `/redfish/v1/Managers` and read its `FirmwareVersion`; collect the BMC-web and BIOS Server Management version displays through approved browser/KVM or manual evidence. Compare every value with the baseline and each other.",
+        "preconditions": "Verified SUT/BMC identity, authorized least-privilege read access, approved tools and secret mechanism, trusted or explicitly excepted lab TLS path, expected-version baseline, and approved BIOS/UI access method.",
+        "expected_evidence": "Expected version and normalization rule; redacted timestamped IPMI outputs; Redfish Manager URI, identity, and FirmwareVersion; BIOS and web-UI screen evidence; cross-path comparison; and before/after unexpected-log delta without clearing history.",
+        "acceptance_reference": "Platform firmware recipe or release baseline supplied by the firmware owner. DMTF Manager FirmwareVersion defines the Redfish value but does not supply the platform's expected revision.",
+        "safety_restrictions": "Read-only queries only. Never embed or log credentials, contact an unverified endpoint, clear logs, reset/update the BMC, change power state, or reboot for BIOS evidence without approval.",
+        "human_approval_requirements": "Owner confirmation of the expected version and mapping is required for PASS/FAIL; authorization is required for credentials and any reboot/interactive BIOS access.",
+        "manual_boundaries": "IPMI/Redfish collection and comparison are automatable. BIOS and BMC-web observations remain manual unless an approved KVM/browser automation path captures equivalent evidence.",
+        "recovery_requirements": "Stop on endpoint/authentication/certificate mismatch, preserve redacted evidence, exit UI/KVM without saving changes, and return the host to its prior boot state if an approved BIOS reboot was used.",
+        "stop_conditions": "Unverified target, exposed credentials, failed authentication, unapproved TLS exception/cipher/reboot, missing required path, version disagreement without an approved mapping, or inability to preserve redacted evidence."
+      }
+    },
+    {
+      "sequence": 9,
+      "source_key": "Reliability|2|Wistron-System RAS-00374-V003",
+      "contract": {
+        "test_name": "OS Exposure of Expected ACPI BERT, ERST, and HEST Tables",
+        "purpose": "Confirm that each ACPI error-record table required for the exact platform is exposed by firmware and recognized by the running OS without unexpected APEI initialization errors.",
+        "applicable_platform_environment": "The identified server architecture, BIOS/firmware build, OS/kernel, and enabled RAS configuration. Table requirements are architecture- and platform-specific.",
+        "target_scope": "Firmware-provided BERT, ERST, and HEST tables and their OS/kernel exposure only; no hardware error injection or persistence/recovery function is exercised.",
+        "required_inputs": "Platform identity and architecture, BIOS/firmware and kernel versions, RAS configuration, required/conditional/not-applicable table matrix, and acceptance rule for table validity and kernel recognition.",
+        "test_command_procedure_intent": "Using authorized read-only access, list the exact BERT/ERST/HEST entries in `/sys/firmware/acpi/tables`, capture safe metadata or approved raw dumps, and collect full contextual ACPI/APEI kernel messages. Record command status and distinguish absent, inaccessible, invalid, and not-applicable results.",
+        "preconditions": "Verified SUT/OS identity, readable kernel logs and ACPI table path, protected remote access, preserved log history, and the platform expectation matrix for final judgment.",
+        "expected_evidence": "Identity/version baseline, expected-table matrix, table names/sizes/hashes/headers or approved dumps, contextual dmesg/journal output, permission and command status, unexpected ACPI errors, and per-table comparison result.",
+        "acceptance_reference": "The exact platform's firmware/RAS specification. ACPI defines BERT, HEST, and ERST mechanisms but does not require the same table set on every server configuration.",
+        "safety_restrictions": "Read-only inspection only; do not clear logs, write firmware/ACPI state, inject errors, use unverified SSH endpoints, expose credentials, or claim end-to-end RAS validation.",
+        "human_approval_requirements": "No approval is needed for authorized read-only collection; the platform owner must provide the expectation matrix and adjudicate unexplained absence or initialization errors.",
+        "manual_boundaries": "Collection, parsing, and matrix comparison are automatable. Platform applicability and final interpretation of unexpected firmware/kernel behavior remain engineering decisions.",
+        "recovery_requirements": "No device-state recovery is expected. On access/identity/permission anomalies, stop, preserve the outputs, and request corrected access or platform mapping.",
+        "stop_conditions": "SUT identity mismatch, unprotected credentials, unavailable read-only evidence, command/permission failure that obscures presence, missing expectation matrix for final judgment, or evidence of an unexpected ACPI/APEI initialization error requiring owner review."
+      }
+    },
+    {
+      "sequence": 10,
+      "source_key": "Reliability|4|Wistron-System RAS-00378-V003",
+      "contract": {
+        "test_name": "Second-DIMM Memory RAS Injection Across Approved Channels",
+        "purpose": "For each owner-mapped second-DIMM target, perform a bounded approved ECC/RAS injection and verify the expected leaky-bucket/register behavior and correlated host and BMC SEL reporting.",
+        "applicable_platform_environment": "The exact server board, CPU/memory-controller topology, BIOS/BMC/firmware build, supported DIMM population, vendor RAS tool/path, isolated maintenance environment, and OOB recovery.",
+        "target_scope": "Only the physical slots and channels explicitly mapped by the platform owner to the source's `2nd DIMM`/`DIMM_B` scope; do not infer labels across server architectures.",
+        "required_inputs": "Per-channel slot map, original/test threshold values, register expectation, vendor injection SOP/tool and error type, bounded count/order, expected host/BMC records, maintenance approval, qualified operator, abort criteria, configuration backup, and restoration/recovery plan.",
+        "test_command_procedure_intent": "The operator enters BIOS, records and applies the approved ECC Leaky Bucket Threshold, saves and resets as specified, then performs the documented bounded injection for one mapped target at a time. The agent captures synchronized pre/post register/status, host RAS/UEFI logs, and BMC SEL, correlates each stimulus, and verifies restoration after the matrix completes.",
+        "preconditions": "Dedicated no-workload SUT, verified topology and firmware, approved SOP and values, preserved baselines, synchronized clocks, working console/BMC/OOB, tested stop/recovery route, and explicit change/injection/reset approval.",
+        "expected_evidence": "Signed target matrix; before/test/restored threshold and register state; per-target injection command or operator record and timestamp; host and BMC SEL event identifiers, severity, address/location and count; unexpected-event check; boot/data-integrity health; and restored configuration.",
+        "acceptance_reference": "Vendor/platform memory-RAS specification for the exact board/CPU/BIOS plus the owner-approved target/event matrix. The source text alone does not define register or event acceptance values.",
+        "safety_restrictions": "Only the qualified operator performs BIOS changes and injection. Limit stimuli exactly as approved; never run on production data, clear logs, guess topology/registers, disable ECC protection, or continue after an uncontrolled or mislocalized event.",
+        "human_approval_requirements": "Explicit approval is required for BIOS changes, reset, each injection matrix, error limits, and recovery. The operator must confirm each target before stimulation.",
+        "manual_boundaries": "BIOS interaction, target verification, and vendor-approved stimulation are manual. The agent may automate read-only topology/log capture, correlation, completeness checks, and restoration verification.",
+        "recovery_requirements": "Stop injection, preserve all evidence, restore the approved threshold/defaults through the vendor procedure, reset or power-recover only as authorized, verify normal boot and memory health, and quarantine the SUT on data corruption, no-boot, or persistent RAS faults.",
+        "stop_conditions": "Missing/ambiguous target map or SOP, unapproved setting/reset, active workload, event storm, wrong-DIMM/channel report, uncorrectable or unexpected error, data corruption, no-boot, thermal/power issue, loss of management, incomplete evidence, or inability to restore configuration."
+      }
+    },
+    {
+      "sequence": 11,
+      "source_key": "Performance|3|Wistron-Performance CPU-00002-V003",
+      "contract": {
+        "test_name": "Platform-Specific CPU HPL Performance Validation",
+        "purpose": "Run a validated, vendor-appropriate HPL profile on the approved CPU SUT and compare repeatable, numerically valid Gflop/s with a configuration-matched reference.",
+        "applicable_platform_environment": "One explicitly selected Intel or AMD CPU server configuration with approved firmware/OS, host memory, compiler, BLAS, MPI, HPL distribution, cooling/power profile, and maintenance window.",
+        "target_scope": "Host CPU and DDR performance for the selected SUT. AMD CCX/CCD scripts apply only when the supplied AMD package and exact EPYC generation support them; they are not an Intel path.",
+        "required_inputs": "Vendor/SKU/topology, approved HPL package/checksum/license and supported stack, HPL.dat/process/thread/binding/SMT profile, installation permissions, measured-run count and 360-minute meaning, telemetry limits, comparable reference configuration/result/tolerance, and recovery owner.",
+        "test_command_procedure_intent": "Review and install or stage the approved vendor-specific package; generate and preserve topology-specific HPL files; verify N/NB/P/Q, memory use, process/thread placement and residual checking; run the approved measured matrix under monitoring; retain every output and exact profile. Use the source AMD scripts only when their named package/version matches the selected AMD SUT.",
+        "preconditions": "Dedicated SUT, configuration-matched baseline, verified archive/scripts/dependencies, approved root/network activity, sufficient memory/storage/cooling/power, stable idle baseline, synchronized evidence collection, and tested abort/OOB path.",
+        "expected_evidence": "Full identity/configuration, package/build provenance, generated HPL.dat and placement, run/repetition timestamps, N/NB/P/Q/time/Gflop/s, numerical residual/pass output, CPU/memory/thermal/power/throttle/error telemetry, reference provenance, per-run comparison, and restored state.",
+        "acceptance_reference": "The owner-approved Intel or AMD result for the same CPU/socket/memory/firmware/software/tuning profile, with a defined metric, tolerance, repetition/aggregation rule, and mandatory HPL numerical validation.",
+        "safety_restrictions": "No unreviewed root installer or outbound dependency, production workload, log clearing, silent topology/tuning change, cross-vendor script reuse, or continuation beyond approved thermal/power/error limits.",
+        "human_approval_requirements": "Approval is required for package/network/root installation, SUT tuning, sustained load, run matrix, baseline comparability, limits, and any reboot or recovery.",
+        "manual_boundaries": "Engineering supplies and approves vendor profile and reference; after setup, generation, execution, monitoring, evidence capture, and calculation are automatable. Final comparability exceptions remain an engineering judgment.",
+        "recovery_requirements": "Stop HPL cleanly, preserve partial output and health logs, terminate MPI/workers, restore approved SMT/governor/power/profile changes, verify hardware/OS health, and do not rerun an invalid or throttled profile without review.",
+        "stop_conditions": "Vendor/profile mismatch, unsupported or untrusted package/script, invalid generated topology, insufficient memory/cooling/power, active workload, numerical residual failure, thermal/power/throttle/error threshold, instability, incomplete run/evidence, or incomparable baseline."
+      }
+    },
+    {
+      "sequence": 12,
+      "source_key": "Performance|4|Wistron-Performance DIMM-00003-V004",
+      "contract": {
+        "test_name": "STREAM Host-Memory Bandwidth Validation",
+        "purpose": "Measure sustainable host-DDR bandwidth with STREAM Copy, Scale, Add, and Triad under a fixed, reproducible profile and compare numerically valid results with an equivalent platform reference.",
+        "applicable_platform_environment": "The identified server CPU/NUMA and DIMM population with approved OS, gcc/OpenMP, power profile, sufficient host memory, isolated workload, and health monitoring. This does not measure GPU HBM.",
+        "target_scope": "The memory scope produced by the approved OpenMP threads, affinity, and NUMA first-touch policy. Describe results as aggregate/socket/node/per-core only when that scope is deliberately configured and evidenced.",
+        "required_inputs": "Approved STREAM source/checksum, compiler version, exact build flags, 9.61-GiB-plus headroom, swap policy, OMP threads/affinity/NUMA profile, external repetition/aggregation rule, comparable reference/tolerance, maintenance approval, and stop/recovery limits.",
+        "test_command_procedure_intent": "Compile the approved `stream.c` with `gcc -fopenmp -mcmodel=large -DSTREAM_TYPE=double -DSTREAM_ARRAY_SIZE=430080000 -DNTIMES=100 stream.c -o stream`; set and record the approved OpenMP/affinity/NUMA environment; run the approved number of complete `./stream` executions; retain full output and health telemetry without changing the profile.",
+        "preconditions": "Verified SUT/DIMM/NUMA identity, source and compiler provenance, enough free RAM with approved swap behavior, idle SUT, preserved logs, stable power/thermal baseline, approved profile/reference, and working abort/OOB path.",
+        "expected_evidence": "Topology and DIMM inventory; source hash; compiler and exact command; array bytes, NTIMES, threads/affinity/NUMA environment; all Copy/Scale/Add/Triad rates and timing columns; Solution Validates result; per-run timestamps; memory/swap/thermal/power/ECC logs; and matched-reference comparison.",
+        "acceptance_reference": "An owner-approved STREAM result for equivalent CPU, DIMM/channel population, firmware, compiler, threads, affinity, NUMA and power settings with an explicit metric, tolerance and aggregation rule. A DIMM data-sheet rate alone is not a sufficient STREAM baseline.",
+        "safety_restrictions": "No log clearing, unverified code, production workload, hidden profile changes, insufficient memory, or swap-driven run. Stop on allocation/validation failure, swapping, ECC/MCE, thermal/power limit, throttling beyond the approved rule, or instability.",
+        "human_approval_requirements": "Approval is required for source/build, runtime profile, maintenance window, high-bandwidth load, thresholds, and acceptance baseline.",
+        "manual_boundaries": "Engineering defines the profile and valid comparison; compilation, execution, monitoring, parsing, and comparison are automatable after approval.",
+        "recovery_requirements": "Terminate STREAM, preserve output, verify memory/swap pressure and telemetry return to baseline, restore temporary affinity/NUMA/power settings, confirm no worker remains, and review faults before rerun.",
+        "stop_conditions": "Profile/reference ambiguity, source/build mismatch, insufficient headroom, active workload, swap/OOM, numerical validation failure, ECC/MCE, thermal/power/throttle breach, instability, incomplete output, or incomparable result scope."
+      }
+    },
+    {
+      "sequence": 13,
+      "source_key": "Performance|15|Wistron-Performance Networking-00030-V004",
+      "contract": {
+        "test_name": "Per-Port InfiniBand RDMA Write Bandwidth Validation",
+        "purpose": "Run a 300-second ib_write_bw workload on each approved ConnectX InfiniBand port and verify bandwidth, authoritative port-counter deltas, and SUT/peer health.",
+        "applicable_platform_environment": "Two compatible RDMA hosts on the approved InfiniBand path with mapped ConnectX ports, matching firmware/driver/perftest capability, healthy link/fabric, isolated capacity, and monitoring/recovery access.",
+        "target_scope": "Every owner-listed physical IB port and its exact peer/path, tested and recorded separately. Ethernet/RoCE netdevs or other HCAs are outside scope unless explicitly mapped to the test.",
+        "required_inputs": "Endpoint/port/GID/LID/MTU mapping, peer address and partition/route, tool versions, symmetric commands, message-size/QP/TX-depth/direction/binding profile, `-D 300` duration confirmation, counter set, per-port reference/tolerance, isolation/window approval, limits, and recovery owners.",
+        "test_command_procedure_intent": "For one mapped port, capture authoritative baselines; start the matching peer server; run the client with identical applicable options, explicit peer and `-D 300` (or version-verified equivalent); capture complete client/server output and telemetry; stop cleanly; collect counter/log deltas; then repeat the full sequence for the next port. Keep `-t` only for an explicitly approved TX depth.",
+        "preconditions": "Verified IB endpoints and physical ports, active link at expected rate/width/MTU, compatible perftest, idle/dedicated path or approved isolation, synchronized clocks, healthy baseline, peer owner approval, exact rate criterion, and tested stop/OOB path.",
+        "expected_evidence": "Per-port identity/path and topology, versions, exact symmetric commands, start/end timestamps proving 300 seconds, full unfiltered throughput/CPU output, message/QP/TX-depth/binding settings, authoritative before/after IB counter deltas, SUT/peer kernel/BMC logs, process cleanup, and comparison result.",
+        "acceptance_reference": "The owner-approved per-port/path bandwidth target for the same link rate/width/MTU, direction, message size, QPs, CPU/NUMA placement and tool version, plus approved zero/tolerance rules for each counter.",
+        "safety_restrictions": "No insecure credential/SSH shortcuts, log/counter clearing, guessed path, production-fabric saturation, mismatched peer options, or continuation after error storms, wrong-port traffic, peer impact, thermal/CPU limit, link flap, or host instability.",
+        "human_approval_requirements": "Approval is required for SUT/peer selection, fabric isolation, server/client profile, per-port traffic window, expected bandwidth/counter rules, abort thresholds, and recovery.",
+        "manual_boundaries": "Owners configure/authorize peer and fabric; after the matrix is fixed, endpoint checks, server/client orchestration, five-minute runs, counters, parsing and comparison are automatable.",
+        "recovery_requirements": "Terminate both perftest processes, preserve partial outputs and counter deltas, remove only approved temporary binding/firewall settings, verify link/fabric and both hosts recover, and escalate unexpected errors before another port or retry.",
+        "stop_conditions": "Endpoint/path mismatch, incompatible options, unavailable peer, unapproved shared traffic, link below expected state, new IB error storm/link flap, wrong-port traffic, bandwidth/process anomaly, peer/SUT instability, thermal/CPU limit, missing duration proof, incomplete output, or unresolved counter mapping."
+      }
+    },
+    {
+      "sequence": 14,
+      "source_key": "Compatibility|76|Wistron-Storage-00059-V004",
+      "contract": {
+        "test_name": "Twelve-Hour M.2 fio Reliability and Performance Validation",
+        "purpose": "Run the approved 12-hour 4-KiB random mixed read/write fio profile on every allowlisted M.2 test target and verify per-drive performance, device health, system stability, and data-boundary compliance.",
+        "applicable_platform_environment": "Dedicated server SUT with owner-approved M.2 devices, stable target mapping, pinned fio, protected evidence/recovery storage, adequate cooling/power, maintenance isolation, and OOB access.",
+        "target_scope": "Only allowlisted stable device/namespace or file targets in the signed matrix. Explicitly exclude boot/OS, user data, RAID members unless intended, mounted production filesystems, evidence destinations, and recovery media.",
+        "required_inputs": "Target/data-loss/backup matrix; fio version/job; exact rw mix, ioengine, direct/cache/flush/verify, clone/file/offset and grouping semantics; 32-job CPU rationale; depth/size/concurrency/schedule; 12-hour window; per-drive reference/80% formula; limits; monitoring; and recovery owners.",
+        "test_command_procedure_intent": "Generate one reviewed job section per stable target preserving `time_based`, `runtime=43200`, `bs=4K`, `rw=randrw`, approved `numjobs=32`, `size=4g`, and `iodepth=32`; add only owner-approved missing semantics. Validate target/range manifest before write, run tracked jobs in the approved simultaneous or sequential schedule, write full JSON and telemetry to a non-target evidence device, and collect per-drive results.",
+        "preconditions": "Two-person verified targets and exclusions, accepted data-loss boundary/backups, healthy devices, pinned fio/profile, no conflicting I/O, sufficient capacity/endurance/cooling/power, preserved logs, protected evidence destination, approved thresholds, and tested stop/OOB/recovery.",
+        "expected_evidence": "Approval matrix; stable IDs/models/firmware/topology; pre/post mounts and health; exact fio job/version; clone/range/footprint manifest; full 43200-second JSON/timestamps; read/write IOPS/BW/latency/errors per drive; health/temperature/endurance and kernel/BMC deltas; process cleanup; data integrity/restore; and auditable 80% comparison.",
+        "acceptance_reference": "Owner-provided per-drive comparable IOPS reference for the exact 4-KiB mix, queue/job concurrency, device count/schedule and system profile, with units, measurement window, aggregation and threshold `actual >= 0.80 × reference`.",
+        "safety_restrictions": "Write only signed targets/ranges. Never clear logs, use unstable device names, include boot/data/evidence media, guess fio defaults, overrun approved endurance/thermal/latency/error limits, auto-repair, auto-reboot, or auto-rerun after a storage fault.",
+        "human_approval_requirements": "Explicit approval is required for every target and data-loss boundary, exact fio job/concurrency, package, 12-hour window, performance reference, abort thresholds and recovery/restore plan.",
+        "manual_boundaries": "Owners identify and approve targets/data policy/reference; after immutable job approval, execution, monitoring, JSON capture, calculations and orderly stop are automatable. Fault recovery and final data-integrity judgment remain manual.",
+        "recovery_requirements": "Stop tracked fio PIDs, preserve partial output and logs, prevent automatic rerun, verify no job remains, collect health/mount/capacity state, execute only the approved restore/cleanup, and quarantine devices on media/filesystem/controller/data-integrity errors.",
+        "stop_conditions": "Target identity or range mismatch, boot/data/evidence overlap, missing backup/recovery, unsafe baseline, active workload, allocation/capacity issue, media/NVMe/SMART/controller/filesystem/kernel error, data corruption, temperature/endurance/power/latency limit, monitoring loss, evidence-device risk, or incomplete job/output."
+      }
+    },
+    {
+      "sequence": 15,
+      "source_key": "Compatibility|251|Wistron-NV GPU-00244-V002",
+      "contract": {
+        "test_name": "NVIDIA GPU PCIe Gen5 Link and Enumeration Validation",
+        "purpose": "Run the qualified NVIDIA FCT for the exact platform and verify every expected GPU enumerates on its mapped path at the approved PCIe generation and width without new platform errors or loss of usability.",
+        "applicable_platform_environment": "The exact NVIDIA GPU server topology, BIOS/BMC/GPU firmware, NVIDIA driver/OS and vendor-qualified NVDiag build/profile on a dedicated idle SUT with OOB recovery.",
+        "target_scope": "All expected GPU UUIDs and PCI BDFs and their mapped upstream ports. Apply Gen5 only to paths the platform recipe defines as PCIe Gen5; do not generalize to C2C or other primary interconnects.",
+        "required_inputs": "Expected topology and Gen/width per path, approved NVDiag build/hash/license and compatibility, exact FCT profile/command/config/targets, side effects, bounded SKU exception, workload window, thresholds, usability checks, and recovery owner.",
+        "test_command_procedure_intent": "Collect a preserved enumeration/link/error baseline, run only the package-documented approved NVDiag FCT profile against the complete target matrix, capture full raw output and exit status, then independently re-collect UUID/BDF and endpoint/upstream link status plus AER/XID/kernel/BMC evidence. Do not substitute an invented command or another diagnostic suite.",
+        "preconditions": "Verified platform recipe and topology, complete expected GPU list, compatible driver/firmware/package, idle/dedicated SUT, reviewed side effects, approved exception policy and stop limits, preserved evidence, and working console/OOB recovery.",
+        "expected_evidence": "Build/hash/profile/config/command; expected and observed UUID/BDF/upstream matrix; pre/post max/current link generation/width; full per-target FCT result and exit status; exact SKU exception application; AER/XID/kernel/BMC deltas; process cleanup; and defined management/GPU workload usability checks.",
+        "acceptance_reference": "The platform qualification recipe for expected GPUs and link generation/width plus the exact NVDiag build's documented result/exception semantics. Public DCGM or nvidia-smi documentation is supplemental, not the proprietary FCT acceptance definition.",
+        "safety_restrictions": "No unreviewed package/profile, active jobs, log clearing, generic exception suppression, reset/retrain action beyond the approved FCT, scope reduction, or automatic reset/reboot. Stop on target mismatch, link loss, GPU reset, AER/XID, management impact or undocumented state change.",
+        "human_approval_requirements": "Explicit approval is required for package/profile, side effects, workload drain, full target matrix, SKU exception, diagnostic window, limits and recovery.",
+        "manual_boundaries": "Owners provide proprietary package semantics and exception policy; after approval, baseline, diagnostic launch, output correlation and post-checks are automatable. Unexpected vendor output and recovery remain engineering decisions.",
+        "recovery_requirements": "Stop the diagnostic, preserve all output, verify no process remains, re-enumerate each GPU/path, use OOB on host/driver impact, and perform reset/reboot/rollback only under separate approved vendor recovery; quarantine unresolved link/AER/XID failures.",
+        "stop_conditions": "Unknown build/profile or side effect, incomplete topology, active job, unapproved exception, endpoint/upstream link mismatch, missing GPU, link retrain/loss, GPU reset, AER/XID/kernel/BMC error, thermal/power issue, management loss, incomplete log, or failed usability/recovery check."
+      }
+    },
+    {
+      "sequence": 16,
+      "source_key": "Compatibility|257|Wistron-NV GPU-00250-V002",
+      "contract": {
+        "test_name": "Generation-Specific 144-Link NVIDIA NVSwitch Fabric Topology Validation",
+        "purpose": "Verify the complete expected 144-edge GPU-to-NVSwitch fabric for the exact platform, including correct endpoint/port mapping and healthy enumeration, then confirm the fabric and SUT remain usable.",
+        "applicable_platform_environment": "One explicitly identified NVIDIA HGX/DGX/ODM baseboard generation and SKU with its qualified driver, GPU/NVSwitch firmware, Fabric Manager or NVLSM stack, approved NVDiag/nvqual build and OOB recovery.",
+        "target_scope": "Every GPU and NVSwitch edge in the owner-approved 144-link manifest. The count and switch-port map are platform-specific; no NVLink bandwidth or application workload is included unless separately specified.",
+        "required_inputs": "Platform/SKU and count definition, stable GPU/switch/link identifiers, full edge manifest, unused/degraded policy, qualified package/profile/command/config and side effects, software/firmware matrix, bounded SKU exception, isolation/window, limits, usability checks, and recovery owner.",
+        "test_command_procedure_intent": "Preserve an independent full-fabric baseline, run only the package-documented approved FCT topology profile, capture complete raw topology/status and exit results, compare every observed stable endpoint/port edge with the signed 144-edge manifest, then re-read fabric/error state and usability. Do not substitute an invented module or a count-only check.",
+        "preconditions": "Verified platform identity and manifest, compatible package/driver/firmware/fabric service, complete stable-ID mapping, idle GPUs, reviewed side effects, preserved evidence, approved exception/thresholds, synchronized timestamps and working OOB recovery.",
+        "expected_evidence": "Package/hash/profile/config; platform/SKU/count definition; expected and observed per-edge map; GPU UUID/BDF/module and NVSwitch/port identities; every link state; complete FCT output/exit status; exact exception; Fabric Manager/NVLSM and XID/NVSwitch/kernel/BMC deltas; cleanup and usability checks.",
+        "acceptance_reference": "The exact platform generation's owner-approved GPU-to-NVSwitch edge manifest and the qualified FCT build's result semantics. The integer 144 is necessary but not sufficient evidence of correct topology.",
+        "safety_restrictions": "No cross-generation manifest, unstable GPU indices, unreviewed package/profile, active jobs, blanket exception, added traffic test, log clearing, autonomous reset/retrain, or continuation after fabric degradation, GPU/NVSwitch reset, XID or management impact.",
+        "human_approval_requirements": "Explicit approval is required for platform manifest, package/profile and effects, job drain, exception policy, diagnostic window, thresholds and recovery.",
+        "manual_boundaries": "Owners provide proprietary harness and generation-specific topology truth; after approval, inventory, FCT launch, per-edge comparison and post-checks are automatable. Unmapped edges, vendor failures and recovery remain engineering decisions.",
+        "recovery_requirements": "Stop the harness, preserve full map and error evidence, verify no traffic/retrain process remains, re-enumerate all devices/links, use OOB on impact, and perform reset/restart/reboot only under the platform recovery procedure; quarantine unresolved fabric faults.",
+        "stop_conditions": "Unknown platform/count definition, incomplete manifest, incompatible package/software, active jobs, identity collision, missing/miswired/down/degraded edge, unexpected unused port, GPU/NVSwitch reset, XID/fabric/kernel/BMC error, management loss, unapproved exception, incomplete output, or failed usability/recovery."
+      }
+    },
+    {
+      "sequence": 17,
+      "source_key": "Stability|68|Wistron-Long Term Stress-00067-V004",
+      "contract": {
+        "test_name": "1000-Cycle / 48-Hour Full-Population AC Power Reliability Campaign",
+        "purpose": "Execute exactly 1000 approved physical AC off/on cycles over 48 hours on the fully populated SUT and verify per-cycle boot, complete device identity, error-free health and final recovery.",
+        "applicable_platform_environment": "Dedicated fully populated server with signed hardware/firmware recipe, qualified programmable PDU or supervised fixture, independent evidence storage, BMC/OOB/KVM, safe electrical capacity, backups and a staffed recovery window.",
+        "target_scope": "The entire SUT and its actual AC input path, including every expected CPU, DIMM, storage device, GPU and NIC identity. An OS reboot, BMC reset or DC cycle is not an AC-cycle substitute.",
+        "required_inputs": "Stable full-device manifest; PDU/fixture/wiring/outlet/interlock qualification; off/on/discharge/boot/health timing; retry and failed-cycle accounting; 1000/48-hour schedule; allowed events; data/backups; maintenance approval; independent logging; abort limits; OOB/physical recovery and responsible operators.",
+        "test_command_procedure_intent": "After operator fixture sign-off and an immutable state-machine review, perform AC OFF, confirm actual loss, wait the approved off dwell, restore AC, confirm power/POST/BMC/OS milestones, run the complete identity and health validator, store evidence outside the SUT, and increment the completed-cycle counter only when the owner-defined state succeeds. Repeat through completed cycle 1000 within the approved 48-hour campaign.",
+        "preconditions": "Full population matches recipe, SUT is dedicated and backed up, fixture load/interlocks/emergency stop pass, logs are preserved, stable device baseline and allowable events are signed, clocks synchronized, evidence path/OOB/physical recovery tested, and campaign explicitly approved.",
+        "expected_evidence": "Fixture and approval records; immutable schedule/profile; cycle 1-1000 state transitions and timestamps; off/on confirmation; boot/POST/OOB/OS outcomes; stable identity diff for every device class; complete incremental BMC/SEL/kernel/OS error evidence; retry/failure ledger; health/data checks; final inventory and restored nominal state.",
+        "acceptance_reference": "The signed platform population and reliability plan defining 1000 completed AC cycles within 48 hours, timing, allowable events, boot/health timeouts, device identities, failed-cycle policy, data-integrity checks and final recovery.",
+        "safety_restrictions": "No unqualified wiring/PDU, unattended unbounded toggling, production workload, log clearing, evidence stored only on the SUT, guessed timing/retry, auto-bypass after fault, or automatic repair/reboot outside the state machine. Emergency stop must remain independent.",
+        "human_approval_requirements": "Explicit electrical/lab, reliability, service/data and recovery approval is required before arming; a qualified operator installs/inspects the fixture and remains available under the approved coverage plan.",
+        "manual_boundaries": "Fixture wiring/interlock sign-off and physical recovery are manual. Once approved, PDU control, state monitoring, per-cycle health checks, inventory diffs and evidence accounting can be automated by the validated harness.",
+        "recovery_requirements": "On fault, de-arm/stop the fixture safely, preserve the current state and all cycle evidence, use OOB then physical recovery as approved, verify electrical safety/data/device health, restore nominal power/configuration and do not resume or adjust counts without owner disposition.",
+        "stop_conditions": "Unsafe load/wiring/fixture/interlock, wrong outlet/SUT, lost evidence or time sync, failed AC-state confirmation, boot/POST/OS timeout, hang/BSOD, missing/replaced device identity, new prohibited BMC/kernel/storage/GPU/network error, data-integrity fault, thermal/power issue, management loss, failed emergency stop, or schedule/count inconsistency."
+      }
+    },
+    {
+      "sequence": 18,
+      "source_key": "Stability|9|Wistron-Margin-00008-V002",
+      "contract": {
+        "test_name": "12-Hour GPU Burn at 40 °C and +5% 5 V/3.3 V Rail Margin",
+        "purpose": "Run the approved GPU burn on every target GPU for the resolved full duration while maintaining verified 40 °C ambient and +5% margins on the 5 V and 3.3 V DC rails, then verify GPU/platform health and nominal restoration.",
+        "applicable_platform_environment": "The exact GPU server with approved GPU topology, calibrated thermal chamber, platform-qualified DC rail-margin fixture and measurement points, verified burn tool, independent telemetry, emergency stop and OOB recovery.",
+        "target_scope": "All owner-listed GPU UUIDs/BDFs and the server power/thermal path affected by the 40 °C and 5 V/3.3 V +5% conditions. Do not margin AC input or unspecified rails by inference.",
+        "required_inputs": "Resolved 720-versus-240-minute duration; chamber tolerance/soak/ramp/airflow; rail control and measurement SOP/tolerances; instrument calibration; tool/version/profile/PASS meaning; GPU targets; sensor/ECC/XID/thermal/power limits; maintenance approval; evidence, emergency stop and recovery owners.",
+        "test_command_procedure_intent": "The operator establishes and independently verifies the approved chamber and DC rail conditions. After soak and sign-off, the harness starts the approved burn profile on all target GPUs for the authoritative duration, records full tool output and synchronized chamber/rail/per-GPU/platform telemetry, aborts on limits, and only after workload stop allows the operator to restore nominal rails and chamber in the approved order.",
+        "preconditions": "Duration conflict resolved, calibrated equipment and signed fixture SOP, stable target inventory, approved package/profile/limits, idle dedicated SUT, preserved baselines, continuous independent monitoring/evidence, tested watchdog/emergency stop/OOB recovery and explicit electrical/thermal/GPU approval.",
+        "expected_evidence": "Signed duration/profile; calibration and fixture IDs; chamber actual trace and soak; 5 V/3.3 V nominal and +5% measured traces; complete per-GPU target/tool output over the full run; sensor/power/clock/ECC/XID and host/BMC logs; stop events; nominal restoration measurements; and post-run GPU/SUT health.",
+        "acceptance_reference": "The platform margin specification for chamber and DC rail conditions plus the qualified GPU burn profile's per-GPU completion rules and engineer-approved sensor/error thresholds. A tool PASS string alone is insufficient.",
+        "safety_restrictions": "Only qualified operators change physical conditions. No AC/DC confusion, guessed margin point, uncalibrated sensor, unverified tool, production workload, log clearing, hidden GPU omission, automatic limit override, or unattended run without independent shutdown and OOB recovery.",
+        "human_approval_requirements": "Explicit margin/electrical/lab, thermal, GPU, service and recovery approval is required before setting conditions or starting stress; qualified operator supervision must follow the lab coverage plan.",
+        "manual_boundaries": "Chamber/rail setup, independent measurement sign-off, emergency physical action and restoration are manual. After approval, GPU workload control, target completeness, telemetry, error detection and evidence capture can be automated.",
+        "recovery_requirements": "Abort burn first, preserve all evidence, restore rails and chamber through the qualified sequence, verify measured nominal values, use OOB/vendor recovery for GPU/driver/host faults, recheck every GPU and quarantine the SUT on persistent electrical/thermal/ECC/XID damage.",
+        "stop_conditions": "Unresolved duration, uncalibrated or drifting condition, rail/chamber outside tolerance, wrong control point, incomplete GPU target, telemetry/watchdog/evidence loss, thermal/power/clock limit, ECC/XID/driver/kernel/BMC fault, GPU/SUT hang, management loss, tool anomaly, or failed nominal restoration."
+      }
+    },
+    {
+      "sequence": 19,
+      "source_key": "(No Main Function)|3|Wistron---00356-V002",
+      "contract": {
+        "test_name": "PCIe LTSSM or Link-Margin Validation — Owner Clarification Required",
+        "purpose": "BLOCKED: determine whether the testcase is an LTSSM state-transition validation, a PCIe lane-margin measurement, or a specifically named Intel SSV combined flow before defining any execution contract.",
+        "applicable_platform_environment": "Unknown Intel server platform and PCIe path; exact CPU/PCH/root complex, board/BIOS, endpoint, switch/retimer, generation/width, tool and manual applicability must be supplied.",
+        "target_scope": "No mutable target is authorized. Read-only inventory may cover candidate PCIe paths solely to support owner clarification.",
+        "required_inputs": "Selected technical intent; Intel manual title/revision/section; exact platform/link topology; qualified tool/fixture/version/license; stimuli/sweep/capture and 720-minute semantics; measurable state or margin limits; logs; side effects; approval; restoration and recovery.",
+        "test_command_procedure_intent": "Do not generate a test command. After clarification, transcribe and review the matching owner-approved flow without substituting a different public Intel tool or treating LTSSM state observation as lane-margin measurement.",
+        "preconditions": "Purpose and acceptance are unambiguous, source conflict is resolved, manual/tool/platform compatibility is verified, affected devices are idle and recoverable, baselines preserved, side effects and abort limits known, and change approval/OOB recovery available.",
+        "expected_evidence": "Owner clarification and reference provenance; exact target map; tool/config/command; raw LTSSM sequence or voltage/time margin data as applicable; numeric/state comparison; PCIe/AER/kernel/BMC/device deltas; timing; restoration and final device/link health.",
+        "acceptance_reference": "The exact owner-selected Intel SSV manual section and platform specification. No generic `follow specification` or public tool example is sufficient.",
+        "safety_restrictions": "Read-only inventory only while blocked. No link retrain, margin sweep, compliance state, register write, speed/width change, reset, unreviewed tool or inferred threshold.",
+        "human_approval_requirements": "Owner clarification and explicit approval are mandatory before any state-changing action; qualified PCIe/lab personnel must approve fixture, target and recovery.",
+        "manual_boundaries": "Unknown until the actual procedure is supplied. Do not assume that missing tooling makes the final flow manual or automated.",
+        "recovery_requirements": "No recovery action is authorized while blocked. The clarified flow must include restoration of link/device state, preserved evidence, OOB access and device/host recovery before execution classification is revisited.",
+        "stop_conditions": "Any unresolved purpose/target/criterion, missing manual applicability, tool mismatch, uncertain side effect, active workload, absent OOB recovery, or attempt to substitute a different LTSSM/margin method."
+      }
+    },
+    {
+      "sequence": 20,
+      "source_key": "(No Main Function)|7|Wistron---00842-V003",
+      "contract": {
+        "test_name": "BMC WebUI Firmware Downgrade with Configuration Preservation",
+        "purpose": "Downgrade the identified BMC through its approved WebUI using the exact compatible older `.ima` image and Preserve all Configuration, then verify the target version, preserved settings and full management/host health.",
+        "applicable_platform_environment": "The exact server board/BMC hardware and current firmware with owner-approved WebUI downgrade support, stable protected power, secure management access, maintenance isolation, configuration backup and independent physical/OOB recovery.",
+        "target_scope": "Only the positively identified BMC and designated source-to-target version transition. Do not apply the image to another SKU/revision or substitute BIOS/device firmware.",
+        "required_inputs": "Source/target versions, board/BMC identity, signed/hashed compatible `.ima`, release/downgrade policy, preserve-all semantics, backup/restore, WebUI procedure, protected credentials/TLS, expected outage/timeouts, host impact/window, rollback/recovery image and responsible operators.",
+        "test_command_procedure_intent": "Preserve a before-state and backup; in the verified BMC WebUI navigate to Operations > Firmware Update, select only the approved image, verify displayed metadata, choose Preserve all Configuration, pause for final human confirmation, start/proceed/confirm once, monitor the task without interruption through BMC restart/reconnect, and collect complete post-version/configuration/interface/host evidence.",
+        "preconditions": "Exact target and image two-person verified, downgrade explicitly supported, configuration exported, rollback/recovery proven, stable power and evidence path, host impact understood, protected authentication/TLS, maintenance window and final flash approval active.",
+        "expected_evidence": "Approval and target/image manifest; image hash/signature/provenance; current and target versions; configuration backup; redacted WebUI steps showing Preserve all; task/progress/result and timestamps; expected outage/reconnect; post-version and configuration diff; Redfish/WebUI/IPMI/host/SEL health; and rollback readiness.",
+        "acceptance_reference": "The platform/BMC firmware owner's approved downgrade matrix and image release documentation for the exact board, plus the source WebUI preserve-all procedure and target version/configuration requirements.",
+        "safety_restrictions": "Never guess or substitute an image/target/path, expose credentials, interrupt valid flash/restart, clear logs, lose stable power, automate retries, power-cycle on timeout without the recovery SOP, or declare success from version text alone.",
+        "human_approval_requirements": "Explicit final approval is required after target/image/backup/recovery verification and immediately before the WebUI flash confirmation; qualified personnel must be available for recovery.",
+        "manual_boundaries": "Owners choose/approve image, compatibility, preserve policy and final irreversible confirmation. With that gate, browser interaction, task monitoring, reconnect and evidence collection can be automated if the WebUI is qualified; recovery remains manual.",
+        "recovery_requirements": "Do not interrupt a progressing task. On documented failure/timeout, preserve all task/evidence, follow only the board-specific recovery/rollback procedure using independent access and approved image, restore/compare configuration, verify BMC/host health and quarantine unresolved management loss.",
+        "stop_conditions": "Identity/image/hash/signature mismatch, unsupported downgrade, missing backup/rollback, unexpected WebUI option, preserve-policy ambiguity, unstable power, authentication/TLS anomaly, task validation/error state, unexpected host impact, management loss beyond the approved timeout, incomplete evidence or unavailable recovery personnel."
+      }
+    }
+  ]
+}

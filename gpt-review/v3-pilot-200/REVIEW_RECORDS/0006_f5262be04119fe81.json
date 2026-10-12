@@ -53,7 +53,7 @@
   "resolved_blockers": [],
   "remaining_blockers": ["Execution waits for worker/topology intent, thresholds, package, maintenance, and recovery approval."],
   "objective_improvement_over_v2": "V3 validates the preserved command semantics against the current upstream manual and adds explicit readiness and false-completion rules. It does not alter V2's correct classification, eight-hour duration, 225-worker scope, or safety gates.",
-  "agent_understanding_result": {"status": "PENDING_INDEPENDENT_VALIDATION", "notes": null},
+  "agent_understanding_result": {"status": "VALIDATED_CLEAR", "validation_scope": "ISOLATED_SAME_MODEL_FAMILY", "validator_id": "agent_a", "validated_at": "2026-10-13T03:11:08+08:00", "notes": "The validator preserved exactly 225 CPU workers and eight hours, kept the CPU target distinct from GPU or memory stress, and required continuous platform-health plus recovery evidence."},
   "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"},
   "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The source command is stress-ng --cpu 225 -t 8h.", "source_specific_v2_comparison": "V2 correctly rejected DeepSeek's --cpu 0 --timeout 600s substitution.", "source_specific_safety_evidence_decision": "Preserve logs, confirm worker oversubscription and thresholds, and require full eight-hour health evidence before completion.", "template_violation_detected": false}
 }

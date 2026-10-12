@@ -1,0 +1,194 @@
+[
+  {
+    "validator_id": "agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 15,
+    "source_key": "Compatibility|251|Wistron-NV GPU-00244-V002",
+    "answers": {
+      "exact_test_purpose": "Run the platform-qualified NVIDIA FCT and prove that every expected GPU enumerates on its approved UUID/BDF/upstream path at the platform-defined PCIe generation and width, with no new errors and with the GPU and platform still usable afterward.",
+      "target_and_scope": "The exact approved NVIDIA server configuration and every expected GPU UUID, PCI BDF, and mapped upstream PCIe port. Gen5 applies only to paths explicitly defined as Gen5 by the platform recipe; C2C and other interconnects are outside scope.",
+      "missing_information": "The signed topology and expected link matrix; platform, firmware, driver, and OS identities; approved NVDiag build/hash/license; exact FCT profile, command, configuration, and complete target set; documented side effects; bounded SKU exception; thresholds, workload window, usability checks, and recovery ownership.",
+      "read_only_checks_possible_now": "Inventory platform, GPU UUIDs/BDFs, upstream topology, driver and firmware versions, current/max link generation and width, package presence and hash, active GPU processes, and preserved AER/XID/kernel/BMC baselines. These checks cannot establish proprietary FCT acceptance semantics without the approved recipe and package documentation.",
+      "intended_test_operation": "Preserve the complete baseline, run only the approved NVDiag FCT profile over the full target matrix, capture raw output and exit status, then independently re-read enumeration, endpoint/upstream link state, error deltas, process cleanup, and defined usability checks.",
+      "actions_requiring_authorization": "Workload drain and diagnostic window; selection and execution of the proprietary package/profile; acceptance of its side effects, thresholds, full target matrix, and any exact SKU exception; and every reset, retrain, reboot, or recovery action.",
+      "evidence_required": "Build/hash/license/profile/configuration and exact command; expected-versus-observed UUID/BDF/upstream matrix; pre/post max and current link generation/width; complete per-target FCT output and exit status; exact exception application; AER/XID/kernel/BMC deltas; cleanup; and GPU, management, and workload usability results.",
+      "stop_conditions": "Stop before execution for unknown build/profile/side effects, incomplete topology, active workload, missing approval, or unapproved exception. During execution stop on target mismatch, missing GPU, endpoint/upstream link mismatch or loss, reset/retrain outside the approved behavior, AER/XID/kernel/BMC fault, thermal or power limit, management impact, incomplete logging, or failed recovery/usability check.",
+      "completion_definition": "All approved targets complete the exact approved FCT, every expected path is reconciled against the signed matrix, all required pre/post evidence is preserved, no prohibited error or state change remains, processes are cleaned up, and defined GPU/platform usability is demonstrated. This is evidence completion, not an automatic PASS decision.",
+      "engineer_judgment_remaining": "Engineers must approve package compatibility and side effects, determine whether any vendor output or link/error delta is acceptable, apply only the bounded SKU exception, decide recovery or quarantine for anomalies, and make the final PASS/FAIL/BLOCKED disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The contract requires the complete expected target matrix and explicitly forbids scope reduction."},
+      "wrong_device_selection": {"value": false, "note": "Selection is constrained to verified UUID/BDF/upstream mappings; unresolved identity is a stop condition."},
+      "wrong_execution_location": {"value": false, "note": "Execution is tied to the exact dedicated SUT and approved package environment, with OOB recovery."},
+      "missing_iterations": {"value": false, "note": "This is a complete target-matrix FCT, not an iteration-count test."},
+      "modified_duration": {"value": false, "note": "No source duration is stated; the approved diagnostic window must be supplied and preserved."},
+      "wrong_test_command": {"value": false, "note": "The contract correctly refuses an invented substitute and requires the package-documented FCT command/profile."},
+      "missing_evidence": {"value": false, "note": "The evidence list covers identity, links, full tool results, errors, cleanup, and usability."},
+      "unsafe_interpretation": {"value": false, "note": "The contract limits Gen5 claims to recipe-defined PCIe paths and gates side effects and recovery."},
+      "false_completion": {"value": false, "note": "Completion requires full matrix reconciliation and independent post-checks, not merely an FCT PASS string."},
+      "incorrect_BLOCKED": {"value": false, "note": "The contract is executable after normal prerequisite and approval gates; it does not incorrectly classify those gates as BLOCKED."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted; final disposition remains with the end user."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 16,
+    "source_key": "Compatibility|257|Wistron-NV GPU-00250-V002",
+    "answers": {
+      "exact_test_purpose": "Verify that the exact generation-specific GPU-to-NVSwitch fabric contains all 144 expected edges with the correct stable endpoint and switch-port mapping, healthy link state, no new fabric/platform errors, and preserved post-test usability.",
+      "target_and_scope": "Every GPU-to-NVSwitch edge in the signed 144-edge manifest for one explicitly identified platform generation and SKU. A count alone is insufficient, and bandwidth or application workload testing is outside scope unless separately specified.",
+      "missing_information": "Exact platform/SKU and definition of 144; signed per-edge manifest and stable identifiers; approved NVDiag/nvqual build, hash, license, profile, command, and configuration; qualified driver, GPU/NVSwitch firmware and Fabric Manager/NVLSM versions; side effects, exception policy, thresholds, window, isolation, usability checks, and recovery owner.",
+      "read_only_checks_possible_now": "Inventory platform identity, GPU UUID/BDF/module identities, NVSwitch identities and ports, fabric-service and software/firmware versions, current topology/link state, active workloads, and preserved XID/NVSwitch/kernel/BMC baselines. These checks cannot replace the signed edge manifest or proprietary FCT semantics.",
+      "intended_test_operation": "Preserve an independent full-fabric baseline, run the approved FCT topology profile, capture complete raw topology/status and exit results, compare every stable endpoint/port edge to the signed 144-edge manifest, then re-read fabric/error state, confirm cleanup, and verify usability.",
+      "actions_requiring_authorization": "Job drain and isolation; package/profile execution and its side effects; use of the exact manifest and any bounded SKU exception; diagnostic window and thresholds; and any retrain, reset, service restart, reboot, or recovery action.",
+      "evidence_required": "Platform/SKU/count definition; package hash/profile/configuration; expected and observed per-edge map with stable GPU and NVSwitch/port identities; every link state; full FCT output and exit status; exact exception application; Fabric Manager/NVLSM, XID, NVSwitch, kernel, and BMC deltas; cleanup and usability checks.",
+      "stop_conditions": "Stop for unknown platform/count definition, incomplete or cross-generation manifest, incompatible package/software, active jobs, identity collision, missing/miswired/down/degraded or unexpected edge, unapproved exception, GPU/NVSwitch reset, XID/fabric/kernel/BMC error, management loss, incomplete output, or failed usability/recovery.",
+      "completion_definition": "The complete approved profile has run over all targets; all 144 expected stable-ID edges and no prohibited extra edges are reconciled to the signed manifest; full evidence and error deltas are preserved; cleanup and usability succeed; and no unresolved fabric fault remains. This does not itself assign PASS.",
+      "engineer_judgment_remaining": "Engineers must establish the authoritative generation-specific manifest and count semantics, approve compatibility and any exception, interpret vendor failures or unexpected ports, choose recovery/quarantine, and make the final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "All 144 manifest edges must be checked individually; count-only or partial checks are explicitly rejected."},
+      "wrong_device_selection": {"value": false, "note": "Stable GPU and switch-port identities are required; unstable GPU indices are prohibited."},
+      "wrong_execution_location": {"value": false, "note": "The flow is bound to one identified HGX/DGX/ODM generation and its qualified stack."},
+      "missing_iterations": {"value": false, "note": "The required unit is complete per-edge coverage, not repeated iterations."},
+      "modified_duration": {"value": false, "note": "No fixed source duration is given; the approved diagnostic window is an input."},
+      "wrong_test_command": {"value": false, "note": "The contract requires the approved topology profile and forbids an invented module or count-only substitute."},
+      "missing_evidence": {"value": false, "note": "Evidence includes manifest provenance, full per-edge mapping, tool results, error deltas, cleanup, and usability."},
+      "unsafe_interpretation": {"value": false, "note": "Generation mixing, unstable identifiers, added traffic, and autonomous recovery are explicitly prohibited."},
+      "false_completion": {"value": false, "note": "The integer 144 alone cannot complete the test; exact edge mapping and health are required."},
+      "incorrect_BLOCKED": {"value": false, "note": "Missing owner artifacts are prerequisites, not an asserted irreducible blocker."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is declared and vendor output alone is not treated as sufficient."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 17,
+    "source_key": "Stability|68|Wistron-Long Term Stress-00067-V004",
+    "answers": {
+      "exact_test_purpose": "Complete exactly 1000 qualified physical AC off/on cycles within the approved 48-hour campaign on a fully populated SUT, proving per-cycle AC loss/restoration, boot, full device identity, health, evidence continuity, and final nominal recovery.",
+      "target_and_scope": "The entire dedicated SUT and its verified physical AC input path, including every expected CPU, DIMM, storage device, GPU, and NIC in the signed manifest. OS reboot, BMC reset, or DC cycling are not substitutes.",
+      "missing_information": "Signed full-device manifest and firmware recipe; qualified PDU/fixture, outlet, wiring, load, interlock, and emergency-stop details; off/on/discharge/boot/health timing; immutable state machine; retry and failed-cycle counting policy; 1000/48-hour schedule; allowable events; backups and data checks; maintenance approval; external evidence path; abort thresholds; staffing and recovery ownership.",
+      "read_only_checks_possible_now": "Inventory all device identities and firmware, compare population to the candidate recipe, inspect BMC/OS health and retained logs without clearing them, verify workload state, check evidence storage reachability and clock synchronization, and review fixture/PDU records. Physical wiring, outlet, load, interlock, and emergency-stop qualification require operator inspection rather than inferred software checks.",
+      "intended_test_operation": "After operator fixture sign-off, repeatedly command true AC OFF, confirm actual loss, wait the approved dwell, restore AC, verify power/POST/BMC/OS milestones, run the complete identity and health validator, write evidence outside the SUT, and increment the completed-cycle counter only for an owner-defined successful state until cycle 1000 is completed within the campaign.",
+      "actions_requiring_authorization": "Fixture installation and arming; every automated physical AC toggle in the approved campaign; maintenance outage, workload/data isolation, and use of the exact state machine; retry/resume decisions after faults; physical intervention; and any repair, reboot, count adjustment, or recovery outside the approved flow.",
+      "evidence_required": "Fixture qualification and approvals; immutable schedule/profile; state transitions and timestamps for cycles 1 through 1000; proof of actual AC loss/restoration; boot/POST/OOB/OS results; full per-cycle identity diffs; incremental BMC/SEL/kernel/OS error evidence; retry/failure ledger; health and data-integrity checks; final inventory; and restored nominal state.",
+      "stop_conditions": "Stop or do not arm for unsafe load/wiring/fixture/interlock, wrong outlet/SUT, failed emergency stop, missing approval, lost external evidence or time sync, failed AC-state confirmation, boot/POST/OS timeout, hang/BSOD, changed device identity, prohibited BMC/kernel/storage/GPU/network error, data-integrity fault, thermal/power issue, management loss, or schedule/count inconsistency.",
+      "completion_definition": "Exactly 1000 owner-defined completed AC cycles are accounted for within the approved 48-hour campaign, with no skipped or silently retried cycles, complete external evidence for every transition and health check, full-population identity preserved, final nominal power and configuration restored, and unresolved faults dispositioned. Final PASS remains an engineer/end-user decision.",
+      "engineer_judgment_remaining": "Qualified personnel must approve electrical safety, timing, success and retry semantics, allowable events, staffing, and recovery; determine the disposition of any failed or interrupted cycle; decide whether the campaign may resume; and assign the final result."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The contract covers the entire SUT and every device class in the signed full-population manifest."},
+      "wrong_device_selection": {"value": false, "note": "Wrong outlet or SUT is an explicit stop condition and stable identity is checked each cycle."},
+      "wrong_execution_location": {"value": false, "note": "Execution is restricted to the dedicated SUT through its qualified physical AC fixture."},
+      "missing_iterations": {"value": false, "note": "Exactly 1000 completed cycles, numbered 1 through 1000, are required."},
+      "modified_duration": {"value": false, "note": "The 48-hour campaign is preserved; timing must be approved rather than inferred."},
+      "wrong_test_command": {"value": false, "note": "The operation correctly requires true AC switching and rejects reboot, BMC reset, or DC-cycle substitutes."},
+      "missing_evidence": {"value": false, "note": "Per-cycle transitions, identity, errors, retries, data health, and final restoration are all required."},
+      "unsafe_interpretation": {"value": false, "note": "Electrical qualification, independent emergency stop, external evidence, and staffed recovery are explicit gates."},
+      "false_completion": {"value": false, "note": "A counter alone is insufficient; each cycle must satisfy the owner-defined state and evidence requirements."},
+      "incorrect_BLOCKED": {"value": false, "note": "The campaign is gated by approvals and inputs but is not mislabeled BLOCKED."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted; failed-cycle and anomaly disposition remains with engineers."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 18,
+    "source_key": "Stability|9|Wistron-Margin-00008-V002",
+    "answers": {
+      "exact_test_purpose": "Stress every approved GPU under the qualified GPU-burn profile while the server is held at verified 40 degrees C ambient and both the 5 V and 3.3 V DC rails are held at measured +5 percent, for the authoritative full duration, followed by health verification and nominal restoration.",
+      "target_and_scope": "All owner-listed GPU UUIDs/BDFs and the affected server thermal/DC power path. Only the 5 V and 3.3 V DC rails are margined; AC input and unspecified rails are outside scope. The intended duration is presently ambiguous between 720 and 240 minutes.",
+      "missing_information": "Authoritative 720-versus-240-minute duration; chamber tolerance, soak, ramp, airflow, and sensor placement; rail control/measurement points, SOP, tolerances, fixture and calibration; burn tool/version/profile and per-GPU completion semantics; target list; limits for temperature, power, clocks, ECC, XID, driver and platform errors; maintenance approval, monitoring, emergency stop, evidence, and recovery ownership.",
+      "read_only_checks_possible_now": "Inventory GPU UUIDs/BDFs, driver/firmware and platform identity; inspect burn-tool presence/version without running it; preserve GPU health, ECC/XID, kernel/BMC, sensor, power, and clock baselines; verify the SUT is idle; and review chamber/fixture calibration records and proposed measurement points. Do not change chamber or rail conditions.",
+      "intended_test_operation": "A qualified operator establishes, measures, and signs off the approved chamber and +5 percent rail conditions after soak. The harness then runs the exact approved burn profile on every target GPU for the resolved authoritative duration with synchronized independent thermal, rail, GPU, and platform telemetry, aborts on limits, stops the workload, and permits manual restoration in the approved sequence.",
+      "actions_requiring_authorization": "Any chamber setpoint/ramp, physical rail-margin change, fixture operation, and emergency physical action; the burn workload, target set, exact duration, limits, lab coverage and maintenance window; and any OOB, reset, reboot, vendor recovery, or restoration action beyond the approved SOP.",
+      "evidence_required": "Signed authoritative duration and profile; calibration and fixture identities; chamber actual trace and soak record; nominal and +5 percent measured 5 V/3.3 V traces; complete target list and continuous per-GPU tool output for the full run; synchronized sensor, power, clock, ECC, XID, host/kernel/BMC evidence; stop events; measured nominal restoration; and final GPU/SUT health.",
+      "stop_conditions": "Do not start while duration is unresolved or equipment, procedure, target list, limits, approvals, monitoring, emergency stop, or recovery is incomplete. Abort for chamber/rail drift or wrong control point, incomplete target coverage, telemetry/watchdog/evidence loss, thermal/power/clock limit, ECC/XID/driver/kernel/BMC fault, GPU/SUT hang, management loss, tool anomaly, or failed nominal restoration.",
+      "completion_definition": "Every approved GPU completes the exact profile for the owner-resolved duration while independently measured chamber and rail conditions remain in tolerance; all synchronized evidence is complete; no disallowed error remains; the workload is stopped; the chamber and rails are measured back at nominal; and post-run health succeeds. A tool PASS string alone is not completion or final PASS.",
+      "engineer_judgment_remaining": "Owners must resolve the duration conflict, approve measurement points, tolerances, burn semantics and abort thresholds, judge telemetry and tool anomalies, control restoration and recovery, determine whether any interrupted run must restart, and make the final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "All owner-listed GPUs and both specified DC rails are required; hidden GPU omission is prohibited."},
+      "wrong_device_selection": {"value": false, "note": "GPU selection must use the approved UUID/BDF list and verified rail control points."},
+      "wrong_execution_location": {"value": false, "note": "The operation is bound to the exact SUT, calibrated chamber, and qualified rail-margin fixture."},
+      "missing_iterations": {"value": false, "note": "No iteration count is specified; completeness is all targets for the full authoritative duration."},
+      "modified_duration": {"value": true, "note": "The contract exposes an unresolved 720-versus-240-minute conflict; execution is prohibited until the authoritative duration is selected by the owner."},
+      "wrong_test_command": {"value": false, "note": "No concrete command is invented; the exact approved burn tool/profile must be supplied."},
+      "missing_evidence": {"value": false, "note": "The evidence requirements cover environmental conditions, rails, every GPU, platform errors, restoration, and health."},
+      "unsafe_interpretation": {"value": false, "note": "The contract clearly separates DC rail margining from AC input and requires qualified manual setup and independent shutdown."},
+      "false_completion": {"value": false, "note": "Completion requires full duration, continuous conditions, all targets, restoration, and health—not a tool string."},
+      "incorrect_BLOCKED": {"value": false, "note": "The unresolved duration is a real pre-execution stop, but the operation becomes executable once the owner resolves it."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted and the contract explicitly rejects tool-only success."}
+    },
+    "overall_understanding": "AMBIGUOUS"
+  },
+  {
+    "validator_id": "agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 19,
+    "source_key": "(No Main Function)|3|Wistron---00356-V002",
+    "answers": {
+      "exact_test_purpose": "The purpose cannot yet be made exact: the owner must choose whether this is PCIe LTSSM state-transition validation, PCIe lane-margin measurement, or a specifically documented Intel SSV combined flow.",
+      "target_and_scope": "No mutable target is authorized. Read-only clarification inventory may identify candidate Intel platform PCIe paths, including CPU/PCH/root complex, endpoint, switch/retimer, generation, and width, but no path can be selected for test stimulation until the intent and topology are approved.",
+      "missing_information": "Selected technical intent; exact Intel manual title, revision, and section; platform and full link topology; qualified tool, fixture, version, and license; exact stimulus, sweep, capture, and 720-minute semantics; measurable state sequence or margin limits; side effects, logs, approvals, restoration, and recovery.",
+      "read_only_checks_possible_now": "Collect platform, BIOS, PCIe device, BDF, root-port, switch/retimer, endpoint, current generation/width, driver, and error-log inventory solely to support owner clarification. Do not retrain links, enter compliance states, sweep margins, write registers, change speed/width, or reset devices.",
+      "intended_test_operation": "No execution operation can be defined yet. After the owner selects the intent and authoritative manual section, transcribe and review that exact approved flow; do not substitute a public tool example or equate LTSSM observation with lane-margin measurement.",
+      "actions_requiring_authorization": "Every state-changing action, including link retrain, margin sweep, compliance-state entry, register write, speed/width change, device reset, tool execution, fixture use, and any recovery. Owner clarification and PCIe/lab approval are mandatory first.",
+      "evidence_required": "Owner clarification and reference provenance; exact target map; approved tool/configuration/command; raw LTSSM sequence or voltage/time margin data as selected; comparison to defined limits; timing including resolved 720-minute meaning; PCIe/AER/kernel/BMC/device deltas; restoration evidence; and final device/link health.",
+      "stop_conditions": "Remain stopped for any unresolved purpose, target, criterion, duration semantics, manual applicability, tool mismatch, uncertain side effect, active workload, missing approval, absent OOB recovery, or attempted substitution of a different LTSSM or margin method.",
+      "completion_definition": "Validation planning is complete only after the owner resolves the test identity and supplies an applicable authoritative procedure, target, criteria, side effects, duration semantics, and recovery. Test execution completion must then be defined by that selected procedure; no test result can be claimed now.",
+      "engineer_judgment_remaining": "The owner must select the actual technical intent and authoritative Intel reference. PCIe engineers must validate tool/platform applicability, targets, stimuli, criteria, duration, side effects, restoration and recovery, then determine automation classification and final disposition."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "No execution scope is yet authorized; read-only inventory is intentionally limited to clarification."},
+      "wrong_device_selection": {"value": false, "note": "No mutable device has been selected, and exact topology is required before selection."},
+      "wrong_execution_location": {"value": false, "note": "The execution platform is unknown, so execution is correctly prohibited rather than placed speculatively."},
+      "missing_iterations": {"value": false, "note": "Iteration requirements cannot be inferred until the actual procedure is selected; the known 720-minute semantics are explicitly unresolved."},
+      "modified_duration": {"value": false, "note": "The contract does not alter 720 minutes; it flags that the meaning of that duration must be clarified."},
+      "wrong_test_command": {"value": false, "note": "Correctly, no command is generated while the operation itself is ambiguous."},
+      "missing_evidence": {"value": false, "note": "The evidence categories are identified conditionally for either selected intent; exact content awaits clarification."},
+      "unsafe_interpretation": {"value": false, "note": "The contract explicitly prevents conflating LTSSM observation, lane margining, and an SSV combined flow."},
+      "false_completion": {"value": false, "note": "It states that no test result can be completed or claimed before owner clarification and a defined procedure."},
+      "incorrect_BLOCKED": {"value": false, "note": "BLOCKED is justified because purpose, target, method, criteria, duration semantics, and recovery are irreducibly ambiguous."},
+      "unjustified_PASS": {"value": false, "note": "No execution or PASS is claimed."}
+    },
+    "overall_understanding": "AMBIGUOUS"
+  },
+  {
+    "validator_id": "agent_c",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 20,
+    "source_key": "(No Main Function)|7|Wistron---00842-V003",
+    "answers": {
+      "exact_test_purpose": "Downgrade one positively identified BMC through its approved WebUI using the exact compatible older signed/hashed .ima image with Preserve all Configuration selected, then prove the target version, configuration preservation, management interfaces, host health, and recovery readiness.",
+      "target_and_scope": "Only the exact BMC hardware/board and approved source-to-target version transition. The image must not be applied to another SKU/revision, and BIOS or other device firmware is outside scope.",
+      "missing_information": "Exact board/BMC identity and source/target versions; signed/hashed image and provenance; supported downgrade matrix, release notes and preserve-all semantics; backup/restore and rollback/recovery image/procedure; exact WebUI flow; protected credentials and TLS requirements; expected outage/timeouts and host impact; maintenance window, evidence path, and responsible recovery personnel.",
+      "read_only_checks_possible_now": "Identify the board and BMC, read current firmware, inventory and export configuration if export is itself approved, inspect WebUI/Redfish/IPMI reachability and TLS identity, review SEL without clearing it, verify host state, calculate a supplied image hash without uploading it, and compare supplied documentation. Do not upload, stage, validate, or flash an image without the final gate.",
+      "intended_test_operation": "Preserve before-state evidence and a verified backup; enter the authenticated verified BMC WebUI; navigate to Operations > Firmware Update; select only the approved image; verify displayed metadata; choose Preserve all Configuration; pause for immediate final human confirmation; start exactly once; monitor without interruption through restart/reconnect; and collect full post-version, configuration, interface, SEL, and host-health evidence.",
+      "actions_requiring_authorization": "Configuration export if policy requires it; image upload or staging; the final downgrade/flash confirmation; acceptance of outage and host impact; use of credentials; and any retry, rollback, recovery image, reset, reboot, or power action. A fresh final approval is required immediately before the irreversible confirmation.",
+      "evidence_required": "Target/image approval manifest; board/BMC identity; source and target versions; image signature, hash, and provenance; configuration backup; redacted WebUI evidence showing Preserve all; task status/progress/result and timestamps; outage/reconnect; post-version and configuration diff; WebUI/Redfish/IPMI, SEL, and host health; and verified rollback readiness.",
+      "stop_conditions": "Stop for identity, image, hash, signature, or metadata mismatch; unsupported downgrade; missing or unverified backup/rollback; unexpected WebUI option; ambiguous preserve behavior; unstable power; authentication/TLS anomaly; task validation/error state; unexpected host impact; management loss beyond the approved timeout; incomplete evidence; unavailable recovery personnel; or any temptation to automate retries or power-cycle outside the SOP.",
+      "completion_definition": "The single approved downgrade task completes without prohibited interruption; the exact target version is independently verified; the required configuration is proven preserved against the backup/baseline; WebUI, Redfish, IPMI, SEL, and host health checks succeed; all evidence is retained; and rollback capability remains available. Version text alone is not completion or final PASS.",
+      "engineer_judgment_remaining": "Firmware owners must approve compatibility, downgrade and preserve semantics, image provenance, outage expectations, and recovery. Engineers must interpret any task anomaly or configuration delta, decide whether to recover or quarantine, and make the final PASS/FAIL/BLOCKED decision."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "Scope is correctly limited to one BMC transition while requiring all relevant configuration, interfaces, SEL, and host-health checks."},
+      "wrong_device_selection": {"value": false, "note": "Two-person target/image verification and board-specific compatibility are mandatory."},
+      "wrong_execution_location": {"value": false, "note": "The downgrade must occur in the verified target BMC WebUI for the exact board."},
+      "missing_iterations": {"value": false, "note": "This is one controlled firmware transition; retries are prohibited without separate recovery authorization."},
+      "modified_duration": {"value": false, "note": "No fixed duration is stated; approved outage and timeout values must be supplied."},
+      "wrong_test_command": {"value": false, "note": "The intended WebUI flow matches the operation and does not substitute a CLI or another firmware path."},
+      "missing_evidence": {"value": false, "note": "Image provenance, before/after configuration, task progress, interfaces, SEL, host health, and rollback readiness are covered."},
+      "unsafe_interpretation": {"value": false, "note": "The contract gates the irreversible step, prohibits guesses and retries, protects credentials, and requires stable power and recovery."},
+      "false_completion": {"value": false, "note": "Completion requires configuration and full management/host health, not merely displayed version text."},
+      "incorrect_BLOCKED": {"value": false, "note": "Missing image, approvals, and recovery are preconditions; the contract does not incorrectly claim the purpose is unknowable."},
+      "unjustified_PASS": {"value": false, "note": "No PASS is asserted and post-flash evidence remains mandatory."}
+    },
+    "overall_understanding": "CLEAR"
+  }
+]

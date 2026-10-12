@@ -1,0 +1,393 @@
+[
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 8,
+    "source_key": "Functionality|2260|Wistron-BMC-00848-V003",
+    "answers": {
+      "test_purpose": "Verify that the approved BMC firmware revision is reported consistently by all five required paths: BIOS Server Management, in-band IPMI, out-of-band IPMI, BMC web UI, and Redfish.",
+      "target_and_scope": "One positively identified server/BMC pair, checked through all five interfaces. The scope cannot be reduced to a single CLI path or transferred to a different management controller.",
+      "missing_information": [
+        "Expected BMC revision and the permitted normalization/mapping rule",
+        "Verified BMC identity and management address",
+        "Approved credential delivery method, TLS policy, IPMI cipher/settings, and Redfish Manager URI or discovery method",
+        "Platform-specific BIOS and web UI paths plus an approved KVM/browser method",
+        "Authorization and maintenance window if collecting BIOS evidence requires a reboot"
+      ],
+      "read_only_checks_possible_now": [
+        "Verify host and BMC identity and endpoint mapping without changing state",
+        "Check availability and versions of ipmitool, Redfish access tooling, browser/KVM access, and the protected secret mechanism",
+        "Discover /redfish/v1/Managers only after endpoint and TLS policy are verified",
+        "Collect current in-band and out-of-band mc info, Redfish FirmwareVersion, and existing unexpected-log deltas without clearing logs",
+        "Confirm whether BIOS and web evidence can be obtained without a reboot or UI change"
+      ],
+      "intended_test_operation": "Collect the firmware version independently from in-band IPMI, out-of-band IPMI, the discovered Redfish Manager resource, BMC web UI, and BIOS Server Management; normalize only as preapproved; then compare all five values with the owner baseline and with one another.",
+      "actions_requiring_authorization": [
+        "Use of protected BMC, Redfish, UI, KVM, or remote-access credentials",
+        "Any TLS exception or non-default IPMI cipher choice",
+        "Any reboot, power-state impact, or interactive BIOS entry",
+        "Final acceptance of a version mapping or normalization rule"
+      ],
+      "evidence_required": [
+        "Expected revision and normalization rule",
+        "Timestamped, redacted in-band and out-of-band IPMI outputs",
+        "Redfish Manager URI, verified identity, and FirmwareVersion",
+        "Timestamped BIOS and BMC web UI screen evidence",
+        "Five-way comparison and unexpected-log delta, with no history clearing"
+      ],
+      "stop_conditions": "Stop for target or endpoint mismatch, exposed credentials, authentication failure, unapproved TLS/cipher/reboot requirements, a missing required interface, unapproved version disagreement or mapping, or inability to retain redacted evidence.",
+      "completion": "Completion requires usable evidence from all five required interfaces, comparison against the approved baseline and across interfaces, preservation of redacted logs/screens, and restoration of the prior boot/UI state if approved BIOS access changed it. Collection from fewer paths is incomplete.",
+      "engineer_judgment": "The firmware owner must decide the expected revision, allowable display normalization, whether any disagreement is explainable, and the final PASS/FAIL/BLOCKED disposition. Engineering also decides whether BIOS access may require a reboot."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "A later executor could incorrectly treat one IPMI or Redfish value as sufficient; all five interfaces are mandatory." },
+      "wrong_device_selection": { "value": true, "note": "Host-to-BMC and Redfish Manager identity must be verified before querying; a reachable controller is not automatically the target." },
+      "wrong_execution_location": { "value": true, "note": "In-band IPMI, out-of-band IPMI, BIOS, web UI, and Redfish originate from distinct locations and cannot substitute for one another." },
+      "missing_iterations": { "value": false, "note": "No repeated-run count is required; the completeness dimension is five distinct interface paths." },
+      "modified_duration": { "value": false, "note": "The contract specifies no timed workload duration." },
+      "wrong_test_command": { "value": true, "note": "Using only ipmitool, hard-coding a Manager URI, or using an unapproved TLS/cipher shortcut would not implement the full operation." },
+      "missing_evidence": { "value": true, "note": "No execution evidence is present yet, and both manual screen captures plus machine-readable outputs are required." },
+      "unsafe_interpretation": { "value": true, "note": "Treating the task as permission to reset/update the BMC, clear logs, expose secrets, or reboot would violate the read-only boundary." },
+      "false_completion": { "value": true, "note": "Declaring completion after a subset of interfaces or without the approved expected-version mapping would be false." },
+      "incorrect_BLOCKED": { "value": true, "note": "Missing credentials, expected version, UI method, or reboot approval are remediable prerequisites; they do not by themselves make the testcase irreducibly BLOCKED." },
+      "unjustified_PASS": { "value": true, "note": "PASS is unjustified until all five values, identity evidence, and the owner-approved baseline agree under the approved normalization rule." }
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 9,
+    "source_key": "Reliability|2|Wistron-System RAS-00374-V003",
+    "answers": {
+      "test_purpose": "Verify that the exact platform exposes every ACPI BERT, ERST, and HEST table it is required to provide and that the running OS recognizes those tables without unexpected ACPI/APEI initialization errors.",
+      "target_and_scope": "The firmware tables and OS/kernel exposure on one identified server configuration. This is presence, accessibility, structure, and initialization-log validation only; it does not inject hardware errors or validate end-to-end persistence or recovery behavior.",
+      "missing_information": [
+        "Exact platform identity, architecture, BIOS/firmware build, OS/kernel, and RAS configuration",
+        "Owner-supplied required/conditional/not-applicable matrix for BERT, ERST, and HEST",
+        "Acceptance rules for table validity, approved raw-dump handling, and kernel recognition",
+        "Authorized access and permissions for the ACPI table directory and kernel logs"
+      ],
+      "read_only_checks_possible_now": [
+        "Capture platform, firmware, kernel, and RAS-configuration identity",
+        "List exact entries under /sys/firmware/acpi/tables and record access status",
+        "Capture sizes, hashes, safe headers, or approved raw dumps without modifying firmware state",
+        "Collect contextual ACPI/APEI dmesg or journal messages without clearing log history",
+        "Separate absent, inaccessible, malformed, and explicitly not-applicable outcomes"
+      ],
+      "intended_test_operation": "Perform authorized read-only enumeration and metadata/content capture for BERT, ERST, and HEST, collect complete contextual kernel initialization messages, and compare each result against the exact platform expectation matrix.",
+      "actions_requiring_authorization": [
+        "Remote access and any privilege elevation needed to read tables or kernel logs",
+        "Handling or export of raw ACPI table dumps when platform policy restricts them",
+        "Owner adjudication of conditional applicability and unexplained initialization errors"
+      ],
+      "evidence_required": [
+        "Platform, architecture, firmware, kernel, and RAS configuration baseline",
+        "Owner-approved table expectation matrix",
+        "Per-table name, presence/access state, size, hash, header or approved dump, and command status",
+        "Contextual ACPI/APEI kernel output and unexpected errors",
+        "Per-table comparison result distinguishing absent, inaccessible, invalid, and not applicable"
+      ],
+      "stop_conditions": "Stop if SUT identity is wrong, credentials are exposed, required read-only evidence cannot be accessed, permissions or commands obscure table presence, the expectation matrix is unavailable for final judgment, or an unexpected initialization error requires owner analysis.",
+      "completion": "Completion requires a per-table result for BERT, ERST, and HEST tied to the verified platform matrix, contextual kernel evidence, recorded access/command status, and an explicit statement that no injection or functional recovery validation was performed.",
+      "engineer_judgment": "The platform owner decides which tables are mandatory or conditional and whether an absence, table characteristic, or ACPI/APEI message is acceptable. Final verdict remains an engineering decision."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "Checking only table filenames or only dmesg would omit required table and OS-recognition evidence." },
+      "wrong_device_selection": { "value": true, "note": "Results are valid only for the verified platform/firmware/kernel/RAS configuration; a different host cannot stand in." },
+      "wrong_execution_location": { "value": true, "note": "Inspection must occur on the target host's running OS and firmware-provided ACPI namespace, not on a copied directory from another system." },
+      "missing_iterations": { "value": false, "note": "No repeated execution is specified; the matrix requires one independently evidenced result per named table." },
+      "modified_duration": { "value": false, "note": "There is no duration parameter." },
+      "wrong_test_command": { "value": true, "note": "A broad grep, truncated log query, or filename-only listing could misclassify absence or miss initialization context." },
+      "missing_evidence": { "value": true, "note": "No platform matrix, table metadata, command status, or contextual kernel evidence has yet been supplied." },
+      "unsafe_interpretation": { "value": true, "note": "This contract does not authorize error injection, firmware writes, log clearing, or claims of end-to-end RAS behavior." },
+      "false_completion": { "value": true, "note": "Presence of files alone is not completion; OS recognition, errors, and platform applicability must also be evaluated." },
+      "incorrect_BLOCKED": { "value": true, "note": "A missing expectation matrix or access permission is a resolvable input/access prerequisite, though final adjudication must pause until supplied." },
+      "unjustified_PASS": { "value": true, "note": "PASS cannot be asserted from generic ACPI expectations or file presence without the exact platform matrix and clean recognition evidence." }
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 10,
+    "source_key": "Reliability|4|Wistron-System RAS-00378-V003",
+    "answers": {
+      "test_purpose": "For every owner-mapped second-DIMM target, perform a bounded approved ECC/RAS injection and verify the expected leaky-bucket or register response plus correlated host and BMC SEL reporting.",
+      "target_and_scope": "Only physical slots/channels explicitly mapped by the platform owner to the source's second-DIMM or DIMM_B designation, on the exact board, CPU/memory topology, firmware, and DIMM population. Labels must not be inferred across architectures.",
+      "missing_information": [
+        "Signed per-channel physical slot map",
+        "Original and test threshold values and expected register behavior",
+        "Exact vendor injection SOP/tool, error type, command semantics, supported platform version, bounded count, and order",
+        "Expected host and BMC event matrix including severity, location, count, and timing",
+        "Maintenance, BIOS-change, reset, injection, and recovery approvals",
+        "Configuration backup, abort limits, qualified operator, and proven OOB recovery plan"
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory board, CPU, memory-controller, DIMM population, firmware, and current health",
+        "Capture the existing threshold/register state using an approved read-only method",
+        "Verify console, BMC, OOB recovery, clock synchronization, and preserved host/BMC log access",
+        "Check that the vendor tool/SOP version matches the platform without invoking injection",
+        "Confirm the SUT is dedicated and has no active workload"
+      ],
+      "intended_test_operation": "A qualified operator records and applies the approved BIOS ECC leaky-bucket threshold, performs any specified save/reset, then injects the documented bounded error into one confirmed mapped target at a time. The agent captures synchronized pre/post register state and host/BMC events, correlates every stimulus, and verifies complete restoration after the matrix.",
+      "actions_requiring_authorization": [
+        "BIOS setting changes and saving configuration",
+        "Reset or power recovery",
+        "Every error-injection target, type, count, and ordered matrix",
+        "Vendor tool use and any privilege elevation",
+        "Restoration and exceptional recovery actions"
+      ],
+      "evidence_required": [
+        "Signed target/channel/slot matrix",
+        "Before, test, and restored threshold/register state",
+        "Per-target operator record or exact injection command, timestamp, type, and count",
+        "Correlated host and BMC SEL event IDs, severity, address/location, and count",
+        "Unexpected-event review, boot/data-integrity health, and restored configuration proof"
+      ],
+      "stop_conditions": "Stop for an ambiguous target or SOP, missing authorization, active workload, event storm, event localized to the wrong DIMM/channel, any uncorrectable or unexpected error, corruption, no-boot, thermal/power issue, loss of management access, incomplete evidence, or inability to restore configuration.",
+      "completion": "Completion requires every signed second-DIMM target to receive exactly the approved bounded stimulus, produce the expected correlated register/host/BMC evidence, show no disallowed side effects, and finish with verified original settings and normal host/memory health.",
+      "engineer_judgment": "Engineering must own the physical mapping, threshold/register expectations, injection SOP and limits, event acceptance matrix, response to unexpected or uncorrectable errors, and final verdict. The agent cannot infer DIMM_B semantics."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "Testing one channel or one slot cannot represent the complete owner-approved second-DIMM matrix." },
+      "wrong_device_selection": { "value": true, "note": "DIMM labels are topology-specific; an inferred slot can direct an injection at the wrong physical target." },
+      "wrong_execution_location": { "value": true, "note": "BIOS changes, vendor injection, host logs, and BMC SEL are distinct control/evidence planes and must be tied to the same SUT and stimulus." },
+      "missing_iterations": { "value": true, "note": "The per-target matrix, bounded injection count, and order are not yet supplied; skipping targets or adding repetitions would invalidate the run." },
+      "modified_duration": { "value": false, "note": "No timed workload duration is specified; bounded count/order, not elapsed time, controls exposure." },
+      "wrong_test_command": { "value": true, "note": "No injection command is safe until the exact vendor SOP, error type, platform version, target map, and count are approved." },
+      "missing_evidence": { "value": true, "note": "No signed map, baseline/restored register state, stimulus record, or correlated host/BMC event evidence exists yet." },
+      "unsafe_interpretation": { "value": true, "note": "Automating BIOS changes or injection, guessing topology, disabling ECC, clearing logs, or continuing after a mislocalized event would be unsafe." },
+      "false_completion": { "value": true, "note": "Expected events without verified target correlation and restoration do not complete the testcase." },
+      "incorrect_BLOCKED": { "value": true, "note": "Missing vendor SOP, map, values, or approvals are required prerequisites; they justify not executing now but are not inherently irreducible blockers." },
+      "unjustified_PASS": { "value": true, "note": "PASS requires complete per-target correlation, approved register behavior, absence of unsafe side effects, and verified restoration." }
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 11,
+    "source_key": "Performance|3|Wistron-Performance CPU-00002-V003",
+    "answers": {
+      "test_purpose": "Run a validated vendor-appropriate HPL profile on the selected CPU server and determine whether repeatable, numerically valid Gflop/s meets a truly configuration-matched reference.",
+      "target_and_scope": "One explicitly selected Intel or AMD CPU/DDR server configuration. AMD CCX/CCD scripts are in scope only for an approved matching AMD package and EPYC generation and must never be reused for Intel or an unsupported AMD platform.",
+      "missing_information": [
+        "CPU vendor, SKU, socket/topology, memory configuration, firmware/OS, and approved tuning profile",
+        "Approved HPL package, checksum, license, compiler/BLAS/MPI stack, dependencies, and trusted installation path",
+        "Exact HPL.dat values, process/thread placement, affinity, SMT policy, residual-validation rule, and memory sizing",
+        "Measured-run count, aggregation rule, and precise meaning of the 360-minute requirement",
+        "Configuration-matched reference, metric, tolerance, and comparability criteria",
+        "Thermal, power, throttle, error, abort, recovery, root/network, and sustained-load approvals"
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory CPU, sockets, cores, NUMA, memory, firmware, OS, power profile, compiler, BLAS, MPI, and existing HPL components",
+        "Verify package/archive hashes, script contents/provenance, license constraints, and dependency availability without installing or running",
+        "Model N/NB/P/Q, memory consumption, process/thread placement, and reference comparability",
+        "Capture idle thermal, power, throttle, hardware-error, storage, and cooling baselines",
+        "Verify dedicated workload state and OOB/abort readiness"
+      ],
+      "intended_test_operation": "Stage only the approved vendor-specific HPL package and stack, generate and preserve a topology-valid HPL.dat and placement profile, verify numerical residual checking, run the approved repetition/time matrix under continuous health monitoring, retain every output, and compare the approved aggregate metric to a matched reference.",
+      "actions_requiring_authorization": [
+        "Package installation, outbound dependency access, root privileges, or execution of vendor scripts",
+        "CPU/OS/firmware tuning, SMT/governor/power-profile changes, or reboot",
+        "Sustained high-load run, run count, duration interpretation, and abort thresholds",
+        "Acceptance of the reference as configuration-comparable"
+      ],
+      "evidence_required": [
+        "Complete system identity and tuning configuration",
+        "Package, build, compiler, BLAS, MPI, script, checksum, and license provenance",
+        "Exact HPL.dat, N/NB/P/Q, memory calculation, ranks, threads, affinity, and SMT placement",
+        "Every run timestamp, duration, time/Gflop/s result, and numerical residual/pass output",
+        "CPU/memory/thermal/power/throttle/error telemetry, reference provenance, aggregation/comparison, and restored state"
+      ],
+      "stop_conditions": "Stop for vendor or profile mismatch, an unsupported/untrusted package or script, invalid topology generation, insufficient memory/cooling/power, active workload, numerical residual failure, exceeded health threshold, throttling beyond the approved rule, instability, incomplete evidence, or an incomparable baseline.",
+      "completion": "Completion requires the full approved repetition/time matrix to finish with valid residuals, stable monitored health, complete profile/output provenance, a comparison under the agreed aggregation rule, and restoration of temporary tuning. A fast single run or raw Gflop/s number is insufficient.",
+      "engineer_judgment": "Engineering must approve the vendor stack, HPL sizing and placement, 360-minute interpretation, run count and aggregation, matched reference and tolerance, acceptable throttling, and any comparability exception."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "A short smoke run, one result, or Gflop/s without residual and health evidence would reduce the required validation." },
+      "wrong_device_selection": { "value": true, "note": "The vendor/SKU/topology determines the legal package and profile; selecting the wrong CPU server invalidates the comparison." },
+      "wrong_execution_location": { "value": true, "note": "HPL must run on the approved SUT with its intended NUMA/process placement, not on a login node, container, or alternate host lacking equivalent topology unless explicitly approved." },
+      "missing_iterations": { "value": true, "note": "The measured-run count and aggregation rule are unspecified and must be fixed before execution." },
+      "modified_duration": { "value": true, "note": "The contract explicitly identifies an unresolved 360-minute meaning; an executor must not silently shorten, reinterpret, or multiply it." },
+      "wrong_test_command": { "value": true, "note": "No safe final command exists until vendor package, HPL.dat, MPI/rank/thread binding, and topology are approved; cross-vendor scripts are expressly invalid." },
+      "missing_evidence": { "value": true, "note": "Package provenance, exact profile, repeated results, numerical validation, telemetry, and comparable reference evidence are not yet present." },
+      "unsafe_interpretation": { "value": true, "note": "Treating source scripts as unconditional root/network/install authority or ignoring thermal and power limits would be unsafe." },
+      "false_completion": { "value": true, "note": "A completed process is not completion if residuals fail, throttling invalidates comparability, repetitions are missing, or tuning is not restored." },
+      "incorrect_BLOCKED": { "value": true, "note": "Missing package/profile/reference/approval inputs are resolvable prerequisites, not by themselves an irreducible semantic block." },
+      "unjustified_PASS": { "value": true, "note": "PASS is impossible without valid residuals, complete repetitions, health evidence, and a configuration-matched approved reference." }
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 12,
+    "source_key": "Performance|4|Wistron-Performance DIMM-00003-V004",
+    "answers": {
+      "test_purpose": "Measure sustainable host DDR bandwidth for STREAM Copy, Scale, Add, and Triad under one fixed reproducible profile, verify numerical validity, and compare like-for-like results to an equivalent approved reference.",
+      "target_and_scope": "The host memory reached by the approved OpenMP thread, affinity, NUMA, and first-touch configuration on the identified CPU/DIMM system. This is not GPU HBM, and aggregate, socket, node, or per-core claims are valid only when that scope is explicitly configured and evidenced.",
+      "missing_information": [
+        "Approved stream.c provenance and checksum plus compiler version",
+        "Exact build flags confirmation and sufficient memory/headroom calculation",
+        "OMP thread count, affinity, NUMA placement, first-touch, and swap policy",
+        "Number of complete executions and external aggregation rule",
+        "Equivalent reference, metric, tolerance, and scope-comparability rule",
+        "Maintenance, load, thermal, power, throttle, error, and recovery approvals"
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory CPU, NUMA, DIMM/channel population, firmware, OS, compiler, and OpenMP runtime",
+        "Verify the source checksum and inspect the exact compile command without building",
+        "Calculate array footprint and confirm at least the required 9.61-GiB-plus free-memory headroom and swap policy",
+        "Capture idle memory, swap, thermal, power, ECC/MCE, and workload baselines",
+        "Assess whether the proposed reference has equivalent scope and configuration"
+      ],
+      "intended_test_operation": "Compile approved stream.c with the specified gcc/OpenMP, large-model, double, array-size, and NTIMES definitions; set and record the approved OMP/affinity/NUMA environment; run the approved number of complete executions without profile changes; retain all four kernel rates, timings, Solution Validates output, and health telemetry; then compare under the approved rule.",
+      "actions_requiring_authorization": [
+        "Source/build acceptance and any package or compiler installation",
+        "Runtime OpenMP, affinity, NUMA, power, or swap settings",
+        "High-bandwidth workload and maintenance window",
+        "Abort thresholds and acceptance of the matched reference"
+      ],
+      "evidence_required": [
+        "CPU/NUMA/DIMM/channel inventory and source hash",
+        "Compiler version and exact build command",
+        "Array bytes, NTIMES, threads, affinity, NUMA/first-touch, swap, and power settings",
+        "All Copy/Scale/Add/Triad rates and timing columns for every execution plus Solution Validates",
+        "Per-run timestamps, memory/swap/thermal/power/ECC/MCE telemetry, comparison calculation, and restored settings"
+      ],
+      "stop_conditions": "Stop for ambiguous profile/reference scope, source/build mismatch, insufficient memory headroom, active workload, swapping or OOM, numerical validation failure, ECC/MCE, thermal/power/throttle threshold breach, instability, incomplete output, or an incomparable reference.",
+      "completion": "Completion requires every approved full STREAM execution under an unchanged recorded profile, successful numerical validation, all four kernel/timing outputs, clean health telemetry, the agreed comparison, worker cleanup, and restoration of temporary placement or power settings.",
+      "engineer_judgment": "Engineering decides threads, affinity, NUMA/first-touch scope, repetition and aggregation, reference equivalence and tolerance, swap policy, and whether observed throttling or topology differences invalidate the result."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "Reporting only Triad, omitting validation/timings, or silently labeling an aggregate result as per-socket or per-core would reduce or distort scope." },
+      "wrong_device_selection": { "value": true, "note": "The test must target host DDR on the identified CPU/DIMM topology; GPU HBM or a different NUMA node/profile is out of scope." },
+      "wrong_execution_location": { "value": true, "note": "STREAM must execute on the approved SUT with the recorded OpenMP/NUMA environment, not an alternate host or uncontrolled container context." },
+      "missing_iterations": { "value": true, "note": "NTIMES=100 is internal loop configuration, not the unspecified number of complete ./stream executions; external repetition and aggregation are still required." },
+      "modified_duration": { "value": false, "note": "There is no explicit wall-clock duration; NTIMES and complete-run repetitions must remain as approved." },
+      "wrong_test_command": { "value": true, "note": "The compile command is specified, but a run without the approved OMP/affinity/NUMA environment or with altered constants is the wrong operation." },
+      "missing_evidence": { "value": true, "note": "No source provenance, build record, placement profile, full outputs, validation line, health telemetry, or matched comparison exists yet." },
+      "unsafe_interpretation": { "value": true, "note": "Running without memory headroom, allowing swap/OOM, using unverified source, or hiding placement/profile changes violates the safety boundary." },
+      "false_completion": { "value": true, "note": "A throughput number alone is incomplete if any kernel, validation result, external repetition, telemetry, or cleanup evidence is absent." },
+      "incorrect_BLOCKED": { "value": true, "note": "Missing profile, reference, or approvals should pause execution but are resolvable inputs rather than an inherent BLOCKED classification." },
+      "unjustified_PASS": { "value": true, "note": "PASS requires a valid complete output under the fixed profile and comparison to an equivalent owner-approved reference." }
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 13,
+    "source_key": "Performance|15|Wistron-Performance Networking-00030-V004",
+    "answers": {
+      "test_purpose": "For each approved physical ConnectX InfiniBand port, run a 300-second RDMA write-bandwidth test and validate bandwidth, authoritative port-counter deltas, and health of both endpoints.",
+      "target_and_scope": "Every owner-listed physical IB port and its exact peer/fabric path, tested separately. Unmapped HCAs, Ethernet or RoCE netdevs, and alternate peers are outside scope.",
+      "missing_information": [
+        "Signed SUT-port-to-peer-port mapping with HCA, physical port, GID/LID, partition/route, MTU, rate, and width",
+        "Compatible firmware, driver, rdma-core/perftest versions and version-specific duration syntax",
+        "Exact symmetric server/client commands including message size, QPs, TX depth, direction, CPU/NUMA binding, and peer address",
+        "Confirmation that -D 300 is the intended 300-second duration and that -t is used only for approved TX depth",
+        "Authoritative counters, zero/tolerance rules, per-port bandwidth reference, and aggregation rule",
+        "Peer/fabric isolation, traffic window, abort thresholds, and recovery owners"
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory both hosts, HCAs, firmware, drivers, perftest versions, ports, link layer, GID/LID, MTU, rate, width, and NUMA locality",
+        "Verify the signed physical port/path mapping and peer reachability without generating load",
+        "Capture authoritative baseline counters and existing host/BMC/kernel health logs without clearing them",
+        "Compare server/client option compatibility and confirm version-specific -D semantics",
+        "Confirm path isolation, idle state, clock synchronization, and cleanup/OOB readiness"
+      ],
+      "intended_test_operation": "For one verified port/path at a time, capture baselines, start a matching peer server, run the client with identical applicable options and explicit peer for exactly 300 seconds, collect complete outputs and telemetry, terminate both sides, collect counter/log deltas, and repeat the complete sequence for every approved port.",
+      "actions_requiring_authorization": [
+        "Selection and use of both endpoint hosts and every physical port/path",
+        "Peer server start, fabric isolation, and five-minute traffic generation",
+        "Binding, temporary firewall, routing, or partition changes",
+        "Bandwidth/counter acceptance rules, abort limits, and recovery actions"
+      ],
+      "evidence_required": [
+        "Per-port endpoint identity, physical topology, GID/LID/MTU/rate/width, versions, and path mapping",
+        "Exact symmetric client/server commands and all message/QP/TX-depth/binding settings",
+        "Start/end timestamps proving 300 seconds and full unfiltered client/server throughput and CPU output",
+        "Authoritative before/after counter deltas and SUT/peer kernel/BMC log deltas",
+        "Per-port reference comparison, process cleanup, and restored link/fabric health"
+      ],
+      "stop_conditions": "Stop for endpoint/path mismatch, incompatible options, unavailable peer, unapproved shared-fabric traffic, a link below expected state, new error storm or link flap, traffic on the wrong port, anomalous bandwidth/process behavior, endpoint instability, thermal/CPU limit, missing 300-second proof, incomplete output, or unresolved counter mapping.",
+      "completion": "Completion requires one complete, separately evidenced 300-second run for every approved physical port, matched endpoint commands, correct-path counter deltas, acceptable bandwidth and health, cleanup of both processes, and restored fabric state.",
+      "engineer_judgment": "Network engineering must approve the physical path map, symmetric profile, valid counters and tolerances, comparable per-port bandwidth target, isolation adequacy, acceptable counter deltas, and any retry after errors."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "One aggregate run or one port cannot represent every owner-listed physical port tested separately." },
+      "wrong_device_selection": { "value": true, "note": "Netdev names, HCAs, physical IB ports, GIDs, and peers can be confused; the signed path map is mandatory." },
+      "wrong_execution_location": { "value": true, "note": "Server and client must run on the mapped peer and SUT with the intended ports and CPU/NUMA binding; reversing or substituting endpoints changes the test." },
+      "missing_iterations": { "value": true, "note": "The required iteration is once per approved physical port, but the actual port matrix is not yet supplied." },
+      "modified_duration": { "value": true, "note": "Each port requires proof of 300 seconds; -D must not be replaced, shortened, or confused with -t." },
+      "wrong_test_command": { "value": true, "note": "The final symmetric commands are undefined, and confusing -t TX depth with time or mismatching peer options would invalidate the workload." },
+      "missing_evidence": { "value": true, "note": "No port matrix, exact commands, 300-second outputs, counter deltas, endpoint logs, or comparisons exist yet." },
+      "unsafe_interpretation": { "value": true, "note": "Generating traffic on a guessed/shared production path, clearing counters, or continuing through errors or link flaps would be unsafe." },
+      "false_completion": { "value": true, "note": "A client bandwidth line is insufficient without peer output, duration proof, counters, health evidence, all ports, and process cleanup." },
+      "incorrect_BLOCKED": { "value": true, "note": "A missing peer, path map, profile, or approval is normally a resolvable prerequisite rather than an irreducible testcase block." },
+      "unjustified_PASS": { "value": true, "note": "PASS requires every mapped port to meet its approved reference and counter rules with complete health and duration evidence." }
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_b",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 14,
+    "source_key": "Compatibility|76|Wistron-Storage-00059-V004",
+    "answers": {
+      "test_purpose": "Run the approved twelve-hour 4-KiB random mixed read/write fio workload on every explicitly allowlisted M.2 target and validate per-drive performance, health, stability, and compliance with the authorized data-loss boundary.",
+      "target_and_scope": "Only stable device, namespace, or approved file/range targets in a signed matrix. Boot/OS media, user data, unintended RAID members, mounted production filesystems, evidence/recovery destinations, and all unlisted storage are excluded.",
+      "missing_information": [
+        "Two-person signed stable target and exclusion matrix with data-loss acceptance and backup state",
+        "Pinned fio version and complete immutable job semantics: read/write mix, ioengine, direct/cache/flush/verify, clone/file/offset, grouping, size/range, concurrency, and schedule",
+        "Rationale and approval for numjobs=32, iodepth=32, size=4g, simultaneous or sequential execution, and endurance footprint",
+        "Twelve-hour maintenance window, protected non-target evidence destination, monitoring, stop limits, and OOB route",
+        "Per-drive comparable reference, units, 80-percent formula inputs, aggregation/measurement window, and recovery owners",
+        "Approved backup, restore, cleanup, and quarantine plan"
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory stable device IDs, namespaces, models, serials, firmware, PCIe topology, mounts, filesystems, RAID/LVM/device-mapper membership, boot/OS relationships, and evidence/recovery devices",
+        "Capture health, SMART/NVMe, capacity, endurance, temperature, controller, kernel, BMC, and workload baselines without clearing logs",
+        "Verify fio binary/version and review the proposed job file without running it",
+        "Compute the exact per-target write range, overlap, aggregate footprint, endurance exposure, memory/CPU pressure, and evidence destination",
+        "Validate exclusions and backup/restore/OOB readiness before any write"
+      ],
+      "intended_test_operation": "Generate one reviewed fio job section per stable signed target, preserving time_based, runtime=43200, bs=4K, rw=randrw, approved numjobs=32, size=4g, and iodepth=32 while adding only approved missing semantics; revalidate the immutable target/range manifest; run the approved schedule for the full twelve hours; write JSON and telemetry to protected non-target storage; then calculate per-drive results and the 80-percent comparison.",
+      "actions_requiring_authorization": [
+        "Every target, namespace/file/range, and accepted data-loss boundary",
+        "The complete fio job, write semantics, concurrency, device count, and simultaneous/sequential schedule",
+        "Fio package/version installation or changes",
+        "The twelve-hour destructive workload, endurance/thermal/latency/error limits, and performance baseline",
+        "Any restore, cleanup, repair, reboot, retry, or quarantine action"
+      ],
+      "evidence_required": [
+        "Signed target/exclusion/data-loss/backup matrix and stable IDs, models, firmware, and topology",
+        "Pre/post mount, RAID/LVM/device-mapper, capacity, and device-health state",
+        "Exact fio version/job plus clone/range/offset/overlap/footprint manifest",
+        "Full JSON and start/end timestamps proving runtime=43200 for each required target",
+        "Per-drive read/write IOPS, bandwidth, latency, and errors plus temperature/endurance and kernel/BMC deltas",
+        "Tracked-PID cleanup, data-integrity/restore result, and auditable actual >= 0.80 x reference calculation"
+      ],
+      "stop_conditions": "Stop before writing for any target/range identity mismatch, overlap with boot/data/evidence/recovery media, missing backup/recovery, unsafe health baseline, active conflicting workload, allocation/capacity issue, or monitoring loss. During execution stop for media/NVMe/SMART/controller/filesystem/kernel errors, corruption, temperature/endurance/power/latency breach, evidence-device risk, or incomplete job/output, and do not auto-rerun.",
+      "completion": "Completion requires every signed M.2 target to complete the approved 43,200-second workload over only its authorized range, with full per-drive JSON and health evidence, auditable 80-percent comparisons, no prohibited overlap, all fio PIDs stopped, and the approved integrity/restore checks completed. A partial run is not completion.",
+      "engineer_judgment": "Storage engineering must approve identity and destructive boundaries, missing fio semantics, concurrency/schedule, write footprint and endurance exposure, comparable per-drive references, stop thresholds, fault handling, data-integrity outcome, and any repair, restore, retry, or final verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": { "value": true, "note": "Testing one drive, reporting aggregate results, shortening the run, or omitting health/data-boundary validation reduces the required every-target scope." },
+      "wrong_device_selection": { "value": true, "note": "This is a destructive write workload; unstable names or an incorrect namespace/range can overwrite boot, user, evidence, RAID, or recovery data." },
+      "wrong_execution_location": { "value": true, "note": "Fio must run on the dedicated SUT against signed local targets while evidence is stored on a verified non-target device; moving either role can create overlap or invalidate telemetry." },
+      "missing_iterations": { "value": true, "note": "The required matrix is every allowlisted target, with schedule/concurrency still unspecified; numjobs=32 is job concurrency, not a substitute for per-drive coverage." },
+      "modified_duration": { "value": true, "note": "runtime=43200 and time_based are explicit and must not be shortened, omitted, or inferred from process wall time without timestamps." },
+      "wrong_test_command": { "value": true, "note": "The listed core parameters are insufficient by themselves; guessed rw mix, ioengine, direct/cache/flush/verify, offset, clone, grouping, or filename semantics could change both risk and meaning." },
+      "missing_evidence": { "value": true, "note": "No signed target manifest, exact immutable job, full twelve-hour JSON, health deltas, cleanup, restore, or 80-percent comparison is present." },
+      "unsafe_interpretation": { "value": true, "note": "Treating the core fio parameters as permission to write any /dev name, clear logs, auto-repair, reboot, or rerun after a storage fault would be unsafe." },
+      "false_completion": { "value": true, "note": "A process exit or partial JSON cannot complete the case without full duration, every target, protected evidence, health/integrity checks, cleanup, and comparison." },
+      "incorrect_BLOCKED": { "value": true, "note": "Missing package, job semantics, target approvals, or reference are resolvable prerequisites; they require stopping before writes but do not inherently make the testcase irreducibly BLOCKED." },
+      "unjustified_PASS": { "value": true, "note": "PASS requires full-duration per-drive evidence, verified safe boundaries, acceptable health and integrity, and the approved 80-percent comparison for every target." }
+    },
+    "overall_understanding": "CLEAR"
+  }
+]

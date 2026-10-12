@@ -1,0 +1,389 @@
+[
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 1,
+    "source_key": "Functionality|29|Wistron-HW-00032-V004",
+    "answers": {
+      "exact_test_purpose": "Verify that the latch-on-fault offset field in one applicable CRPS configuration block encodes the vendor-defined byte displacement from that block to the next block.",
+      "target_and_scope": "One engineer-identified CRPS slot, its confirmed model and firmware family, and one specified configuration-block offset field. Other PSU slots, models, firmware families, fields, resets, writes, and generic bus discovery are outside scope.",
+      "missing_information": [
+        "The actual CRPS identity, slot, firmware/VPD revision, and management path.",
+        "The applicable vendor specification and version, field address, current and next block boundaries, encoding/byte order, and expected value.",
+        "The exact vendor-approved read-only tool/decoder and resolved invocation."
+      ],
+      "read_only_checks_possible_now": [
+        "Review the supplied specification offline for model/firmware applicability and calculate the expected offset from the stated block boundaries.",
+        "Inspect tool documentation or help output offline to prove that the proposed operation is non-writing.",
+        "Compare existing inventory records with the proposed CRPS slot and firmware if such records are supplied; no live PMBus access is justified from this contract alone."
+      ],
+      "intended_test_operation": "After the target, specification, and command are approved, use the vendor-approved non-writing configuration decoder on the named CRPS, capture the raw field bytes, decode them with the specified byte order, and present the result and both block boundaries for comparison. A generic PMBus scan is not an equivalent test.",
+      "actions_requiring_authorization": [
+        "Any access to the CRPS management path after target resolution.",
+        "Approval of the proprietary specification, exact target, and exact read-only command.",
+        "Any write, reset, firmware operation, bus scan, or recovery action; none is authorized by this contract."
+      ],
+      "evidence_required": [
+        "CRPS slot, model/identity, firmware/VPD revision, and timestamp.",
+        "Specification and tool versions plus the exact command used.",
+        "Raw field bytes, decoded offset, byte order/encoding, and current/next block boundaries.",
+        "Unedited read output and any management-path error evidence."
+      ],
+      "stop_conditions": [
+        "Target identity or specification applicability cannot be confirmed.",
+        "Field mapping, expected value, encoding, or block boundaries remain unresolved.",
+        "The command cannot be proven read-only or resolves to a blind bus scan.",
+        "The management path fails or produces unexpected target or error evidence."
+      ],
+      "what_constitutes_completion": "Completion is a preserved, target-specific readback package containing all required identity, raw, decoded, boundary, tool, and timestamp evidence. It does not itself establish PASS; the end user must compare the decoded value with the applicable vendor reference.",
+      "what_remains_for_engineer_judgment": "The engineer must decide specification applicability, target correctness, whether the tool is safely read-only, the authoritative expected encoding/value, and the final comparison outcome."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The intended scope is expressly one field on one CRPS; reading less than the raw field plus both block boundaries would be incomplete, not an allowed reduction."},
+      "wrong_device_selection": {"value": true, "note": "No concrete CRPS slot/model/firmware identity is supplied, so selecting the wrong PSU remains a material risk."},
+      "wrong_execution_location": {"value": true, "note": "The BMC or other management access path is unresolved; a host-side generic PMBus scan would not prove access to the required target."},
+      "missing_iterations": {"value": false, "note": "The contract calls for one target-specific field verification and specifies no repeated cycles."},
+      "modified_duration": {"value": false, "note": "No duration requirement is stated."},
+      "wrong_test_command": {"value": true, "note": "The exact approved decoder command is missing, and a generic scan is explicitly non-equivalent."},
+      "missing_evidence": {"value": true, "note": "No target readback exists yet, and the reference value, raw bytes, boundaries, and identity evidence remain unavailable."},
+      "unsafe_interpretation": {"value": true, "note": "Reusing an offset from another PSU family or treating exploratory bus access as harmless could reach the wrong device or cause unintended effects."},
+      "false_completion": {"value": true, "note": "A device listing, generic PMBus scan, or decoded number without raw bytes and boundary proof must not be called complete."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing vendor artifacts or operator confirmation alone should be treated as prerequisites awaiting input, not an irreducible semantic BLOCKED verdict."},
+      "unjustified_PASS": {"value": true, "note": "PASS is unjustified until the target-specific decoded offset is compared with the applicable vendor value by the end user."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 2,
+    "source_key": "Functionality|67|Wistron-HW-00070-V004",
+    "answers": {
+      "exact_test_purpose": "Exercise five approved PSU firmware transitions between versions N and N-1 through the BMC HPM update path, proving after each required transition that activation, PSU health, BMC access, power delivery, and SUT power-cycle recovery remain acceptable.",
+      "target_and_scope": "Only the engineer-identified PSU slot or explicitly defined PSU set on the compatible platform. The five-cycle transition order, whether redundant PSUs are handled sequentially or together, and the required final version must be fixed before execution.",
+      "missing_information": [
+        "Exact PSU identities/slots and current firmware versions, plus whether one PSU or a redundant set is in scope.",
+        "Signed N and N-1 images, hashes, compatibility statement, and exact vendor HPM procedure.",
+        "The definition of one cycle, five-cycle order, dwell/timing, activation behavior, power-cycle point, and required final version.",
+        "Maintenance approval, workload evacuation, redundancy constraints, OOB/KVM readiness, and tested recovery/replacement procedure."
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory PSU/BMC/platform identity, current versions, redundancy state, sensor health, active workloads, and OOB availability without changing firmware.",
+        "Validate image hashes, signatures, release notes, and compatibility statements offline.",
+        "Capture baseline PSU sensors, output state, BMC connectivity, SEL/host logs, and current SUT boot health without clearing evidence."
+      ],
+      "intended_test_operation": "In an approved maintenance window, flash only the resolved PSU target with the authorized N or N-1 image through the vendor HPM path, verify activation and health, perform the required recovery/power-cycle check, and repeat the approved N/N-1 sequence until five complete cycles are evidenced. A version query is only a check, not the firmware test.",
+      "actions_requiring_authorization": [
+        "Every PSU firmware write/activation and the initial five-cycle sequence.",
+        "Each SUT or PSU power cycle, reset, redundancy-affecting step, or service interruption.",
+        "Any changed target, image, sequence, timing, interface, or recovery plan requires renewed approval.",
+        "Vendor recovery/reflash or physical PSU replacement after a failure."
+      ],
+      "evidence_required": [
+        "Per-transition cycle number, direction, PSU identity/slot, before/after version, image filename/hash/signature, exact HPM action, status, and timing.",
+        "Activation evidence, BMC reconnect, PSU sensor/output/redundancy health, SEL and host-log deltas, and SUT boot/power-cycle recovery for every required transition.",
+        "A five-cycle accounting table and final firmware/redundancy/host state."
+      ],
+      "stop_conditions": [
+        "Identity, compatibility, image, cycle definition/order, maintenance approval, redundancy plan, or recovery access is unresolved.",
+        "Active workloads are present or stable redundant power cannot be maintained as required.",
+        "Image mismatch, flash error, output loss, abnormal sensor/redundancy state, management loss, or incomplete recovery occurs.",
+        "Evidence for any transition is incomplete; subsequent cycles must not continue."
+      ],
+      "what_constitutes_completion": "All five owner-defined N/N-1 cycles are performed in the approved order, every transition has a complete identity/image/flash/activation/health/recovery evidence set, and the system is left in the approved final firmware and stable power state. Final PASS remains an end-user decision.",
+      "what_remains_for_engineer_judgment": "The engineer must define a cycle, choose the PSU set and sequencing strategy, approve both images and compatibility, set timing and health criteria, decide the final version, and judge whether every recovery and power-delivery result is acceptable."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "The contract allows a slot or PSU set, so the owner must prevent an execution plan from silently testing only one PSU when the required redundant set is broader."},
+      "wrong_device_selection": {"value": true, "note": "No exact PSU slot/serial identity is provided; a wrong-slot flash has high service and recovery impact."},
+      "wrong_execution_location": {"value": true, "note": "The update must use the compatible BMC HPM path, but the exact interface and implementation are not yet resolved."},
+      "missing_iterations": {"value": true, "note": "Five cycles are required, but the meaning and direction sequence of each cycle are not defined; five individual flashes may not equal five N/N-1 cycles."},
+      "modified_duration": {"value": false, "note": "No fixed test duration is stated, although per-transition dwell and timeout values are still missing inputs."},
+      "wrong_test_command": {"value": true, "note": "The exact vendor HPM flash procedure and command are absent; a version query cannot substitute for the flash sequence."},
+      "missing_evidence": {"value": true, "note": "No per-cycle firmware, activation, health, log-delta, or recovery evidence has been collected."},
+      "unsafe_interpretation": {"value": true, "note": "Treating image names, slot numbers, redundant-update order, or power-cycle timing as inferable could interrupt power or brick the wrong PSU."},
+      "false_completion": {"value": true, "note": "Five successful command returns, five version queries, or one final healthy state do not prove five complete bidirectional cycles and per-transition recovery."},
+      "incorrect_BLOCKED": {"value": true, "note": "Unavailable images, maintenance approval, or vendor procedure are package/user-confirmation prerequisites; they do not alone prove an irreducible BLOCKED testcase."},
+      "unjustified_PASS": {"value": true, "note": "PASS cannot be supported without all five complete cycles and per-transition activation, power, management, and recovery evidence."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 3,
+    "source_key": "Functionality|150|Wistron-HW-00153-V002",
+    "answers": {
+      "exact_test_purpose": "The apparent intended combined test is to install an approved OS on one disposable, explicitly named target while applying a specified TPM BIOS state, then verify in the installed OS that the required TPM function is exposed. The contract itself says the source owner must first confirm that both activities are truly intended.",
+      "target_and_scope": "One identified SUT, one designated installation disk, one named TPM control/state transition, one approved OS image and boot mode. All other disks, keys, Secure Boot state, TPM actions, and platform security controls are out of scope unless explicitly added by the corrected requirement.",
+      "missing_information": [
+        "A corrected authoritative source requirement resolving whether OS installation, TPM state change, or both are required and in what order.",
+        "Exact SUT and disk identity, OS image/hash, boot mode, drivers, and expected installed-OS result.",
+        "Exact TPM initial/final BIOS state, verification method, and whether Secure Boot or key handling is involved.",
+        "Backup, key-protection, OOB access, reimage/recovery, and approval details."
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory disks by stable identity and capture partition, mount, RAID/LVM/device-mapper, boot, and OS state without altering storage.",
+        "Read current TPM, firmware, Secure Boot, BIOS inventory, and kernel/device exposure without clearing TPM or changing keys.",
+        "Verify OS image hash/signature, driver availability, backup status, and OOB/KVM reachability offline or through non-writing checks."
+      ],
+      "intended_test_operation": "Only after the source owner resolves the conflict: approve and perform the exact TPM BIOS transition and OS installation against the one designated disposable disk, reboot as required, and collect installed-OS TPM device/capability and platform-health evidence. Post-install inventory alone cannot substitute for the required install and state transition.",
+      "actions_requiring_authorization": [
+        "Formatting, partitioning, overwriting, or installing to the designated disk.",
+        "Any BIOS/TPM or Secure Boot/key change and each reboot.",
+        "Any TPM clear, key alteration, or non-target storage action requires separate explicit scope and a recovery plan; it is not implied here.",
+        "Recovery reimage or restoration of BIOS/security state."
+      ],
+      "evidence_required": [
+        "The corrected owner-approved intent and exact ordered procedure.",
+        "Stable SUT/disk identity, image identity/hash, boot mode, and proof that only the target disk changed.",
+        "Before/after TPM BIOS state, Secure Boot/key state as applicable, installer transcript/result, installed OS identity, TPM device/capability/kernel evidence, and preserved host/BMC logs.",
+        "Successful boot, target-only storage verification, and recovery readiness/final state."
+      ],
+      "stop_conditions": [
+        "The source purpose or ordering remains unresolved.",
+        "The disk, TPM control, initial/final state, image, or approval is ambiguous.",
+        "Backup, key protection, OOB/reimage recovery, or target isolation is unavailable.",
+        "Any non-target disk or unapproved security/key impact is possible or observed."
+      ],
+      "what_constitutes_completion": "Completion requires the owner-approved combined requirement to be carried out on the exact isolated target, with proof of the intended TPM before/after state, successful installation, installed-OS TPM capability, target-only storage impact, boot health, and preserved logs. No completion claim is valid while the source conflict remains.",
+      "what_remains_for_engineer_judgment": "The engineer must first decide the actual test intent and ordering, then select the target disk and TPM states, approve security/key effects and recovery, define the required TPM capability, and make the final acceptance decision."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Executing only an OS inventory or only a TPM query would omit the conditional installation and state-transition activities; the authoritative intended scope is not yet resolved."},
+      "wrong_device_selection": {"value": true, "note": "The installation disk is unidentified, creating an unacceptable risk of overwriting boot, RAID, mounted, or other non-target storage."},
+      "wrong_execution_location": {"value": true, "note": "BIOS/installer work must occur on the named SUT through the approved local/KVM path; running only host-side TPM inventory would be the wrong stage and location."},
+      "missing_iterations": {"value": false, "note": "No repeated installation or cycle count is specified."},
+      "modified_duration": {"value": false, "note": "No fixed duration is specified."},
+      "wrong_test_command": {"value": true, "note": "No corrected ordered install/TPM procedure exists yet, and a post-install inventory command is explicitly not equivalent."},
+      "missing_evidence": {"value": true, "note": "Corrected intent and all target, before/after, installer, TPM, and storage-isolation evidence are absent."},
+      "unsafe_interpretation": {"value": true, "note": "Guessing the disk or treating TPM enablement as permission to clear TPM or alter Secure Boot keys could destroy data or credentials."},
+      "false_completion": {"value": true, "note": "A booted OS or visible TPM device alone does not prove the required installation, state transition, or target-only impact."},
+      "incorrect_BLOCKED": {"value": false, "note": "Because the contract explicitly identifies an unresolved source-purpose conflict, stopping execution as BLOCKED pending owner correction is justified rather than merely a missing-package pause."},
+      "unjustified_PASS": {"value": true, "note": "PASS cannot be justified until the source conflict is resolved and the complete approved install/state-transition evidence exists."}
+    },
+    "overall_understanding": "AMBIGUOUS"
+  },
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 4,
+    "source_key": "Functionality|198|Wistron-HW-00207-V002",
+    "answers": {
+      "exact_test_purpose": "Demonstrate two-way data transfer over one designated physical SUT serial port and approved peer, using compatible electrical signaling, pinout, serial framing, and a harmless known payload/response.",
+      "target_and_scope": "Only the named board serial connector and named client endpoint. Both SUT-to-client and client-to-SUT communication are in scope; alternate consoles, network paths, unrelated serial ports, and arbitrary shell commands are not.",
+      "missing_information": [
+        "Exact port and peer identity, electrical standard, connector/pinout, cable, and ownership/current console use.",
+        "Baud rate, data bits, parity, stop bits, flow control, endpoint roles, and exact terminal method.",
+        "Harmless payload, expected response in both directions, timeout, repetition/retry rule, and acceptance criterion.",
+        "Operator assignment and alternate/OOB console/recovery readiness."
+      ],
+      "read_only_checks_possible_now": [
+        "Review board schematics, port maps, client documentation, pinout, and voltage compatibility before any cable is attached.",
+        "Inventory existing serial devices and console ownership/configuration without changing settings or opening an interactive session.",
+        "Confirm OOB/alternate-console availability and preserve baseline system/BMC logs."
+      ],
+      "intended_test_operation": "An operator connects only the approved compatible cable, configures both endpoints with the approved framing, transmits the approved harmless test data in both directions, captures the complete timestamped transcript and errors, then disconnects or restores the original console state.",
+      "actions_requiring_authorization": [
+        "Physical cable attachment, movement, and disconnection.",
+        "Changing serial-port settings or opening an interactive terminal on a console-affecting port.",
+        "Sending the approved payload and performing any console recovery/restoration action."
+      ],
+      "evidence_required": [
+        "Port, peer, cable, electrical standard, and pinout identities.",
+        "A settings table for both endpoints and the exact payload/expected response.",
+        "Timestamped full transmit/receive transcript for both directions, including timeouts/framing errors.",
+        "Proof that the original console/cable state was restored and SUT/BMC health remained normal."
+      ],
+      "stop_conditions": [
+        "Any electrical standard, pinout, cable, port, peer, ownership, settings, or expected response is unknown or mismatched.",
+        "The link is an active production console without approved alternate access.",
+        "Framing/electrical errors, unexpected peer output/behavior, or console impact occurs.",
+        "Alternate/OOB recovery is unavailable."
+      ],
+      "what_constitutes_completion": "Completion is a port-specific evidence package proving correct settings and the approved payload/response in both directions, with errors recorded and the original connection/console state and system health restored. The operator/owner decides physical acceptance and PASS.",
+      "what_remains_for_engineer_judgment": "The engineer must confirm electrical compatibility and ownership, define the harmless payload and expected response, decide repetition/timeouts and acceptable errors, and judge whether the observed two-way behavior satisfies the interface specification."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The scope explicitly requires bidirectional communication; a one-way or alternate-path check would plainly be incomplete rather than an allowed reduction."},
+      "wrong_device_selection": {"value": true, "note": "Neither the physical port nor peer is concretely identified, so the wrong connector or console could be selected."},
+      "wrong_execution_location": {"value": true, "note": "A network console, BMC SOL session, or different UART cannot substitute for the named physical serial link."},
+      "missing_iterations": {"value": true, "note": "The timeout, retry, and required exchange count are missing, so a single successful exchange may not meet the owner's intended repetition rule."},
+      "modified_duration": {"value": false, "note": "No test duration is specified; only unresolved timeouts and retries remain."},
+      "wrong_test_command": {"value": true, "note": "The exact terminal method and safe payload are absent, and arbitrary terminal commands are forbidden."},
+      "missing_evidence": {"value": true, "note": "No connection record, settings table, two-way transcript, or restoration evidence exists."},
+      "unsafe_interpretation": {"value": true, "note": "Assuming electrical level or pin compatibility, or sending an arbitrary command to an active console, could damage hardware or disrupt control."},
+      "false_completion": {"value": true, "note": "Port enumeration, cable presence, or a one-way echo does not prove bidirectional communication with the specified peer."},
+      "incorrect_BLOCKED": {"value": true, "note": "Missing cable/settings/operator details normally call for user confirmation; they become a true blocker only if interface semantics or safe recovery cannot be resolved."},
+      "unjustified_PASS": {"value": true, "note": "PASS is unsupported without an approved expected response and complete two-way transcript for the exact link."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 5,
+    "source_key": "Functionality|201|Wistron-HW-00210-V002",
+    "answers": {
+      "exact_test_purpose": "Verify, port by port, that every required physical USB connector on the identified platform detects an approved known-good device in BIOS and again in the installed OS, with evidence mapped to the controller/hub topology.",
+      "target_and_scope": "Every front, rear, and internal USB port listed in the owner-supplied matrix, on the specified platform revision. Both BIOS detection and OS detection are required for each applicable row; unrelated ports, unapproved devices, and automatic mounting or data access are outside scope.",
+      "missing_information": [
+        "The complete physical port/controller matrix and platform revision.",
+        "Approved device identity, device class, power needs, driver requirements, and known-good proof.",
+        "The BIOS/KVM capture method and the definition of detected versus usable in both BIOS and OS.",
+        "Placement order, handling operator, baseline/final state, usbutils availability, and recovery procedure."
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory current USB controllers, hubs, devices, drivers, kernel messages, and topology without attaching or mounting new media.",
+        "Review the platform port map and BIOS documentation offline and compare it with existing inventory.",
+        "Confirm auto-mount/boot/security risk controls and OOB access without changing them."
+      ],
+      "intended_test_operation": "For every approved matrix row, an operator places the known-good device in that exact port, captures BIOS detection where required, boots or enters the installed OS as approved, and collects full enumeration, topology, driver, and timestamped kernel evidence for that placement before moving to the next port. Restore the final state afterward.",
+      "actions_requiring_authorization": [
+        "Every physical device insertion, removal, or movement, especially for internal ports.",
+        "BIOS entry, reboot, or console manipulation needed for BIOS evidence.",
+        "Any mount, filesystem access, driver installation, or boot-order/security change; these are not implied by detection testing."
+      ],
+      "evidence_required": [
+        "A completed row-by-row matrix tying physical port, controller/hub path, device identity, and timestamp together.",
+        "BIOS capture and OS lsusb/topology/device/driver evidence for every applicable port.",
+        "Kernel enumeration timestamps and errors, unexpected-mount/boot observations, and baseline-to-final topology comparison.",
+        "Final proof that the device was safely removed and boot/input/security state was restored."
+      ],
+      "stop_conditions": [
+        "Port or device identity is unknown, the matrix is incomplete, or the BIOS/OS acceptance definition remains conflicted.",
+        "Unexpected mount, boot behavior, security impact, over-current/power error, or controller reset occurs.",
+        "Required BIOS evidence cannot be safely obtained or OOB/alternate console is unavailable.",
+        "Per-port evidence is missing or cannot be mapped uniquely to the physical placement."
+      ],
+      "what_constitutes_completion": "Every required matrix row has uniquely mapped BIOS and OS evidence for the approved device, all errors and topology are preserved, no unapproved mount or security effect occurred, and final platform state is restored. Enumeration alone is complete only if the engineer defines it as the acceptance criterion.",
+      "what_remains_for_engineer_judgment": "The engineer must define the authoritative port matrix, approve the device, decide whether detection or usable I/O is required, interpret BIOS evidence and any enumeration errors, and make the final coverage and PASS decision."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "Because the actual matrix is absent, internal ports or one of the BIOS/OS phases could be silently omitted unless the owner fixes the full row set first."},
+      "wrong_device_selection": {"value": true, "note": "The approved device and its known-good identity are not supplied; arbitrary or storage-bearing USB media would be unsafe and non-equivalent."},
+      "wrong_execution_location": {"value": true, "note": "OS enumeration alone or testing a controller rather than each physical connector does not satisfy the BIOS-plus-OS, port-by-port requirement."},
+      "missing_iterations": {"value": true, "note": "The number of required placements equals the missing matrix row count, so total iterations cannot yet be established."},
+      "modified_duration": {"value": false, "note": "No fixed duration is specified."},
+      "wrong_test_command": {"value": true, "note": "A single lsusb command is insufficient; the required command/evidence sequence must be repeated and mapped after each approved physical placement."},
+      "missing_evidence": {"value": true, "note": "The coverage matrix, per-port BIOS captures, OS topology/driver logs, and restoration evidence are all absent."},
+      "unsafe_interpretation": {"value": true, "note": "Using arbitrary media or permitting auto-mount/boot can expose data or change boot/security state; port labels also cannot be inferred from one topology snapshot."},
+      "false_completion": {"value": true, "note": "One aggregate lsusb listing or successful testing of representative ports cannot establish all-port BIOS-and-OS coverage."},
+      "incorrect_BLOCKED": {"value": true, "note": "A missing matrix, approved device, or operator normally requires package/user confirmation; it is not irreducibly BLOCKED unless scope or acceptance remains unresolvable."},
+      "unjustified_PASS": {"value": true, "note": "PASS is unjustified until every authoritative matrix row has both required evidence phases and the engineer resolves detection-versus-usability criteria."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 6,
+    "source_key": "Functionality|79|Wistron-HW-00082-V004",
+    "answers": {
+      "exact_test_purpose": "Run exactly 225 stress-ng CPU workers continuously for eight hours on the approved SUT and determine, from workload and platform telemetry, whether the server remains manageable and free of disallowed CPU, thermal, power, kernel, MCE/EDAC, BMC, or recovery faults.",
+      "target_and_scope": "The CPU complex of one approved, dedicated Linux SUT. The source parameters are one eight-hour run with 225 CPU workers; reducing the workers or runtime, running elsewhere, or substituting a different stressor is outside scope unless the testcase owner formally revises it.",
+      "missing_information": [
+        "Exact SUT identity, CPU topology, and engineering approval for 225 workers including any oversubscription.",
+        "Approved stress-ng build/version and package-installation status.",
+        "Maintenance window, workload evacuation proof, cooling/power margin, monitoring sources and sampling, and numeric stop/acceptance thresholds.",
+        "Definition of workable/recovered, tested abort procedure, and OOB/KVM recovery owner."
+      ],
+      "read_only_checks_possible_now": [
+        "Collect SUT identity and CPU topology and compare 225 workers with online CPUs without starting load.",
+        "Query stress-ng presence/version/help, current processes/load, cgroup/container limits, cooling/power sensors, and OOB reachability.",
+        "Capture evidence-preserving baseline kernel, MCE/EDAC, BMC/SEL, thermal, power, frequency, and throttle data without clearing logs."
+      ],
+      "intended_test_operation": "After separate package and high-load approval, run `stress-ng --cpu 225 -t 8h` on the named SUT, retain complete stdout/stderr and exit status, monitor health continuously against approved thresholds, stop safely on a trigger, and prove that no stress worker remains and manageability/workload readiness recover afterward.",
+      "actions_requiring_authorization": [
+        "Installing or changing stress-ng or dependencies.",
+        "Starting the 225-worker eight-hour high-load run in the maintenance window.",
+        "Any changed worker count, runtime, command, target host, threshold, or retry.",
+        "OOB intervention, reboot, reset, or other recovery action beyond stopping workers."
+      ],
+      "evidence_required": [
+        "SUT/CPU topology, worker approval, stress-ng version, exact command, start/end timestamps, full output, and exit status.",
+        "Continuous thermal, power, frequency, throttle, utilization, and management telemetry for the complete eight hours.",
+        "Baseline and delta kernel/MCE/EDAC and BMC/SEL evidence without log clearing.",
+        "Stop-event details if any, zero remaining stress processes, normalized health, and post-run management/workload recovery."
+      ],
+      "stop_conditions": [
+        "225 workers, package, target, maintenance, cooling/power capacity, thresholds, abort method, or OOB access is unapproved or unresolved.",
+        "Active users/jobs or an abnormal baseline are present.",
+        "Approved thermal/current/power/throttle threshold, kernel/MCE/EDAC/BMC error threshold, hang, or management-loss condition is reached.",
+        "Monitoring or required evidence becomes incomplete."
+      ],
+      "what_constitutes_completion": "The exact command runs on the approved SUT for the full eight hours with complete continuous telemetry and log deltas, an accounted-for exit state, no remaining workers, and verified post-run recovery. A clean exit alone is not completion or PASS.",
+      "what_remains_for_engineer_judgment": "The engineer must approve 225 workers relative to topology, provide thermal/power/error thresholds and a definition of workable, interpret throttling and corrected errors, and make the final PASS/FAIL/BLOCKED decision."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": false, "note": "The contract fixes both 225 workers and eight hours; any reduction requires a formal source revision and cannot be treated as equivalent."},
+      "wrong_device_selection": {"value": true, "note": "The specific SUT is not identified, so execution on the wrong server remains possible."},
+      "wrong_execution_location": {"value": true, "note": "The test must run on the approved bare-metal SUT under its actual resource controls; a login node, container-limited context, or different host may not stress the intended CPU complex."},
+      "missing_iterations": {"value": false, "note": "The contract specifies one continuous eight-hour run, not repeated cycles."},
+      "modified_duration": {"value": false, "note": "The supplied intent correctly preserves eight hours; substituting 600 seconds would be a clear future deviation, not an ambiguity in this contract."},
+      "wrong_test_command": {"value": false, "note": "The stated command matches the required 225 workers and eight-hour duration, subject to package/version and target approval."},
+      "missing_evidence": {"value": true, "note": "No run, telemetry, log-delta, exit, process-termination, or recovery evidence exists yet."},
+      "unsafe_interpretation": {"value": true, "note": "Treating the command as unconditional permission or treating 225 as safe without topology/cooling review could overload an active or unsuitable host."},
+      "false_completion": {"value": true, "note": "A short 600-second run, an exit code alone, or an eight-hour command killed early cannot establish completion."},
+      "incorrect_BLOCKED": {"value": true, "note": "A missing package, maintenance window, thresholds, or approval requires user confirmation; it does not by itself make the testcase irreducibly BLOCKED."},
+      "unjustified_PASS": {"value": true, "note": "PASS is unsupported without the full-duration workload plus complete health, error, termination, and recovery evidence and engineer threshold interpretation."}
+    },
+    "overall_understanding": "CLEAR"
+  },
+  {
+    "validator_id": "agent_a",
+    "model_independence": "same-model-family isolated context; not independent-model validation",
+    "sequence": 7,
+    "source_key": "Functionality|87|Wistron-HW-00090-V004",
+    "answers": {
+      "exact_test_purpose": "Stress host DDR memory, not GPU HBM, for eight hours with stress-ng virtual-memory workers allocating the source-required 90% memory target, then evaluate allocation behavior, ECC/platform errors, telemetry, manageability, and recovery. The exact worker count is not yet knowable because the source contains conflicting 15-versus-9 values.",
+      "target_and_scope": "The approved Linux SUT's intended host-memory resources, as constrained by its NUMA, cgroup, swap, and available-capacity design. One corrected worker count must be chosen; `--vm-bytes 90%` semantics must be verified for the installed version before defining the actual aggregate pressure.",
+      "missing_information": [
+        "Owner resolution of the 15-versus-9 worker conflict and confirmation of one exact command.",
+        "Exact SUT, stress-ng version, and verified interpretation of `--vm-bytes 90%` for that version and worker count.",
+        "DIMM/NUMA, free/available memory, swap, hugepage, cgroup, and workload inventory and an allocation/OOM risk assessment.",
+        "Meaning of the source's `badblock` evidence, acceptable ECC/error criteria, monitoring/stop thresholds, maintenance approval, abort method, and recovery owner."
+      ],
+      "read_only_checks_possible_now": [
+        "Inventory SUT identity, DIMMs, NUMA layout, online/available memory, swap, hugepages, cgroup/container limits, current workloads, and GPU memory separately.",
+        "Query the installed stress-ng version/help and validate `--vm`/`--vm-bytes` semantics offline without allocating memory.",
+        "Capture baseline ECC/EDAC/MCE, kernel, OOM, BMC/SEL, thermal, power, and management evidence without clearing logs."
+      ],
+      "intended_test_operation": "After the owner chooses one worker count and approves the resolved command, run `stress-ng --vm <APPROVED_WORKER_COUNT> --vm-bytes 90% --timeout 8h` on the dedicated SUT, monitor memory pressure, swap/OOM, ECC and platform health continuously, stop on approved thresholds, and prove all workers terminate and the host returns to a manageable normal state.",
+      "actions_requiring_authorization": [
+        "Installing or changing stress-ng or dependencies.",
+        "Approval of the corrected worker count and exact command semantics.",
+        "Starting the eight-hour, 90%-memory high-pressure workload.",
+        "Any change to workers, percentage, runtime, swap policy, target, thresholds, retry, or recovery action."
+      ],
+      "evidence_required": [
+        "Owner-approved command, stress-ng version/semantics, SUT identity, and DIMM/NUMA/memory/swap/cgroup baseline.",
+        "Full eight-hour stdout/stderr, exit status, timestamps, allocation/throughput data, and continuous pressure/swap/OOM/thermal/power telemetry.",
+        "Baseline and delta ECC/EDAC/MCE/kernel/BMC/SEL evidence, including an explicit mapping of any required `badblock` result.",
+        "Stop-event details if applicable, zero remaining workers, normalized memory/swap state, and post-run manageability/workload recovery."
+      ],
+      "stop_conditions": [
+        "Worker count or `--vm-bytes` allocation semantics remains unresolved.",
+        "Target, capacity, maintenance, package, thresholds, abort procedure, or OOB recovery is unapproved or unsafe.",
+        "Active workloads, abnormal baseline, OOM, swap storm, error above the approved ECC threshold, kernel/BMC fault, thermal/power breach, hang, or management loss occurs.",
+        "Monitoring or required evidence becomes incomplete."
+      ],
+      "what_constitutes_completion": "After the command conflict is formally resolved, the approved worker count and 90% semantics are exercised for the full eight hours on the correct host-memory target, with complete workload/health/error evidence, clean worker termination, and recovered memory, swap, and management state. Until then the execution cannot validly start or complete.",
+      "what_remains_for_engineer_judgment": "The engineer must select 15 or 9 (or formally revise the source), validate aggregate 90% allocation semantics and capacity safety, define `badblock` and ECC acceptance, set OOM/swap/thermal/power thresholds, and decide final platform health and verdict."
+    },
+    "flags": {
+      "possible_scope_reduction": {"value": true, "note": "The unresolved worker count changes workload concurrency and potentially aggregate coverage; choosing the smaller value without owner correction could reduce scope."},
+      "wrong_device_selection": {"value": true, "note": "The SUT is unidentified and the test could be mistakenly aimed at GPU HBM rather than host DDR memory."},
+      "wrong_execution_location": {"value": true, "note": "A container/cgroup-limited context or GPU memory tool would stress a different effective resource than the approved host-memory scope."},
+      "missing_iterations": {"value": true, "note": "The required number of virtual-memory workers is explicitly conflicted between 15 and 9 and must not be inferred from duplicate-option precedence."},
+      "modified_duration": {"value": false, "note": "The contract preserves the source-required eight-hour duration; any shorter run would be a non-equivalent future change."},
+      "wrong_test_command": {"value": true, "note": "No executable command is valid until one worker count is approved and the installed version's 90% semantics are verified; the conflicting source command must not be run unchanged."},
+      "missing_evidence": {"value": true, "note": "The corrected command and all baseline, eight-hour workload, allocation, ECC, log-delta, termination, and recovery evidence are absent."},
+      "unsafe_interpretation": {"value": true, "note": "Guessing duplicate-option precedence or aggregate versus per-worker 90% semantics could provoke OOM, swap storm, hang, or test the wrong memory domain."},
+      "false_completion": {"value": true, "note": "A shorter run, generic memory allocation test, one selected worker value without approval, or clean exit without health evidence is not completion."},
+      "incorrect_BLOCKED": {"value": false, "note": "Execution is correctly blocked at present because the exact command semantics and worker count are irreducibly ambiguous until the testcase owner resolves them; missing package/approval alone would not suffice."},
+      "unjustified_PASS": {"value": true, "note": "PASS cannot be justified while the command is ambiguous or without the complete eight-hour host-memory, error, termination, and recovery evidence."}
+    },
+    "overall_understanding": "AMBIGUOUS"
+  }
+]

@@ -1,6 +1,7 @@
 # Review Workflow Logic V3
 
-Status: pilot working contract, 2026-10-13
+Status: calibrated after the 20-case draft review; isolated understanding
+validation remains a separate recorded gate, 2026-10-13
 
 This document is the entry point for V3 testcase review. It does not replace
 `REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md`; V2 remains historical and usable
@@ -186,6 +187,37 @@ name, Redfish resource ID, network interface, storage target, or recovery path
 is shared across white-box systems. Platform-specific expected values require
 an identified applicable platform specification.
 
+Calibration adds these interpretation rules:
+
+- Treat the tested access path as scope when the source names it. A WebUI
+  flash is not silently replaced by Redfish, and a BIOS or BMC-web observation
+  is not made optional merely because a CLI can read a similar value.
+- Validate option aliases and versioned CLI semantics against the installed or
+  qualified tool before emitting a command. A duplicate alias with different
+  values is a source-command conflict; a flag that controls queue depth cannot
+  be used as a duration flag.
+- Preserve graph and identity evidence, not only scalar counts. A device count
+  cannot prove the same devices returned, and a total link count cannot prove
+  a generation-specific GPU/NVSwitch topology.
+- For cloned, multi-device, or multi-port workloads, resolve per-clone address
+  ranges, per-target results, ordering/concurrency, and the protected evidence
+  destination before execution.
+- Benchmark acceptance must bind the measured metric to an equivalent target,
+  topology, software/tuning profile, scope, repetition rule, and reference.
+  Theoretical component ratings are not automatically comparable application
+  or system benchmark thresholds.
+- Workbook timing fields are source facts. If Procedure duration conflicts
+  with Machine Time, record `SOURCE_CONFLICT`; do not select either value.
+- A programmable PDU, chamber, fixture, browser, or operator setup can create
+  a hybrid test. Use `REQUIRES PACKAGE / USER CONFIRMATION` when the physical
+  setup/stimulus and automated execution/evidence phases are both meaningful;
+  reserve `MANUAL ONLY` for acceptance that has no reasonable automated
+  substitute.
+- Retain `BLOCKED` when plausible source interpretations are materially
+  different tests. For example, LTSSM state-transition capture and PCIe
+  voltage/time lane-margin measurement cannot be merged merely because an
+  unspecified manual might later mention one of them.
+
 Safety invariants from V2 remain in force: never guess a destructive storage
 target; never assume GPU indices/BDFs; preserve logs; require image-to-device
 compatibility and recovery for firmware; validate management connectivity and
@@ -280,6 +312,15 @@ Before continuing to the remaining 180, confirm that V3:
 
 Record the draft-to-calibrated rule changes. Failed calibration cases must be
 fixed and revalidated before expansion.
+
+### 10.1 Draft-to-calibrated amendments from the 20-case pilot
+
+The initial draft already separated capability from readiness and required
+source preservation. The first 20 reviews added the explicit path, CLI-alias,
+identity/graph, clone/target, benchmark-comparability, timing-conflict, hybrid
+fixture, and genuine-semantic-blocker rules in Section 5. These amendments are
+technical corrections demonstrated by individual calibration cases; they are
+not permission to append generic fields to unrelated cases.
 
 ## 11. Agent understanding validation
 
