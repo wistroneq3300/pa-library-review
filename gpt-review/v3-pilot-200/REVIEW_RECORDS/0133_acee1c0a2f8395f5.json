@@ -1,0 +1,193 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 133,
+    "calibration": false,
+    "source_key": "Performance|37|Wistron-Performance GPU-00053-V003",
+    "case_variant_id": "acee1c0a2f8395f5",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 37,
+        "code": "Wistron-Performance GPU-00053-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "33491e8f71391056ef0fadf08ee4acd75d9572f2b007c39be001e05041cb0246",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "Performance",
+        "test_set": "Minigo",
+        "purpose_facts": "Evaluate GPGPU performance by training Minigo.",
+        "procedure_facts": [
+            "No repository revision, dataset, board size, self-play/training/evaluation pipeline, command or metric is supplied."
+        ],
+        "criteria_facts": [
+            "Greater than an unspecified official NVIDIA MLPerf score."
+        ],
+        "attended_time_minutes": "60",
+        "machine_time_minutes": "90",
+        "source_conflicts": [
+            "The testcase defines Minigo training but cites an undefined official MLPerf NVIDIA score; no MLPerf Minigo benchmark/profile is identified."
+        ],
+        "missing_source_information": [
+            "Minigo implementation/commit and workload stage.",
+            "Framework/backend, data/checkpoint, precision, GPU count, iterations/duration and reproducibility seed.",
+            "Training metric and valid comparable baseline."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Evaluate the designated GPGPU platform with an engineer-approved Minigo training workload for the intended 90-minute machine window and compare reproducible training performance and health with a valid Minigo-specific baseline.",
+        "must_preserve": [
+            "Minigo training, not inference or GPU inventory.",
+            "A real training workload and 60/90-minute planning intent.",
+            "GPGPU performance plus health evidence."
+        ],
+        "must_not_infer": [
+            "That Minigo here is an official MLPerf benchmark.",
+            "NVIDIA/CUDA on an unknown GPU backend.",
+            "A repository, board size, training stage, metric or reference from another testcase."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 correctly notes that inventory is not training, rejects NVIDIA-only assumptions and requires Minigo repo/data/framework/config plus a valid baseline.",
+        "specific_gap": "V2 does not force a choice among self-play generation, model training and evaluation, nor require seed/checkpoint/board-size identity and a throughput-versus-quality completion rule for a 90-minute run."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "MLPerf inference cases cannot define this non-MLPerf Minigo training workload."
+        ],
+        "precedence_application": "The invalid MLPerf criterion cannot be used; a Minigo-specific baseline and pipeline must be supplied without changing the training intent."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "SOURCE_CONFLICT",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Keep Minigo training automatable after handoff, but block workload execution until the pipeline stage, 90-minute profile, exact artifacts and non-MLPerf acceptance baseline replace the invalid score criterion."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Minigo training and GPGPU performance intent are clear."
+        ],
+        "missing": [
+            "Implementation, pipeline stage, backend/artifacts, duration/iterations, metric, baseline, resource limits and recovery."
+        ],
+        "provider": [
+            "ML engineer defines pipeline/config/quality metric.",
+            "Software/data owner supplies code/data/checkpoint/licenses.",
+            "GPU/lab owner approves sustained load and baseline."
+        ],
+        "safe_read_only_work": [
+            "Inventory GPU/CPU/topology/driver/framework and capacity; inspect proposed repository/artifact metadata without training."
+        ],
+        "prohibited_until_resolved": [
+            "Install, generate self-play data, train/evaluate, tune clocks, clear logs or PASS."
+        ],
+        "closure_evidence": [
+            "Pinned Minigo pipeline and artifacts.",
+            "Signed 90-minute/iteration/seed/checkpoint profile.",
+            "Minigo-specific performance/quality baseline and health limits."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Run the Approved Minigo GPU Training Workload",
+        "purpose": "Execute the signed Minigo training pipeline on the designated GPU SUT for the approved 90-minute workload, measure reproducible training throughput and quality progression, and compare results with a Minigo-specific baseline while preserving platform-health evidence.",
+        "applicable_platform_environment": "Exact GPU vendor/model/count/topology, CPU/NUMA/memory/storage, driver/runtime/framework, Minigo repository commit, board/game configuration, data/checkpoint and container/environment. CUDA and ROCm are not interchangeable.",
+        "target_scope": "The explicitly selected Minigo stage: self-play generation, training and any required evaluation must be named separately. Preserve Machine Time 90 and Attended Time 60 as planning intent; exact active-training window, steps/games and repetitions must be signed.",
+        "required_inputs": "Repository/commit/license; framework/backend/container hashes; GPU allocation; board/model/hyperparameters/precision/batch size; self-play data and checkpoint provenance; seed; stage sequence; 90-minute mapping or step/game counts; throughput, loss/quality and baseline criteria; telemetry/abort limits; output retention and recovery.",
+        "test_command_procedure_intent": "Verify hashes/config and baseline health, stage only approved data/checkpoints, then execute the signed Minigo stage sequence with full commands/logs and fixed seed/profile. Record active training time, games/positions/steps per second, loss/quality trajectory and resource telemetry. Do not substitute an inventory command or label the result MLPerf.",
+        "preconditions": "Pipeline and baseline signed; artifacts licensed/pinned; sufficient storage/memory/cooling/power; no competing GPU load; checkpoint/output/recovery paths approved.",
+        "expected_evidence": "System/GPU topology; code/container/framework/data/checkpoint/config hashes; exact commands, seed and stage boundaries; active duration and completed games/positions/steps; throughput and loss/quality/evaluation trajectory; GPU utilization/memory/power/thermal/clocks; XID/ECC/kernel/SEL logs; output/checkpoint manifest; baseline comparison; final health.",
+        "acceptance_reference": "Signed Minigo-specific baseline for the same implementation, stage, hardware allocation, board/model, data/checkpoint, precision and duration/steps. Pass requires the performance and quality-progression rules plus clean health; an MLPerf score or `nvidia-smi` output is invalid.",
+        "safety_restrictions": "Do not invent pipeline stages, overwrite checkpoints/data, use unlicensed data, assume NVIDIA, change clocks/power/hyperparameters without approval, expand beyond the signed GPU set, clear logs or claim MLPerf status.",
+        "human_approval_requirements": "ML owner signs pipeline/quality/baseline; data/software owner approves artifacts; platform owner approves load/resources; human judges result and checkpoint retention.",
+        "manual_boundaries": "Humans define the missing scientific workload and baseline. The Agent executes the frozen pipeline and collects evidence only after gates.",
+        "recovery_requirements": "On divergence, NaN, data/checkpoint corruption or platform limit, stop cleanly, preserve logs and last approved checkpoint, restore tuning/services, verify health and require approval before resumption.",
+        "stop_conditions": "Pipeline/stage/duration/baseline remains undefined; artifact/license mismatch; wrong backend/GPU allocation; NaN/divergence, corrupt data/checkpoint, storage exhaustion, XID/ECC/thermal/power/host limit, monitoring/evidence loss."
+    },
+    "identified_defects": [
+        "Minigo is incorrectly tied to an undefined MLPerf NVIDIA score.",
+        "Training stage and executable profile are absent.",
+        "No reproducibility, quality or 90-minute completion rule."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Test Command / Procedure Intent",
+        "Expected Evidence",
+        "Acceptance Reference",
+        "Safety Restrictions",
+        "Recovery Requirements",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Convert an inventory-only handoff into a real Minigo training contract without inventing a pipeline or mislabeling it MLPerf.",
+    "new_technical_evidence": [
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Performance!row-37",
+            "title": "Source testcase Wistron-Performance GPU-00053-V003",
+            "version": "Baseline workbook",
+            "applicability": "Only this case",
+            "supports": "Minigo training intent, 60/90-minute metadata and conflicting MLPerf criterion.",
+            "remaining_uncertainty": "Every executable workload and baseline parameter is missing."
+        },
+        {
+            "source_url": "https://github.com/mlcommons/training",
+            "title": "MLPerf Training reference benchmarks",
+            "version": "Official repository inspected 2026-10-14",
+            "applicability": "Boundary check only",
+            "supports": "An official comparison must identify a defined benchmark/release; this testcase identifies no MLPerf Minigo profile.",
+            "remaining_uncertainty": "The intended Minigo implementation is unknown."
+        }
+    ],
+    "removed_ambiguities": [
+        "Separates self-play, training and evaluation.",
+        "Rejects MLPerf-score and NVIDIA assumptions.",
+        "Requires stage-specific throughput plus quality progression and reproducibility."
+    ],
+    "resolved_blockers": [
+        "Repo/data/config are provider-closable and do not imply permanent BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Invalid acceptance criterion and missing pipeline/profile require ML engineer decision."
+    ],
+    "objective_improvement_over_v2": "V3 defines the precise missing Minigo stage, reproducibility, quality, checkpoint and recovery boundaries while preserving the real training intent and 90-minute plan.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Contract-only validation was CLEAR. The validator preserved the signed Minigo stages and 90-minute intent; rejected inventory-only completion, invented pipeline stages, NVIDIA/CUDA assumptions and MLPerf labeling; required reproducible throughput plus quality progression, checkpoint provenance, retention and health evidence; and kept scientific pipeline/baseline decisions with engineers. No document defect was found. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Performance row 37 says Minigo training for Machine Time 90 but supplies no training command and cites an undefined MLPerf NV score.",
+        "source_specific_v2_comparison": "V2 rejects inventory-only review; V3 additionally freezes pipeline stages, reproducibility, quality and checkpoint recovery.",
+        "source_specific_safety_evidence_decision": "Inventory only is safe; no training/data/checkpoint mutation until pipeline and baseline are signed.",
+        "template_violation_detected": false
+    }
+}

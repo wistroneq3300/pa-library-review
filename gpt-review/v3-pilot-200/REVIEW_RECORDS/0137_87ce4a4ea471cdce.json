@@ -1,0 +1,202 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 137,
+    "calibration": false,
+    "source_key": "Performance|48|Wistron-Performance GPU-00020-V002",
+    "case_variant_id": "87ce4a4ea471cdce",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 48,
+        "code": "Wistron-Performance GPU-00020-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "80a370e90c2b05e2ee94ad8a8c40a1c217e5da018200ce005e9a102d506d30d1",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "Multi - Node - NCCL",
+        "test_set": "NCCL",
+        "purpose_facts": "Prepare two systems for multi-node NCCL and require NCCL execution without errors and performance matching an NVIDIA benchmark document.",
+        "procedure_facts": [
+            "Edit `/etc/hosts`, create root passwordless SSH, install PMIx/libfabric dependencies and download OpenMPI 5.0.5.",
+            "The source stops after extracting OpenMPI; it never builds OpenMPI/NCCL-tests or runs NCCL."
+        ],
+        "criteria_facts": [
+            "Multi-node NCCL runs without errors and meets an unspecified NVIDIA performance specification."
+        ],
+        "attended_time_minutes": "30",
+        "machine_time_minutes": "10",
+        "source_conflicts": [
+            "Procedure contains setup only, while criteria require a completed NCCL benchmark."
+        ],
+        "missing_source_information": [
+            "Two-node GPU/NIC/fabric topology, NCCL/CUDA/OpenMPI/NCCL-tests versions and build.",
+            "Collective, ranks/GPUs, message matrix, iterations, transport/plugin/interface, correctness and bandwidth thresholds.",
+            "Approved authentication and package/network changes."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Run a two-node NCCL collective-performance test across the designated GPUs and interconnect, prove data correctness and error-free completion, and compare algbw/busbw over an approved message-size matrix with a topology-matched NVIDIA reference.",
+        "must_preserve": [
+            "Two physical SUT nodes and multi-node NCCL.",
+            "A real collective benchmark, not setup or SSH reachability.",
+            "Correctness plus performance comparison."
+        ],
+        "must_not_infer": [
+            "`/etc/hosts` as an MPI hostfile.",
+            "One rank or one GPU per node.",
+            "Socket versus InfiniBand/RoCE transport, GDR, SHARP/NVLS or thresholds.",
+            "That 10 minutes is sufficient without an approved matrix."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 correctly identifies the setup-only source, rejects DeepSeek password/host-key shortcuts and requires complete stack, rank mapping, transport, matrix, logs and reference.",
+        "specific_gap": "V2 does not explicitly require NCCL data checking, pin the exact network interface/plugin/fallback behavior, reconcile 30/10-minute planning with the message matrix, or distinguish algbw from topology-normalized busbw."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Single-node NCCL evidence cannot satisfy inter-node transport or two-node rank mapping."
+        ],
+        "precedence_application": "Missing packages/topology are provider-closable, but the setup-only procedure cannot be called complete."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "REWRITE_REQUIRED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Replace the setup fragment with a signed two-node NCCL-tests contract. Execution remains automatable after stack, topology, transport, matrix, correctness, thresholds and privileged-change approvals are supplied."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Two nodes, OpenMPI 5.0.5 intent and NCCL performance goal are identified."
+        ],
+        "missing": [
+            "Complete software stack/build, secure access, rank/GPU map, fabric/interface/plugin, message/iteration matrix, correctness and reference/limits."
+        ],
+        "provider": [
+            "GPU/fabric owner supplies topology/transport/reference.",
+            "Software owner supplies pinned artifacts/build.",
+            "Lab/security owners approve access/network/package changes."
+        ],
+        "safe_read_only_work": [
+            "Inventory GPU UUID/BDF/NVLink/NVSwitch, NIC BDF/GUID/firmware/link, NUMA, routes, MTU/RDMA/GDR capability, installed versions and logs on both nodes."
+        ],
+        "prohibited_until_resolved": [
+            "Edit hosts/SSH, install/build, firewall/sysctl/network changes, MPI/NCCL traffic, log clearing or PASS."
+        ],
+        "closure_evidence": [
+            "Signed two-node rank-to-GPU/NIC map and isolated path.",
+            "Pinned compatible stack and secure launcher.",
+            "Approved collective/matrix/iterations/check/reference and recovery."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Measure Two-Node NCCL All-Reduce Performance and Correctness",
+        "purpose": "Run the approved two-node NCCL all-reduce matrix across the exact GPU and network fabric topology, verify reduction correctness and error-free completion, and compare algbw and topology-normalized busbw with a signed comparable NVIDIA reference.",
+        "applicable_platform_environment": "Exactly two named SUT nodes with matched GPU/NIC/NVLink/NVSwitch/PCIe/NUMA topology, pinned NVIDIA driver/CUDA/NCCL, OpenMPI 5.0.5 or approved version, PMIx/libfabric/OFED/plugin and NCCL-tests commit. Ethernet, RoCE and InfiniBand paths are not interchangeable.",
+        "target_scope": "Signed ranks per node, GPUs per rank, collective/data type/reduction, in-place/out-of-place modes, message range/factor, warmup/iterations and transport. Attended 30/Machine 10 minutes are planning metadata; the approved matrix defines completion.",
+        "required_inputs": "Two node identities; secure SSH/orchestrator; rank/GPU/NIC/NUMA map; stack/build hashes; interface/GID/route/MTU/FEC/RDMA/GDR/plugin/fallback policy; collective/matrix/iterations/check flag; environment variables; numeric algbw/busbw/correctness thresholds and reference; abort/recovery limits; approvals.",
+        "test_command_procedure_intent": "Capture both-node topology/health/counters, verify binaries and rank mapping, and start only the approved launcher with explicit hostfile and environment. Run the signed `all_reduce_perf` matrix with correctness checking, full untrimmed stdout and per-rank NCCL logs. Confirm actual interface/plugin/transport and no unintended fallback; collect algbw, busbw and wrong/error fields, counters and health, then remove only approved temporary state.",
+        "preconditions": "Dedicated healthy two-node fabric; clocks/link/profile frozen; secure trust and package/network changes approved; peer reachability and ports ready; no competing workload; evidence storage and cleanup tested.",
+        "expected_evidence": "Both-node hardware/software/topology maps; artifact hashes/build logs; exact hostfile/rank map/commands/environment; NCCL selected interface/plugin/transport; full per-size in/out-of-place time/algbw/busbw/correctness; per-rank logs; NIC/RDMA/FEC/retry/drop counters; GPU XID/ECC/NVLink telemetry; CPU/NUMA/power/thermal and dmesg/SEL; reference comparison; cleanup/final health.",
+        "acceptance_reference": "Signed NVIDIA or platform reference for the same two-node topology, GPU/NIC counts, transport/plugin, NCCL-tests collective/data type/modes/message matrix and versions. Pass requires zero disallowed correctness errors, no unintended fallback/hang, complete matrix and all accepted metrics/health within limits; algbw and busbw are not interchangeable.",
+        "safety_restrictions": "Do not use root password injection, disable host-key checking, treat `/etc/hosts` as hostfile, install latest/unpinned code, modify network/sysctl/firewall without approval, guess interfaces/ranks, hide logs with `tail`, kill unrelated jobs, auto-retry hangs or compare unmatched topology.",
+        "human_approval_requirements": "Owners approve nodes/fabric, secure trust, package/network changes, matrix/reference and load; human authorizes traffic and judges disposition.",
+        "manual_boundaries": "Humans select topology/transport/reference and privileged setup. Agent may execute the frozen launcher, monitor and package evidence.",
+        "recovery_requirements": "On hang/error/fallback/link fault, terminate recorded ranks/daemons in order, preserve all logs/counters, restore network/SSH/package state, verify both nodes/GPUs/NICs and require approval before rerun.",
+        "stop_conditions": "Stack/topology/rank/transport/matrix/reference/approval missing; wrong interface/plugin/fallback; rank/GPU mismatch; correctness error; hang/timeout; NIC/RDMA/NVLink/XID/ECC/thermal/power/host limit; monitoring loss or failed cleanup."
+    },
+    "identified_defects": [
+        "Source never builds or runs NCCL.",
+        "Unsafe root trust/package setup lacks approval.",
+        "No rank/fabric/matrix/correctness/reference definition."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Test Command / Procedure Intent",
+        "Expected Evidence",
+        "Acceptance Reference",
+        "Safety Restrictions",
+        "Recovery Requirements",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Turn a two-node setup fragment into an executable, correctness-aware NCCL contract without assuming transport or topology.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting/networking_troubleshooting.html",
+            "title": "NCCL Networking Troubleshooting",
+            "version": "Official documentation retrieved 2026-10-14",
+            "applicability": "Inter-node NCCL",
+            "supports": "NCCL may auto-select unusable interfaces and open network ports; selected interface/path must be verified.",
+            "remaining_uncertainty": "Platform transport/plugin is unspecified."
+        },
+        {
+            "source_url": "https://github.com/NVIDIA/nccl-tests/blob/master/doc/PERFORMANCE.md",
+            "title": "NCCL Tests Performance",
+            "version": "Upstream documentation retrieved 2026-10-14",
+            "applicability": "nccl-tests metrics",
+            "supports": "algbw and busbw have distinct meanings and collective-specific normalization.",
+            "remaining_uncertainty": "Matrix/threshold absent."
+        },
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Performance!row-48",
+            "title": "Source testcase Wistron-Performance GPU-00020-V002",
+            "version": "Baseline workbook",
+            "applicability": "Only this case",
+            "supports": "Two-node setup fragment, OpenMPI 5.0.5 and NCCL performance criteria.",
+            "remaining_uncertainty": "All benchmark parameters missing."
+        }
+    ],
+    "removed_ambiguities": [
+        "Defines two-node collective completion.",
+        "Separates algbw/busbw and requires correctness.",
+        "Pins rank-to-GPU/NIC and actual transport/fallback evidence."
+    ],
+    "resolved_blockers": [
+        "Stack/topology/matrix are provider-closable."
+    ],
+    "remaining_blockers": [
+        "Execution waits for complete two-node handoff and privileged approvals."
+    ],
+    "objective_improvement_over_v2": "V3 adds data correctness, interface/plugin/fallback proof, metric semantics, explicit matrix completion and ordered multi-node recovery.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Contract-only validation was CLEAR. The validator preserved exactly two nodes, the signed rank/GPU/NIC/NUMA map and complete all-reduce matrix; rejected setup-only completion, `/etc/hosts` as hostfile, insecure SSH, unintended transport fallback and algbw/busbw substitution; required correctness, per-rank logs, full iterations, ordered cleanup and separate comparable thresholds. No intrinsic document defect was found. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Performance row 48 prepares two nodes but never builds/runs NCCL, while criteria require benchmark performance.",
+        "source_specific_v2_comparison": "V2 finds setup gap; V3 adds correctness, metric, transport/fallback and cleanup specificity.",
+        "source_specific_safety_evidence_decision": "Inventory only until secure access, stack, topology, matrix and approvals are signed.",
+        "template_violation_detected": false
+    }
+}
