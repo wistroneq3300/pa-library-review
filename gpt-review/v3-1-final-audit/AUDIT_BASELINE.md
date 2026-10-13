@@ -45,3 +45,11 @@ explicit V3.1 changes, then explicit Final Audit corrections. Omission in a
 shorter overlay does not delete a V3 command token, duration, target, safety
 boundary, evidence item, stop condition or recovery requirement.
 
+## Full Library Review baseline addendum
+
+The user's 2026-10-13 Full Library Review handoff resolves the former Seq 182
+question through ED-32. Seq 182 remains `MANUAL ONLY`; its source-defined
+physical AC cable removal cannot be replaced by PDU control, BMC power off,
+software reboot, or another remote action. This case-specific additive decision
+does not alter other AC-cycle cases. All immutable source hashes above remain
+the locked baseline for the 3,112-case review.

@@ -44,11 +44,12 @@ All twelve change from `MANUAL ONLY` to
 storage write, power operation or workload without the recorded project and
 safety gates.
 
-## Pending individual decision
+## Resolved case-specific decision
 
-Sequence 182 remains `MANUAL ONLY` in the effective release pending an
-engineer decision. The source requires ten physical AC removals after five
-minutes of combined stress. If an approved programmable power fixture is
-accepted as equivalent to that physical action, the case may later become
-hybrid; evidence collection alone is not enough to make that decision here.
-
+Sequence 182 remains `MANUAL ONLY` under ED-32. The source requires ten
+physical AC cable removals after five minutes of combined CPU/DIMM/HDD stress.
+An agent may assist with an approved stress plan, monitoring, evidence
+collection and reporting, but cannot claim the physical removal. A PDU, BMC
+power off, software reboot, or another remote power action is not an equivalent
+substitute for this testcase. This ruling is limited to sequence 182 and does
+not change the classification of other AC-cycle cases.

@@ -17,6 +17,13 @@ provided and is not invented.
   the source calls for ten AC removals and requires an engineer to approve an
   automated fixture as equivalent coverage before hybrid classification.
 
+The historical statement above records the Final Audit state before the Full
+Library Review handoff. It is superseded for sequence 182 only by ED-32 in
+`gpt-review/V3_1_ENGINEERING_DECISIONS.md`: physical AC cable removal is
+`MANUAL ONLY`, and PDU, BMC power off, software reboot, or another remote power
+action is not accepted as equivalent coverage. ED-30 remains unchanged for all
+other cases.
+
 ## ED-31 — WebUI sensor/manual observation
 
 - Formal capability: `MANUAL ONLY` when the core acceptance is the rendered
@@ -33,4 +40,3 @@ provided and is not invented.
 
 The full register was updated in
 `gpt-review/V3_1_ENGINEERING_DECISIONS.md` without changing ED-01–ED-28.
-

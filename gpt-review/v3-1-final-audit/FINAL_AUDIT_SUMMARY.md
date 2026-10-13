@@ -2,9 +2,11 @@
 
 ## Release-candidate result
 
-The 200-case Final Audit is complete. The release candidate contains 200 unique
-case audit records: **173 PASS_UNCHANGED, 26 CORRECTED, and 1
-NEED_ENGINEER_DECISION**. No case is hidden as passed; Seq 182 remains explicit.
+The 200-case Final Audit plus the Full Library Review baseline decision is
+complete. The effective release candidate contains 200 unique case audit
+records: **173 PASS_UNCHANGED and 27 CORRECTED**, with **0
+NEED_ENGINEER_DECISION**. Seq 182 remains explicit and traceable to its former
+pending state.
 
 ## Classification and conflict result
 
@@ -30,6 +32,10 @@ goal to lower BLOCKED or MANUAL counts.
    contradictory source requirements.
 6. Concise V3.1 overlays could be misread as deleting detailed V3 contracts;
    the new additive-retention rule closes that systemic regression risk.
+7. ED-32 resolves Seq 182 as `MANUAL ONLY`: the engineer must perform the
+   physical AC cable removal. PDU, BMC power off, software reboot, and other
+   remote power actions are not equivalent coverage. This is case-specific and
+   does not alter other AC-cycle cases.
 
 ## Safety and evidence
 
@@ -47,9 +53,9 @@ and all other repositories were untouched.
 
 ## Release decision
 
-**PASS as a V3.1 document/review Release Candidate with one disclosed per-case
-engineering decision and same-model-family validation limitation.** The rules
+**PASS as a V3.1 document/review Release Candidate with no unresolved
+case-level classification decision and a disclosed same-model-family validation
+limitation.** The rules
 and records are suitable to guide the remaining 2,912 one-case-at-a-time
 reviews after user/ChatGPT independent review. They do not authorize a batch
 generator, test execution, formal library merge, or automatic expansion.
-

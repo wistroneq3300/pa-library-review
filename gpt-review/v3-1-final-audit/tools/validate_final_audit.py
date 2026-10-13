@@ -87,13 +87,26 @@ def main() -> int:
     outcomes = Counter(r["audit_outcome"] for r in records)
     conflicts = sum(bool(r["after"]["source_conflict"]) for r in records)
     expected_classes = {"FULLY AUTOMATABLE": 12, "REQUIRES PACKAGE / USER CONFIRMATION": 139, "MANUAL ONLY": 27, "BLOCKED": 22}
-    expected_outcomes = {"PASS_UNCHANGED": 173, "CORRECTED": 26, "NEED_ENGINEER_DECISION": 1}
+    expected_outcomes = {"PASS_UNCHANGED": 173, "CORRECTED": 27}
     if dict(classes) != expected_classes:
         failures.append(f"classification counts differ: {dict(classes)}")
     if dict(outcomes) != expected_outcomes:
         failures.append(f"outcome counts differ: {dict(outcomes)}")
     if conflicts != 48:
         failures.append(f"expected 48 source conflicts, found {conflicts}")
+    seq182 = next((r for r in records if r["sequence"] == 182), None)
+    if not seq182:
+        failures.append("missing sequence 182")
+    else:
+        decision = seq182.get("case_specific_decision", {})
+        if decision.get("decision_id") != "ED-32" or decision.get("status") != "RESOLVED":
+            failures.append("seq 182: ED-32 resolved decision missing")
+        if seq182.get("after", {}).get("automation_classification") != "MANUAL ONLY":
+            failures.append("seq 182: classification must remain MANUAL ONLY")
+        substitutions = " ".join(decision.get("prohibited_substitutions", [])).lower()
+        for token in ("pdu", "bmc power off", "software reboot"):
+            if token not in substitutions:
+                failures.append(f"seq 182: missing prohibited substitute {token}")
     result = {
         "status": "PASS" if not failures else "FAIL",
         "record_count": len(records),

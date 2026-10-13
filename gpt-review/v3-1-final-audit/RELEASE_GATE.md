@@ -6,7 +6,7 @@
   zero manifest/schema/regression failures.
 - Direct XLSX verifier: **PASS**, 200 rows read and 200 code/hash matches.
 - Final Audit validator: **PASS**, 200 audit records, 200 unique keys/variants,
-  expected 173/26/1 outcomes, 12/139/27/22 classifications, 48 conflicts,
+  expected 173/27/0 outcomes, 12/139/27/22 classifications, 48 conflicts,
   unchanged source hashes and zero failures.
 
 ## Required gates
@@ -28,11 +28,11 @@
 | ED-30/ED-31 included | PASS | Logic, decision register, skill route and correction report. |
 | Modern method references | PASS/PENDING | Public methods verified; private applicability remains explicitly pending. |
 | Agent Understanding | LIMITED PASS | 38/38 same-model-family context replay; not cross-model/hardware validation. |
-| Pending decisions visible | PASS | Seq 182 and project/private inputs listed. |
+| Seq 182 decision incorporated | PASS | ED-32 fixes MANUAL ONLY, prohibits remote substitutes, preserves assistance and case-specific scope. |
+| Pending decisions visible | PASS | No case-level classification decision remains; project/private readiness inputs remain listed. |
 
 ## Release decision
 
-**PASS for commit and push as a review/document Release Candidate.** This does
+**PASS for commit and push as the locked Full Library Review baseline.** This does
 not approve testcase execution, modify the Master Library, certify hardware,
 merge main, or authorize automatic review of the remaining 2,912 cases.
-

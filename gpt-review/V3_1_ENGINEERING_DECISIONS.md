@@ -281,6 +281,31 @@ history.
 - Unresolved: a future qualified UI-automation or machine-vision contract may
   be reviewed case by case; none is approved by this no-DUT audit.
 
+### ED-32 — Sequence 182 physical AC removal
+
+- Scope: Final Audit sequence 182 only,
+  `Stability|69|Wistron-Long Term Stress-00068-V002`.
+- Decision: classify the complete testcase `MANUAL ONLY`. The source-defined
+  action is a qualified engineer physically removing and reconnecting the AC
+  power cable after five minutes of CPU/DIMM/HDD stress, repeated ten times.
+- Non-substitution boundary: an agent must not replace the physical cable
+  removal with a programmable PDU, BMC power off, software reboot, or another
+  remotely controlled power action and claim equivalent coverage.
+- Agent assistance: the agent may prepare the approved stress plan, run only
+  the separately authorized machine-executable preparation or monitoring,
+  collect and correlate raw evidence, and organize the report. It must not
+  claim that it performed or observed the physical cable removal.
+- Rule type: case-specific. This decision does not reclassify other AC-cycle,
+  cold-cycle, PDU, rack-manager, or power-fixture testcases; each keeps its own
+  source-defined method and independent capability review.
+- Rationale: for this row, the repeated physical AC removal is the function
+  under test, not merely a setup step for an otherwise automated acceptance.
+- Impact: resolves the sole Final Audit case-level engineering decision without
+  changing sequence 182's effective `MANUAL ONLY` classification.
+- Unresolved: project stress profile, safe storage target, AC handling SOP,
+  dwell/timing, expected event pattern, recovery limits, and safety stops
+  remain execution-readiness inputs rather than classification questions.
+
 ### Numbering note
 
 Decision 29 was not provided in the user handoff. This register does not invent
@@ -295,3 +320,5 @@ its wording or approval status. The gap is preserved intentionally.
   and no DUT execution are authorized by this review.
 - Decisions 30 and 31 were added by the 2026-10-13 Final Audit handoff; they do
   not rewrite the historical meaning of Decisions 01–28.
+- Decision 32 was added by the user's 2026-10-13 Full Library Review handoff.
+  It resolves only sequence 182 and does not create a global AC-cycle rule.

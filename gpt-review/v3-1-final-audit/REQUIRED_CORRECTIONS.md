@@ -15,10 +15,16 @@
 7. Refreshed modernization evidence against current official public sources
    while retaining installed-version and project applicability gates.
 
+## Resolved after the Final Audit
+
+- Seq 182 is now formally `MANUAL ONLY` under ED-32. Its ten source-defined
+  physical AC cable removals may not be replaced by PDU control, BMC power off,
+  software reboot, or another remote action. The agent may assist with approved
+  stress preparation, evidence collection, and reporting without claiming the
+  physical action.
+
 ## Pending, not hidden
 
-- Seq 182 needs an engineer decision on whether a qualified programmable power
-  fixture is equivalent to ten source-defined physical AC removals.
 - Private-tool cases still need applicable manuals/SOPs and installed versions.
 - Project SPEC, target, limits, Expected, overrides and recovery remain per-case
   execution inputs.
@@ -29,4 +35,3 @@
 
 The original V3.1 records and reports were not overwritten. Final Audit records
 carry Before/After/Reason and act as the release-candidate correction overlay.
-

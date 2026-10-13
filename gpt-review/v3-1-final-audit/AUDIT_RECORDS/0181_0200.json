@@ -74,7 +74,7 @@
       "source_row": 69,
       "code": "Wistron-Long Term Stress-00068-V002"
     },
-    "audit_outcome": "NEED_ENGINEER_DECISION",
+    "audit_outcome": "CORRECTED",
     "source_material_read": {
       "xlsx_row": true,
       "deepseek": true,
@@ -82,7 +82,7 @@
       "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0182_14733e9a69f6dad1.json",
       "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0182_14733e9a69f6dad1.json"
     },
-    "independent_semantic_finding": "Ten source-defined AC removals may remain core manual actions; hybrid classification needs an engineer to approve a programmable fixture as equivalent coverage.",
+    "independent_semantic_finding": "ED-32 confirms that the ten source-defined physical AC cable removals are the core manual action. PDU control, BMC power off, software reboot, and other remote power actions are not equivalent coverage for this testcase.",
     "audit_checks": {
       "original_test_intent_preserved": true,
       "scope_not_reduced_without_recorded_override": true,
@@ -110,7 +110,26 @@
     "after": {
       "automation_classification": "MANUAL ONLY",
       "source_conflict": false,
-      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections + ED-32 case-specific decision"
+    },
+    "case_specific_decision": {
+      "decision_id": "ED-32",
+      "status": "RESOLVED",
+      "decision": "Physical AC cable removal is MANUAL ONLY for sequence 182.",
+      "prohibited_substitutions": [
+        "Programmable PDU action",
+        "BMC power off",
+        "Software reboot",
+        "Other remotely controlled power action presented as equivalent coverage"
+      ],
+      "agent_assistance_allowed": [
+        "Prepare the approved stress plan",
+        "Perform separately authorized machine-executable monitoring",
+        "Collect and correlate raw evidence",
+        "Organize the engineering report"
+      ],
+      "scope_limit": "This decision applies only to sequence 182 and does not set the classification of other AC-cycle cases.",
+      "historical_state_preserved": "The prior Final Audit NEED_ENGINEER_DECISION state remains documented in the before block and historical reports."
     },
     "blocked_category": null,
     "modernized_method_audit": {
@@ -119,7 +138,7 @@
       "project_version_and_applicability_required": true,
       "no_method_executed": true
     },
-    "reason": "Ten source-defined AC removals may remain core manual actions; hybrid classification needs an engineer to approve a programmable fixture as equivalent coverage.",
+    "reason": "The user resolved the former fixture-equivalence question: the exact physical cable removal is mandatory and remains engineer-operated. Agent preparation and evidence assistance do not change the complete-case MANUAL ONLY classification.",
     "regression": {
       "found": false,
       "corrected": false,
