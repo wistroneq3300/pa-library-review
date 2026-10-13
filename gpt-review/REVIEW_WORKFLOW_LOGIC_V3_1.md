@@ -282,3 +282,40 @@ no agent-owned formal verdict, no automatic retry, no unapproved method/tool
 replacement, and traceable official references for every modernization.
 
 This review never connects to a DUT and never merges `main`.
+
+## 22. Final Audit clarifications (ED-30 and ED-31)
+
+Manual establishment of a chamber, rail, fixture, cable, population, or other
+physical precondition followed by automated workload execution, monitoring and
+log collection is hybrid capability. Use the canonical classification
+`REQUIRES PACKAGE / USER CONFIRMATION`; retain the operator-owned setup,
+calibration, interlocks, stop authority and recovery. Do not apply this rule
+when the repeated physical operation or human observation is itself the core
+acceptance activity.
+
+When the core test is BMC WebUI presentation, rendered sensor values, page
+content, link navigation, or another human-visible UI state, use `MANUAL ONLY`.
+An agent may explain steps, compare an engineer-supplied screenshot with a
+specification, correlate Redfish/IPMI/log data and organize evidence. It may not
+replace the required WebUI observation with backend telemetry or claim that AI
+screenshot analysis made the test fully automated.
+
+## 23. Additive overlay retention rule
+
+V3.1 and the Final Audit are additive overlays over the exact source row and
+its V3 record. An omitted V3 procedure detail, command token, duration,
+iteration, target, evidence item, stop condition, safety boundary, or recovery
+requirement is not deleted unless a later record explicitly identifies the
+field, gives a reason, records the coverage effect and names the controlling
+engineering decision. Concision is never an implicit override.
+
+Effective review order is: immutable XLSX source and provenance; V2/V3 history;
+V3.1 explicit changes; Final Audit explicit corrections. A conflict between
+layers is surfaced for engineering resolution, never silently normalized.
+
+`SOURCE_CONFLICT` is reserved for contradictory source requirements or
+mutually incompatible source intents. Missing project values, absent vendor
+documentation, undefined intent, and a missing external specification are
+recorded respectively as readiness, private-document, unclear-intent, or
+semantic-block conditions; they are not called source conflicts unless two
+source statements actually disagree.

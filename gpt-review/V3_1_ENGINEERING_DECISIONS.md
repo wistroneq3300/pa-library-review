@@ -239,6 +239,53 @@ history.
 - Unresolved: the original Question 28 wording, selected network mode, and
   private-tool documentation/version per project.
 
+### ED-30 — Manual setup plus automated execution
+
+- Scope: cases that require a qualified engineer to establish a chamber,
+  voltage/rail condition, fixture, cabling, population, or other physical
+  precondition before a tool executes the workload, monitoring, and log
+  collection.
+- Decision: classify the complete capability as hybrid/partial automation. The
+  canonical JSON value remains `REQUIRES PACKAGE / USER CONFIRMATION`; manual
+  setup alone is not sufficient reason for `MANUAL ONLY`.
+- Rationale: physical preparation and the core executable test are separate
+  automation dimensions. The human-owned setup, calibration, interlocks and
+  emergency stop remain explicit even when the workload is automated.
+- Rule type: general, with a per-case check that the core acceptance activity
+  is actually machine-executable after setup.
+- Impact: Final Audit sequences 170–181 are reclassified after individual
+  review. Sequence 182 remains an engineer decision because repeated physical
+  AC removal is itself the source-defined core action unless an approved power
+  fixture is accepted as equivalent coverage.
+- Unresolved: exact project fixture, qualified control path, safety limits,
+  workload package, and recovery remain project inputs.
+
+### ED-31 — WebUI sensor/manual observation
+
+- Scope: BMC WebUI display, rendered sensor values, page content, navigation,
+  and other cases whose acceptance is the human-visible UI behavior.
+- Decision: classify the complete case `MANUAL ONLY` when the core purpose is
+  to verify the BMC WebUI presentation or other human-visible state. Redfish,
+  IPMI, logs, and agent screenshot analysis may corroborate evidence but do not
+  replace the engineer's actual WebUI operation and observation.
+- Rationale: a backend value cannot prove that the rendered page, labels,
+  fields, links, or visible state are correct. AI analysis of an engineer-
+  supplied screenshot does not transfer observation ownership to the agent.
+- Rule type: general for core WebUI presentation; cross-interface tests remain
+  hybrid when WebUI is one required phase and independent command/API phases
+  are also substantive parts of the original test.
+- Impact: Final Audit sequences 51, 52, 53, 70, and 74 are reclassified after
+  independent review. Sequences 8, 81, 84, 90, and 153 remain hybrid because
+  their original acceptance requires substantive cross-interface collection,
+  not WebUI presentation alone.
+- Unresolved: a future qualified UI-automation or machine-vision contract may
+  be reviewed case by case; none is approved by this no-DUT audit.
+
+### Numbering note
+
+Decision 29 was not provided in the user handoff. This register does not invent
+its wording or approval status. The gap is preserved intentionally.
+
 ## Explicit carry-forward decisions
 
 - PA Manager Cycle and existing project scripts take precedence over new cycle
@@ -246,3 +293,5 @@ history.
 - Original commands remain recorded even when a modern method is recommended.
 - No automatic retry, no agent-owned formal verdict, no dual-signoff invention,
   and no DUT execution are authorized by this review.
+- Decisions 30 and 31 were added by the 2026-10-13 Final Audit handoff; they do
+  not rewrite the historical meaning of Decisions 01–28.

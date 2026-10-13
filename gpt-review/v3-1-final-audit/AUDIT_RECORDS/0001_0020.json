@@ -1,0 +1,1294 @@
+[
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 1,
+    "source_key": "Functionality|29|Wistron-HW-00032-V004",
+    "case_variant_id": "eb1edb1375e32b56",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 29,
+      "code": "Wistron-HW-00032-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0001_eb1edb1375e32b56.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0001_eb1edb1375e32b56.json"
+    },
+    "independent_semantic_finding": "The proprietary CRPS offset intent, no-guess PMBus boundary, decoded-byte evidence and engineer-owned comparison remain complete.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "CRPS identity and firmware/VPD",
+        "Specification and decoder/tool version",
+        "Raw field/block bytes, byte order, decoded offset and block boundaries",
+        "Timestamped readback and preserved BMC/SEL state"
+      ],
+      "safety_and_stop_reviewed": [
+        "Do not blind-scan PMBus/SMBus or guess a register/address.",
+        "Do not write configuration, reset or flash the PSU.",
+        "Preserve existing BMC/SEL evidence rather than clearing logs."
+      ],
+      "no_automatic_retry_reviewed": "Any failed or ambiguous read is retained. Do not change the command, scan another address, reset the PSU, or retry without a new approved plan.",
+      "engineer_owned_verdict_reviewed": "The agent may report the raw and decoded values and their difference from the approved reference; only the engineer assigns formal PASS/FAIL/BLOCKED."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0001_eb1edb1375e32b56.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The proprietary CRPS offset intent, no-guess PMBus boundary, decoded-byte evidence and engineer-owned comparison remain complete.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 2,
+    "source_key": "Functionality|67|Wistron-HW-00070-V004",
+    "case_variant_id": "531324e50ed3dd43",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 67,
+      "code": "Wistron-HW-00070-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0002_531324e50ed3dd43.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0002_531324e50ed3dd43.json"
+    },
+    "independent_semantic_finding": "The five N/N-1 PSU transitions, WebUI HPM function, activation/power-cycle recovery and immutable first-failure evidence remain intact.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Per-cycle target/image/hash and flash transcript or WebUI screenshots",
+        "Activated firmware and PSU sensor/output readback",
+        "BMC reconnect, SEL/host delta and power-cycle recovery",
+        "First failure preserved separately from later loops"
+      ],
+      "safety_and_stop_reviewed": [
+        "No flash until image-to-PSU compatibility, redundancy and OOB recovery are proven.",
+        "Stop on PSU output loss, flash error, management loss or incomplete recovery.",
+        "Do not clear SEL/host evidence."
+      ],
+      "no_automatic_retry_reviewed": "A failed transition ends the approved sequence unless the engineer approves a distinct recovery or retry plan. A later successful flash never overwrites the original failure.",
+      "engineer_owned_verdict_reviewed": "Tool/WebUI success is raw evidence; only the engineer assigns formal PASS/FAIL/BLOCKED."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0002_531324e50ed3dd43.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The five N/N-1 PSU transitions, WebUI HPM function, activation/power-cycle recovery and immutable first-failure evidence remain intact.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "SELECTED_SAME_MODEL_FAMILY_NO_DUT",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 3,
+    "source_key": "Functionality|150|Wistron-HW-00153-V002",
+    "case_variant_id": "17fe1ceefe6c69c2",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 150,
+      "code": "Wistron-HW-00153-V002"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0003_17fe1ceefe6c69c2.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0003_17fe1ceefe6c69c2.json"
+    },
+    "independent_semantic_finding": "OS installation and TPM-setting revision remain distinct source intents; the project may choose scope without repairing the Master row.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Written project scope resolution",
+        "Disk/image/boot/TPM identities before change",
+        "Installer/BIOS action record",
+        "Post-install OS, TPM, boot, BMC/SEL and recovery evidence"
+      ],
+      "safety_and_stop_reviewed": [
+        "Never infer or choose the installation disk.",
+        "Do not clear/own TPM, alter keys or change Secure Boot without explicit scope and recovery.",
+        "Preserve logs and storage identity evidence."
+      ],
+      "no_automatic_retry_reviewed": "A failed install, TPM change or boot is preserved. Reimage, firmware/setup changes or another install attempt require a new approved recovery/run plan.",
+      "engineer_owned_verdict_reviewed": "Agent reports install and TPM evidence and the unresolved master conflict; only the engineer assigns formal verdict."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": true,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0003_17fe1ceefe6c69c2.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": true,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "OS installation and TPM-setting revision remain distinct source intents; the project may choose scope without repairing the Master row.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 4,
+    "source_key": "Functionality|198|Wistron-HW-00207-V002",
+    "case_variant_id": "4cbdff4ca96c069a",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 198,
+      "code": "Wistron-HW-00207-V002"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0004_4cbdff4ca96c069a.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0004_4cbdff4ca96c069a.json"
+    },
+    "independent_semantic_finding": "Physical serial cabling and two-way terminal observation remain operator-owned, with approved electrical mode and harmless payload required.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Port/cable/settings record",
+        "Timestamped two-way terminal transcript with exact payload and reply",
+        "Operator observation and restored-console/system health"
+      ],
+      "safety_and_stop_reviewed": [
+        "Do not connect an unknown RS-232/RS-422/RS-485 path.",
+        "Do not send arbitrary commands to an unidentified console.",
+        "Maintain alternate OOB access and restore the original cable state."
+      ],
+      "no_automatic_retry_reviewed": "Framing errors, unexpected peer response or console loss are preserved. Do not vary electrical settings or retry another payload without engineer approval.",
+      "engineer_owned_verdict_reviewed": "The engineer evaluates the transcript and physical connection; the agent cannot declare the serial communication testcase PASS."
+    },
+    "before": {
+      "automation_classification": "MANUAL ONLY",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0004_4cbdff4ca96c069a.json"
+    },
+    "after": {
+      "automation_classification": "MANUAL ONLY",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "Physical serial cabling and two-way terminal observation remain operator-owned, with approved electrical mode and harmless payload required.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 5,
+    "source_key": "Functionality|201|Wistron-HW-00210-V002",
+    "case_variant_id": "6bbdfc766a7b18d6",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 201,
+      "code": "Wistron-HW-00210-V002"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0005_6bbdfc766a7b18d6.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0005_6bbdfc766a7b18d6.json"
+    },
+    "independent_semantic_finding": "Every physical USB port still requires BIOS and OS evidence tied to the moved device; a one-port lsusb sample cannot complete coverage.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Per-port physical identity and BIOS capture",
+        "Per-placement lsusb/topology/kernel evidence tied to device identity",
+        "Complete coverage matrix including N/A disposition",
+        "Unexpected-event and restoration record"
+      ],
+      "safety_and_stop_reviewed": [
+        "Do not attach arbitrary bootable, storage, security or over-current devices.",
+        "Stop on unexpected mount, overcurrent, controller error or console/boot impact.",
+        "Preserve logs and restore the original peripheral state."
+      ],
+      "no_automatic_retry_reviewed": "A failed enumeration stays recorded. Moving the device again, changing driver/power policy or repeating a port requires the approved plan or new engineer direction.",
+      "engineer_owned_verdict_reviewed": "Agent reports per-port facts and gaps; engineer determines detection PASS/FAIL/N/A/BLOCKED."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0005_6bbdfc766a7b18d6.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "Every physical USB port still requires BIOS and OS evidence tied to the moved device; a one-port lsusb sample cannot complete coverage.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 6,
+    "source_key": "Functionality|79|Wistron-HW-00082-V004",
+    "case_variant_id": "f5262be04119fe81",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 79,
+      "code": "Wistron-HW-00082-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0006_f5262be04119fe81.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0006_f5262be04119fe81.json"
+    },
+    "independent_semantic_finding": "The 225-worker eight-hour stress-ng Master profile, thermal/power evidence and project-override delta are retained without clearing logs.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Topology and approved plan",
+        "Full stress output/exit status and elapsed time",
+        "Continuous thermal/power/frequency/throttle telemetry",
+        "Kernel/MCE/EDAC/BMC/SEL deltas and recovery"
+      ],
+      "safety_and_stop_reviewed": [
+        "No unapproved package or production workload impact.",
+        "Stop only at approved safety/data/control limits; ordinary warnings are retained while collection continues.",
+        "Do not clear logs."
+      ],
+      "no_automatic_retry_reviewed": "Preserve the first failure or early stop. Do not restart with fewer workers, shorter duration or changed flags unless separately approved; the next pre-approved loop is not a retry.",
+      "engineer_owned_verdict_reviewed": "Agent records Actual versus project plan and master coverage; engineer decides formal outcome."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0006_f5262be04119fe81.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The 225-worker eight-hour stress-ng Master profile, thermal/power evidence and project-override delta are retained without clearing logs.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 7,
+    "source_key": "Functionality|87|Wistron-HW-00090-V004",
+    "case_variant_id": "d4cd349ba1e22fac",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 87,
+      "code": "Wistron-HW-00090-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0007_d4cd349ba1e22fac.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0007_d4cd349ba1e22fac.json"
+    },
+    "independent_semantic_finding": "The conflicting stress-ng VM-worker aliases remain unresolved; eight hours, 90 percent memory pressure and ECC/MCE evidence are preserved.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Approved corrected command and version semantics",
+        "DIMM/NUMA/memory/swap baseline",
+        "Full stress output, elapsed time and exit status",
+        "ECC/EDAC/MCE/kernel/BMC/SEL and recovery evidence"
+      ],
+      "safety_and_stop_reviewed": [
+        "No execution of the ambiguous command and no guessing option precedence.",
+        "Dedicated capacity, monitoring, abort and OOB recovery are mandatory.",
+        "Preserve logs; do not use `dmesg -c`."
+      ],
+      "no_automatic_retry_reviewed": "Preserve any OOM, hang, early stop or error. A changed worker count or allocation is a new plan requiring approval, not an automatic retry.",
+      "engineer_owned_verdict_reviewed": "Agent records execution and evidence; engineer resolves the source conflict and decides the formal result."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": true,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0007_d4cd349ba1e22fac.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": true,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The conflicting stress-ng VM-worker aliases remain unresolved; eight hours, 90 percent memory pressure and ECC/MCE evidence are preserved.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 8,
+    "source_key": "Functionality|2260|Wistron-BMC-00848-V003",
+    "case_variant_id": "71ebac9de7eeb481",
+    "source_ref": {
+      "sheet": "Functionality",
+      "source_row": 2260,
+      "code": "Wistron-BMC-00848-V003"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0008_71ebac9de7eeb481.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0008_71ebac9de7eeb481.json"
+    },
+    "independent_semantic_finding": "BIOS, in-band IPMI, OOB IPMI, WebUI and Redfish BMC-version observations remain a five-interface comparison, not an API-only shortcut.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Platform expected version",
+        "Redacted timestamped IPMI and Redfish outputs with target identity",
+        "BIOS and BMC WebUI screenshots/operator attestations",
+        "Cross-interface comparison and log delta"
+      ],
+      "safety_and_stop_reviewed": [
+        "Read-only queries only; no BMC reset/update or power action.",
+        "No credential exposure and no unverified endpoint.",
+        "No unapproved reboot merely to enter BIOS."
+      ],
+      "no_automatic_retry_reviewed": "Authentication, TLS, endpoint or version disagreement is recorded. Do not switch endpoints, ciphers or credentials and retry without approval.",
+      "engineer_owned_verdict_reviewed": "The agent reports each observed value and mismatch; the firmware owner decides correctness and formal PASS/FAIL."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0008_71ebac9de7eeb481.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "BIOS, in-band IPMI, OOB IPMI, WebUI and Redfish BMC-version observations remain a five-interface comparison, not an API-only shortcut.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 9,
+    "source_key": "Reliability|2|Wistron-System RAS-00374-V003",
+    "case_variant_id": "29b859a5265142ac",
+    "source_ref": {
+      "sheet": "Reliability",
+      "source_row": 2,
+      "code": "Wistron-System RAS-00374-V003"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0009_29b859a5265142ac.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0009_29b859a5265142ac.json"
+    },
+    "independent_semantic_finding": "Read-only ACPI table collection is automatable, while platform applicability is an input and inspection is not promoted to end-to-end RAS proof.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Platform and version baseline",
+        "Per-table required/applicable status",
+        "Table names, sizes and safe metadata/hashes",
+        "Contextual ACPI/APEI logs, command status and comparison"
+      ],
+      "safety_and_stop_reviewed": [
+        "Read-only inspection only; no error injection or firmware writes.",
+        "Preserve log history and protect remote credentials.",
+        "Do not claim end-to-end RAS validation."
+      ],
+      "no_automatic_retry_reviewed": "A permission failure or missing table is preserved. Do not alter firmware/RAS configuration and retry without a new approved plan.",
+      "engineer_owned_verdict_reviewed": "Agent can collect and compare against a supplied matrix; the platform owner decides whether absence or initialization errors are acceptable."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0009_29b859a5265142ac.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "Read-only ACPI table collection is automatable, while platform applicability is an input and inspection is not promoted to end-to-end RAS proof.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 10,
+    "source_key": "Reliability|4|Wistron-System RAS-00378-V003",
+    "case_variant_id": "bfc067a826c65d9e",
+    "source_ref": {
+      "sheet": "Reliability",
+      "source_row": 4,
+      "code": "Wistron-System RAS-00378-V003"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0010_bfc067a826c65d9e.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0010_bfc067a826c65d9e.json"
+    },
+    "independent_semantic_finding": "BIOS leaky-bucket configuration, exact DIMM target, bounded injection, log correlation and recovery remain manual/high-risk rather than tool-owned.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Signed channel/slot matrix",
+        "Before/test/restored BIOS and register values",
+        "Per-target stimulus record and timestamps",
+        "Correlated host RAS and BMC SEL events plus normal-boot/recovery evidence"
+      ],
+      "safety_and_stop_reviewed": [
+        "Qualified operator only; isolated no-workload SUT.",
+        "Never guess registers, labels or injection commands and never clear logs.",
+        "Stop on wrong-target event, UCE, corruption, no-boot, event storm or loss of control."
+      ],
+      "no_automatic_retry_reviewed": "Every failed, mislocalized or uncontrolled stimulus is preserved. No additional injection, reset or recovery attempt occurs outside the approved matrix.",
+      "engineer_owned_verdict_reviewed": "Agent may flag incomplete or mismatched evidence; qualified engineering owns target validity, safety decisions and formal outcome."
+    },
+    "before": {
+      "automation_classification": "MANUAL ONLY",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0010_bfc067a826c65d9e.json"
+    },
+    "after": {
+      "automation_classification": "MANUAL ONLY",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "BIOS leaky-bucket configuration, exact DIMM target, bounded injection, log correlation and recovery remain manual/high-risk rather than tool-owned.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 11,
+    "source_key": "Performance|3|Wistron-Performance CPU-00002-V003",
+    "case_variant_id": "29c4ea53e9944c9f",
+    "source_ref": {
+      "sheet": "Performance",
+      "source_row": 3,
+      "code": "Wistron-Performance CPU-00002-V003"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0011_29c4ea53e9944c9f.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0011_29c4ea53e9944c9f.json"
+    },
+    "independent_semantic_finding": "The AMD-only HPL procedure versus Intel/AMD criterion remains a real vendor-path conflict; numerical validation and comparable reference are required.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Platform and package/build provenance",
+        "HPL.dat and process/thread placement",
+        "Full Gflop/s and residual output per run",
+        "Telemetry, reference provenance and comparison"
+      ],
+      "safety_and_stop_reviewed": [
+        "No unreviewed root installer/outbound downloads.",
+        "No cross-vendor scripts or silent topology tuning.",
+        "Preserve logs and stop at approved thermal/power/error limits."
+      ],
+      "no_automatic_retry_reviewed": "Numerical failure, throttle or invalid profile is retained; no retuning/rerun without approval.",
+      "engineer_owned_verdict_reviewed": "Agent reports numerical validity and comparison; engineer decides comparability and outcome."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": true,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0011_29c4ea53e9944c9f.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": true,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The AMD-only HPL procedure versus Intel/AMD criterion remains a real vendor-path conflict; numerical validation and comparable reference are required.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 12,
+    "source_key": "Performance|4|Wistron-Performance DIMM-00003-V004",
+    "case_variant_id": "cae12a273117d2b9",
+    "source_ref": {
+      "sheet": "Performance",
+      "source_row": 4,
+      "code": "Wistron-Performance DIMM-00003-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0012_cae12a273117d2b9.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0012_cae12a273117d2b9.json"
+    },
+    "independent_semantic_finding": "STREAM retains all four kernels, NTIMES=100, the large memory footprint, NUMA/thread placement and the Solution Validates gate.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "DIMM/NUMA topology and source/build provenance",
+        "Exact environment and four kernel outputs",
+        "Solution Validates result",
+        "Telemetry and matched-reference calculation"
+      ],
+      "safety_and_stop_reviewed": [
+        "No unverified source, swap-driven run or production contention.",
+        "Do not clear logs.",
+        "Stop on validation, ECC/MCE, thermal/power or stability limits."
+      ],
+      "no_automatic_retry_reviewed": "Invalid numerical output or profile is retained; no affinity/tuning change and rerun without approval.",
+      "engineer_owned_verdict_reviewed": "Agent calculates under the approved contract; engineer owns the formal result."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0012_cae12a273117d2b9.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "STREAM retains all four kernels, NTIMES=100, the large memory footprint, NUMA/thread placement and the Solution Validates gate.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 13,
+    "source_key": "Performance|15|Wistron-Performance Networking-00030-V004",
+    "case_variant_id": "dc614bb45400a8bd",
+    "source_ref": {
+      "sheet": "Performance",
+      "source_row": 15,
+      "code": "Wistron-Performance Networking-00030-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0013_dc614bb45400a8bd.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0013_dc614bb45400a8bd.json"
+    },
+    "independent_semantic_finding": "The InfiniBand case retains every mapped port and a real 300-second run; perftest -D is duration and -t is not silently treated as seconds.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Per-port topology and exact commands",
+        "Full client/server output with 300-second proof",
+        "IB counter deltas and link state",
+        "Host/peer health and comparison"
+      ],
+      "safety_and_stop_reviewed": [
+        "No unapproved shared-fabric saturation or guessed endpoint.",
+        "No insecure credentials or counter/log clearing.",
+        "Stop on link flap, wrong-port traffic, error storm or host/peer impact."
+      ],
+      "no_automatic_retry_reviewed": "A failed port/path remains recorded; no option/path change or second run without approval.",
+      "engineer_owned_verdict_reviewed": "Agent compares against supplied targets; network engineer owns the result."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0013_dc614bb45400a8bd.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The InfiniBand case retains every mapped port and a real 300-second run; perftest -D is duration and -t is not silently treated as seconds.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 14,
+    "source_key": "Compatibility|76|Wistron-Storage-00059-V004",
+    "case_variant_id": "175d03e2d8aed771",
+    "source_ref": {
+      "sheet": "Compatibility",
+      "source_row": 76,
+      "code": "Wistron-Storage-00059-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0014_175d03e2d8aed771.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0014_175d03e2d8aed771.json"
+    },
+    "independent_semantic_finding": "All-drive 12-hour fio coverage remains gated by stable target identity, write exclusions, exact clone semantics and per-drive 80-percent comparison.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Signed target/exclusion matrix and pre/post health",
+        "Exact jobfile/version and 12-hour proof",
+        "Per-drive JSON IOPS/BW/latency/errors",
+        "Endurance/temperature/log deltas and 80% calculation"
+      ],
+      "safety_and_stop_reviewed": [
+        "Never write OS, mounted/in-use, user-data, evidence or unidentified devices.",
+        "Approval does not replace stable-ID/mount/topology verification.",
+        "No unapproved unmount, format, erase, auto-repair or rerun."
+      ],
+      "no_automatic_retry_reviewed": "Any media, filesystem, controller, target or fio failure is preserved; no automatic rerun or destructive recovery.",
+      "engineer_owned_verdict_reviewed": "Agent validates target gates and records Actual/coverage; engineer decides performance and data-integrity outcome."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0014_175d03e2d8aed771.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "All-drive 12-hour fio coverage remains gated by stable target identity, write exclusions, exact clone semantics and per-drive 80-percent comparison.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "SELECTED_SAME_MODEL_FAMILY_NO_DUT",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 15,
+    "source_key": "Compatibility|251|Wistron-NV GPU-00244-V002",
+    "case_variant_id": "30a1edb537dc62f4",
+    "source_ref": {
+      "sheet": "Compatibility",
+      "source_row": 251,
+      "code": "Wistron-NV GPU-00244-V002"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0015_30a1edb537dc62f4.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0015_30a1edb537dc62f4.json"
+    },
+    "independent_semantic_finding": "NVIDIA FCT remains private and gated; every GPU UUID/BDF/link path and the narrowly approved SKU exception require complete evidence.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Package hash/version/profile and full raw output",
+        "Expected/observed UUID-BDF-upstream matrix",
+        "Pre/post current/max link state",
+        "AER/XID/kernel/BMC and usability evidence"
+      ],
+      "safety_and_stop_reviewed": [
+        "No unreviewed proprietary command or active GPU jobs.",
+        "No blanket SKU suppression, automatic reset or reboot.",
+        "Stop on missing GPU, link loss, AER/XID or management impact."
+      ],
+      "no_automatic_retry_reviewed": "Diagnostic failure or GPU reset is retained; no profile change, reset or rerun without approval.",
+      "engineer_owned_verdict_reviewed": "Agent correlates evidence; owner interprets proprietary result semantics and decides outcome."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0015_30a1edb537dc62f4.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "NVIDIA FCT remains private and gated; every GPU UUID/BDF/link path and the narrowly approved SKU exception require complete evidence.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 16,
+    "source_key": "Compatibility|257|Wistron-NV GPU-00250-V002",
+    "case_variant_id": "f3f5fe1e0e4515a5",
+    "source_ref": {
+      "sheet": "Compatibility",
+      "source_row": 257,
+      "code": "Wistron-NV GPU-00250-V002"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0016_f3f5fe1e0e4515a5.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0016_f3f5fe1e0e4515a5.json"
+    },
+    "independent_semantic_finding": "The 144-link requirement remains topology-specific rather than count-only, with platform generation and per-edge NVLink/NVSwitch mapping required.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Per-edge expected/actual matrix",
+        "Full tool output and exit status",
+        "Link/error/health deltas"
+      ],
+      "safety_and_stop_reviewed": [
+        "No active workload or unreviewed tool profile",
+        "No count-only completion claim"
+      ],
+      "no_automatic_retry_reviewed": "Preserve any missing link or tool failure; no reset/rerun without approval.",
+      "engineer_owned_verdict_reviewed": "Engineer decides topology acceptance."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0016_f3f5fe1e0e4515a5.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The 144-link requirement remains topology-specific rather than count-only, with platform generation and per-edge NVLink/NVSwitch mapping required.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 17,
+    "source_key": "Stability|68|Wistron-Long Term Stress-00067-V004",
+    "case_variant_id": "d92f6d3a1aa2f9dd",
+    "source_ref": {
+      "sheet": "Stability",
+      "source_row": 68,
+      "code": "Wistron-Long Term Stress-00067-V004"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0017_d92f6d3a1aa2f9dd.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0017_d92f6d3a1aa2f9dd.json"
+    },
+    "independent_semantic_finding": "The 1000-cycle AC campaign correctly uses qualified physical setup plus existing cycle control, per-attempt inventory and no hidden retry.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Approved plan and fixture check",
+        "Per-cycle attempt/completion ledger",
+        "Boot/inventory/log deltas",
+        "Failure and recovery record"
+      ],
+      "safety_and_stop_reviewed": [
+        "No AC action before target/interlock verification",
+        "No hidden retry or count reset",
+        "Stop on loss of control or hardware/data risk"
+      ],
+      "no_automatic_retry_reviewed": "Failed cycles remain failed; the next pre-approved loop is not a retry.",
+      "engineer_owned_verdict_reviewed": "Agent records project completion and Master coverage gap; engineer decides result."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0017_d92f6d3a1aa2f9dd.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The 1000-cycle AC campaign correctly uses qualified physical setup plus existing cycle control, per-attempt inventory and no hidden retry.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 18,
+    "source_key": "Stability|9|Wistron-Margin-00008-V002",
+    "case_variant_id": "29a3fd8857561173",
+    "source_ref": {
+      "sheet": "Stability",
+      "source_row": 9,
+      "code": "Wistron-Margin-00008-V002"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0018_29a3fd8857561173.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0018_29a3fd8857561173.json"
+    },
+    "independent_semantic_finding": "The 12-hour 40C/+5-percent GPU burn remains hybrid; the four-hour Machine Time value is planning metadata and all-GPU safety telemetry is retained.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Measured chamber/rail trace",
+        "All-GPU identity and burn output",
+        "Continuous telemetry/error logs",
+        "Duration and recovery evidence"
+      ],
+      "safety_and_stop_reviewed": [
+        "No energizing until independent rail measurement and target verification",
+        "Stop on safety limit or loss of control",
+        "No automatic recovery or retry"
+      ],
+      "no_automatic_retry_reviewed": "Preserve the first anomaly and do not restart or reduce load without approval.",
+      "engineer_owned_verdict_reviewed": "Engineer decides whether Actual and coverage satisfy the project plan."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0018_29a3fd8857561173.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The 12-hour 40C/+5-percent GPU burn remains hybrid; the four-hour Machine Time value is planning metadata and all-GPU safety telemetry is retained.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 19,
+    "source_key": "(No Main Function)|3|Wistron---00356-V002",
+    "case_variant_id": "3363f41fbfff8445",
+    "source_ref": {
+      "sheet": "(No Main Function)",
+      "source_row": 3,
+      "code": "Wistron---00356-V002"
+    },
+    "audit_outcome": "CORRECTED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0019_3363f41fbfff8445.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0019_3363f41fbfff8445.json"
+    },
+    "independent_semantic_finding": "The source only delegates an absent Intel SSV LTSSM procedure, so intent is unclear; it is not a GDS case and not a contradictory-source conflict.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Corrected source decision and selected official procedure"
+      ],
+      "safety_and_stop_reviewed": [
+        "Read-only inventory only",
+        "No guessed SSV command or merged intent"
+      ],
+      "no_automatic_retry_reviewed": "Not applicable; execution is prohibited.",
+      "engineer_owned_verdict_reviewed": "Owner must resolve the semantic block."
+    },
+    "before": {
+      "automation_classification": "BLOCKED",
+      "source_conflict": true,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0019_3363f41fbfff8445.json"
+    },
+    "after": {
+      "automation_classification": "BLOCKED",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": "A_UNCLEAR_TEST_INTENT",
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "The source only delegates an absent Intel SSV LTSSM procedure, so intent is unclear; it is not a GDS case and not a contradictory-source conflict.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "SELECTED_SAME_MODEL_FAMILY_NO_DUT",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  },
+  {
+    "schema_version": "v3-1-final-audit-record-1.0",
+    "sequence": 20,
+    "source_key": "(No Main Function)|7|Wistron---00842-V003",
+    "case_variant_id": "7a9eafd32111d1b9",
+    "source_ref": {
+      "sheet": "(No Main Function)",
+      "source_row": 7,
+      "code": "Wistron---00842-V003"
+    },
+    "audit_outcome": "PASS_UNCHANGED",
+    "source_material_read": {
+      "xlsx_row": true,
+      "deepseek": true,
+      "gpt_v2": true,
+      "v3": "gpt-review/v3-pilot-200/REVIEW_RECORDS/0020_7a9eafd32111d1b9.json",
+      "v3_1": "gpt-review/v3-1/REVIEW_RECORDS/0020_7a9eafd32111d1b9.json"
+    },
+    "independent_semantic_finding": "BMC downgrade remains a WebUI preserve-all workflow with signed image, supported downgrade path, activation, management recovery and no generic endpoint.",
+    "audit_checks": {
+      "original_test_intent_preserved": true,
+      "scope_not_reduced_without_recorded_override": true,
+      "v3_detail_retained_by_additive_overlay_rule": true,
+      "original_method_and_command_provenance_preserved": true,
+      "required_evidence_reviewed": [
+        "Pre/post version and configuration inventory",
+        "Image provenance and complete WebUI record",
+        "Task/activation logs and restored management/host health"
+      ],
+      "safety_and_stop_reviewed": [
+        "No upload until target/image/version are verified",
+        "No invented action URI or automatic retry",
+        "Separate approval for recovery/reset"
+      ],
+      "no_automatic_retry_reviewed": "Any uncertain flash state blocks retry and requires vendor/engineer disposition.",
+      "engineer_owned_verdict_reviewed": "Engineer owns acceptance and any recovery decision."
+    },
+    "before": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "v3_1_record": "gpt-review/v3-1/REVIEW_RECORDS/0020_7a9eafd32111d1b9.json"
+    },
+    "after": {
+      "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+      "source_conflict": false,
+      "effective_record_rule": "XLSX + inherited V3 detail + V3.1 explicit changes + Final Audit explicit corrections"
+    },
+    "blocked_category": null,
+    "modernized_method_audit": {
+      "status": "CONDITIONAL_OR_NOT_APPLICABLE_ACCEPTED",
+      "original_method_retained": true,
+      "project_version_and_applicability_required": true,
+      "no_method_executed": true
+    },
+    "reason": "BMC downgrade remains a WebUI preserve-all workflow with signed image, supported downgrade path, activation, management recovery and no generic endpoint.",
+    "regression": {
+      "found": false,
+      "corrected": false,
+      "detail": "No unrepaired V3-to-V3.1 semantic loss after applying the additive overlay-retention rule."
+    },
+    "agent_understanding_validation": "NOT_SELECTED_RISK_BASED_FINAL_SAMPLE",
+    "hardware_tested": false,
+    "formal_test_verdict": "ENGINEER OWNED; NOT SET"
+  }
+]

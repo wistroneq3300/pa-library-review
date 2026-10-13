@@ -17,6 +17,21 @@ the original method and records any officially verified modernized method as a
 separate recommendation. It also prohibits automatic retry and reserves the
 formal PASS/FAIL/BLOCKED verdict for the engineer.
 
+For V3.1 work after the Final Audit, also read
+`gpt-review/v3-1-final-audit/ENGINEERING_DECISIONS_30_31.md` and
+`gpt-review/v3-1-final-audit/REQUIRED_CORRECTIONS.md`. Apply ED-30 per case:
+manual chamber/rail/fixture setup followed by automated workload and evidence
+is `REQUIRES PACKAGE / USER CONFIRMATION`, unless the repeated physical action
+or human observation is itself the core acceptance. Apply ED-31 per case: a
+core BMC WebUI presentation/navigation/visible-state check is `MANUAL ONLY`;
+IPMI, Redfish, logs and screenshot analysis are corroboration, not a substitute.
+
+Treat V3.1 and Final Audit as additive overlays over the exact V3 record.
+Shortening text never silently deletes a V3 command token, duration, target,
+evidence item, safety stop or recovery requirement. Reserve `SOURCE_CONFLICT`
+for contradictory source requirements; unclear intent, missing project input,
+or unavailable private documentation use their own readiness/blocker reason.
+
 Store V3.1 records separately under the requested V3.1 workspace. Never
 overwrite the source workbook, production JSON, V2 overlay, or V3 records.
 
