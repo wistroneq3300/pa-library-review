@@ -1,0 +1,112 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 169,
+    "calibration": false,
+    "source_key": "Compatibility|460|Wistron-NV GPU-00067-V003",
+    "case_variant_id": "1edcce0a4826d958",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 460,
+        "code": "Wistron-NV GPU-00067-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "21150e472f547f69983020feb2cd9125856af7c2b45be715ed03dbdfd107a211"
+    },
+    "source_snapshot": {
+        "test_name": "gemm",
+        "facts": [
+            "Procedure and criterion only say `check SPEC`.",
+            "Attended time is 60 minutes and machine time is 100 minutes."
+        ],
+        "deepseek": "PARTIAL; proposes an SGEMM/cuBLAS benchmark and GFLOPS output without source parameters.",
+        "v2": "BLOCKED until workload, GPU, reference, tolerance and approval are supplied."
+    },
+    "original_test_intent": {
+        "statement": "Run the project-specified NVIDIA GEMM workload and compare its measured performance with the approved reference while observing GPU health.",
+        "must_preserve": [
+            "The workload comes from the missing SPEC, not from a generic SGEMM guess.",
+            "The planned long-run timing and performance comparison."
+        ],
+        "unknowns": [
+            "GPU set, datatype, matrix dimensions/layout, transposes, warm-up, iterations, runtime, clocks/power state, reference and tolerance."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "specific_gap": "It correctly prohibits a guessed workload but treats missing provisionable recipe data as permanent automation inability."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "GEMM execution and evidence collection are automatable after the owner supplies the exact benchmark recipe and acceptance reference; no workload may run now."
+    },
+    "revision_candidate": {
+        "test_name": "Run the Approved NVIDIA GEMM Performance Workload",
+        "purpose": "Execute the exact project GEMM recipe on the specified GPU scope and determine whether performance and health meet its signed reference.",
+        "applicable_platform_environment": "Owner-named NVIDIA GPU model/topology with pinned driver, CUDA, cuBLAS and benchmark build.",
+        "target_scope": "Only the GPU set and GEMM datatype/dimensions/layout/iterations stated by the SPEC; no inferred SGEMM substitute.",
+        "required_inputs": "SPEC revision, stable GPU UUID/BDF list, binary provenance/hash, complete GEMM parameters, warm-up/repetition/runtime policy, clock/power policy, expected GFLOPS or time and tolerance, monitoring limits and approval.",
+        "test_command_procedure_intent": "Collect read-only identity/health first. After approval, run the verified binary with the exact recipe for its declared duration, preserving every invocation and result; do not clear baseline logs.",
+        "preconditions": "Recipe, binary, target mapping, idle window, thermal/power headroom, OOB monitoring and stop/recovery plan are approved.",
+        "expected_evidence": "SPEC revision; GPU UUID/BDF/topology; driver/CUDA/cuBLAS/binary versions and hash; exact commands, parameters, timestamps, iterations and raw performance; clocks/power/temperature/ECC/XID plus kernel/BMC deltas.",
+        "acceptance_reference": "Only the signed recipe threshold/tolerance. Actual values may be collected before disposition, but absence of the reference prevents PASS.",
+        "safety_restrictions": "Do not invent dimensions/datatype/reference, target GPUs by unstable index, clear logs, change clocks/power or run an unbounded load.",
+        "human_approval_requirements": "GPU owner approves recipe, package and long compute window; engineer makes final disposition.",
+        "manual_boundaries": "Agent can inventory and execute a supplied recipe; owner defines the workload and judges anomalies.",
+        "recovery_requirements": "Stop load, preserve partial output, return GPUs to idle, verify GPU/driver/thermal/power health and use approved recovery for persistent faults.",
+        "stop_conditions": "Missing or inconsistent recipe, target or binary; thermal/power/ECC/XID/AER anomaly; hang, timeout, device loss or incomplete evidence."
+    },
+    "identified_defects": [
+        "Source has no executable workload or acceptance rule.",
+        "DeepSeek invents SGEMM specifics."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Agent Contract"
+    ],
+    "reason_for_change": "A missing owner recipe prevents present execution and PASS, but it does not make a well-defined future GEMM run technically non-automatable.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "No generic GEMM substitution is permitted.",
+        "Actual collection is separated from PASS disposition."
+    ],
+    "resolved_blockers": [
+        "Capability is no longer mislabeled BLOCKED."
+    ],
+    "remaining_blockers": [
+        "All recipe and acceptance details remain owner-supplied."
+    ],
+    "objective_improvement_over_v2": "V3 keeps the same no-guess safety boundary while correctly representing the missing SPEC as readiness inputs and preserving an executable, evidence-complete path once those inputs arrive.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved owner-defined datatype/dimensions/layout/iterations, stable GPU scope, bounded duration, reference-before-PASS and health stop gates."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 460 delegates both procedure and criterion to the absent SPEC and schedules 60/100 minutes.",
+        "template_violation_detected": false
+    }
+}

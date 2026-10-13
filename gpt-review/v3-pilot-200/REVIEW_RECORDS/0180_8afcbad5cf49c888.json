@@ -1,0 +1,114 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 180,
+    "calibration": false,
+    "source_key": "Stability|54|Wistron-Margin-00053-V002",
+    "case_variant_id": "8afcbad5cf49c888",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 54,
+        "code": "Wistron-Margin-00053-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "a9ada29b181bcd1baa965a069edde9820e4c581b54fa5cf1bbf232031a8a4d7d"
+    },
+    "source_snapshot": {
+        "test_name": "0C & -5% 5V/3.3V All front-side storage",
+        "facts": [
+            "Select front-side disks and run SST 12 hours under cold undervoltage.",
+            "Criterion only repeats setup; machine time is 240 minutes."
+        ],
+        "deepseek": "NO due to physical environment.",
+        "v2": "BLOCKED for missing bay map, workload and pass criteria."
+    },
+    "original_test_intent": {
+        "statement": "Exercise all front-side storage for 12 hours at 0 C/-5% rails and detect device, data-path or platform instability.",
+        "must_preserve": [
+            "All front bays, cold/undervoltage, 12 hours and storage health."
+        ],
+        "unknowns": [
+            "Bay/drive identities, data safety, workload, acceptance, condensation procedure and duration conflict."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "specific_gap": "Correctly prevents undefined disk I/O, but conflates current missing semantics with capability; qualified physical margin makes the eventual test MANUAL ONLY."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "MANUAL ONLY",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_MANUAL_ACTION",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "No I/O may begin. Once safe targets/workload/criteria are supplied, software execution can be assisted but physical cold/undervoltage control remains manual."
+    },
+    "revision_candidate": {
+        "test_name": "Stress All Front-Side Storage at 0 C and -5% Rail Margin",
+        "purpose": "Run the signed 12-hour workload against every approved front-side storage target under controlled cold undervoltage and verify data integrity, device health and clean platform logs.",
+        "applicable_platform_environment": "Exact storage backplane/controller topology in a calibrated 0 C chamber with signed humidity/dew-point and condensation controls, plus owner-named -5% 5 V/3.3 V rails with defined control/measurement points, tolerances, soak, ramp and restoration sequence.",
+        "target_scope": "Every physical front bay must have an owner-approved disposition: tested target, empty, or justified N/A. Tested bays are mapped to enclosure/slot/serial-or-WWN/controller/namespace and use only disposable or proven non-destructive targets; boot, production, mounted, swap, LVM, device-mapper and RAID members are excluded unless explicitly authorized.",
+        "required_inputs": "Complete physical-bay manifest and disposition; stable device identities and ownership; boot/mount/swap/LVM/device-mapper/RAID classification; exact safe workload, I/O range, parallelism and end-to-end integrity method; performance/error thresholds; formal resolution that preserves the source 12-hour duration unless the case itself is revised; named rail points/tolerances, chamber humidity/dew-point/condensation/soak/ramp limits; monitoring cadence and recovery.",
+        "test_command_procedure_intent": "Perform read-only multi-view storage and environment inventory first. Only after signed resolution may the operator establish and verify the cold/undervoltage environment. Immediately before I/O, re-resolve each persistent serial/WWN/enclosure-slot identity, repeat protected-device interlocks and reject transient device-name-only targeting. Run the exact approved range/workload on every test disposition for the full 12 hours, retaining continuous environmental and per-target evidence without log clearing.",
+        "preconditions": "Every physical bay has a disposition; immediate identity and protected-use interlocks pass; backups/array policy, capacity/thermal margins, OOB, dew-point safeguards and controlled warm-up recovery are verified.",
+        "expected_evidence": "Complete physical-bay disposition; persistent physical/logical mapping and immediate pre-I/O interlocks; ownership and protected-use checks; command/version/range/parameters; full 12-hour per-target results and integrity proof; SMART/NVMe/SAS/controller/kernel/SEL deltas; continuous temperature, humidity/dew-point and named-rail traces; condensation observations, warm-up/restoration and final health.",
+        "acceptance_reference": "Every physical bay has a valid tested/empty/N/A disposition; every tested target completes the full 12-hour owner-defined integrity, zero-error and performance/health rules while environmental limits hold. Setup, inventory, workload launch, partial coverage or a 240-minute run is never completion.",
+        "safety_restrictions": "No transient device-name targeting, guessed/raw/protected device, undefined or out-of-range write, omitted bay, log clearing, shortened run, moisture/dew-point exposure or remote fixture improvisation.",
+        "human_approval_requirements": "Storage owner approves every target/method; lab operator controls 0 C/-5% and recovery.",
+        "manual_boundaries": "Physical environment is manual; bounded I/O may be automated only after per-device interlocks.",
+        "recovery_requirements": "Stop I/O, preserve errors, warm and restore nominal rails, verify array/filesystem/device health and do not write to an uncertain target.",
+        "stop_conditions": "Any undisposed bay, persistent-identity drift, protected-use interlock, ownership/range/acceptance ambiguity, unresolved duration, humidity/dew-point or named-rail definition failure, moisture, telemetry loss, medium/controller/integrity error, device loss, array/filesystem degradation, thermal/power/SEL anomaly, failed restoration or incomplete evidence."
+    },
+    "identified_defects": [
+        "No acceptance result.",
+        "Unsafe undefined target/workload.",
+        "12-hour/240-minute conflict and condensation risk."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Target Scope",
+        "Acceptance",
+        "Safety"
+    ],
+    "reason_for_change": "V3 preserves the absolute storage no-go until semantics are supplied while assigning the eventual capability according to the unavoidable manual cold/rail setup.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Setup steps are not pass criteria; targets require stable physical/logical mapping."
+    ],
+    "resolved_blockers": [
+        "Readiness is separated from MANUAL ONLY capability."
+    ],
+    "remaining_blockers": [
+        "Bay map, safe workload and acceptance remain unresolved."
+    ],
+    "objective_improvement_over_v2": "V3 does not relax the undefined-I/O prohibition, but it corrects the enduring classification, adds cold-condensation recovery and explicitly rejects the source's repeated setup steps as acceptance evidence.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Initial validation found incomplete all-bay disposition, pre-I/O identity/protected-device interlocks and cold/rail/dew-point controls. Revalidation confirmed every-bay disposition, persistent identity, full 12-hour coverage and complete manual environmental safeguards."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 54 is all front-side storage at 0 C/-5%, 12-hour SST, but the criterion only repeats procedure steps.",
+        "template_violation_detected": false
+    }
+}

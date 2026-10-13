@@ -1,0 +1,115 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 175,
+    "calibration": false,
+    "source_key": "Stability|27|Wistron-Margin-00026-V003",
+    "case_variant_id": "d033de4bcc07e39e",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 27,
+        "code": "Wistron-Margin-00026-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "58dbbedbc9a2dd647e4599de2bdc944762361bca9a4705d0646c1f7b57640ff4"
+    },
+    "source_snapshot": {
+        "test_name": "40C & -5% 5V/3.3V BMC upload file stress",
+        "facts": [
+            "Via PuTTY, upload data to BMC, remove it, repeat; total plan 30/30 minutes.",
+            "No file, destination, transfer method or repeat count is defined."
+        ],
+        "deepseek": "NO because margin setup is physical.",
+        "v2": "BLOCKED until file/method/loop/storage limits are supplied."
+    },
+    "original_test_intent": {
+        "statement": "Repeatedly upload and delete a bounded test object through the approved BMC interface at 40 C/-5% rails, verifying transfer integrity and BMC/SEL health.",
+        "must_preserve": [
+            "BMC data upload/removal cycle, high-temperature undervoltage condition and repeated operation."
+        ],
+        "unknowns": [
+            "Interface/protocol, destination, file content/size/hash, repetitions or 30-minute interpretation, free-space reserve and acceptance thresholds."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "specific_gap": "It correctly prohibits arbitrary writes but uses BLOCKED for provisionable procedure inputs; the physical fixture makes the enduring class MANUAL ONLY."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "MANUAL ONLY",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_MANUAL_ACTION",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "No file operation is ready. After owner defines a sandboxed transfer cycle, software steps may be automated, but operator-controlled margin makes the full test MANUAL ONLY."
+    },
+    "revision_candidate": {
+        "test_name": "Cycle BMC Test-File Upload and Removal at 40 C and -5% Rails",
+        "purpose": "Exercise the approved BMC transfer/storage path for one owner-selected finite cycle count or 30-minute campaign under physical margin, verifying every object's integrity through an owner-approved end-to-end method, exact deletion, continuous capacity reserve and management health.",
+        "applicable_platform_environment": "Exact BMC firmware/interface/storage partition in calibrated 40 C and owner-named -5% 5 V/3.3 V rail conditions, with signed control/measurement points, tolerances, soak and restoration sequence.",
+        "target_scope": "One canonical owner-created sandbox root and one uniquely named non-sensitive object per cycle; containment is revalidated before each delete. Never firmware partitions, configuration, logs, certificates, symlink/reparse escapes or arbitrary BMC paths.",
+        "required_inputs": "Supported interface/commands; canonical sandbox identity and containment check; non-sensitive file size/hash and immutable per-cycle object naming; one trustworthy end-to-end integrity method for every cycle (server checksum, authenticated readback plus local hash comparison, or owner-approved equivalent); one authoritative bound (fixed count or 30 minutes), including in-progress-cycle timeout behavior; free-space floor and sampling cadence; exact margined rails/control points/tolerances/soak/restore; transfer timeout/retry policy, expected SEL/log behavior, cleanup and recovery approval.",
+        "test_command_procedure_intent": "Read-only BMC/storage baseline may occur now. After specification, operator establishes and independently verifies the signed margin. The authenticated client uploads the uniquely identified object, proves end-to-end integrity through the mandatory approved method, revalidates canonical containment, removes only that object, proves absence and records free space every cycle. Execute only the selected finite bound; do not choose between count and time at runtime.",
+        "preconditions": "Sandbox/privilege scope and canonical containment are proven, OOB remains reachable, continuous environment and per-cycle capacity monitoring are ready.",
+        "expected_evidence": "Firmware/interface/partition identity; canonical sandbox and per-cycle object identity/name/size/hash; chosen loop rule and boundary behavior; exact per-cycle upload/integrity/containment/delete/absence results and timestamps; per-cycle free space plus minimum observed reserve; completed count or full duration; continuous temperature and named-rail traces with tolerances; BMC services/sensors/SEL/network; final capacity, no residual object and nominal restoration.",
+        "acceptance_reference": "Every cycle required by the selected bound completes with matching integrity and exact cleanup, measured reserve never crosses its floor, signed environmental tolerances hold continuously, and BMC services/SEL meet owner criteria.",
+        "safety_restrictions": "Do not browse/write arbitrary BMC paths, follow symlink/path traversal outside the sandbox, upload firmware/config/secret data, clear SEL, select or change the loop rule, retry automatically, run unboundedly or delete by wildcard/uncertain identity.",
+        "human_approval_requirements": "BMC owner supplies sandbox/object/bound method; lab operator controls named physical rails, temperature and recovery.",
+        "manual_boundaries": "Environment is manual; the owner-defined bounded transfer loop can be automated only through the approved interface.",
+        "recovery_requirements": "Stop new transfers, preserve the failed exact object/evidence, restore named rails/temperature by the signed sequence, use supported cleanup/service recovery and never delete an uncertain path.",
+        "stop_conditions": "Unresolved canonical target/method/bound/margin, unavailable or failed trustworthy end-to-end integrity method, containment failure, capacity floor breach, integrity or deletion failure, BMC service loss, SEL/storage/power/thermal anomaly, fixture drift or monitoring gap."
+    },
+    "identified_defects": [
+        "Undefined BMC target and interface.",
+        "No file identity/integrity or loop bound.",
+        "Delete step could affect privileged storage."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Target Scope",
+        "Safety",
+        "Evidence"
+    ],
+    "reason_for_change": "The semantic gaps block today's write operation, but they are owner-supplied parameters; the stable classification should reflect mandatory physical margin handling rather than describe inputs as permanent impossibility.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Only a named sandbox object is writable/deletable.",
+        "Loop must be bounded."
+    ],
+    "resolved_blockers": [
+        "Capability is separated from readiness."
+    ],
+    "remaining_blockers": [
+        "Transfer recipe and sandbox remain unspecified."
+    ],
+    "objective_improvement_over_v2": "V3 retains the hard no-write gate while replacing an over-BLOCKED capability label with MANUAL ONLY and adds object-level integrity, storage-reserve and exact-delete safeguards absent from V2.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Initial validator exposed bound, containment, reserve, margin and integrity-proof gaps. After two revisions, revalidation confirmed one authoritative finite bound, canonical containment, exact deletion, per-cycle reserve, named rail controls and mandatory end-to-end integrity for every cycle."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 27 repeats BMC upload/delete but supplies neither object nor repetitions and has a 30-minute plan.",
+        "template_violation_detected": false
+    }
+}

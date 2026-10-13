@@ -1,0 +1,173 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 164,
+    "calibration": false,
+    "source_key": "Compatibility|388|Wistron-Networking-00377-V003",
+    "case_variant_id": "1f72b5c39dbf1e1d",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 388,
+        "code": "Wistron-Networking-00377-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "6afc38338e576e2f32d7e82dc6007358dfcef41849f5f183005c1757599e66e8",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "Information Check",
+        "test_set": "Networking - BlueField",
+        "purpose_facts": "Find the BlueField-3 FRU through `ipmitool fru list | grep <BF3>` and compare its information/description to SPEC.",
+        "procedure_facts": [
+            "Read-only five-minute IPMI FRU check; `<BF3>` is an unresolved placeholder.",
+            "DeepSeek instead queries uname, nproc and os-release with unrelated packages."
+        ],
+        "criteria_facts": [
+            "FRU information and description reasonable and matching SPEC."
+        ],
+        "attended_time_minutes": "5",
+        "machine_time_minutes": "5",
+        "source_conflicts": [
+            "DeepSeek review targets OS/CPU data rather than source FRU, but the original source intent itself is coherent."
+        ],
+        "missing_source_information": [
+            "Exact BF3 FRU record/ID/string, execution plane, expected fields/values and secure IPMI access."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Verify the BMC/platform FRU record representing the installed BlueField-3 adapter has the expected identity and description fields from the server recipe.",
+        "must_preserve": [
+            "IPMI FRU data, BF3 identity, all relevant information/description and five-minute read-only scope."
+        ],
+        "must_not_infer": [
+            "DPU OS/kernel/CPU health as a substitute.",
+            "A substring match as proof the correct FRU record and all fields were checked.",
+            "That generic BlueField fields apply to this ODM platform."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 rejects DeepSeek's OS substitution, requires secure ipmitool, exact BF3 filter/SPEC, full output and no log clearing.",
+        "specific_gap": "V2 still phrases filtering as sufficient and adds broad telemetry unrelated to the five-minute FRU intent; it does not require selecting a unique FRU record before retrieving/validating its complete fields."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "BlueField OS/firmware/link tests cannot establish this BMC FRU record."
+        ],
+        "precedence_application": "The XLSX FRU command/criteria override DeepSeek's unrelated host inventory."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_SPEC"
+        ],
+        "summary": "Enumerate full FRU inventory first, prove one unique record represents the BF3, then compare its complete approved identity/description fields. Do not grep first or substitute DPU OS facts."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Read-only FRU intent, source command family and five-minute scope."
+        ],
+        "missing": [
+            "Unique FRU ID/identifier, exact expected fields, BMC/in-band execution plane and secure access."
+        ],
+        "provider": [
+            "Platform/asset owner supplies BF3-to-FRU map and expected values.",
+            "BMC owner supplies authorized channel if OOB is needed."
+        ],
+        "safe_read_only_work": [
+            "With authorized local/IPMI access, collect complete FRU inventory and tool/BMC versions without clearing logs."
+        ],
+        "prohibited_until_resolved": [
+            "Selecting a record by guessed substring, FRU write/edit, log clearing, insecure credentials, OS substitution or PASS."
+        ],
+        "closure_evidence": [
+            "One unique FRU record maps to the physical BF3 and an approved required-field/value table."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Verify BlueField-3 FRU Information",
+        "purpose": "Identify the unique FRU record for the installed BlueField-3 adapter and verify every required product, part, serial, asset and description field against the platform recipe without altering FRU or logs.",
+        "applicable_platform_environment": "Exact server/BMC/FRU implementation and installed BF3 SKU/slot; in-band or OOB IPMI plane must be explicitly chosen and authorized.",
+        "target_scope": "One physically mapped BF3 adapter and its unique FRU record, plus the full FRU inventory needed to prove uniqueness; one five-minute read-only collection.",
+        "required_inputs": "Host/BMC identity; installed BF3 SKU/serial/slot/BDF; FRU device ID or approved identifying fields; exact expected field/value table and normalization; pinned ipmitool/version plus its documented complete-inventory and record-detail read syntax; secure local or OOB access and protected evidence path.",
+        "test_command_procedure_intent": "Record host/BMC/tool identity and physical BF3 map. Verify the pinned ipmitool's local help/manual for the source `fru list` syntax before use. If that exact source syntax is supported and returns complete inventory, run it through the approved plane without an initial grep and preserve raw output/status. If it is unsupported, incomplete or vendor-specific, stop and obtain an owner-approved source correction naming the documented complete-inventory and record-detail read commands; do not silently substitute `fru print` or another operation. After a valid command is approved, preserve full inventory, identify exactly one candidate using approved fields, retrieve its complete detail where separate, and compare every required field and description. Do not use uname/nproc/os-release as substitute evidence.",
+        "preconditions": "Correct host/BMC; authorized read-only IPMI; unique BF3 physical/FRU map and expected fields available; logs preserved.",
+        "expected_evidence": "Host/BMC/pinned ipmitool versions and time; documented inventory/detail syntax and source `fru list` support decision; any owner-approved source correction; BF3 physical SKU/serial/slot/BDF; exact command/plane/status; complete FRU inventory; selected FRU ID and uniqueness proof; full record; field-by-field expected/actual/normalization result; discrepancies; credential-redaction and no-change confirmation.",
+        "acceptance_reference": "Approved platform BF3 FRU definition for the exact adapter/server. Pass requires exactly one mapped record and every required field/description equal after approved normalization; a grep hit or reasonable-looking text is insufficient.",
+        "safety_restrictions": "Do not clear logs, embed credentials, disable host verification, issue FRU write/edit, guess `<BF3>`, filter before preserving full output, accept multiple matches, expose serial/asset data or substitute OS health.",
+        "human_approval_requirements": "Owner supplies/approves physical-to-FRU map and expected fields; no additional approval is needed for an already authorized read-only query.",
+        "manual_boundaries": "Automated collection/comparison is possible; resolving physical label/FRU ownership or spec conflicts is manual.",
+        "recovery_requirements": "No recovery for read-only access. On wrong target/auth or credential exposure, stop, close/rotate the session as required and preserve redacted evidence; never alter FRU to fix a mismatch in this test.",
+        "stop_conditions": "Wrong/ambiguous host/BMC/plane; source `fru list` unsupported or not a complete inventory without an approved source correction; no unique BF3 record; missing expected map; unauthorized/insecure access; incomplete/truncated output; any write attempt; credential/data exposure. Missing SPEC stops PASS, not safe actual collection after valid read syntax is established."
+    },
+    "identified_defects": [
+        "DeepSeek substitutes unrelated OS inventory.",
+        "Placeholder grep can hide context and multiple records.",
+        "`reasonable` criteria lacks exact field/value rules."
+    ],
+    "changed_fields": [
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety"
+    ],
+    "reason_for_change": "Keep the exact FRU check while making physical ownership, unique-record selection and complete field comparison auditable.",
+    "new_technical_evidence": [
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Compatibility!row-388",
+            "title": "Source testcase Wistron-Networking-00377-V003",
+            "version": "Baseline workbook",
+            "applicability": "Only this BF3 FRU case",
+            "supports": "IPMI FRU, BF3 placeholder and SPEC comparison are the actual test; DeepSeek OS queries are unrelated.",
+            "remaining_uncertainty": "FRU identifier and expected values are missing."
+        }
+    ],
+    "removed_ambiguities": [
+        "Rejects OS-health substitution.",
+        "Requires unique FRU identity before comparison.",
+        "Replaces subjective reasonable with declared field/value normalization."
+    ],
+    "resolved_blockers": [
+        "Missing ipmitool/access/SPEC are furnishable prerequisites, not inherent BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Unique physical-to-FRU map and expected fields are required for PASS."
+    ],
+    "objective_improvement_over_v2": "V3 narrows evidence to the actual BF3 FRU purpose, verifies rather than assumes the source's `fru list` syntax, prohibits silent substitution, and prevents a grep hit from hiding duplicate or partial records through full inventory and unique physical mapping.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "validator": "validate_calibration_c",
+        "notes": "Initial validation found an assumed `ipmitool fru list` syntax. Revalidation confirmed pinned-version verification, explicit stop/source correction, no silent substitution, and complete unique BF3 FRU coverage."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 388 checks BF3 FRU by ipmitool while DeepSeek queries OS/CPU facts.",
+        "source_specific_v2_comparison": "V2 rejects substitution; V3 adds unique physical-to-FRU proof and complete field coverage.",
+        "source_specific_safety_evidence_decision": "Authorized full FRU read is safe; no grep-first, log clear or write.",
+        "template_violation_detected": false
+    }
+}

@@ -1,0 +1,180 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 161,
+    "calibration": false,
+    "source_key": "Compatibility|356|Wistron-NV GPU-00349-V002",
+    "case_variant_id": "29afdef470abf0a5",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 356,
+        "code": "Wistron-NV GPU-00349-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "052d298186ecbe7f642205904d84f0c65b7117b1fd4f3cfd5aa0a11b16342986",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "DCGM - Persistence Mode",
+        "test_set": "NV GPU - DCGM",
+        "purpose_facts": "Enable NVIDIA persistence mode and run verbose DCGM level-4 diagnostics.",
+        "procedure_facts": [
+            "Lists diagnostic before starting nvidia-dcgm service.",
+            "Uses `nvidia-smi -pm 1`, `dcgmi diag -v -r 4`, then service start; machine time is 120 minutes."
+        ],
+        "criteria_facts": [
+            "Diagnostic PASS without errors."
+        ],
+        "attended_time_minutes": "5",
+        "machine_time_minutes": "120",
+        "source_conflicts": [
+            "Operational order places the required DCGM service start after the diagnostic."
+        ],
+        "missing_source_information": [
+            "Exact target entities, DCGM/driver/product support, desired final persistence/service state and run-level-4 test/monitoring policy."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Validate persistence mode and the target NVIDIA GPUs with the complete supported DCGM extra-long level-4 diagnostic over the planned 120-minute window.",
+        "must_preserve": [
+            "Persistence-mode mutation, level 4 (`-r 4`), verbose complete results and 120-minute machine-time plan.",
+            "Every applicable subtest result and restored approved runtime state."
+        ],
+        "must_not_infer": [
+            "DeepSeek's conflicting level 1.",
+            "That current DCGM default entity scope is GPU-only.",
+            "That skipped/not-run subtests are PASS or that output may be tailed."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 fixes service order, preserves level 4/full output, records/restores persistence and service state, isolates workload and rejects DeepSeek's level-1/truncation path.",
+        "specific_gap": "V2 does not address current DCGM's default entity scope, which may include all NVIDIA GPUs and CPUs, or require a version-resolved level-4 test catalogue and monitoring exclusions for tests such as EUD."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Other DCGM run levels cannot replace source level 4."
+        ],
+        "precedence_application": "Source `-r 4` and 120 minutes control; official version-specific semantics determine target selector and included tests."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Start/verify the host engine first, bind the level-4 suite to approved GPU entities rather than version-dependent defaults, preserve the complete included/skipped test matrix, and restore the exact persistence/service pre-state."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Exact level-4 command intent and 120-minute plan."
+        ],
+        "missing": [
+            "Pinned DCGM/driver, supported GPU/entity list, included test catalogue, MIG/workload prerequisites, monitoring compatibility, stop limits, final mode/service policy and approval."
+        ],
+        "provider": [
+            "NVIDIA/platform owner supplies supported matrix/test policy.",
+            "Workload/lab owner supplies entity scope/window/limits and final-state decision."
+        ],
+        "safe_read_only_work": [
+            "Collect GPU UUID/BDF/model, NVIDIA CPU presence, driver/DCGM versions/help, persistence/service state, workloads/MIG and baseline logs/health."
+        ],
+        "prohibited_until_resolved": [
+            "Persistence/service change, level-4 launch, relying on default entity selection, output truncation, log clearing or PASS."
+        ],
+        "closure_evidence": [
+            "Explicit GPU entity list and version-resolved suite/prerequisites plus approved state/monitoring/recovery plan."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Validate NVIDIA GPU Persistence Mode with DCGM Level-4 Diagnostics",
+        "purpose": "Enable the approved NVIDIA GPU persistence state, execute the complete supported DCGM extra-long level-4 suite on the explicitly selected GPU entities, and verify every required subtest and platform-health result before restoring the approved final persistence and service state.",
+        "applicable_platform_environment": "Exact supported NVIDIA datacenter GPU/driver/DCGM release and host OS. Higher diagnostic levels require product support; CPU entities and unsupported GPU classes are excluded unless the test owner explicitly includes them.",
+        "target_scope": "Every approved GPU identified by stable UUID/entity mapping and no unapproved CPU entity. One level-4 run using the source's 120-minute machine-time plan; included, skipped, not-run and failed tests must all be accounted for.",
+        "required_inputs": "Pinned compatible DCGM/driver; version-specific level-4 catalogue/prerequisites; explicit GPU entities; MIG/workload/isolation rules; current/desired/final persistence and nvidia-dcgm service states; 120-minute planning/timeout policy; test-compatible telemetry policy; thermal/power/error limits; protected output, abort/OOB/recovery and approval.",
+        "test_command_procedure_intent": "Preserve logs and record identity, persistence/service state, workloads/MIG and health. Start or verify `nvidia-dcgm` before diagnostics, set persistence mode only for the approved GPUs and confirm readback. Use the installed version's supported entity selector to run the source suite equivalent to `dcgmi diag -v -r 4` on only those GPUs. Retain complete untruncated structured/text results, per-test/per-entity statuses, reasons for skipped/not-run items and allowed telemetry. Restore persistence and service to the approved recorded final state and verify health.",
+        "preconditions": "Supported stack/entities; all required level-4 plugins/executables; workloads drained; MIG/test prerequisites met; sufficient power/cooling/time/storage; compatible monitoring, watchdog, OOB and approval ready.",
+        "expected_evidence": "Driver/DCGM/GPU UUID/BDF/entity map and product support; current/desired/final persistence/service states; exact command/selector/status/times; 120-minute policy; complete per-test/per-entity PASS/FAIL/SKIP/NOT_RUN and diagnostic codes/messages; plugin/executable availability; permitted telemetry; XID/ECC/AER/kernel/DCGM/BMC/SEL deltas; restore and final health.",
+        "acceptance_reference": "Pinned DCGM documentation and platform diagnostic policy. Pass requires every required level-4 test for every approved GPU to PASS, every skip/not-run to be explicitly allowed, no disqualifying health event, and approved final persistence/service state; summary success or partial output is insufficient.",
+        "safety_restrictions": "Do not use DeepSeek level 1, run before the host engine, accept default entities without inspection, include CPUs unintentionally, run on active/MIG-incompatible targets, use monitoring forbidden by an included test, truncate output, clear logs, treat skip as pass, exceed limits or leave state changed.",
+        "human_approval_requirements": "Owner approves entity list, state changes, exact level-4 content, monitoring/limits/window and final state; engineer judges skips, warnings and health deltas.",
+        "manual_boundaries": "The agent may prepare/set/run/restore after approval; product support, skip policy and anomaly disposition remain engineering decisions.",
+        "recovery_requirements": "On setup, plugin, diagnostic, GPU/XID/ECC/AER, thermal/power or workload fault, abort under the approved mechanism, preserve complete partial results, restore persistence/service pre-state, verify GPU/host health and escalate before retry.",
+        "stop_conditions": "Unsupported/incompatible product or stack; ambiguous/default entity scope; missing plugin/prerequisite; unresolved MIG/workload/monitoring policy; absent limits/approval/recovery; timeout/hang; required test fail/skip/not-run; GPU reset/XID/ECC/AER; thermal/power breach; restore failure; incomplete output."
+    },
+    "identified_defects": [
+        "Service order is non-executable.",
+        "DeepSeek conflicts on run level and truncates output.",
+        "Default entity scope can add NVIDIA CPUs.",
+        "Level-4 catalogue/support/skip rules are version-dependent."
+    ],
+    "changed_fields": [
+        "Purpose",
+        "Applicable Environment",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Recovery"
+    ],
+    "reason_for_change": "Preserve the demanding level-4 test while preventing service-order failure, CPU scope expansion and false PASS from partial/skipped results.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://docs.nvidia.com/datacenter/dcgm/latest/reference/command-line-reference/dcgmi/dcgmi-diag.html",
+            "title": "NVIDIA DCGM dcgmi diag command reference",
+            "version": "Latest accessed 2026-10-14; execution release must be pinned",
+            "applicability": "DCGM run-level, entity and output semantics",
+            "supports": "Level 4 is extra-long and includes prior levels plus additional tests; current default scope can include all GPUs and NVIDIA CPUs; diagnostics consume substantial resources and expose per-test status.",
+            "remaining_uncertainty": "Installed DCGM version, exact product support and included plugins are absent."
+        }
+    ],
+    "removed_ambiguities": [
+        "Starts service before diagnostic.",
+        "Keeps level 4 and 120-minute plan.",
+        "Makes GPU-only entity scope explicit.",
+        "Separates PASS from skipped/not-run results and preserves full output."
+    ],
+    "resolved_blockers": [
+        "Missing DCGM/approval are provisionable, not inherently BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Supported stack/entity/test/monitoring/final-state policy remains required."
+    ],
+    "objective_improvement_over_v2": "V3 detects that modern DCGM may target NVIDIA CPUs by default, requires an explicit GPU entity set and version-resolved level-4 result matrix, and prevents skipped or truncated subtests from becoming PASS.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "validator": "validate_calibration_b",
+        "notes": "Validator preserved exact level 4 and one 120-minute-policy run, required GPU-only explicit entities instead of defaults, accounted for SKIP/NOT_RUN, enforced service order and final persistence/service restoration."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 356 enables persistence, runs verbose DCGM level 4 for a 120-minute planned machine time, then incorrectly starts the service.",
+        "source_specific_v2_comparison": "V2 fixes order/level/output; V3 additionally controls current default CPU inclusion and skip/test catalogue semantics.",
+        "source_specific_safety_evidence_decision": "Only inventory is safe until entity/suite/state/monitoring policies and approval close.",
+        "template_violation_detected": false
+    }
+}

@@ -1,0 +1,175 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 166,
+    "calibration": false,
+    "source_key": "Compatibility|435|Wistron-Storage-00070-V002",
+    "case_variant_id": "bd497e08deb1ccf1",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 435,
+        "code": "Wistron-Storage-00070-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "7f9a955ea7115d0c349c4fee4019f860e3a6d037292b75f16edda013a8e05a5e",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "LED Check",
+        "test_set": "LED Check",
+        "purpose_facts": "Visually verify storage LED solid green when powered, blinking green during read/write and off when ready to remove.",
+        "procedure_facts": [
+            "Requires three physical visual states over 60 attended and 60 machine minutes."
+        ],
+        "criteria_facts": [
+            "Solid green powered; blinking green read/write; off ready-to-remove."
+        ],
+        "attended_time_minutes": "60",
+        "machine_time_minutes": "60",
+        "source_conflicts": [],
+        "missing_source_information": [
+            "Exact device/slot/LED lens and platform meaning, non-destructive activity method, safe-removal workflow, operator/camera and hot-plug SOP."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Physically observe the identified storage device's status/activity LED through powered-idle, active I/O and formally prepared-for-removal states and compare color/behavior with the platform specification.",
+        "must_preserve": [
+            "All three states, physical visual evidence, exact slot/device and full 60-minute activity."
+        ],
+        "must_not_infer": [
+            "LED state from software telemetry.",
+            "That LED off itself proves data is flushed or physical removal is safe.",
+            "That write I/O to production data is authorized."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "MANUAL ONLY",
+        "second_review_outcome": "IMPROVED",
+        "risk_level": "MEDIUM",
+        "summary": "V2 correctly retains operator-only visual judgment, adds slot identity/photos, safe power/I/O/removal states, no destructive command and log preservation.",
+        "specific_gap": "V2 says the operator prepares removal but does not require an independent OS/controller safe-removal confirmation before using the off-state, leaving a risk that LED-off is treated as removal authorization."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Storage slot mapping and hot-plug cases cannot replace this visual LED behavior test."
+        ],
+        "precedence_application": "Source-specific colors/states are preserved; platform SOP must establish readiness independently of the LED."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "MANUAL ONLY",
+        "execution_readiness": [
+            "NEEDS_MANUAL_ACTION",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "A qualified operator must observe all three LED states. The agent may coordinate a bounded non-destructive activity and evidence, but the controller/OS/SOP\u2014not LED-off\u2014must establish removal readiness; no drive removal is required."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Three visual outcomes and 60-minute allocation."
+        ],
+        "missing": [
+            "Slot/LED map, exact color/blink specification, safe I/O target, prepare-to-remove procedure, hot-plug capability, operator/camera and approval."
+        ],
+        "provider": [
+            "Storage/platform owner supplies LED/removal specification.",
+            "Lab owner/operator supplies physical access and safe transition/I/O plan."
+        ],
+        "safe_read_only_work": [
+            "Inventory device persistent identity, slot/controller/filesystem/mount/RAID state, current LEDs via operator baseline and logs without activity or removal."
+        ],
+        "prohibited_until_resolved": [
+            "Writes to unapproved data, unmount/offline/remove/power change, log clearing, inferring LED state or PASS remotely."
+        ],
+        "closure_evidence": [
+            "Signed device-slot-LED map, non-destructive activity target, safe-removal SOP and qualified operator/evidence plan."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Verify Storage Device LED States",
+        "purpose": "Visually verify the exact storage slot's LED is solid green when powered and idle, blinks green during approved I/O, and turns off after the OS/controller has independently confirmed the device is ready for removal, without using the LED itself as safety authorization.",
+        "applicable_platform_environment": "Exact chassis/backplane/controller/drive protocol and firmware whose LED behavior matches the signed platform specification; NVMe and SAS/SATA enclosure indicators may differ.",
+        "target_scope": "Every owner-selected storage device/slot required by the recipe, with the same physical LED lens and persistent device identity followed through all three states. Allocate the source's full 60-minute attended/machine activity; actual drive removal is outside scope unless separately authorized.",
+        "required_inputs": "Chassis/slot/LED map and signed color/blink/off meanings; drive serial/WWN/EUI and controller/OS mapping; approved read-only or scratch I/O fixture; filesystem/data protection; prepare-to-remove/offline/hot-plug SOP and capability; operator/camera, maintenance, recovery and approval.",
+        "test_command_procedure_intent": "Record persistent device/slot/LED identity, baseline health/logs and powered-idle operator photo/video. Generate bounded approved I/O, preferring reads or an isolated scratch target, while the operator captures timestamped blinking green and the agent correlates activity. Stop I/O, flush/verify as required and execute only the approved OS/controller prepare-to-remove workflow without removing the drive. After independent readiness confirmation, the operator records the LED-off state. Restore the device to normal service and verify storage health.",
+        "preconditions": "Exact mapping/spec; qualified operator; protected data; supported state transitions; approved I/O and removal-readiness workflow; OOB/recovery and evidence ready.",
+        "expected_evidence": "Chassis/controller/backplane/drive identity; slot/LED map; persistent serial/WWN/EUI; operator checklist and timestamped color-correct photo/video for solid, blink and off; exact I/O target/command/rate/times; OS/controller prepare-to-remove confirmation distinct from LED; device/log/health baseline/deltas; normal-service restoration.",
+        "acceptance_reference": "Signed platform LED specification and safe-removal SOP. Pass requires all three specified visual behaviors on the same mapped device/LED with matching system state, independent readiness confirmation before the off observation and healthy restoration; software telemetry alone is insufficient.",
+        "safety_restrictions": "Do not clear logs, write production data, infer slot by `/dev` order, touch/remove an active device, treat LED off as safety proof, claim visual observation remotely, force hot-plug, continue on filesystem/controller/error/heat anomaly or omit restoration.",
+        "human_approval_requirements": "Qualified operator performs visual/state observations; storage owner approves I/O and prepare-to-remove transition; engineer judges color/blink and discrepancies.",
+        "manual_boundaries": "Physical vision is manual. Agent may collect identity/activity/logs and coordinate approved state transitions but cannot attest color/blink/off or touch hardware.",
+        "recovery_requirements": "On wrong LED/device, I/O/filesystem/controller error, unsafe power/heat or readiness failure, stop, do not remove, preserve evidence, return the device online through SOP and verify array/filesystem/host health before escalation.",
+        "stop_conditions": "No unique device-slot-LED map; missing operator/spec/SOP/approval; data target unsafe; unsupported hot-plug/removal transition; unexpected LED/fault color; activity or readiness mismatch; storage/filesystem/controller error; incomplete visual evidence."
+    },
+    "identified_defects": [
+        "LED-off can be misused as removal-readiness proof.",
+        "I/O target/data safety and persistent slot identity are underspecified.",
+        "Remote Agent cannot attest physical color/blink."
+    ],
+    "changed_fields": [
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Manual Boundaries",
+        "Recovery"
+    ],
+    "reason_for_change": "Preserve manual LED validation while separating visual behavior from the independent safe-removal decision and preventing destructive activity generation.",
+    "new_technical_evidence": [
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Compatibility!row-435",
+            "title": "Source testcase Wistron-Storage-00070-V002",
+            "version": "Baseline workbook",
+            "applicability": "Only this LED case",
+            "supports": "Three required visual states and 60-minute values.",
+            "remaining_uncertainty": "Platform LED meanings and safe-removal SOP are absent."
+        }
+    ],
+    "removed_ambiguities": [
+        "Same device/LED tracked through all states.",
+        "Ready-to-remove proven outside the LED.",
+        "No physical removal required.",
+        "Activity constrained to protected read/scratch method."
+    ],
+    "resolved_blockers": [
+        "Hybrid coordination is possible, but visual acceptance remains MANUAL ONLY."
+    ],
+    "remaining_blockers": [
+        "Operator, platform LED/removal spec, exact mapping and safe I/O plan required."
+    ],
+    "objective_improvement_over_v2": "V3 adds a critical safety separation: the OS/controller must prove removal readiness before the LED-off observation, so a dark LED can never authorize handling the drive; it also retains one persistent device identity across all three states.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "validator": "validate_calibration_b",
+        "notes": "Validator preserved all three states on one persistent device/LED, the manual visual boundary and full 60-minute plan, preferred read/scratch I/O, required independent readiness before LED-off, prohibited removal and required restoration."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 435 requires solid green, blinking green and off LED states over 60 minutes.",
+        "source_specific_v2_comparison": "V2 makes visual work manual; V3 prevents LED-off from being removal authorization and binds persistent device identity.",
+        "source_specific_safety_evidence_decision": "Only inventory/baseline is safe until operator, mapping, I/O and removal SOP are approved.",
+        "template_violation_detected": false
+    }
+}

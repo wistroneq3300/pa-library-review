@@ -1,0 +1,178 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 165,
+    "calibration": false,
+    "source_key": "Compatibility|423|Wistron-L12 Cluster-00005-V002",
+    "case_variant_id": "bbc317bb9708f6fc",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 423,
+        "code": "Wistron-L12 Cluster-00005-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "08a302ce51f0b27df0dcc50e5a286d3fbcc60c725ffbc5e9c7a9a69780a355d0",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "Network Validation Initial Environment Setup and trial run - Check Network Map",
+        "test_set": "UFM",
+        "purpose_facts": "Generate IB traffic between node-1/node-2, configure UFM Link Analysis so Port RX Data Rate >100 Gb/s is yellow, and verify yellow link/property presentation.",
+        "procedure_facts": [
+            "Requires interactive UFM view mutation and IB-Stress; 15-minute attended and machine time."
+        ],
+        "criteria_facts": [
+            "RX threshold config saves without errors; links yellow; node properties yellow in Port TX/RX Data Rate."
+        ],
+        "attended_time_minutes": "15",
+        "machine_time_minutes": "15",
+        "source_conflicts": [
+            "The configured condition names only Port RX Data Rate, but the final criterion expects yellow in a combined `Port TX/RX Data Rate` property; bidirectional traffic needed to trigger both endpoint RX values is not defined."
+        ],
+        "missing_source_information": [
+            "Exact node/HCA/port/link map, IB-Stress direction/tool/rate/duration, UFM release/metric units/refresh/color scope and saved-view rollback."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Under controlled node-1/node-2 InfiniBand traffic, verify UFM Network Map correctly evaluates the configured >100 Gb/s Port RX threshold and presents yellow on the intended links and associated properties.",
+        "must_preserve": [
+            "Node pair, UFM Network Map/Link Analysis, exact >100 Gb/s RX condition, yellow display and 15-minute activity."
+        ],
+        "must_not_infer": [
+            "That a unidirectional run makes both endpoint RX ports exceed threshold.",
+            "That yellow itself means fabric health PASS beyond rule rendering.",
+            "That the threshold automatically applies to TX or a combined property."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 preserves IB traffic, exact RX metric/threshold/yellow state, requires port mapping, bounded traffic, refresh wait, saved view and rollback.",
+        "specific_gap": "V2 does not expose the RX-only versus TX/RX display inconsistency or require a traffic-direction plan that independently makes each intended receiving port exceed 100 Gb/s."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Other IB throughput cases cannot define UFM color-rule propagation in this UI release."
+        ],
+        "precedence_application": "Source threshold and UI outcomes are preserved, but the owner must resolve direction and combined-property semantics rather than V3 inventing them."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "SOURCE_CONFLICT",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL",
+            "NEEDS_MANUAL_ACTION"
+        ],
+        "summary": "Resolve whether one RX rule is expected to color a combined TX/RX property and define traffic directions for both endpoint receive links. Then run bounded traffic, correlate raw counters to UFM refreshes and restore the saved view."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Exact UI area, RX threshold, color and node pair."
+        ],
+        "missing": [
+            "Rule propagation semantics, per-direction traffic plan, port mapping, tool/rate/duration, refresh interval, view rollback and approval."
+        ],
+        "provider": [
+            "UFM/fabric owner resolves UI semantics and map.",
+            "Lab owner supplies isolated pair, traffic plan and window."
+        ],
+        "safe_read_only_work": [
+            "Export current UFM view/rules/topology, collect port GUID/LID/HCA/link mapping and baseline counters/alarms without load or edits."
+        ],
+        "prohibited_until_resolved": [
+            "IB-Stress, UFM rule/view mutation, topology deployment, log clearing, interpreting yellow as health PASS or PASS."
+        ],
+        "closure_evidence": [
+            "Signed RX-to-display behavior and direction/port/rate plan plus saved-view rollback and bounded stop."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Verify UFM Network Map RX-Rate Yellow Rule Under Controlled IB Traffic",
+        "purpose": "Verify that UFM applies the configured `Port RX Data Rate > 100 Gb/s` yellow rule to the exact node-1/node-2 links and intended property display when independently measured receive traffic exceeds the threshold.",
+        "applicable_platform_environment": "The approved isolated InfiniBand fabric, UFM release/Network Map view, node-1/node-2 HCAs and port links. Ethernet/RoCE counters or a different UFM release cannot be assumed equivalent.",
+        "target_scope": "Only the signed physical/logical links between node-1 and node-2 and the corresponding UFM link/property objects. The owner must define whether traffic runs bidirectionally/simultaneously or sequentially so each intended RX port exceeds 100 Gb/s, and whether the RX rule should color a combined TX/RX property.",
+        "required_inputs": "UFM version/access and saved view/rules; node/HCA/port GUID/LID/link map; exact metric units/aggregation/refresh; owner decision on RX versus TX/RX display; approved IB-Stress/perftest command, message size/direction/rate/duration; independent traffic timeout/stop policy; isolation, rollback and evidence approval.",
+        "test_command_procedure_intent": "Export the current Network Map view/rules and baseline raw per-port TX/RX counters/alarms. Treat the source's 15 minutes as a planning estimate for the complete setup, bounded traffic, observation and rollback activity—not a required traffic dwell, hard timeout or acceptance criterion. Configure only the approved Link Analysis `Port RX Data Rate > 100 Gb/s` yellow rule. Run the finite owner-defined traffic direction(s) and duration so each designated receiving port crosses the threshold, correlate traffic-tool throughput and raw port counters to enough declared UFM refresh cycles to prove the transition, and capture the exact links and property fields before/during/after the condition. Stop all workers by the independent approved timeout/stop policy and restore the prior UFM view/rules.",
+        "preconditions": "Healthy mapped IB links; no unrelated jobs; UFM metric semantics and display decision resolved; traffic can exceed threshold safely; evidence clock synchronization, saved rollback, stop owner and approval ready.",
+        "expected_evidence": "UFM version/view export and rule diff; topology/node/HCA/port identities; source 15-minute planning estimate plus owner-defined traffic duration, stop timeout and observed refresh count; exact traffic commands/directions/times/results; raw per-port RX/TX counters in matching units; UFM refresh timestamps and values; screenshots/API evidence for each targeted link and property below/above/after threshold; alarms/logs; worker stop and exact view restoration.",
+        "acceptance_reference": "Owner-approved UFM rule behavior for this release. Pass requires the rule to save, every mapped receiving link with independently proven RX >100 Gb/s to turn yellow after the declared refresh, only the approved property representation to color as specified, below-threshold state not to falsely color, and full cleanup/rollback.",
+        "safety_restrictions": "Do not guess direction/port, use production traffic, leave workers/rules active, deploy topology/subnet changes, overload neighboring links, clear logs, infer rate solely from color, assume TX/RX propagation or call yellow fabric health PASS.",
+        "human_approval_requirements": "Fabric owner approves ports/directions/rate/rule semantics and view edit; operator supervises UFM/traffic; engineer judges display/counter timing.",
+        "manual_boundaries": "Traffic and counter capture can be automated; interactive UFM edit/visual evidence may require operator, and rule semantics remain owner-defined.",
+        "recovery_requirements": "On wrong port, rate/refresh mismatch, alarm, congestion or link degradation, stop traffic, preserve counters/UI state, restore exported rules/view, verify links/UFM/fabric health and escalate before retry.",
+        "stop_conditions": "RX-versus-TX/RX semantics unresolved; ambiguous ports/direction; no isolation/rollback/stop; inability to reach threshold safely; wrong link colors; UFM/IB alarm; link degradation; orphan worker; incomplete counter-to-UI correlation."
+    },
+    "identified_defects": [
+        "RX-only rule conflicts with combined TX/RX expected display.",
+        "Traffic direction needed for both RX endpoints is undefined.",
+        "Yellow lacks independent counter correlation."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety"
+    ],
+    "reason_for_change": "Prevent a UI color demonstration from silently changing metric direction or becoming a substitute for measured link traffic.",
+    "new_technical_evidence": [
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Compatibility!row-423",
+            "title": "Source testcase Wistron-L12 Cluster-00005-V002",
+            "version": "Baseline workbook",
+            "applicability": "Only this UFM case",
+            "supports": "RX threshold, >100 Gb/s, yellow link and TX/RX property wording, node pair and 15-minute times.",
+            "remaining_uncertainty": "UFM release-specific rule propagation and traffic direction remain absent."
+        }
+    ],
+    "removed_ambiguities": [
+        "Exposes RX versus combined TX/RX inconsistency.",
+        "Requires every target RX port to cross threshold by defined direction.",
+        "Correlates UI color to raw counter and refresh time."
+    ],
+    "resolved_blockers": [
+        "UFM/traffic packages and user inputs are provisionable; not inherently BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Rule semantics, direction/port plan and approval must be supplied."
+    ],
+    "objective_improvement_over_v2": "V3 detects the source's RX-only versus TX/RX display conflict and requires direction-specific raw counter evidence for each yellow link, eliminating a color-only or one-way false PASS.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "validator": "validate_calibration_a",
+        "notes": "Initial validation found ambiguous 15-minute semantics. Revalidation confirmed planning-only meaning, separate finite traffic duration/stop timeout, enough declared refresh cycles, direction-specific RX proof and exact rollback."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 423 configures RX >100 Gb/s yellow yet expects TX/RX property yellow for both nodes under IB-Stress.",
+        "source_specific_v2_comparison": "V2 guards traffic/view; V3 adds direction and rule-propagation conflict handling.",
+        "source_specific_safety_evidence_decision": "Only view/topology/counter baseline is safe before conflict resolution and traffic approval.",
+        "template_violation_detected": false
+    }
+}

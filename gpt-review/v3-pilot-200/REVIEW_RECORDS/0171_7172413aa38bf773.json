@@ -1,0 +1,115 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 171,
+    "calibration": false,
+    "source_key": "Stability|6|Wistron-Margin-00005-V002",
+    "case_variant_id": "7172413aa38bf773",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 6,
+        "code": "Wistron-Margin-00005-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "8d24c6c82764d58bf1710bd1e21f3fd2ac797fd0f62ead9c6caf3af05df2c19d"
+    },
+    "source_snapshot": {
+        "test_name": "40C & +5% 5V/3.3V All front-side storage",
+        "facts": [
+            "Select front-side disks and run SST for 12 hours.",
+            "Criterion merely repeats setup; no pass condition.",
+            "Machine time is 240 minutes, not 12 hours."
+        ],
+        "deepseek": "NO due to physical margin environment.",
+        "v2": "BLOCKED for missing bay map, workload and threshold."
+    },
+    "original_test_intent": {
+        "statement": "Exercise every front-side storage bay for 12 hours at 40 C and +5% rail margin and detect storage or platform instability.",
+        "must_preserve": [
+            "Every front-side bay, 40 C, +5% rails and 12-hour stress."
+        ],
+        "unknowns": [
+            "Drive/bay map, destructive versus non-destructive SST mode, data ownership, workload, expected health/performance and timing conflict."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "specific_gap": "It correctly stops undefined I/O, but BLOCKED describes missing handoff semantics rather than the enduring capability; the physical fixture makes this MANUAL ONLY even after inputs arrive."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "MANUAL ONLY",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_MANUAL_ACTION",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "No storage I/O is ready. Reclassify capability to MANUAL ONLY because the eventual test necessarily uses operator-controlled chamber/rails; missing workload and acceptance remain readiness blockers."
+    },
+    "revision_candidate": {
+        "test_name": "Stress All Front-Side Storage at 40 C and +5% Rail Margin",
+        "purpose": "Run the owner-approved 12-hour workload on every mapped front-side storage device under controlled margin and verify declared data-integrity, health, error and performance criteria.",
+        "applicable_platform_environment": "Exact server storage topology in a calibrated 40 C/+5% rail setup with supported SST/storage stack.",
+        "target_scope": "Each signed front bay and its stable enclosure/slot/controller/namespace identity; exclude boot, production, RAID-member and unapproved devices.",
+        "required_inputs": "Bay-to-device map, data ownership, non-destructive or disposable-target method, SST profile, parallelism, 12-hour/240-minute resolution, thresholds, capacity/thermal limits, restoration and approval.",
+        "test_command_procedure_intent": "Read-only inventory is allowed now. After owner resolution, operator sets the environment and the agent may run only the signed workload against verified disposable targets, collecting per-bay evidence without clearing logs.",
+        "preconditions": "Identity interlocks prove every target, backups/RAID policy are satisfied, fixture and OOB recovery are ready.",
+        "expected_evidence": "Bay/enclosure/serial/controller/namespace mapping; target ownership; exact workload/version/parameters; 12-hour per-bay output; SMART/NVMe/SAS/controller/kernel/SEL deltas; chamber/rail telemetry; integrity results and nominal restoration.",
+        "acceptance_reference": "Owner-defined zero-error/integrity and performance/health thresholds for every bay; setup completion is never a PASS criterion.",
+        "safety_restrictions": "No raw or protected device I/O, guessed bay mapping, log clearing, reduced duration, unapproved destructive mode or remote fixture control.",
+        "human_approval_requirements": "Storage owner signs targets/method; lab operator controls physical margin; engineer disposes results.",
+        "manual_boundaries": "Environment is manual; bounded per-target workload can be automated after interlocks.",
+        "recovery_requirements": "Stop I/O, preserve evidence, restore nominal environment, verify filesystem/array/device health and follow storage recovery without writes to uncertain targets.",
+        "stop_conditions": "Any target ambiguity, missing acceptance, fixture drift, medium/controller/kernel/SEL error, integrity mismatch, overheating, device loss or incomplete evidence."
+    },
+    "identified_defects": [
+        "No acceptance criterion.",
+        "No safe target/workload.",
+        "12-hour versus 240-minute conflict."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Target Scope",
+        "Acceptance",
+        "Safety"
+    ],
+    "reason_for_change": "The missing recipe makes current execution unsafe, but once supplied the irreducible chamber and rail manipulation\u2014not semantic unknowability\u2014sets the MANUAL ONLY capability class.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Bay identity and data ownership are mandatory interlocks."
+    ],
+    "resolved_blockers": [
+        "Capability/readiness conflation is removed."
+    ],
+    "remaining_blockers": [
+        "Source acceptance and workload are unresolved."
+    ],
+    "objective_improvement_over_v2": "V3 preserves the no-I/O gate yet identifies the correct enduring class, exposes the time conflict, and turns the repeated setup text into an explicit engineering-decision requirement rather than a fictitious criterion.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved every-bay scope, 12-hour duration, 40 C/+5% conditions, stable storage identity, no undefined I/O and no setup-as-PASS interpretation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 6 names every front-side disk and 12-hour SST but its criterion is only the four procedure steps.",
+        "template_violation_detected": false
+    }
+}
