@@ -1,0 +1,178 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 159,
+    "calibration": false,
+    "source_key": "Compatibility|301|Wistron-NV GPU-00294-V004",
+    "case_variant_id": "7bf55de68b2038eb",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 301,
+        "code": "Wistron-NV GPU-00294-V004"
+    },
+    "source_integrity": {
+        "original_row_sha256": "96a7f843f44f546975f67c1fa36f25335c3ff539829f674b6248b7d0d3c7f4cc",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "NVIDIA-SMI  - Power limit",
+        "test_set": "NV GPU - Nvidia-smi tool Validation",
+        "purpose_facts": "Set an operator-specified NVIDIA GPU power limit, read it back and verify normal system operation.",
+        "procedure_facts": [
+            "Source command uses typographic dashes, uppercase `I`, unspecified GPU_number and Watts.",
+            "Attended and machine time are each five minutes."
+        ],
+        "criteria_facts": [
+            "Power limit saves successfully and system works normally."
+        ],
+        "attended_time_minutes": "5",
+        "machine_time_minutes": "5",
+        "source_conflicts": [],
+        "missing_source_information": [
+            "Stable GPU scope, target watts, device-supported range, meaning of save/persistence, monitoring limits and restoration value."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Apply an approved power cap to the selected NVIDIA GPU(s), prove the requested cap is accepted/read back while the system remains healthy, and restore the pre-test state after evidence collection.",
+        "must_preserve": [
+            "Actual power-limit mutation and readback, not inventory only.",
+            "Selected GPU scope, approved watts and five-minute test activity."
+        ],
+        "must_not_infer": [
+            "Target GPU or watts.",
+            "That `-pl` persists across driver unload or reboot.",
+            "That a successful command proves the enforced cap or system health."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "USER CONFIRMATION",
+        "second_review_outcome": "AGREE",
+        "risk_level": "HIGH",
+        "summary": "V2 fixes ASCII syntax, requires GPU/watts/range approval, captures current/default limits, monitors health and restores the recorded limit.",
+        "specific_gap": "`USER CONFIRMATION` is not one of the four formal classifications. V2 also asks whether the value persists without defining a reboot/unload test, and its all-GPU readback can misattribute requested versus enforced limit or miss newer GPU/module power scopes."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Read-only power queries do not authorize this state-changing cap test."
+        ],
+        "precedence_application": "Formal V3 taxonomy controls classification; the source requires a bounded mutation but not reboot-persistence testing."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Normalize V2's noncanonical label. Bind the cap to stable UUID/BDF and explicit supported power scope, verify requested and enforced readback plus health, then restore the exact pre-test setting; do not add a reboot persistence test."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Driver tool and bounded five-minute set/readback intent."
+        ],
+        "missing": [
+            "GPU UUID/BDF, GPU-versus-module scope, watts/range, original/restoration value, workload drain, health limits and approval."
+        ],
+        "provider": [
+            "Platform/workload owner supplies target/scope/watts and maintenance approval.",
+            "GPU owner supplies supported range/scope and restoration rule."
+        ],
+        "safe_read_only_work": [
+            "Collect GPU UUID/BDF/model, driver help/version, supported/current/requested/enforced/default/min/max power values, active processes, telemetry and logs."
+        ],
+        "prohibited_until_resolved": [
+            "Any `-pl` mutation, broad all-GPU selection, reboot/unload, workload interference, auto-retry or PASS."
+        ],
+        "closure_evidence": [
+            "Signed GPU/scope/watts/restoration tuple within reported range and guarded window."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Set, Verify and Restore NVIDIA GPU Power Limit",
+        "purpose": "Set the approved power limit on each explicitly selected NVIDIA GPU power scope, verify requested and enforced readback against the owner-defined relationship while the system remains healthy, and restore the exact recorded pre-test limit without adding a reboot-persistence test.",
+        "applicable_platform_environment": "Exact NVIDIA GPU/server and installed driver where `nvidia-smi` reports the selected GPU or module power scope and supports power-limit setting.",
+        "target_scope": "Only approved stable GPU UUIDs or PCI BDFs and the explicitly selected GPU/module/base-power scope. Perform one bounded set/readback/health/restore sequence; enumeration indexes alone are not stable scope. The source's five minutes is a planning estimate for the complete activity, not a required dwell, maximum timeout or acceptance criterion.",
+        "required_inputs": "Stable UUID/BDF list; target watts and intended power scope; current/requested/enforced/default/min/max values; signed rule or tolerance for the expected requested-versus-enforced relationship; driver-specific supported syntax; workload drain; thermal/power/performance health thresholds; original-value restoration plan; privileged access, maintenance and OOB approval.",
+        "test_command_procedure_intent": "First collect identity, active workloads, all supported power-limit properties, telemetry and health. Validate the requested watts against the reported range and the signed requested-versus-enforced rule for the exact scope. After approval, use the driver-supported ASCII `nvidia-smi -i <approved_UUID_or_BDF> -pl <watts>` plus any explicitly required scope option. Capture command status, then query the same stable targets for requested/current/enforced limit and telemetry; evaluate both values against the signed relationship/tolerance without inventing a dwell. Restore each recorded pre-test value, verify requested/enforced restoration under the same rule and final health. Do not reboot or unload the driver unless a separate persistence test is authorized.",
+        "preconditions": "Targets idle/drained; stable IDs and scope proven; values in supported range; requested/enforced rule, privilege, telemetry, recovery and restoration available; approval recorded.",
+        "expected_evidence": "Host/driver/GPU model/UUID/BDF; command help/scope support; selected targets/scope/watts and approval; source five-minute planning estimate; signed requested-versus-enforced relationship/tolerance; pre requested/enforced/default/min/max limits; exact set/readback/restore commands/statuses; target-correlated requested/enforced values and evaluated deltas; power/temperature/clock/throttle telemetry; workload status; XID/dmesg/BMC/SEL deltas; final restored values and health.",
+        "acceptance_reference": "Owner-approved target/scope/watts within device-reported limits and its signed requested-versus-enforced rule. Complete when every selected target's requested value equals the approved setting, its enforced/current value satisfies the declared relationship/tolerance, health remains acceptable, and both limit state and platform return to the exact approved pre-test condition. Five minutes is planning metadata, and no reboot persistence is implied.",
+        "safety_restrictions": "Do not infer index/watts/scope, use typographic options, set all GPUs unintentionally, exceed range, change clocks/firmware, run against active workloads, conflate requested with enforced power, omit restoration, reboot to test persistence, or continue after health/restoration failure.",
+        "human_approval_requirements": "Explicit approval for GPU list, power scope, watts, workload impact, privileged mutation and restoration; engineer judges telemetry/performance and any limit mismatch.",
+        "manual_boundaries": "The agent may perform the exact guarded set/readback/restore; scope/value choice and anomaly disposition are human decisions.",
+        "recovery_requirements": "On rejection, target mismatch, thermal/power/XID/workload anomaly or readback discrepancy, stop further targets, preserve evidence, restore every changed target to its recorded pre-state and verify health; use OOB/vendor recovery if the driver is unavailable.",
+        "stop_conditions": "Unknown stable target/scope/range/pre-state; active workload; absent approval/telemetry/recovery; unsupported syntax; set/readback mismatch; thermal/power/throttle/XID error; driver loss; restoration failure; incomplete evidence."
+    },
+    "identified_defects": [
+        "V2 uses noncanonical classification.",
+        "Source syntax and target/watts are invalid placeholders.",
+        "Requested/enforced and GPU/module power scopes are not distinguished.",
+        "Persistence beyond immediate readback is undefined."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Recovery"
+    ],
+    "reason_for_change": "Normalize taxonomy and make the bounded mutation attributable and reversible without inventing persistence requirements.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://docs.nvidia.com/deploy/nvidia-smi/index.html",
+            "title": "NVIDIA System Management Interface documentation - power limits and device selection",
+            "version": "Current documentation accessed 2026-10-14",
+            "applicability": "nvidia-smi device identifiers and GPU/module power-limit semantics",
+            "supports": "UUID/BDF is preferred over unstable index; requested, enforced, default, minimum and maximum limits are distinct; supported products can expose module versus GPU power scopes.",
+            "remaining_uncertainty": "Exact installed driver syntax/scope and platform-approved watts must be checked on the DUT."
+        }
+    ],
+    "removed_ambiguities": [
+        "Uses only formal classification.",
+        "Binds value to stable target and explicit scope.",
+        "Separates requested/enforced readback and immediate save from persistence.",
+        "Defines exact pre-state restoration."
+    ],
+    "resolved_blockers": [
+        "Missing watts/approval are resolvable prerequisites, not inherent BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Target/scope/watts/range/restoration and approval remain required."
+    ],
+    "objective_improvement_over_v2": "V3 replaces the invalid `USER CONFIRMATION` label, prevents index/scope misapplication on newer power models, and limits acceptance to immediate requested/enforced readback plus exact restoration rather than an undefined persistence claim.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "validator": "validate_calibration_a",
+        "notes": "Initial validation found ambiguous five-minute semantics and no requested-versus-enforced acceptance rule. After revision, revalidation confirmed five minutes is planning metadata and the signed relationship/tolerance gates set, evidence, acceptance and restoration."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 301 sets an unspecified NVIDIA power limit and reads it back within five minutes.",
+        "source_specific_v2_comparison": "V2 safety is strong but classification is noncanonical and power scope/persistence are underspecified.",
+        "source_specific_safety_evidence_decision": "Read-only range/pre-state collection is allowed; mutation requires exact tuple and restoration approval.",
+        "template_violation_detected": false
+    }
+}

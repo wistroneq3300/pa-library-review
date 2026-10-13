@@ -1,0 +1,175 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 160,
+    "calibration": false,
+    "source_key": "Compatibility|328|Wistron-NV GPU-00321-V003",
+    "case_variant_id": "c6881fbececbe70a",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 328,
+        "code": "Wistron-NV GPU-00321-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "fc262fee9a43f34ba1d1d227603a7e2154996f7df81bcfdccc14338466f6f6bf",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "nvsm show storage",
+        "test_set": "NV GPU - NVSM",
+        "purpose_facts": "Run `nvsm show storage` and verify all storage information and every Status_Health value.",
+        "procedure_facts": [
+            "Single five-minute read-only NVSM display after a generic source instruction to clear logs."
+        ],
+        "criteria_facts": [
+            "All storage information correct and all storage Status_Health values OK."
+        ],
+        "attended_time_minutes": "5",
+        "machine_time_minutes": "5",
+        "source_conflicts": [],
+        "missing_source_information": [
+            "Supported NVSM platform/version, authoritative drive/controller/volume inventory and attribute/health expectations."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Use NVSM to enumerate all platform-managed storage objects and verify their identity, attributes and health against the approved server storage recipe.",
+        "must_preserve": [
+            "All storage-related information and every applicable Status_Health, not a sample.",
+            "Read-only five-minute NVSM command."
+        ],
+        "must_not_infer": [
+            "That NVSM supports every white-box platform.",
+            "That aggregate `Status_Health=OK` proves device count/identity/configuration correctness.",
+            "That logs may be cleared before evidence collection."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 requires a compatible NVSM package, complete storage/path scope and specification, preserves logs and prohibits storage mutation.",
+        "specific_gap": "V2's test command itself embeds `sshpass` and disables host-key checking despite its own security rules. It also lacks explicit object-class coverage for drives, controllers and volumes, where each has distinct identities/health attributes."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Generic OS/NVMe inventory cannot substitute for NVSM-managed object health, but may corroborate completeness."
+        ],
+        "precedence_application": "The source command remains the primary view; official NVSM documentation defines its storage object coverage, while the platform recipe defines expected objects."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT"
+        ],
+        "summary": "Use an approved compatible NVSM locally or through a secure channel, preserve existing evidence, and reconcile all reported drives, controllers and volumes to the expected topology; health OK alone is not full acceptance."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Exact read-only command and five-minute activity."
+        ],
+        "missing": [
+            "NVSM support/version, expected object inventory/attributes/health and secure execution channel."
+        ],
+        "provider": [
+            "Platform/NVIDIA owner supplies supported NVSM recipe and expected storage map.",
+            "Lab owner supplies authorized channel/evidence path."
+        ],
+        "safe_read_only_work": [
+            "Without installing or clearing logs, inventory existing NVSM version/support and OS/controller/drive/volume topology and preserve error logs."
+        ],
+        "prohibited_until_resolved": [
+            "Package installation, log clearing, remediation, format/mount/reset/scrub, credential bypass or PASS."
+        ],
+        "closure_evidence": [
+            "Supported NVSM manifest and expected drive/controller/volume matrix for the exact system."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Verify NVSM Storage Inventory and Health",
+        "purpose": "Enumerate every NVSM-managed storage drive, controller and volume and verify its identity, configuration attributes and Status_State/Status_Health against the approved server storage recipe without changing storage state or deleting fault history.",
+        "applicable_platform_environment": "An NVIDIA platform and NVSM release explicitly supporting the exact server, controllers, drives and volumes; applicability must not be extrapolated to an unsupported white-box system.",
+        "target_scope": "All objects included by `nvsm show storage`, with explicit reconciliation of drives, controllers and volumes to the expected physical/logical map. One read-only five-minute collection; corroborating OS/controller inventory is used only to detect omissions.",
+        "required_inputs": "Supported NVSM package/version or existing installation; exact SUT/controller/drive/volume/RAID recipe; expected serial/model/firmware/capacity/path/volume attributes and Status_State/Status_Health; NVSM monitoring policy including muted drives; read-only privilege; secure execution/evidence channel.",
+        "test_command_procedure_intent": "Preserve current dmesg/storage/controller/BMC/SEL evidence and capture independent read-only controller/drive/volume topology. Verify NVSM version/support and monitoring policy, then run `nvsm show storage` through the approved channel and retain complete raw output/status. Parse every drive, controller and volume; reconcile counts and persistent identities to the recipe and corroborating inventory; compare each required attribute, Status_State and Status_Health and report missing, extra, muted or unsupported objects.",
+        "preconditions": "Correct supported host; NVSM installed or provisioned under separate approval; complete expected topology/attributes; no storage mutation; sufficient privilege/evidence storage.",
+        "expected_evidence": "Host/NVSM/platform/firmware versions; monitoring/mute policy; exact command/status/time; complete raw NVSM output; expected versus reported drive/controller/volume counts; serial/model/firmware/capacity/path/RAID/volume mappings; per-object Status_State/Status_Health; independent inventory reconciliation; alerts plus preserved dmesg/controller/BMC/SEL context; discrepancy list.",
+        "acceptance_reference": "Approved storage BOM/topology/configuration and the supported NVSM health policy for the exact platform. Pass requires complete expected object coverage, correct required attributes, no unexpected/muted/unsupported objects, all applicable health/state values acceptable and no corroborating disqualifying fault.",
+        "safety_restrictions": "Do not clear logs, install without approval, use embedded passwords or host-key bypass, run remediation, format/mount/unmount/reset/scrub, change RAID/LVM/DM, unmute/mute monitoring, ignore missing objects or treat aggregate OK as proof of correct inventory.",
+        "human_approval_requirements": "Approval is required to install/provision NVSM; platform owner supplies recipe and judges unsupported/muted objects or discrepancies. The already-approved read-only query itself needs no storage mutation approval.",
+        "manual_boundaries": "Query, parsing and comparison are automatable; package provisioning and discrepancy disposition remain human-controlled.",
+        "recovery_requirements": "No recovery for a verified read-only query. If NVSM attempts mutation, hangs or triggers device/path errors, terminate safely, preserve all evidence, verify storage/boot/RAID health through approved tools and escalate without clearing logs.",
+        "stop_conditions": "Unsupported/wrong host or NVSM; ambiguous object scope; missing expected map; query not read-only; credential/host identity failure; truncated output; attempted remediation; device/path loss; incomplete drive/controller/volume evidence. Missing expected values stops PASS, not safe actual collection where NVSM is already installed."
+    },
+    "identified_defects": [
+        "V2 command contradicts its credential/host-key policy.",
+        "Aggregate storage output lacks explicit drive/controller/volume coverage contract.",
+        "Health OK can coexist with wrong/missing or monitoring-muted objects."
+    ],
+    "changed_fields": [
+        "Purpose",
+        "Applicable Environment",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Make the read-only query secure and ensure all managed storage object classes are proven complete, not merely healthy-looking.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://docs.nvidia.com/datacenter/nvsm/nvsm-user-guide/latest/using-nvsm-cli.html",
+            "title": "NVIDIA System Management User Guide 25.03 - Using the NVSM CLI",
+            "version": "25.03",
+            "applicability": "Supported NVSM platforms and storage display semantics",
+            "supports": "`nvsm show storage` displays all storage-related information; related objects include drives, controllers and volumes with per-object state/health, and monitoring can be muted for specified drive slots.",
+            "remaining_uncertainty": "Exact target-platform support and expected inventory remain owner-supplied."
+        }
+    ],
+    "removed_ambiguities": [
+        "Defines all three storage object classes.",
+        "Separates correct inventory/configuration from health status.",
+        "Exposes muted/unsupported objects and independent completeness check.",
+        "Removes insecure transport from the command contract."
+    ],
+    "resolved_blockers": [
+        "Missing NVSM/spec are provisionable prerequisites rather than inherent BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Supported package and exact expected object map remain absent."
+    ],
+    "objective_improvement_over_v2": "V3 removes V2's insecure execution contradiction and proves completeness across NVSM drives, controllers and volumes\u2014including monitoring-muted objects\u2014so an aggregate OK cannot hide a wrong or missing storage configuration.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "validator": "validate_calibration_c",
+        "notes": "Validator preserved all drives/controllers/volumes, separated health from correct inventory, exposed monitoring-muted objects, retained log history and rejected aggregate OK or missing spec as automatic BLOCKED."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 328 runs nvsm show storage and requires all information correct plus every health OK.",
+        "source_specific_v2_comparison": "V2 preserves evidence but embeds unsafe SSH; V3 secures execution and defines full object coverage.",
+        "source_specific_safety_evidence_decision": "Existing NVSM may be queried read-only after support/scope checks; package installation and any storage mutation remain gated.",
+        "template_violation_detected": false
+    }
+}
