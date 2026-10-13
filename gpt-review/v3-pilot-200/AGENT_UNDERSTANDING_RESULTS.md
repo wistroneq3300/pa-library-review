@@ -238,6 +238,28 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   proposed-contract defect was found. This is not independent-model validation
   and is not DUT hardware validation.
 
+## fio QD1 destructive M.2 random-write validation: sequence 124
+
+Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Performance|12|Wistron-Performance Storage-00015-V004`.
+- It preserved one bounded destructive randwrite run with 512-byte blocks, one
+  job, effective QD1 and the full 43200-second measured interval.
+- It correctly treated M.2 as a form factor and required proof of NVMe/PCIe
+  versus SATA/AHCI transport, plus logical-block and 512-byte `O_DIRECT`
+  alignment.
+- It required random/preconditioning/steady-state evidence, host and NAND write
+  accounting, write amplification/endurance budget and final health; a
+  60-minute sample, setup-only run, transient target or vendor headline was not
+  completion.
+- Failure attribution: missing target/profile/spec/approval are
+  `PLATFORM_HANDOFF_DEFECT`; guessing transport/range, shortening, ignoring
+  alignment/endurance or retrying is `MODEL_PLANNING_ERROR`. Unsupported 512B
+  alignment or an unprovable safe target can legitimately block execution. No
+  proposed-contract defect was found. This is not independent-model validation
+  and is not DUT hardware validation.
+
 ## fio QD1 random-read validation: sequence 123
 
 Status: `PASSED AFTER ONE DOCUMENT REVISION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
