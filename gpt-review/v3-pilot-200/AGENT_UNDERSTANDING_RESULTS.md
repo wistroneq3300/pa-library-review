@@ -238,6 +238,28 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   proposed-contract defect was found. This is not independent-model validation
   and is not DUT hardware validation.
 
+## fio QD1 random-read validation: sequence 123
+
+Status: `PASSED AFTER ONE DOCUMENT REVISION IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
+
+- The validator received only the proposed execution contract for
+  `Performance|9|Wistron-Performance Storage-00008-V004`.
+- The first validation preserved QD1, 512-byte randread, one job, bounded target
+  and 43200 seconds, but found a real document defect: a filesystem read may
+  update atime/journal metadata, and 512-byte `O_DIRECT` support/alignment was
+  not explicitly gated.
+- V3 was revised to distinguish zero fio-issued writes/trims from filesystem
+  metadata, require a signed mount/atime/journal policy and observed metadata
+  delta, and require logical-block/direct-I/O alignment proof for the exact raw
+  device or file profile.
+- Revalidation was CLEAR. The contract still rejects a 60-minute substitute,
+  transient/default target, file creation, write/trim/preconditioning,
+  unverified `./fio`, wrong effective depth and automatic retry.
+- Failure attribution after correction: missing alignment or metadata policy is
+  `PLATFORM_HANDOFF_DEFECT`; ignoring it is `MODEL_PLANNING_ERROR`. No remaining
+  proposed-contract defect was found. This is not independent-model validation
+  and is not DUT hardware validation.
+
 ## AMD GPU GFX poison-consumption validation: sequence 120
 
 Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
