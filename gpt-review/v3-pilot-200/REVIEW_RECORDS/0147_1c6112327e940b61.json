@@ -1,0 +1,179 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 147,
+    "calibration": false,
+    "source_key": "Compatibility|50|Wistron-Networking-00033-V003",
+    "case_variant_id": "1c6112327e940b61",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 50,
+        "code": "Wistron-Networking-00033-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "7f7124351c994188435c8a70b714dd1f968db10196c7453ebf8bdff7c795d57a",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "Driver reload",
+        "test_set": "Networking - Basic function",
+        "purpose_facts": "Unload/load the 1G LAN driver five times per port, verify interface disappearance/reappearance and BMC network continuity.",
+        "procedure_facts": [
+            "No driver/module, port map, traffic test, management path or recovery method is supplied."
+        ],
+        "criteria_facts": [
+            "OS interface removed on unload and identified after load; BMC network remains functional; confirm 1G LAN."
+        ],
+        "attended_time_minutes": "40",
+        "machine_time_minutes": "40",
+        "source_conflicts": [],
+        "missing_source_information": [
+            "Exact 1G NIC ports/BDFs/netdevs/module and shared consumers.",
+            "Safe OOB control path, reload method, per-cycle traffic/identity criteria and recovery."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "For every approved 1G LAN port, perform five driver unload/load cycles, prove expected OS disappearance and same-device recovery, verify data-path traffic after each cycle, and continuously confirm the independent BMC OOB network is unaffected.",
+        "must_preserve": [
+            "Five cycles per port.",
+            "Unload disappearance, reload recovery and BMC continuity.",
+            "1G LAN scope."
+        ],
+        "must_not_infer": [
+            "A module from keyword matching.",
+            "That BMC and host NIC use independent hardware/path.",
+            "One module reload per port if the module controls multiple ports/functions.",
+            "Interface name stability as device identity."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 correctly requires a non-management 1G driver, dependency/outage/recovery approval, five cycles, per-cycle interface/traffic/BMC evidence and secure control.",
+        "specific_gap": "V2 does not resolve how `five times per port` applies when one module owns several ports/PFs/VFs, require stable BDF/MAC identity across renamed netdevs, or distinguish driver unbind/bind from global module removal as a safer approved method."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Other NIC reload cases cannot establish this platform's shared module or BMC isolation."
+        ],
+        "precedence_application": "High risk does not mean automation BLOCKED; exact mapping and OOB approval are execution gates."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL",
+            "NEEDS_SPEC"
+        ],
+        "summary": "Automate only after the 1G port/module/dependency map, cycle semantics, independent OOB path and recovery are signed. Preserve all five cycles per port without unloading a shared management path."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Cycle count, disappearance/recovery and BMC-continuity intent are explicit."
+        ],
+        "missing": [
+            "Target ports/module, shared consumers, PF/VF/bond/bridge dependencies, OOB path, traffic criteria, timeout and recovery."
+        ],
+        "provider": [
+            "Network owner supplies port/driver map and criteria.",
+            "BMC/lab owner confirms independent OOB and console recovery.",
+            "OS owner approves unbind/module method and outage."
+        ],
+        "safe_read_only_work": [
+            "Map BDF/netdev/MAC/driver/module/dependencies, routes/bonds/bridges/VFs and BMC path; capture baseline links/counters/logs without unload."
+        ],
+        "prohibited_until_resolved": [
+            "Driver unbind/remove/load, network changes, log clearing or PASS."
+        ],
+        "closure_evidence": [
+            "Signed target and shared-dependency map.",
+            "Proven independent control/BMC path and recovery.",
+            "Five-cycle per-port execution/acceptance plan."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Cycle the 1G LAN Driver Five Times per Approved Port",
+        "purpose": "Verify each approved 1G LAN port disappears when its driver binding is removed, recovers the same BDF/MAC identity and functional traffic after reload for five cycles, while an independently mapped BMC OOB path remains continuously available.",
+        "applicable_platform_environment": "Exact server, 1G NIC ports/PFs/VFs, PCI BDFs, netdevs, driver/module/version/firmware, kernel and network dependencies. Shared modules, bonds, bridges and virtualization consumers must be modeled.",
+        "target_scope": "Every signed 1G host port, five completed unload/load cycles per port. The engineer must define whether one shared module cycle counts for all affected ports or whether safe per-device unbind/bind is required; other-speed and BMC interfaces are excluded.",
+        "required_inputs": "Port/BDF/MAC/netdev/module map; shared devices/consumers; approved unbind/bind or module command; independent console/BMC path and continuous probe; expected link/speed/IP/traffic; per-cycle timeout; service/network restoration; maintenance/outage approval and recovery.",
+        "test_command_procedure_intent": "From independent OOB control, capture baseline identity/dependencies/traffic. For each approved port and each of five numbered cycles, revalidate target, stop only approved consumers, perform the signed unbind or unload, prove the target interfaces disappear while BMC probes continue, reload/rebind, map the same BDF/MAC even if netdev changes, restore services/config, wait for 1G link/address and pass bidirectional traffic, then collect counters/logs. Do not continue after a failed cycle.",
+        "preconditions": "Independent BMC/console proven; target not carrying control/production traffic; dependencies quiesced; exact driver method tested; recovery and rollback available; monitoring continuous.",
+        "expected_evidence": "Target/shared-dependency map; exact commands; numbered 1-5 cycle timeline per port; module/refcount/device binding before/removed/restored; interface/BDF/MAC/link/speed/address and traffic per cycle; continuous BMC probe with no gap; counters/dmesg/syslog/SEL; service restoration and final topology/health.",
+        "acceptance_reference": "Signed 1G port map and recovery criteria. Pass requires all five cycles for every port, expected absence/reappearance with stable hardware identity, 1G link and functional traffic after each reload, zero disallowed errors and uninterrupted independent BMC reachability.",
+        "safety_restrictions": "Do not discover a module by regex and unload it; target management/production path; unload shared drivers without dependency scope; assume netdev name identity; proceed after failed recovery; use insecure SSH; clear logs or auto-retry.",
+        "human_approval_requirements": "Network/OS/BMC/lab owners approve target/method/outage/recovery; human authorizes first disruptive action and judges result.",
+        "manual_boundaries": "Humans approve dependency graph and recovery. Agent may execute the frozen cycles from independent control and stop on any deviation.",
+        "recovery_requirements": "On loss/failure, stop remaining cycles, preserve evidence, use independent console to rebind/reload and restore network/services, reboot only if pre-approved, verify BMC/host/data paths and require fresh approval.",
+        "stop_conditions": "Target/dependency/OOB/recovery ambiguous; wrong device; BMC/control loss; module busy unexpectedly; interface fails to disappear/recover; BDF/MAC changes; link/traffic timeout; kernel/AER/firmware error; any cycle fails or monitoring is lost."
+    },
+    "identified_defects": [
+        "No exact 1G port/module/dependency map.",
+        "Five-per-port semantics ambiguous for shared drivers.",
+        "No independent OOB proof or recovery/traffic criteria."
+    ],
+    "changed_fields": [
+        "Execution Readiness",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Recovery",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Make all five cycles measurable without risking the management path or miscounting a shared-module reload as per-port validation.",
+    "new_technical_evidence": [
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Compatibility!row-50",
+            "title": "Source testcase Wistron-Networking-00033-V003",
+            "version": "Baseline workbook",
+            "applicability": "Only this case",
+            "supports": "Five reload cycles per port, disappearance/recovery, BMC continuity and 1G scope.",
+            "remaining_uncertainty": "Mapping/method/recovery absent."
+        }
+    ],
+    "removed_ambiguities": [
+        "Defines shared-module per-port semantics.",
+        "Uses BDF/MAC identity across rename.",
+        "Requires continuous BMC and post-cycle traffic."
+    ],
+    "resolved_blockers": [
+        "Mapping/approval are provider-closable."
+    ],
+    "remaining_blockers": [
+        "Disruptive execution awaits signed mapping/OOB/recovery."
+    ],
+    "objective_improvement_over_v2": "V3 prevents a shared-module unload from being miscounted as five independent port tests and requires stable BDF/MAC plus continuous OOB evidence for every numbered cycle.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Contract-only validation was CLEAR. The validator preserved exactly five traceable cycles per approved 1G port, explicit shared-module counting policy, stable BDF/permanent-MAC identity across netdev rename, bidirectional traffic restoration and continuous independent BMC control; it rejected regex driver discovery, link-only recovery, unsafe unload/retry and early PASS. No intrinsic document defect was found. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 50 requires five unload/load cycles per 1G LAN port and uninterrupted BMC network.",
+        "source_specific_v2_comparison": "V2 preserves cycles and recovery; V3 adds shared-module semantics, BDF/MAC identity and continuous OOB/traffic proof.",
+        "source_specific_safety_evidence_decision": "Read-only mapping only until independent control and target/dependency approvals close.",
+        "template_violation_detected": false
+    }
+}

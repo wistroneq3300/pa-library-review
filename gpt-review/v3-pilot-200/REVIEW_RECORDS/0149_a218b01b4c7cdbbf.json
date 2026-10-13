@@ -1,0 +1,187 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 149,
+    "calibration": false,
+    "source_key": "Compatibility|88|Wistron-Storage-00071-V002",
+    "case_variant_id": "a218b01b4c7cdbbf",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 88,
+        "code": "Wistron-Storage-00071-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "467c9c421aed259f430dca41ffacbc8aeafc2c4e9fb3c0bcb80cce8c831972fc",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "IOmeter",
+        "test_set": "Storage - SSD",
+        "purpose_facts": "Stress all approved HDD/SSD/NVMe volumes with IOmeter at 16 outstanding I/Os for at least 48 hours to exercise PCIe/NVMe communication and stability.",
+        "procedure_facts": [
+            "Bring all drives online, format each as its own volume, select all volumes and the `Default` access specification in GUI.",
+            "IOmeter may spend hours in Preparing Drives before the workload.",
+            "Run minimum 48 hours."
+        ],
+        "criteria_facts": [
+            "No reported errors, system hangs or reboots."
+        ],
+        "attended_time_minutes": "10",
+        "machine_time_minutes": "2880",
+        "source_conflicts": [],
+        "missing_source_information": [
+            "Exact target drive/volume map excluding boot/OS/protected data.",
+            "IOmeter version/config and meaning of Default access specification.",
+            "Whether 48 hours excludes preparation, per-volume capacity/test-file limits, health/thermal/endurance and recovery."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "After approved destructive volume provisioning, run one frozen IOmeter workload concurrently across every designated storage volume with 16 outstanding I/Os for a full 48-hour measurement window, proving no I/O errors, hangs or reboots and preserving drive/bus health evidence.",
+        "must_preserve": [
+            "All approved drives as separate volumes.",
+            "QD/outstanding I/O 16, approved access specification and minimum 48-hour active test.",
+            "System stability and error-free completion."
+        ],
+        "must_not_infer": [
+            "All physical drives includes OS/boot or protected media.",
+            "Preparing Drives time counts toward 48 active hours.",
+            "What `Default` workload means across IOmeter versions.",
+            "That GUI launch or a headless worker alone proves completion."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "CRITICAL",
+        "summary": "V2 correctly treats this as destructive hybrid execution requiring licensed tool/config, explicit non-OS volumes, format/write approval, 48-hour evidence and recovery ownership.",
+        "specific_gap": "V2 does not explicitly separate formatting, test-file preparation and the 48-hour active window, pin the `Default` access profile contents, or require per-volume worker/target coverage and before/after endurance/health."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "fio or single-drive cases cannot define IOmeter GUI/config, all-volume concurrency or 48-hour completion."
+        ],
+        "precedence_application": "Manual configuration plus automated worker/evidence is hybrid REQUIRES, not MANUAL ONLY or BLOCKED."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL",
+            "NEEDS_MANUAL_ACTION"
+        ],
+        "summary": "The 48-hour workload can be automated after an operator provisions only signed sacrificial volumes and exports a validated IOmeter configuration; preparation never substitutes for the full active window."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "All-volume intent, outstanding-I/O 16 and minimum 48 hours are explicit."
+        ],
+        "missing": [
+            "Target/exclusion map, exact config/workload, provisioning/preparation/active timing, tool/worker versions, thresholds, endurance/thermal limits, monitoring and restore."
+        ],
+        "provider": [
+            "Storage owner designates sacrificial drives/volumes and accepts format/data loss/endurance.",
+            "Test owner exports signed IOmeter config and timing semantics.",
+            "Lab/operator provisions volumes and approves long-run recovery."
+        ],
+        "safe_read_only_work": [
+            "Inventory persistent drive/volume/controller/topology, boot/data/swap/RAID/LVM dependencies, IOmeter availability, health/endurance/temperature, free space and logs."
+        ],
+        "prohibited_until_resolved": [
+            "Online/format/partition, test-file preparation, GUI/worker launch, writes, log clearing or PASS."
+        ],
+        "closure_evidence": [
+            "Two-view target exclusion for every drive.",
+            "Checksummed config defines workers/targets/QD/access pattern/timing.",
+            "Signed destructive/endurance/monitoring/restore plan."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Run a 48-Hour IOmeter Stress Test across All Approved Storage Volumes",
+        "purpose": "After approved provisioning, run the exact IOmeter access profile concurrently against every signed sacrificial HDD/SSD/NVMe volume for a full 48-hour active measurement, and verify no I/O error, hang, reboot or unacceptable device/bus health change. Preserve the source's Disk Targets setting of 16 outstanding I/Os, but do not execute until the owner documents whether IOmeter applies that setting per worker, selected target, disk or total in the approved configuration.",
+        "applicable_platform_environment": "Exact Windows/IOmeter/Dynamo versions, drive/controller/PCIe topology, firmware/driver, volume/filesystem/cache/power policy and exported IOmeter configuration. HDD, SATA SSD and NVMe behavior and endurance are evaluated per device class.",
+        "target_scope": "Every drive on the signed sacrificial list as its own volume, with persistent identity and explicit exclusion of OS/boot/recovery/pagefile/data/RAID/protected media. The source records the UI value 16 under Disk Targets; its effective per-worker/target/disk/total scope is a required owner decision and configuration proof, not a profile already fixed by this contract. Formatting and Preparing Drives are setup; the active workload must run at least 48 hours afterward.",
+        "required_inputs": "Drive/volume identity and exclusion map; data-loss/format/endurance approval; IOmeter installer/hash/license and worker version; exported config with manager/worker-to-volume map, exact access specification, transfer/read-write/random mix, queue semantics, test-file size/range, ramp/update interval and 48-hour duration; cache/power state; per-class limits; telemetry/heartbeat/reboot detection; restore/reprovision.",
+        "test_command_procedure_intent": "Operator provisions only signed volumes and loads the validated config; Agent may launch/monitor a supported worker/config interface but not improvise GUI clicks. Record separate provisioning and preparation intervals, prove every worker/target is active, then start the 48-hour timer only when all volumes enter the workload. Capture continuous per-volume results, errors, health, PCIe/AER and host heartbeat/boot-ID evidence; stop and restore under the approved plan.",
+        "preconditions": "All targets sacrificial and excluded; config dry-reviewed; tool licensed/pinned; sufficient space/endurance/cooling/power; no production I/O; monitoring, maintenance window and recovery tested.",
+        "expected_evidence": "Persistent drive/volume/controller map and exclusion proof; format/provisioning approval/log; IOmeter/Dynamo/config hashes; manager/worker/target map; all profile settings including exact meaning of Default; preparation start/end; at least 48 active hours with timestamps/heartbeats; complete per-volume IOPS/BW/latency/error results; drive health/endurance/temperature and PCIe/AER/controller/kernel/SEL logs; boot IDs proving no reboot; hang monitoring; cleanup/restore and final health.",
+        "acceptance_reference": "Signed IOmeter profile and platform/device health limits. Pass requires every approved target active for the full 48-hour measurement, zero disallowed I/O errors, no hang/reboot, no target omission and acceptable device/controller/PCIe/endurance/thermal health. Preparation time, partial target coverage or GUI screenshots alone are insufficient.",
+        "safety_restrictions": "Do not format/select a drive by transient letter/name; include OS/data/RAID/protected media; use an unreviewed Default profile; count preparation toward 48 hours; change cache/power during run; automate unsupported GUI actions; hide per-volume errors; clear logs; auto-restart or auto-retry after failure.",
+        "human_approval_requirements": "Storage owner signs each target/data loss/endurance and restore; test owner signs config/timing; operator performs provisioning/GUI steps; lab owner approves 48-hour window/recovery; human judges result.",
+        "manual_boundaries": "Drive provisioning and GUI target/config verification are manual. A validated config/worker may automate the run and evidence collection after gates.",
+        "recovery_requirements": "On wrong target, I/O error, hang/reboot or limit, stop workers if safe, freeze further writes, preserve config/results/health/boot/log evidence, recover host/controller only by approved steps and restore/reprovision each volume; no automatic continuation.",
+        "stop_conditions": "Any target/config/timing/approval/recovery missing; wrong/omitted volume; worker not active; unexpected profile; I/O/media/controller/AER error; temperature/endurance limit; heartbeat loss, hang, reboot, device disappearance, evidence/storage loss or failed restore."
+    },
+    "identified_defects": [
+        "All-volume/format scope lacks explicit exclusions.",
+        "Default access profile and QD ownership are undefined.",
+        "Preparation can be confused with the required 48-hour active run.",
+        "No per-volume coverage/health/endurance evidence."
+    ],
+    "changed_fields": [
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Manual Boundaries",
+        "Recovery",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Preserve the 48-hour all-volume stress while separating destructive provisioning, IOmeter preparation and actual measurement and proving every target stayed active.",
+    "new_technical_evidence": [
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Compatibility!row-88",
+            "title": "Source testcase Wistron-Storage-00071-V002",
+            "version": "Baseline workbook",
+            "applicability": "Only this case",
+            "supports": "All-volume formatting, outstanding I/O 16, Default profile, Preparing Drives and minimum 48-hour run.",
+            "remaining_uncertainty": "Exact workload/config and target exclusions absent."
+        }
+    ],
+    "removed_ambiguities": [
+        "Separates provisioning/preparation/measurement.",
+        "Defines per-volume target coverage and QD semantics as required input.",
+        "Requires boot-ID/heartbeat and endurance evidence."
+    ],
+    "resolved_blockers": [
+        "Licensed config/operator/targets can be supplied; hybrid flow is technically automatable."
+    ],
+    "remaining_blockers": [
+        "Destructive execution awaits target/config/timing/endurance/recovery approvals."
+    ],
+    "objective_improvement_over_v2": "V3 makes the 48-hour clock begin only after every worker leaves Preparing Drives, requires a worker-to-volume coverage proof, and captures boot IDs plus per-device endurance so a partial or auto-restarted run cannot pass.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "First contract-only validation preserved target, duration and health boundaries but found that the purpose prematurely described 16 outstanding I/Os as per-target. After revision, revalidation was CLEAR: the source UI value 16 is preserved while its effective per-worker/target/disk/total scope requires owner decision, exported-config calculation and achieved-load evidence; preparation remains outside the 48-hour active window, all volumes require persistent identity and per-volume health, and no restart is allowed. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 88 formats every drive volume, selects all IOmeter targets at outstanding I/O 16 and requires at least 48 hours after potentially long preparation.",
+        "source_specific_v2_comparison": "V2 protects targets/duration; V3 adds preparation boundary, per-volume coverage, reboot/hang and endurance proof.",
+        "source_specific_safety_evidence_decision": "Read-only inventory only until every destructive/config/recovery gate is signed.",
+        "template_violation_detected": false
+    }
+}

@@ -1,0 +1,195 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 143,
+    "calibration": false,
+    "source_key": "Compatibility|2|Wistron-Storage-00009-V003",
+    "case_variant_id": "1e834d24b687ba93",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 2,
+        "code": "Wistron-Storage-00009-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "a802958e8a0dd77545c3ce80af74f3b240e8f88e17624c86150e96b5c524874e",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "FIO Mix read/write bandwidth/IOPS (70/30% read/write @ QD1, bs=512B, numjobs=1)",
+        "test_set": "Storage-SSD",
+        "purpose_facts": "Title requests mixed random 70% read/30% write at QD1, 512B and one job.",
+        "procedure_facts": [
+            "Actual job uses `rw=randwrite` with no `rwmixread`, so it is 100% random write.",
+            "Job requests 43200 seconds but Machine Time is 60 minutes.",
+            "No filename, size or offset bounds the destructive target; `./fio` is unverified."
+        ],
+        "criteria_facts": [
+            "fio result matches an unspecified specification."
+        ],
+        "attended_time_minutes": "20",
+        "machine_time_minutes": "60",
+        "source_conflicts": [
+            "Title 70/30 mixed random I/O conflicts with 100% randwrite job.",
+            "43200-second runtime conflicts with 60-minute Machine Time."
+        ],
+        "missing_source_information": [
+            "Persistent empty SSD target/range, block alignment and raw/file scope.",
+            "Authoritative workload/duration, preconditioning/cache/steady-state and thresholds.",
+            "Endurance budget and restore/reprovision."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Measure a 70% read/30% write random SSD workload at 512B, one job and effective QD1 over a signed sacrificial range, but do not execute until the randwrite and 43200s/60min source conflicts are formally resolved.",
+        "must_preserve": [
+            "70/30 mixed random intent from title, 512B, one job and QD1.",
+            "Destructive write risk and complete fio/health evidence."
+        ],
+        "must_not_infer": [
+            "That 100% randwrite is equivalent to 70/30.",
+            "A target/range or duration.",
+            "That `direct=1` disables device cache or 512B is aligned."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "CRITICAL",
+        "summary": "V2 correctly detects randwrite versus 70/30, missing rwmixread/target/range and 12-hour destructive risk.",
+        "specific_gap": "V2 does not also elevate 43200 seconds versus Machine Time 60, verify 512-byte direct-I/O alignment, or require measured read/write mix, media/preconditioning/steady-state and endurance evidence."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Other fio cases cannot resolve this row's mixed-ratio and duration conflicts."
+        ],
+        "precedence_application": "Items and Procedure conflict; V3 must not silently rewrite the job or run either interpretation."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "SOURCE_CONFLICT",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "No writes until formal revision selects 70/30 versus randwrite and 12 hours versus 60 minutes, then binds a sacrificial aligned range, media profile, thresholds, endurance and recovery."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "Title supplies mixed ratio/QD/block/job; procedure supplies fio engine/random options/ramp."
+        ],
+        "missing": [
+            "Authoritative workload/duration, target/range/alignment, exact binary, media state, thresholds, endurance and recovery."
+        ],
+        "provider": [
+            "Test owner resolves intent/duration.",
+            "Storage owner assigns sacrificial range and accepts data loss/endurance.",
+            "Performance/lab owners sign profile/limits/recovery."
+        ],
+        "safe_read_only_work": [
+            "Inventory persistent SSD identity/topology, block sizes, mounts/LVM/RAID/swap, fio version and SMART/NVMe health; parse proposed job without I/O."
+        ],
+        "prohibited_until_resolved": [
+            "Install, unmount/format/trim/precondition, write, clear logs or PASS."
+        ],
+        "closure_evidence": [
+            "Formal corrected job/duration.",
+            "Two-view target exclusion and 512B alignment proof.",
+            "Signed spec/media/endurance/restore package."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Measure QD1 512-Byte 70/30 Random Mixed I/O on an SSD",
+        "purpose": "After formal source correction, measure sustained 70% random reads and 30% random writes with 512-byte blocks, one job and effective QD1 on one bounded empty SSD range, and compare stable read/write IOPS, bandwidth and latency plus post-test health with a profile-matched specification. Until correction, record SOURCE_CONFLICT execution readiness; do not reclassify the technically automatable case as automation BLOCKED.",
+        "applicable_platform_environment": "Exact SSD/namespace/controller/firmware, OS/kernel/fio/libaio, raw-or-file scope, cache/preconditioning and filesystem state. This candidate follows the title's 70/30 intent only after signed correction; it is not authority to overwrite the source.",
+        "target_scope": "One persistent empty sacrificial SSD range with exact offset/size; `rw=randrw`, `rwmixread=70`, bs=512B, numjobs=1, direct=1, effective iodepth=1 and signed ramp/runtime. The source 43200s/60min conflict must be closed before execution.",
+        "required_inputs": "Formal corrected job/duration; target identity/range/exclusion; 512B alignment; fio hash/version; random seed/distribution; preconditioning/cache/steady-state; numeric read/write IOPS/BW/latency/mix criteria; endurance/thermal limits; destructive approval and restore.",
+        "test_command_procedure_intent": "Capture identity, alignment, health and exact job; parse-only before I/O. After separate media-preparation and destructive gates, run the corrected bounded fio job and record achieved depth, measured read/write byte/IO mix, stable-window metrics, host/device writes, health/temperature and full logs. Never execute the current randwrite file as the mixed test.",
+        "preconditions": "Conflicts formally resolved; target empty/excluded; alignment valid; media/profile/spec frozen; approvals/monitoring/recovery ready.",
+        "expected_evidence": "Correction decision; target/topology/alignment proof; fio/job hashes; media/cache/preconditioning state; complete runtime; achieved QD1 and 70/30 mix; separate read/write IOPS/BW/latency percentiles; bytes written/endurance/temperature; before/after health/logs; restoration.",
+        "acceptance_reference": "Signed SSD spec for the corrected 70/30 QD1 512B profile and duration. Pass requires measured mix and stable metrics within limits, zero disallowed errors and acceptable health/endurance; 100% randwrite or a shortened run is invalid.",
+        "safety_restrictions": "Do not choose a target, write boot/data/RAID/LVM/swap, broaden range, issue misaligned I/O, silently replace randwrite, shorten duration, change media/cache, clear logs, auto-retry or claim PASS.",
+        "human_approval_requirements": "Test owner signs correction; storage owner signs target/data loss/endurance/restore; performance/lab owners sign profile/limits; human authorizes immediately before I/O and judges result.",
+        "manual_boundaries": "Humans resolve source conflicts and select target. Agent inventories and runs only the frozen corrected job after gates.",
+        "recovery_requirements": "On wrong target/mix/range, media error or limit, stop safely, freeze writes, preserve evidence and use only approved reset/reprovision; fresh approval before rerun.",
+        "stop_conditions": "Any source conflict, target/range/alignment/profile/spec/approval/recovery missing; measured mix drifts; out-of-range I/O, media/controller error, thermal/endurance breach, device loss, host instability or monitoring loss."
+    },
+    "identified_defects": [
+        "70/30 title conflicts with 100% randwrite.",
+        "43200 seconds conflicts with Machine Time 60.",
+        "No target/range/alignment or thresholds."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety",
+        "Recovery",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Prevent a destructive 100%-write run from masquerading as the requested mixed profile and make duration/target/media gates explicit.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://github.com/axboe/fio/blob/master/HOWTO.rst",
+            "title": "fio HOWTO",
+            "version": "Upstream documentation retrieved 2026-10-14",
+            "applicability": "Installed fio must be version-checked",
+            "supports": "`randrw` and `rwmixread` define mixed random ratio; filename/size bound targets; time_based/runtime and achieved depth require verification.",
+            "remaining_uncertainty": "Exact installed behavior and device alignment are platform-specific."
+        },
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Compatibility!row-2",
+            "title": "Source testcase Wistron-Storage-00009-V003",
+            "version": "Baseline workbook",
+            "applicability": "Only this case",
+            "supports": "70/30 title, randwrite job, 43200 seconds and 20/60 metadata.",
+            "remaining_uncertainty": "Authoritative job/duration unresolved."
+        }
+    ],
+    "removed_ambiguities": [
+        "Exposes mix and duration conflicts.",
+        "Requires achieved ratio, alignment and bounded target.",
+        "Separates media setup from measurement."
+    ],
+    "resolved_blockers": [
+        "Tool/target/spec can be supplied."
+    ],
+    "remaining_blockers": [
+        "Formal workload/duration correction and destructive handoff required."
+    ],
+    "objective_improvement_over_v2": "V3 prevents the 100%-write script from satisfying a 70/30 test, adds measured-mix and 512-byte alignment proof, and preserves the unresolved twelve-hour versus one-hour decision as a release gate.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "First contract-only validation preserved the technical boundaries but described current execution as blocked, risking confusion with automation classification. After the contract explicitly distinguished SOURCE_CONFLICT readiness from REQUIRES PACKAGE / USER CONFIRMATION capability, revalidation was CLEAR: the validator preserved 70/30 versus randwrite and 43200s versus 60min conflicts, bounded target, alignment, achieved QD1/mix, media/endurance gates and no-I/O status. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Compatibility row 2 titles 70/30 randrw but defines 100% randwrite for 43200s and Machine Time 60.",
+        "source_specific_v2_comparison": "V2 finds mix/target risk; V3 adds duration, alignment, achieved-mix and endurance gates.",
+        "source_specific_safety_evidence_decision": "Read-only inventory/parse only until formal correction and destructive approval.",
+        "template_violation_detected": false
+    }
+}
