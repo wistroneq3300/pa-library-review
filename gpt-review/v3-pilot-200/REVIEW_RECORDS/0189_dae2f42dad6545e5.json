@@ -1,0 +1,108 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 189,
+    "calibration": false,
+    "source_key": "Stability|82|Wistron-Long Term Stress-00013-V001",
+    "case_variant_id": "dae2f42dad6545e5",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 82,
+        "code": "Wistron-Long Term Stress-00013-V001"
+    },
+    "source_integrity": {
+        "original_row_sha256": "04a87f7a3e6561e4c2be3a8ddedbfd9b5791b2400e4aedd557f1bf10ddf2eb8b"
+    },
+    "source_snapshot": {
+        "test_name": "DC Reboot - usbPoll()",
+        "facts": [
+            "Same 250-cycle WAT command; title requires OS USB bus devices."
+        ],
+        "deepseek": "PARTIAL and assumes usbPoll.",
+        "v2": "REQUIRES PACKAGE with USB baseline."
+    },
+    "original_test_intent": {
+        "statement": "Perform 250 DC reboots while verifying required OS-visible USB topology returns after every boot.",
+        "must_preserve": [
+            "250 cycles, DC reboot and USB device/bus validation."
+        ],
+        "unknowns": [
+            "Private scenario mapping, physical USB port/device baseline and allowed transient hubs."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It fails to expose that the shown command contains no obvious usbPoll selector."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL",
+            "SOURCE_CONFLICT"
+        ],
+        "summary": "Obtain WAT proof of usbPoll behavior and a port-path/serial baseline before 250 disruptive cycles."
+    },
+    "revision_candidate": {
+        "test_name": "Run 250 WAT DC Reboots with OS USB Polling",
+        "purpose": "Verify every required physical USB path and attached test device re-enumerates correctly after each of 250 DC reboot cycles.",
+        "applicable_platform_environment": "Pinned WAT/OS USB stack with stable physical port mapping and OOB recovery.",
+        "target_scope": "Declared USB controllers, hubs, physical port paths and device VID:PID/serial; exactly 250 cycles.",
+        "required_inputs": "Exact WAT package version/hash/provenance, signed flag-to-usbPoll and output/side-effect semantics, exact command and protected secret path, approved DC controller/off-on-dwell method, explicit cycle-success/count/failure/retry rule, controller-BDF-to-physical-hub/port/sysfs baseline, required/optional VID:PID/serial matrix, boot/enumeration timeouts, data/workload isolation, external evidence storage, recovery and approval.",
+        "test_command_procedure_intent": "After proof, run a bounded 250-cycle state machine. For each numbered attempt, execute the approved DC waveform, prove the power and boot transition, wait for signed OS-ready/enumeration timeouts, collect the complete controller-BDF-anchored physical/sysfs topology and device identities, compare every required/optional entry, capture errors externally, and advance the completed-cycle counter only under the signed success rule. Stop at the first failed attempt; no automatic retry.",
+        "preconditions": "All required test devices are physically secured, workloads/data are in the approved power-loss-safe state, external evidence survives DC removal, OOB/power recovery works and no user hot-plug occurs.",
+        "expected_evidence": "Exact WAT artifact/hash, command and usbPoll semantics; DC controller/waveform; immutable attempt/completion ledger; per-attempt power/boot times; controller BDF, hub and physical/sysfs path; expected and observed VID:PID/serial for every device; optional-device disposition; enumeration timing; WAT output; USB reset/disconnect errors; BMC/OS logs; failed-attempt/retry authorization and final health.",
+        "acceptance_reference": "Exactly 250 qualifying cycles under the signed count rule; every required physical path/device returns within timeout after every cycle with correct BDF-anchored topology and identity, and no disallowed USB/boot/platform error. Failed attempts remain visible and cannot be replaced unless the owner-approved rule explicitly permits and dispositions them.",
+        "safety_restrictions": "No unproven scenario, count-only lsusb evidence, hidden retry, log clearing or port substitution.",
+        "human_approval_requirements": "USB/platform owner approves topology and disruptive run.",
+        "manual_boundaries": "Physical device placement is manual; verified harness collection is automated.",
+        "recovery_requirements": "Abort, preserve the missing-path and power state in external evidence, recover via OOB, inspect cabling/power, and perform any diagnostic retry only after fresh approval under the signed count policy.",
+        "stop_conditions": "Unmapped usbPoll or artifact semantics, ambiguous/unsafe DC waveform, incomplete BDF-anchored mapping, missing/wrong device/path, unauthorized extra/hot-plug, boot/enumeration timeout, USB reset storm, harness/output/evidence/OOB failure, power anomaly or unclear cycle accounting."
+    },
+    "identified_defects": [
+        "WAT syntax does not visibly identify usbPoll.",
+        "No physical port-path baseline."
+    ],
+    "changed_fields": [
+        "Execution Readiness",
+        "Target Scope",
+        "Evidence"
+    ],
+    "reason_for_change": "USB device counts can stay equal while the wrong port or replacement device appears; V3 binds each cycle to physical topology and serial identity.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Required USB paths are owner-defined."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "Private scenario and topology."
+    ],
+    "objective_improvement_over_v2": "V3 detects the ambiguous shared WAT invocation and requires per-port, per-device identity rather than a generic USB presence check.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Initial validator found insufficient private-artifact proof, deterministic cycle/retry accounting and DC power/data/evidence safeguards. Revalidation confirmed exact artifact semantics, BDF-anchored USB mapping, 250-cycle accounting, no automatic retry and external evidence safety."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 82 names usbPoll on OS but repeats the same unqualified WAT sequence.",
+        "template_violation_detected": false
+    }
+}

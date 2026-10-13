@@ -1,59 +1,168 @@
 {
-  "schema_version": "v3-review-record-1.0",
-  "sequence": 55,
-  "calibration": false,
-  "source_key": "Functionality|1020|Wistron-BMC-00310-V002",
-  "case_variant_id": "bc73c79179756ded",
-  "source_ref": {"sheet": "Functionality", "source_row": 1020, "code": "Wistron-BMC-00310-V002"},
-  "source_integrity": {"xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869", "original_row_sha256": "1b3c4c4c5186d0dbcb1b832bcde9ea9ef4dcacbf673d2dd69f00d13643409483"},
-  "source_snapshot": {"test_name": "Get AuthCode", "test_set": "IPMI Messaging Support Commands", "items": "Get AuthCode", "procedure": "TBD", "criteria": "TBD", "attended_time": "10", "machine_time": "5", "script": null, "deepseek_classification": "NO", "deepseek_finding": "DeepSeek correctly refuses to invent execution while procedure and criteria are TBD, but does not use the row's IPMI Messaging context or the normative Get AuthCode command definition to distinguish technical capability from current readiness."},
-  "original_test_intent": {
-    "purpose": "Validate the standard IPMI Get AuthCode command for an owner-approved channel, user, authentication type and input data by comparing the BMC-returned authentication hash with a protected independent calculation; the source owner must confirm that this normative command is the intended row because Procedure and Criteria remain TBD.",
-    "target": "The exact BMC firmware's IPMI Messaging Get AuthCode implementation and one dedicated non-production test user/channel/authentication-type tuple; no production user or unrelated OEM authorization-code feature is implied.",
-    "scope": "Confirm command support and privilege, submit one or more owner-defined non-secret input-data vectors under a dedicated identity, receive the Get AuthCode response through the approved interface, compare it inside a non-disclosing verifier with the expected algorithm result, verify completion/error codes and audit behavior, then destroy transient values without changing user/channel configuration.",
-    "operation": "Obtain owner confirmation and the IPMI Table 22-25 request/response profile, create or designate a least-privilege test identity through a separate approved process, keep password and returned AuthCode out of arguments/logs, run only approved test vectors and authentication types, compare in protected memory, record redacted metadata/result, verify rate/error/audit behavior and clean transient material.",
-    "duration_and_iterations": "The workbook estimates 10 attended and 5 machine minutes but defines no vector count. The owner must supply the supported authentication-type/vector matrix; no brute-force, replay or open-ended iteration is permitted.",
-    "expected_result": "For every approved vector, the BMC accepts the valid request, returns the defined response length/completion code and an AuthCode matching the protected independent calculation for the exact channel/user/authentication type and data; unsupported/invalid cases return the specified code; no password/AuthCode leaks or persistent state changes.",
-    "required_evidence": "Owner intent confirmation; BMC/IPMI version and command-support evidence; channel/user/auth-type/vector manifest; approved interface/tool; redacted request metadata and completion codes; verifier version/algorithm and boolean match result without secret values; audit/rate/error behavior; secret-cleanup and unchanged account/channel/BMC health.",
-    "ambiguities": ["Procedure and Criteria are explicitly TBD, so the owner has not confirmed that the standard IPMI Get AuthCode command is the intended feature.", "No channel, user, authentication type, input data, valid/invalid vector count, completion-code expectation or supported algorithm matrix is supplied.", "The IPMI specification defines command mechanics but states that application use is beyond the specification, so challenge binding, lifetime and replay policy require an owner decision.", "The source does not define whether the returned hash is allowed in raw test evidence; V3 treats it as transient sensitive material."],
-    "source_conflicts": []
-  },
-  "v2_review_conclusion": {"automation_classification": "BLOCKED", "second_review_outcome": "CHANGED", "finding": "V2 appropriately prohibits guessing, production credentials, output disclosure, replay and log clearing. It treats all missing procedure/criteria/security inputs as permanent semantic impossibility and speculates broadly about service tokens and privilege escalation without first anchoring the row to the normative IPMI Get AuthCode command in its stated Messaging Support test set."},
-  "applicable_history": [{"path": "review_round_02_functionality.md", "decision": "The historical UNRESOLVED verdict notices TBD content but assigns a DUT-host execution location without a defined interface or standard-command analysis."}],
-  "v3_review_conclusion": {"review_outcome": "RECLASSIFIED", "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "execution_readiness": ["NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_APPROVAL"], "summary": "Reclassify capability from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION, conditional on owner confirmation that IPMI 2.0 Get AuthCode is intended. Its normative request/response and hash behavior make a protected automated verifier feasible; current execution remains prohibited until the TBD vector, identity, algorithm, evidence and secret-handling contract is supplied."},
-  "execution_readiness_detail": {
-    "available_now": ["The item sits in IPMI Messaging Support Commands and Intel IPMI 2.0 section 22.21 normatively defines Get AuthCode request/response behavior.", "Read-only command-support capability, BMC/IPMI version, channel inventory and current audit policy can be collected without requesting an AuthCode or changing users.", "A verifier can compare hashes internally and emit only match/mismatch plus non-secret metadata, so technical automation does not require persisting the returned value."],
-    "missing_inputs": ["Owner confirmation that standard IPMI Get AuthCode is intended, plus applicable IPMI revision, exact net function/command route and BMC firmware support", "Dedicated test channel/user identity, authentication type/algorithm, protected password source, input-data vectors, invalid-case matrix, expected completion codes and vector count", "Application-specific challenge binding, expiry/replay/rate policy and whether remote, system-interface or bridged execution is required", "Qualified tool/verifier, non-disclosure/redaction/zeroization method, audit-retention policy, security approval, credential rotation/revocation and incident response"],
-    "input_owner": "The testcase/BMC owner confirms the standard command and supported matrix; the security/IAM owner supplies the dedicated identity, secret handling and replay/rate policy; the tool owner supplies the protected verifier and interface; the lab owner confirms the target and recovery path.",
-    "safe_read_only_work_before_closure": ["Record BMC/IPMI/firmware identity, query supported command capabilities and enumerate non-secret channel/authentication capabilities without changing access or issuing Get AuthCode.", "Review the official request/response and algorithm rules offline and validate that the proposed verifier never prints, persists or exports password, input secrets or AuthCode."],
-    "prohibited_until_closed": ["Do not issue Get AuthCode, invent raw bytes/vectors, use production users, place passwords in command lines, print/store/return the response hash, replay requests, brute-force identities or alter channel/user/security configuration.", "Do not clear security logs, disable authentication/TLS, treat command support as PASS or claim application-level authentication semantics that the owner has not defined."],
-    "closure_verification": "Owner confirms the normative command; a dedicated identity and finite signed vector matrix exist; exact request fields/completion codes/algorithms are reviewed; the verifier produces only boolean/redacted results and is tested for zeroization/log leakage; replay/rate/audit/rotation and incident controls are approved."
-  },
-  "revision_candidate": {
-    "test_name": "IPMI Get AuthCode Protected Command Validation",
-    "purpose": "After owner confirmation, validate that the BMC's standard IPMI Get AuthCode implementation returns the correct authentication hash for each approved dedicated-user test vector without exposing or persisting secret material.",
-    "applicable_platform_environment": "The exact BMC/IPMI firmware supporting Get AuthCode for the approved channel/authentication type, with a dedicated non-production test identity, protected secret provider, non-disclosing verifier, preserved audit and independent recovery access.",
-    "target_scope": "Only the signed channel/user/authentication-type/vector matrix for the standard IPMI Messaging command. OEM tokens, production users, unrelated login protocols and application operations are outside scope unless the owner revises the source.",
-    "required_inputs": "Owner intent; IPMI revision/command support and exact route; dedicated user/channel; supported authentication algorithms; finite valid/invalid vectors and completion codes; protected password source; application replay/expiry rules; verifier/tool package; approval, audit, zeroization, rotation/revocation and incident plan.",
-    "test_command_procedure_intent": "Confirm support and target without mutation. For each approved vector, construct the exact standard request through the qualified interface, keep credentials and response out of process arguments and logs, compare the returned AuthCode with an independently calculated value inside protected memory, record only redacted metadata/completion code/match status, enforce rate/replay limits, zeroize transient values and verify unchanged access state.",
-    "preconditions": "Owner confirms standard Get AuthCode intent; exact BMC/firmware/channel/user/auth type and command route verified; test-only identity and secrets protected; vector matrix and expected codes signed; verifier leakage-tested; audit/replay/rate/cleanup/revocation controls and security approval active; no production account involved.",
-    "expected_evidence": "BMC/IPMI/firmware and support identity; approved vector manifest with sensitive fields redacted; tool/verifier version; request metadata and completion codes; per-vector boolean match result; invalid-case behavior; audit/rate/replay evidence; proof no code/password persisted; unchanged user/channel/BMC health and approved cleanup.",
-    "acceptance_reference": "Intel IPMI 2.0 rev. 1.1 Get AuthCode command and AuthCode algorithm tables plus the owner-approved BMC applicability and application-specific vector/replay policy.",
-    "safety_restrictions": "Never use production credentials, invent command fields, expose password/AuthCode, embed secrets in arguments, persist raw response, replay/brute-force, disable security controls, change access configuration, clear audit logs or exceed the finite approved vector set.",
-    "human_approval_requirements": "BMC/testcase owner confirms intent and applicability; security owner approves identity, algorithms, vectors, handling, rate/replay and cleanup before any Get AuthCode request.",
-    "manual_boundaries": "Owners define the application-specific policy and provision/revoke the test identity. After approval, request construction, protected comparison, leak checks and redacted evidence can be automated; any exposure or unexpected privilege behavior is a human-led security incident.",
-    "recovery_requirements": "On leakage, unexpected success/failure, replay acceptance, rate issue, account/session anomaly or audit failure, stop without retry, preserve security evidence, revoke/rotate the test identity and affected secrets through the approved path, terminate test sessions and escalate under the credential-incident procedure.",
-    "stop_conditions": "Owner has not confirmed intent; procedure/criteria/vector matrix remain TBD; unsupported command/auth type; wrong target/user/channel; verifier may leak material; production credential involvement; unexpected completion code/hash mismatch/replay/rate behavior; secret exposure; audit loss; failed zeroization/revocation or BMC/access instability."
-  },
-  "identified_defects": ["V2 does not anchor the row to the normative Get AuthCode command despite the IPMI Messaging test set.", "V2 converts missing finite test inputs into capability BLOCKED even though the standard command and protected verifier are technically automatable.", "The source itself remains incomplete and supplies no vectors, authentication type, expected codes or application policy."],
-  "changed_fields": ["Automation Classification", "Purpose", "Execution Readiness", "Target Scope", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference"],
-  "reason_for_change": "Use the official IPMI command definition to separate technical capability from current TBD readiness, while narrowing V2's speculative token language and retaining stronger non-disclosure, test-identity, replay/rate, audit and incident gates.",
-  "new_technical_evidence": [{"source_url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1 E7 Markup", "version": "2.0 rev. 1.1, Errata 7; section 22.21 and AuthCode algorithm table", "applicability": "BMCs claiming support for the standard IPMI Get AuthCode command and selected authentication type", "supports": "Get AuthCode hashes caller-supplied data with the internally stored password for the specified channel/user so system software can compare authentication codes; the application-level use remains outside the specification.", "remaining_uncertainty": "This BMC's support, interface, authentication types, application binding, vector set and acceptance policy remain owner-specific."}],
-  "removed_ambiguities": ["Distinguishes the standard IPMI command from an unspecified OEM service token.", "Defines a finite dedicated-user hash-verification target without exposing the returned value.", "Separates normative command correctness from owner-defined application replay/expiry semantics."],
-  "resolved_blockers": ["Official command semantics establish that a deterministic protected automated verifier is technically possible; missing procedure, vectors and approval are readiness inputs rather than permanent capability impossibility."],
-  "remaining_blockers": ["No request may run until the owner confirms intent and supplies exact command applicability, finite vectors, dedicated identity, protected secrets/verifier, expected codes, replay/rate/audit policy and security approval."],
-  "objective_improvement_over_v2": "V3 replaces a blanket TBD-based BLOCKED capability verdict with a standards-grounded but non-executable readiness contract, avoids mislabeling every AuthCode as an arbitrary service token, and preserves stricter secret non-disclosure and incident controls.",
-  "agent_understanding_result": {"status": "PENDING_MATERIAL_CHANGE_VALIDATION", "notes": "The BLOCKED-to-REQUIRES standards-based reclassification and secret-safe verifier contract are queued for the next isolated validation batch."},
-  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"},
-  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The row is named Get AuthCode under IPMI Messaging Support Commands but leaves both procedure and criteria TBD.", "source_specific_v2_comparison": "V2 protects secrets but does not use the normative standard command to distinguish feasible capability from missing owner vectors and policy.", "source_specific_safety_evidence_decision": "Allow only support/inventory and offline verifier review now; prohibit any AuthCode request until owner-confirmed finite vectors, dedicated credentials, non-disclosing comparison, audit and revocation controls exist.", "template_violation_detected": false}
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 55,
+    "calibration": false,
+    "source_key": "Functionality|1020|Wistron-BMC-00310-V002",
+    "case_variant_id": "bc73c79179756ded",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1020,
+        "code": "Wistron-BMC-00310-V002"
+    },
+    "source_integrity": {
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+        "original_row_sha256": "1b3c4c4c5186d0dbcb1b832bcde9ea9ef4dcacbf673d2dd69f00d13643409483"
+    },
+    "source_snapshot": {
+        "test_name": "Get AuthCode",
+        "test_set": "IPMI Messaging Support Commands",
+        "items": "Get AuthCode",
+        "procedure": "TBD",
+        "criteria": "TBD",
+        "attended_time": "10",
+        "machine_time": "5",
+        "script": null,
+        "deepseek_classification": "NO",
+        "deepseek_finding": "DeepSeek correctly refuses to invent execution while procedure and criteria are TBD, but does not use the row's IPMI Messaging context or the normative Get AuthCode command definition to distinguish technical capability from current readiness."
+    },
+    "original_test_intent": {
+        "purpose": "Validate the standard IPMI Get AuthCode command for an owner-approved channel, user, authentication type and input data by comparing the BMC-returned authentication hash with a protected independent calculation; the source owner must confirm that this normative command is the intended row because Procedure and Criteria remain TBD.",
+        "target": "The exact BMC firmware's IPMI Messaging Get AuthCode implementation and one dedicated non-production test user/channel/authentication-type tuple; no production user or unrelated OEM authorization-code feature is implied.",
+        "scope": "Confirm command support and privilege, submit one or more owner-defined non-secret input-data vectors under a dedicated identity, receive the Get AuthCode response through the approved interface, compare it inside a non-disclosing verifier with the expected algorithm result, verify completion/error codes and audit behavior, then destroy transient values without changing user/channel configuration.",
+        "operation": "Obtain owner confirmation and the IPMI Table 22-25 request/response profile, create or designate a least-privilege test identity through a separate approved process, keep password and returned AuthCode out of arguments/logs, run only approved test vectors and authentication types, compare in protected memory, record redacted metadata/result, verify rate/error/audit behavior and clean transient material.",
+        "duration_and_iterations": "The workbook estimates 10 attended and 5 machine minutes but defines no vector count. The owner must supply the supported authentication-type/vector matrix; no brute-force, replay or open-ended iteration is permitted.",
+        "expected_result": "For every approved vector, the BMC accepts the valid request, returns the defined response length/completion code and an AuthCode matching the protected independent calculation for the exact channel/user/authentication type and data; unsupported/invalid cases return the specified code; no password/AuthCode leaks or persistent state changes.",
+        "required_evidence": "Owner intent confirmation; BMC/IPMI version and command-support evidence; channel/user/auth-type/vector manifest; approved interface/tool; redacted request metadata and completion codes; verifier version/algorithm and boolean match result without secret values; audit/rate/error behavior; secret-cleanup and unchanged account/channel/BMC health.",
+        "ambiguities": [
+            "Procedure and Criteria are explicitly TBD, so the owner has not confirmed that the standard IPMI Get AuthCode command is the intended feature.",
+            "No channel, user, authentication type, input data, valid/invalid vector count, completion-code expectation or supported algorithm matrix is supplied.",
+            "The IPMI specification defines command mechanics but states that application use is beyond the specification, so challenge binding, lifetime and replay policy require an owner decision.",
+            "The source does not define whether the returned hash is allowed in raw test evidence; V3 treats it as transient sensitive material."
+        ],
+        "source_conflicts": []
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "finding": "V2 appropriately prohibits guessing, production credentials, output disclosure, replay and log clearing. It treats all missing procedure/criteria/security inputs as permanent semantic impossibility and speculates broadly about service tokens and privilege escalation without first anchoring the row to the normative IPMI Get AuthCode command in its stated Messaging Support test set."
+    },
+    "applicable_history": [
+        {
+            "path": "review_round_02_functionality.md",
+            "decision": "The historical UNRESOLVED verdict notices TBD content but assigns a DUT-host execution location without a defined interface or standard-command analysis."
+        }
+    ],
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Reclassify capability from BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION, conditional on owner confirmation that IPMI 2.0 Get AuthCode is intended. Its normative request/response and hash behavior make a protected automated verifier feasible; current execution remains prohibited until the TBD vector, identity, algorithm, evidence and secret-handling contract is supplied."
+    },
+    "execution_readiness_detail": {
+        "available_now": [
+            "The item sits in IPMI Messaging Support Commands and Intel IPMI 2.0 section 22.21 normatively defines Get AuthCode request/response behavior.",
+            "Read-only command-support capability, BMC/IPMI version, channel inventory and current audit policy can be collected without requesting an AuthCode or changing users.",
+            "A verifier can compare hashes internally and emit only match/mismatch plus non-secret metadata, so technical automation does not require persisting the returned value."
+        ],
+        "missing_inputs": [
+            "Owner confirmation that standard IPMI Get AuthCode is intended, plus applicable IPMI revision, exact net function/command route and BMC firmware support",
+            "Dedicated test channel/user identity, authentication type/algorithm, protected password source, input-data vectors, invalid-case matrix, expected completion codes and vector count",
+            "Application-specific challenge binding, expiry/replay/rate policy and whether remote, system-interface or bridged execution is required",
+            "Qualified tool/verifier, non-disclosure/redaction/zeroization method, audit-retention policy, security approval, credential rotation/revocation and incident response"
+        ],
+        "input_owner": "The testcase/BMC owner confirms the standard command and supported matrix; the security/IAM owner supplies the dedicated identity, secret handling and replay/rate policy; the tool owner supplies the protected verifier and interface; the lab owner confirms the target and recovery path.",
+        "safe_read_only_work_before_closure": [
+            "Record BMC/IPMI/firmware identity, query supported command capabilities and enumerate non-secret channel/authentication capabilities without changing access or issuing Get AuthCode.",
+            "Review the official request/response and algorithm rules offline and validate that the proposed verifier never prints, persists or exports password, input secrets or AuthCode."
+        ],
+        "prohibited_until_closed": [
+            "Do not issue Get AuthCode, invent raw bytes/vectors, use production users, place passwords in command lines, print/store/return the response hash, replay requests, brute-force identities or alter channel/user/security configuration.",
+            "Do not clear security logs, disable authentication/TLS, treat command support as PASS or claim application-level authentication semantics that the owner has not defined."
+        ],
+        "closure_verification": "Owner confirms the normative command; a dedicated identity and finite signed vector matrix exist; exact request fields/completion codes/algorithms are reviewed; the verifier produces only boolean/redacted results and is tested for zeroization/log leakage; replay/rate/audit/rotation and incident controls are approved."
+    },
+    "revision_candidate": {
+        "test_name": "IPMI Get AuthCode Protected Command Validation",
+        "purpose": "After owner confirmation, validate that the BMC's standard IPMI Get AuthCode implementation returns the correct authentication hash for each approved dedicated-user test vector without exposing or persisting secret material.",
+        "applicable_platform_environment": "The exact BMC/IPMI firmware supporting Get AuthCode for the approved channel/authentication type, with a dedicated non-production test identity, protected secret provider, non-disclosing verifier, preserved audit and independent recovery access.",
+        "target_scope": "Only the signed channel/user/authentication-type/vector matrix for the standard IPMI Messaging command. OEM tokens, production users, unrelated login protocols and application operations are outside scope unless the owner revises the source.",
+        "required_inputs": "Owner intent; IPMI revision/command support and exact route; dedicated user/channel; supported authentication algorithms; finite valid/invalid vectors and completion codes; protected password source; application replay/expiry rules; verifier/tool package; approval, audit, zeroization, rotation/revocation and incident plan.",
+        "test_command_procedure_intent": "Confirm support and target without mutation. For each approved vector, construct the exact standard request through the qualified interface, keep credentials and response out of process arguments and logs, compare the returned AuthCode with an independently calculated value inside protected memory, record only redacted metadata/completion code/match status, enforce rate/replay limits, zeroize transient values and verify unchanged access state.",
+        "preconditions": "Owner confirms standard Get AuthCode intent; exact BMC/firmware/channel/user/auth type and command route verified; test-only identity and secrets protected; vector matrix and expected codes signed; verifier leakage-tested; audit/replay/rate/cleanup/revocation controls and security approval active; no production account involved.",
+        "expected_evidence": "BMC/IPMI/firmware and support identity; approved vector manifest with sensitive fields redacted; tool/verifier version; request metadata and completion codes; per-vector boolean match result; invalid-case behavior; audit/rate/replay evidence; proof no code/password persisted; unchanged user/channel/BMC health and approved cleanup.",
+        "acceptance_reference": "Intel IPMI 2.0 rev. 1.1 Get AuthCode command and AuthCode algorithm tables plus the owner-approved BMC applicability and application-specific vector/replay policy.",
+        "safety_restrictions": "Never use production credentials, invent command fields, expose password/AuthCode, embed secrets in arguments, persist raw response, replay/brute-force, disable security controls, change access configuration, clear audit logs or exceed the finite approved vector set.",
+        "human_approval_requirements": "BMC/testcase owner confirms intent and applicability; security owner approves identity, algorithms, vectors, handling, rate/replay and cleanup before any Get AuthCode request.",
+        "manual_boundaries": "Owners define the application-specific policy and provision/revoke the test identity. After approval, request construction, protected comparison, leak checks and redacted evidence can be automated; any exposure or unexpected privilege behavior is a human-led security incident.",
+        "recovery_requirements": "On leakage, unexpected success/failure, replay acceptance, rate issue, account/session anomaly or audit failure, stop without retry, preserve security evidence, revoke/rotate the test identity and affected secrets through the approved path, terminate test sessions and escalate under the credential-incident procedure.",
+        "stop_conditions": "Owner has not confirmed intent; procedure/criteria/vector matrix remain TBD; unsupported command/auth type; wrong target/user/channel; verifier may leak material; production credential involvement; unexpected completion code/hash mismatch/replay/rate behavior; secret exposure; audit loss; failed zeroization/revocation or BMC/access instability."
+    },
+    "identified_defects": [
+        "V2 does not anchor the row to the normative Get AuthCode command despite the IPMI Messaging test set.",
+        "V2 converts missing finite test inputs into capability BLOCKED even though the standard command and protected verifier are technically automatable.",
+        "The source itself remains incomplete and supplies no vectors, authentication type, expected codes or application policy."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Purpose",
+        "Execution Readiness",
+        "Target Scope",
+        "Test Command / Procedure Intent",
+        "Expected Evidence",
+        "Acceptance Reference"
+    ],
+    "reason_for_change": "Use the official IPMI command definition to separate technical capability from current TBD readiness, while narrowing V2's speculative token language and retaining stronger non-disclosure, test-identity, replay/rate, audit and incident gates.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf",
+            "title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1 E7 Markup",
+            "version": "2.0 rev. 1.1, Errata 7; section 22.21 and AuthCode algorithm table",
+            "applicability": "BMCs claiming support for the standard IPMI Get AuthCode command and selected authentication type",
+            "supports": "Get AuthCode hashes caller-supplied data with the internally stored password for the specified channel/user so system software can compare authentication codes; the application-level use remains outside the specification.",
+            "remaining_uncertainty": "This BMC's support, interface, authentication types, application binding, vector set and acceptance policy remain owner-specific."
+        }
+    ],
+    "removed_ambiguities": [
+        "Distinguishes the standard IPMI command from an unspecified OEM service token.",
+        "Defines a finite dedicated-user hash-verification target without exposing the returned value.",
+        "Separates normative command correctness from owner-defined application replay/expiry semantics."
+    ],
+    "resolved_blockers": [
+        "Official command semantics establish that a deterministic protected automated verifier is technically possible; missing procedure, vectors and approval are readiness inputs rather than permanent capability impossibility."
+    ],
+    "remaining_blockers": [
+        "No request may run until the owner confirms intent and supplies exact command applicability, finite vectors, dedicated identity, protected secrets/verifier, expected codes, replay/rate/audit policy and security approval."
+    ],
+    "objective_improvement_over_v2": "V3 replaces a blanket TBD-based BLOCKED capability verdict with a standards-grounded but non-executable readiness contract, avoids mislabeling every AuthCode as an arbitrary service token, and preserves stricter secret non-disclosure and incident controls.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "notes": "Isolated validation confirmed the standard IPMI Get AuthCode scope, finite dedicated-user vector matrix, standard-versus-OEM boundary, protected transient secret handling, redacted evidence, zeroization, stop conditions, and false-PASS protections. Missing vectors, verifier, and owner authorization are handoff prerequisites rather than a semantic blocker."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "The row is named Get AuthCode under IPMI Messaging Support Commands but leaves both procedure and criteria TBD.",
+        "source_specific_v2_comparison": "V2 protects secrets but does not use the normative standard command to distinguish feasible capability from missing owner vectors and policy.",
+        "source_specific_safety_evidence_decision": "Allow only support/inventory and offline verifier review now; prohibit any AuthCode request until owner-confirmed finite vectors, dedicated credentials, non-disclosing comparison, audit and revocation controls exist.",
+        "template_violation_detected": false
+    }
 }

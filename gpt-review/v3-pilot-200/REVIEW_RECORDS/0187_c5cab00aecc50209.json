@@ -1,0 +1,108 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 187,
+    "calibration": false,
+    "source_key": "Stability|79|Wistron-Long Term Stress-00010-V001",
+    "case_variant_id": "c5cab00aecc50209",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 79,
+        "code": "Wistron-Long Term Stress-00010-V001"
+    },
+    "source_integrity": {
+        "original_row_sha256": "200ccdd4b510c37e421c464ffe230ac065b9176635d618306bbe4a281ce2ece5"
+    },
+    "source_snapshot": {
+        "test_name": "DC Reboot - OS Ping",
+        "facts": [
+            "Exact WAT command uses 250 cycles and `-s BMC_P DC OS OS_I BMC_I`.",
+            "Machine time 1800 minutes."
+        ],
+        "deepseek": "PARTIAL with WAT package/credentials.",
+        "v2": "REQUIRES PACKAGE and assumes named OS-ping scenario."
+    },
+    "original_test_intent": {
+        "statement": "Run 250 WAT DC reboot cycles and verify OS ping/reachability plus overall system health after each cycle.",
+        "must_preserve": [
+            "250 cycles, DC reboot and OS ping polling."
+        ],
+        "unknowns": [
+            "Private WAT flag mapping, DC method, ping target/cadence/timeout and scenario order."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It does not explicitly require owner proof that the shown generic scenario flags enable the title's OS Ping check."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL",
+            "SOURCE_CONFLICT"
+        ],
+        "summary": "Do not infer private WAT semantics; obtain package-specific mapping of `OS_I`/sequence to OS Ping before 250 DC cycles."
+    },
+    "revision_candidate": {
+        "test_name": "Run 250 WAT DC Reboots with OS Ping Validation",
+        "purpose": "Verify OS network reachability and system recovery after each of 250 approved DC reboot cycles.",
+        "applicable_platform_environment": "Pinned WAT package on a dedicated SUT with approved BMC/host credential channels.",
+        "target_scope": "One SUT, exactly 250 cycles, declared OS ping endpoint/interface and DC reboot mechanism.",
+        "required_inputs": "WAT hash/version/dependencies, signed flag-to-OS-Ping mapping, BMC endpoint/secret path, DC semantics, explicit boot-ready signal and timeout, ping source/interface/target/count/interval/allowed-loss and timeout rule, immutable inventory/error baseline, signed failure/retry/resume count policy, interpretation of 1800 minutes, and approval.",
+        "test_command_procedure_intent": "Validate command dry-run/help, then run the exact scenario through protected secrets. For each numbered attempt, record the DC action, wait for the explicit boot-ready signal, execute the exact ping rule, compare the complete required inventory/health to baseline before continuing, and abort on policy failure. Retries are diagnostic only and never affect completion; a failed campaign cannot resume toward PASS, and only a separately authorized and labeled new campaign can produce a new result.",
+        "preconditions": "OOB/recovery, per-cycle comparison and evidence capacity are ready. The owner has declared whether 1800 minutes is planning metadata, a timeout or an acceptance duration; it cannot be inferred by the agent.",
+        "expected_evidence": "Package provenance; signed OS-Ping and 1800-minute semantics; redacted invocation; immutable attempt ledger; per-attempt DC/boot-ready/ping parameters, results and timing; per-attempt full inventory/health/log diff before continuation; explicit failure/retry/resume disposition; BMC/SEL/host deltas and final state.",
+        "acceptance_reference": "Exactly 250 numbered DC cycles meet the explicit boot-ready and ping rules with complete per-cycle inventory/health, and no cycle fails. Any failure in the campaign prevents PASS; a retry may be diagnostic only, and only a separately authorized wholly new campaign can establish a new result. No extra success can replace or erase a failed cycle.",
+        "safety_restrictions": "No credentials on command line/logs, guessed flags, hidden retry, log clearing or warm/AC substitution.",
+        "human_approval_requirements": "Owner approves WAT recipe and disruptive window.",
+        "manual_boundaries": "Agent can run verified harness; engineer judges anomalies.",
+        "recovery_requirements": "Abort and fail the current campaign, preserve the failed attempt, recover via OOB, and permit only a separately labeled diagnostic retry or separately authorized new campaign; never resume the failed campaign as PASS, renumber or replace the failure.",
+        "stop_conditions": "Unmapped scenario; unresolved boot/ping/count/1800-minute semantics; ping or boot failure; per-cycle device/health mismatch; exposed secret; error/hang; or evidence/OOB failure."
+    },
+    "identified_defects": [
+        "Title-to-private-WAT flag mapping is unproven."
+    ],
+    "changed_fields": [
+        "Execution Readiness",
+        "Required Inputs",
+        "Evidence"
+    ],
+    "reason_for_change": "Identical WAT syntax appears under different polling titles, so V3 demands package-specific proof that this invocation actually performs OS Ping.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "OS Ping endpoint and cadence are explicit inputs."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "Private WAT semantics/package."
+    ],
+    "objective_improvement_over_v2": "V3 detects that the displayed command alone does not prove the named poll function and prevents 250 destructive cycles from validating only generic reboot health.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Initial validator found underspecified boot/ping success, per-cycle inventory, retry counting and 1800-minute semantics. After iterative correction, revalidation confirmed any failure ends the campaign, retries are diagnostic only and only a new authorized campaign can establish a new result."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 79 title says OS Ping but only provides WAT flags shared by other poll cases.",
+        "template_violation_detected": false
+    }
+}

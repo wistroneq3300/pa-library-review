@@ -1,0 +1,108 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 194,
+    "calibration": false,
+    "source_key": "(No Main Function)|4|Wistron---00361-V003",
+    "case_variant_id": "1d7a82745137d9f4",
+    "source_ref": {
+        "sheet": "(No Main Function)",
+        "source_row": 4,
+        "code": "Wistron---00361-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "41959fd95b8d7607dd84ef0d576877c7b4163df5d13c8e2287ed2f5764bca6f5"
+    },
+    "source_snapshot": {
+        "test_name": "Type 46 - String Property",
+        "facts": [
+            "Read-only `dmidecode --type 46` under OS.",
+            "Criteria say match unspecified SPEC."
+        ],
+        "deepseek": "YES and asks operator comparison.",
+        "v2": "BLOCKED until expected values are supplied."
+    },
+    "original_test_intent": {
+        "statement": "Read SMBIOS Type 46 String Property structures and compare each required property with the platform SPEC.",
+        "must_preserve": [
+            "Type 46 specifically and field-level comparison."
+        ],
+        "unknowns": [
+            "Expected strings/handles/association rules, firmware/config scope and spec revision."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "specific_gap": "Over-BLOCKED: missing expected values prevents PASS, not safe read-only acquisition of actual Type 46 data."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "NEEDS_SPEC"
+        ],
+        "summary": "Collecting actual Type 46 structures is fully automatable and safe; final comparison remains pending until the owner supplies the golden reference."
+    },
+    "revision_candidate": {
+        "test_name": "Read and Validate SMBIOS Type 46 String Properties",
+        "purpose": "Acquire every SMBIOS Type 46 structure and compare its handle, parent association, property ID and string value with the signed platform reference.",
+        "applicable_platform_environment": "OS with privileged read access to SMBIOS/DMI data and firmware whose SMBIOS version supports the requested structure.",
+        "target_scope": "All Type 46 records returned for the current boot/firmware/configuration; do not substitute Type 11 or arbitrary string search.",
+        "required_inputs": "For PASS: SPEC revision, expected Type 46 records/associations/values and comparison rules. These are not required to capture Actual.",
+        "test_command_procedure_intent": "Record platform/BIOS/SMBIOS identity, run `dmidecode --type 46` read-only with raw output/status, parse every complete record and compare only if a signed reference is present.",
+        "preconditions": "Authorized read privilege and dmidecode available; no firmware change needed.",
+        "expected_evidence": "Exact command/version/status/time; complete unfiltered Type 46 output; parsed handles, parent handles, property IDs/strings; platform/BIOS identity; reference revision and field diff if available.",
+        "acceptance_reference": "All required fields and associations exactly follow the signed reference. Without it, result is Actual Collected / Acceptance Pending, never PASS.",
+        "safety_restrictions": "Do not alter SMBIOS/firmware, guess strings, filter away records or claim absence solely from an unsupported old dmidecode version.",
+        "human_approval_requirements": "None for authorized read-only collection; owner provides/approves SPEC for disposition.",
+        "manual_boundaries": "Engineer judges undocumented vendor strings or reference applicability.",
+        "recovery_requirements": "None beyond preserving raw output; on access/tool failure, record it and stop.",
+        "stop_conditions": "Unsupported tool/table access, truncated output or mismatched platform identity; these stop comparison, not safe inventory."
+    },
+    "identified_defects": [
+        "V2 conflates missing Expected with inability to collect Actual.",
+        "Field/association evidence omitted."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Evidence",
+        "Acceptance"
+    ],
+    "reason_for_change": "The command is a pure firmware-table read; no SPEC is needed to acquire and preserve Actual values, although PASS still requires the missing reference.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Actual collection and final disposition are separate."
+    ],
+    "resolved_blockers": [
+        "Read-only work can proceed."
+    ],
+    "remaining_blockers": [
+        "SPEC needed only for PASS."
+    ],
+    "objective_improvement_over_v2": "V3 safely releases read-only evidence collection while retaining the exact no-reference/no-PASS rule, eliminating a canonical over-BLOCKED error.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently separated complete read-only Actual collection from SPEC-dependent PASS, retained every Type 46 handle/association/property/string, and prohibited firmware changes or unsupported-decoder false absence."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "No-main row 4 contains an exact read-only Type 46 command and only lacks golden values.",
+        "template_violation_detected": false
+    }
+}

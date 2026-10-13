@@ -1,0 +1,116 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 195,
+    "calibration": false,
+    "source_key": "(No Main Function)|6|Wistron---00841-V003",
+    "case_variant_id": "a361496c7db5db12",
+    "source_ref": {
+        "sheet": "(No Main Function)",
+        "source_row": 6,
+        "code": "Wistron---00841-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "ac5570a312db51c23a0eb584d14df2461e7cb7d7b499c1f3e6141b51a5f9c19b"
+    },
+    "source_snapshot": {
+        "test_name": "Flash BMC Firmware - upgrade",
+        "facts": [
+            "BMC WebUI uploads `.ima`, selects Preserve all Configuration, flashes and checks version."
+        ],
+        "deepseek": "PARTIAL but assumes a generic `/Actions/UpdateService.Update` endpoint.",
+        "v2": "REQUIRES PACKAGE with provenance/power/OOB/rollback."
+    },
+    "original_test_intent": {
+        "statement": "Upgrade BMC firmware through the supported management update path while preserving configuration, then verify intended version and BMC service health.",
+        "must_preserve": [
+            "BMC target, upgrade direction, preserve-all choice and version verification."
+        ],
+        "unknowns": [
+            "Image/version, exact vendor update mechanism, activation reset, preserved fields and rollback."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It allows a generic UpdateService implication; Redfish services expose supported update URIs/actions dynamically and message format can be vendor-specific."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Use only the target BMC's advertised, vendor-approved WebUI or Redfish update mechanism; never invent a fixed action URI."
+    },
+    "revision_candidate": {
+        "test_name": "Upgrade BMC Firmware with Configuration Preservation",
+        "purpose": "Apply the signed newer BMC image to the exact controller, preserve the approved configuration set, and verify version plus complete management recovery.",
+        "applicable_platform_environment": "Exact board/BMC hardware revision and current firmware with vendor-supported upgrade path.",
+        "target_scope": "One mapped BMC and one signed newer `.ima`; host BIOS/CPLD images are excluded.",
+        "required_inputs": "Target serial/board/BMC identity, current/target versions, image source/signature/hash/compatibility, advertised update endpoint or WebUI SOP, exhaustive signed preservation matrix and access method for every entry, activation/reset behavior, task polling interval, completion timeout, stall definition, accepted terminal-state/message rule, expected disconnect/reconnect window, stable power, backup/rollback and approval.",
+        "test_command_procedure_intent": "Capture versions, every preservation-matrix entry and all required services; verify image/target; discover supported UpdateService mechanisms or follow WebUI SOP; upload once; poll the returned task at the signed interval until an accepted terminal state or timeout/stall; allow only the approved BMC reset and reconnect window; then exhaustively compare every preservation entry and verify version/services. Any omitted or inaccessible matrix entry prevents PASS.",
+        "preconditions": "Alternate recovery/console, stable power and exported configuration available.",
+        "expected_evidence": "Target/image identities and hash/signature; pre/post firmware inventory; complete pre/post export and field-by-field result for every signed preservation entry, including explicit inaccessible/omitted fields; exact method/request or screenshots; task ID/URI, poll timestamps, progress/messages and accepted terminal result; disconnect/reconnect/reset timeline; IPMI/Redfish/WebUI/network/sensor/SEL/user/config recovery.",
+        "acceptance_reference": "Correct newer BMC version, task reaches the signed successful terminal state within timeout without stall, every preservation-matrix entry is verified as required with no omission/inaccessibility, and all management services recover; version string or sampled settings are insufficient.",
+        "safety_restrictions": "Do not use generic fixed POST URI, wrong component/image, expose secrets, interrupt power/task, clear logs or retry failed flash automatically.",
+        "human_approval_requirements": "BMC owner approves image, preservation, outage and rollback.",
+        "manual_boundaries": "Agent may automate an advertised mechanism; console recovery/manual WebUI may be required.",
+        "recovery_requirements": "Do not power-cycle during active flash; on terminal failure preserve task data and use vendor recovery/rollback from alternate path.",
+        "stop_conditions": "Identity/compatibility/signature mismatch, unsupported mechanism, missing polling/timeout/stall/terminal rules, unstable power, task error or defined stall/timeout, reconnect-window violation, lost recovery path, inaccessible/omitted preservation entry or failed service/config restoration."
+    },
+    "identified_defects": [
+        "DeepSeek invents a generic UpdateService action path.",
+        "Version-only postcheck misses BMC services/config."
+    ],
+    "changed_fields": [
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance",
+        "Safety"
+    ],
+    "reason_for_change": "Firmware transport is service- and vendor-advertised; assuming one Redfish action URI can upload to the wrong method or component despite otherwise correct image controls.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+            "title": "DMTF Redfish Resource and Schema Guide DSP2046, UpdateService 1.16.0",
+            "version": "2025.2",
+            "applicability": "Redfish update mechanism discovery",
+            "supports": "UpdateService links firmware inventory and exposes supported pull/push mechanisms; push message format can be vendor-specific and clients should follow the service-advertised URI/task model.",
+            "remaining_uncertainty": "Target BMC implementation and vendor `.ima` method must be discovered/approved."
+        }
+    ],
+    "removed_ambiguities": [
+        "BMC is distinct from BIOS/CPLD; preservation is verified, not assumed."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "Image, vendor method and recovery approval."
+    ],
+    "objective_improvement_over_v2": "V3 prevents a fabricated universal Redfish endpoint and expands completion from a version check to preserved configuration plus operational management services.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Initial validator found sampled preserve-all evidence and undefined task timing/terminal semantics. Revalidation confirmed exhaustive preservation, poll/timeout/stall/terminal rules, reconnect window and full management-service recovery."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "No-main row 6 is BMC `.ima` upgrade with Preserve all Configuration and version check.",
+        "template_violation_detected": false
+    }
+}

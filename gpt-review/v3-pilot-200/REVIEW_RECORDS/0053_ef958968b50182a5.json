@@ -1,59 +1,175 @@
 {
-  "schema_version": "v3-review-record-1.0",
-  "sequence": 53,
-  "calibration": false,
-  "source_key": "Functionality|948|Wistron-BMC-00238-V002",
-  "case_variant_id": "ef958968b50182a5",
-  "source_ref": {"sheet": "Functionality", "source_row": 948, "code": "Wistron-BMC-00238-V002"},
-  "source_integrity": {"xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869", "original_row_sha256": "1659de9a776607d06de199ec90c91132fffeda618e5c7e141170f985e298ab65"},
-  "source_snapshot": {"test_name": "Chassis -EROT", "test_set": "Inventory and LEDs", "items": "Chassis -EROT", "procedure": "Open BMC WebUI, select Hardware status > Inventory and LEDs, and check Chassis information and detail information.", "criteria": "Data is readable and correct.", "attended_time": "2", "machine_time": "0", "script": null, "deepseek_classification": "YES", "deepseek_finding": "DeepSeek assumes the EROT data is a FirmwareInventory array and filters by a name substring. Standard Redfish collections expose `Members`, and the source does not establish that every Chassis EROT detail is represented by FirmwareInventory."},
-  "original_test_intent": {
-    "purpose": "Verify that the Chassis EROT entry and its detail view on BMC WebUI Hardware status > Inventory and LEDs are legible, identify the correct chassis security component, and match the exact platform specification.",
-    "target": "The platform-defined EROT component represented under the Chassis section of the source-named BMC WebUI page, for the exact chassis/BMC/EROT hardware and firmware recipe.",
-    "scope": "Open the Chassis inventory and EROT detail UI, capture every required displayed identity/version/status/security/lifecycle field defined by the owner, resolve the physical or logical component without substring guessing, and corroborate fields only through the platform-mapped read-only Chassis/OEM/FirmwareInventory resources.",
-    "operation": "Confirm target and EROT definition, load the Chassis inventory, select the exact EROT row/detail, capture complete rendered evidence and stable identifiers, compare each owner-required field with the signed reference, discover any mapped Redfish collection/member through links and `Members`, correlate its RelatedItem or vendor mapping, and perform no firmware or security action.",
-    "duration_and_iterations": "One complete read-only observation of the applicable chassis EROT row and detail panel. The two-minute attended estimate and zero machine time do not permit a version-only or substring-only result.",
-    "expected_result": "The exact EROT entry is present once for each expected component, its Chassis and detail views are readable and complete, identity/version/status and any defined active/staged/security state match the applicable reference, UI and mapped backend sources agree, and no firmware/security state changes.",
-    "required_evidence": "Chassis/BMC/EROT hardware and firmware identity; owner definition and expected-field matrix; complete redacted Chassis row/detail screenshots plus DOM/text; stable EROT identifier/location; per-field comparison; discovered mapped API member and raw response if applicable; discrepancy and no-mutation record.",
-    "ambiguities": ["The source does not define EROT, the expected component count/location or required Chassis detail fields.", "The source does not establish that EROT is exposed through UpdateService/FirmwareInventory rather than Chassis OEM, Assembly or another vendor resource.", "DeepSeek's `.FirmwareInventory[]` expression does not match the standard Redfish resource-collection `Members` model.", "Active/staged and Updateable may be relevant on some implementations but are not universally required by the source."],
-    "source_conflicts": []
-  },
-  "v2_review_conclusion": {"automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "second_review_outcome": "CHANGED", "finding": "V2 correctly requires exact EROT identity, complete collection traversal, protected transport, UI correlation and a strict no-update boundary. It still reframes the source as a firmware-inventory lifecycle test and assumes Version/Updateable/active-staged fields before the platform mapping proves that the Chassis EROT detail uses SoftwareInventory."},
-  "applicable_history": [{"path": "review_round_02_functionality.md", "decision": "The historical YES verdict treats the substring-filtered UpdateService query as direct execution and does not validate the Chassis detail view or exact component mapping."}],
-  "v3_review_conclusion": {"review_outcome": "REWRITE_REQUIRED", "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "execution_readiness": ["NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE"], "summary": "Keep the gated class but restore the Chassis EROT WebUI row/detail as the test target. The platform owner must first identify EROT and map its required UI fields to the correct read-only backend resources; FirmwareInventory is conditional corroboration, not an assumed canonical source."},
-  "execution_readiness_detail": {
-    "available_now": ["The source identifies the Chassis inventory and detail UI as the required presentation surface.", "BMC/chassis identity, WebUI build, TLS endpoint and existing read-only Redfish collection links can be inventoried without mutation.", "DMTF defines UpdateService.FirmwareInventory as a link to a SoftwareInventory collection, whose resources can carry version/status/updateability and RelatedItem data when the implementation uses that model."],
-    "missing_inputs": ["Platform definition of EROT, expected count, stable component ID/location and exact chassis/BMC/EROT hardware-firmware applicability", "Required Chassis row/detail labels, values, version/status/security/lifecycle semantics, allowed omissions, sensitive fields and authoritative reference", "Explicit UI-to-backend mapping identifying Chassis/OEM/Assembly/FirmwareInventory resources and exact member-selection keys; active/staged applicability if any", "Supported browser/API tooling, protected credentials, TLS trust, page completion/staleness rule and screenshot/raw-response redaction policy"],
-    "input_owner": "The chassis security/firmware owner defines EROT identity and expected state; the BMC/UI owner supplies row/detail and backend mapping; the security/lab owner supplies protected access, redaction and target confirmation.",
-    "safe_read_only_work_before_closure": ["Capture BMC/chassis/WebUI build identity and the unmodified Chassis inventory/detail page, marking any candidate EROT row unverified.", "Follow advertised Redfish links and enumerate collection `Members` with certificate validation; retain raw results but do not select by `ROT` substring or judge state without vendor mapping."],
-    "prohibited_until_closed": ["Do not assume EROT expansion, select a substring match, presume UpdateService is canonical, infer active/staged state, or accept version alone as correct component proof.", "Do not invoke UpdateService actions, upload/delete firmware, reset BMC/chassis, change security state, clear logs, bypass credential/TLS controls or release sensitive root-of-trust identifiers."],
-    "closure_verification": "The owner identifies each expected EROT and required field; the UI row/detail and authoritative reference agree on stable identity; any API resource is linked by explicit vendor mapping or RelatedItem; collection traversal uses `Members`; browser/TLS/redaction are validated and no action endpoint is needed."
-  },
-  "revision_candidate": {
-    "test_name": "Chassis EROT Inventory and Detail Verification",
-    "purpose": "Verify that the exact platform-defined EROT component is correctly and legibly represented in the BMC WebUI Chassis inventory and detail view, with all required fields matching the approved reference.",
-    "applicable_platform_environment": "The identified chassis, BMC/WebUI build and EROT hardware/firmware recipe covered by an owner-signed component identity, UI-field and backend-resource mapping, using protected read-only access.",
-    "target_scope": "Every EROT component required by the platform's Chassis inventory. FirmwareInventory, Chassis OEM or other API resources are supporting sources only when explicitly mapped; substring matches are not target identity.",
-    "required_inputs": "EROT definition/count/location/stable IDs; chassis/BMC/EROT applicability; required UI fields and expected values; version/status/security/lifecycle semantics; UI-to-authoritative-source mapping; browser/API package; TLS/credentials; page freshness and sensitive-field redaction rules.",
-    "test_command_procedure_intent": "Open Hardware status > Inventory and LEDs, locate the mapped Chassis EROT entry, open its detail view, capture every required rendered field and compare with the signed reference. Where mapped, follow advertised read-only Redfish links, enumerate collection `Members`, fetch the exact member by stable ID/relationship, and corroborate only the specified fields. Perform no action or mutation.",
-    "preconditions": "Correct chassis/BMC/EROT recipe confirmed; expected EROT list and field matrix approved; exact UI route and stable selection keys validated; trusted TLS and protected read-only credentials available; no firmware/security maintenance in progress; clocks and redaction-aware evidence storage ready.",
-    "expected_evidence": "Target and component manifest; BMC/WebUI/EROT versions; full timestamped Chassis row/detail screenshot and DOM/text; exact ID/location and per-field result; mapped API URI/member/raw response with relationship evidence if applicable; discrepancy, redaction and no-firmware-action audit record.",
-    "acceptance_reference": "The exact platform chassis-security/EROT and BMC WebUI inventory specification. DMTF SoftwareInventory semantics apply only to fields actually exposed through the mapped FirmwareInventory member.",
-    "safety_restrictions": "Read-only navigation and GET only. Never guess EROT meaning or identity, select by substring alone, invoke update/delete/reset/security actions, change firmware or lifecycle state, clear logs, bypass TLS/credential safeguards or expose sensitive identifiers.",
-    "human_approval_requirements": "No disruptive-action approval is required; the chassis security/BMC owner must confirm component identity, applicability and the expected-field mapping before final comparison.",
-    "manual_boundaries": "Owners define the security component and authoritative state and resolve ambiguous lifecycle data. Once mapped, browser/API collection and field comparison can be automated; human review addresses visual defects or sensitive-state interpretation.",
-    "recovery_requirements": "No mutation is expected. On wrong/duplicate component, authentication/TLS anomaly, incomplete/stale UI, ambiguous backend mapping or BMC instability, stop, preserve evidence, close the session and use the approved management-access recovery path without reset or firmware action.",
-    "stop_conditions": "Undefined EROT identity, incomplete expected manifest/field matrix, duplicate or substring-only candidate, no authoritative UI/backend relationship, unreadable/stale detail, lifecycle ambiguity, TLS/credential/redaction concern, unexpected mismatch or any requested firmware/security mutation."
-  },
-  "identified_defects": ["V2 assumes the Chassis EROT row is necessarily a FirmwareInventory lifecycle record before the platform mapping establishes that relationship.", "DeepSeek uses a nonstandard collection expression and unsafe substring identity selection.", "The source's rendered Chassis detail readability can fail even when a backend SoftwareInventory member is correct."],
-  "changed_fields": ["Purpose", "Target Scope", "Required Inputs", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference", "Blocked Conditions"],
-  "reason_for_change": "Restore the platform-specific Chassis EROT UI/detail acceptance, require stable component and backend mapping before using security-firmware fields, and retain V2's protected read-only/no-update controls without inventing a universal resource model.",
-  "new_technical_evidence": [{"source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "title": "DMTF Redfish Resource and Schema Guide, DSP2046 2025.2", "version": "2025.2, UpdateService 1.16.0 and applicable SoftwareInventory schema", "applicability": "Redfish services advertising UpdateService/FirmwareInventory", "supports": "FirmwareInventory is a link to a collection of SoftwareInventory resources; those resources can describe software components and their version/status-related fields.", "remaining_uncertainty": "The platform may expose EROT chassis details elsewhere or through OEM properties; generic Redfish does not establish the vendor WebUI mapping."}, {"source_url": "https://redfish.dmtf.org/schemas/DSP0266_1.20.1.html", "title": "Redfish Specification DSP0266 1.20.1", "version": "1.20.1", "applicability": "Redfish resource collections", "supports": "A resource collection exposes its entries in the required `Members` array, so `.FirmwareInventory[]` is not a standard collection-member traversal.", "remaining_uncertainty": "Vendor OEM response extensions and the exact deployed Redfish version must still be inspected."}],
-  "removed_ambiguities": ["Separates the EROT UI identity from a mere ROT/EROT substring.", "Makes FirmwareInventory conditional on an explicit platform mapping.", "Keeps security/lifecycle fields only when the owner declares them applicable rather than universally required."],
-  "resolved_blockers": ["The read-only UI/API workflow is technically executable after the owner supplies component and resource mappings; missing proprietary semantics do not make it permanently blocked."],
-  "remaining_blockers": ["Final comparison awaits the EROT definition, expected component/field matrix, UI-to-backend map, authoritative security/lifecycle values, supported access and redaction policy."],
-  "objective_improvement_over_v2": "V3 prevents a valid but unrelated FirmwareInventory substring match from replacing the source's Chassis EROT detail check, uses standard collection traversal, and avoids imposing lifecycle fields not proven applicable while retaining strict no-update security boundaries.",
-  "agent_understanding_result": {"status": "PENDING_MATERIAL_CHANGE_VALIDATION", "notes": "The EROT resource-mapping correction and UI-primary boundary are queued for the next isolated validation batch."},
-  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"},
-  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The source explicitly requires BMC WebUI Chassis information and detail information for `Chassis -EROT`, with readable and correct data.", "source_specific_v2_comparison": "V2 improves identity and safety but assumes a FirmwareInventory lifecycle test and fields not established by the source or platform mapping.", "source_specific_safety_evidence_decision": "Allow complete read-only UI and discovered-resource collection only; require stable EROT mapping, standard Members traversal and strict exclusion of update/reset/security actions.", "template_violation_detected": false}
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 53,
+    "calibration": false,
+    "source_key": "Functionality|948|Wistron-BMC-00238-V002",
+    "case_variant_id": "ef958968b50182a5",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 948,
+        "code": "Wistron-BMC-00238-V002"
+    },
+    "source_integrity": {
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+        "original_row_sha256": "1659de9a776607d06de199ec90c91132fffeda618e5c7e141170f985e298ab65"
+    },
+    "source_snapshot": {
+        "test_name": "Chassis -EROT",
+        "test_set": "Inventory and LEDs",
+        "items": "Chassis -EROT",
+        "procedure": "Open BMC WebUI, select Hardware status > Inventory and LEDs, and check Chassis information and detail information.",
+        "criteria": "Data is readable and correct.",
+        "attended_time": "2",
+        "machine_time": "0",
+        "script": null,
+        "deepseek_classification": "YES",
+        "deepseek_finding": "DeepSeek assumes the EROT data is a FirmwareInventory array and filters by a name substring. Standard Redfish collections expose `Members`, and the source does not establish that every Chassis EROT detail is represented by FirmwareInventory."
+    },
+    "original_test_intent": {
+        "purpose": "Verify that the Chassis EROT entry and its detail view on BMC WebUI Hardware status > Inventory and LEDs are legible, identify the correct chassis security component, and match the exact platform specification.",
+        "target": "The platform-defined EROT component represented under the Chassis section of the source-named BMC WebUI page, for the exact chassis/BMC/EROT hardware and firmware recipe.",
+        "scope": "Open the Chassis inventory and EROT detail UI, capture every required displayed identity/version/status/security/lifecycle field defined by the owner, resolve the physical or logical component without substring guessing, and corroborate fields only through the platform-mapped read-only Chassis/OEM/FirmwareInventory resources.",
+        "operation": "Confirm target and EROT definition, load the Chassis inventory, select the exact EROT row/detail, capture complete rendered evidence and stable identifiers, compare each owner-required field with the signed reference, discover any mapped Redfish collection/member through links and `Members`, correlate its RelatedItem or vendor mapping, and perform no firmware or security action.",
+        "duration_and_iterations": "One complete read-only observation of the applicable chassis EROT row and detail panel. The two-minute attended estimate and zero machine time do not permit a version-only or substring-only result.",
+        "expected_result": "The exact EROT entry is present once for each expected component, its Chassis and detail views are readable and complete, identity/version/status and any defined active/staged/security state match the applicable reference, UI and mapped backend sources agree, and no firmware/security state changes.",
+        "required_evidence": "Chassis/BMC/EROT hardware and firmware identity; owner definition and expected-field matrix; complete redacted Chassis row/detail screenshots plus DOM/text; stable EROT identifier/location; per-field comparison; discovered mapped API member and raw response if applicable; discrepancy and no-mutation record.",
+        "ambiguities": [
+            "The source does not define EROT, the expected component count/location or required Chassis detail fields.",
+            "The source does not establish that EROT is exposed through UpdateService/FirmwareInventory rather than Chassis OEM, Assembly or another vendor resource.",
+            "DeepSeek's `.FirmwareInventory[]` expression does not match the standard Redfish resource-collection `Members` model.",
+            "Active/staged and Updateable may be relevant on some implementations but are not universally required by the source."
+        ],
+        "source_conflicts": []
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "finding": "V2 correctly requires exact EROT identity, complete collection traversal, protected transport, UI correlation and a strict no-update boundary. It still reframes the source as a firmware-inventory lifecycle test and assumes Version/Updateable/active-staged fields before the platform mapping proves that the Chassis EROT detail uses SoftwareInventory."
+    },
+    "applicable_history": [
+        {
+            "path": "review_round_02_functionality.md",
+            "decision": "The historical YES verdict treats the substring-filtered UpdateService query as direct execution and does not validate the Chassis detail view or exact component mapping."
+        }
+    ],
+    "v3_review_conclusion": {
+        "review_outcome": "REWRITE_REQUIRED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE"
+        ],
+        "summary": "Keep the gated class but restore the Chassis EROT WebUI row/detail as the test target. The platform owner must first identify EROT and map its required UI fields to the correct read-only backend resources; FirmwareInventory is conditional corroboration, not an assumed canonical source."
+    },
+    "execution_readiness_detail": {
+        "available_now": [
+            "The source identifies the Chassis inventory and detail UI as the required presentation surface.",
+            "BMC/chassis identity, WebUI build, TLS endpoint and existing read-only Redfish collection links can be inventoried without mutation.",
+            "DMTF defines UpdateService.FirmwareInventory as a link to a SoftwareInventory collection, whose resources can carry version/status/updateability and RelatedItem data when the implementation uses that model."
+        ],
+        "missing_inputs": [
+            "Platform definition of EROT, expected count, stable component ID/location and exact chassis/BMC/EROT hardware-firmware applicability",
+            "Required Chassis row/detail labels, values, version/status/security/lifecycle semantics, allowed omissions, sensitive fields and authoritative reference",
+            "Explicit UI-to-backend mapping identifying Chassis/OEM/Assembly/FirmwareInventory resources and exact member-selection keys; active/staged applicability if any",
+            "Supported browser/API tooling, protected credentials, TLS trust, page completion/staleness rule and screenshot/raw-response redaction policy"
+        ],
+        "input_owner": "The chassis security/firmware owner defines EROT identity and expected state; the BMC/UI owner supplies row/detail and backend mapping; the security/lab owner supplies protected access, redaction and target confirmation.",
+        "safe_read_only_work_before_closure": [
+            "Capture BMC/chassis/WebUI build identity and the unmodified Chassis inventory/detail page, marking any candidate EROT row unverified.",
+            "Follow advertised Redfish links and enumerate collection `Members` with certificate validation; retain raw results but do not select by `ROT` substring or judge state without vendor mapping."
+        ],
+        "prohibited_until_closed": [
+            "Do not assume EROT expansion, select a substring match, presume UpdateService is canonical, infer active/staged state, or accept version alone as correct component proof.",
+            "Do not invoke UpdateService actions, upload/delete firmware, reset BMC/chassis, change security state, clear logs, bypass credential/TLS controls or release sensitive root-of-trust identifiers."
+        ],
+        "closure_verification": "The owner identifies each expected EROT and required field; the UI row/detail and authoritative reference agree on stable identity; any API resource is linked by explicit vendor mapping or RelatedItem; collection traversal uses `Members`; browser/TLS/redaction are validated and no action endpoint is needed."
+    },
+    "revision_candidate": {
+        "test_name": "Chassis EROT Inventory and Detail Verification",
+        "purpose": "Verify that the exact platform-defined EROT component is correctly and legibly represented in the BMC WebUI Chassis inventory and detail view, with all required fields matching the approved reference.",
+        "applicable_platform_environment": "The identified chassis, BMC/WebUI build and EROT hardware/firmware recipe covered by an owner-signed component identity, UI-field and backend-resource mapping, using protected read-only access.",
+        "target_scope": "Every EROT component required by the platform's Chassis inventory. FirmwareInventory, Chassis OEM or other API resources are supporting sources only when explicitly mapped; substring matches are not target identity.",
+        "required_inputs": "EROT definition/count/location/stable IDs; chassis/BMC/EROT applicability; required UI fields and expected values; version/status/security/lifecycle semantics; UI-to-authoritative-source mapping; browser/API package; TLS/credentials; page freshness and sensitive-field redaction rules.",
+        "test_command_procedure_intent": "Open Hardware status > Inventory and LEDs, locate the mapped Chassis EROT entry, open its detail view, capture every required rendered field and compare with the signed reference. Where mapped, follow advertised read-only Redfish links, enumerate collection `Members`, fetch the exact member by stable ID/relationship, and corroborate only the specified fields. Perform no action or mutation.",
+        "preconditions": "Correct chassis/BMC/EROT recipe confirmed; expected EROT list and field matrix approved; exact UI route and stable selection keys validated; trusted TLS and protected read-only credentials available; no firmware/security maintenance in progress; clocks and redaction-aware evidence storage ready.",
+        "expected_evidence": "Target and component manifest; BMC/WebUI/EROT versions; full timestamped Chassis row/detail screenshot and DOM/text; exact ID/location and per-field result; mapped API URI/member/raw response with relationship evidence if applicable; discrepancy, redaction and no-firmware-action audit record.",
+        "acceptance_reference": "The exact platform chassis-security/EROT and BMC WebUI inventory specification. DMTF SoftwareInventory semantics apply only to fields actually exposed through the mapped FirmwareInventory member.",
+        "safety_restrictions": "Read-only navigation and GET only. Never guess EROT meaning or identity, select by substring alone, invoke update/delete/reset/security actions, change firmware or lifecycle state, clear logs, bypass TLS/credential safeguards or expose sensitive identifiers.",
+        "human_approval_requirements": "No disruptive-action approval is required; the chassis security/BMC owner must confirm component identity, applicability and the expected-field mapping before final comparison.",
+        "manual_boundaries": "Owners define the security component and authoritative state and resolve ambiguous lifecycle data. Once mapped, browser/API collection and field comparison can be automated; human review addresses visual defects or sensitive-state interpretation.",
+        "recovery_requirements": "No mutation is expected. On wrong/duplicate component, authentication/TLS anomaly, incomplete/stale UI, ambiguous backend mapping or BMC instability, stop, preserve evidence, close the session and use the approved management-access recovery path without reset or firmware action.",
+        "stop_conditions": "Undefined EROT identity, incomplete expected manifest/field matrix, duplicate or substring-only candidate, no authoritative UI/backend relationship, unreadable/stale detail, lifecycle ambiguity, TLS/credential/redaction concern, unexpected mismatch or any requested firmware/security mutation."
+    },
+    "identified_defects": [
+        "V2 assumes the Chassis EROT row is necessarily a FirmwareInventory lifecycle record before the platform mapping establishes that relationship.",
+        "DeepSeek uses a nonstandard collection expression and unsafe substring identity selection.",
+        "The source's rendered Chassis detail readability can fail even when a backend SoftwareInventory member is correct."
+    ],
+    "changed_fields": [
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Test Command / Procedure Intent",
+        "Expected Evidence",
+        "Acceptance Reference",
+        "Blocked Conditions"
+    ],
+    "reason_for_change": "Restore the platform-specific Chassis EROT UI/detail acceptance, require stable component and backend mapping before using security-firmware fields, and retain V2's protected read-only/no-update controls without inventing a universal resource model.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+            "title": "DMTF Redfish Resource and Schema Guide, DSP2046 2025.2",
+            "version": "2025.2, UpdateService 1.16.0 and applicable SoftwareInventory schema",
+            "applicability": "Redfish services advertising UpdateService/FirmwareInventory",
+            "supports": "FirmwareInventory is a link to a collection of SoftwareInventory resources; those resources can describe software components and their version/status-related fields.",
+            "remaining_uncertainty": "The platform may expose EROT chassis details elsewhere or through OEM properties; generic Redfish does not establish the vendor WebUI mapping."
+        },
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/DSP0266_1.20.1.html",
+            "title": "Redfish Specification DSP0266 1.20.1",
+            "version": "1.20.1",
+            "applicability": "Redfish resource collections",
+            "supports": "A resource collection exposes its entries in the required `Members` array, so `.FirmwareInventory[]` is not a standard collection-member traversal.",
+            "remaining_uncertainty": "Vendor OEM response extensions and the exact deployed Redfish version must still be inspected."
+        }
+    ],
+    "removed_ambiguities": [
+        "Separates the EROT UI identity from a mere ROT/EROT substring.",
+        "Makes FirmwareInventory conditional on an explicit platform mapping.",
+        "Keeps security/lifecycle fields only when the owner declares them applicable rather than universally required."
+    ],
+    "resolved_blockers": [
+        "The read-only UI/API workflow is technically executable after the owner supplies component and resource mappings; missing proprietary semantics do not make it permanently blocked."
+    ],
+    "remaining_blockers": [
+        "Final comparison awaits the EROT definition, expected component/field matrix, UI-to-backend map, authoritative security/lifecycle values, supported access and redaction policy."
+    ],
+    "objective_improvement_over_v2": "V3 prevents a valid but unrelated FirmwareInventory substring match from replacing the source's Chassis EROT detail check, uses standard collection traversal, and avoids imposing lifecycle fields not proven applicable while retaining strict no-update security boundaries.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "notes": "Validator independently retained every manifest EROT, stable identity, full Chassis inventory/detail evidence and the rule that generic FirmwareInventory or substring presence cannot substitute."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "The source explicitly requires BMC WebUI Chassis information and detail information for `Chassis -EROT`, with readable and correct data.",
+        "source_specific_v2_comparison": "V2 improves identity and safety but assumes a FirmwareInventory lifecycle test and fields not established by the source or platform mapping.",
+        "source_specific_safety_evidence_decision": "Allow complete read-only UI and discovered-resource collection only; require stable EROT mapping, standard Members traversal and strict exclusion of update/reset/security actions.",
+        "template_violation_detected": false
+    }
 }

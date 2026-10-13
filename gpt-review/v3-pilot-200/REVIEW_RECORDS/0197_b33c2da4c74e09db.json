@@ -1,0 +1,117 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 197,
+    "calibration": false,
+    "source_key": "(No Main Function)|9|Wistron---00845-V003",
+    "case_variant_id": "b33c2da4c74e09db",
+    "source_ref": {
+        "sheet": "(No Main Function)",
+        "source_row": 9,
+        "code": "Wistron---00845-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "f62df0a2bc11dff4fce640a2fd703fa151e2976b622f8fb1356efa56d297f35c"
+    },
+    "source_snapshot": {
+        "test_name": "Flash BIOS Firmware - downgrade",
+        "facts": [
+            "Procedure text still says Start firmware upgrade, but item requires older BIOS downgrade."
+        ],
+        "deepseek": "PARTIAL using same generic update assumption.",
+        "v2": "REQUIRES PACKAGE with downgrade support, backup and recovery."
+    },
+    "original_test_intent": {
+        "statement": "Deliberately install an approved older BIOS and prove downgrade support, target version, preserved configuration and healthy host recovery.",
+        "must_preserve": [
+            "Downgrade direction and older target, not a normal upgrade."
+        ],
+        "unknowns": [
+            "Anti-rollback/minimum version, intermediate path, config schema compatibility, activation and recovery."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It needs explicit anti-rollback/lowest-supported-version evidence and treatment of settings schema/security state across rollback."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Downgrade is gated by vendor-supported version path, security/anti-rollback policy and recoverable configuration migration; an upload-capable UI is not proof of support."
+    },
+    "revision_candidate": {
+        "test_name": "Downgrade Host BIOS Through the Approved Version Path",
+        "purpose": "Install the exact approved older BIOS on the mapped host and verify supported rollback, intended settings/security state, successful POST/boot and complete device health.",
+        "applicable_platform_environment": "Exact board/BMC/current-BIOS combination whose vendor matrix supports the requested older version/path.",
+        "target_scope": "One host BIOS and an ordered signed image manifest containing the final older image and every required intermediate version; other firmware excluded.",
+        "required_inputs": "Current/target/minimum supported versions, anti-rollback policy, ordered version path, and for every hop: component ID, image filename/version/provenance/hash/signature/compatibility, vendor method/parameters, activation/reboot rule, expected active version, POST/boot/config/Secure Boot/TPM/boot-key/device-health gate and explicit approval before the next transition; plus backup and recovery.",
+        "test_command_procedure_intent": "Read version/support metadata first. If downgrade is explicitly allowed, freeze the ordered manifest and back up configuration. For each hop in order, reverify component and that hop's image/hash/signature/compatibility, use only the vendor method, monitor its task, perform the approved activation, then require the declared active version plus POST, boot, configuration, security and complete device-health gate before seeking approval for the next hop. Stop the path on any failure.",
+        "preconditions": "Stable power, console/OOB, recovery image/dual-bank method and data/boot-key risk accepted.",
+        "expected_evidence": "Vendor downgrade support/path; ordered per-hop manifest and approvals; for every image, component/version/provenance/hash/signature/compatibility, update task/messages, activation and verified active version; per-hop POST/boot/config/Secure Boot/TPM/boot-order/device inventory and SEL/kernel health; final recovery state.",
+        "acceptance_reference": "Every approved manifest hop completes in order and passes its active-version, POST/boot, configuration, security and device-health gate before the next; the exact final older version is reached with healthy host. Skipped hops, forced bypass or final version string alone fail.",
+        "safety_restrictions": "Do not disable signature/anti-rollback, force unsupported image, assume preserve-all compatibility, interrupt power, retry automatically or clear evidence.",
+        "human_approval_requirements": "BIOS/security/platform owners approve rollback path and recovery.",
+        "manual_boundaries": "Agent may automate supported path; recovery/security disposition remains human.",
+        "recovery_requirements": "On rejection/POST failure preserve task/logs and use approved recovery or return to known-good BIOS.",
+        "stop_conditions": "Missing or unordered per-hop manifest/approval, unsupported target/path, anti-rollback rejection, any hop's signature/component/compatibility mismatch, power/task error, failed activation/version, lost keys/settings, POST/boot/device regression or no recovery."
+    },
+    "identified_defects": [
+        "Procedure language says upgrade despite downgrade intent.",
+        "Anti-rollback/version path and security state absent."
+    ],
+    "changed_fields": [
+        "Required Inputs",
+        "Procedure Intent",
+        "Safety",
+        "Acceptance"
+    ],
+    "reason_for_change": "A BIOS downgrade can be rejected or change configuration/security semantics even when image upload succeeds; V3 treats version-path support as a precondition.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/DSP2046_2019.1.html",
+            "title": "DMTF Redfish Resource and Schema Guide \u2014 SoftwareInventory",
+            "version": "2019.1 schema guide",
+            "applicability": "Read-only firmware inventory metadata",
+            "supports": "SoftwareInventory may expose LowestSupportedVersion and component-specific SoftwareId/RelatedItem; these are evidence inputs, not universal permission to downgrade.",
+            "remaining_uncertainty": "Vendor anti-rollback and intermediate path remain authoritative."
+        }
+    ],
+    "removed_ambiguities": [
+        "Downgrade is not renamed upgrade."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "Supported older path/image/security recovery."
+    ],
+    "objective_improvement_over_v2": "V3 adds minimum-version, anti-rollback, intermediate-path and security/configuration migration gates unique to downgrade rather than treating it as an ordinary firmware upload.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Initial validator found singular-image wording incompatible with intermediate downgrade hops. Revalidation confirmed the ordered per-image manifest, per-hop identity/integrity/activation/security/health gates and approval before advancing."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "No-main row 9 item says BIOS downgrade while copied UI text calls the action upgrade.",
+        "template_violation_detected": false
+    }
+}

@@ -1,59 +1,166 @@
 {
-  "schema_version": "v3-review-record-1.0",
-  "sequence": 51,
-  "calibration": false,
-  "source_key": "Functionality|885|Wistron-BMC-00175-V003",
-  "case_variant_id": "1236d7f856c3dd2f",
-  "source_ref": {"sheet": "Functionality", "source_row": 885, "code": "Wistron-BMC-00175-V003"},
-  "source_integrity": {"xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869", "original_row_sha256": "1927e60b20d64cba5c0d18f19b9a5143a62ef42bb4b241b24921c681479cef44"},
-  "source_snapshot": {"test_name": "TEMP_GB_HSC1~10", "test_set": "Sensor Page", "items": "TEMP_GB_HSC1~10", "procedure": "Open BMC WebUI Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor readings and thresholds are human-readable and match the specification.", "attended_time": "1", "machine_time": "0", "script": "private sensor.git repository", "deepseek_classification": "YES", "deepseek_finding": "DeepSeek sends the literal range string `TEMP_GB_HSC1~10` to `sensor get` and truncates fallback SDR output, so it does not prove ten distinct sensors or the two required WebUI views."},
-  "original_test_intent": {
-    "purpose": "Verify that TEMP_GB_HSC1 through TEMP_GB_HSC10 are individually displayed with human-readable current readings and thresholds in both required BMC WebUI views and that every applicable value matches the platform specification.",
-    "target": "Ten distinct named BMC sensor records and their corresponding entries on Dashboard and Server Health > Sensor Reading for the exact platform/BMC firmware recipe; the expansion of `HSC` must come from that recipe, not reviewer inference.",
-    "scope": "Capture the two required UI views, enumerate each of the ten sensor names without treating the tilde as literal syntax, record displayed value/unit/state/thresholds, correlate each UI row with complete read-only SDR/sensor evidence where supported, and compare every applicable field with the signed specification.",
-    "operation": "Identify the BMC and applicable ten-sensor manifest, open Dashboard and Server Health > Sensor Reading, capture each TEMP_GB_HSC1~10 entry and its readable fields, query each exact supported sensor name or full untruncated SDR for corroboration, mark absence/N/A only under the owner rule, and produce a ten-row comparison matrix without changing thresholds or logs.",
-    "duration_and_iterations": "One complete read-only observation for each of ten sensors in both required UI locations. The one-minute attended estimate and zero machine time do not permit sampling one sensor or truncating the list.",
-    "expected_result": "Every applicable TEMP_GB_HSC1~10 entry is present in both required views, text and numeric fields are legible, names/units/states/readings/thresholds are internally consistent and match the platform specification within its tolerance, and any absent/N/A channel follows the approved population rule.",
-    "required_evidence": "BMC/platform/firmware identity; signed ten-sensor applicability and specification matrix; timestamped redacted captures of both WebUI views; complete per-sensor UI values and thresholds; exact-name or full SDR corroboration; discrepancies, absent/N/A disposition and proof of no mutation.",
-    "ambiguities": ["The source does not define `GB` or `HSC`; V2's `high-speed connector` expansion is unsupported.", "The platform specification, ten-sensor population map, units, tolerances and absent/N/A behavior are not supplied.", "The literal `TEMP_GB_HSC1~10` string may not be a valid BMC sensor ID or ipmitool range syntax.", "The criterion does not define whether Dashboard shows all thresholds or only a summary; both required UI locations must still be evidenced."],
-    "source_conflicts": []
-  },
-  "v2_review_conclusion": {"automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "second_review_outcome": "CHANGED", "finding": "V2 correctly rejects the literal range query and truncated SDR fallback, requires all ten UI entries, mapping/specification and no stimulus or mutation, and chooses the appropriate gated classification. It nevertheless invents that HSC means a high-speed connector/zone and overstates GPU/PCIe topology as mandatory when the source only requires WebUI sensor readability and specification comparison."},
-  "applicable_history": [{"path": "review_round_02_functionality.md", "decision": "The historical YES verdict assumes a directly runnable query and does not demonstrate ten separate sensor records or both UI views."}],
-  "v3_review_conclusion": {"review_outcome": "IMPROVED", "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "execution_readiness": ["NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE"], "summary": "Keep the V2 class but remove the unsupported HSC expansion and excess topology assumption. This is a read-only ten-sensor WebUI presentation/specification check; execution awaits the exact population/specification and supported WebUI/API or browser access, not a special high-risk approval."},
-  "execution_readiness_detail": {
-    "available_now": ["The source identifies ten sensor labels and the exact two BMC WebUI views to inspect.", "Complete SDR/sensor collection is a non-mutating corroboration path when exact sensor IDs are supported.", "No thermal stimulus, hardware change, threshold write or log clear is part of this testcase."],
-    "missing_inputs": ["Exact platform meaning of GB/HSC and authoritative TEMP_GB_HSC1~10 population/applicability mapping", "Per-sensor expected names, units, readable format, normal-state/readings, threshold values and comparison tolerances", "BMC firmware-specific Dashboard and Sensor Reading UI/API fields, exact SDR names and absent/N/A/stale-data rules", "Protected BMC credentials and validated browser/API/ipmitool versions; private script revision if it is to be used"],
-    "input_owner": "The BMC/platform owner supplies HSC semantics, population and expected sensor/threshold matrix; the BMC UI/tool owner supplies supported access and field mapping; the test operator supplies the target BMC identity and protected credentials.",
-    "safe_read_only_work_before_closure": ["Record BMC/platform/firmware identity and capture the two UI pages without modifying settings or clearing logs.", "Export complete untruncated SDR/sensor inventory and tentatively list exact TEMP_GB_HSC labels, clearly marking comparison and physical meaning as unresolved."],
-    "prohibited_until_closed": ["Do not invent the HSC expansion or physical zone, treat the tilde as command syntax, truncate SDR evidence, infer missing sensor numbers, or apply another platform's thresholds.", "Do not change thresholds, clear logs, run thermal/GPU load, reseat hardware or claim PASS from one UI page or a readable sample."],
-    "closure_verification": "The signed matrix accounts for all ten labels and applicability; exact UI and SDR names resolve without duplicates; expected units/thresholds/tolerances and N/A rules match the BMC firmware; both pages and all ten rows can be captured completely with protected read-only access."
-  },
-  "revision_candidate": {
-    "test_name": "TEMP_GB_HSC1–10 WebUI Reading and Threshold Verification",
-    "purpose": "Verify that all ten applicable TEMP_GB_HSC sensors are human-readable in BMC Dashboard and Server Health > Sensor Reading and match the exact platform specification.",
-    "applicable_platform_environment": "The identified server/BMC firmware recipe for which the owner supplies the TEMP_GB_HSC1–10 population and expected sensor/threshold matrix, with protected read-only WebUI and optional IPMI/API access.",
-    "target_scope": "TEMP_GB_HSC1 through TEMP_GB_HSC10 individually in both source-required WebUI views; do not infer what HSC means or omit an absent/N/A channel without the approved population rule.",
-    "required_inputs": "Platform/BMC identity; GB/HSC definition; ten-sensor applicability/map; expected labels, readings/states, units, thresholds, tolerances and N/A behavior; WebUI field mapping; exact SDR names; protected credentials and qualified browser/API/ipmitool or script revision.",
-    "test_command_procedure_intent": "Open Dashboard and Server Health > Sensor Reading on the resolved BMC, capture every TEMP_GB_HSC1–10 row and all readable reading/threshold fields, collect complete exact-name or untruncated SDR evidence for corroboration, and compare each applicable field with the signed matrix. Keep the session read-only and preserve logs.",
-    "preconditions": "Correct BMC/platform/firmware confirmed; ten-sensor matrix approved; both UI paths and exact names validated; clocks synchronized; credentials protected; no concurrent BMC update or sensor reconfiguration; evidence storage ready.",
-    "expected_evidence": "Target identity; signed ten-row matrix; timestamped redacted captures from both UI locations; per-sensor name/value/unit/state/thresholds; complete SDR/API corroboration; explicit PASS/FAIL/NOT_APPLICABLE comparison for each row; discrepancies and no-mutation confirmation.",
-    "acceptance_reference": "The exact platform/BMC firmware sensor and threshold specification. Generic ipmitool documentation supports collection mechanics but does not define HSC semantics or expected values.",
-    "safety_restrictions": "Read-only access only. Never guess HSC semantics, use a literal range as proof, truncate evidence, borrow thresholds from another platform, alter sensor settings, clear logs, stress hardware or expose credentials.",
-    "human_approval_requirements": "No special disruptive-action approval is required; the platform/BMC owner must confirm the applicable specification and ten-sensor population before final comparison.",
-    "manual_boundaries": "The owner defines platform semantics and judges specification applicability. Once supplied, browser/API/IPMI collection and the ten-row comparison can be automated; a human may review visual readability where browser automation cannot capture rendered text reliably.",
-    "recovery_requirements": "No mutation is expected. On wrong target, authentication anomaly, stale/duplicate/missing sensor data or BMC instability, stop, close the session, preserve evidence and use the approved management-access recovery path without resetting hardware or changing thresholds.",
-    "stop_conditions": "Wrong/unverified BMC, missing ten-sensor specification, unresolved exact labels, duplicate/missing entries without an N/A rule, unreadable or stale UI data, unit/threshold mismatch, incomplete page capture, authentication concern or any requested mutation."
-  },
-  "identified_defects": ["V2 assigns an unsupported `high-speed connector` meaning to HSC.", "DeepSeek's literal range query and first-100 SDR fallback cannot prove all ten sensors.", "V2 adds GPU/PCIe topology as a universal prerequisite although the source is a BMC UI presentation/specification check."],
-  "changed_fields": ["Purpose", "Target Scope", "Applicable Platform / Environment", "Required Inputs", "Test Command / Procedure Intent", "Human Approval Requirements"],
-  "reason_for_change": "Preserve the exact ten-sensor, two-WebUI-view readability/specification intent while removing an invented acronym expansion and non-source GPU/PCIe scope; keep full per-sensor evidence and platform-specific values gated on owner input.",
-  "new_technical_evidence": [{"source_url": "https://github.com/ipmitool/ipmitool/blob/master/README", "title": "ipmitool README", "version": "upstream master accessed 2026-10-13; installed version must be recorded", "applicability": "Qualified IPMI BMC interfaces", "supports": "ipmitool can read SDR and sensor values for corroboration; it does not define vendor sensor names, HSC meaning or WebUI presentation requirements.", "remaining_uncertainty": "Exact TEMP_GB_HSC names, semantics, expected readings and thresholds remain platform-specific."}],
-  "removed_ambiguities": ["Refuses to expand HSC without the platform specification.", "Expands 1~10 as ten required records rather than a literal sensor name.", "Makes both WebUI views primary acceptance evidence and IPMI only corroboration."],
-  "resolved_blockers": ["The intended read-only workflow is understandable and automatable after the ten-sensor specification and access package are supplied; no active stimulus or destructive operation is implied."],
-  "remaining_blockers": ["Final comparison cannot proceed without the platform-specific HSC definition, population, expected values/thresholds/tolerances, exact UI/SDR mapping and protected access."],
-  "objective_improvement_over_v2": "V3 removes V2's invented HSC/high-speed-connector meaning and unnecessary universal GPU topology requirement while retaining complete ten-sensor coverage, both UI views, full SDR corroboration and no-mutation controls.",
-  "agent_understanding_result": {"status": "PENDING_MATERIAL_CHANGE_VALIDATION", "notes": "The acronym/scope correction and two-view evidence boundary are queued for the next isolated validation batch."},
-  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"},
-  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The row names TEMP_GB_HSC1~10, requires Dashboard and Server Health > Sensor Reading, and accepts only human-readable readings and thresholds matching spec.", "source_specific_v2_comparison": "V2 fixes coverage and truncation but invents HSC as high-speed connector/zone and broadens the prerequisite topology beyond the UI check.", "source_specific_safety_evidence_decision": "Permit complete read-only UI/SDR capture; require all ten rows and the platform matrix; prohibit acronym/value inference, mutation, log clearing or added thermal load.", "template_violation_detected": false}
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 51,
+    "calibration": false,
+    "source_key": "Functionality|885|Wistron-BMC-00175-V003",
+    "case_variant_id": "1236d7f856c3dd2f",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 885,
+        "code": "Wistron-BMC-00175-V003"
+    },
+    "source_integrity": {
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+        "original_row_sha256": "1927e60b20d64cba5c0d18f19b9a5143a62ef42bb4b241b24921c681479cef44"
+    },
+    "source_snapshot": {
+        "test_name": "TEMP_GB_HSC1~10",
+        "test_set": "Sensor Page",
+        "items": "TEMP_GB_HSC1~10",
+        "procedure": "Open BMC WebUI Dashboard and Server Health > Sensor Reading.",
+        "criteria": "Sensor readings and thresholds are human-readable and match the specification.",
+        "attended_time": "1",
+        "machine_time": "0",
+        "script": "private sensor.git repository",
+        "deepseek_classification": "YES",
+        "deepseek_finding": "DeepSeek sends the literal range string `TEMP_GB_HSC1~10` to `sensor get` and truncates fallback SDR output, so it does not prove ten distinct sensors or the two required WebUI views."
+    },
+    "original_test_intent": {
+        "purpose": "Verify that TEMP_GB_HSC1 through TEMP_GB_HSC10 are individually displayed with human-readable current readings and thresholds in both required BMC WebUI views and that every applicable value matches the platform specification.",
+        "target": "Ten distinct named BMC sensor records and their corresponding entries on Dashboard and Server Health > Sensor Reading for the exact platform/BMC firmware recipe; the expansion of `HSC` must come from that recipe, not reviewer inference.",
+        "scope": "Capture the two required UI views, enumerate each of the ten sensor names without treating the tilde as literal syntax, record displayed value/unit/state/thresholds, correlate each UI row with complete read-only SDR/sensor evidence where supported, and compare every applicable field with the signed specification.",
+        "operation": "Identify the BMC and applicable ten-sensor manifest, open Dashboard and Server Health > Sensor Reading, capture each TEMP_GB_HSC1~10 entry and its readable fields, query each exact supported sensor name or full untruncated SDR for corroboration, mark absence/N/A only under the owner rule, and produce a ten-row comparison matrix without changing thresholds or logs.",
+        "duration_and_iterations": "One complete read-only observation for each of ten sensors in both required UI locations. The one-minute attended estimate and zero machine time do not permit sampling one sensor or truncating the list.",
+        "expected_result": "Every applicable TEMP_GB_HSC1~10 entry is present in both required views, text and numeric fields are legible, names/units/states/readings/thresholds are internally consistent and match the platform specification within its tolerance, and any absent/N/A channel follows the approved population rule.",
+        "required_evidence": "BMC/platform/firmware identity; signed ten-sensor applicability and specification matrix; timestamped redacted captures of both WebUI views; complete per-sensor UI values and thresholds; exact-name or full SDR corroboration; discrepancies, absent/N/A disposition and proof of no mutation.",
+        "ambiguities": [
+            "The source does not define `GB` or `HSC`; V2's `high-speed connector` expansion is unsupported.",
+            "The platform specification, ten-sensor population map, units, tolerances and absent/N/A behavior are not supplied.",
+            "The literal `TEMP_GB_HSC1~10` string may not be a valid BMC sensor ID or ipmitool range syntax.",
+            "The criterion does not define whether Dashboard shows all thresholds or only a summary; both required UI locations must still be evidenced."
+        ],
+        "source_conflicts": []
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "finding": "V2 correctly rejects the literal range query and truncated SDR fallback, requires all ten UI entries, mapping/specification and no stimulus or mutation, and chooses the appropriate gated classification. It nevertheless invents that HSC means a high-speed connector/zone and overstates GPU/PCIe topology as mandatory when the source only requires WebUI sensor readability and specification comparison."
+    },
+    "applicable_history": [
+        {
+            "path": "review_round_02_functionality.md",
+            "decision": "The historical YES verdict assumes a directly runnable query and does not demonstrate ten separate sensor records or both UI views."
+        }
+    ],
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE"
+        ],
+        "summary": "Keep the V2 class but remove the unsupported HSC expansion and excess topology assumption. This is a read-only ten-sensor WebUI presentation/specification check; execution awaits the exact population/specification and supported WebUI/API or browser access, not a special high-risk approval."
+    },
+    "execution_readiness_detail": {
+        "available_now": [
+            "The source identifies ten sensor labels and the exact two BMC WebUI views to inspect.",
+            "Complete SDR/sensor collection is a non-mutating corroboration path when exact sensor IDs are supported.",
+            "No thermal stimulus, hardware change, threshold write or log clear is part of this testcase."
+        ],
+        "missing_inputs": [
+            "Exact platform meaning of GB/HSC and authoritative TEMP_GB_HSC1~10 population/applicability mapping",
+            "Per-sensor expected names, units, readable format, normal-state/readings, threshold values and comparison tolerances",
+            "BMC firmware-specific Dashboard and Sensor Reading UI/API fields, exact SDR names and absent/N/A/stale-data rules",
+            "Protected BMC credentials and validated browser/API/ipmitool versions; private script revision if it is to be used"
+        ],
+        "input_owner": "The BMC/platform owner supplies HSC semantics, population and expected sensor/threshold matrix; the BMC UI/tool owner supplies supported access and field mapping; the test operator supplies the target BMC identity and protected credentials.",
+        "safe_read_only_work_before_closure": [
+            "Record BMC/platform/firmware identity and capture the two UI pages without modifying settings or clearing logs.",
+            "Export complete untruncated SDR/sensor inventory and tentatively list exact TEMP_GB_HSC labels, clearly marking comparison and physical meaning as unresolved."
+        ],
+        "prohibited_until_closed": [
+            "Do not invent the HSC expansion or physical zone, treat the tilde as command syntax, truncate SDR evidence, infer missing sensor numbers, or apply another platform's thresholds.",
+            "Do not change thresholds, clear logs, run thermal/GPU load, reseat hardware or claim PASS from one UI page or a readable sample."
+        ],
+        "closure_verification": "The signed matrix accounts for all ten labels and applicability; exact UI and SDR names resolve without duplicates; expected units/thresholds/tolerances and N/A rules match the BMC firmware; both pages and all ten rows can be captured completely with protected read-only access."
+    },
+    "revision_candidate": {
+        "test_name": "TEMP_GB_HSC1\u201310 WebUI Reading and Threshold Verification",
+        "purpose": "Verify that all ten applicable TEMP_GB_HSC sensors are human-readable in BMC Dashboard and Server Health > Sensor Reading and match the exact platform specification.",
+        "applicable_platform_environment": "The identified server/BMC firmware recipe for which the owner supplies the TEMP_GB_HSC1\u201310 population and expected sensor/threshold matrix, with protected read-only WebUI and optional IPMI/API access.",
+        "target_scope": "TEMP_GB_HSC1 through TEMP_GB_HSC10 individually in both source-required WebUI views; do not infer what HSC means or omit an absent/N/A channel without the approved population rule.",
+        "required_inputs": "Platform/BMC identity; GB/HSC definition; ten-sensor applicability/map; expected labels, readings/states, units, thresholds, tolerances and N/A behavior; WebUI field mapping; exact SDR names; protected credentials and qualified browser/API/ipmitool or script revision.",
+        "test_command_procedure_intent": "Open Dashboard and Server Health > Sensor Reading on the resolved BMC, capture every TEMP_GB_HSC1\u201310 row and all readable reading/threshold fields, collect complete exact-name or untruncated SDR evidence for corroboration, and compare each applicable field with the signed matrix. Keep the session read-only and preserve logs.",
+        "preconditions": "Correct BMC/platform/firmware confirmed; ten-sensor matrix approved; both UI paths and exact names validated; clocks synchronized; credentials protected; no concurrent BMC update or sensor reconfiguration; evidence storage ready.",
+        "expected_evidence": "Target identity; signed ten-row matrix; timestamped redacted captures from both UI locations; per-sensor name/value/unit/state/thresholds; complete SDR/API corroboration; explicit PASS/FAIL/NOT_APPLICABLE comparison for each row; discrepancies and no-mutation confirmation.",
+        "acceptance_reference": "The exact platform/BMC firmware sensor and threshold specification. Generic ipmitool documentation supports collection mechanics but does not define HSC semantics or expected values.",
+        "safety_restrictions": "Read-only access only. Never guess HSC semantics, use a literal range as proof, truncate evidence, borrow thresholds from another platform, alter sensor settings, clear logs, stress hardware or expose credentials.",
+        "human_approval_requirements": "No special disruptive-action approval is required; the platform/BMC owner must confirm the applicable specification and ten-sensor population before final comparison.",
+        "manual_boundaries": "The owner defines platform semantics and judges specification applicability. Once supplied, browser/API/IPMI collection and the ten-row comparison can be automated; a human may review visual readability where browser automation cannot capture rendered text reliably.",
+        "recovery_requirements": "No mutation is expected. For stale, duplicate, missing, unreadable or mismatched sensor data, preserve the discrepancy and complete the remaining safe bounded views/sensors. Close the session and use approved management-access recovery only for wrong target, authentication/security concern, BMC instability or mutation risk; never reset hardware or change thresholds under this test.",
+        "stop_conditions": "Stop the whole collection only for wrong/unverified BMC, authentication or sensitive-data concern, BMC instability, or any requested mutation. A missing specification prevents comparison/PASS. Missing, duplicate, stale, unreadable, unit-mismatched or threshold-mismatched sensor data is a test discrepancy: preserve it, withhold PASS, and continue the remaining authorized bounded read-only sensors/views unless safety is affected."
+    },
+    "identified_defects": [
+        "V2 assigns an unsupported `high-speed connector` meaning to HSC.",
+        "DeepSeek's literal range query and first-100 SDR fallback cannot prove all ten sensors.",
+        "V2 adds GPU/PCIe topology as a universal prerequisite although the source is a BMC UI presentation/specification check."
+    ],
+    "changed_fields": [
+        "Purpose",
+        "Target Scope",
+        "Applicable Platform / Environment",
+        "Required Inputs",
+        "Test Command / Procedure Intent",
+        "Human Approval Requirements"
+    ],
+    "reason_for_change": "Preserve the exact ten-sensor, two-WebUI-view readability/specification intent while removing an invented acronym expansion and non-source GPU/PCIe scope; keep full per-sensor evidence and platform-specific values gated on owner input.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://github.com/ipmitool/ipmitool/blob/master/README",
+            "title": "ipmitool README",
+            "version": "upstream master accessed 2026-10-13; installed version must be recorded",
+            "applicability": "Qualified IPMI BMC interfaces",
+            "supports": "ipmitool can read SDR and sensor values for corroboration; it does not define vendor sensor names, HSC meaning or WebUI presentation requirements.",
+            "remaining_uncertainty": "Exact TEMP_GB_HSC names, semantics, expected readings and thresholds remain platform-specific."
+        }
+    ],
+    "removed_ambiguities": [
+        "Refuses to expand HSC without the platform specification.",
+        "Expands 1~10 as ten required records rather than a literal sensor name.",
+        "Makes both WebUI views primary acceptance evidence and IPMI only corroboration."
+    ],
+    "resolved_blockers": [
+        "The intended read-only workflow is understandable and automatable after the ten-sensor specification and access package are supplied; no active stimulus or destructive operation is implied."
+    ],
+    "remaining_blockers": [
+        "Final comparison cannot proceed without the platform-specific HSC definition, population, expected values/thresholds/tolerances, exact UI/SDR mapping and protected access."
+    ],
+    "objective_improvement_over_v2": "V3 removes V2's invented HSC/high-speed-connector meaning and unnecessary universal GPU topology requirement while retaining complete ten-sensor coverage, both UI views, full SDR corroboration and no-mutation controls.",
+    "agent_understanding_result": {
+        "status": "CLEAR_AFTER_REVISION",
+        "notes": "Isolated revalidation confirmed that ordinary missing, duplicate, stale, unreadable, unit-mismatched, or threshold-mismatched readings are preserved as evidence without truncating the authorized ten-sensor/two-view collection. Whole-collection termination is now limited to wrong target, authentication or security concern, BMC instability, or mutation risk; no remaining document defect was identified."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_AFTER_AGENT_GUIDED_REVISION"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "The row names TEMP_GB_HSC1~10, requires Dashboard and Server Health > Sensor Reading, and accepts only human-readable readings and thresholds matching spec.",
+        "source_specific_v2_comparison": "V2 fixes coverage and truncation but invents HSC as high-speed connector/zone and broadens the prerequisite topology beyond the UI check.",
+        "source_specific_safety_evidence_decision": "Permit complete read-only UI/SDR capture; require all ten rows and the platform matrix; prohibit acronym/value inference, mutation, log clearing or added thermal load.",
+        "template_violation_detected": false
+    }
 }

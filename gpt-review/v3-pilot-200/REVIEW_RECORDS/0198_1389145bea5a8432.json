@@ -1,0 +1,117 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 198,
+    "calibration": false,
+    "source_key": "(No Main Function)|11|Wistron---00846-V003",
+    "case_variant_id": "1389145bea5a8432",
+    "source_ref": {
+        "sheet": "(No Main Function)",
+        "source_row": 11,
+        "code": "Wistron---00846-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "224e4a65196ab59acf14f3045039dcdbf1319376b03454123191b9fcd2536775"
+    },
+    "source_snapshot": {
+        "test_name": "Flash CPLD Firmware",
+        "facts": [
+            "BMC WebUI OEM firmware path uploads `.ima`, preserve config, flash and verify version."
+        ],
+        "deepseek": "PARTIAL but changes OEM path to generic Firmware Update/Redfish assumption.",
+        "v2": "REQUIRES PACKAGE with OEM target and recovery."
+    },
+    "original_test_intent": {
+        "statement": "Flash the designated CPLD image through the BMC OEM path and verify the exact CPLD version and platform recovery.",
+        "must_preserve": [
+            "CPLD target and OEM update channel."
+        ],
+        "unknowns": [
+            "Which CPLD/board, update order, activation power state, version source and rollback."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It should emphasize that multiple CPLDs may exist and OEM firmware semantics are not interchangeable with standard UpdateService."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Identify the physical CPLD/board and follow only its OEM update/activation sequence; generic Redfish substitution is prohibited."
+    },
+    "revision_candidate": {
+        "test_name": "Flash the Designated CPLD Through the BMC OEM Path",
+        "purpose": "Update one explicitly mapped CPLD component with its signed image and prove correct version, required activation and platform power/management/device health.",
+        "applicable_platform_environment": "Exact board assembly/CPLD hardware revision/BMC OEM updater combination.",
+        "target_scope": "One named CPLD at a physical board/location and component inventory ID; other CPLDs, BMC and BIOS excluded.",
+        "required_inputs": "Board/CPLD identity and current/target version, image hash/signature/compatibility, OEM SOP/endpoint, dependency/update order, preserve-setting meaning, activation reset/DC/AC cycle, stable power, rollback/recovery and approval.",
+        "test_command_procedure_intent": "Capture component/board/power baseline, verify image, use only OEM path, monitor complete task, perform only signed activation sequence, then query the same component and validate affected buses/devices.",
+        "preconditions": "Alternate management/power recovery and correct board/component map proven.",
+        "expected_evidence": "Physical/component mapping; image/hash; pre/post CPLD version from authoritative source; exact OEM task/messages; activation/power trace; BMC/host/PCIe/I2C/sensor/SEL health appropriate to affected CPLD.",
+        "acceptance_reference": "Named CPLD reaches target version and all dependent platform paths recover; a generic firmware inventory version is insufficient.",
+        "safety_restrictions": "No generic standard endpoint assumption, wrong CPLD/image/order, power interruption outside activation, automatic retry or unrelated firmware flash.",
+        "human_approval_requirements": "CPLD/platform owner approves component, image, activation and recovery.",
+        "manual_boundaries": "OEM UI/power activation or recovery may be manual.",
+        "recovery_requirements": "On task/activation failure preserve state and use board-specific CPLD recovery; do not repeat blindly.",
+        "stop_conditions": "Component ambiguity, incompatible/signature-failed image, unsupported OEM path, dependency/power issue, task error, lost management or affected-bus/device failure."
+    },
+    "identified_defects": [
+        "Generic Redfish substitution changes OEM method.",
+        "CPLD component/activation unspecified."
+    ],
+    "changed_fields": [
+        "Target Scope",
+        "Procedure Intent",
+        "Evidence",
+        "Recovery"
+    ],
+    "reason_for_change": "Servers often contain multiple CPLDs with board-specific update and activation rules; 'firmware version' without physical component identity can validate the wrong device.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+            "title": "DMTF Redfish Resource and Schema Guide DSP2046",
+            "version": "2025.2",
+            "applicability": "Limits of standard UpdateService evidence",
+            "supports": "UpdateService describes advertised standard mechanisms, but OEM update paths and vendor-specific payloads remain implementation-specific.",
+            "remaining_uncertainty": "This CPLD OEM path and activation require vendor SOP."
+        }
+    ],
+    "removed_ambiguities": [
+        "One physical CPLD target and affected paths must be named."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "OEM image/component/activation/recovery."
+    ],
+    "objective_improvement_over_v2": "V3 prevents an OEM CPLD workflow from being collapsed into generic Redfish firmware update and requires physical component plus dependent-bus validation.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved one physical CPLD/component identity, OEM-only method, signed image/dependency order, exact reset/DC/AC activation, affected-path evidence, one attempt and board-specific recovery."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "No-main row 11 explicitly uses BMC Operations -> OEM firmware for CPLD `.ima`.",
+        "template_violation_detected": false
+    }
+}

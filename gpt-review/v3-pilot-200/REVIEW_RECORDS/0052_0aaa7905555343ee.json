@@ -1,59 +1,167 @@
 {
-  "schema_version": "v3-review-record-1.0",
-  "sequence": 52,
-  "calibration": false,
-  "source_key": "Functionality|946|Wistron-BMC-00236-V002",
-  "case_variant_id": "0aaa7905555343ee",
-  "source_ref": {"sheet": "Functionality", "source_row": 946, "code": "Wistron-BMC-00236-V002"},
-  "source_integrity": {"xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869", "original_row_sha256": "687bf2d9ee00e46926e285de566c179a51c6fe2a6f4c7a1453eb47e23a364128"},
-  "source_snapshot": {"test_name": "System", "test_set": "Inventory and LEDs", "items": "System", "procedure": "Open BMC WebUI, select Hardware status > Inventory and LEDs, and check system information.", "criteria": "System data is readable and correct.", "attended_time": "2", "machine_time": "0", "script": null, "deepseek_classification": "YES", "deepseek_finding": "DeepSeek substitutes a Redfish GET filtered to Model and Status for the required WebUI page. It neither proves the page renders nor defines all system fields that must be readable and correct."},
-  "original_test_intent": {
-    "purpose": "Verify that the BMC WebUI Hardware status > Inventory and LEDs page renders the required System information legibly and that every displayed platform-defined field is correct for the intended SUT.",
-    "target": "The System section of the specified BMC WebUI page on the exact SUT/BMC firmware recipe, with any Redfish ComputerSystem resource used only as a corroborating source when the platform maps it to those UI fields.",
-    "scope": "Authenticate to the intended BMC, navigate the source-defined UI path, capture the complete System section and rendered labels/values/states, compare each required UI field with the signed platform inventory/specification and independent identity source, and optionally correlate mapped Redfish properties without replacing the UI check.",
-    "operation": "Confirm target identity and browser compatibility, open Hardware status > Inventory and LEDs, wait for the System panel to finish loading, record the full rendered panel and DOM/text where available, verify readability and field completeness, compare each field against the owner matrix, collect a certificate-verified read-only Redfish member only for mapped cross-checks, and leave all state unchanged.",
-    "duration_and_iterations": "One complete observation of the System section after a fresh page load. The two-minute attended estimate and zero machine time do not justify limiting evidence to Model and Status or skipping the WebUI.",
-    "expected_result": "The correct target's System panel loads without UI/API error, every required field is visible, legible and non-stale, values match the platform specification/inventory and mapped backend source, sensitive identifiers are handled under the redaction policy, and no BMC/SUT state changes.",
-    "required_evidence": "BMC/SUT/firmware and WebUI build identity; signed required-field/expected-value/redaction matrix; timestamped full-page and System-panel capture; DOM/text or accessibility evidence; per-field comparison; mapped certificate-verified Redfish raw response if used; page/network errors and no-mutation confirmation.",
-    "ambiguities": ["The source does not enumerate which System fields the page must show or their authoritative expected values.", "The source does not say that Redfish is the acceptance interface; DeepSeek and V2 promote it beyond the stated WebUI purpose.", "The fixed `/redfish/v1/Systems/system` member ID may not be valid on this implementation.", "Readability needs a rendered-page check; valid backend JSON cannot prove layout, truncation, localization or stale UI behavior."],
-    "source_conflicts": []
-  },
-  "v2_review_conclusion": {"automation_classification": "FULLY AUTOMATABLE", "second_review_outcome": "CHANGED", "finding": "V2 usefully adds target/member validation, protected transport, redaction and complete identity/status evidence. It changes the primary test from the named BMC WebUI System panel to a complete Redfish ComputerSystem resource and makes the actual UI optional; it also calls the case fully automatable while the platform-required UI field/expected-value matrix is still absent."},
-  "applicable_history": [{"path": "review_round_02_functionality.md", "decision": "The historical YES verdict accepts the API substitution and does not separately verify rendered WebUI readability."}],
-  "v3_review_conclusion": {"review_outcome": "RECLASSIFIED", "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "execution_readiness": ["NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE"], "summary": "Restore the BMC WebUI System panel as the primary acceptance surface and reclassify until its required-field/expected-value matrix and supported browser/access package are supplied. Redfish is valuable corroboration but cannot prove the required page is readable or correct."},
-  "execution_readiness_detail": {
-    "available_now": ["The exact BMC WebUI navigation path and read-only presentation intent are known.", "Target/BMC identity, WebUI build, TLS endpoint and discovered Redfish Systems collection can be inspected without state changes.", "DMTF defines ComputerSystem as an API representation of a system and related data-plane resources; it does not define a vendor's WebUI layout or required displayed fields."],
-    "missing_inputs": ["Platform/BMC-firmware-specific list of required System panel labels, authoritative values, permitted omissions and readability/localization rules", "Mapping from each UI field to platform inventory and, if applicable, the discovered Redfish ComputerSystem member/property; no fixed member ID may be assumed", "Supported browser/automation version, WebUI route, load-completion/staleness rule, protected credentials, trusted TLS/certificate handling and screenshot/DOM redaction policy", "Treatment of serial, UUID, asset and other sensitive identifiers plus owner-approved final comparison criteria"],
-    "input_owner": "The BMC/UI and platform owners supply the required-field and expected-value matrix and UI-to-source mapping; the lab/security owner supplies the target, protected credentials, TLS trust and artifact redaction policy.",
-    "safe_read_only_work_before_closure": ["Discover and record the intended BMC, firmware/WebUI build, trusted certificate and current page availability without changing system state.", "Read the Redfish service root and Systems collection with certificate validation to identify candidate members; mark all UI-field mapping and acceptance as unresolved."],
-    "prohibited_until_closed": ["Do not substitute API JSON for the required rendered page, assume `/Systems/system`, accept only Model/Status, disable certificate verification as the sole method, or compare against an invented field list.", "Do not click power/identify/reset controls, change inventory/asset data, clear logs, expose credentials or publish unredacted sensitive identifiers."],
-    "closure_verification": "The owner matrix covers every required UI field and expected source; the correct member and target are discovered; the supported browser captures the complete rendered panel without truncation/staleness; TLS, credentials and redaction are validated; optional Redfish mappings are explicitly one-to-one."
-  },
-  "revision_candidate": {
-    "test_name": "BMC WebUI System Inventory Readability and Accuracy",
-    "purpose": "Verify that the Hardware status > Inventory and LEDs > System panel is fully readable and that every required displayed value is correct for the intended SUT.",
-    "applicable_platform_environment": "The exact server, BMC firmware and WebUI build covered by an owner-approved System-panel field/value matrix, using a supported browser, protected read-only account, trusted TLS and redaction-aware evidence storage.",
-    "target_scope": "The complete System section in the source-named BMC WebUI page. A discovered Redfish ComputerSystem resource may corroborate mapped fields but is not a replacement for rendered UI evidence.",
-    "required_inputs": "SUT/BMC identity; WebUI build and route; required field/expected value/allowed omission matrix; UI-to-authoritative-source and optional Redfish mapping; browser/automation package; page-complete/stale rules; TLS trust, credentials and sensitive-field redaction policy.",
-    "test_command_procedure_intent": "Open the resolved BMC WebUI, navigate to Hardware status > Inventory and LEDs, wait for the System panel's approved completion signal, capture the full rendered panel plus DOM/accessibility text, and compare every required label/value/state with the signed matrix. If approved, discover the correct Redfish Systems member and use a certificate-verified GET only to corroborate explicitly mapped fields.",
-    "preconditions": "Correct BMC/SUT and firmware confirmed; required-field matrix approved; browser and page route validated; target is not undergoing update/reset; TLS trust and protected credentials work; clocks and evidence storage are ready; redaction rules are active.",
-    "expected_evidence": "BMC/SUT/WebUI identity; signed matrix; full timestamped System-panel screenshot and DOM/text evidence; per-field legibility/completeness/value result; mapped independent inventory or Redfish evidence with discovered member URI; page/API errors; sensitive-field redaction and no-mutation proof.",
-    "acceptance_reference": "The exact platform/BMC WebUI System inventory specification and signed expected-value matrix. DMTF Redfish ComputerSystem defines an API resource, not the vendor UI's visual acceptance criteria.",
-    "safety_restrictions": "Read-only navigation and GET only. Never assume a fixed member, bypass TLS without an approved trust method, invoke UI controls/actions, modify asset/power/BIOS/OS state, clear logs, expose credentials or release sensitive identifiers unredacted.",
-    "human_approval_requirements": "No disruptive-action approval is needed; the platform/BMC owner must confirm the required-field matrix and source mapping before final acceptance.",
-    "manual_boundaries": "The owner defines correctness and sensitive-field policy. Browser navigation, rendered/DOM capture, mapped read-only Redfish collection and comparison can be automated; a human resolves visual defects or platform-specific omissions.",
-    "recovery_requirements": "No mutation is expected. On wrong target, authentication/TLS anomaly, incomplete/stale page, browser failure or BMC instability, stop, preserve evidence, close the session and follow the approved read-only management-access recovery path without power/reset actions.",
-    "stop_conditions": "Wrong or ambiguous BMC/System member, missing field matrix, unsupported WebUI/browser, incomplete or unreadable panel, stale/loading error, unexpected value without authoritative source, TLS/credential concern, sensitive-data leakage risk or any requested state-changing action."
-  },
-  "identified_defects": ["V2 makes a complete Redfish ComputerSystem response the primary test although the source explicitly requires a BMC WebUI page.", "DeepSeek's Model/Status filter is insufficient and its fixed member plus `-k` handling may be wrong for the implementation.", "The platform-required UI fields and expected values are absent, so current execution readiness is not FULLY AUTOMATABLE."],
-  "changed_fields": ["Automation Classification", "Purpose", "Target Scope", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference", "Execution Readiness"],
-  "reason_for_change": "Prevent an API-only false completion by restoring rendered WebUI readability and correctness as the actual acceptance target, retaining Redfish only for explicitly mapped corroboration, and separating the missing field/spec/browser inputs from technical capability.",
-  "new_technical_evidence": [{"source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "title": "DMTF Redfish Resource and Schema Guide, DSP2046 2025.2", "version": "2025.2, ComputerSystem v1.25.0", "applicability": "Redfish services implementing the advertised ComputerSystem schema version", "supports": "ComputerSystem represents a system instance and linked software-visible resources at `/redfish/v1/Systems/{ComputerSystemId}`; the member identifier is parameterized and must be discovered rather than assumed as `system`.", "remaining_uncertainty": "The vendor WebUI field set, rendering, and UI-to-Redfish mapping are outside the generic schema and remain platform-specific."}],
-  "removed_ambiguities": ["Makes the rendered WebUI panel primary and API evidence secondary.", "Requires discovery of the correct ComputerSystem member rather than a fixed URI.", "Defines readability, completeness, correctness and redaction as separate evidence dimensions."],
-  "resolved_blockers": ["The workflow is technically automatable with a supported browser and read-only APIs; missing platform field expectations are provisionable inputs rather than a semantic BLOCKED condition."],
-  "remaining_blockers": ["Final execution/acceptance awaits the required UI-field/expected-value matrix, supported browser/page completion method, target/member mapping, trusted access and redaction policy."],
-  "objective_improvement_over_v2": "V3 restores the source-mandated WebUI presentation test that V2 made optional, prevents API-only false completion and fixed-member assumptions, and correctly gates missing platform expectations without declaring the intent irreducibly blocked.",
-  "agent_understanding_result": {"status": "PENDING_MATERIAL_CHANGE_VALIDATION", "notes": "The API-to-WebUI intent restoration and classification change are queued for the next isolated validation batch."},
-  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"},
-  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The procedure explicitly navigates BMC WebUI Hardware status > Inventory and LEDs and the criterion requires System data to be readable and correct.", "source_specific_v2_comparison": "V2 improves API completeness but makes the actual WebUI check optional and assumes a complete ComputerSystem resource is the test target.", "source_specific_safety_evidence_decision": "Permit only read-only browser/GET evidence, restore the rendered panel as primary, require a signed field/value matrix and prohibit UI actions, fixed member guesses, TLS/credential shortcuts or unredacted release.", "template_violation_detected": false}
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 52,
+    "calibration": false,
+    "source_key": "Functionality|946|Wistron-BMC-00236-V002",
+    "case_variant_id": "0aaa7905555343ee",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 946,
+        "code": "Wistron-BMC-00236-V002"
+    },
+    "source_integrity": {
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+        "original_row_sha256": "687bf2d9ee00e46926e285de566c179a51c6fe2a6f4c7a1453eb47e23a364128"
+    },
+    "source_snapshot": {
+        "test_name": "System",
+        "test_set": "Inventory and LEDs",
+        "items": "System",
+        "procedure": "Open BMC WebUI, select Hardware status > Inventory and LEDs, and check system information.",
+        "criteria": "System data is readable and correct.",
+        "attended_time": "2",
+        "machine_time": "0",
+        "script": null,
+        "deepseek_classification": "YES",
+        "deepseek_finding": "DeepSeek substitutes a Redfish GET filtered to Model and Status for the required WebUI page. It neither proves the page renders nor defines all system fields that must be readable and correct."
+    },
+    "original_test_intent": {
+        "purpose": "Verify that the BMC WebUI Hardware status > Inventory and LEDs page renders the required System information legibly and that every displayed platform-defined field is correct for the intended SUT.",
+        "target": "The System section of the specified BMC WebUI page on the exact SUT/BMC firmware recipe, with any Redfish ComputerSystem resource used only as a corroborating source when the platform maps it to those UI fields.",
+        "scope": "Authenticate to the intended BMC, navigate the source-defined UI path, capture the complete System section and rendered labels/values/states, compare each required UI field with the signed platform inventory/specification and independent identity source, and optionally correlate mapped Redfish properties without replacing the UI check.",
+        "operation": "Confirm target identity and browser compatibility, open Hardware status > Inventory and LEDs, wait for the System panel to finish loading, record the full rendered panel and DOM/text where available, verify readability and field completeness, compare each field against the owner matrix, collect a certificate-verified read-only Redfish member only for mapped cross-checks, and leave all state unchanged.",
+        "duration_and_iterations": "One complete observation of the System section after a fresh page load. The two-minute attended estimate and zero machine time do not justify limiting evidence to Model and Status or skipping the WebUI.",
+        "expected_result": "The correct target's System panel loads without UI/API error, every required field is visible, legible and non-stale, values match the platform specification/inventory and mapped backend source, sensitive identifiers are handled under the redaction policy, and no BMC/SUT state changes.",
+        "required_evidence": "BMC/SUT/firmware and WebUI build identity; signed required-field/expected-value/redaction matrix; timestamped full-page and System-panel capture; DOM/text or accessibility evidence; per-field comparison; mapped certificate-verified Redfish raw response if used; page/network errors and no-mutation confirmation.",
+        "ambiguities": [
+            "The source does not enumerate which System fields the page must show or their authoritative expected values.",
+            "The source does not say that Redfish is the acceptance interface; DeepSeek and V2 promote it beyond the stated WebUI purpose.",
+            "The fixed `/redfish/v1/Systems/system` member ID may not be valid on this implementation.",
+            "Readability needs a rendered-page check; valid backend JSON cannot prove layout, truncation, localization or stale UI behavior."
+        ],
+        "source_conflicts": []
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "FULLY AUTOMATABLE",
+        "second_review_outcome": "CHANGED",
+        "finding": "V2 usefully adds target/member validation, protected transport, redaction and complete identity/status evidence. It changes the primary test from the named BMC WebUI System panel to a complete Redfish ComputerSystem resource and makes the actual UI optional; it also calls the case fully automatable while the platform-required UI field/expected-value matrix is still absent."
+    },
+    "applicable_history": [
+        {
+            "path": "review_round_02_functionality.md",
+            "decision": "The historical YES verdict accepts the API substitution and does not separately verify rendered WebUI readability."
+        }
+    ],
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE"
+        ],
+        "summary": "Restore the BMC WebUI System panel as the primary acceptance surface and reclassify until its required-field/expected-value matrix and supported browser/access package are supplied. Redfish is valuable corroboration but cannot prove the required page is readable or correct."
+    },
+    "execution_readiness_detail": {
+        "available_now": [
+            "The exact BMC WebUI navigation path and read-only presentation intent are known.",
+            "Target/BMC identity, WebUI build, TLS endpoint and discovered Redfish Systems collection can be inspected without state changes.",
+            "DMTF defines ComputerSystem as an API representation of a system and related data-plane resources; it does not define a vendor's WebUI layout or required displayed fields."
+        ],
+        "missing_inputs": [
+            "Platform/BMC-firmware-specific list of required System panel labels, authoritative values, permitted omissions and readability/localization rules",
+            "Mapping from each UI field to platform inventory and, if applicable, the discovered Redfish ComputerSystem member/property; no fixed member ID may be assumed",
+            "Supported browser/automation version, WebUI route, load-completion/staleness rule, protected credentials, trusted TLS/certificate handling and screenshot/DOM redaction policy",
+            "Treatment of serial, UUID, asset and other sensitive identifiers plus owner-approved final comparison criteria"
+        ],
+        "input_owner": "The BMC/UI and platform owners supply the required-field and expected-value matrix and UI-to-source mapping; the lab/security owner supplies the target, protected credentials, TLS trust and artifact redaction policy.",
+        "safe_read_only_work_before_closure": [
+            "Discover and record the intended BMC, firmware/WebUI build, trusted certificate and current page availability without changing system state.",
+            "Read the Redfish service root and Systems collection with certificate validation to identify candidate members; mark all UI-field mapping and acceptance as unresolved."
+        ],
+        "prohibited_until_closed": [
+            "Do not substitute API JSON for the required rendered page, assume `/Systems/system`, accept only Model/Status, disable certificate verification as the sole method, or compare against an invented field list.",
+            "Do not click power/identify/reset controls, change inventory/asset data, clear logs, expose credentials or publish unredacted sensitive identifiers."
+        ],
+        "closure_verification": "The owner matrix covers every required UI field and expected source; the correct member and target are discovered; the supported browser captures the complete rendered panel without truncation/staleness; TLS, credentials and redaction are validated; optional Redfish mappings are explicitly one-to-one."
+    },
+    "revision_candidate": {
+        "test_name": "BMC WebUI System Inventory Readability and Accuracy",
+        "purpose": "Verify that the Hardware status > Inventory and LEDs > System panel is fully readable and that every required displayed value is correct for the intended SUT.",
+        "applicable_platform_environment": "The exact server, BMC firmware and WebUI build covered by an owner-approved System-panel field/value matrix, using a supported browser, protected read-only account, trusted TLS and redaction-aware evidence storage.",
+        "target_scope": "The complete System section in the source-named BMC WebUI page. A discovered Redfish ComputerSystem resource may corroborate mapped fields but is not a replacement for rendered UI evidence.",
+        "required_inputs": "SUT/BMC identity; WebUI build and route; required field/expected value/allowed omission matrix; UI-to-authoritative-source and optional Redfish mapping; browser/automation package; page-complete/stale rules; TLS trust, credentials and sensitive-field redaction policy.",
+        "test_command_procedure_intent": "Open the resolved BMC WebUI, navigate to Hardware status > Inventory and LEDs, wait for the System panel's approved completion signal, capture the full rendered panel plus DOM/accessibility text, and compare every required label/value/state with the signed matrix. If approved, discover the correct Redfish Systems member and use a certificate-verified GET only to corroborate explicitly mapped fields.",
+        "preconditions": "Correct BMC/SUT and firmware confirmed; required-field matrix approved; browser and page route validated; target is not undergoing update/reset; TLS trust and protected credentials work; clocks and evidence storage are ready; redaction rules are active.",
+        "expected_evidence": "BMC/SUT/WebUI identity; signed matrix; full timestamped System-panel screenshot and DOM/text evidence; per-field legibility/completeness/value result; mapped independent inventory or Redfish evidence with discovered member URI; page/API errors; sensitive-field redaction and no-mutation proof.",
+        "acceptance_reference": "The exact platform/BMC WebUI System inventory specification and signed expected-value matrix. DMTF Redfish ComputerSystem defines an API resource, not the vendor UI's visual acceptance criteria.",
+        "safety_restrictions": "Read-only navigation and GET only. Never assume a fixed member, bypass TLS without an approved trust method, invoke UI controls/actions, modify asset/power/BIOS/OS state, clear logs, expose credentials or release sensitive identifiers unredacted.",
+        "human_approval_requirements": "No disruptive-action approval is needed; the platform/BMC owner must confirm the required-field matrix and source mapping before final acceptance.",
+        "manual_boundaries": "The owner defines correctness and sensitive-field policy. Browser navigation, rendered/DOM capture, mapped read-only Redfish collection and comparison can be automated; a human resolves visual defects or platform-specific omissions.",
+        "recovery_requirements": "No mutation is expected. On wrong target, authentication/TLS anomaly, incomplete/stale page, browser failure or BMC instability, stop, preserve evidence, close the session and follow the approved read-only management-access recovery path without power/reset actions.",
+        "stop_conditions": "Wrong or ambiguous BMC/System member, missing field matrix, unsupported WebUI/browser, incomplete or unreadable panel, stale/loading error, unexpected value without authoritative source, TLS/credential concern, sensitive-data leakage risk or any requested state-changing action."
+    },
+    "identified_defects": [
+        "V2 makes a complete Redfish ComputerSystem response the primary test although the source explicitly requires a BMC WebUI page.",
+        "DeepSeek's Model/Status filter is insufficient and its fixed member plus `-k` handling may be wrong for the implementation.",
+        "The platform-required UI fields and expected values are absent, so current execution readiness is not FULLY AUTOMATABLE."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Purpose",
+        "Target Scope",
+        "Test Command / Procedure Intent",
+        "Expected Evidence",
+        "Acceptance Reference",
+        "Execution Readiness"
+    ],
+    "reason_for_change": "Prevent an API-only false completion by restoring rendered WebUI readability and correctness as the actual acceptance target, retaining Redfish only for explicitly mapped corroboration, and separating the missing field/spec/browser inputs from technical capability.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+            "title": "DMTF Redfish Resource and Schema Guide, DSP2046 2025.2",
+            "version": "2025.2, ComputerSystem v1.25.0",
+            "applicability": "Redfish services implementing the advertised ComputerSystem schema version",
+            "supports": "ComputerSystem represents a system instance and linked software-visible resources at `/redfish/v1/Systems/{ComputerSystemId}`; the member identifier is parameterized and must be discovered rather than assumed as `system`.",
+            "remaining_uncertainty": "The vendor WebUI field set, rendering, and UI-to-Redfish mapping are outside the generic schema and remain platform-specific."
+        }
+    ],
+    "removed_ambiguities": [
+        "Makes the rendered WebUI panel primary and API evidence secondary.",
+        "Requires discovery of the correct ComputerSystem member rather than a fixed URI.",
+        "Defines readability, completeness, correctness and redaction as separate evidence dimensions."
+    ],
+    "resolved_blockers": [
+        "The workflow is technically automatable with a supported browser and read-only APIs; missing platform field expectations are provisionable inputs rather than a semantic BLOCKED condition."
+    ],
+    "remaining_blockers": [
+        "Final execution/acceptance awaits the required UI-field/expected-value matrix, supported browser/page completion method, target/member mapping, trusted access and redaction policy."
+    ],
+    "objective_improvement_over_v2": "V3 restores the source-mandated WebUI presentation test that V2 made optional, prevents API-only false completion and fixed-member assumptions, and correctly gates missing platform expectations without declaring the intent irreducibly blocked.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "notes": "Validator independently retained the complete rendered System panel, visual plus DOM/text evidence, authoritative per-field matrix, discovered-only Redfish corroboration and no page-load-only PASS."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "The procedure explicitly navigates BMC WebUI Hardware status > Inventory and LEDs and the criterion requires System data to be readable and correct.",
+        "source_specific_v2_comparison": "V2 improves API completeness but makes the actual WebUI check optional and assumes a complete ComputerSystem resource is the test target.",
+        "source_specific_safety_evidence_decision": "Permit only read-only browser/GET evidence, restore the rendered panel as primary, require a signed field/value matrix and prohibit UI actions, fixed member guesses, TLS/credential shortcuts or unredacted release.",
+        "template_violation_detected": false
+    }
 }

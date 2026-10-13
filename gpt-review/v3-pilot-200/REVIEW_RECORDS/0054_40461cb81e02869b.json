@@ -1,59 +1,186 @@
 {
-  "schema_version": "v3-review-record-1.0",
-  "sequence": 54,
-  "calibration": false,
-  "source_key": "Functionality|988|Wistron-BMC-00278-V002",
-  "case_variant_id": "40461cb81e02869b",
-  "source_ref": {"sheet": "Functionality", "source_row": 988, "code": "Wistron-BMC-00278-V002"},
-  "source_integrity": {"xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869", "original_row_sha256": "035c0b3980ec7c43104ab7d3fa640c6c21d0f9d3e42488c6930474ffa46b9543"},
-  "source_snapshot": {"test_name": "Get CPU capping/limit", "test_set": "Power Consumption", "items": "Get CPU capping/limit", "procedure": "Power on, enter an Advanced BMC license if needed, record Maximum Available/Peak Observed/Minimum Observed power, enable capping, set the cap to Maximum Available Power, apply it, and stress the server for 30 hours.", "criteria": "CPU power utilization is capped; Average Power remains below the Power Cap line, while Maximum Power may cross it.", "attended_time": "10", "machine_time": "1440", "script": null, "deepseek_classification": "YES", "deepseek_finding": "DeepSeek reduces a license, cap-write and long stress validation to read-only sensor/Redfish collection, uses a guessed Chassis URI and cannot test enforcement or restoration."},
-  "original_test_intent": {
-    "purpose": "SOURCE_CONFLICT: determine whether this row is a read-only CPU cap/limit query or a state-changing system power-cap enforcement test, then resolve the test domain, authoritative duration and stimulus before defining execution.",
-    "target": "Unresolved: the title and criterion name CPU capping, while the BMC Power Settings fields and generic Redfish PowerControl commonly describe chassis/system power. The exact processor/package/system/chassis control domain and SUT must be identified.",
-    "scope": "The written procedure includes secure license entitlement, recording three BMC power metrics, enabling and writing a persistent cap, applying server stress, observing meter traces and restoring the initial state. Read-only limit inventory is only preparatory and cannot satisfy that workflow.",
-    "operation": "While blocked, discover read-only target/schema/control-domain and preserve original cap/license/power values without installing a key or changing settings. The owner must choose query-only versus enforcement validation, reconcile 30 hours with 1440 minutes, define a cap that can validly demonstrate enforcement, workload and evidence, then authorize a separately reviewed cap/write/stress/restore flow.",
-    "duration_and_iterations": "Conflict: Procedure specifies 30 hours, while Machine Time is 1440 minutes (24 hours). No duration may be selected or shortened until the testcase owner corrects the source.",
-    "expected_result": "Unresolved. For an enforcement interpretation, merely observing average power below a cap set to Maximum Available Power does not prove the cap constrained the workload; an owner-defined demand-above-cap condition, domain-specific throttle/enforcement evidence, permitted transient rule and recovery are required.",
-    "required_evidence": "Owner correction; target/control domain; discovered schema/resource and units; license entitlement without secret disclosure; original and applied cap/state; authoritative duration/workload; time-series demand/average/peak/cap plus CPU/package/chassis enforcement indicators; errors/thermal health; aborts; restored original cap/license/configuration and service health.",
-    "ambiguities": ["`Get` in the title conflicts with enabling and writing a cap plus long-duration stress in the procedure.", "CPU capping conflicts with generic BMC system/chassis Power Settings semantics unless a platform mapping proves the controlled domain.", "Thirty hours conflicts with the 1440-minute Machine Time.", "A cap equal to Maximum Available Power plus average-below-cap acceptance may never create or prove an enforcement condition.", "Stress tool, target resources, load level, sampling, tolerance, transient window and allowed Maximum-over-cap behavior are undefined."],
-    "source_conflicts": ["READ_ONLY_GET_VS_CAP_WRITE_STRESS", "CPU_DOMAIN_VS_CHASSIS_SYSTEM_POWER_CONTROL", "PROCEDURE_30_HOURS_VS_MACHINE_TIME_1440_MINUTES", "CAP_AT_MAXIMUM_AVAILABLE_VS_ENFORCEMENT_PROOF"]
-  },
-  "v2_review_conclusion": {"automation_classification": "BLOCKED", "second_review_outcome": "CHANGED", "finding": "V2 correctly blocks the current cap write and 30-hour stress, rejects the read-only substitution and demands schema, license, safe limits, workload, watchdog and restore controls. It frames most gaps as missing inputs but does not explicitly record the 30-hour/24-hour source conflict, CPU-versus-chassis domain conflict or the non-proving cap-at-maximum acceptance design as independent semantic blockers."},
-  "applicable_history": [{"path": "review_round_02_functionality.md", "decision": "The historical YES verdict treats an OOB/DUT read-only command as execution even though it omits license, cap enable/write/apply, full stress duration, enforcement evidence and restoration."}],
-  "v3_review_conclusion": {"review_outcome": "SOURCE_CONFLICT", "automation_classification": "BLOCKED", "execution_readiness": ["SOURCE_CONFLICT", "NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_APPROVAL"], "summary": "Keep BLOCKED for genuine semantic conflicts, not merely missing artifacts. Query-only versus enforcement, CPU versus chassis domain, 30 versus 24 hours, and a non-demonstrative cap/acceptance design must be corrected by the owner. Only read-only discovery and baseline collection are allowed now."},
-  "execution_readiness_detail": {
-    "available_now": ["BMC/SUT identity, advertised Redfish schemas/resources, current read-only license status, cap state and power metrics can be collected without setting a cap or starting stress.", "The original cap/configuration can be documented for a future restoration plan without changing it.", "DMTF's legacy Power.PowerControl.PowerLimit describes a chassis power limit in watts, while processor power-limit throttling is a separate processor metric; deployed platform mapping must establish the source's CPU claim."],
-    "missing_inputs": ["Owner-corrected purpose, control domain and source text; authoritative duration resolving 30 hours versus 1440 minutes", "Advertised BMC schema/resource/member, units, writable-property semantics, persistent/volatile behavior, enable/apply sequence, allowed range and original-state restore method", "Cap selection and workload that create a safe measurable enforcement condition, with sampling/aggregation, transient/peak tolerance and CPU/package/chassis throttle evidence", "Protected advanced-license entitlement workflow, exact stress package/targets, dedicated window, workloads/users evacuation, independent thermal/power monitoring, abort and OOB recovery"],
-    "input_owner": "The testcase/platform power owner resolves intent, duration and domain; the BMC vendor supplies schema and license/cap semantics; CPU/performance/thermal owners define workload and enforcement evidence; security/operations approve entitlement, long stress, service impact and recovery.",
-    "safe_read_only_work_before_closure": ["Discover service root, Chassis/System/Processor links and advertised Power, PowerSubsystem, Control, EnvironmentMetrics or OEM resources; capture schema versions and current values with certificate-verified GET only.", "Record current cap-enabled state, cap value, Maximum Available/Peak/Minimum/Average values, CPU/platform inventory, thermal/error baseline and existing license status, with secrets redacted and no log clearing."],
-    "prohibited_until_closed": ["Do not install/expose a license key, enable/write/apply a cap, start stress, choose 24 or 30 hours, assume `/Chassis/1/Power`, clear logs or infer CPU enforcement from chassis average power.", "Do not choose a lower cap merely to force throttling, accept uncontrolled peak crossings, run on an active SUT, retry after anomaly or restore by guessing an original value."],
-    "closure_verification": "The corrected source names one purpose/domain/duration; schema discovery proves the exact writable control and units; the cap/workload produces an approved measurable enforcement condition within safe limits; sampling and peak rules are signed; secrets, baseline, monitoring, abort, maintenance and restoration have dry-run evidence."
-  },
-  "revision_candidate": {
-    "test_name": "CPU or System Power-Cap Enforcement — Source Correction Required",
-    "purpose": "BLOCKED: resolve whether the requested activity is read-only limit retrieval or a power-cap enforcement stress test, and identify whether the controlled domain is CPU/package or whole-system/chassis power.",
-    "applicable_platform_environment": "Unresolved until the owner identifies the SUT, BMC/firmware/license, advertised power-control schema, CPU/platform power domain, approved stress stack and the corrected duration.",
-    "target_scope": "No mutable target is authorized. Read-only discovery may cover candidate BMC chassis/system/processor power resources and the current cap state solely to resolve the source conflict.",
-    "required_inputs": "Corrected purpose/domain; 30-hour-versus-1440-minute resolution; discovered schema/resource/units; license entitlement; original and safe cap/restore semantics; enforcement-producing workload; sampling/transient/tolerance rules; throttle proof; packages; maintenance/approval; monitoring/abort/recovery.",
-    "test_command_procedure_intent": "Do not produce an executable write/stress command. First collect read-only schema, current cap/license and power baselines. After owner correction, separately review the exact secure license, cap enable/set/read-back, full-duration workload, synchronized CPU/system power and throttling evidence, stop rules and original-state restoration procedure.",
-    "preconditions": "Source conflict resolved; exact SUT/domain/resource identified; authoritative duration and acceptance fixed; secrets protected; workload and cap validated to demonstrate enforcement safely; idle dedicated SUT; baseline/config backup; continuous independent monitoring; tested abort/OOB/restore and explicit approval.",
-    "expected_evidence": "Owner correction; schema and control-domain proof; protected entitlement record; original/capped settings and read-back; exact workload/duration; synchronized cap/demand/average/peak plus CPU/package/chassis throttle data; thermal/error/host/BMC logs; aborts; original-state restoration and final workload/system health.",
-    "acceptance_reference": "The corrected testcase plus exact BMC/platform power-control and CPU enforcement specification. Generic Redfish power fields alone do not prove CPU-specific capping or define safe acceptance.",
-    "safety_restrictions": "Read-only discovery only while blocked. Never disclose/install a key, write a cap, start stress, guess duration/domain/resource/limit, clear logs, bypass TLS, use production workloads or infer enforcement from average-below-cap alone.",
-    "human_approval_requirements": "Owner correction is mandatory. Security approves license handling; operations, CPU/performance and power/thermal owners approve the cap, workload, full duration, thresholds, service impact and recovery immediately before execution.",
-    "manual_boundaries": "Owners must correct semantics, provide entitlement and approve the high-load campaign. After a new review, supported cap control, workload, monitoring and evidence may be automated; secret entry, emergency intervention and failed restoration remain controlled human actions.",
-    "recovery_requirements": "No mutation is authorized while blocked. A corrected flow must capture the original state, abort workload on any limit/error, restore cap enable/value through the validated path, preserve evidence, verify CPU/system performance and thermal/BMC/OS health, and escalate failed restoration without automatic retry.",
-    "stop_conditions": "Any unresolved purpose/domain/duration/criterion; unknown resource or cap semantics; absent license security, package, maintenance, monitoring, abort, OOB or restoration; active workload; cap/workload unable to demonstrate enforcement safely; telemetry loss, thermal/power/error fault or secret exposure."
-  },
-  "identified_defects": ["The source title and automation imply read-only retrieval while the procedure requires persistent cap configuration and long stress.", "Procedure duration conflicts with Machine Time by six hours.", "CPU-specific acceptance is not mapped to the BMC's likely chassis/system power-control domain.", "Setting the cap to Maximum Available Power and checking only average-below-cap may not exercise enforcement."],
-  "changed_fields": ["Original Test Intent", "Review Outcome", "Execution Readiness", "Purpose", "Target Scope", "Duration and Iterations", "Acceptance Reference", "Blocked Conditions"],
-  "reason_for_change": "Convert a generic missing-input BLOCKED explanation into a precise source-conflict decision: four unresolved choices materially change the command, target, duration and proof of power-cap enforcement, while still allowing safe read-only discovery.",
-  "new_technical_evidence": [{"source_url": "https://redfish.dmtf.org/schemas/v1/DSP2053_2025.2.pdf", "title": "DMTF Redfish Property Guide, DSP2053 2025.2", "version": "2025.2", "applicability": "Redfish implementations advertising the cited Power and ProcessorMetrics properties", "supports": "PowerControl.PowerLimit is defined for chassis power, while PowerLimitThrottleDuration is a distinct processor metric; control and enforcement domains must not be conflated.", "remaining_uncertainty": "The deployed BMC may implement legacy, newer Control/EnvironmentMetrics or OEM resources and may not expose a processor throttle metric."}, {"source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "title": "DMTF Redfish Resource and Schema Guide, DSP2046 2025.2", "version": "2025.2", "applicability": "Current Redfish schema guidance; deployed service version controls actual paths", "supports": "The legacy Power schema is deprecated in favor of newer power-subsystem modeling, so `/Chassis/1/Power` must be discovered and version-validated rather than assumed.", "remaining_uncertainty": "The platform may intentionally retain the legacy resource and vendor-specific capping semantics."}],
-  "removed_ambiguities": ["Explicitly separates read-only query from state-changing enforcement validation.", "Surfaces the 30-hour versus 24-hour conflict rather than silently choosing one.", "Separates CPU throttle evidence from chassis power-limit metrics and rejects average-below-cap as sole proof."],
-  "resolved_blockers": ["Read-only schema, license-status, cap-state and power baseline collection can proceed without choosing the final interpretation or changing the SUT."],
-  "remaining_blockers": ["All write/stress execution remains blocked until the owner resolves purpose, domain, duration and enforcement design and supplies secure license, workload, monitoring, approval and restoration controls."],
-  "objective_improvement_over_v2": "V3 preserves V2's hard safety stop but identifies the irreducible source conflicts that justify BLOCKED, prevents a 24/30-hour silent change and a chassis-to-CPU evidence error, and states exactly which read-only work remains safe.",
-  "agent_understanding_result": {"status": "PENDING_MATERIAL_CHANGE_VALIDATION", "notes": "The genuine source-conflict rationale and CPU-versus-chassis boundary are queued for the next isolated validation batch."},
-  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": false, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "SOURCE_CONFLICT_RECORDED", "notes": "No duration was selected because 30 hours conflicts with 1440 minutes."},
-  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "The row records BMC Maximum Available/Peak/Minimum power, enables a cap at Maximum Available Power, applies stress for 30 hours and expects average below cap, while Machine Time is 1440 minutes.", "source_specific_v2_comparison": "V2 safely blocks execution but does not explicitly distinguish the duration, domain, query-versus-write and non-proving enforcement conflicts from missing provisionable inputs.", "source_specific_safety_evidence_decision": "Permit certificate-verified read-only discovery and baseline only; forbid license entry, cap writes and stress until a corrected source and complete monitored restore contract exist.", "template_violation_detected": false}
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 54,
+    "calibration": false,
+    "source_key": "Functionality|988|Wistron-BMC-00278-V002",
+    "case_variant_id": "40461cb81e02869b",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 988,
+        "code": "Wistron-BMC-00278-V002"
+    },
+    "source_integrity": {
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869",
+        "original_row_sha256": "035c0b3980ec7c43104ab7d3fa640c6c21d0f9d3e42488c6930474ffa46b9543"
+    },
+    "source_snapshot": {
+        "test_name": "Get CPU capping/limit",
+        "test_set": "Power Consumption",
+        "items": "Get CPU capping/limit",
+        "procedure": "Power on, enter an Advanced BMC license if needed, record Maximum Available/Peak Observed/Minimum Observed power, enable capping, set the cap to Maximum Available Power, apply it, and stress the server for 30 hours.",
+        "criteria": "CPU power utilization is capped; Average Power remains below the Power Cap line, while Maximum Power may cross it.",
+        "attended_time": "10",
+        "machine_time": "1440",
+        "script": null,
+        "deepseek_classification": "YES",
+        "deepseek_finding": "DeepSeek reduces a license, cap-write and long stress validation to read-only sensor/Redfish collection, uses a guessed Chassis URI and cannot test enforcement or restoration."
+    },
+    "original_test_intent": {
+        "purpose": "SOURCE_CONFLICT: determine whether this row is a read-only CPU cap/limit query or a state-changing system power-cap enforcement test, then resolve the test domain, authoritative duration and stimulus before defining execution.",
+        "target": "Unresolved: the title and criterion name CPU capping, while the BMC Power Settings fields and generic Redfish PowerControl commonly describe chassis/system power. The exact processor/package/system/chassis control domain and SUT must be identified.",
+        "scope": "The written procedure includes secure license entitlement, recording three BMC power metrics, enabling and writing a persistent cap, applying server stress, observing meter traces and restoring the initial state. Read-only limit inventory is only preparatory and cannot satisfy that workflow.",
+        "operation": "While blocked, discover read-only target/schema/control-domain and preserve original cap/license/power values without installing a key or changing settings. The owner must choose query-only versus enforcement validation, reconcile 30 hours with 1440 minutes, define a cap that can validly demonstrate enforcement, workload and evidence, then authorize a separately reviewed cap/write/stress/restore flow.",
+        "duration_and_iterations": "Conflict: Procedure specifies 30 hours, while Machine Time is 1440 minutes (24 hours). No duration may be selected or shortened until the testcase owner corrects the source.",
+        "expected_result": "Unresolved. For an enforcement interpretation, merely observing average power below a cap set to Maximum Available Power does not prove the cap constrained the workload; an owner-defined demand-above-cap condition, domain-specific throttle/enforcement evidence, permitted transient rule and recovery are required.",
+        "required_evidence": "Owner correction; target/control domain; discovered schema/resource and units; license entitlement without secret disclosure; original and applied cap/state; authoritative duration/workload; time-series demand/average/peak/cap plus CPU/package/chassis enforcement indicators; errors/thermal health; aborts; restored original cap/license/configuration and service health.",
+        "ambiguities": [
+            "`Get` in the title conflicts with enabling and writing a cap plus long-duration stress in the procedure.",
+            "CPU capping conflicts with generic BMC system/chassis Power Settings semantics unless a platform mapping proves the controlled domain.",
+            "Thirty hours conflicts with the 1440-minute Machine Time.",
+            "A cap equal to Maximum Available Power plus average-below-cap acceptance may never create or prove an enforcement condition.",
+            "Stress tool, target resources, load level, sampling, tolerance, transient window and allowed Maximum-over-cap behavior are undefined."
+        ],
+        "source_conflicts": [
+            "READ_ONLY_GET_VS_CAP_WRITE_STRESS",
+            "CPU_DOMAIN_VS_CHASSIS_SYSTEM_POWER_CONTROL",
+            "PROCEDURE_30_HOURS_VS_MACHINE_TIME_1440_MINUTES",
+            "CAP_AT_MAXIMUM_AVAILABLE_VS_ENFORCEMENT_PROOF"
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "finding": "V2 correctly blocks the current cap write and 30-hour stress, rejects the read-only substitution and demands schema, license, safe limits, workload, watchdog and restore controls. It frames most gaps as missing inputs but does not explicitly record the 30-hour/24-hour source conflict, CPU-versus-chassis domain conflict or the non-proving cap-at-maximum acceptance design as independent semantic blockers."
+    },
+    "applicable_history": [
+        {
+            "path": "review_round_02_functionality.md",
+            "decision": "The historical YES verdict treats an OOB/DUT read-only command as execution even though it omits license, cap enable/write/apply, full stress duration, enforcement evidence and restoration."
+        }
+    ],
+    "v3_review_conclusion": {
+        "review_outcome": "SOURCE_CONFLICT",
+        "automation_classification": "BLOCKED",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Keep BLOCKED for genuine semantic conflicts, not merely missing artifacts. Query-only versus enforcement, CPU versus chassis domain, 30 versus 24 hours, and a non-demonstrative cap/acceptance design must be corrected by the owner. Only read-only discovery and baseline collection are allowed now."
+    },
+    "execution_readiness_detail": {
+        "available_now": [
+            "BMC/SUT identity, advertised Redfish schemas/resources, current read-only license status, cap state and power metrics can be collected without setting a cap or starting stress.",
+            "The original cap/configuration can be documented for a future restoration plan without changing it.",
+            "DMTF's legacy Power.PowerControl.PowerLimit describes a chassis power limit in watts, while processor power-limit throttling is a separate processor metric; deployed platform mapping must establish the source's CPU claim."
+        ],
+        "missing_inputs": [
+            "Owner-corrected purpose, control domain and source text; authoritative duration resolving 30 hours versus 1440 minutes",
+            "Advertised BMC schema/resource/member, units, writable-property semantics, persistent/volatile behavior, enable/apply sequence, allowed range and original-state restore method",
+            "Cap selection and workload that create a safe measurable enforcement condition, with sampling/aggregation, transient/peak tolerance and CPU/package/chassis throttle evidence",
+            "Protected advanced-license entitlement workflow, exact stress package/targets, dedicated window, workloads/users evacuation, independent thermal/power monitoring, abort and OOB recovery"
+        ],
+        "input_owner": "The testcase/platform power owner resolves intent, duration and domain; the BMC vendor supplies schema and license/cap semantics; CPU/performance/thermal owners define workload and enforcement evidence; security/operations approve entitlement, long stress, service impact and recovery.",
+        "safe_read_only_work_before_closure": [
+            "Discover service root, Chassis/System/Processor links and advertised Power, PowerSubsystem, Control, EnvironmentMetrics or OEM resources; capture schema versions and current values with certificate-verified GET only.",
+            "Record current cap-enabled state, cap value, Maximum Available/Peak/Minimum/Average values, CPU/platform inventory, thermal/error baseline and existing license status, with secrets redacted and no log clearing."
+        ],
+        "prohibited_until_closed": [
+            "Do not install/expose a license key, enable/write/apply a cap, start stress, choose 24 or 30 hours, assume `/Chassis/1/Power`, clear logs or infer CPU enforcement from chassis average power.",
+            "Do not choose a lower cap merely to force throttling, accept uncontrolled peak crossings, run on an active SUT, retry after anomaly or restore by guessing an original value."
+        ],
+        "closure_verification": "The corrected source names one purpose/domain/duration; schema discovery proves the exact writable control and units; the cap/workload produces an approved measurable enforcement condition within safe limits; sampling and peak rules are signed; secrets, baseline, monitoring, abort, maintenance and restoration have dry-run evidence."
+    },
+    "revision_candidate": {
+        "test_name": "CPU or System Power-Cap Enforcement \u2014 Source Correction Required",
+        "purpose": "BLOCKED: resolve whether the requested activity is read-only limit retrieval or a power-cap enforcement stress test, and identify whether the controlled domain is CPU/package or whole-system/chassis power.",
+        "applicable_platform_environment": "Unresolved until the owner identifies the SUT, BMC/firmware/license, advertised power-control schema, CPU/platform power domain, approved stress stack and the corrected duration.",
+        "target_scope": "No mutable target is authorized. Read-only discovery may cover candidate BMC chassis/system/processor power resources and the current cap state solely to resolve the source conflict.",
+        "required_inputs": "Corrected purpose/domain; 30-hour-versus-1440-minute resolution; discovered schema/resource/units; license entitlement; original and safe cap/restore semantics; enforcement-producing workload; sampling/transient/tolerance rules; throttle proof; packages; maintenance/approval; monitoring/abort/recovery.",
+        "test_command_procedure_intent": "Do not produce an executable write/stress command. First collect read-only schema, current cap/license and power baselines. After owner correction, separately review the exact secure license, cap enable/set/read-back, full-duration workload, synchronized CPU/system power and throttling evidence, stop rules and original-state restoration procedure.",
+        "preconditions": "Source conflict resolved; exact SUT/domain/resource identified; authoritative duration and acceptance fixed; secrets protected; workload and cap validated to demonstrate enforcement safely; idle dedicated SUT; baseline/config backup; continuous independent monitoring; tested abort/OOB/restore and explicit approval.",
+        "expected_evidence": "Owner correction; schema and control-domain proof; protected entitlement record; original/capped settings and read-back; exact workload/duration; synchronized cap/demand/average/peak plus CPU/package/chassis throttle data; thermal/error/host/BMC logs; aborts; original-state restoration and final workload/system health.",
+        "acceptance_reference": "The corrected testcase plus exact BMC/platform power-control and CPU enforcement specification. Generic Redfish power fields alone do not prove CPU-specific capping or define safe acceptance.",
+        "safety_restrictions": "Read-only discovery only while blocked. Never disclose/install a key, write a cap, start stress, guess duration/domain/resource/limit, clear logs, bypass TLS, use production workloads or infer enforcement from average-below-cap alone.",
+        "human_approval_requirements": "Owner correction is mandatory. Security approves license handling; operations, CPU/performance and power/thermal owners approve the cap, workload, full duration, thresholds, service impact and recovery immediately before execution.",
+        "manual_boundaries": "Owners must correct semantics, provide entitlement and approve the high-load campaign. After a new review, supported cap control, workload, monitoring and evidence may be automated; secret entry, emergency intervention and failed restoration remain controlled human actions.",
+        "recovery_requirements": "No mutation is authorized while blocked. A corrected flow must capture the original state, abort workload on any limit/error, restore cap enable/value through the validated path, preserve evidence, verify CPU/system performance and thermal/BMC/OS health, and escalate failed restoration without automatic retry.",
+        "stop_conditions": "Any unresolved purpose/domain/duration/criterion; unknown resource or cap semantics; absent license security, package, maintenance, monitoring, abort, OOB or restoration; active workload; cap/workload unable to demonstrate enforcement safely; telemetry loss, thermal/power/error fault or secret exposure."
+    },
+    "identified_defects": [
+        "The source title and automation imply read-only retrieval while the procedure requires persistent cap configuration and long stress.",
+        "Procedure duration conflicts with Machine Time by six hours.",
+        "CPU-specific acceptance is not mapped to the BMC's likely chassis/system power-control domain.",
+        "Setting the cap to Maximum Available Power and checking only average-below-cap may not exercise enforcement."
+    ],
+    "changed_fields": [
+        "Original Test Intent",
+        "Review Outcome",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Duration and Iterations",
+        "Acceptance Reference",
+        "Blocked Conditions"
+    ],
+    "reason_for_change": "Convert a generic missing-input BLOCKED explanation into a precise source-conflict decision: four unresolved choices materially change the command, target, duration and proof of power-cap enforcement, while still allowing safe read-only discovery.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2053_2025.2.pdf",
+            "title": "DMTF Redfish Property Guide, DSP2053 2025.2",
+            "version": "2025.2",
+            "applicability": "Redfish implementations advertising the cited Power and ProcessorMetrics properties",
+            "supports": "PowerControl.PowerLimit is defined for chassis power, while PowerLimitThrottleDuration is a distinct processor metric; control and enforcement domains must not be conflated.",
+            "remaining_uncertainty": "The deployed BMC may implement legacy, newer Control/EnvironmentMetrics or OEM resources and may not expose a processor throttle metric."
+        },
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+            "title": "DMTF Redfish Resource and Schema Guide, DSP2046 2025.2",
+            "version": "2025.2",
+            "applicability": "Current Redfish schema guidance; deployed service version controls actual paths",
+            "supports": "The legacy Power schema is deprecated in favor of newer power-subsystem modeling, so `/Chassis/1/Power` must be discovered and version-validated rather than assumed.",
+            "remaining_uncertainty": "The platform may intentionally retain the legacy resource and vendor-specific capping semantics."
+        }
+    ],
+    "removed_ambiguities": [
+        "Explicitly separates read-only query from state-changing enforcement validation.",
+        "Surfaces the 30-hour versus 24-hour conflict rather than silently choosing one.",
+        "Separates CPU throttle evidence from chassis power-limit metrics and rejects average-below-cap as sole proof."
+    ],
+    "resolved_blockers": [
+        "Read-only schema, license-status, cap-state and power baseline collection can proceed without choosing the final interpretation or changing the SUT."
+    ],
+    "remaining_blockers": [
+        "All write/stress execution remains blocked until the owner resolves purpose, domain, duration and enforcement design and supplies secure license, workload, monitoring, approval and restoration controls."
+    ],
+    "objective_improvement_over_v2": "V3 preserves V2's hard safety stop but identifies the irreducible source conflicts that justify BLOCKED, prevents a 24/30-hour silent change and a chassis-to-CPU evidence error, and states exactly which read-only work remains safe.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "notes": "Isolated validation confirmed that BLOCKED is justified by unresolved retrieval-versus-enforcement intent, CPU/package-versus-chassis domain, and 30-hour-versus-1440-minute source conflicts. The contract correctly permits only non-mutating discovery and prevents inferred domain, duration, write, stress, or PASS claims."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": false,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "SOURCE_CONFLICT_RECORDED",
+        "notes": "No duration was selected because 30 hours conflicts with 1440 minutes."
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "The row records BMC Maximum Available/Peak/Minimum power, enables a cap at Maximum Available Power, applies stress for 30 hours and expects average below cap, while Machine Time is 1440 minutes.",
+        "source_specific_v2_comparison": "V2 safely blocks execution but does not explicitly distinguish the duration, domain, query-versus-write and non-proving enforcement conflicts from missing provisionable inputs.",
+        "source_specific_safety_evidence_decision": "Permit certificate-verified read-only discovery and baseline only; forbid license entry, cap writes and stress until a corrected source and complete monitored restore contract exist.",
+        "template_violation_detected": false
+    }
 }

@@ -1,0 +1,113 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 185,
+    "calibration": false,
+    "source_key": "Stability|75|Wistron-Long Term Stress-00074-V002",
+    "case_variant_id": "ac4d62e354306147",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 75,
+        "code": "Wistron-Long Term Stress-00074-V002"
+    },
+    "source_integrity": {
+        "original_row_sha256": "aaa0b653146113ab1cfeba709eb59bed62622ddda0d8bd22b20baab7e6e3a510"
+    },
+    "source_snapshot": {
+        "test_name": "Ethernet Stress",
+        "facts": [
+            "Run `ib_read write` for all ConnectX-7 and BlueField-3 ports for one hour.",
+            "Bandwidth must match SPEC; machine time is 500 minutes."
+        ],
+        "deepseek": "PARTIAL but gives invalid/ambiguous `ib_read_bw -d <port> -t 3600` and no peer/server orchestration.",
+        "v2": "BLOCKED for port/topology/tool/threshold gaps."
+    },
+    "original_test_intent": {
+        "statement": "Stress every required CX-7 and BF3 data port for one hour using the owner-approved read/write transport benchmark and compare per-port bandwidth and errors to SPEC.",
+        "must_preserve": [
+            "All listed adapter ports, read and write intent, one hour and SPEC comparison."
+        ],
+        "unknowns": [
+            "Ethernet/RoCE versus InfiniBand mode, local/peer topology, RDMA device/port mapping, benchmark roles/options and numeric thresholds."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "BLOCKED",
+        "second_review_outcome": "CHANGED",
+        "specific_gap": "The missing map/recipe is provisionable; once supplied, the paired traffic and evidence are technically automatable."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "RECLASSIFIED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_SPEC",
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL",
+            "SOURCE_CONFLICT"
+        ],
+        "summary": "No traffic is ready, but this is not inherently BLOCKED. Owner must reconcile Ethernet/RoCE/IB mode and provide both endpoint commands, port map and thresholds."
+    },
+    "revision_candidate": {
+        "test_name": "Stress All CX-7 and BF3 Data Ports for One Hour",
+        "purpose": "Run the approved bidirectional/read-and-write RDMA or Ethernet workload on every mapped port and verify per-port bandwidth and error counters against the platform SPEC.",
+        "applicable_platform_environment": "Pinned CX-7/BF3 firmware/driver/OFED stack and owner-declared Ethernet/RoCE or InfiniBand fabric with peers.",
+        "target_scope": "Every physical adapter port mapped to PCI BDF, netdev/RDMA device and peer; management interfaces excluded unless explicitly listed.",
+        "required_inputs": "Port/peer/topology and transport-mode map, server/client commands, message size/depth/concurrency/direction, one-hour allocation, numeric SPEC/tolerance, counter baseline and approval.",
+        "test_command_procedure_intent": "Read-only map and counters first. After recipe approval, start peers in correct roles and exercise each port for the declared one-hour coverage, preserving full output and counter deltas.",
+        "preconditions": "Links meet expected speed/width/state/MTU, routing/VLAN/RDMA config and isolated management path.",
+        "expected_evidence": "BDF/port/netdev/RDMA/peer map; link mode/rate/FEC/MTU; tool/firmware/driver versions; exact endpoint commands/times; per-port throughput and retry/drop/CRC/FEC/RDMA counters; kernel/BMC/SEL deltas.",
+        "acceptance_reference": "Each port meets its signed bandwidth/tolerance and error-counter policy; aggregate throughput cannot mask a failed port.",
+        "safety_restrictions": "Do not guess `${ETH_PORTS}`, use `-d` as a port without tool-version proof, omit peer command, mix IB with Ethernet/RoCE or disrupt management.",
+        "human_approval_requirements": "Network owner supplies recipe/topology and approves load window.",
+        "manual_boundaries": "Cabling/fabric setup may be manual; traffic/evidence can be automated.",
+        "recovery_requirements": "Stop both endpoints, restore network config, preserve counters and verify all links/management.",
+        "stop_conditions": "Mode/topology ambiguity, link loss, counter spike, host impact, wrong interface, package mismatch or incomplete per-port evidence."
+    },
+    "identified_defects": [
+        "Transport mode and endpoints undefined.",
+        "DeepSeek command does not establish read+write/all-port traffic.",
+        "One-hour versus 500-minute metadata conflict."
+    ],
+    "changed_fields": [
+        "Automation Classification",
+        "Execution Readiness",
+        "Procedure Intent",
+        "Target Scope"
+    ],
+    "reason_for_change": "A complete port/peer recipe can be executed automatically; blocking capability because the handoff omitted it hides the actual network-engineering decisions still required.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Physical/RDMA/netdev identity and both endpoint roles are explicit."
+    ],
+    "resolved_blockers": [
+        "Capability is reclassified from BLOCKED."
+    ],
+    "remaining_blockers": [
+        "Transport, topology and numeric SPEC remain missing."
+    ],
+    "objective_improvement_over_v2": "V3 retains the no-traffic gate but distinguishes a resolvable handoff from permanent inability and prevents an invalid single-ended command from masquerading as all-port Ethernet stress.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved every CX-7/BF3 port, transport-mode and execution-location separation, both endpoint roles, full one-hour per-port coverage, option proof, management isolation and per-port acceptance."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 75 names all CX7/BF3, read/write, one hour and SPEC bandwidth while leaving ports and peers absent.",
+        "template_violation_detected": false
+    }
+}

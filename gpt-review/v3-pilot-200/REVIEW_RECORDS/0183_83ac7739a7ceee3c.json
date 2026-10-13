@@ -1,0 +1,107 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 183,
+    "calibration": false,
+    "source_key": "Stability|70|Wistron-Long Term Stress-00069-V004",
+    "case_variant_id": "83ac7739a7ceee3c",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 70,
+        "code": "Wistron-Long Term Stress-00069-V004"
+    },
+    "source_integrity": {
+        "original_row_sha256": "423f923efc81f7531b31aee93c04e99ae3be6e6f626f90a6d2d60425b687fb88"
+    },
+    "source_snapshot": {
+        "test_name": "Reboot 500 times",
+        "facts": [
+            "Title requires 500 reboots; procedure says run reboot for 12 hours.",
+            "Fully populated system; no errors, hang/BSOD or device loss."
+        ],
+        "deepseek": "PARTIAL and assumes 500 warm reboots over 12 hours.",
+        "v2": "USER CONFIRMATION with bounded controller."
+    },
+    "original_test_intent": {
+        "statement": "Exercise a fully populated system through a large warm-reboot campaign, nominally 500 cycles and 12 hours, and detect boot/device/log failures.",
+        "must_preserve": [
+            "500 count and 12-hour source statements until owner resolves their relationship."
+        ],
+        "unknowns": [
+            "Whether both are mandatory, feasibility, boot timeout, controller/retry semantics and inventory allowlist."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It treats 500 and 12 hours as simultaneously settled instead of flagging the ambiguous completion rule and possible infeasibility."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "SOURCE_CONFLICT",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Do not start until owner states whether completion requires 500 cycles, 12 elapsed hours, both, or an explicit precedence rule."
+    },
+    "revision_candidate": {
+        "test_name": "Run the Approved 500-Cycle / 12-Hour Warm-Reboot Campaign",
+        "purpose": "Perform the owner-resolved warm-reboot objective on the complete inventory and detect any cycle-specific boot, device or log regression.",
+        "applicable_platform_environment": "Fully populated SUT with stable OS reboot path, bounded controller, OOB and evidence storage.",
+        "target_scope": "All signed devices and an immutable cycle ledger; AC remains applied.",
+        "required_inputs": "Signed 500-versus-12-hour completion rule, feasibility estimate, boot-ready timeout, reboot command, retry/count policy, inventory/event baseline and approval.",
+        "test_command_procedure_intent": "After resolution, controller issues warm reboots, records every attempt and performs boot/inventory/log checks; it must not accelerate, omit or relabel failed cycles to fit time.",
+        "preconditions": "Maintenance window, OOB recovery and evidence capacity cover the resolved objective.",
+        "expected_evidence": "Owner rule; cycles attempted/completed with timestamps/durations/status; per-cycle inventory/log diff; any recovery; final full health.",
+        "acceptance_reference": "Only the signed count/time rule plus zero unpermitted failure or device loss; 12 hours alone cannot imply 500 completed cycles unless specified.",
+        "safety_restrictions": "No AC cycle substitution, log clearing, hidden retry, unbounded loop or compression of boot checks.",
+        "human_approval_requirements": "Owner approves completion rule and disruptive run.",
+        "manual_boundaries": "Agent may control a bounded warm-reboot loop; engineer evaluates failures.",
+        "recovery_requirements": "Abort, preserve ledger and failed state, recover via OOB and resume only with explicit disposition.",
+        "stop_conditions": "Unresolved completion rule, boot timeout, device loss, error/hang/BSOD, evidence failure or OOB loss."
+    },
+    "identified_defects": [
+        "Title count and procedure duration do not define precedence.",
+        "500 cycles in 12 hours may be platform-infeasible."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Completion Rule"
+    ],
+    "reason_for_change": "A reboot campaign cannot be audited when reaching 12 hours and reaching 500 cycles may produce different completion states.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "Warm reboot and AC-on boundary explicit."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "Owner must resolve count versus time."
+    ],
+    "objective_improvement_over_v2": "V3 surfaces a real source conflict that V2 silently combined, preventing a 12-hour partial count or a 500-cycle overrun from being declared complete without owner authority.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved the unresolved 500-versus-12-hour completion rule, warm/AC-on semantics, immutable cycle ledger, full inventory checks and no hidden retry."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 70 title says 500 reboots while the only execution step says reboot for 12 hours.",
+        "template_violation_detected": false
+    }
+}

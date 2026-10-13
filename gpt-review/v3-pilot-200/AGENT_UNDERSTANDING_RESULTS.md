@@ -1051,3 +1051,39 @@ Status: `PASSED IN ISOLATED SAME-MODEL-FAMILY CONTEXT`
   guessing them, widening the path claim or declaring partial-evidence PASS
   would be `MODEL_PLANNING_ERROR`. No proposed-contract defect was found. This
   is not independent-model validation and is not DUT hardware validation.
+## Final Pilot Validation Addendum (Cases 161-200)
+
+Validation inputs used only each case's `revision_candidate`; reviewer conclusions and expected answers were excluded. No validator executed commands or accessed a DUT. The validators are isolated contexts from the same model family, so this is not independent-model validation.
+
+Final-batch CLEAR validations include cases 161, 164-169, 171, 175, 180, 183, 185, 187-189 and 194-198. Cases 175, 180, 187, 189, 195 and 197 required one or more document revisions before CLEAR; the initial defects and correction rationale remain in their per-case records.
+
+Important corrected misunderstandings/ambiguities:
+
+- Case 175: selected one finite loop rule, added canonical containment, mandatory per-cycle end-to-end integrity and capacity/environment evidence.
+- Case 180: required a disposition for every physical bay, persistent identity immediately before I/O, protected-device exclusions and full dew-point/rail controls.
+- Case 187: defined boot/ping rules and made any failed cycle terminal for PASS; diagnostic retries never replace failures.
+- Case 189: required exact private `usbPoll` proof, controller-BDF-anchored physical paths and deterministic DC-cycle accounting.
+- Case 195: made preserve-all exhaustive and defined task polling, timeout, stall, terminal and reconnect rules.
+- Case 197: replaced singular-image downgrade wording with an ordered per-hop image and activation/health manifest.
+
+Final interpretation remains: review completed and semantically reviewed are not hardware tested; a CLEAR understanding result proves only that the isolated agent interpreted the written contract consistently.
+
+## Final Closure Addendum (Cases 51-87 and pilot-wide status)
+
+The remaining queued contracts were resolved before release. Validators again received only each `revision_candidate`, without source rows, V2 conclusions, reviewer findings or expected answers. Cases 51-65 and 73, 79 were treated as material, security-sensitive or genuine-blocker checks; the remaining queued cases 57, 63, 66, 68, 70, 72, 74, 76-78, 81-82, 84 and 87 were also validated rather than left pending.
+
+Material corrections discovered by isolated validation included:
+
+- Case 51: ordinary sensor discrepancies no longer truncate the required ten-sensor/two-view collection.
+- Case 56: physical I2C bus/address identities are separated from command-ready IPMI routing/address bytes.
+- Case 60: hysteresis reads branch by per-sensor capability and use exact owner/LUN routing and mandatory conversion when acceptance is in engineering units.
+- Case 61: Get User Access is endpoint-bound OOB `lanplus`, enforces User IDs 1-63 within the platform maximum, and defines the governing channel-access selector.
+- Case 63: SEL allocation special values are applied per field; maximum geometry is not confused with current free space.
+- Case 68: Redfish collection validation follows bounded same-origin pagination and cannot pass from the first page or an unsupported result.
+- Case 70: every WebUI GPU entry requires stable same-device mapping, and dynamic Power comparison requires signed sampling/aggregation and maximum timestamp skew.
+- Case 72: SMBIOS Type 25 validation requires raw-table capture correlated by handle with formatted output and an explicit absent-structure policy.
+- Case 84: ordinary sensor evidence discrepancies withhold PASS but cannot truncate remaining safe IB/OOB/Web collection.
+
+Pilot-wide status counts after closure are 160 contracts with isolated same-model-family validation and 40 explicitly marked not selected/not required under the risk-pattern policy. Of the 160 validated contracts, 155 ended clear/passed and 5 correctly handled intentional ambiguity. Twenty-seven records carry an after-revision/correction status. No record remains `PENDING*`, `REVISION_REQUIRED`, `NOT_VALIDATED` or without a validation status.
+
+These counts are document-understanding results, not testcase PASS rates. No independent model and no DUT hardware were used.

@@ -1,0 +1,116 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 196,
+    "calibration": false,
+    "source_key": "(No Main Function)|8|Wistron---00843-V003",
+    "case_variant_id": "3e073c32172e6d6b",
+    "source_ref": {
+        "sheet": "(No Main Function)",
+        "source_row": 8,
+        "code": "Wistron---00843-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "35919adbabbce3d33b01cfbcd1a45c281825b20c7bafe9a9024a439a90644d93"
+    },
+    "source_snapshot": {
+        "test_name": "Flash BIOS Firmware - upgrade",
+        "facts": [
+            "BMC WebUI uploads `.ima`, Preserve all Configuration, flash, verify version."
+        ],
+        "deepseek": "PARTIAL and assumes a generic Redfish action.",
+        "v2": "REQUIRES PACKAGE with BIOS image, recovery and boot health."
+    },
+    "original_test_intent": {
+        "statement": "Upgrade host BIOS via the supported BMC path, preserve the intended settings and verify target version plus successful host boot.",
+        "must_preserve": [
+            "BIOS\u2014not BMC\u2014target, newer version, preserve configuration and activation."
+        ],
+        "unknowns": [
+            "Image/component ID, activation/reset sequence, preservation scope, boot/config acceptance and rollback."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It should explicitly bind the firmware-inventory component to host BIOS and avoid assuming a universal Redfish upload action."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Use the target BMC's advertised/vendor-approved BIOS channel, prove component identity, then validate host boot and settings after activation."
+    },
+    "revision_candidate": {
+        "test_name": "Upgrade Host BIOS Firmware Through the Approved BMC Path",
+        "purpose": "Apply one signed newer BIOS image to the exact host firmware component, preserve the approved settings and prove the host boots with the target version and healthy inventory.",
+        "applicable_platform_environment": "Exact board revision/BMC/BIOS update matrix with stable power and host console.",
+        "target_scope": "Host BIOS component only; BMC/CPLD are excluded. One approved image/update attempt.",
+        "required_inputs": "Board/system serial, BIOS component inventory ID, current/target version, image hash/signature/compatibility, advertised/vendor update method, setting-preservation matrix, activation reboot sequence, backup/rollback and approval.",
+        "test_command_procedure_intent": "Capture BIOS/config/boot/security state, verify image/component, use only advertised or SOP path, monitor task, perform only the approved activation reboot, then verify version, settings, boot and devices.",
+        "preconditions": "Stable power, OOB/serial console, recovery image/method and maintenance window.",
+        "expected_evidence": "Component/image identity/hash; pre/post BIOS version and settings; exact update/task status/messages; activation timeline; POST/boot completion; CPU/memory/PCIe/storage/GPU/network inventory and SEL/kernel health.",
+        "acceptance_reference": "Correct newer BIOS, successful task/activation, approved settings preserved and healthy boot/device state; inventory string alone is insufficient.",
+        "safety_restrictions": "No generic endpoint guess, wrong component, unsigned/incompatible image, power interruption, automatic retry or unapproved setup-default reset.",
+        "human_approval_requirements": "BIOS/platform owner approves image, preservation, reboot and rollback.",
+        "manual_boundaries": "Agent may use verified update API; recovery/setup intervention may be manual.",
+        "recovery_requirements": "Preserve task state; use vendor dual-image/recovery only as approved if POST fails.",
+        "stop_conditions": "Identity/signature/compatibility mismatch, unsupported method, power instability, task error/stall, POST/boot failure, settings/device regression or lost recovery."
+    },
+    "identified_defects": [
+        "Component targeting and post-boot checks need BIOS-specific proof.",
+        "Generic Redfish action assumption unsafe."
+    ],
+    "changed_fields": [
+        "Target Scope",
+        "Procedure Intent",
+        "Evidence",
+        "Acceptance"
+    ],
+    "reason_for_change": "A management controller can expose multiple firmware inventories; V3 prevents a correct image from being sent to an unproven component and requires actual host activation evidence.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+            "title": "DMTF Redfish Resource and Schema Guide DSP2046, UpdateService 1.16.0",
+            "version": "2025.2",
+            "applicability": "Firmware inventory and advertised update mechanisms",
+            "supports": "Clients discover component inventory and supported pull/push update paths from the service rather than assuming one universal upload action.",
+            "remaining_uncertainty": "Vendor BIOS activation and preservation semantics remain platform-specific."
+        }
+    ],
+    "removed_ambiguities": [
+        "BIOS component and host activation are explicit."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "Image, method, preservation and recovery."
+    ],
+    "objective_improvement_over_v2": "V3 ties the update to a proven BIOS component and makes POST, boot, settings and complete device inventory part of completion, not merely the new version string.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved host-BIOS component identity, one signed image/attempt, service-advertised/vendor path, preservation, activation reboot, POST/boot/device evidence and authorized recovery without automatic retry."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "No-main row 8 is BIOS upgrade through BMC WebUI with preserve-all and version verification.",
+        "template_violation_detected": false
+    }
+}

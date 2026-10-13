@@ -1,0 +1,108 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 188,
+    "calibration": false,
+    "source_key": "Stability|80|Wistron-Long Term Stress-00011-V001",
+    "case_variant_id": "cc522cfdb35f6d75",
+    "source_ref": {
+        "sheet": "Stability",
+        "source_row": 80,
+        "code": "Wistron-Long Term Stress-00011-V001"
+    },
+    "source_integrity": {
+        "original_row_sha256": "7a43361fe221c4f0fd15f8c7837c75cf29ff2850536886b7d96eef87fe45b7c2"
+    },
+    "source_snapshot": {
+        "test_name": "DC Reboot - pciePoll()",
+        "facts": [
+            "Same 250-cycle WAT flags as adjacent cases; title requires all PCIe devices."
+        ],
+        "deepseek": "PARTIAL and assumes pciePoll scenario.",
+        "v2": "REQUIRES PACKAGE with PCIe baseline."
+    },
+    "original_test_intent": {
+        "statement": "Perform 250 DC reboot cycles and prove every required PCIe function returns after each boot.",
+        "must_preserve": [
+            "250 DC cycles and all required PCIe bus devices."
+        ],
+        "unknowns": [
+            "Private flag mapping, complete PCIe baseline, expected dynamic functions and link criteria."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "IMPROVED",
+        "specific_gap": "It assumes the command invokes pciePoll although the exact invocation is indistinguishable from OS Ping and USB cases."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_INPUT",
+            "NEEDS_APPROVAL",
+            "SOURCE_CONFLICT"
+        ],
+        "summary": "Require WAT scenario proof plus stable BDF/vendor/device/link baseline before executing the 250-cycle DC campaign."
+    },
+    "revision_candidate": {
+        "test_name": "Run 250 WAT DC Reboots with Complete PCIe Polling",
+        "purpose": "Verify every required PCIe function and link returns to its approved state after each DC reboot.",
+        "applicable_platform_environment": "Pinned WAT/BMC platform with signed PCIe topology and OOB recovery.",
+        "target_scope": "Exactly 250 cycles and every required BDF/function, including bridges/endpoints defined in the baseline; hot-plug/optional devices need explicit rules.",
+        "required_inputs": "WAT package/flag mapping to pciePoll, DC method, complete lspci/topology/link baseline, dynamic-device allowlist, boot timeout and approval.",
+        "test_command_procedure_intent": "After semantic proof, execute 250 cycles and capture per-cycle structured PCIe enumeration/link-state diff plus boot/BMC/host logs.",
+        "preconditions": "No pending firmware/device change; protected credentials and OOB ready.",
+        "expected_evidence": "Package provenance; exact command; cycle ledger; per-BDF vendor/device/class/link speed/width and AER diff; BMC/OS logs; final state.",
+        "acceptance_reference": "All required functions appear in correct hierarchy/link state every cycle with no disallowed AER/error.",
+        "safety_restrictions": "No count-only `lspci | wc -l`, guessed scenario, hidden retry, log clearing or device-baseline substitution.",
+        "human_approval_requirements": "PCIe/platform owner approves baseline and campaign.",
+        "manual_boundaries": "Agent runs verified harness; engineer resolves allowed topology variance.",
+        "recovery_requirements": "Abort on first policy failure, preserve topology, recover via OOB and do not mask missing devices.",
+        "stop_conditions": "Unmapped pciePoll, missing/moved BDF, degraded link, AER, boot/harness/evidence failure."
+    },
+    "identified_defects": [
+        "Command does not visibly select pciePoll.",
+        "Device count cannot prove all PCIe devices."
+    ],
+    "changed_fields": [
+        "Execution Readiness",
+        "Evidence",
+        "Acceptance"
+    ],
+    "reason_for_change": "PCIe enumeration is identity and topology sensitive; V3 rejects both an unproven poll selector and aggregate device-count evidence.",
+    "new_technical_evidence": [],
+    "removed_ambiguities": [
+        "All PCIe means signed functions and link attributes."
+    ],
+    "resolved_blockers": [],
+    "remaining_blockers": [
+        "WAT mapping and baseline."
+    ],
+    "objective_improvement_over_v2": "V3 requires proof that the private harness really runs pciePoll and upgrades evidence from a total device count to per-BDF topology/link validation.",
+    "agent_understanding_result": {
+        "status": "CLEAR",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Validator independently preserved private pciePoll proof, exactly 250 accounted DC cycles, frozen per-BDF hierarchy/link baseline, dynamic-device allowlist, AER policy and no count-only or hidden-retry completion."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Row 80 names pciePoll/all PCIe yet uses the same BMC_P DC OS OS_I BMC_I sequence as row 79.",
+        "template_violation_detected": false
+    }
+}
