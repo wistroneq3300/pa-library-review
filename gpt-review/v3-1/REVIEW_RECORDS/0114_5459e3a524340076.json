@@ -1,0 +1,79 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 114,
+    "source_key": "Reliability|149|Wistron-HW Robust-00027-V002",
+    "case_variant_id": "5459e3a524340076",
+    "source_ref": {
+        "sheet": "Reliability",
+        "source_row": 149,
+        "code": "Wistron-HW Robust-00027-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Read CPU temperature properties through the exact independent source paths and compare mapped actual values.",
+    "original_procedure_criteria": {
+        "procedure": "Run each read-only path with independent status, retain raw data and map to expected interface/property/value.",
+        "criteria": "Every required path/property is present and correct."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; FULLY AUTOMATABLE and safe collection immediate."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "READY_FOR_READ_ONLY_COLLECTION",
+            "NEEDS_SPEC_FOR_VERDICT"
+        ],
+        "manual_test_activity": "Engineer supplies expected matrix; no manual test action."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-20",
+        "ED-21",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Independent CPU-temperature paths.",
+        "project_inputs": "Expected interface/property/value matrix.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "One successful path cannot hide another failure.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Read-only paths retained.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Independent status tracking and structured comparison.",
+        "official_reference": "Platform BMC/CPU sensor documentation.",
+        "coverage_difference": "All source paths retained.",
+        "risks_limitations": "Private mapping supplies Expected."
+    },
+    "missing_inputs": [
+        "Expected path/property matrix"
+    ],
+    "safety_boundaries": [
+        "CPU temperature collection is read-only across the named independent paths; do not alter thermal, fan or power policy to reconcile values"
+    ],
+    "expected_evidence": [
+        "Raw per-path outputs/status",
+        "Mapped actual values"
+    ],
+    "no_automatic_retry": "Failed path remains visible.",
+    "engineer_owned_verdict": "Engineer owns correctness.",
+    "review_improvement": "KEEP: V3 already separates fully automatable collection from verdict input.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

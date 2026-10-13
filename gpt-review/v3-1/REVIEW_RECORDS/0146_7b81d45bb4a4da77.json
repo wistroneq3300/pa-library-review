@@ -1,0 +1,84 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 146,
+    "source_key": "Compatibility|45|Wistron-Networking-00028-V002",
+    "case_variant_id": "7b81d45bb4a4da77",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 45,
+        "code": "Wistron-Networking-00028-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Visually verify every required NIC device/port is correctly shown in BIOS.",
+    "original_procedure_criteria": {
+        "procedure": "Operator enters BIOS and maps displayed devices to physical NIC/port matrix.",
+        "criteria": "BIOS inventory matches approved topology."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; MANUAL ONLY; OS inventory is corroboration only."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "MANUAL ONLY",
+        "execution_readiness": [
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL",
+            "MANUAL_ACTIVITY"
+        ],
+        "manual_test_activity": "Engineer operates/observes BIOS; agent may collect pre-boot OS inventory."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-10",
+        "ED-12",
+        "ED-17",
+        "ED-23",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "BIOS NIC information check.",
+        "project_inputs": "NIC/port map, expected fields and reboot/KVM window.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "OS data cannot replace BIOS display.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Retain direct BIOS Setup inspection of every required NIC device and port; OS inventory cannot replace firmware-screen coverage.",
+    "modernized_recommendation": {
+        "status": "SUPPLEMENT ONLY",
+        "recommended_method": "Use approved KVM capture plus stable OS/BDF corroboration.",
+        "official_reference": "Platform BIOS/NIC topology spec.",
+        "coverage_difference": "BIOS remains primary.",
+        "risks_limitations": "Reboot/service impact."
+    },
+    "missing_inputs": [
+        "NIC/port/expected matrix",
+        "Reboot/KVM approval"
+    ],
+    "safety_boundaries": [
+        "No BIOS change",
+        "Approved reboot only"
+    ],
+    "expected_evidence": [
+        "BIOS screenshots",
+        "Mapped inventory",
+        "Optional OS corroboration"
+    ],
+    "no_automatic_retry": "No extra reboot/navigation.",
+    "engineer_owned_verdict": "Engineer owns visual result.",
+    "review_improvement": "KEEP: V3 already preserves the tested interface.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

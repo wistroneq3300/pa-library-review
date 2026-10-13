@@ -1,0 +1,78 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 66,
+    "source_key": "Functionality|1284|Wistron-BMC-00574-V003",
+    "case_variant_id": "566c46736b084d27",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1284,
+        "code": "Wistron-BMC-00574-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Issue the in-band DCMI Get Temperature Readings request for source instance 01h and byte-accurately validate its response.",
+    "original_procedure_criteria": {
+        "procedure": "Send the exact read-only request and parse the normative DCMI payload.",
+        "criteria": "Completion, count and temperature-instance data are structurally correct; reasonableness is platform-specific."
+    },
+    "historical_reviews": {
+        "v3": "REWRITE_REQUIRED; FULLY AUTOMATABLE and removes nonexistent V2 fields."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "READY_FOR_READ_ONLY_COLLECTION"
+        ],
+        "manual_test_activity": "None inherent; engineer owns optional reasonableness comparison."
+    },
+    "applicable_engineering_decisions": [
+        "ED-08",
+        "ED-20",
+        "ED-21",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Source instance 01h and standard response conformance.",
+        "project_inputs": "Optional expected sensor mapping/range.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Instance 01h does not imply all temperature instances.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "DCMI Get Temperature Readings retained.",
+    "modernized_recommendation": {
+        "status": "SPEC-CORRECTED ORIGINAL",
+        "recommended_method": "Normative parser with raw bytes and count/record-length checks.",
+        "official_reference": "Applicable DCMI 1.5 temperature command definition.",
+        "coverage_difference": "Command conformance only.",
+        "risks_limitations": "Do not invent fields or universal thresholds."
+    },
+    "missing_inputs": [
+        "Only optional platform range/mapping"
+    ],
+    "safety_boundaries": [
+        "Issue only the in-band DCMI Get Temperature Readings request for instance 01h; no sensor thresholds, BMC settings or SEL contents may be changed"
+    ],
+    "expected_evidence": [
+        "Raw request/response",
+        "Normative field decode",
+        "Target/version"
+    ],
+    "no_automatic_retry": "Malformed/error response retained.",
+    "engineer_owned_verdict": "Engineer decides platform reasonableness.",
+    "review_improvement": "KEEP: V3 already corrects payload semantics without needing private Expected for collection.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

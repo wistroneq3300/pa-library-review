@@ -1,0 +1,76 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 107,
+    "source_key": "Reliability|111|Wistron-System RAS-00831-V002",
+    "case_variant_id": "5d45065d94c6427e",
+    "source_ref": {
+        "sheet": "Reliability",
+        "source_row": 111,
+        "code": "Wistron-System RAS-00831-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "PCIe fatal Surprise Down case lacks the actual stimulus, endpoint/link/DPC/AER locus and expected containment/host-state contract.",
+    "original_procedure_criteria": {
+        "procedure": "TBD; selected stimulus must actually exercise Surprise Down.",
+        "criteria": "TBD fatal containment and recovery."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED but remains semantic BLOCKED."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "BLOCKED",
+        "execution_readiness": [
+            "SEMANTIC_BLOCK",
+            "HIGH_RISK"
+        ],
+        "manual_test_activity": "Only non-mutating topology/capability discovery."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-20",
+        "ED-21",
+        "ED-26"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Surprise Down fatal-error title/provenance.",
+        "project_inputs": "Stimulus/locus/containment/host-state/recovery contract.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Another fatal AER event cannot substitute for Surprise Down.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "No Surprise Down mechanism, endpoint/root-port/DPC locus or fatal-containment procedure is supplied.",
+    "modernized_recommendation": {
+        "status": "NOT APPLICABLE",
+        "recommended_method": "Read-only topology/DPC/AER baselines only.",
+        "official_reference": "Owner PCIe RAS specification required.",
+        "coverage_difference": "Unknown.",
+        "risks_limitations": "Fatal event may reset host/device or corrupt work."
+    },
+    "missing_inputs": [
+        "Complete Surprise Down test contract"
+    ],
+    "safety_boundaries": [
+        "Do not trigger Surprise Down until the endpoint/root-port, DPC/AER containment, workload isolation and recovery path are approved"
+    ],
+    "expected_evidence": [
+        "PCIe fatal-error definition with physical/logical locus, Surprise Down stimulus, DPC/AER and OS/BMC reporting, containment and host recovery"
+    ],
+    "no_automatic_retry": "Not applicable.",
+    "engineer_owned_verdict": "Owner defines case.",
+    "review_improvement": "KEEP: V3 correctly blocks missing fatal-event semantics rather than copying adjacent tests.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

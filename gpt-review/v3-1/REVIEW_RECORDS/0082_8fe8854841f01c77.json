@@ -1,0 +1,82 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 82,
+    "source_key": "Functionality|1941|Wistron-BIOS-00483-V002",
+    "case_variant_id": "8fe8854841f01c77",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1941,
+        "code": "Wistron-BIOS-00483-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Decode applicable SMBIOS Type 29 Electrical Current Probe records and verify persistence; unrelated Type 3 fields conflict with this intent.",
+    "original_procedure_criteria": {
+        "procedure": "Collect raw Type 29 records, map probes, decode values and repeat after approved reboot.",
+        "criteria": "Mapped Type 29 fields match platform expectations."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES, excludes unrelated Type 3 fields pending owner disposition."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "READY_FOR_PRECHECK",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL_FOR_REBOOT"
+        ],
+        "manual_test_activity": "Owner resolves Type 3 text and supplies probe map."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-20",
+        "ED-21",
+        "ED-24",
+        "ED-25",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Type 29 intent plus conflicting Type 3 provenance.",
+        "project_inputs": "Probe map/Expected and owner disposition of Type 3 text.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Type 3 evidence cannot replace Type 29.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "SMBIOS Type 29 decode.",
+    "modernized_recommendation": {
+        "status": "SPEC-CORRECTED ORIGINAL",
+        "recommended_method": "Handle-based raw Type 29 parsing.",
+        "official_reference": "DMTF SMBIOS Type 29 specification.",
+        "coverage_difference": "Conflict remains recorded.",
+        "risks_limitations": "Reboot separate approval."
+    },
+    "missing_inputs": [
+        "Probe map/Expected",
+        "Type 3 disposition"
+    ],
+    "safety_boundaries": [
+        "Decode Type 29 records without electrical probing or firmware edits; perform a reboot only under the approved persistence plan"
+    ],
+    "expected_evidence": [
+        "Raw Type 29 matrix before/after reboot"
+    ],
+    "no_automatic_retry": "No unplanned reboot.",
+    "engineer_owned_verdict": "Owner resolves conflict/result.",
+    "review_improvement": "KEEP: safe Actual collection remains possible while the true source conflict is not erased.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}

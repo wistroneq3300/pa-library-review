@@ -1,0 +1,76 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 104,
+    "source_key": "Reliability|103|Wistron-System RAS-00823-V003",
+    "case_variant_id": "7e9c99a970a5850f",
+    "source_ref": {
+        "sheet": "Reliability",
+        "source_row": 103,
+        "code": "Wistron-System RAS-00823-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Memory uncorrectable-nonfatal case lacks actual NVIDIA host-memory topology, stimulus and consumption/containment acceptance.",
+    "original_procedure_criteria": {
+        "procedure": "TBD.",
+        "criteria": "TBD."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED but remains BLOCKED; removed premature DIMM/channel assumption."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "BLOCKED",
+        "execution_readiness": [
+            "SEMANTIC_BLOCK",
+            "HIGH_RISK"
+        ],
+        "manual_test_activity": "Only non-mutating topology/capability discovery."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-20",
+        "ED-21",
+        "ED-26"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Memory UENF title/provenance.",
+        "project_inputs": "Exact memory target/topology, injection, consumption/containment and recovery.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "No guessed DIMM/GPU-memory scope.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "No memory UENF injection, DIMM/GPU-memory target or containment method is present in the source.",
+    "modernized_recommendation": {
+        "status": "NOT APPLICABLE",
+        "recommended_method": "Read-only topology/RAS discovery.",
+        "official_reference": "Owner/platform RAS specification required.",
+        "coverage_difference": "Unknown.",
+        "risks_limitations": "UE can corrupt data or reset devices."
+    },
+    "missing_inputs": [
+        "Complete target/stimulus/acceptance contract"
+    ],
+    "safety_boundaries": [
+        "Do not inject an uncorrectable memory error or assume a DIMM versus GPU-memory target until topology, containment and recovery are signed"
+    ],
+    "expected_evidence": [
+        "Memory RAS owner definition of target topology, UENF stimulus, consumption/containment behavior, reporter correlation and recovery, followed by re-review"
+    ],
+    "no_automatic_retry": "Not applicable.",
+    "engineer_owned_verdict": "Owner defines case.",
+    "review_improvement": "KEEP: V3 correctly avoids borrowing topology from adjacent cases.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

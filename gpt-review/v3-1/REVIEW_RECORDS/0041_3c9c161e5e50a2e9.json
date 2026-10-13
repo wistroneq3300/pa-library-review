@@ -1,0 +1,83 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 41,
+    "source_key": "Functionality|560|Wistron-BIOS-00227-V005",
+    "case_variant_id": "3c9c161e5e50a2e9",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 560,
+        "code": "Wistron-BIOS-00227-V005"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Verify every required SMBIOS Type 7 System Cache Type enum before and after reboot.",
+    "original_procedure_criteria": {
+        "procedure": "Collect complete Type 7 structures, map cache instances, compare enums and repeat after approved reboot.",
+        "criteria": "Every mapped cache type is correct and persistent."
+    },
+    "historical_reviews": {
+        "v3": "RECLASSIFIED BLOCKED to REQUIRES; safe actual collection is available."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "READY_FOR_PRECHECK",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL_FOR_REBOOT"
+        ],
+        "manual_test_activity": "Engineer supplies map/expected enums and reboot approval."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-13",
+        "ED-20",
+        "ED-21",
+        "ED-25",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Complete Type 7 enum/persistence check.",
+        "project_inputs": "Per-cache enum/topology and reboot plan.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "One record cannot stand for all applicable caches.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Decode every SMBIOS Type 7 structure and compare the System Cache Type enum by handle before and after the approved reboot.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD RETAINED",
+        "recommended_method": "Parse every handle using DMTF enum semantics.",
+        "official_reference": "Applicable DMTF SMBIOS Type 7 specification.",
+        "coverage_difference": "All mapped records retained.",
+        "risks_limitations": "Private topology supplies Expected."
+    },
+    "missing_inputs": [
+        "Cache map/expected enum",
+        "Reboot approval"
+    ],
+    "safety_boundaries": [
+        "SMBIOS access is read-only; the only state change is the separately approved reboot, with no BIOS setting edit or firmware write"
+    ],
+    "expected_evidence": [
+        "Raw structures",
+        "Per-handle before/after matrix"
+    ],
+    "no_automatic_retry": "Preserve mismatch or boot failure.",
+    "engineer_owned_verdict": "Engineer owns acceptance.",
+    "review_improvement": "KEEP: V3 already treats missing Expected as project input rather than permanent BLOCKED.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

@@ -1,0 +1,82 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 136,
+    "source_key": "Performance|45|Wistron-Performance GPU-00065-V003",
+    "case_variant_id": "53a6f84a47e05ded",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 45,
+        "code": "Wistron-Performance GPU-00065-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run the explicit MLPerf BERT 99.9 Server profile with pinned SQuAD/accuracy, Server-latency and comparison rules.",
+    "original_procedure_criteria": {
+        "procedure": "Use selected-release approved BERT high-accuracy Server harness and complete phases.",
+        "criteria": "Accuracy, latency/throughput and compliance meet comparable reference."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; REQUIRES and retains explicit profile."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "manual_test_activity": "Owner supplies pinned stack/reference and load approval."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-05",
+        "ED-13",
+        "ED-15",
+        "ED-16",
+        "ED-20",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "BERT 99.9 Server profile and source timing.",
+        "project_inputs": "Release/artifacts/config/phases/reference/limits.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Other accuracy/scenario profiles are explicit overrides.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "MLPerf BERT Server retained.",
+    "modernized_recommendation": {
+        "status": "VERSION-PINNED ORIGINAL",
+        "recommended_method": "Pinned selected-release approved BERT 99.9 Server implementation.",
+        "official_reference": "MLCommons selected-release rules/results.",
+        "coverage_difference": "No profile substitution.",
+        "risks_limitations": "Reference/config comparability."
+    },
+    "missing_inputs": [
+        "Pinned stack/reference"
+    ],
+    "safety_boundaries": [
+        "Approved GPU load/tuning"
+    ],
+    "expected_evidence": [
+        "BERT 99.9 SQuAD accuracy, Server latency/throughput and compliance outputs",
+        "BERT model, dataset, harness, rules and reference-result provenance"
+    ],
+    "no_automatic_retry": "No retune/rerun without approval.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 already defines a coherent workload-specific contract.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

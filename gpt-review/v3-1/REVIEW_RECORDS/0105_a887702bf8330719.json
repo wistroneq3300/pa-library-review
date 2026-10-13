@@ -1,0 +1,76 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 105,
+    "source_key": "Reliability|106|Wistron-System RAS-00826-V003",
+    "case_variant_id": "a887702bf8330719",
+    "source_ref": {
+        "sheet": "Reliability",
+        "source_row": 106,
+        "code": "Wistron-System RAS-00826-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "PCIe correctable Bad TLP case lacks the actual stimulus, hierarchy locus and acceptance/ownership contract.",
+    "original_procedure_criteria": {
+        "procedure": "TBD.",
+        "criteria": "TBD."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED but remains BLOCKED; adds locus/AER ownership/no-reset health requirements."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "BLOCKED",
+        "execution_readiness": [
+            "SEMANTIC_BLOCK",
+            "HIGH_RISK"
+        ],
+        "manual_test_activity": "Only non-mutating topology/counter baselines."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-20",
+        "ED-21",
+        "ED-26"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Bad TLP correctable title/provenance.",
+        "project_inputs": "Endpoint/link/root locus, generator, AER owner, expected event/health/recovery.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Adjacent PCIe RAS semantics cannot be copied.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "No Bad TLP generator, PCIe hierarchy locus or correctable-error observation procedure is present.",
+    "modernized_recommendation": {
+        "status": "NOT APPLICABLE",
+        "recommended_method": "Read-only topology/AER baselines only.",
+        "official_reference": "Owner PCIe RAS specification required.",
+        "coverage_difference": "Unknown.",
+        "risks_limitations": "Bad TLP injection may retrain/reset link."
+    },
+    "missing_inputs": [
+        "Complete stimulus/locus/acceptance contract"
+    ],
+    "safety_boundaries": [
+        "Do not generate Bad TLP traffic until the exact endpoint/root-port locus, bounded injector and AER ownership are approved"
+    ],
+    "expected_evidence": [
+        "PCIe RAS definition identifying the Bad TLP generator, BDF hierarchy, expected Correctable Error Status/counters and link-health recovery"
+    ],
+    "no_automatic_retry": "Not applicable.",
+    "engineer_owned_verdict": "Owner defines case.",
+    "review_improvement": "KEEP: V3 correctly blocks on missing operation rather than a keyword-driven classification.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

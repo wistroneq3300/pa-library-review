@@ -1,0 +1,79 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 145,
+    "source_key": "Compatibility|24|Wistron-Processor-00007-V002",
+    "case_variant_id": "4b826111803299d1",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 24,
+        "code": "Wistron-Processor-00007-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Collect complete Linux CPU identity/topology/capability information and compare it with the approved processor specification.",
+    "original_procedure_criteria": {
+        "procedure": "Run read-only native inventory commands and preserve complete outputs.",
+        "criteria": "Observed CPU data match platform/CPU specification."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; FULLY AUTOMATABLE and safe Actual collection ready."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "READY_FOR_READ_ONLY_COLLECTION",
+            "NEEDS_SPEC_FOR_VERDICT"
+        ],
+        "manual_test_activity": "Engineer supplies expected CPU spec; no manual test action."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-20",
+        "ED-21",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Complete Linux CPU information check.",
+        "project_inputs": "Expected CPU/SKU/topology/features and normalization.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Actual collection is valid before formal comparison.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Linux native inventory retained.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Structured lscpu/proc/sysfs/SMBIOS correlation.",
+        "official_reference": "Linux tool/kernel documentation plus processor spec.",
+        "coverage_difference": "Complete fields retained.",
+        "risks_limitations": "Virtualization/firmware may affect exposed flags."
+    },
+    "missing_inputs": [
+        "Expected CPU matrix"
+    ],
+    "safety_boundaries": [
+        "Linux CPU identity/topology/capability collection is read-only; do not change microcode, CPU online state, affinity or firmware settings"
+    ],
+    "expected_evidence": [
+        "Raw inventories",
+        "Mapped expected/actual matrix"
+    ],
+    "no_automatic_retry": "Query discrepancy retained.",
+    "engineer_owned_verdict": "Engineer owns comparison.",
+    "review_improvement": "KEEP: V3 already embodies capability/readiness separation.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

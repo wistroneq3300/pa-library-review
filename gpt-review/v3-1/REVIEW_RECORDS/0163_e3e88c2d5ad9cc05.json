@@ -1,0 +1,75 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 163,
+    "source_key": "Compatibility|372|Wistron-NV GPU-00365-V002",
+    "case_variant_id": "e3e88c2d5ad9cc05",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 372,
+        "code": "Wistron-NV GPU-00365-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "NVTOP GPU Power Monitor lacks the exact measured-power domain/statistic, identity scope, idle/load fixture and 10-minute acceptance contract.",
+    "original_procedure_criteria": {
+        "procedure": "TBD; requested/enforced limits cannot substitute for draw.",
+        "criteria": "TBD measured-power behavior."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED but remains BLOCKED."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "BLOCKED",
+        "execution_readiness": [
+            "SEMANTIC_BLOCK"
+        ],
+        "manual_test_activity": "No valid UI/metric judgment until owner contract."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-20",
+        "ED-21",
+        "ED-26"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "NVTOP GPU power-monitor title and 10-minute fact.",
+        "project_inputs": "Power domain/statistic/GPU scope/load/sampling/tolerance.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Power limits are not measured draw.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Retain the NVTOP GPU Power Monitor UI intent while leaving measured power domain and statistic unresolved.",
+    "modernized_recommendation": {
+        "status": "NOT APPLICABLE UNTIL INTENT RESOLVED",
+        "recommended_method": "None; optional read-only power discovery is not completion.",
+        "official_reference": "Applicable nvtop/NVIDIA telemetry documentation after selection.",
+        "coverage_difference": "Unknown.",
+        "risks_limitations": "Sampling/statistic/domain materially change results."
+    },
+    "missing_inputs": [
+        "Complete power-monitor contract"
+    ],
+    "safety_boundaries": [
+        "No load or limit change"
+    ],
+    "expected_evidence": [
+        "Owner definition then raw time series/UI evidence"
+    ],
+    "no_automatic_retry": "Not applicable.",
+    "engineer_owned_verdict": "Owner defines case.",
+    "review_improvement": "KEEP: V3 correctly blocks missing measurement semantics rather than accepting any power field.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

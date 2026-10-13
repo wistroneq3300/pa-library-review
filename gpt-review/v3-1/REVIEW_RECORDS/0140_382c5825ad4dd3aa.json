@@ -1,0 +1,82 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 140,
+    "source_key": "Performance|56|Wistron-Performance GPU-00028-V002",
+    "case_variant_id": "382c5825ad4dd3aa",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 56,
+        "code": "Wistron-Performance GPU-00028-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run MLPerf RetinaNet Offline inference, but source mixes training and BERT criterion.",
+    "original_procedure_criteria": {
+        "procedure": "Pin approved RetinaNet Offline artifacts/config and detection-accuracy rule.",
+        "criteria": "Detection accuracy, Offline samples/s and compliance meet comparable reference."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC"
+        ],
+        "manual_test_activity": "MLPerf owner corrects mode/criterion/reference."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-13",
+        "ED-15",
+        "ED-20",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "RetinaNet Offline identity plus conflicting text.",
+        "project_inputs": "Release/artifacts/config/detection metric/reference.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Training/BERT/Server results cannot substitute.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Preserve the RetinaNet Offline label and the contradictory training/BERT criterion pending an explicit source resolution.",
+    "modernized_recommendation": {
+        "status": "MLPERF PROFILE CORRECTION REQUIRED",
+        "recommended_method": "Pinned approved RetinaNet Offline implementation.",
+        "official_reference": "MLCommons selected-release rules/results.",
+        "coverage_difference": "Detection/Offline scope retained.",
+        "risks_limitations": "Dataset/postprocessing/reference comparability."
+    },
+    "missing_inputs": [
+        "Correct profile/reference"
+    ],
+    "safety_boundaries": [
+        "Do not replace RetinaNet Offline inference with BERT or a training workflow",
+        "Apply approved object-detection dataset, GPU memory, thermal, power and Offline-load limits"
+    ],
+    "expected_evidence": [
+        "RetinaNet detection accuracy, Offline throughput and compliance outputs",
+        "Detection model/dataset/harness provenance and approved reference comparison"
+    ],
+    "no_automatic_retry": "No auto retune/rerun.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 already preserves RetinaNet-specific acceptance.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}

@@ -1,0 +1,83 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 130,
+    "source_key": "Performance|29|Wistron-Performance GPU-00045-V003",
+    "case_variant_id": "0591993daa179317",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 29,
+        "code": "Wistron-Performance GPU-00045-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run MLPerf Llama 99.9 Server, but source includes a BERT criterion and uncertain harness alias/model mapping.",
+    "original_procedure_criteria": {
+        "procedure": "Correct criterion, pin Llama2-70B profile and prove alias/reference before execution.",
+        "criteria": "Llama 99.9 accuracy and Server latency/throughput/compliance meet rules."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC"
+        ],
+        "manual_test_activity": "MLPerf owner corrects model/criterion/alias/reference."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-13",
+        "ED-15",
+        "ED-16",
+        "ED-20",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Llama 99.9 Server identity plus conflicting BERT text.",
+        "project_inputs": "Exact model/release/harness/config/reference.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "BERT or Offline result cannot substitute.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Original conflicting method retained.",
+    "modernized_recommendation": {
+        "status": "MLPERF PROFILE CORRECTION REQUIRED",
+        "recommended_method": "Pinned approved Llama2-70B 99.9 Server stack for applicable release.",
+        "official_reference": "MLCommons selected-release rules/results.",
+        "coverage_difference": "Server/high-accuracy preserved.",
+        "risks_limitations": "Alias/model/version comparability."
+    },
+    "missing_inputs": [
+        "Correct model/profile/reference"
+    ],
+    "safety_boundaries": [
+        "Do not substitute BERT or another language model for the Llama 99.9 Server workload",
+        "Apply the project GPU power, thermal, memory-capacity and service-latency stop limits for the approved Llama deployment"
+    ],
+    "expected_evidence": [
+        "Accuracy/server performance/compliance logs",
+        "Provenance/comparison"
+    ],
+    "no_automatic_retry": "No auto retune/rerun.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 explicitly preserves the unique Llama Server/high-accuracy contract.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}

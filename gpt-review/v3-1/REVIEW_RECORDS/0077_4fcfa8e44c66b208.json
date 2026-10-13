@@ -1,0 +1,86 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 77,
+    "source_key": "Functionality|1738|Wistron-HW-00367-V002",
+    "case_variant_id": "4fcfa8e44c66b208",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1738,
+        "code": "Wistron-HW-00367-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Verify the specified enabled state in BIOS Setup; OS evidence is corroboration only and save/reboot/persistence scope is unresolved.",
+    "original_procedure_criteria": {
+        "procedure": "Engineer navigates exact BIOS field, observes/selects approved state and follows owner-defined save policy.",
+        "criteria": "BIOS shows the platform-required value without regression."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; hybrid REQUIRES and restores BIOS as acceptance interface."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "NEEDS_ENGINEER_DECISION",
+            "MANUAL_ACTIVITY",
+            "NEEDS_APPROVAL"
+        ],
+        "manual_test_activity": "Engineer operates BIOS; agent may collect supporting OS inventory."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-10",
+        "ED-13",
+        "ED-17",
+        "ED-20",
+        "ED-23",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "BIOS Setup validation.",
+        "project_inputs": "Exact field/value and save/reboot/persistence decision.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "OS data cannot replace BIOS display/selection.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Retain direct BIOS Setup observation of the named enabled state; OS evidence is corroboration and not a substitute for the firmware UI.",
+    "modernized_recommendation": {
+        "status": "SUPPLEMENT ONLY",
+        "recommended_method": "Use approved KVM plus optional read-only OS corroboration.",
+        "official_reference": "Exact BIOS/platform setting specification.",
+        "coverage_difference": "BIOS remains primary.",
+        "risks_limitations": "Saving may change security/boot behavior."
+    },
+    "missing_inputs": [
+        "Field/value",
+        "Save/persistence/final-state policy"
+    ],
+    "safety_boundaries": [
+        "No save/reboot before approval",
+        "No OS substitution"
+    ],
+    "expected_evidence": [
+        "BIOS path/value capture",
+        "Optional OS evidence",
+        "Final state/health"
+    ],
+    "no_automatic_retry": "Unexpected field/state stops; no exploratory changes.",
+    "engineer_owned_verdict": "BIOS owner decides result.",
+    "review_improvement": "KEEP: V3 already preserves interface and unresolved persistence decision.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

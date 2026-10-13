@@ -1,0 +1,82 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 139,
+    "source_key": "Performance|53|Wistron-Performance GPU-00025-V002",
+    "case_variant_id": "cc63bbdfd9fdb155",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 53,
+        "code": "Wistron-Performance GPU-00025-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run MLPerf ResNet-50 Server inference, but source text mixes training and BERT criterion.",
+    "original_procedure_criteria": {
+        "procedure": "Pin approved ResNet-50 Server artifacts/config and correct criterion.",
+        "criteria": "Image classification accuracy, Server performance/compliance meet comparable reference."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC"
+        ],
+        "manual_test_activity": "MLPerf owner corrects training/BERT text and reference."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-13",
+        "ED-15",
+        "ED-20",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "ResNet-50 Server identity plus conflicting text.",
+        "project_inputs": "Release/artifacts/config/reference.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Training or BERT results do not substitute.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Preserve the ResNet-50 Server label and its contradictory training/BERT text; do not normalize them into one inferred benchmark.",
+    "modernized_recommendation": {
+        "status": "MLPERF PROFILE CORRECTION REQUIRED",
+        "recommended_method": "Pinned approved ResNet-50 Server implementation.",
+        "official_reference": "MLCommons selected-release rules/results.",
+        "coverage_difference": "Classification/Server scope retained.",
+        "risks_limitations": "Artifact/reference comparability."
+    },
+    "missing_inputs": [
+        "Correct profile/reference"
+    ],
+    "safety_boundaries": [
+        "Do not run BERT or training when the resolved scope is ResNet-50 Server inference",
+        "Apply approved image-dataset, GPU memory, thermal, power and Server-latency controls"
+    ],
+    "expected_evidence": [
+        "ResNet-50 accuracy, Server performance/latency and compliance outputs",
+        "Image model/dataset/harness provenance and approved reference comparison"
+    ],
+    "no_automatic_retry": "No auto retune/rerun.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 already preserves ResNet-specific technical criteria.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}

@@ -1,0 +1,74 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 103,
+    "source_key": "Reliability|100|Wistron-System RAS-00820-V002",
+    "case_variant_id": "b23414ff6fedd2c3",
+    "source_ref": {
+        "sheet": "Reliability",
+        "source_row": 100,
+        "code": "Wistron-System RAS-00820-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Processor correctable-error case lacks stimulus, target scope and acceptance semantics.",
+    "original_procedure_criteria": {
+        "procedure": "TBD.",
+        "criteria": "TBD."
+    },
+    "historical_reviews": {
+        "v3": "KEEP; semantic BLOCKED."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "BLOCKED",
+        "execution_readiness": [
+            "SEMANTIC_BLOCK"
+        ],
+        "manual_test_activity": "Only non-mutating capability discovery is safe."
+    },
+    "applicable_engineering_decisions": [
+        "ED-04",
+        "ED-20",
+        "ED-26"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Processor CE title/provenance.",
+        "project_inputs": "Target/stimulus/tool/event/acceptance/recovery.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Generic RAS inventory is not the undefined test.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "No processor correctable-error injection or observation method is present in the source.",
+    "modernized_recommendation": {
+        "status": "NOT APPLICABLE",
+        "recommended_method": "Read-only platform/RAS discovery only.",
+        "official_reference": "Owner specification required.",
+        "coverage_difference": "Unknown.",
+        "risks_limitations": "Injection semantics unknown."
+    },
+    "missing_inputs": [
+        "Complete operational/acceptance contract"
+    ],
+    "safety_boundaries": [
+        "No injection or setting change"
+    ],
+    "expected_evidence": [
+        "Processor RAS owner must define the CPU target, correctable-error stimulus, reporter path, thresholds and recovery before a new technical review"
+    ],
+    "no_automatic_retry": "Not applicable.",
+    "engineer_owned_verdict": "Owner defines case.",
+    "review_improvement": "KEEP: this is missing meaning, not merely a missing package.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

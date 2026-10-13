@@ -1,0 +1,23 @@
+{
+  "schema_version": "v3-1-review-record-1.0",
+  "sequence": 1,
+  "source_key": "Functionality|29|Wistron-HW-00032-V004",
+  "case_variant_id": "eb1edb1375e32b56",
+  "source_ref": {"sheet": "Functionality", "source_row": 29, "code": "Wistron-HW-00032-V004"},
+  "source_integrity": {"xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "original_row_sha256": "2da6bb953c41394c0d431982cac18d68aa3042591c7cf313a4394646a990f892", "exact_xlsx_row_read": true, "deepseek_row_read": true, "gpt_v2_read": true, "v3_record_read": true},
+  "original_test_intent": "Read the CRPS latch-on-fault configuration field that encodes the byte offset from the current configuration block to the next block, then compare the decoded value with the applicable PSU vendor layout.",
+  "original_procedure_criteria": {"procedure": "Verify the SUT configuration; the test step states: offset in bytes from this location to the beginning of the next configuration block; collect results/photos and inspect logs.", "criteria": "Offset in bytes from this location to the beginning of the next configuration block.", "original_parameters": {"attended_time_minutes": 5, "machine_time_minutes": 5}},
+  "historical_reviews": {"deepseek": "NO; vendor configuration-block decoder/specification required.", "gpt_v2": "BLOCKED because the field map, byte order, expected offset, safe read tool, and recovery were absent.", "v3": "RECLASSIFIED to REQUIRES PACKAGE / USER CONFIRMATION with read-only identity collection and a prohibition on guessed PMBus access."},
+  "v3_1_conclusion": {"review_outcome": "KEEP", "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_APPROVAL"], "manual_test_activity": "The PSU/platform engineer supplies and approves the proprietary specification and decoder; the approved readback can then be agent-executed.", "required_user_inputs": ["CRPS model, slot, serial and firmware/VPD identity", "Applicable PMBus configuration-block specification", "Field address, current/next block boundaries, byte order, encoding and expected offset", "Vendor-approved read-only decoder/tool and invocation"]},
+  "applicable_engineering_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-09", "ED-10", "ED-13", "ED-14", "ED-17", "ED-18", "ED-28"],
+  "master_vs_project_parameters": {"master_default": "The master identifies the offset relationship and 5/5-minute planning values but supplies no model-specific numeric offset or command.", "project_inputs": "Bind the exact CRPS/firmware, field definition, expected value and read-only vendor method.", "approved_override": null, "actual_execution": "NOT EXECUTED", "coverage_difference": "No project run exists; CRPS identity inventory alone would not cover the offset decode/comparison.", "engineering_verdict": "ENGINEER OWNED; NOT SET"},
+  "original_method": "Use a PSU vendor configuration-block/VPD decoder and compare the offset against the printed vendor table. No executable source command is present.",
+  "modernized_recommendation": {"status": "NOT APPLICABLE", "reason": "The vendor-defined read-only decoder remains the only defensible method; no public generic substitute can establish the proprietary block layout."},
+  "missing_inputs": ["Model-specific field map and expected numeric offset", "Approved read-only access path", "Tool/version applicability"],
+  "safety_boundaries": ["Do not blind-scan PMBus/SMBus or guess a register/address.", "Do not write configuration, reset or flash the PSU.", "Preserve existing BMC/SEL evidence rather than clearing logs."],
+  "expected_evidence": ["CRPS identity and firmware/VPD", "Specification and decoder/tool version", "Raw field/block bytes, byte order, decoded offset and block boundaries", "Timestamped readback and preserved BMC/SEL state"],
+  "no_automatic_retry": "Any failed or ambiguous read is retained. Do not change the command, scan another address, reset the PSU, or retry without a new approved plan.",
+  "engineer_owned_verdict": "The agent may report the raw and decoded values and their difference from the approved reference; only the engineer assigns formal PASS/FAIL/BLOCKED.",
+  "review_improvement": "KEEP because V3 already converted the missing proprietary artifact from a permanent blocker into explicit readiness gates while preserving the no-guess safety boundary. V3.1 adds only the master/project parameter separation and does not change the technical conclusion.",
+  "regression_result": {"intent_preserved": true, "original_command_preserved": true, "coverage_regression": false, "safety_regression": false, "pass_claimed": false, "hardware_tested": false, "status": "PASS"}
+}

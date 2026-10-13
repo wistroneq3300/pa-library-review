@@ -1,0 +1,84 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 90,
+    "source_key": "Functionality|2274|Wistron-HW-00483-V002",
+    "case_variant_id": "c9acc00c916bc616",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 2274,
+        "code": "Wistron-HW-00483-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Cross-check PDB sensors through command collections and mandatory BMC WebUI against the authoritative PDB map/specification.",
+    "original_procedure_criteria": {
+        "procedure": "Collect all required views, map PDB sensors and compare normalized values/status.",
+        "criteria": "Every required PDB sensor is complete and correct."
+    },
+    "historical_reviews": {
+        "v3": "RECLASSIFIED FULLY to REQUIRES because WebUI/spec are mandatory."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "READY_FOR_PARTIAL_COLLECTION",
+            "NEEDS_SPEC",
+            "MANUAL_ACTIVITY"
+        ],
+        "manual_test_activity": "Engineer supplies WebUI evidence; commands automate."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-04",
+        "ED-08",
+        "ED-17",
+        "ED-20",
+        "ED-21",
+        "ED-23",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Command and WebUI PDB sensor coverage.",
+        "project_inputs": "PDB map/spec and UI access/normalization.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Command-side data alone is incomplete.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "All required source views retained.",
+    "modernized_recommendation": {
+        "status": "SUPPLEMENTAL AUTOMATION",
+        "recommended_method": "Automate CLI/API collection and comparison after manual UI capture.",
+        "official_reference": "Platform PDB sensor/UI specification.",
+        "coverage_difference": "No WebUI substitution.",
+        "risks_limitations": "Private expected map."
+    },
+    "missing_inputs": [
+        "PDB sensor/spec matrix",
+        "WebUI evidence"
+    ],
+    "safety_boundaries": [
+        "PDB sensor collection is read-only; do not toggle rails, change thresholds or treat a command view as a substitute for required WebUI observation"
+    ],
+    "expected_evidence": [
+        "Per-view raw outputs",
+        "Mapped expected/actual matrix"
+    ],
+    "no_automatic_retry": "Access/mismatch retained.",
+    "engineer_owned_verdict": "Engineer owns result.",
+    "review_improvement": "KEEP: V3 correctly distinguishes automation capability of substeps from complete case readiness.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

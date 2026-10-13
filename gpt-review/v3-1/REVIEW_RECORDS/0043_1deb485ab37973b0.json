@@ -1,0 +1,83 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 43,
+    "source_key": "Functionality|671|Wistron-BIOS-00338-V005",
+    "case_variant_id": "1deb485ab37973b0",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 671,
+        "code": "Wistron-BIOS-00338-V005"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Verify each applicable SMBIOS Type 39 PSU Cooling Device Handle resolves to the intended Type 27 record or approved no-device value and persists.",
+    "original_procedure_criteria": {
+        "procedure": "Collect Type 27/39 structures, resolve handles, compare topology and repeat after reboot.",
+        "criteria": "Every applicable handle relationship is structurally correct."
+    },
+    "historical_reviews": {
+        "v3": "KEEP; REQUIRES with safe actual collection."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "READY_FOR_PRECHECK",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL_FOR_REBOOT"
+        ],
+        "manual_test_activity": "Owner supplies PSU/cooling topology and approves reboot."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-13",
+        "ED-20",
+        "ED-21",
+        "ED-25",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Complete Type 39-to-27 relationship/persistence.",
+        "project_inputs": "Applicable topology/version/no-device policy.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Presence alone does not prove handle resolution.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Resolve each SMBIOS Type 39 Cooling Device Handle to its Type 27 target and repeat the relationship check after reboot.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD RETAINED",
+        "recommended_method": "Resolve raw handle references programmatically while preserving structures.",
+        "official_reference": "Applicable DMTF SMBIOS Type 27/39 specification.",
+        "coverage_difference": "All PSU records retained.",
+        "risks_limitations": "Applicability is platform-specific."
+    },
+    "missing_inputs": [
+        "PSU/cooling topology",
+        "Reboot approval"
+    ],
+    "safety_boundaries": [
+        "Do not alter PSU or cooling configuration; only relationship decoding and the separately approved persistence reboot are allowed"
+    ],
+    "expected_evidence": [
+        "Raw structures/handles",
+        "Resolved expected/actual matrix before/after reboot"
+    ],
+    "no_automatic_retry": "No unplanned reboot.",
+    "engineer_owned_verdict": "Engineer decides topology acceptance.",
+    "review_improvement": "KEEP: V3 already avoids blocking safe Actual collection for missing private topology.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

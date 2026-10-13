@@ -1,0 +1,83 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 134,
+    "source_key": "Performance|40|Wistron-Performance GPU-00060-V004",
+    "case_variant_id": "ba4c7b22ab09ce1a",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 40,
+        "code": "Wistron-Performance GPU-00060-V004"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run MLPerf 3D-UNet 99 Offline, but source criterion incorrectly names BERT and phase timing/reference are undefined.",
+    "original_procedure_criteria": {
+        "procedure": "Pin selected-release KiTS19/3D-UNet profile and owner-approved phase plan.",
+        "criteria": "3D-UNet accuracy, Offline performance and compliance meet comparable reference."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC"
+        ],
+        "manual_test_activity": "MLPerf owner corrects criterion/profile/reference."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-05",
+        "ED-13",
+        "ED-15",
+        "ED-20",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "3D-UNet 99 Offline and source 600-minute planning/phase facts.",
+        "project_inputs": "Release/KiTS19/artifacts/config/phase plan/reference.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "BERT accuracy or another scenario cannot substitute.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Retain the 3D-UNet 99 Offline source workload and separately preserve the erroneous BERT criterion for owner correction.",
+    "modernized_recommendation": {
+        "status": "MLPERF PROFILE CORRECTION REQUIRED",
+        "recommended_method": "Pinned approved 3D-UNet Offline implementation.",
+        "official_reference": "MLCommons selected-release 3D-UNet rules/results.",
+        "coverage_difference": "Medical-image accuracy/Offline scope retained.",
+        "risks_limitations": "Dataset/preprocessing/reference comparability."
+    },
+    "missing_inputs": [
+        "Correct profile/phase/reference"
+    ],
+    "safety_boundaries": [
+        "Do not replace 3D-UNet with BERT or another imaging model to satisfy the copied criterion",
+        "Enforce approved GPU memory, thermal, power and dataset-capacity limits for Offline inference"
+    ],
+    "expected_evidence": [
+        "3D-UNet accuracy, Offline performance and compliance logs",
+        "Model/dataset/harness provenance and comparison to the approved 3D-UNet reference"
+    ],
+    "no_automatic_retry": "No auto retune/rerun.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 already preserves exact workload identity and phase ambiguity.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}

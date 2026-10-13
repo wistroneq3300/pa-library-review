@@ -5,7 +5,20 @@ description: Use when reviewing the Wistron AI test-case library (REVISED_comman
 
 # PA Test-Library Review
 
-## V3 review routing
+## V3.1 and V3 review routing
+
+When the requested work names Review Logic V3.1, read
+`gpt-review/REVIEW_WORKFLOW_LOGIC_V3_1.md` and
+`gpt-review/V3_1_ENGINEERING_DECISIONS.md` first. V3.1 is the controlling
+prospective contract for that run. It treats the 3,112 rows as a shared Master
+Library and keeps Master Default, Project Inputs, Approved Override, Actual
+Execution, Coverage Difference, and Engineer Verdict separate. It preserves
+the original method and records any officially verified modernized method as a
+separate recommendation. It also prohibits automatic retry and reserves the
+formal PASS/FAIL/BLOCKED verdict for the engineer.
+
+Store V3.1 records separately under the requested V3.1 workspace. Never
+overwrite the source workbook, production JSON, V2 overlay, or V3 records.
 
 When the requested work explicitly names Review Logic V3 or the V3 pilot,
 read `gpt-review/REVIEW_WORKFLOW_LOGIC_V3.md` first and use it as the

@@ -1,0 +1,79 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 76,
+    "source_key": "Functionality|1684|Wistron-BMC-00956-V003",
+    "case_variant_id": "8e43731daec3fa40",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1684,
+        "code": "Wistron-BMC-00956-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Read mapped CPU temperature sensors and compare the actual data with firmware-specific correctness rules.",
+    "original_procedure_criteria": {
+        "procedure": "Collect all required CPU sensor readings with identity, units/status and timestamps.",
+        "criteria": "Mapped values/status are correct for the platform."
+    },
+    "historical_reviews": {
+        "v3": "RECLASSIFIED FULLY to REQUIRES because final correctness needs mapping/Expected."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "IMPROVED",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "READY_FOR_READ_ONLY_COLLECTION",
+            "NEEDS_SPEC_FOR_VERDICT"
+        ],
+        "manual_test_activity": "Engineer supplies mapping/Expected; no manual activity is inherent."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-20",
+        "ED-21",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "CPU temperature monitoring/read correctness.",
+        "project_inputs": "CPU/sensor map, range/status/normalization rules.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Actual values can be collected now; PASS waits for Expected.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Read-only BMC sensor query.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Manifest-based collection with units/status and CPU topology correlation.",
+        "official_reference": "Platform sensor map/IPMI SDR documentation.",
+        "coverage_difference": "Every required CPU sensor retained.",
+        "risks_limitations": "Generic thermal ranges cannot replace platform spec."
+    },
+    "missing_inputs": [
+        "Sensor mapping and Expected ranges"
+    ],
+    "safety_boundaries": [
+        "Collect CPU temperature sensors without changing fan policy, thermal thresholds, power limits or BMC configuration"
+    ],
+    "expected_evidence": [
+        "Raw sensor records",
+        "Mapped readings/status/timestamps"
+    ],
+    "no_automatic_retry": "Query failure recorded; no configuration change.",
+    "engineer_owned_verdict": "Engineer decides correctness.",
+    "review_improvement": "V3.1 corrects classification: needing a provisionable Expected value does not make the read-only test partially automatable; collection is fully automatable while verdict readiness remains separate.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

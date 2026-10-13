@@ -1,0 +1,85 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 84,
+    "source_key": "Functionality|2010|Wistron-BMC-01031-V002",
+    "case_variant_id": "8da48f7cdc4703ea",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 2010,
+        "code": "Wistron-BMC-01031-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Cross-check motherboard sensors through the four source-required command/UI collections against the product MB specification.",
+    "original_procedure_criteria": {
+        "procedure": "Collect all views with stable identity, map fields and compare normalized values/status.",
+        "criteria": "Every required MB sensor is present and correct across interfaces."
+    },
+    "historical_reviews": {
+        "v3": "KEEP; REQUIRES due WebUI/spec/access."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "READY_FOR_PARTIAL_COLLECTION",
+            "NEEDS_SPEC",
+            "MANUAL_ACTIVITY"
+        ],
+        "manual_test_activity": "Engineer supplies WebUI evidence; command collections automate."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-04",
+        "ED-08",
+        "ED-17",
+        "ED-20",
+        "ED-21",
+        "ED-23",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Four-view MB sensor coverage.",
+        "project_inputs": "MB sensor map/spec and interface access/normalization.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Command-only evidence cannot replace required WebUI view.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "All four source views retained.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Manifest-based cross-interface matrix.",
+        "official_reference": "Platform MB sensor/UI specification.",
+        "coverage_difference": "No view omitted.",
+        "risks_limitations": "Expected values private."
+    },
+    "missing_inputs": [
+        "MB sensor/spec matrix",
+        "WebUI access"
+    ],
+    "safety_boundaries": [
+        "Use only the four source-required MB sensor views and do not alter sensor thresholds or fan control",
+        "Do not clear BMC or host logs before cross-view discrepancy analysis"
+    ],
+    "expected_evidence": [
+        "Complete raw views",
+        "Per-sensor normalized comparison"
+    ],
+    "no_automatic_retry": "Mismatch/access failure retained.",
+    "engineer_owned_verdict": "Engineer owns result.",
+    "review_improvement": "KEEP: V3 already separates WebUI manual activity from automatable collection.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

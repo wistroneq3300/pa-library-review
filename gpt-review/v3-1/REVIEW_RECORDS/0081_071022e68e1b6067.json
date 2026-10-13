@@ -1,0 +1,85 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 81,
+    "source_key": "Functionality|1871|Wistron-BMC-00960-V002",
+    "case_variant_id": "071022e68e1b6067",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1871,
+        "code": "Wistron-BMC-00960-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Compare TEMP_GB_NVS1 through NVS4 across all five required views with an indexed population/spec matrix.",
+    "original_procedure_criteria": {
+        "procedure": "Collect read-only UI/CLI/API views without clearing logs and normalize per index.",
+        "criteria": "Every applicable sensor agrees with the platform specification across views."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; REQUIRES and preserves five-view coverage."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "READY_FOR_PARTIAL_COLLECTION",
+            "NEEDS_SPEC",
+            "MANUAL_ACTIVITY"
+        ],
+        "manual_test_activity": "Engineer supplies WebUI evidence; other read-only views may automate."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-04",
+        "ED-08",
+        "ED-17",
+        "ED-20",
+        "ED-21",
+        "ED-23",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "NVS1-4 and all five source views.",
+        "project_inputs": "Population/map/spec and normalization.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Missing/unpopulated and cross-view mismatches stay explicit.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Five-view read-only comparison.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Indexed matrix with stable target/timestamp correlation.",
+        "official_reference": "Platform sensor/UI specification.",
+        "coverage_difference": "No view substitution.",
+        "risks_limitations": "Private mapping supplies Expected."
+    },
+    "missing_inputs": [
+        "NVS1-4 map/spec",
+        "WebUI path"
+    ],
+    "safety_boundaries": [
+        "Query NVS1 through NVS4 only through the five specified views; do not edit sensor configuration",
+        "Preserve all raw view outputs and existing logs so cross-view discrepancies remain auditable"
+    ],
+    "expected_evidence": [
+        "Per-index per-view raw values",
+        "Normalized comparison"
+    ],
+    "no_automatic_retry": "Mismatch/access failure retained.",
+    "engineer_owned_verdict": "Engineer owns correctness.",
+    "review_improvement": "KEEP: V3 already distinguishes low-risk collection from UI/spec readiness.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

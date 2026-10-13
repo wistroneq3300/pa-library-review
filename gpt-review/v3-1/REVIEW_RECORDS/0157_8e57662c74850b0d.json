@@ -1,0 +1,79 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 157,
+    "source_key": "Compatibility|290|Wistron-NV GPU-00283-V003",
+    "case_variant_id": "8e57662c74850b0d",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 290,
+        "code": "Wistron-NV GPU-00283-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Collect serial number for every NVIDIA GPU with stable UUID/BDF identity and compare to authoritative board/GPU mapping.",
+    "original_procedure_criteria": {
+        "procedure": "Run read-only nvidia-smi query for all GPUs and retain identity/serial units/blank values.",
+        "criteria": "Every observed serial matches the approved map, including shared board-serial policy."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; FULLY AUTOMATABLE."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "READY_FOR_READ_ONLY_COLLECTION",
+            "NEEDS_SPEC_FOR_VERDICT"
+        ],
+        "manual_test_activity": "Owner supplies serial map/policy; collection is automatic."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-20",
+        "ED-21",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "All-GPU serial-number check.",
+        "project_inputs": "Expected board/GPU serial map and shared-serial policy.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Actuals can be collected before Expected; every GPU required.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Retain nvidia-smi serial-number query and correlate each result with GPU UUID and PCI BDF.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Structured query with UUID/BDF/serial correlation.",
+        "official_reference": "NVIDIA nvidia-smi documentation.",
+        "coverage_difference": "No index-only mapping.",
+        "risks_limitations": "Board serial may legitimately repeat."
+    },
+    "missing_inputs": [
+        "Authoritative serial map/policy"
+    ],
+    "safety_boundaries": [
+        "Query NVIDIA GPU serial numbers read-only; do not reset GPUs, change persistence/power settings or rely on unstable enumeration indices"
+    ],
+    "expected_evidence": [
+        "Raw query/version",
+        "Per-GPU UUID/BDF/serial matrix"
+    ],
+    "no_automatic_retry": "Missing serial retained.",
+    "engineer_owned_verdict": "Engineer owns mapping/result.",
+    "review_improvement": "KEEP: V3 already separates collection from private Expected.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

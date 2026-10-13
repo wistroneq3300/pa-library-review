@@ -1,0 +1,82 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 141,
+    "source_key": "Performance|58|Wistron-Performance GPU-00475-V002",
+    "case_variant_id": "5e469c3e5ef17701",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 58,
+        "code": "Wistron-Performance GPU-00475-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run MLPerf Mixtral-8x7B Offline; source mixes training/inference and lacks pinned MoE/tokenizer/rules/reference.",
+    "original_procedure_criteria": {
+        "procedure": "Correct/pin model, tokenizer, MoE profile and selected-release Offline harness.",
+        "criteria": "Mixtral accuracy, Offline performance and compliance meet comparable reference."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC"
+        ],
+        "manual_test_activity": "MLPerf owner resolves mode/profile/reference."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-13",
+        "ED-15",
+        "ED-20",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Mixtral-8x7B Offline identity plus conflicting source text.",
+        "project_inputs": "Release/model/tokenizer/MoE/harness/config/reference.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Training or another LLM cannot substitute.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Preserve the Mixtral-8x7B Offline label and mixed training/inference text until model, tokenizer and scenario are resolved.",
+    "modernized_recommendation": {
+        "status": "MLPERF PROFILE CORRECTION REQUIRED",
+        "recommended_method": "Pinned approved Mixtral-8x7B Offline implementation.",
+        "official_reference": "MLCommons selected-release rules/results.",
+        "coverage_difference": "MoE model/Offline scope retained.",
+        "risks_limitations": "Tokenizer/model/reference comparability."
+    },
+    "missing_inputs": [
+        "Correct profile/reference"
+    ],
+    "safety_boundaries": [
+        "No mode/model substitution",
+        "GPU load limits"
+    ],
+    "expected_evidence": [
+        "Mixtral accuracy, token-throughput/Offline performance and compliance outputs",
+        "MoE model, tokenizer, dataset, harness and reference-result provenance"
+    ],
+    "no_automatic_retry": "No auto retune/rerun.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 already preserves Mixtral-specific semantics.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}

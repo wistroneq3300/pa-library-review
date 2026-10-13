@@ -1,5 +1,10 @@
 # Verdict rules (LOCKED, 2026-09-18) - do not re-derive
 
+> V3.1 note: these legacy YES/PARTIAL/NO definitions remain historical for the
+> legacy workflow. A V3.1 overlay uses the four formal classifications and
+> separately records capability, readiness, manual activity, inputs, and
+> safety approval under `REVIEW_WORKFLOW_LOGIC_V3_1.md`.
+
 Operator-approved definitions. The boundary is NOT "does the operator need to give
 something" - it is "after everything is given, does the EXECUTION still need a human
 hand / presence / approval mid-run".

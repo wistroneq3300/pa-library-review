@@ -1,0 +1,83 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 42,
+    "source_key": "Functionality|613|Wistron-BIOS-00280-V005",
+    "case_variant_id": "ad7b99be5ab4e1cf",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 613,
+        "code": "Wistron-BIOS-00280-V005"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Verify every SMBIOS Type 17 Device Locator matches the physical slot/population map and remains correct after reboot.",
+    "original_procedure_criteria": {
+        "procedure": "Collect all Type 17 handles, correlate slots/population, compare and repeat after reboot.",
+        "criteria": "Complete locator mapping is correct and persistent."
+    },
+    "historical_reviews": {
+        "v3": "KEEP; REQUIRES, with safe pre-reboot collection."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "READY_FOR_PRECHECK",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL_FOR_REBOOT"
+        ],
+        "manual_test_activity": "Owner supplies physical map and approves reboot."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-13",
+        "ED-20",
+        "ED-21",
+        "ED-25",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "All Type 17 records before/after reboot.",
+        "project_inputs": "Physical locator/population map and normalization.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "OS-reported locator without physical mapping is incomplete.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Collect the full SMBIOS Type 17 inventory and correlate every Device Locator with the physical memory-slot map before and after reboot.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Handle-based structured parsing and expected/actual slot matrix.",
+        "official_reference": "DMTF SMBIOS Type 17 specification.",
+        "coverage_difference": "Empty and populated slots remain explicit.",
+        "risks_limitations": "Private board labels determine Expected."
+    },
+    "missing_inputs": [
+        "Slot/population map",
+        "Reboot approval"
+    ],
+    "safety_boundaries": [
+        "Do not reseat DIMMs or change firmware; permit only read-only Type 17 collection plus the explicitly approved reboot"
+    ],
+    "expected_evidence": [
+        "Raw Type 17 records",
+        "Mapped before/after comparison"
+    ],
+    "no_automatic_retry": "No unplanned reboot or DIMM movement.",
+    "engineer_owned_verdict": "Engineer owns locator mapping result.",
+    "review_improvement": "KEEP: V3 correctly separates collection capability from missing platform Expected.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

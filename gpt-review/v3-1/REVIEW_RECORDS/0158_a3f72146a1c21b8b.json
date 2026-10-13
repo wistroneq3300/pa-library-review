@@ -1,0 +1,79 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 158,
+    "source_key": "Compatibility|298|Wistron-NV GPU-00291-V003",
+    "case_variant_id": "a3f72146a1c21b8b",
+    "source_ref": {
+        "sheet": "Compatibility",
+        "source_row": 298,
+        "code": "Wistron-NV GPU-00291-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Collect reported FB total memory for every NVIDIA GPU and compare to driver/ECC-aware expected reported-memory values.",
+    "original_procedure_criteria": {
+        "procedure": "Read-only nvidia-smi query with stable UUID/BDF and units.",
+        "criteria": "Each GPU's reported total matches the approved reported-memory table."
+    },
+    "historical_reviews": {
+        "v3": "IMPROVED; FULLY AUTOMATABLE and rejects raw advertised HBM as direct Expected."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "FULLY AUTOMATABLE",
+        "execution_readiness": [
+            "READY_FOR_READ_ONLY_COLLECTION",
+            "NEEDS_SPEC_FOR_VERDICT"
+        ],
+        "manual_test_activity": "Owner supplies expected reported-memory table."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-08",
+        "ED-20",
+        "ED-21",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "All-GPU FB total-memory check.",
+        "project_inputs": "GPU model/driver/ECC-aware expected reported values/tolerance.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Advertised raw capacity is not necessarily reported usable memory.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Retain nvidia-smi total-memory query with per-GPU UUID/BDF identity and ECC/driver-aware expected values.",
+    "modernized_recommendation": {
+        "status": "ORIGINAL METHOD STRENGTHENED",
+        "recommended_method": "Structured UUID/BDF/memory.total query with units/version.",
+        "official_reference": "NVIDIA nvidia-smi documentation.",
+        "coverage_difference": "Every GPU separately compared.",
+        "risks_limitations": "ECC/reserved memory affects value."
+    },
+    "missing_inputs": [
+        "Expected reported-memory table"
+    ],
+    "safety_boundaries": [
+        "Query framebuffer memory read-only; do not modify ECC mode, MIG partitioning, persistence, clocks or power configuration"
+    ],
+    "expected_evidence": [
+        "Per-GPU raw query",
+        "Expected/actual units/tolerance"
+    ],
+    "no_automatic_retry": "Mismatch retained.",
+    "engineer_owned_verdict": "GPU engineer owns result.",
+    "review_improvement": "KEEP: V3 already prevents platform-specific capacity overgeneralization.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS"
+    }
+}

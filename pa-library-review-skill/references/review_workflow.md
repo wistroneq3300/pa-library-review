@@ -1,5 +1,15 @@
 # Review workflow - condensed rule bible (see repo REVIEW_WORKFLOW_LOGIC.md for full)
 
+## V3.1 master/project overlay
+
+For a V3.1 run, the source row is a shared Master Library record. Preserve its
+original method and values. Record project-bound inputs and approved overrides
+separately; completing an approved project override does not complete an
+unexecuted master default. Treat Machine/Attended Time as planning metadata
+unless the source explicitly makes both normative. Prefer an existing approved
+project tool or PA Manager Cycle and prove its coverage. Never add an automatic
+retry, and never assign the engineer's formal PASS/FAIL/BLOCKED verdict.
+
 ## Per-case review SOP (every case, no batching)
 
 1. Locate: read `items` (AUTHORITATIVE title), `procedure` (old manual doc, background only),

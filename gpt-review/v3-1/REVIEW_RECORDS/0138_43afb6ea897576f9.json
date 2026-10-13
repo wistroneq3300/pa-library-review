@@ -1,0 +1,82 @@
+{
+    "schema_version": "v3-1-review-record-1.0",
+    "sequence": 138,
+    "source_key": "Performance|50|Wistron-Performance GPU-00022-V003",
+    "case_variant_id": "43afb6ea897576f9",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 50,
+        "code": "Wistron-Performance GPU-00022-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "deepseek_row_read": true,
+        "gpt_v2_read": true,
+        "v3_record_read": true
+    },
+    "original_test_intent": "Run Llama3.1-405B MLPerf Server inference, but source mixes training/inference, model naming and BERT criterion.",
+    "original_procedure_criteria": {
+        "procedure": "Correct/pin v5.0-equivalent model, Server harness, artifacts and multi-GPU plan.",
+        "criteria": "Llama accuracy, Server latency/throughput and compliance meet comparable reference."
+    },
+    "historical_reviews": {
+        "v3": "SOURCE_CONFLICT; REQUIRES."
+    },
+    "v3_1_conclusion": {
+        "review_outcome": "KEEP",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_SPEC"
+        ],
+        "manual_test_activity": "MLPerf owner resolves model/mode/criterion/reference."
+    },
+    "applicable_engineering_decisions": [
+        "ED-03",
+        "ED-13",
+        "ED-15",
+        "ED-20",
+        "ED-24",
+        "ED-26",
+        "ED-27"
+    ],
+    "master_vs_project_parameters": {
+        "master_default": "Llama3-405B Server title plus conflicting source text.",
+        "project_inputs": "Exact model/release/harness/config/reference/topology.",
+        "actual_execution": "NOT EXECUTED",
+        "coverage_difference": "Training/BERT/other Llama results cannot substitute.",
+        "engineering_verdict": "ENGINEER OWNED; NOT SET"
+    },
+    "original_method": "Preserve the Llama3.1-405B Server label, training/inference mixture and copied BERT criterion until the owner selects the intended MLPerf scenario.",
+    "modernized_recommendation": {
+        "status": "MLPERF PROFILE CORRECTION REQUIRED",
+        "recommended_method": "Pinned approved Llama3.1-405B Server implementation.",
+        "official_reference": "MLCommons selected-release rules/results.",
+        "coverage_difference": "Model and Server scenario retained.",
+        "risks_limitations": "Massive multi-GPU memory/topology/load."
+    },
+    "missing_inputs": [
+        "Correct model/profile/reference"
+    ],
+    "safety_boundaries": [
+        "No mode/model substitution",
+        "Load/topology limits"
+    ],
+    "expected_evidence": [
+        "Accuracy/performance/compliance logs",
+        "Topology/provenance/comparison"
+    ],
+    "no_automatic_retry": "No auto retune/rerun.",
+    "engineer_owned_verdict": "MLPerf engineer owns result.",
+    "review_improvement": "KEEP: V3 already resolves toward the named modern model without masking source conflict.",
+    "regression_result": {
+        "intent_preserved": true,
+        "original_command_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASS_WITH_SOURCE_CONFLICT"
+    }
+}
