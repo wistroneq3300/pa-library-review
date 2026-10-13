@@ -1,0 +1,197 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 127,
+    "calibration": false,
+    "source_key": "Performance|21|Wistron-Performance GPU-00037-V003",
+    "case_variant_id": "dd93dd580c409950",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 21,
+        "code": "Wistron-Performance GPU-00037-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "f4e98542552046941c51c75acd2920122fdab56277aa24681f565cdd5a6d2a7a",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "MLPerf - DLRM_v2_99_Server",
+        "test_set": "MLPerf",
+        "purpose_facts": "Run the MLPerf Inference v4.0 DLRM v2 99 Server scenario and compare with MLCommons v4.0 results.",
+        "procedure_facts": [
+            "Install GPU driver/runtime and MLPerf packages.",
+            "Download inference_results_v4.0 and run `make run RUN_ARGS=\"--benchmarks=dlrm-v2 --scenarios=server\"`.",
+            "The text later requires a valid BERT result and the Script field points to a Llama2-70B 99.9 repository."
+        ],
+        "criteria_facts": [
+            "Greater than an unspecified official NVIDIA MLPerf score."
+        ],
+        "attended_time_minutes": "240",
+        "machine_time_minutes": "60",
+        "source_conflicts": [
+            "DLRM v2 title/command conflicts with the BERT validity statement.",
+            "The Script field names a Llama2-70B 99.9 asset, not DLRM v2 99 Server.",
+            "A generic greater-than-NVIDIA-score criterion lacks a matching system/configuration and may compare unlike submissions."
+        ],
+        "missing_source_information": [
+            "Exact v4.0 harness commit/container/model/dataset/configuration and system ID.",
+            "PerformanceOnly, AccuracyOnly and compliance run requirements.",
+            "Matching published result ID and numeric Server QPS/latency acceptance rule."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Run a release-pinned MLPerf Inference v4.0 DLRM v2 normal-accuracy (99) Server benchmark on the complete SUT, prove LoadGen validity and required accuracy/compliance evidence, and compare Server performance with an approved comparable v4.0 result.",
+        "must_preserve": [
+            "DLRM v2, 99 accuracy target and Server scenario.",
+            "MLPerf v4.0 rules and valid LoadGen evidence.",
+            "Whole-system GPU-intensive run and comparable published reference."
+        ],
+        "must_not_infer": [
+            "BERT or Llama2 artifacts.",
+            "Offline scenario or a local one-line score.",
+            "That any NVIDIA result is comparable to this SUT.",
+            "Official submission status from a local reproduction."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 correctly detects the DLRM/BERT conflict, requires licensed artifacts and matching environment, and insists on LoadGen accuracy/validity evidence rather than throughput alone.",
+        "specific_gap": "V2 does not elevate the unrelated Llama2 Script field or the incomparable `> official NV score` criterion into explicit source conflicts, and it does not bind the comparison to a published v4.0 system/result/configuration ID."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "Other MLPerf rows may share a harness but cannot supply this DLRM 99 Server model, dataset, latency constraint or result reference."
+        ],
+        "precedence_application": "The title and command identify DLRM v2 99 Server; contradictory BERT/Llama2 references must be removed by formal source correction, not interpreted as extra coverage."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "SOURCE_CONFLICT",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "Do not execute until DLRM/BERT/Llama2 conflicts and the comparable v4.0 reference are formally resolved. After that, the pinned harness can automate accuracy, performance, compliance and evidence collection under human approval."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "DLRM v2, 99 and Server are consistent between title and run arguments."
+        ],
+        "missing": [
+            "Correct script/harness, artifacts/licenses, system config, run modes, numeric comparable result and health limits."
+        ],
+        "provider": [
+            "Benchmark owner corrects model references and selects the official v4.0 result/configuration.",
+            "GPU owner supplies approved driver/runtime/container and thermal/power limits.",
+            "Data owner supplies licensed DLRM model/dataset/preprocessing."
+        ],
+        "safe_read_only_work": [
+            "Inventory GPUs/UUIDs/BDFs/topology, CPU/NUMA, memory, driver/runtime/container versions and storage capacity.",
+            "Inspect artifact manifests and published result metadata without downloading licensed data or running workloads."
+        ],
+        "prohibited_until_resolved": [
+            "Package/model/data download, container execution, tuning, benchmark run, log clearing or PASS."
+        ],
+        "closure_evidence": [
+            "Formal correction removes BERT/Llama references.",
+            "Pinned v4.0 harness/config/artifact hashes and licenses are approved.",
+            "Matching result ID plus QPS/latency/accuracy/compliance acceptance is signed."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Run MLPerf Inference v4.0 DLRM v2 99 Server",
+        "purpose": "Execute the approved MLPerf Inference v4.0 DLRM v2 normal-accuracy Server configuration, verify required accuracy, LoadGen validity and compliance, measure Server queries per second under the release latency constraints, and compare only with a signed comparable v4.0 result.",
+        "applicable_platform_environment": "The exact SUT system ID, GPU/CPU/memory/topology, driver/runtime, container/harness commit, DLRM v2 model/dataset/preprocessing and MLPerf v4.0 rules. NVIDIA, AMD and other implementations are not interchangeable.",
+        "target_scope": "All GPUs and host resources declared by the approved system configuration; DLRM v2 99; Server scenario only. Offline, BERT, Llama2 and high-accuracy profiles are excluded. Machine Time 60 and Attended Time 240 are planning metadata unless the approved harness defines otherwise.",
+        "required_inputs": "Corrected source; approved v4.0 harness/container/commit; DLRM v2 model and dataset licenses/hashes; system/user/mlperf configs; PerformanceOnly, AccuracyOnly and compliance procedure; power/clock/cooling policy; matching published result ID/system/config; numeric comparison tolerance and validity/error/thermal limits.",
+        "test_command_procedure_intent": "Verify artifact hashes and exact system config, capture baseline topology/health, build or load the approved container, then run the DLRM v2 99 Server accuracy, performance and required compliance phases exactly as the pinned v4.0 implementation documents. Preserve raw LoadGen logs/configs and system telemetry. Do not execute the generic command until its harness compatibility is proven, and do not run BERT or the Llama script.",
+        "preconditions": "Source conflicts resolved; artifacts licensed and pinned; all GPUs healthy/visible; storage, cooling and power adequate; tuning and maintenance approved; monitoring and recovery ready.",
+        "expected_evidence": "System ID/config; GPU UUID/BDF/topology and driver/runtime/container/harness hashes; model/dataset/preprocessing hashes; exact commands/configs; accuracy result; LoadGen detail/summary/accuracy logs; Server QPS and latency-validity evidence; compliance/audit output where required; power/thermal/XID/ECC/dmesg/SEL telemetry; published reference ID and normalized comparison; final health.",
+        "acceptance_reference": "Signed MLPerf Inference v4.0 DLRM v2 99 Server rules and the approved comparable published result. Pass requires valid accuracy, LoadGen and required compliance, Server latency constraints satisfied, the numeric comparison rule met and no disallowed platform errors. A local valid run is not automatically an official submission.",
+        "safety_restrictions": "Do not mix models/scenarios/releases, use unlicensed/unhashed artifacts, copy another system's tuning, change clocks/power/cooling without approval, clear logs, suppress invalid LoadGen status, compare unlike GPU counts/configurations or call a local score official.",
+        "human_approval_requirements": "Benchmark owner signs model/scenario/release/reference and acceptance; data/software owners approve artifacts; platform owner approves tuning and sustained GPU load; a human judges comparability and PASS/FAIL/BLOCKED.",
+        "manual_boundaries": "Humans resolve source conflicts and comparison validity. An Agent may execute the pinned harness and collect evidence after gates; it may not select a reference or waive accuracy/validity/compliance.",
+        "recovery_requirements": "Stop on invalid result or platform limit, preserve logs/telemetry, terminate harness/container cleanly, restore approved clocks/power/services, verify GPU/host health and require fresh approval before rerun.",
+        "stop_conditions": "Model/script/reference conflict remains; artifact/license/config is missing; GPU visibility/topology changes; LoadGen validity/accuracy/compliance fails; XID/ECC, thermal/power, storage or host instability exceeds limits; evidence or monitoring is lost."
+    },
+    "identified_defects": [
+        "DLRM conflicts with BERT text and Llama2 Script field.",
+        "NVIDIA score criterion has no comparable result identity.",
+        "Official-score language omits accuracy/compliance and submission status boundaries."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Expected Evidence",
+        "Acceptance Reference",
+        "Safety Restrictions",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "Make this specifically a DLRM v2 99 Server validation and prevent a wrong-model run or invalid cross-system score comparison.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://github.com/mlcommons/inference",
+            "title": "MLPerf Inference reference implementations",
+            "version": "v4.0 section, retrieved 2026-10-14",
+            "applicability": "MLPerf Inference v4.0",
+            "supports": "DLRM v2 is a datacenter benchmark using the Multihot Criteo dataset; model, dataset, scenario and release must be pinned.",
+            "remaining_uncertainty": "The repository testcase does not identify an exact v4.0 commit or comparable result."
+        },
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Performance!row-21",
+            "title": "Source testcase Wistron-Performance GPU-00037-V003",
+            "version": "Baseline workbook",
+            "applicability": "Only this DLRM case",
+            "supports": "DLRM v2 99 Server command and contradictory BERT/Llama references.",
+            "remaining_uncertainty": "Correct harness and acceptance reference are unresolved."
+        }
+    ],
+    "removed_ambiguities": [
+        "Excludes BERT, Llama2, Offline and 99.9 profiles.",
+        "Separates local valid execution from official submission.",
+        "Requires a comparable result ID and full validity evidence."
+    ],
+    "resolved_blockers": [
+        "Licensed artifacts and harness can be provided; this remains technically automatable after correction."
+    ],
+    "remaining_blockers": [
+        "Source model/script conflict and comparison reference require engineer correction."
+    ],
+    "objective_improvement_over_v2": "V3 identifies the unrelated Script path and makes comparable-system identity, official-status boundary and DLRM-specific Server evidence mandatory.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Contract-only validation was CLEAR. The validator preserved MLPerf v4.0 DLRM v2 normal-accuracy 99 Server only; excluded BERT, Llama2, 99.9, Offline and release/config drift; required accuracy, LoadGen latency-validity and applicable compliance evidence; retained signed comparable-result and tuning/health gates; and rejected local-result-as-official or premature PASS claims. No intrinsic document defect was found. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Performance row 21 names DLRM v2 99 Server but also says BERT and links a Llama2 99.9 script.",
+        "source_specific_v2_comparison": "V2 catches BERT but not the Llama Script and does not bind the NVIDIA comparison to a result/system ID.",
+        "source_specific_safety_evidence_decision": "Permit inventory/metadata review; prohibit benchmark execution until model/script/reference conflicts and artifacts are closed.",
+        "template_violation_detected": false
+    }
+}

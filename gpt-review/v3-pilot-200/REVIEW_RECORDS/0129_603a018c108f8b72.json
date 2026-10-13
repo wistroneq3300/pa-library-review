@@ -1,0 +1,195 @@
+{
+    "schema_version": "v3-review-record-1.0",
+    "sequence": 129,
+    "calibration": false,
+    "source_key": "Performance|26|Wistron-Performance GPU-00042-V003",
+    "case_variant_id": "603a018c108f8b72",
+    "source_ref": {
+        "sheet": "Performance",
+        "source_row": 26,
+        "code": "Wistron-Performance GPU-00042-V003"
+    },
+    "source_integrity": {
+        "original_row_sha256": "5d4662344226c95e45ff2fe0ea4da989b1944682239397d73aec8108a1a90a42",
+        "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37",
+        "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"
+    },
+    "source_snapshot": {
+        "test_name": "MLPerf - GPTJ_99_offline",
+        "test_set": "MLPerf",
+        "purpose_facts": "Run MLPerf Inference v4.0 GPT-J 99 Offline and compare with MLCommons v4.0.",
+        "procedure_facts": [
+            "The command `make run RUN_ARGS=\"--benchmarks=gptj --scenarios=offline` has no closing quote.",
+            "Later text asks for a valid BERT result and the Script field points to a Llama2-70B 99.9 repository."
+        ],
+        "criteria_facts": [
+            "Greater than an unspecified official NVIDIA MLPerf score."
+        ],
+        "attended_time_minutes": "240",
+        "machine_time_minutes": "60",
+        "source_conflicts": [
+            "GPT-J conflicts with BERT and Llama2 references.",
+            "The run command is syntactically incomplete.",
+            "The comparison lacks a matching GPT-J 99 Offline result/system ID."
+        ],
+        "missing_source_information": [
+            "Pinned GPT-J model/CNN-DailyMail data, preprocessing and v4.0 harness.",
+            "Accuracy/performance/compliance commands and comparable samples/s rule."
+        ]
+    },
+    "original_test_intent": {
+        "statement": "Run a valid MLPerf Inference v4.0 GPT-J normal-accuracy 99 Offline benchmark, prove GPT-J accuracy and LoadGen/compliance validity, and compare Offline throughput with an approved comparable v4.0 result.",
+        "must_preserve": [
+            "GPT-J 99, Offline and v4.0.",
+            "GPT-J-specific accuracy plus valid LoadGen evidence.",
+            "Whole-system GPU workload and comparable reference."
+        ],
+        "must_not_infer": [
+            "BERT, Llama2, GPT-J 99.9 or Server.",
+            "That the malformed command is executable.",
+            "That any NVIDIA score is comparable or that a local run is official."
+        ]
+    },
+    "v2_review_conclusion": {
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "second_review_outcome": "CHANGED",
+        "risk_level": "HIGH",
+        "summary": "V2 correctly detects the unclosed quote, GPT-J/BERT conflict and Server/Offline ambiguity, and requires valid GPT-J Offline artifacts and evidence.",
+        "specific_gap": "V2 does not identify the unrelated Llama2 Script field or bind GPT-J acceptance to its model-specific accuracy evidence and a named comparable v4.0 Offline result."
+    },
+    "applicable_history": {
+        "locked_user_decisions": [],
+        "related_records": [
+            "DLRM and Llama rows cannot supply GPT-J model, dataset, accuracy metric or result reference."
+        ],
+        "precedence_application": "Title and scenario identify GPT-J 99 Offline, but the broken command and wrong-model references require a formal rewrite before execution."
+    },
+    "v3_review_conclusion": {
+        "review_outcome": "REWRITE_REQUIRED",
+        "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+        "execution_readiness": [
+            "SOURCE_CONFLICT",
+            "NEEDS_PACKAGE",
+            "NEEDS_INPUT",
+            "NEEDS_SPEC",
+            "NEEDS_APPROVAL"
+        ],
+        "summary": "The source command cannot be executed and its BERT/Llama references are wrong. Rewrite it around a pinned GPT-J 99 Offline v4.0 implementation and comparable result before automation."
+    },
+    "execution_readiness_detail": {
+        "conditions_present": [
+            "The title consistently names GPT-J 99 Offline."
+        ],
+        "missing": [
+            "Correct executable command/script, GPT-J artifacts/licenses/configs, accuracy/compliance phases, reference ID, threshold and platform limits."
+        ],
+        "provider": [
+            "Benchmark owner rewrites command and signs reference.",
+            "Data/software owners supply GPT-J model and CNN/DailyMail-derived data under approved terms.",
+            "Platform owner approves tuning/load/recovery."
+        ],
+        "safe_read_only_work": [
+            "Inventory platform and inspect hashes/licenses/config manifests and published GPT-J v4.0 result metadata."
+        ],
+        "prohibited_until_resolved": [
+            "Execute malformed command, use BERT/Llama assets, download licensed artifacts, tune/run, clear logs or PASS."
+        ],
+        "closure_evidence": [
+            "Correct GPT-J-only command and Script reference.",
+            "Pinned v4.0 artifacts/configs and valid accuracy/compliance procedure.",
+            "Comparable Offline result ID and numeric rule."
+        ]
+    },
+    "revision_candidate": {
+        "test_name": "Run MLPerf Inference v4.0 GPT-J 99 Offline",
+        "purpose": "Execute the approved MLPerf Inference v4.0 GPT-J normal-accuracy Offline configuration, verify GPT-J accuracy plus LoadGen/compliance validity, measure Offline throughput, and compare only with a signed comparable v4.0 GPT-J result.",
+        "applicable_platform_environment": "Exact SUT/GPU topology, driver/runtime, container/harness commit, GPT-J model, approved CNN/DailyMail evaluation data/preprocessing and v4.0 configs. Vendor implementations and model variants are not interchangeable.",
+        "target_scope": "All resources declared by the system configuration; GPT-J 99; Offline only. GPT-J 99.9, Server, BERT, Llama2 and DLRM are excluded.",
+        "required_inputs": "Corrected checksummed script/command; pinned v4.0 harness/container; licensed GPT-J model/data/preprocessing hashes; system/user/mlperf configs; GPT-J AccuracyOnly, PerformanceOnly and compliance procedures; approved tuning/cooling/power; comparable result ID; numeric throughput/accuracy/validity/health rules.",
+        "test_command_procedure_intent": "Verify artifacts/configs and baseline health, then execute GPT-J 99 Offline accuracy, performance and required compliance phases using the pinned implementation. Preserve complete LoadGen and GPT-J accuracy logs and telemetry. Never execute the unclosed source command or substitute the linked Llama2 script/BERT check.",
+        "preconditions": "Formal rewrite completed; artifacts licensed and pinned; full GPU visibility; sufficient memory/storage/cooling/power; no competing workload; tuning and recovery approved.",
+        "expected_evidence": "System/config and GPU topology; all binary/container/harness/model/data hashes; exact commands/configs; GPT-J accuracy output; LoadGen detail/summary/accuracy logs; valid Offline throughput; required compliance output; power/thermal/XID/ECC/host logs; named comparable result and normalized comparison; final health.",
+        "acceptance_reference": "Signed v4.0 GPT-J 99 Offline rules and identified comparable result. Pass requires GPT-J accuracy validity, valid LoadGen/compliance, numeric Offline comparison and clean platform health. BERT accuracy, Llama2 logs, Server metrics or command exit alone are invalid.",
+        "safety_restrictions": "Do not run malformed or wrong-model commands, mix 99/99.9 or Server/Offline, use unlicensed artifacts, copy unmatched tuning, alter clocks/power without approval, suppress invalidity, clear logs or claim official status.",
+        "human_approval_requirements": "Benchmark/data/software/platform owners approve rewrite, artifacts, reference, tuning and load; a human judges comparability and final disposition.",
+        "manual_boundaries": "Humans correct the source and select acceptance. The Agent may run only the pinned GPT-J workflow after gates and cannot repair intent at runtime.",
+        "recovery_requirements": "On invalidity or platform limit, preserve evidence, stop the harness/container, restore tuning/services and verify GPU/host health before a separately approved rerun.",
+        "stop_conditions": "Malformed/wrong-model command remains; wrong scenario/accuracy/release; missing license/config/reference; accuracy/LoadGen/compliance failure; topology drift; XID/ECC/thermal/power/storage/host limit; monitoring/evidence loss."
+    },
+    "identified_defects": [
+        "Unclosed RUN_ARGS quote.",
+        "GPT-J conflicts with BERT text and Llama2 Script.",
+        "No comparable result identity or GPT-J-specific accuracy rule."
+    ],
+    "changed_fields": [
+        "Review Outcome",
+        "Execution Readiness",
+        "Test Command / Procedure Intent",
+        "Purpose",
+        "Target Scope",
+        "Required Inputs",
+        "Expected Evidence",
+        "Acceptance Reference",
+        "Safety Restrictions",
+        "Stop Conditions"
+    ],
+    "reason_for_change": "A syntactically broken, cross-model testcase must be rewritten rather than patched at runtime; the revision freezes GPT-J 99 Offline and its own accuracy evidence.",
+    "new_technical_evidence": [
+        {
+            "source_url": "https://github.com/mlcommons/inference/language/gpt-j/README.md",
+            "title": "MLPerf GPT-J reference README",
+            "version": "Retrieved 2026-10-14; execution must use a release-pinned v4.0 revision",
+            "applicability": "GPT-J only",
+            "supports": "GPT-J uses its own model and evaluation data, scenario selection and accuracy-log evaluation; these cannot be replaced by BERT/Llama evidence.",
+            "remaining_uncertainty": "Exact v4.0 harness commit and organization implementation are not supplied."
+        },
+        {
+            "source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Performance!row-26",
+            "title": "Source testcase Wistron-Performance GPU-00042-V003",
+            "version": "Baseline workbook",
+            "applicability": "Only this case",
+            "supports": "GPT-J 99 Offline intent, broken quote and contradictory BERT/Llama references.",
+            "remaining_uncertainty": "Correct implementation and reference are unresolved."
+        }
+    ],
+    "removed_ambiguities": [
+        "Freezes GPT-J 99 Offline.",
+        "Rejects broken command and wrong-model artifacts.",
+        "Requires GPT-J accuracy rather than BERT validity.",
+        "Separates local valid run from official result."
+    ],
+    "resolved_blockers": [
+        "Artifacts and corrected command are provider-closable."
+    ],
+    "remaining_blockers": [
+        "Formal command/script rewrite and comparable result selection are required."
+    ],
+    "objective_improvement_over_v2": "V3 elevates the broken command to REWRITE_REQUIRED, detects the Llama Script mismatch and requires GPT-J-specific accuracy/reference evidence.",
+    "agent_understanding_result": {
+        "status": "PASSED",
+        "validation_scope": "ISOLATED_SAME_MODEL_FAMILY",
+        "independent_model_validation": false,
+        "notes": "Contract-only validation was CLEAR. The validator preserved MLPerf v4.0 GPT-J normal-accuracy 99 Offline only; rejected BERT/Llama, 99.9, Server, malformed-command carryover and release/config drift; required GPT-J accuracy, LoadGen performance-validity and applicable compliance evidence; retained licensed-artifact, tuning, comparable-reference, recovery and health gates; and rejected partial, official or PASS claims. No material document defect was found. This is not independent-model or DUT validation."
+    },
+    "regression_status": {
+        "test_intent_preserved": true,
+        "scope_preserved": true,
+        "duration_preserved": true,
+        "iteration_preserved": true,
+        "safety_relaxed": false,
+        "pass_claimed": false,
+        "hardware_tested": false,
+        "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"
+    },
+    "per_case_integrity_check": {
+        "exact_xlsx_row_read": true,
+        "matching_deepseek_read": true,
+        "matching_v2_read": true,
+        "history_read": true,
+        "source_specific_purpose_fact": "Performance row 26 is GPT-J 99 Offline, but its RUN_ARGS quote is open and its checks reference BERT/Llama2.",
+        "source_specific_v2_comparison": "V2 catches the quote and BERT but not the Llama Script or GPT-J-specific comparable acceptance.",
+        "source_specific_safety_evidence_decision": "Only inventory/metadata is safe until a corrected GPT-J command and acceptance package are signed.",
+        "template_violation_detected": false
+    }
+}

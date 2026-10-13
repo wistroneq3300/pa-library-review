@@ -1,0 +1,72 @@
+{
+  "schema_version": "v3-review-record-1.0",
+  "sequence": 125,
+  "calibration": false,
+  "source_key": "Performance|16|Wistron-Performance Networking-00031-V004",
+  "case_variant_id": "4599ba4981977666",
+  "source_ref": {"sheet": "Performance", "source_row": 16, "code": "Wistron-Performance Networking-00031-V004"},
+  "source_integrity": {"original_row_sha256": "6c6aae7cb3c140ee3284fb7b412d8f893f6aca5f9fc049609d9a0f0dcbe5f323", "xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "tests_json_sha256": "5eefd664be9ed794e4429095f9d8e0c969d392a688b787af71f4f319526fdd37", "gpt_v2_sha256": "5776cf96ff65219ca8d0dce07631914a9f45a98c0bccae8390f076ec67e25869"},
+  "source_snapshot": {
+    "test_name": "Ethernet Performance",
+    "test_set": "Mellanox - BlueField",
+    "purpose_facts": "Measure Ethernet bandwidth for five minutes with the SUT acting as the iperf server and a second host acting as the client, then check system usability and event logs.",
+    "procedure_facts": ["Check configuration and clear logs.", "Download the latest iperf package from iperf.fr.", "Start the SUT as server with `iperf -s -i 60`.", "Run the peer as client for 300 seconds; the source example `iperf -c -i 60 -t 300` omits the required server destination."],
+    "criteria_facts": ["Network bandwidth matches the unspecified specification during stress.", "The system remains workable and has no system event errors after the run."],
+    "attended_time_minutes": "15",
+    "machine_time_minutes": "15",
+    "source_conflicts": [],
+    "missing_source_information": ["Exact BlueField execution path and interfaces.", "iperf major version/build and server address.", "Link/IP/MTU/VLAN/offload/congestion/window topology and numeric single-stream threshold.", "Approved package source, firewall port and log-clear policy."]
+  },
+  "original_test_intent": {
+    "statement": "Run one default-direction TCP stream for 300 seconds from a separate peer client to the SUT iperf server over the designated BlueField Ethernet path, report 60-second intervals, and compare throughput and post-test health with the applicable specification.",
+    "must_preserve": ["SUT server and separate-host client roles.", "Client-to-server default TCP direction, one stream and 300-second duration.", "BlueField Ethernet path, complete throughput output and post-test usability/error checks."],
+    "must_not_infer": ["DPU Arm, host PF/VF, representor or external-port execution location.", "iperf2 and iperf3 syntax equivalence.", "Reverse, bidirectional, UDP or parallel traffic.", "That link-up or ping satisfies throughput acceptance."]
+  },
+  "v2_review_conclusion": {
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "second_review_outcome": "CHANGED",
+    "risk_level": "HIGH",
+    "summary": "V2 correctly requests the BlueField endpoint, peer topology, IP/link parameters, tool version, specification, 300-second run and endpoint evidence.",
+    "specific_gap": "V2 makes traffic direction and stream count negotiable although the source fixes peer-client to SUT-server default TCP behavior; it also does not explicitly reject the unsafe DeepSeek same-host SSH construction or require a reproducible package and bound listener address."
+  },
+  "applicable_history": {"locked_user_decisions": [], "related_records": ["Other network cases cannot determine this row's BlueField path, roles or threshold."], "precedence_application": "The source role assignment and 300-second duration govern; missing platform details are provider-closable inputs rather than a semantic blocker."},
+  "v3_review_conclusion": {"review_outcome": "IMPROVED", "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION", "execution_readiness": ["NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_SPEC", "NEEDS_APPROVAL"], "summary": "Keep the test automatable after handoff, but preserve one peer-to-SUT TCP stream for 300 seconds and require an explicit BlueField path, reproducible iperf build, bound addresses, peer capacity, threshold and temporary network-change approval."},
+  "execution_readiness_detail": {
+    "conditions_present": ["The source supplies endpoint roles, TCP server/client intent, 60-second reporting and a 300-second run."],
+    "missing": ["BlueField path, endpoint addresses, tool version/hash, port, network profile, peer capacity, numeric threshold and approvals."],
+    "provider": ["Network owner supplies the path/topology and acceptance specification.", "Lab owner supplies the peer, approved package and firewall/port authorization.", "Platform owner defines health/error limits and restoration."],
+    "safe_read_only_work": ["Inventory BlueField PF/VF/representor/Arm netdev mapping, PCI BDFs, firmware/driver, link state/speed, addresses/routes, MTU/offloads and existing counters.", "Record installed iperf binaries and hashes without starting a listener or traffic."],
+    "prohibited_until_resolved": ["Package download/install, firewall or namespace changes, listener startup, traffic generation, log clearing or PASS."],
+    "closure_evidence": ["Signed endpoint/path map and peer reachability on the isolated test network.", "Approved checksummed tool and exact commands bind the intended addresses.", "Numeric one-stream threshold and health/error criteria are approved."]
+  },
+  "revision_candidate": {
+    "test_name": "Measure Single-Stream TCP Ingress Throughput on the Designated BlueField Ethernet Path",
+    "purpose": "Measure one default-direction TCP stream from a separate peer client to the SUT server for 300 seconds on the designated BlueField Ethernet path, record 60-second intervals, and verify throughput plus endpoint/platform health against the signed specification.",
+    "applicable_platform_environment": "The exact BlueField generation/firmware/driver and one signed data path: DPU Arm netdev, host PF/VF, representor or external port. The peer and SUT must be on an isolated approved network; host and DPU execution contexts are not interchangeable.",
+    "target_scope": "One named peer client, one SUT server address/interface, one TCP stream, default client-to-server direction, 300 seconds and 60-second reporting. Reverse, bidirectional, UDP and parallel modes are out of scope unless the testcase is formally revised.",
+    "required_inputs": "Endpoint roles/addresses/netdevs/namespaces/BDFs; exact BlueField path; link speed/FEC, IP family, VLAN, route, MTU, offloads, congestion/window and CPU/NUMA/IRQ policy; peer capacity; exact approved iperf2 or iperf3 build/hash and port; firewall approval; numeric throughput/retransmission/drop/error thresholds; monitoring and restoration plan.",
+    "test_command_procedure_intent": "Capture mapping, configuration, negotiated link, counters and logs. Install only the approved checksummed package. Start the SUT server bound to the signed address/interface and port, verify listener readiness, then run the peer client to that server for exactly 300 seconds with 60-second intervals and one default TCP stream. Do not add reverse, bidirectional, UDP or parallel flags. Capture full output and both-end counters, stop the listener, restore temporary firewall/network changes and verify final connectivity and health.",
+    "preconditions": "Approved isolated path and peer; exact endpoint binding proven; no production traffic; link/profile and CPU placement frozen; sufficient peer capacity; package and temporary listener/firewall approved; baseline counters/logs captured.",
+    "expected_evidence": "Path/netdev/BDF/namespace map; BlueField firmware/driver and link/FEC/MTU/offload state; endpoint addresses/routes; tool binary/version/hash and exact commands; server readiness; complete 300-second output with five 60-second intervals; throughput/retransmissions; peer, SUT and DPU counters/errors/drops; CPU/NUMA utilization; thermal/system logs; listener shutdown, restoration and final connectivity.",
+    "acceptance_reference": "The signed threshold for the exact BlueField path, negotiated link and one-stream 300-second TCP profile. Pass requires all accepted intervals/aggregate to meet the stated rule, no disallowed retransmission/drop/link/system errors, system usability after the run and complete evidence; ping or link-up alone is insufficient.",
+    "safety_restrictions": "Do not download an unpinned latest binary, expose a listener beyond the isolated network, guess a BlueField interface, change MTU/offloads/VLAN/routes/firewall without approval, use production traffic, clear logs, alter traffic direction/stream count/protocol or claim PASS without the numeric specification.",
+    "human_approval_requirements": "Network owner signs path/profile/threshold; lab owner approves package, peer, port and temporary firewall/listener; a human authorizes traffic after the binding and isolation check and judges PASS/FAIL/BLOCKED.",
+    "manual_boundaries": "Humans select the BlueField data path, approve network changes and own the specification. An Agent may inventory, execute the frozen client/server commands, monitor and package evidence after gates; it may not choose a path or redefine the profile.",
+    "recovery_requirements": "Stop client and server, preserve output/counters/logs, restore firewall/routes/namespaces/offloads, verify management and data connectivity, and escalate link loss, DPU reset or persistent errors before any rerun.",
+    "stop_conditions": "Path/binding/tool/profile/spec/approval is missing; traffic escapes the isolated network; endpoint/link/profile changes; peer saturates; monitoring is lost; disallowed retransmission/drop/error, DPU reset, thermal limit, system instability or failed restoration occurs."
+  },
+  "identified_defects": ["Client command omits the server address.", "BlueField execution path and numeric threshold are undefined.", "Latest package download is not reproducible.", "DeepSeek collapses two endpoint roles into one unsafe SSH flow.", "V2 does not freeze default direction and one stream."],
+  "changed_fields": ["Purpose", "Target Scope", "Required Inputs", "Test Command / Procedure Intent", "Expected Evidence", "Acceptance Reference", "Safety Restrictions", "Recovery Requirements", "Stop Conditions"],
+  "reason_for_change": "Prevent a BlueField path or traffic-profile substitution while turning missing endpoint, package and specification details into explicit handoff gates.",
+  "new_technical_evidence": [
+    {"source_url": "https://software.es.net/iperf/invoking.html", "title": "Invoking iperf3", "version": "Official ESnet documentation retrieved 2026-10-14", "applicability": "Only when the approved tool is iperf3; iperf2 must use its matching documentation", "supports": "Client mode requires a server host; default traffic is client-to-server; reverse, bidirectional and parallel modes change the profile; bind and JSON options are version-specific.", "remaining_uncertainty": "The source does not identify iperf2 versus iperf3 or the BlueField path."},
+    {"source_url": "repo:data/REVISED_commands_merged_with_raw.xlsx#Performance!row-16", "title": "Source testcase Wistron-Performance Networking-00031-V004", "version": "Baseline workbook SHA-256 e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "applicability": "Only this BlueField Ethernet case", "supports": "SUT-server/peer-client roles, 300 seconds, 60-second intervals and generic bandwidth/health criteria.", "remaining_uncertainty": "Path, server address, tool version and specification are absent."}
+  ],
+  "removed_ambiguities": ["Freezes peer-client to SUT-server default direction and one stream.", "Separates DPU, host PF/VF and representor paths.", "Requires an exact reproducible tool and server binding.", "Separates throughput completion from ping/link evidence."],
+  "resolved_blockers": ["Tool, path, peer and threshold are provider-closable; they do not make the test permanently non-automatable."],
+  "remaining_blockers": ["Execution awaits signed path/profile, endpoint binding, package, peer capacity, threshold and network approval."],
+  "objective_improvement_over_v2": "V3 preserves the source's exact traffic roles and single-stream direction, prevents same-host/ambiguous-interface execution, and makes package provenance, listener exposure, evidence and restoration test-specific.",
+  "agent_understanding_result": {"status": "PASSED", "validation_scope": "ISOLATED_SAME_MODEL_FAMILY", "independent_model_validation": false, "notes": "Contract-only validation was CLEAR. The validator preserved one peer-client to SUT-server TCP stream, the signed BlueField path, exactly 300 seconds and five 60-second reports; distinguished DPU Arm, host PF/VF, representor and external-port contexts; rejected reverse/bidirectional/UDP/parallel substitutions, ping-only completion and unbound listener exposure; and retained both-end evidence, restoration and human threshold judgment. No document defect was found. This is not independent-model or DUT validation."},
+  "regression_status": {"test_intent_preserved": true, "scope_preserved": true, "duration_preserved": true, "iteration_preserved": true, "safety_relaxed": false, "pass_claimed": false, "hardware_tested": false, "status": "PASSED_STATIC_AND_AGENT_UNDERSTANDING"},
+  "per_case_integrity_check": {"exact_xlsx_row_read": true, "matching_deepseek_read": true, "matching_v2_read": true, "history_read": true, "source_specific_purpose_fact": "Performance row 16 assigns the SUT as iperf server and a second host as client for 300 seconds with 60-second reports.", "source_specific_v2_comparison": "V2 captures most dependencies but leaves direction/stream count open and does not explicitly reject the generated same-host SSH flow.", "source_specific_safety_evidence_decision": "Permit mapping and installed-tool inventory; prohibit listener, traffic and network changes until the path, bind addresses, package, threshold and approvals are signed.", "template_violation_detected": false}
+}
