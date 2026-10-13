@@ -125,7 +125,8 @@ V3 適合進入受控、分批的剩餘案例 Review，不適合無人監督的�
 
 - Branch: `codex/testcase-review-v3-pilot-200`
 - Baseline: `770c2bd81d329414f308999faa55d20212210fab`
-- Final commit: 以該 branch push 後的 HEAD 為準，最終交付訊息提供 SHA。
+- Reviewed-artifact commit (200 records, V3 outputs and validations): `9c93889513bc1cc3702f30a347c4fa8a55b17818`.
+- The metadata-only commit that records this SHA is the branch HEAD reported in the final handoff; Git commits cannot contain their own hash.
 - Reports: `gpt-review/v3-pilot-200/`
 
 ## Release Gate
