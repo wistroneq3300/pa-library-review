@@ -1,35 +1,163 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 415,
   "library_sequence": 232,
   "source_key": "Functionality|233|Wistron-HW-00242-V003",
   "case_variant_id": "52213f9bc9f0fb6f",
-  "source_ref": {"sheet": "Functionality", "source_row": 233, "code": "Wistron-HW-00242-V003"},
-  "source_integrity": {"exact_xlsx_row_read": true, "original_row_sha256": "0b2689f1691c1874aecd30600d588df1c0d531361d4d73cc1f1f3dc257f67559", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true, "historical_revision_search": true, "duplicate_code_search": true, "duplicate_code_result": "No other XLSX row uses Wistron-HW-00242-V003.", "next_source_row_verified": "Functionality|234|Wistron-HW-00249-V002"},
-  "source_snapshot": {"sub_function": "HW", "test_set": "Function Check", "test_name_items": "No TPM with bitlocker", "procedure": "The source provides a Windows Group Policy and BitLocker GUI/command-line workflow: enable 'Allow BitLocker without a compatible TPM', select an exact drive, choose password or USB startup-key authentication, save a recovery key, choose encryption mode, start encryption, optionally use `manage-bde -on C: -password` and `manage-bde -protectors -add C: -rp`, then inspect `manage-bde -status C:`. The full verbatim procedure remains in the source XLSX and was read for this review.", "criteria": "The criteria cell duplicates the same Group Policy, drive-encryption, recovery-key and status-check workflow rather than stating a separate concise expected result; it includes the expectation that the drive is listed as BitLocker On and that status shows encryption and protectors.", "script": null, "attended_time": "2", "machine_time": "5", "latest_updated": "2025-09-12", "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "Not remotely runnable: operator configures Windows Group Policy and BitLocker, encrypts the drive and validates it.", "ai_logs_output": "Operator Windows policy, encryption and reboot evidence.", "risk": "Human-only Windows security and disk operation.", "remark": null}},
-  "historical_reviews": {"deepseek": "NO; correctly recognizes the GUI/policy/encryption boundary but gives no exact-volume, credential or recovery safeguards.", "gpt_v2": "MANUAL ONLY / IMPROVED; adds exact target volume, protector, recovery material, compatible policy, reboot and no-production-disk controls.", "round_02": "No separate exact-code round-02 entry was found.", "second_review_handoff": "Confirms the literal C: example is not authorization to encrypt an inferred boot volume.", "v3": "No V3 Pilot record exists.", "v3_1": "No V3.1 200-case record exists."},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 233,
+    "code": "Wistron-HW-00242-V003"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "0b2689f1691c1874aecd30600d588df1c0d531361d4d73cc1f1f3dc257f67559",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00242-V003.",
+    "next_source_row_verified": "Functionality|234|Wistron-HW-00249-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Function Check",
+    "test_name_items": "No TPM with bitlocker",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Enable BitLocker Without TPM\nFirst, you need to configure your Windows policy to allow BitLocker without a TPM.\n\nUsing Group Policy Editor\nOpen the Group Policy Editor:\n\nPress Win + R, type gpedit.msc, and press Enter.\nNavigate to the BitLocker Policy:\n\nGo to Computer Configuration > Administrative Templates > Windows Components > BitLocker Drive Encryption > Operating System Drives.\nConfigure Policy:\n\nFind the policy Require additional authentication at startup and double-click to edit it.\nEnable the policy.\nEnsure the option Allow BitLocker without a compatible TPM (requires a password or a startup key on a USB flash drive) is checked.\nClick Apply and OK.\n2. Enable BitLocker on a Drive\nOnce the policy is set, you can proceed to enable BitLocker.\n\nUsing BitLocker GUI\nOpen File Explorer:\n\nRight-click on the drive you want to encrypt (e.g., C: drive).\nSelect Turn on BitLocker.\nChoose Authentication Method:\n\nSelect Enter a password or Insert a USB flash drive.\nFollow the prompts to set a password or use a USB flash drive.\nSave Recovery Key:\n\nSave the recovery key to a file, print it, or store it somewhere safe.\nEncrypt the Drive:\n\nChoose the type of encryption (New or Compatible mode).\nStart the encryption process.\nUsing Command Line\nYou can also use the manage-bde command-line tool to enable BitLocker.\n\nOpen Command Prompt as Administrator:\n\nPress Win + X, then select Command Prompt (Admin) or Windows PowerShell (Admin).\nEnable BitLocker with a Password:\n\nmanage-bde -on C: -password\nFollow Prompts:\n\nEnter and confirm the password when prompted.\nSave Recovery Key:\n\nmanage-bde -protectors -add C: -rp\n3. Check BitLocker Status\nTo verify that BitLocker is enabled and working without a TPM, check the status.\n\nGUI Method\nOpen BitLocker Drive Encryption:\nGo to Control Panel > System and Security > BitLocker Drive Encryption.\nEnsure that the drive is listed as BitLocker On.\nCommand Line Method\nOpen Command Prompt as Administrator.\nCheck Status:\nmanage-bde -status C:\nThis command will show the status of BitLocker on the specified drive, including the encryption method and the protectors used.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Enable BitLocker Without TPM\nFirst, you need to configure your Windows policy to allow BitLocker without a TPM.\n\nUsing Group Policy Editor\nOpen the Group Policy Editor:\n\nPress Win + R, type gpedit.msc, and press Enter.\nNavigate to the BitLocker Policy:\n\nGo to Computer Configuration > Administrative Templates > Windows Components > BitLocker Drive Encryption > Operating System Drives.\nConfigure Policy:\n\nFind the policy Require additional authentication at startup and double-click to edit it.\nEnable the policy.\nEnsure the option Allow BitLocker without a compatible TPM (requires a password or a startup key on a USB flash drive) is checked.\nClick Apply and OK.\n2. Enable BitLocker on a Drive\nOnce the policy is set, you can proceed to enable BitLocker.\n\nUsing BitLocker GUI\nOpen File Explorer:\n\nRight-click on the drive you want to encrypt (e.g., C: drive).\nSelect Turn on BitLocker.\nChoose Authentication Method:\n\nSelect Enter a password or Insert a USB flash drive.\nFollow the prompts to set a password or use a USB flash drive.\nSave Recovery Key:\n\nSave the recovery key to a file, print it, or store it somewhere safe.\nEncrypt the Drive:\n\nChoose the type of encryption (New or Compatible mode).\nStart the encryption process.\nUsing Command Line\nYou can also use the manage-bde command-line tool to enable BitLocker.\n\nOpen Command Prompt as Administrator:\n\nPress Win + X, then select Command Prompt (Admin) or Windows PowerShell (Admin).\nEnable BitLocker with a Password:\n\nmanage-bde -on C: -password\nFollow Prompts:\n\nEnter and confirm the password when prompted.\nSave Recovery Key:\n\nmanage-bde -protectors -add C: -rp\n3. Check BitLocker Status\nTo verify that BitLocker is enabled and working without a TPM, check the status.\n\nGUI Method\nOpen BitLocker Drive Encryption:\nGo to Control Panel > System and Security > BitLocker Drive Encryption.\nEnsure that the drive is listed as BitLocker On.\nCommand Line Method\nOpen Command Prompt as Administrator.\nCheck Status:\nmanage-bde -status C:\nThis command will show the status of BitLocker on the specified drive, including the encryption method and the protectors used.",
+    "bundle": "-",
+    "branch": "Common",
+    "script": null,
+    "attended_time": "2",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this No-TPM BitLocker case requires enabling BitLocker without a TPM via Windows Group-Policy (gpedit.msc) then encrypting a drive - interactive Windows GUI + policy + reboot validation. The agent cannot drive the Windows Group Policy editor or the BitLocker wizard.",
+      "ai_logs_output": "operator configures BitLocker-without-TPM via Windows Group Policy, encrypts, and validates over a reboot; agent cannot drive the Windows GUI.",
+      "risk": "RISK: physical/hardware operation at the machine - human only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO; correctly recognizes the GUI/policy/encryption boundary but gives no exact-volume, credential or recovery safeguards.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED; adds exact target volume, protector, recovery material, compatible policy, reboot and no-production-disk controls.",
+    "round_02": "No separate exact-code round-02 entry was found.",
+    "second_review_handoff": "Confirms the literal C: example is not authorization to encrypt an inferred boot volume.",
+    "v3": "No V3 Pilot record exists.",
+    "v3_1": "No V3.1 200-case record exists."
+  },
   "original_test_intent": "Demonstrate that an approved Windows test volume can be protected by BitLocker without a compatible TPM using the project-approved password or USB startup-key policy, with recovery material secured and encryption/protector state verified without data loss.",
   "original_method": "A qualified Windows operator changes the specified Group Policy, positively identifies the authorized test volume, chooses the approved password or USB startup-key protector, verifies recovery-key escrow, selects the encryption mode, completes encryption, inspects BitLocker status and validates the approved boot/recovery behavior.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_EXACT_WINDOWS_VOLUME_AND_DATA_AUTHORIZATION", "NEEDS_NO_TPM_POLICY_AND_PROTECTOR_SELECTION", "NEEDS_PASSWORD_OR_USB_STARTUP_KEY_CUSTODY", "NEEDS_RECOVERY_KEY_BACKUP_AND_RESTORE_PLAN", "NEEDS_WINDOWS_OPERATOR_KVM_AND_REBOOT_WINDOW"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_EXACT_WINDOWS_VOLUME_AND_DATA_AUTHORIZATION",
+    "NEEDS_NO_TPM_POLICY_AND_PROTECTOR_SELECTION",
+    "NEEDS_PASSWORD_OR_USB_STARTUP_KEY_CUSTODY",
+    "NEEDS_RECOVERY_KEY_BACKUP_AND_RESTORE_PLAN",
+    "NEEDS_WINDOWS_OPERATOR_KVM_AND_REBOOT_WINDOW"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "The core includes human Windows Group Policy and BitLocker UI configuration, secret or USB-key handling, selection of a disk volume and observation of encryption/boot behavior. The agent may review the plan and analyze exported status but cannot claim those operator actions.",
-  "required_inputs": ["Exact Windows edition/build and applicability of the no-TPM policy", "Explicitly approved disk/volume identity and backup/data-loss disposition", "Chosen password or USB startup-key protector, secure custody and handling procedure", "Recovery-key escrow verification, encryption mode and expected boot/recovery behavior", "Qualified operator, maintenance window, KVM/OOB and rollback/restoration plan"],
-  "safety_requirements": ["Never target C: or any volume by example or drive letter alone; correlate disk, partition, filesystem and workload identity before change.", "Do not enable the policy or encryption until startup credentials and the recovery key are created, protected and independently verified.", "Stop on wrong-volume, policy, protector, encryption, storage, boot or recovery anomaly and preserve evidence.", "Do not auto-retry encryption, alter protectors, expose secrets or clear security/event logs."],
-  "agent_execution_scope": ["Validate volume identity, policy compatibility, protector/recovery custody and backup/rollback evidence.", "Prepare the operator checklist and collect policy screenshots/exports, complete encryption status, protector inventory and boot/recovery artifacts.", "Compare supplied evidence with the no-TPM intent and report Tool Result without setting PASS/FAIL."],
-  "engineer_actions": ["Approve the exact volume, policy, protector, encryption mode and credential/recovery handling.", "Perform and attest the Windows GUI/credential/encryption and boot observations.", "Confirm restoration/final state and issue the formal verdict."],
-  "command_applicability": {"original_deepseek_command_fit": "Its refusal to run the workflow remotely is correct. The source's manage-bde examples remain relevant only after exact volume, protector and recovery approval; the literal C: target is not safe authorization.", "executable_command_required": false, "command_recommendation": "Retain the operator-run Group Policy and BitLocker method. Optional scripted status export may support evidence, but must not silently replace required UI/credential handling or infer a target.", "original_parameters_and_time_preserved": "Group Policy path, password/USB options, recovery-key steps, manage-bde examples and 2/5-minute fields are preserved."},
-  "modernized_recommendation": {"status": "RETAIN WINDOWS METHOD WITH TARGET AND SECRET CONTROLS", "recommended_method": "Use an operator-run change record that binds immutable volume identity, policy setting, protector type, recovery escrow, encryption mode/progress, status export, one controlled boot and final state.", "applicable_platform": "Only the approved Windows edition/build and named test volume.", "supported_version": "Record Windows build, BitLocker policy and management-tool versions.", "official_reference": "Project Windows security/BitLocker policy and recovery SOP must be supplied; no external replacement was adopted.", "difference_from_original_method": "Adds safe volume identity, secret custody, measurable completion and boot/recovery evidence.", "coverage_difference": "No reduction; no-TPM policy, protector, encryption and status remain required.", "required_inputs": "Approved volume, policy, protector and recovery plan.", "risks_limitations": "A policy/status screenshot alone does not prove safe encryption or recoverable boot."},
+  "required_inputs": [
+    "Exact Windows edition/build and applicability of the no-TPM policy",
+    "Explicitly approved disk/volume identity and backup/data-loss disposition",
+    "Chosen password or USB startup-key protector, secure custody and handling procedure",
+    "Recovery-key escrow verification, encryption mode and expected boot/recovery behavior",
+    "Qualified operator, maintenance window, KVM/OOB and rollback/restoration plan"
+  ],
+  "safety_requirements": [
+    "Never target C: or any volume by example or drive letter alone; correlate disk, partition, filesystem and workload identity before change.",
+    "Do not enable the policy or encryption until startup credentials and the recovery key are created, protected and independently verified.",
+    "Stop on wrong-volume, policy, protector, encryption, storage, boot or recovery anomaly and preserve evidence.",
+    "Do not auto-retry encryption, alter protectors, expose secrets or clear security/event logs."
+  ],
+  "agent_execution_scope": [
+    "Validate volume identity, policy compatibility, protector/recovery custody and backup/rollback evidence.",
+    "Prepare the operator checklist and collect policy screenshots/exports, complete encryption status, protector inventory and boot/recovery artifacts.",
+    "Compare supplied evidence with the no-TPM intent and report Tool Result without setting PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Approve the exact volume, policy, protector, encryption mode and credential/recovery handling.",
+    "Perform and attest the Windows GUI/credential/encryption and boot observations.",
+    "Confirm restoration/final state and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its refusal to run the workflow remotely is correct. The source's manage-bde examples remain relevant only after exact volume, protector and recovery approval; the literal C: target is not safe authorization.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain the operator-run Group Policy and BitLocker method. Optional scripted status export may support evidence, but must not silently replace required UI/credential handling or infer a target.",
+    "original_parameters_and_time_preserved": "Group Policy path, password/USB options, recovery-key steps, manage-bde examples and 2/5-minute fields are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN WINDOWS METHOD WITH TARGET AND SECRET CONTROLS",
+    "recommended_method": "Use an operator-run change record that binds immutable volume identity, policy setting, protector type, recovery escrow, encryption mode/progress, status export, one controlled boot and final state.",
+    "applicable_platform": "Only the approved Windows edition/build and named test volume.",
+    "supported_version": "Record Windows build, BitLocker policy and management-tool versions.",
+    "official_reference": "Project Windows security/BitLocker policy and recovery SOP must be supplied; no external replacement was adopted.",
+    "difference_from_original_method": "Adds safe volume identity, secret custody, measurable completion and boot/recovery evidence.",
+    "coverage_difference": "No reduction; no-TPM policy, protector, encryption and status remain required.",
+    "required_inputs": "Approved volume, policy, protector and recovery plan.",
+    "risks_limitations": "A policy/status screenshot alone does not prove safe encryption or recoverable boot."
+  },
   "project_override_considerations": "A project may choose password versus USB startup key and the exact non-production volume. The review outcome applies only to that approved combination; secrets must be redacted from reports without losing proof of escrow.",
-  "expected_evidence": ["Windows/policy and exact disk-volume identity, backup, authorization and no-TPM applicability", "Protector type and redacted credential/startup-key custody plus verified recovery-key escrow", "Operator-attributed policy change, encryption configuration/progress/completion and manage-bde status", "Approved boot/recovery result, Windows/security/storage/BMC health, Tool Result and separate engineer verdict"],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criteria are redundant but consistently describe enabling and verifying BitLocker without TPM. The lack of a concise separate criterion is a quality weakness, not a contradiction."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The intended no-TPM BitLocker workflow is clear. Missing target, secrets, recovery material or operator are readiness conditions; the human GUI/credential/disk core is MANUAL ONLY."},
-  "comparison_to_prior_reviews": {"deepseek": "Agrees with the non-agent execution boundary while adding specific volume, secret and recovery safeguards.", "gpt_v2": "Agrees with MANUAL ONLY and retains its exact-volume, policy, recovery and rollback controls.", "v3_1_improvement": "Separates evidence automation from manual secret/UI operations and interprets the duplicated criteria without inventing reboot acceptance."},
+  "expected_evidence": [
+    "Windows/policy and exact disk-volume identity, backup, authorization and no-TPM applicability",
+    "Protector type and redacted credential/startup-key custody plus verified recovery-key escrow",
+    "Operator-attributed policy change, encryption configuration/progress/completion and manage-bde status",
+    "Approved boot/recovery result, Windows/security/storage/BMC health, Tool Result and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Procedure and criteria are redundant but consistently describe enabling and verifying BitLocker without TPM. The lack of a concise separate criterion is a quality weakness, not a contradiction."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The intended no-TPM BitLocker workflow is clear. Missing target, secrets, recovery material or operator are readiness conditions; the human GUI/credential/disk core is MANUAL ONLY."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agrees with the non-agent execution boundary while adding specific volume, secret and recovery safeguards.",
+    "gpt_v2": "Agrees with MANUAL ONLY and retains its exact-volume, policy, recovery and rollback controls.",
+    "v3_1_improvement": "Separates evidence automation from manual secret/UI operations and interprets the duplicated criteria without inventing reboot acceptance."
+  },
   "review_improvement": "Makes destructive scope and credential custody explicit and prevents an example drive letter from authorizing production-volume encryption.",
   "independent_technical_reasoning": "Although manage-bde can automate portions, the specified core includes human Group Policy/GUI work and password or physical USB startup-key handling on a stateful disk, so MANUAL ONLY is appropriate. The agent can still organize and compare evidence independently of the verdict.",
-  "source_provenance": {"primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 233, read directly with openpyxl 3.1.5; the full long-form procedure/criteria are preserved there and were read", "deepseek_same_row": "Columns 13-18 and data/tests.json", "gpt_v2": "gpt-review/test_gpt_review.json, exact row 233", "history": "SESSION_HANDOFF_SECOND_REVIEW_20260928_ROW229.md exact-code record", "external_sources": []},
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 233, read directly with openpyxl 3.1.5; the full long-form procedure/criteria are preserved there and were read",
+    "deepseek_same_row": "Columns 13-18 and data/tests.json",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact row 233",
+    "history": "SESSION_HANDOFF_SECOND_REVIEW_20260928_ROW229.md exact-code record",
+    "external_sources": []
+  },
   "no_automatic_retry": "Preserve the first policy, encryption, protector or boot failure. Do not repeat or alter credentials, volumes or policy automatically; follow the approved recovery decision.",
-  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
-  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true, "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true, "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
-  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
 }

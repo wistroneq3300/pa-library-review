@@ -224,6 +224,127 @@ changing other AC-cycle cases.
   versus powered-off host state, define the sole BMC reset, and provide the
   vendor Redfish action/task/activation, secure authentication and a recovery
   route that does not depend only on the updated DCSCM. No write is authorized.
+- `Functionality|724|Wistron-BMC-00014-V004` — define the authoritative GPUBB
+  control path. The source stages the image on a fixed SUT-BMC address, POSTs
+  to `${bmc}` labeled as an HMC address, and polls fixed HTTP `Tasks/0` on a
+  third address without request correlation. Reconcile the source's booted
+  state with same-row powered-off guidance, and supply secure transport, exact
+  GPUBB/GPU compatibility, response-bound task/activation evidence and an
+  independent recovery path. No upload or update is authorized meanwhile.
+- `Functionality|732|Wistron-BMC-00022-V005` — correct the destructive target:
+  Items and Script identify HIB-CPLD, while Procedure explicitly says FPGA.
+  Align a component selector, signed image/version order, host-off and one-BMC-
+  reset activation semantics, target-specific inventory/health evidence,
+  secure Redfish action/task behavior and recovery. A project override must not
+  silently select HIB-CPLD or FPGA; no firmware write is authorized meanwhile.
+- `Functionality|734|Wistron-BMC-00024-V005` — correct the destructive target:
+  Items and Script identify DCSCM-CPLD, while Procedure explicitly says FPGA.
+  Align the component selector, signed image/version order, host-off and sole
+  BMC-reset activation semantics, target-specific evidence, secure Redfish
+  action/task contract and a recovery route independent of the updated
+  management module. No firmware write is authorized while unresolved.
+- `Functionality|736|Wistron-BMC-00026-V004` — define the authoritative
+  off-state GPUBB control path. The source stages on a fixed SUT-BMC address,
+  POSTs to `${bmc}` labeled HMC, and polls fixed HTTP `Tasks/0` on a third
+  address with no transaction correlation. Supply secure transport, exact
+  GPUBB/GPU compatibility, response-bound task/activation evidence, approved
+  power-on acceptance and independent recovery before any upload or update.
+
+- `Functionality|739|Wistron-BMC-00029-V003` — replace or map the copied
+  BMC/BIOS raw-IPMI procedure to the authoritative FPGA component and canonical
+  read-only version field, with expected before/after values.
+- `Functionality|740|Wistron-BMC-00030-V003` — replace or map the copied
+  BMC/BIOS procedure to the exact DCSCM-CPLD resource and canonical version
+  property; a FirmwareInventory name list is not version evidence.
+- `Functionality|741|Wistron-BMC-00031-V003` — replace or map the copied
+  BMC/BIOS procedure to the exact HIB-CPLD resource and canonical version
+  property; do not rely on a broad HIB/CPLD name match.
+- `Functionality|742|Wistron-BMC-00032-V003` — define the active RoT component,
+  canonical version property and whether scope is version-only or includes
+  attestation; replace the copied BMC/BIOS procedure accordingly.
+- `Functionality|744|Wistron-BMC-00034-V002` — decide whether CIFS virtual
+  media is mount-only, boot media or an OS auto-install; correct the incomplete
+  CIFS command and define image, disk protection, evidence, cleanup and recovery.
+- `Functionality|745|Wistron-BMC-00035-V002` — decide whether NFS virtual media
+  is mount-only, boot media or an OS auto-install; define the exact export/image
+  security, disk protection, evidence, cleanup and recovery.
+
+- `Functionality|747|Wistron-BMC-00037-V002` — decide mount-only, boot or
+  install scope and define HTTPS trust, immutable image, disk protection and cleanup.
+- `Functionality|748|Wistron-BMC-00038-V002` — define the simultaneous-mount
+  count, protocol/image/device matrix, pass conditions, end state and cleanup.
+- `Functionality|749|Wistron-BMC-00039-V002` — define trap mode/security,
+  receiver, safe stimulus, expected OID/varbinds, delivery and rollback.
+- `Functionality|750|Wistron-BMC-00040-V002` — clarify v1/v3 and query/trap
+  scope; supply per-mode objects, values, security and cleanup.
+- `Functionality|751|Wistron-BMC-00041-V002` — define system-health MIB/OIDs,
+  expected enums and SNMPv3 profile; reconcile the two named clients.
+- `Functionality|752|Wistron-BMC-00042-V002` — define voltage rails/OIDs,
+  units/scaling, state, limits and reference evidence.
+- `Functionality|753|Wistron-BMC-00043-V002` — define temperature sensors/OIDs,
+  units/scaling, load/ambient state, thresholds and sampling.
+- `Functionality|754|Wistron-BMC-00044-V002` — define allowlisted user fields,
+  account/role baseline and secret-exclusion/redaction rules.
+- `Functionality|755|Wistron-BMC-00045-V002` — define the storage layer,
+  identity/status OIDs, baseline and no-write boundary.
+- `Functionality|756|Wistron-BMC-00046-V002` — define fan slot/OIDs, RPM/PWM/
+  status semantics, state, thresholds, redundancy and thermal safety response.
+
+- `Functionality|757|Wistron-BMC-00047-V002` — define LED identities/OIDs,
+  state encodings, expected state and optional physical correlation scope.
+- `Functionality|758|Wistron-BMC-00048-V002` — define adapter class, exact
+  inventory/status OIDs, expected topology and BMC-to-host mapping.
+- `Functionality|759|Wistron-BMC-00049-V002` — define power-module slots/OIDs,
+  presence/health/redundancy, electrical fields, units, limits and topology.
+
+- `Functionality|760|Wistron-BMC-00050-V002` — define the finite SNMP
+  error-log object/schema, event/severity/time/count window, pagination,
+  redaction and no-clear evidence-preservation contract.
+
+- `Functionality|761|Wistron-BMC-00051-V002` — decide read-only clock
+  comparison versus SNMP SET, then define object/encoding/tolerance and any
+  write rollback/log-preservation plan.
+- `Functionality|763|Wistron-BMC-00053-V002` — define the finite SysInfo
+  field/OID schema, completeness, authoritative inventory and redaction.
+- `Functionality|764|Wistron-BMC-00054-V003` — define RealErr and whether
+  `full the SEL` is a separate capacity test; distinguish duplicate row 1486.
+- `Functionality|765|Wistron-BMC-00055-V003` — define InfoErr versus RealErr
+  and any capacity scope; distinguish duplicate row 1487.
+- `Functionality|766|Wistron-BMC-00056-V003` — supply ambient sensor mapping,
+  thermal envelope, response and recovery; distinguish duplicate GPU row 1488.
+
+- `Functionality|767..776` thermal variants — supply each named sensor's
+  physical/component mapping, limits, safe stimulus/recovery and expected event/
+  protection matrix. These ten codes are also reused by unrelated rows
+  `1489..1498`; keep every decision bound to Source Key and variant identity.
+
+- `Functionality|788|Wistron-BMC-00078-V003` — correct or split the thermal
+  target matrix: Items and Procedure specify six PSU sensors, but Criterion 5
+  specifies two CRPS sensors. Do not choose a hardware family by inference.
+- `Functionality|795|Wistron-BMC-00085-V003` — define the standby HSC rail,
+  required host/BMC power state and a safe causal stimulus. The copied booted-OS
+  GPU workload cannot prove standby-rail behavior without an approved power-tree
+  relationship.
+
+- `Functionality|798|Wistron-BMC-00088-V004` — resolve fan count `1~N` versus
+  `1~16` and replace copied temperature-threshold criteria with status/SEL criteria.
+- `Functionality|799..800` CRPS/PSU status cases — replace copied temperature
+  criteria with module-presence, redundancy, event and recovery matrices.
+- `Functionality|803|Wistron-BMC-00093-V005` — choose or split runtime
+  loader/OS-watchdog fault recovery and BIOS/WDAT-table inspection.
+- `Functionality|805|Wistron-BMC-00095-V005` — provide a vendor-approved,
+  interlocked CPU thermal method instead of powered heatsink removal or
+  unbounded heat-until-reset.
+- `Functionality|807|Wistron-BMC-00097-V004` — correct the minimum PSU count:
+  booting from one PSU conflicts with the prohibition on two-PSU power-on.
+- `Functionality|813|Wistron-BMC-00103-V005` — correct the WebUI UID-on state;
+  the criteria currently require both blue and off for the same action.
+- `Functionality|825..826` shared/dedicated NIC cases — define the physical or
+  failover path and expected reachability while the named cable is absent.
+- `Functionality|832|Wistron-BMC-00122-V004` — choose or split true remote
+  syslog delivery and local Redfish/WebGUI log parity.
+- `Functionality|838|Wistron-BMC-00128-V005` — choose or split NTP tracking and
+  BMC-firmware network persistence, and define UBB IP versus Virtual NIC.
 
 Per-case project inputs, private specifications, tool manuals, target maps,
 expected values, parameters, overrides, safety limits, and recovery owners are

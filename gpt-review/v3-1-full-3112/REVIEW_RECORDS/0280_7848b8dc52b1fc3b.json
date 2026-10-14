@@ -1,36 +1,72 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 280,
   "library_sequence": 89,
   "source_key": "Functionality|90|Wistron-HW-00093-V002",
   "case_variant_id": "7848b8dc52b1fc3b",
-  "source_ref": {"sheet": "Functionality", "source_row": 90, "code": "Wistron-HW-00093-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 90,
+    "code": "Wistron-HW-00093-V002"
+  },
   "source_integrity": {
-    "exact_xlsx_row_read": true, "original_row_sha256": "d6b561d09820d46db4dfa036d74c8a25ede781685b06aca225cdc3e195287a0c",
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "d6b561d09820d46db4dfa036d74c8a25ede781685b06aca225cdc3e195287a0c",
     "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
-    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
-    "historical_revision_search": true, "duplicate_code_search": true,
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
     "duplicate_code_result": "No other XLSX row uses Wistron-HW-00093-V002.",
     "next_source_row_verified": "Functionality|91|Wistron-HW-00094-V003"
   },
   "source_snapshot": {
-    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "NIC Speed & LED",
+    "sub_function": "HW",
+    "test_set": "NIC (Network)",
+    "test_name_items": "NIC Speed & LED",
     "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Use ethtool to change NIC speed via ethtool ( e.g. , 100/1000/10000 Mbps ):\n$ ethtool -s autoneg [on/off] speed [10/100/1000] duplex [half/full]\n2. Check the LED status of NIC speed LED.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
-    "criteria": "1. OFF - Link is not eastablished or System is OFF\n2. LED color should match the speed definition\n    - 100 Mbps -> Off\n    - 1000 Mbps -> Green Solid on\n    - 10000 Mbps -> Off\n3. After change NIC speed, need to check OS dmesg and ethtool log.",
-    "script": null, "attended_time": "10", "machine_time": "10", "latest_updated": "2025-09-12",
-    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "-- not runnable by agent: NIC Speed & LED requires visually watching the Activity LED blink during network traffic; a physical/visual check needing a person at the machine.", "ai_logs_output": "operator records Activity LED behavior (off/solid/blinking) while generating traffic; agent cannot see LEDs.", "risk": "RISK: LED inspection is physical/visual - human only.", "remark": null}
+    "criteria": "1. OFF - Link is not eastablished or System is OFF\n2. LED color should match the speed definition\n    - 100 Mbps -> Off\n    - 1000 Mbps -> Green Solid on\n    - 10000 Mbps -> Off\n3. After change NIC speed, need to check OS dmesg and ethtool log.",
+    "bundle": "-",
+    "branch": "Common",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "10",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: NIC Speed & LED requires visually watching the Activity LED blink during network traffic; a physical/visual check needing a person at the machine.",
+      "ai_logs_output": "operator records Activity LED behavior (off/solid/blinking) while generating traffic; agent cannot see LEDs.",
+      "risk": "RISK: LED inspection is physical/visual - human only.",
+      "remark": null
+    }
   },
   "historical_reviews": {
     "deepseek": "NO. It recognizes a physical LED dependency but misdescribes this speed-indicator test as activity blinking and omits the state-changing ethtool operation.",
     "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 identifies the speed-list contradiction, missing interface/peer/rollback and required visual operator, but labels the mixed case PARTIAL.",
-    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 2359-2384: historical physical/NO review that omitted the ethtool state change."]
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 2359-2384: historical physical/NO review that omitted the ethtool state change."
+    ]
   },
   "original_test_intent": "Apply approved NIC speed/autonegotiation/duplex states, verify the negotiated link and OS logs, and visually confirm the physical speed LED matches the source color/state definition, subject to correction of the conflicting speed lists.",
   "original_method": "On an isolated owner-mapped interface and peer, capture the original link configuration, apply each approved ethtool state, record negotiated results and dmesg, have an operator observe the speed LED, then restore and verify the original state.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PORT_MAP", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_ENGINEER_ACTION",
+    "NEEDS_ENGINEER_DECISION",
+    "NEEDS_SPEC",
+    "NEEDS_EXPECTED",
+    "NEEDS_PORT_MAP",
+    "NEEDS_RECOVERY_PLAN",
+    "NEEDS_APPROVAL"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "The speed changes and log collection can be automated after approval, but physical LED color/state observation is an explicit core criterion. An agent cannot replace it with ethtool output.",
   "required_inputs": [
     "Exact physical port/interface, NIC/driver/firmware and peer/switch capabilities",
@@ -82,8 +118,14 @@
     "Management/peer health and verified rollback after every state",
     "Separate engineer verdict"
   ],
-  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The prose example calls for 100/1000/10000 Mbps, while the command parameter list offers 10/100/1000. The required state matrix is therefore inconsistent; additionally, the same OFF indication is non-unique for 100, 10000 and no-link."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The test remains clearly a manual speed-LED mapping exercise. The owner must correct the matrix before execution, but the automation classification and safe analysis do not require guessing a new global policy."},
+  "source_conflict_analysis": {
+    "is_source_conflict": true,
+    "analysis": "The prose example calls for 100/1000/10000 Mbps, while the command parameter list offers 10/100/1000. The required state matrix is therefore inconsistent; additionally, the same OFF indication is non-unique for 100, 10000 and no-link."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The test remains clearly a manual speed-LED mapping exercise. The owner must correct the matrix before execution, but the automation classification and safe analysis do not require guessing a new global policy."
+  },
   "comparison_to_prior_reviews": {
     "deepseek": "Reject its activity-LED interpretation and restore the state-changing speed test and rollback requirements.",
     "gpt_v2": "Retain V2's conflict and isolation controls but reclassify PARTIAL to MANUAL ONLY because visual speed-LED acceptance is core.",
@@ -95,18 +137,33 @@
     "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 90, read directly with openpyxl 3.1.5",
     "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
     "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 90 source_ref",
-    "history": "review_round_02_functionality.md lines 2359-2384", "external_sources": []
+    "history": "review_round_02_functionality.md lines 2359-2384",
+    "external_sources": []
   },
   "no_automatic_retry": "Each approved state is attempted once. On link, management, peer, command or LED discrepancy, preserve evidence, restore the original state if safely possible and stop; do not continue automatically.",
-  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "CHANGED",
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
   "regression_result": {
-    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
-    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
-    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
   },
   "per_case_quality_gate": {
-    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
-    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
-    "no_hardware_pass_claimed": true, "record_complete": true
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
   }
 }

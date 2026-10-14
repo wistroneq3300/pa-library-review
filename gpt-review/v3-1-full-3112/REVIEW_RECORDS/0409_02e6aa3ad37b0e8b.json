@@ -1,35 +1,163 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 409,
   "library_sequence": 226,
   "source_key": "Functionality|227|Wistron-HW-00236-V002",
   "case_variant_id": "02e6aa3ad37b0e8b",
-  "source_ref": {"sheet": "Functionality", "source_row": 227, "code": "Wistron-HW-00236-V002"},
-  "source_integrity": {"exact_xlsx_row_read": true, "original_row_sha256": "25fbf8cb42825b178c95e87c97185d37e41cb5d3c52b33f5499a3c4705fac0c1", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true, "historical_revision_search": true, "duplicate_code_search": true, "duplicate_code_result": "No other XLSX row uses Wistron-HW-00236-V002.", "next_source_row_verified": "Functionality|228|Wistron-HW-00237-V002"},
-  "source_snapshot": {"sub_function": "HW", "test_set": "Driver verification", "test_name_items": "Driver Function Test", "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. To verify no error report during chipset and driver installation.\n2. To verify driver version is correct.\nChipset driver installation and verification\n1. Execute the chipset driver package and double click “Setup.exe”. When the “Welcome to Setup Program” screen appears, click\" Next”.                                                                                                                                                2. Read the License Agreement and click “Yes” if you agree with it.\n3. When the message “Click Next to continue” appears, click “Next”.\n4. When the Chipset Device Software Setup is Complete” screen appears, click “Finish” and then restart the machine.\n5. Reboot the system after driver installation completes.\n6. Press “Windows + R”, input “regedit” and then click “OK”.\n7. In “Registry Editor” window, select “HKEY_LOCAL_MACHINE” -> “SOFTWARE” -> “Infinst”. Check the driver version.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.", "criteria": "1. Chipset driver can be installed without any problem.\n2. Chipset driver version is the same as driver version list.\n3. Digital Signer should be Microsoft Windows Hardware Compatibility Signed.", "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12", "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "Windows OS + chipset driver installer (operator)", "ai_commands": "Install the chipset driver through the Windows GUI and verify version and Microsoft digital signer; not executable from the assumed Linux SSH session.", "ai_logs_output": "Operator installation, version and signer evidence.", "risk": null, "remark": null}},
-  "historical_reviews": {"deepseek": "NO; correctly recognizes the explicitly interactive Windows GUI flow but provides little package, recovery or evidence discipline.", "gpt_v2": "MANUAL ONLY / IMPROVED; requires approved package identity, Windows operator, reboot/rollback and version/signature evidence.", "round_02": "No separate exact-code round-02 entry was found.", "second_review_handoff": "Confirms the Windows GUI setup, license acceptance, reboot and registry/device evidence remain operator-owned.", "v3": "No V3 Pilot record exists.", "v3_1": "No V3.1 200-case record exists."},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 227,
+    "code": "Wistron-HW-00236-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "25fbf8cb42825b178c95e87c97185d37e41cb5d3c52b33f5499a3c4705fac0c1",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00236-V002.",
+    "next_source_row_verified": "Functionality|228|Wistron-HW-00237-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Driver verification",
+    "test_name_items": "Driver Function Test",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. To verify no error report during chipset and driver installation.\n2. To verify driver version is correct.\nChipset driver installation and verification\n1. Execute the chipset driver package and double click “Setup.exe”. When the “Welcome to Setup Program” screen appears, click\" Next”.                                                                                                                                                                        2. Read the License Agreement and click “Yes” if you agree with it.\n3. When the message “Click Next to continue” appears, click “Next”.\n4. When the Chipset Device Software Setup is Complete” screen appears, click “Finish” and then restart the machine.\n5. Reboot the system after driver installation completes.\n6. Press “Windows + R”, input “regedit” and then click “OK”.\n7. In “Registry Editor” window, select “HKEY_LOCAL_MACHINE” -> “SOFTWARE” -> “Infinst”. Check the driver version.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Chipset driver can be installed without any problem.\n2. Chipset driver version is the same as driver version list.\n3. Digital Signer should be Microsoft Windows Hardware Compatibility Signed.",
+    "bundle": "-",
+    "branch": "Common",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "Windows OS + chipset driver installer (operator)",
+      "ai_commands": "-- Driver Function Test: install the chipset driver on a Windows system and verify the version + Microsoft digital signer. This is a Windows GUI/OS driver installation flow the agent cannot run from a Linux SSH session.",
+      "ai_logs_output": "operator installs the chipset driver in Windows, verifies the version matches the driver list and the digital signer is Microsoft WHQL; agent cannot drive Windows driver setup.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO; correctly recognizes the explicitly interactive Windows GUI flow but provides little package, recovery or evidence discipline.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED; requires approved package identity, Windows operator, reboot/rollback and version/signature evidence.",
+    "round_02": "No separate exact-code round-02 entry was found.",
+    "second_review_handoff": "Confirms the Windows GUI setup, license acceptance, reboot and registry/device evidence remain operator-owned.",
+    "v3": "No V3 Pilot record exists.",
+    "v3_1": "No V3.1 200-case record exists."
+  },
   "original_test_intent": "Install the approved Windows chipset driver on the specified platform without setup or device errors, reboot successfully, verify the installed version against the driver list and prove the required Microsoft Windows Hardware Compatibility signature.",
   "original_method": "A qualified Windows operator runs the named Setup.exe GUI, makes the license decision, completes setup, restarts Windows, checks the Infinst registry version, verifies the installed driver's signer through an approved Windows evidence path and preserves setup and post-reboot health evidence.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_EXACT_WINDOWS_BUILD_PLATFORM_AND_CHIPSET", "NEEDS_APPROVED_INSTALLER_HASH_PUBLISHER_AND_VERSION_LIST", "NEEDS_QUALIFIED_WINDOWS_GUI_OPERATOR_AND_LICENSE_ACCEPTANCE", "NEEDS_REBOOT_MAINTENANCE_AND_DRIVER_ROLLBACK", "NEEDS_DEFINED_SIGNER_AND_POST_INSTALL_HEALTH_EVIDENCE"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_EXACT_WINDOWS_BUILD_PLATFORM_AND_CHIPSET",
+    "NEEDS_APPROVED_INSTALLER_HASH_PUBLISHER_AND_VERSION_LIST",
+    "NEEDS_QUALIFIED_WINDOWS_GUI_OPERATOR_AND_LICENSE_ACCEPTANCE",
+    "NEEDS_REBOOT_MAINTENANCE_AND_DRIVER_ROLLBACK",
+    "NEEDS_DEFINED_SIGNER_AND_POST_INSTALL_HEALTH_EVIDENCE"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "The source explicitly requires a person to drive Setup.exe, accept the license, respond to dialogs, reboot and inspect Windows registry/signature evidence. The agent may validate artifacts, guide the operator and analyze supplied logs/screenshots but must not claim those human GUI actions or observations.",
-  "required_inputs": ["Exact SUT, Windows edition/build and chipset/device identity", "Approved chipset package, hash, publisher/signature, target version and authoritative driver-version list", "License-acceptance authority, qualified GUI operator and maintenance/reboot approval", "Current driver/device baseline plus rollback or OS recovery procedure", "Authoritative location and interpretation for installed-version and Microsoft hardware-compatible signer evidence"],
-  "safety_requirements": ["Do not install a package whose platform applicability, hash, publisher or signature is unverified.", "Preserve pre-install and failure evidence; do not clear Windows event logs merely to satisfy the generic preamble.", "Stop on installer error, signature failure, device loss, BSOD or reboot failure and use the approved rollback/recovery path.", "Do not auto-retry, silently select a different package or represent GUI screenshots as agent-performed acceptance."],
-  "agent_execution_scope": ["Validate package metadata, target compatibility, version list, rollback plan and the operator's authorization before the manual session.", "Provide a step checklist and collect installer transcript/screenshots, reboot timeline, registry/device/signature and Windows event evidence supplied by the operator.", "Compare actual artifacts with the criteria and report discrepancies as Tool Result without issuing PASS/FAIL."],
-  "engineer_actions": ["Approve the package, target, license, reboot and rollback boundaries.", "Perform and attest the Windows GUI installation and required observations.", "Resolve the procedure/criteria signer-evidence gap and issue the formal verdict."],
-  "command_applicability": {"original_deepseek_command_fit": "DeepSeek provides no executable command because the source is an operator-driven Windows GUI flow. That boundary is correct, but its evidence plan omits package identity, installer logs, rollback and an explicit signer check.", "executable_command_required": false, "command_recommendation": "Keep the source GUI method. Optional read-only Windows inventory/export commands may corroborate version and signature only if the platform owner validates them; they do not replace the manual setup and license steps.", "original_parameters_and_time_preserved": "Setup.exe, dialog sequence, reboot, Infinst registry path and 5/5-minute fields are preserved. No silent-install switch is invented."},
-  "modernized_recommendation": {"status": "RETAIN GUI METHOD; STRUCTURE EVIDENCE", "recommended_method": "Use a signed installation manifest and operator checklist that captures package Authenticode metadata, every setup outcome, reboot state, exact installed device/version, signer chain and relevant Windows setup/system events.", "applicable_platform": "Only the approved Windows build, chipset and vendor package combination.", "supported_version": "Record OS build, BIOS/chipset identity, installer version/hash/publisher and installed driver versions.", "official_reference": "Platform and chipset-vendor installation/signing documentation supplied by the owner; no official package documentation was present in the repository.", "difference_from_original_method": "Adds artifact identity, rollback and explicit signer evidence while retaining the human GUI flow.", "coverage_difference": "No reduction; setup, version and signer criteria remain required.", "required_inputs": "Approved package/version/signature specification and operator evidence path.", "risks_limitations": "A registry version alone does not prove every device driver is installed correctly or signed as required."},
+  "required_inputs": [
+    "Exact SUT, Windows edition/build and chipset/device identity",
+    "Approved chipset package, hash, publisher/signature, target version and authoritative driver-version list",
+    "License-acceptance authority, qualified GUI operator and maintenance/reboot approval",
+    "Current driver/device baseline plus rollback or OS recovery procedure",
+    "Authoritative location and interpretation for installed-version and Microsoft hardware-compatible signer evidence"
+  ],
+  "safety_requirements": [
+    "Do not install a package whose platform applicability, hash, publisher or signature is unverified.",
+    "Preserve pre-install and failure evidence; do not clear Windows event logs merely to satisfy the generic preamble.",
+    "Stop on installer error, signature failure, device loss, BSOD or reboot failure and use the approved rollback/recovery path.",
+    "Do not auto-retry, silently select a different package or represent GUI screenshots as agent-performed acceptance."
+  ],
+  "agent_execution_scope": [
+    "Validate package metadata, target compatibility, version list, rollback plan and the operator's authorization before the manual session.",
+    "Provide a step checklist and collect installer transcript/screenshots, reboot timeline, registry/device/signature and Windows event evidence supplied by the operator.",
+    "Compare actual artifacts with the criteria and report discrepancies as Tool Result without issuing PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Approve the package, target, license, reboot and rollback boundaries.",
+    "Perform and attest the Windows GUI installation and required observations.",
+    "Resolve the procedure/criteria signer-evidence gap and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek provides no executable command because the source is an operator-driven Windows GUI flow. That boundary is correct, but its evidence plan omits package identity, installer logs, rollback and an explicit signer check.",
+    "executable_command_required": false,
+    "command_recommendation": "Keep the source GUI method. Optional read-only Windows inventory/export commands may corroborate version and signature only if the platform owner validates them; they do not replace the manual setup and license steps.",
+    "original_parameters_and_time_preserved": "Setup.exe, dialog sequence, reboot, Infinst registry path and 5/5-minute fields are preserved. No silent-install switch is invented."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN GUI METHOD; STRUCTURE EVIDENCE",
+    "recommended_method": "Use a signed installation manifest and operator checklist that captures package Authenticode metadata, every setup outcome, reboot state, exact installed device/version, signer chain and relevant Windows setup/system events.",
+    "applicable_platform": "Only the approved Windows build, chipset and vendor package combination.",
+    "supported_version": "Record OS build, BIOS/chipset identity, installer version/hash/publisher and installed driver versions.",
+    "official_reference": "Platform and chipset-vendor installation/signing documentation supplied by the owner; no official package documentation was present in the repository.",
+    "difference_from_original_method": "Adds artifact identity, rollback and explicit signer evidence while retaining the human GUI flow.",
+    "coverage_difference": "No reduction; setup, version and signer criteria remain required.",
+    "required_inputs": "Approved package/version/signature specification and operator evidence path.",
+    "risks_limitations": "A registry version alone does not prove every device driver is installed correctly or signed as required."
+  },
   "project_override_considerations": "A project may approve another documented vendor UI path or validated installer mode, but it must preserve setup-error, target-version and signer coverage and may not silently substitute a generic driver update mechanism.",
-  "expected_evidence": ["SUT/Windows/chipset identity, package hash/publisher/signature, expected version list and authorization", "Operator-attributed Setup.exe dialog/transcript and license/setup completion evidence", "Reboot result, Infinst registry version, installed device/driver version and Microsoft hardware-compatible signer evidence", "Windows setup/system/device health, any failure and rollback evidence, Tool Result and separate engineer verdict"],
-  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The criteria require Microsoft Windows Hardware Compatibility signer verification, but the detailed procedure specifies only Setup.exe dialogs, reboot and an Infinst version check. The missing signer acquisition/interpretation step must be defined by the owner; it cannot be inferred from the registry version."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The installation purpose is understandable. Missing package, version list, signer procedure or operator are readiness/owner-input conditions, while the inherently human GUI core is classified MANUAL ONLY rather than BLOCKED."},
-  "comparison_to_prior_reviews": {"deepseek": "Agrees that the GUI core is not remotely executable, but adds concrete integrity, recovery and evidence requirements.", "gpt_v2": "Agrees with MANUAL ONLY and preserves its operator/reboot/rollback gates while identifying the signer procedure gap as a source conflict.", "v3_1_improvement": "Separates human execution from automated evidence analysis and prevents a registry-only version check from satisfying the signer criterion."},
+  "expected_evidence": [
+    "SUT/Windows/chipset identity, package hash/publisher/signature, expected version list and authorization",
+    "Operator-attributed Setup.exe dialog/transcript and license/setup completion evidence",
+    "Reboot result, Infinst registry version, installed device/driver version and Microsoft hardware-compatible signer evidence",
+    "Windows setup/system/device health, any failure and rollback evidence, Tool Result and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": true,
+    "analysis": "The criteria require Microsoft Windows Hardware Compatibility signer verification, but the detailed procedure specifies only Setup.exe dialogs, reboot and an Infinst version check. The missing signer acquisition/interpretation step must be defined by the owner; it cannot be inferred from the registry version."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The installation purpose is understandable. Missing package, version list, signer procedure or operator are readiness/owner-input conditions, while the inherently human GUI core is classified MANUAL ONLY rather than BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agrees that the GUI core is not remotely executable, but adds concrete integrity, recovery and evidence requirements.",
+    "gpt_v2": "Agrees with MANUAL ONLY and preserves its operator/reboot/rollback gates while identifying the signer procedure gap as a source conflict.",
+    "v3_1_improvement": "Separates human execution from automated evidence analysis and prevents a registry-only version check from satisfying the signer criterion."
+  },
   "review_improvement": "Makes package identity, operator attribution, signer proof and rollback explicit while preserving the original Windows GUI method and ownership of the verdict.",
   "independent_technical_reasoning": "The source does not merely require a package: its core method is interactive GUI execution, license acceptance and human inspection, so MANUAL ONLY is appropriate. Automation can assist evidence collection but cannot claim the specified human actions. The absent signer step is a genuine procedure-to-criteria gap.",
-  "source_provenance": {"primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 227, read directly with openpyxl 3.1.5", "deepseek_same_row": "Columns 13-18 and data/tests.json", "gpt_v2": "gpt-review/test_gpt_review.json, exact row 227", "history": "SESSION_HANDOFF_SECOND_REVIEW_20260928_ROW223.md exact-code record", "external_sources": []},
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 227, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 and data/tests.json",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact row 227",
+    "history": "SESSION_HANDOFF_SECOND_REVIEW_20260928_ROW223.md exact-code record",
+    "external_sources": []
+  },
   "no_automatic_retry": "Preserve any installer, device or reboot failure. Do not relaunch Setup.exe, change the package or roll back automatically; follow the engineer-approved recovery decision.",
-  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "IMPROVED",
-  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true, "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true, "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
-  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
 }

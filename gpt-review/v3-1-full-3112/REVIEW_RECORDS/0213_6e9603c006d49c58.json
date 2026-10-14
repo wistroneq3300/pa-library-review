@@ -1,10 +1,15 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 213,
   "library_sequence": 14,
   "source_key": "Functionality|15|Wistron-HW-00014-V002",
   "case_variant_id": "6e9603c006d49c58",
-  "source_ref": {"sheet": "Functionality", "source_row": 15, "code": "Wistron-HW-00014-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 15,
+    "code": "Wistron-HW-00014-V002"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "b4fcd9bce0ee594aeb3d92b0d598cf97b7c7355b17af9e9028251fb577b404c8",
@@ -21,8 +26,10 @@
     "sub_function": "HW",
     "test_set": "Mechanical -Cable",
     "test_name_items": "Mechanical_Cable_Connection",
-    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check the connections of nodes, components and cables\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check the connections of nodes, components and cables\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
     "criteria": "1. All parts should be connected and positioned correctly\n2. There should be no mismatch, bent pin or cable routing issue when connecting",
+    "bundle": "-",
+    "branch": "Common",
     "script": null,
     "attended_time": "5",
     "machine_time": "5",
@@ -41,12 +48,19 @@
     "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly covers position, mismatch, bent pins and routing, but likewise treats a plug cycle as part of the default method although the exact source only says to check connections.",
     "v3": "No V3 Pilot record exists for this source key.",
     "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 393-413: historical physical/NO result for Mechanical_Cable_Connection."]
+    "related_revisions": [
+      "review_round_02_functionality.md lines 393-413: historical physical/NO result for Mechanical_Cable_Connection."
+    ]
   },
   "original_test_intent": "Inspect the specified node, component and cable connections to verify that every part is connected to the correct mate, positioned and routed according to the platform design, and free of mismatch, bent pins or routing defects.",
   "original_method": "A qualified engineer performs an inspection against the connection/routing drawing and photographs identities, connector seating, pin/contact condition where visible, keying, retention, bend path, clearance and strain relief. The Master source does not require disconnect/reconnect or a plug cycle by default.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
   "execution_status": "NOT EXECUTED",
   "tool_result": "NOT RUN",
   "engineer_verdict": "ENGINEER OWNED; PENDING",
@@ -104,8 +118,14 @@
     "Any excluded or inaccessible connection and separately approved functional corroboration",
     "Separate engineer verdict"
   ],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and Criteria consistently define a physical connection/routing inspection. The plug-cycle language exists only in derived reviews, not in competing Master fields, so it is a review defect rather than SOURCE_CONFLICT."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The inspection objective is clear. A project connection matrix and routing limits are readiness inputs; their absence does not make the case permanently blocked."},
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Procedure and Criteria consistently define a physical connection/routing inspection. The plug-cycle language exists only in derived reviews, not in competing Master fields, so it is a review defect rather than SOURCE_CONFLICT."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The inspection objective is clear. A project connection matrix and routing limits are readiness inputs; their absence does not make the case permanently blocked."
+  },
   "comparison_to_prior_reviews": {
     "deepseek": "Keep NO/manual-only but remove the unsupported plug-cycle and detection claim from the default method.",
     "gpt_v2": "Retain V2's connector/routing hazards and evidence ownership, while correcting its expansion of the source into a plug cycle.",
@@ -124,13 +144,26 @@
   "review_outcome": "IMPROVED",
   "second_review_outcome": "CHANGED",
   "regression_result": {
-    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
-    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
-    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
   },
   "per_case_quality_gate": {
-    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
-    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
-    "no_hardware_pass_claimed": true, "record_complete": true
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
   }
 }

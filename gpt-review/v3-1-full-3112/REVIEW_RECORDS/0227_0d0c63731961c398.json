@@ -1,10 +1,15 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 227,
   "library_sequence": 31,
   "source_key": "Functionality|32|Wistron-HW-00035-V004",
   "case_variant_id": "0d0c63731961c398",
-  "source_ref": {"sheet": "Functionality", "source_row": 32, "code": "Wistron-HW-00035-V004"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 32,
+    "code": "Wistron-HW-00035-V004"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "4ba8d923566b739c0e4ea2db57b577f9605f16e263a05239b1adf528ebc03090",
@@ -21,8 +26,10 @@
     "sub_function": "HW",
     "test_set": "Power Supply - L10 : CRPS -LED",
     "test_name_items": "LED_OFF",
-    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED Off status\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check LED Off status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
     "criteria": "Check LED Off status",
+    "bundle": "-",
+    "branch": "Common",
     "script": null,
     "attended_time": "5",
     "machine_time": "5",
@@ -41,12 +48,19 @@
     "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds target identity, expected operating/fault state, off-versus-dim/blink interpretation and read-only context without allowing telemetry substitution.",
     "v3": "No V3 Pilot record exists for this source key.",
     "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 824-844: historical physical/NO review for LED_OFF."]
+    "related_revisions": [
+      "review_round_02_functionality.md lines 824-844: historical physical/NO review for LED_OFF."
+    ]
   },
   "original_test_intent": "Directly observe the identified CRPS PSU bezel and verify that its LED is unlit in the platform-defined LED_OFF test condition, while recording the exact PSU identity and operating context needed to distinguish an expected off indication from loss of power, absence or a transitional/fault state.",
   "original_method": "A qualified operator establishes the approved non-manipulative test state, identifies the target PSU by slot or serial, observes the physical indicator long enough to rule out a blink, and captures an identity-linked photograph. The agent may collect read-only PSU/BMC context and assess evidence quality but cannot claim the visual result.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
   "execution_status": "NOT EXECUTED",
   "tool_result": "NOT RUN",
   "engineer_verdict": "ENGINEER OWNED; PENDING",

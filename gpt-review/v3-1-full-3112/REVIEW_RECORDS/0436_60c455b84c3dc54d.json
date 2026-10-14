@@ -1,35 +1,163 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 436,
   "library_sequence": 255,
   "source_key": "Functionality|256|Wistron-HW-00271-V003",
   "case_variant_id": "60c455b84c3dc54d",
-  "source_ref": {"sheet": "Functionality", "source_row": 256, "code": "Wistron-HW-00271-V003"},
-  "source_integrity": {"exact_xlsx_row_read": true, "original_row_sha256": "6fb819a6cf6d51337b930dd6441202efea094b02a573bea8505c7aebef95e555", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true, "historical_revision_search": true, "duplicate_code_search": true, "duplicate_code_result": "No other XLSX row uses Wistron-HW-00271-V003.", "next_source_row_verified": "Functionality|257|Wistron-HW-00272-V002"},
-  "source_snapshot": {"sub_function": "HW", "test_set": "Storage - SSD", "test_name_items": "Manual Hot adding", "procedure": "The source provides separate Windows and Linux paths: boot with the target bay empty, physically plug the HDD/SSD into the slot for four seconds, confirm detection in Windows Disk Manager or Linux fdisk, run five minutes of drive I/O stress, and inspect OS event/kernel plus iMM logs. The full verbatim procedure remains in the source XLSX and was read.", "criteria": "1. Check HDD/SSD drive can be recognized well and handle correctly.\n2. Check system log and IMM log without unexpected error information.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/compatibility/storage/storage-ssd/storage_ssd_manual_hot_adding", "attended_time": "15", "machine_time": "80", "latest_updated": "2026-05-08", "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "lsblk (standard)", "ai_commands": "Operator inserts/removes while agent samples lsblk and short dmesg tails.", "ai_logs_output": "Enumeration and kernel-log snapshots.", "risk": "Physical hot-plug requires operator and hot-swap support.", "remark": null}},
-  "historical_reviews": {"deepseek": "PARTIAL; correctly separates physical action but omits Windows path, source four-second timing, five-minute I/O, iMM evidence and exact target/data safety.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED; restores both OS paths, timing, workload, management logs and destructive-target safeguards.", "round_02": "No separate exact-code round-02 entry was found.", "second_review_handoff": "No V3/V3.1 baseline record exists; exact long-form procedure and script reference were independently reviewed.", "v3": "No V3 Pilot record exists.", "v3_1": "No V3.1 200-case record exists."},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 256,
+    "code": "Wistron-HW-00271-V003"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "6fb819a6cf6d51337b930dd6441202efea094b02a573bea8505c7aebef95e555",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00271-V003.",
+    "next_source_row_verified": "Functionality|257|Wistron-HW-00272-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Storage - SSD",
+    "test_name_items": "Manual Hot adding",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    To validate HDD hot adding function that if a drive was not present in a slot during boot, a drive can be recognized well and handle correctly.\n\nWindows:\n1. Boot into Windows OS without HDD/SSD drive installed in a slot. \n2. Plug in HDD/SSD drive into slot for 4 seconds,\n3. Check disk manager whether can show installed HDD/SSD drive information.\n4. Have IO stress for NVMe drive 5 minutes.\n5. Check OS event log and iMM log without any errors.\n\nLinux:\n1. Boot into Linux system without HDD/SSD drive installed in a slot.\n2. Plug in HDD/SSD into slot for 4 seconds,\n3. Check if the HDD/SSD drive just installed can be detected in the system:\n#fdisk -l\n4. Have IO stress for drive 5 minutes.\n5. Check OS event log and iMM log without any errors.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Check HDD/SSD drive can be recognized well and handle correctly.\n2. Check system log and IMM log without unexpected error information.",
+    "bundle": "-",
+    "branch": "Common",
+    "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/compatibility/storage/storage-ssd/storage_ssd_manual_hot_adding",
+    "attended_time": "15",
+    "machine_time": "80",
+    "latest_updated": "2026-05-08",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL",
+      "ai_packages_needed": "lsblk (standard)",
+      "ai_commands": "-- SSD plug/manual test (repeated cycles): physical insert/remove is operator-action. Agent assists by watching enumeration before/after each cycle: sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lsblk -o NAME,SERIAL,MODEL 2>&1\" and checking `dmesg -T | tail -30` for clean hot-plug (no errors).",
+      "ai_logs_output": "return the enumeration snapshot + `dmesg -T` tail across the plug/unplug cycles so user + operator confirm clean detection/removal each time.",
+      "risk": "RISK: physical hot-plug requires operator; agent must not power the bay. Confirm drive bay is hot-swap capable.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL; correctly separates physical action but omits Windows path, source four-second timing, five-minute I/O, iMM evidence and exact target/data safety.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED; restores both OS paths, timing, workload, management logs and destructive-target safeguards.",
+    "round_02": "No separate exact-code round-02 entry was found.",
+    "second_review_handoff": "No V3/V3.1 baseline record exists; exact long-form procedure and script reference were independently reviewed.",
+    "v3": "No V3 Pilot record exists.",
+    "v3_1": "No V3.1 200-case record exists."
+  },
   "original_test_intent": "Verify that a drive absent during boot can be physically hot-added to the approved bay, appears correctly in the selected Windows or Linux path, sustains the owner-approved five-minute I/O test and produces no unexpected OS or iMM/BMC errors.",
   "original_method": "Boot with the mapped bay empty, capture OS/iMM baseline, have a qualified operator insert the exact allowlisted drive using the source four-second timing, correlate enumeration to its serial, run the target-safe five-minute workload and collect full timestamped OS, storage-health and iMM/BMC evidence.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_HOT_SWAP_BAY_BACKPLANE_AND_DRIVE_SERIAL_MAP", "NEEDS_SELECTED_WINDOWS_OR_LINUX_EXECUTION_PATH", "NEEDS_FOUR_SECOND_TIMING_INTERPRETATION", "NEEDS_APPROVED_FIVE_MINUTE_IO_TARGET_AND_WORKLOAD", "NEEDS_OS_IMM_LOG_AND_RECOVERY_PLAN"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_HOT_SWAP_BAY_BACKPLANE_AND_DRIVE_SERIAL_MAP",
+    "NEEDS_SELECTED_WINDOWS_OR_LINUX_EXECUTION_PATH",
+    "NEEDS_FOUR_SECOND_TIMING_INTERPRETATION",
+    "NEEDS_APPROVED_FIVE_MINUTE_IO_TARGET_AND_WORKLOAD",
+    "NEEDS_OS_IMM_LOG_AND_RECOVERY_PLAN"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "The named test and defining stimulus require a person to insert the physical drive into a powered system. That core physical act cannot be performed or claimed by the agent, so the complete case is MANUAL ONLY; enumeration, I/O and logs remain automatable assistance.",
-  "required_inputs": ["Exact backplane/bay hot-add capability, drive serial/model/WWN and empty-at-boot proof", "Chosen Windows or Linux path and expected enumeration/online/mount behavior", "Owner interpretation and recording method for the source four-second insertion timing", "Five-minute I/O tool/profile, immutable target and read/write/data-safety policy", "Qualified operator, maintenance approval, iMM/BMC access and safe removal/recovery procedure"],
-  "safety_requirements": ["Do not insert into a powered bay unless platform/backplane/controller support hot-add and the exact bay is allowlisted.", "Do not online, format, mount or stress an OS, RAID member, protected, mounted/in-use or unknown drive.", "Stop on resistance, wrong enumeration, power/thermal event, I/O/media error, filesystem change or management instability.", "Preserve complete evidence; do not auto-retry the hot-add, power the bay, invent a workload or clear logs."],
-  "agent_execution_scope": ["Validate bay/drive/OS/workload/log plan and capture absent-target/storage/OS/iMM baseline.", "Timestamp the operator-attributed insertion, detect and bind the new device, then run only the approved five-minute workload and collect health/events.", "Compare Windows/Linux and iMM evidence with criteria and report Tool Result without claiming the physical action or verdict."],
-  "engineer_actions": ["Approve bay/drive, hot-add mode, timing and I/O/data impact.", "Perform and attest the physical insertion and supervise anomalies.", "Review detection/I/O/log evidence, direct any recovery/removal and issue the formal verdict."],
-  "command_applicability": {"original_deepseek_command_fit": "`lsblk` plus a short dmesg tail covers only part of Linux enumeration and may miss events; it does not satisfy Windows Disk Manager, five-minute I/O or iMM evidence and cannot prove physical timing.", "executable_command_required": false, "command_recommendation": "Retain operator hot-add. Use the reviewed internal script and OS-specific target-bound inventory, approved five-minute workload, complete event range and iMM/BMC queries as supplemental automation.", "original_parameters_and_time_preserved": "Empty-at-boot condition, Windows/Linux branches, four-second insertion, five-minute I/O, OS/iMM logs, referenced script and 15/80-minute fields are preserved."},
-  "modernized_recommendation": {"status": "MANUAL HOT-ADD WITH EVENT-CORRELATED AUTOMATION", "recommended_method": "Use a synchronized insertion timestamp/video and pre/post serial-bound OS/controller/iMM event captures, followed by a pinned five-minute target-safe workload and health comparison.", "applicable_platform": "Exact hot-swap backplane/controller/bay, drive and chosen OS.", "supported_version": "Record BIOS/BMC/iMM, controller/backplane/drive firmware, OS/kernel/driver, script and workload versions.", "official_reference": "Platform hot-add SOP, OS/controller procedure and reviewed internal script must define safe operation.", "difference_from_original_method": "Adds immutable identity, complete event windows and workload safety without replacing the physical stimulus.", "coverage_difference": "No reduction; selected OS path, timing, I/O and iMM evidence remain required.", "required_inputs": "Hot-add mapping, workload and OS/iMM evidence definitions.", "risks_limitations": "Enumeration success does not prove physical insertion safety or data integrity."},
+  "required_inputs": [
+    "Exact backplane/bay hot-add capability, drive serial/model/WWN and empty-at-boot proof",
+    "Chosen Windows or Linux path and expected enumeration/online/mount behavior",
+    "Owner interpretation and recording method for the source four-second insertion timing",
+    "Five-minute I/O tool/profile, immutable target and read/write/data-safety policy",
+    "Qualified operator, maintenance approval, iMM/BMC access and safe removal/recovery procedure"
+  ],
+  "safety_requirements": [
+    "Do not insert into a powered bay unless platform/backplane/controller support hot-add and the exact bay is allowlisted.",
+    "Do not online, format, mount or stress an OS, RAID member, protected, mounted/in-use or unknown drive.",
+    "Stop on resistance, wrong enumeration, power/thermal event, I/O/media error, filesystem change or management instability.",
+    "Preserve complete evidence; do not auto-retry the hot-add, power the bay, invent a workload or clear logs."
+  ],
+  "agent_execution_scope": [
+    "Validate bay/drive/OS/workload/log plan and capture absent-target/storage/OS/iMM baseline.",
+    "Timestamp the operator-attributed insertion, detect and bind the new device, then run only the approved five-minute workload and collect health/events.",
+    "Compare Windows/Linux and iMM evidence with criteria and report Tool Result without claiming the physical action or verdict."
+  ],
+  "engineer_actions": [
+    "Approve bay/drive, hot-add mode, timing and I/O/data impact.",
+    "Perform and attest the physical insertion and supervise anomalies.",
+    "Review detection/I/O/log evidence, direct any recovery/removal and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "`lsblk` plus a short dmesg tail covers only part of Linux enumeration and may miss events; it does not satisfy Windows Disk Manager, five-minute I/O or iMM evidence and cannot prove physical timing.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain operator hot-add. Use the reviewed internal script and OS-specific target-bound inventory, approved five-minute workload, complete event range and iMM/BMC queries as supplemental automation.",
+    "original_parameters_and_time_preserved": "Empty-at-boot condition, Windows/Linux branches, four-second insertion, five-minute I/O, OS/iMM logs, referenced script and 15/80-minute fields are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "MANUAL HOT-ADD WITH EVENT-CORRELATED AUTOMATION",
+    "recommended_method": "Use a synchronized insertion timestamp/video and pre/post serial-bound OS/controller/iMM event captures, followed by a pinned five-minute target-safe workload and health comparison.",
+    "applicable_platform": "Exact hot-swap backplane/controller/bay, drive and chosen OS.",
+    "supported_version": "Record BIOS/BMC/iMM, controller/backplane/drive firmware, OS/kernel/driver, script and workload versions.",
+    "official_reference": "Platform hot-add SOP, OS/controller procedure and reviewed internal script must define safe operation.",
+    "difference_from_original_method": "Adds immutable identity, complete event windows and workload safety without replacing the physical stimulus.",
+    "coverage_difference": "No reduction; selected OS path, timing, I/O and iMM evidence remain required.",
+    "required_inputs": "Hot-add mapping, workload and OS/iMM evidence definitions.",
+    "risks_limitations": "Enumeration success does not prove physical insertion safety or data integrity."
+  },
   "project_override_considerations": "A project may select Windows or Linux and the exact workload. It must state the branch and parameters; completing one branch does not imply both were tested unless the project plan requires both.",
-  "expected_evidence": ["Bay/backplane/controller/drive/OS mapping, hot-add support and authorization", "Absent-at-boot baseline plus operator-attributed four-second insertion timestamp/video", "Exact serial detection and complete approved five-minute I/O result/health", "OS event/kernel and iMM/BMC logs, final safe state, Tool Result and separate engineer verdict"],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Windows and Linux paths implement the same hot-add/detection/I/O/log intent. The four-second wording needs project interpretation but is not contradicted elsewhere."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The hot-add intent is clear. Mapping/workload/OS choice are readiness inputs; physical insertion makes the case MANUAL ONLY."},
-  "comparison_to_prior_reviews": {"deepseek": "Retains useful Linux telemetry but rejects PARTIAL and restores timing, workload, Windows and iMM coverage.", "gpt_v2": "Retains comprehensive target and safety controls while applying MANUAL ONLY for the physical core.", "v3_1_improvement": "Separates branch selection from coverage and binds event/I/O evidence to the exact insertion timestamp and serial."},
+  "expected_evidence": [
+    "Bay/backplane/controller/drive/OS mapping, hot-add support and authorization",
+    "Absent-at-boot baseline plus operator-attributed four-second insertion timestamp/video",
+    "Exact serial detection and complete approved five-minute I/O result/health",
+    "OS event/kernel and iMM/BMC logs, final safe state, Tool Result and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Windows and Linux paths implement the same hot-add/detection/I/O/log intent. The four-second wording needs project interpretation but is not contradicted elsewhere."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The hot-add intent is clear. Mapping/workload/OS choice are readiness inputs; physical insertion makes the case MANUAL ONLY."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retains useful Linux telemetry but rejects PARTIAL and restores timing, workload, Windows and iMM coverage.",
+    "gpt_v2": "Retains comprehensive target and safety controls while applying MANUAL ONLY for the physical core.",
+    "v3_1_improvement": "Separates branch selection from coverage and binds event/I/O evidence to the exact insertion timestamp and serial."
+  },
   "review_improvement": "Prevents generic enumeration from replacing the required manual hot-add and ensures the five-minute workload and management logs are neither omitted nor run on the wrong drive.",
   "independent_technical_reasoning": "Because the core stimulus is physical insertion after boot, this case is MANUAL ONLY under the locked rule even though the post-insertion detection, stress and logging are automatable.",
-  "source_provenance": {"primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 256, read directly with openpyxl 3.1.5; full Windows/Linux procedure read", "deepseek_same_row": "Columns 13-18 and data/tests.json", "gpt_v2": "gpt-review/test_gpt_review.json, exact row 256", "history": "Repository exact-code search; no V3/V3.1 baseline record", "external_sources": []},
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 256, read directly with openpyxl 3.1.5; full Windows/Linux procedure read",
+    "deepseek_same_row": "Columns 13-18 and data/tests.json",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact row 256",
+    "history": "Repository exact-code search; no V3/V3.1 baseline record",
+    "external_sources": []
+  },
   "no_automatic_retry": "One approved physical hot-add sequence only. Preserve any anomaly; do not reseat, rerun I/O or switch OS/target automatically.",
-  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
-  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true, "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true, "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
-  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+  "review_outcome": "RECLASSIFIED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
 }

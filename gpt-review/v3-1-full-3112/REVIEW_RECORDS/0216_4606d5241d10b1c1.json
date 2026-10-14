@@ -1,42 +1,69 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 216,
   "library_sequence": 17,
   "source_key": "Functionality|18|Wistron-HW-00017-V002",
   "case_variant_id": "4606d5241d10b1c1",
-  "source_ref": {"sheet": "Functionality", "source_row": 18, "code": "Wistron-HW-00017-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 18,
+    "code": "Wistron-HW-00017-V002"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "ed70ea2b4cec5073e33664270066081fa44daad6b8f3812801ccc14338525a06",
     "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
-    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
-    "historical_revision_search": true, "duplicate_code_search": true,
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
     "duplicate_code_result": "No other XLSX row uses Wistron-HW-00017-V002.",
     "next_source_row_verified": "Functionality|19|Wistron-HW-00018-V002"
   },
   "source_snapshot": {
-    "sub_function": "HW", "test_set": "Mechanical -Cable", "test_name_items": "PCIe Stability",
-    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
-    "criteria": "All components should be seated properly", "script": null,
-    "attended_time": "10", "machine_time": "0", "latest_updated": "2025-09-12",
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cable",
+    "test_name_items": "PCIe Stability",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "bundle": "-",
+    "branch": "Common",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
     "deepseek_columns": {
-      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
       "ai_commands": "-- not runnable by agent: PCIe Stability is a physical/mechanical check of cable/component connections and seating (easy plug/unplug, device still detected after plug cycle, no bent pin / routing issue) that requires a person at the machine - agent cannot manipulate cables over SSH.",
       "ai_logs_output": "operator checks PCIe Stability connections/seating + photos + plug-cycle detect status; agent cannot produce this physical evidence.",
-      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.", "remark": null
+      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.",
+      "remark": null
     }
   },
   "historical_reviews": {
     "deepseek": "NO. It correctly identifies the physical single-cycle/seating boundary, but does not resolve endpoint identity or explain that the title alone does not authorize a repeated or timed stability workload.",
     "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds identity, safe plug-cycle, preserved baseline and post-action PCIe evidence without inventing stress execution.",
-    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 469-489: historical physical/NO result for PCIe Stability."]
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 469-489: historical physical/NO result for PCIe Stability."
+    ]
   },
   "original_test_intent": "Verify mechanical and functional stability across the one source-defined PCIe plug cycle: the selected assembly remains correctly seated and retained, the expected endpoint returns, and no new relevant PCIe or platform error is observed after restoration.",
   "original_method": "A qualified engineer inspects and performs the approved disconnect/reconnect cycle and confirms final seating. An agent may preserve mapped PCIe identity and error evidence before and after the action. No soak duration, repeated cycle count or stress workload is specified by this row.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "The engineer identifies the exact PCIe connector/card/cable assembly, establishes its approved service state, inspects contacts and retention, performs the single authorized plug/reconnect, evaluates resistance/alignment and confirms full seating. Those core mechanical observations cannot be performed or established remotely.",
   "required_inputs": [
     "PCIe assembly, slot/connector and expected endpoint identity/topology",
@@ -91,8 +118,14 @@
     "Actual duration/workload/loop evidence only when separately approved",
     "Safety stops, coverage difference and separate engineer verdict"
   ],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Items, Procedure and Criteria consistently support a physical plug-cycle/seating check. The broad title does not contradict the one-cycle method and does not independently impose duration or repetition."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The single-cycle intent is clear. Endpoint mapping, service state and any added stability parameters are execution inputs, not permanent blockers."},
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Items, Procedure and Criteria consistently support a physical plug-cycle/seating check. The broad title does not contradict the one-cycle method and does not independently impose duration or repetition."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The single-cycle intent is clear. Endpoint mapping, service state and any added stability parameters are execution inputs, not permanent blockers."
+  },
   "comparison_to_prior_reviews": {
     "deepseek": "Keep NO/manual-only, add endpoint and error mapping, and explicitly reject an inferred stress/loop requirement.",
     "gpt_v2": "Agree with V2's manual cycle, preserved evidence and post-action collection; distinguish immediate Master coverage from any project-added duration.",
@@ -104,18 +137,33 @@
     "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 18, read directly with openpyxl 3.1.5",
     "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
     "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 18 source_ref",
-    "history": "review_round_02_functionality.md lines 469-489", "external_sources": []
+    "history": "review_round_02_functionality.md lines 469-489",
+    "external_sources": []
   },
   "no_automatic_retry": "On physical anomaly, endpoint loss, new PCIe error or management loss, preserve the first-cycle evidence and stop. Do not repeat, rescan, reset, reload, reboot or start an added workload without a new engineer-approved plan.",
-  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
   "regression_result": {
-    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
-    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
-    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
   },
   "per_case_quality_gate": {
-    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
-    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
-    "no_hardware_pass_claimed": true, "record_complete": true
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
   }
 }

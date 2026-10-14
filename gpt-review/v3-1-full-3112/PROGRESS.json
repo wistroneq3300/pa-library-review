@@ -3,20 +3,20 @@
   "branch": "codex/testcase-review-v3-1-full-3112",
   "logic_version": "V3.1 Final Audit + ED-32 locked baseline",
   "target_count": 3112,
-  "completed_count": 891,
-  "new_full_review_records_count": 691,
-  "remaining_count": 2221,
+  "completed_count": 1000,
+  "new_full_review_records_count": 800,
+  "remaining_count": 2112,
   "completed_baseline_reference": "gpt-review/v3-1-final-audit/AUDIT_RECORDS/",
-  "next_unreviewed_source_key": "Functionality|724|Wistron-BMC-00014-V004",
-  "next_unreviewed_case_variant_id": "ab8191604688ed61",
+  "next_unreviewed_source_key": "Functionality|839|Wistron-BMC-00129-V003",
+  "next_unreviewed_case_variant_id": "177ea34faf055ad9",
   "classification_statistics": {
-    "MANUAL ONLY": 322,
-    "REQUIRES PACKAGE / USER CONFIRMATION": 169,
-    "FULLY AUTOMATABLE": 315,
-    "BLOCKED": 85
+    "MANUAL ONLY": 345,
+    "REQUIRES PACKAGE / USER CONFIRMATION": 216,
+    "FULLY AUTOMATABLE": 329,
+    "BLOCKED": 110
   },
-  "blocked_count": 85,
-  "source_conflict_count": 129,
+  "blocked_count": 110,
+  "source_conflict_count": 194,
   "engineering_decisions_pending": [
     {
       "source_key": "Functionality|340|Wistron-BIOS-00007-V003",
@@ -161,6 +161,214 @@
     {
       "source_key": "Functionality|722|Wistron-BMC-00012-V008",
       "question": "Correct the destructive target: Items and Script identify DCSCM-CPLD, while Procedure says FPGA. Define the device selector and image/version order, reconcile booted versus powered-off state, define the sole BMC reset, and provide a vendor Redfish action/task/activation contract with secure authentication and DCSCM-independent recovery."
+    },
+    {
+      "source_key": "Functionality|724|Wistron-BMC-00014-V004",
+      "question": "Define the authoritative GPUBB update control path: explain the fixed SUT-BMC SCP address, `${bmc}` labeled as HMC, and the separate fixed Task 0 endpoint; require response-correlated task monitoring, reconcile booted versus powered-off state, and provide secure transport, exact GPUBB/GPU compatibility, activation evidence and independent recovery."
+    },
+    {
+      "source_key": "Functionality|732|Wistron-BMC-00022-V005",
+      "question": "Correct the destructive firmware target: Items and Script identify HIB-CPLD, while Procedure explicitly says FPGA. Align the device selector, signed image/version order, host-off and one-BMC-reset activation semantics, target-specific inventory/health evidence, secure Redfish contract and recovery before any write."
+    },
+    {
+      "source_key": "Functionality|734|Wistron-BMC-00024-V005",
+      "question": "Correct the destructive firmware target: Items and Script identify DCSCM-CPLD, while Procedure explicitly says FPGA. Align the component selector, signed image/version order, host-off and one-BMC-reset activation semantics, target-specific evidence, secure Redfish contract and recovery independent of the updated management module."
+    },
+    {
+      "source_key": "Functionality|736|Wistron-BMC-00026-V004",
+      "question": "Define the authoritative off-state GPUBB control path: explain the fixed SUT-BMC staging address, `${bmc}` labeled HMC, and separate fixed HTTP Task 0 endpoint; require response-correlated task evidence, secure transport, exact GPUBB/GPU compatibility, power-on acceptance and independent recovery."
+    },
+    {
+      "source_key": "Functionality|739|Wistron-BMC-00029-V003",
+      "question": "Replace or map the copied BMC/BIOS raw-IPMI procedure to the authoritative FPGA component and canonical read-only version field, with expected before/after values."
+    },
+    {
+      "source_key": "Functionality|740|Wistron-BMC-00030-V003",
+      "question": "Replace or map the copied BMC/BIOS procedure to the exact DCSCM-CPLD resource and canonical version property; a FirmwareInventory name list is not version evidence."
+    },
+    {
+      "source_key": "Functionality|741|Wistron-BMC-00031-V003",
+      "question": "Replace or map the copied BMC/BIOS procedure to the exact HIB-CPLD resource and canonical version property; do not rely on a broad HIB/CPLD name match."
+    },
+    {
+      "source_key": "Functionality|742|Wistron-BMC-00032-V003",
+      "question": "Define the active RoT component, canonical version property and whether this is version-only or includes attestation; replace the copied BMC/BIOS procedure accordingly."
+    },
+    {
+      "source_key": "Functionality|744|Wistron-BMC-00034-V002",
+      "question": "Decide whether CIFS virtual media is mount-only, boot media, or an OS auto-install; correct the incomplete CIFS command and define image, target-disk protection, expected device/console evidence, cleanup and recovery."
+    },
+    {
+      "source_key": "Functionality|745|Wistron-BMC-00035-V002",
+      "question": "Decide whether NFS virtual media is mount-only, boot media, or an OS auto-install; define the exact export/image/security, target-disk protection, expected device/console evidence, cleanup and recovery."
+    },
+    {
+      "source_key": "Functionality|747|Wistron-BMC-00037-V002",
+      "question": "Decide whether HTTPS virtual media is mount-only, boot media, or OS auto-install; define CA/authentication, immutable image, disk protection, evidence and cleanup."
+    },
+    {
+      "source_key": "Functionality|748|Wistron-BMC-00038-V002",
+      "question": "Define the supported simultaneous-mount count and protocol-to-image-to-device matrix, observable pass conditions, mount-versus-install scope and ordered cleanup."
+    },
+    {
+      "source_key": "Functionality|749|Wistron-BMC-00039-V002",
+      "question": "Define the SNMP trap mode/security matrix, receiver, safe generating stimulus, expected OID/varbinds, delivery criteria and configuration rollback."
+    },
+    {
+      "source_key": "Functionality|750|Wistron-BMC-00040-V002",
+      "question": "Clarify whether both SNMP v1 and v3 are required and whether queries, traps or both are tested; supply per-mode OIDs, values, security profiles and cleanup."
+    },
+    {
+      "source_key": "Functionality|751|Wistron-BMC-00041-V002",
+      "question": "Define the vendor system-health MIB/OIDs, expected enums/baseline and SNMPv3 profile; reconcile IReasoning and Net-SNMP without substituting v2c."
+    },
+    {
+      "source_key": "Functionality|752|Wistron-BMC-00042-V002",
+      "question": "Define voltage rail OIDs, identities, units/scaling, operating state, limits/tolerances and SNMPv3/reference evidence."
+    },
+    {
+      "source_key": "Functionality|753|Wistron-BMC-00043-V002",
+      "question": "Define temperature sensor OIDs/locations, units/scaling, load/ambient state, warning/critical limits and sampling semantics."
+    },
+    {
+      "source_key": "Functionality|754|Wistron-BMC-00044-V002",
+      "question": "Define allowlisted user-metadata OIDs, expected account/role baseline, SNMPv3 access and mandatory redaction/secret-exclusion rules."
+    },
+    {
+      "source_key": "Functionality|755|Wistron-BMC-00045-V002",
+      "question": "Define whether disks means FRUs, physical drives or logical volumes, then supply exact identity/status OIDs, baseline and read-only boundary."
+    },
+    {
+      "source_key": "Functionality|756|Wistron-BMC-00046-V002",
+      "question": "Define fan slot/OID mapping, RPM/PWM/status semantics, operating state, thresholds, redundancy and thermal safety response."
+    },
+    {
+      "source_key": "Functionality|757|Wistron-BMC-00047-V002",
+      "question": "Define LED identities/OIDs/state encodings, expected baseline or stimulus, SNMPv3 profile and whether physical visual correlation is required."
+    },
+    {
+      "source_key": "Functionality|758|Wistron-BMC-00048-V002",
+      "question": "Define the adapter class, exact inventory/status OIDs, expected topology and BMC-to-host mapping; reconcile IReasoning/Net-SNMP while retaining SNMPv3."
+    },
+    {
+      "source_key": "Functionality|759|Wistron-BMC-00049-V002",
+      "question": "Define power-module slot/OIDs, presence/health/redundancy and electrical field matrix, units/scaling, limits and expected topology."
+    },
+    {
+      "source_key": "Functionality|760|Wistron-BMC-00050-V002",
+      "question": "Define the finite SNMP error-log object/schema, event/severity/time/count window, pagination, redaction and no-clear evidence-preservation contract."
+    },
+    {
+      "source_key": "Functionality|761|Wistron-BMC-00051-V002",
+      "question": "Decide whether spClock is a read-only SNMP time comparison or a state-changing SNMP SET; define OID/encoding/time zone/tolerance and, for SET, approval, rollback and log-preservation."
+    },
+    {
+      "source_key": "Functionality|763|Wistron-BMC-00053-V002",
+      "question": "Define the finite SysInfo MIB field/OID schema, completeness rule, expected authoritative inventory, normalization and redaction; do not substitute unverified Redfish output."
+    },
+    {
+      "source_key": "Functionality|764|Wistron-BMC-00054-V003",
+      "question": "Define RealErr, target/stimulus/event mapping and whether `full the SEL` means a distinct capacity/overflow test; also preserve row-764 identity apart from duplicate code at row 1486."
+    },
+    {
+      "source_key": "Functionality|765|Wistron-BMC-00055-V003",
+      "question": "Define how InfoErr differs from RealErr, its event/stimulus/severity and any separate SEL-capacity scope; preserve row-765 identity apart from duplicate code at row 1487."
+    },
+    {
+      "source_key": "Functionality|766|Wistron-BMC-00056-V003",
+      "question": "Supply the ambient sensor/SDR mapping, numeric thermal envelope, ramp/dwell/abort/cooldown, expected SEL/fan/shutdown behavior and recovery; keep this thermal variant distinct from duplicate GPU WebUI row 1488."
+    },
+    {
+      "source_key": "Functionality|767|Wistron-BMC-00057-V003",
+      "question": "Supply DCSCM sensor/location, limits and safe thermal/event/recovery matrix; distinguish duplicate PSU Information code at row 1489."
+    },
+    {
+      "source_key": "Functionality|768|Wistron-BMC-00058-V003",
+      "question": "Enumerate CPU0/CPU1 sensors and per-socket thermal/protection matrix; distinguish duplicate FAN Information code at row 1490."
+    },
+    {
+      "source_key": "Functionality|769|Wistron-BMC-00059-V003",
+      "question": "Map DIMM zones 1-4 to channels/sensors and define safe memory thermal/ECC response; distinguish duplicate PCIe Information code at row 1491."
+    },
+    {
+      "source_key": "Functionality|770|Wistron-BMC-00060-V003",
+      "question": "Map CPU0_IN/CPU1_IN physical inlet sensors and airflow response; distinguish duplicate HDD Information code at row 1492."
+    },
+    {
+      "source_key": "Functionality|771|Wistron-BMC-00061-V003",
+      "question": "Define outlet sensor/location and exhaust thermal envelope; distinguish duplicate BMC FW Version code at row 1493."
+    },
+    {
+      "source_key": "Functionality|772|Wistron-BMC-00062-V003",
+      "question": "Map PSU1/PSU2 inlet sensors and derating/redundancy response; distinguish duplicate BIOS FW Version code at row 1494."
+    },
+    {
+      "source_key": "Functionality|773|Wistron-BMC-00063-V003",
+      "question": "Define OCP1/OCP2 component ownership and safe power/thermal protection matrix without assuming GPU; distinguish duplicate FPGA FW Version code at row 1495."
+    },
+    {
+      "source_key": "Functionality|774|Wistron-BMC-00064-V003",
+      "question": "Map the midplane sensor and affected chassis components; distinguish duplicate Check FRU code at row 1496."
+    },
+    {
+      "source_key": "Functionality|775|Wistron-BMC-00065-V003",
+      "question": "Define CEM and map slots 1-2/cards/sensors plus their protection behavior; distinguish duplicate Sensor code at row 1497."
+    },
+    {
+      "source_key": "Functionality|776|Wistron-BMC-00066-V003",
+      "question": "Define CEMBB component/location and safe affected-domain thermal matrix; distinguish duplicate BIOS Redfish flash code at row 1498."
+    },
+    {
+      "source_key": "Functionality|788|Wistron-BMC-00078-V003",
+      "question": "Correct the thermal target matrix: Items and Procedure require TEMP_PSU1~6, while Criterion 5 requires TEMP_CRPS1~TEMP_CRPS2. Select or split the six-PSU and two-CRPS scopes before any thermal stimulus."
+    },
+    {
+      "source_key": "Functionality|795|Wistron-BMC-00085-V003",
+      "question": "Define PWR_STBY_HSC, its required host/BMC power state and a safe causal stimulus. The current booted-OS GPU-driver stress has no documented coupling to the named standby rail."
+    },
+    {
+      "source_key": "Functionality|798|Wistron-BMC-00088-V004",
+      "question": "Resolve STATUS_FAN 1~N versus STATUS_FAN1~16 and replace the copied temperature-threshold criteria with a canonical fan presence/status and SEL acceptance matrix."
+    },
+    {
+      "source_key": "Functionality|799|Wistron-BMC-00089-V003",
+      "question": "Replace the copied temperature-threshold criteria with CRPS1/2 presence/status, redundancy and SEL acceptance before physical module service."
+    },
+    {
+      "source_key": "Functionality|800|Wistron-BMC-00090-V003",
+      "question": "Replace the copied temperature-threshold criteria with PSU1~6 presence/status, feed/redundancy and SEL acceptance before physical service."
+    },
+    {
+      "source_key": "Functionality|803|Wistron-BMC-00093-V005",
+      "question": "Choose or split loader/OS watchdog runtime fault recovery versus BIOS/WDAT table inspection; align the High IRQ procedure, Enabled/Disabled criteria and recovery."
+    },
+    {
+      "source_key": "Functionality|805|Wistron-BMC-00095-V005",
+      "question": "Replace powered heatsink removal or unbounded heating-until-reset with a vendor-approved interlocked CPU thermal method, numeric limits and recovery plan."
+    },
+    {
+      "source_key": "Functionality|807|Wistron-BMC-00097-V004",
+      "question": "Correct the minimum PSU population: the procedure expects boot starting with one PSU, while Criterion 1 says the system must be unable to power on with two PSUs."
+    },
+    {
+      "source_key": "Functionality|813|Wistron-BMC-00103-V005",
+      "question": "Correct the UID WebUI state matrix: criteria require both bright blue and OFF for the same WebUI UID-on action."
+    },
+    {
+      "source_key": "Functionality|825|Wistron-BMC-00115-V007",
+      "question": "Define the shared-NIC disconnected-state path and expected reachability, and separate or align POST-display and optional WOL acceptance."
+    },
+    {
+      "source_key": "Functionality|826|Wistron-BMC-00116-V005",
+      "question": "Define whether the BMC must become unreachable when the dedicated cable is removed or fail over through a mapped alternate path; align per-state channel/IP/MAC acceptance."
+    },
+    {
+      "source_key": "Functionality|832|Wistron-BMC-00122-V004",
+      "question": "Choose or split true remote-syslog forwarding and receiver delivery versus local Redfish PlatformLog/WebGUI field parity; the current procedure never tests a remote receiver."
+    },
+    {
+      "source_key": "Functionality|838|Wistron-BMC-00128-V005",
+      "question": "Choose or split NTP configuration/tracking from BMC firmware-flash network persistence, and define whether UBB IP and Virtual NIC are the same path."
     }
   ],
   "project_readiness_inputs_pending": "Tracked per testcase; not counted as unresolved global engineering decisions.",
@@ -172,7 +380,7 @@
     2700,
     3112
   ],
-  "last_remote_checkpoint": 891,
+  "last_remote_checkpoint": 1000,
   "hardware_tested": false,
   "formal_test_verdicts_set": false
 }

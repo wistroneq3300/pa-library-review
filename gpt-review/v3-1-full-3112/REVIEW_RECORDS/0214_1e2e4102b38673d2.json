@@ -1,10 +1,15 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 214,
   "library_sequence": 15,
   "source_key": "Functionality|16|Wistron-HW-00015-V002",
   "case_variant_id": "1e2e4102b38673d2",
-  "source_ref": {"sheet": "Functionality", "source_row": 16, "code": "Wistron-HW-00015-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 16,
+    "code": "Wistron-HW-00015-V002"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "6d85468806dbd74e38dcb5d098c1ebbf22d0e868a821be089588016d72def2ee",
@@ -21,8 +26,10 @@
     "sub_function": "HW",
     "test_set": "Mechanical -Cable",
     "test_name_items": "PCIe Connector",
-    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
     "criteria": "All components should be seated properly",
+    "bundle": "-",
+    "branch": "Common",
     "script": null,
     "attended_time": "10",
     "machine_time": "0",
@@ -49,7 +56,12 @@
   "original_test_intent": "Physically exercise the approved PCIe connector/card or cable interface through one plug/reconnect cycle, verify alignment and complete seating/retention, and confirm that the expected PCIe endpoint returns without new relevant PCIe, kernel or platform errors.",
   "original_method": "A qualified engineer identifies the exact slot/connector and endpoint, performs the platform-approved power isolation or hot-plug sequence, inspects the mating interface and restores seating. An agent may preserve mapped PCIe inventory/error evidence before and after the action but cannot perform or certify the physical cycle.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
   "execution_status": "NOT EXECUTED",
   "tool_result": "NOT RUN",
   "engineer_verdict": "ENGINEER OWNED; PENDING",
@@ -108,8 +120,14 @@
     "Relevant kernel/BMC/PCIe error delta plus management-path status",
     "Safety stops, coverage deviations and separate engineer verdict"
   ],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The PCIe Connector row's Items, Procedure and Criteria are mutually consistent. The I3C material is a derived-review cross-variant contamination caused by a duplicate code, not contradictory Master source facts."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The physical PCIe objective is clear. Slot/endpoint mapping and service procedure are execution inputs; the wrong DeepSeek command can be rejected without making the case permanently blocked."},
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The PCIe Connector row's Items, Procedure and Criteria are mutually consistent. The I3C material is a derived-review cross-variant contamination caused by a duplicate code, not contradictory Master source facts."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The physical PCIe objective is clear. Slot/endpoint mapping and service procedure are execution inputs; the wrong DeepSeek command can be rejected without making the case permanently blocked."
+  },
   "comparison_to_prior_reviews": {
     "deepseek": "Reject its PARTIAL classification and all I3C content for this variant; it belongs to row 1816.",
     "gpt_v2": "Agree with V2's MANUAL ONLY correction, duplicate-variant separation, physical boundary and mapped post-action evidence.",
@@ -128,13 +146,26 @@
   "review_outcome": "RECLASSIFIED",
   "second_review_outcome": "CHANGED",
   "regression_result": {
-    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
-    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
-    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
   },
   "per_case_quality_gate": {
-    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
-    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
-    "no_hardware_pass_claimed": true, "record_complete": true
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
   }
 }

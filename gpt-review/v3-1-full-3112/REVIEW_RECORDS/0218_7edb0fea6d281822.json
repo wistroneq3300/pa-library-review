@@ -1,42 +1,69 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 218,
   "library_sequence": 19,
   "source_key": "Functionality|20|Wistron-HW-00019-V002",
   "case_variant_id": "7edb0fea6d281822",
-  "source_ref": {"sheet": "Functionality", "source_row": 20, "code": "Wistron-HW-00019-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 20,
+    "code": "Wistron-HW-00019-V002"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "4c2c05f93b7d083d243eb205cb16b59ccedc7e3ad2e00e963caaa04b63664cd2",
     "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
-    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
-    "historical_revision_search": true, "duplicate_code_search": true,
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
     "duplicate_code_result": "No other XLSX row uses Wistron-HW-00019-V002.",
     "next_source_row_verified": "Functionality|21|Wistron-HW-00020-V002"
   },
   "source_snapshot": {
-    "sub_function": "HW", "test_set": "Mechanical -Cable", "test_name_items": "Power Routing",
-    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
-    "criteria": "All components should be seated properly", "script": null,
-    "attended_time": "10", "machine_time": "0", "latest_updated": "2025-09-12",
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cable",
+    "test_name_items": "Power Routing",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "bundle": "-",
+    "branch": "Common",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
     "deepseek_columns": {
-      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
       "ai_commands": "-- not runnable by agent: Power Routing is a physical/mechanical check of cable/component connections and seating (easy plug/unplug, device still detected after plug cycle, no bent pin / routing issue) that requires a person at the machine - agent cannot manipulate cables over SSH.",
       "ai_logs_output": "operator checks Power Routing connections/seating + photos + plug-cycle detect status; agent cannot produce this physical evidence.",
-      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.", "remark": null
+      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.",
+      "remark": null
     }
   },
   "historical_reviews": {
     "deepseek": "NO. The physical boundary is correct, but the review does not distinguish end-to-end power routing from connector-only seating or identify insulation, heat, airflow and source/load hazards.",
     "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds full-route bend/clearance/strain/airflow evidence, power isolation and post-action power/status collection.",
-    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 517-537: historical physical/NO result for Power Routing."]
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 517-537: historical physical/NO result for Power Routing."
+    ]
   },
   "original_test_intent": "Verify that each selected power cable or harness follows the approved source-to-load route, preserves insulation, clearance, bend and strain controls, remains clear of hot/moving/sharp features and airflow paths, is fully seated at both ends, and restores the expected loads without new power or thermal faults after the approved plug cycle.",
   "original_method": "A qualified engineer traces the entire power path against the routing drawing, performs the authorized isolated connector cycle, restores all clips and service loops, and records the full route. The agent may collect mapped power and availability evidence only after physical restoration.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "The engineer identifies the cable's source, loads and every routing checkpoint; isolates and verifies discharge; inspects insulation and contacts; evaluates bend, torsion, abrasion, strain, service slack and clearance; performs the approved disconnect/reconnect; and restores clips, separators and seating. Remote status cannot establish these spatial and material conditions.",
   "required_inputs": [
     "Power-cable/harness FRU and source-to-load connector map",
@@ -91,8 +118,14 @@
     "Raw mapped pre/post power, load, fan/thermal and event evidence",
     "Safety stops, inaccessible/excluded segments and separate engineer verdict"
   ],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Procedure's physical cycle/detection and Criteria's seating requirement are consistent with Power Routing. Missing route values and topology are project inputs rather than contradictions."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The end-to-end routing and restoration intent is clear. The harness map, limits and isolation plan gate execution but do not permanently block review."},
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The Procedure's physical cycle/detection and Criteria's seating requirement are consistent with Power Routing. Missing route values and topology are project inputs rather than contradictions."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The end-to-end routing and restoration intent is clear. The harness map, limits and isolation plan gate execution but do not permanently block review."
+  },
   "comparison_to_prior_reviews": {
     "deepseek": "Keep NO/manual-only and add end-to-end source/load mapping, insulation, heat, airflow and route-segment evidence.",
     "gpt_v2": "Agree with full-route bend/clearance/strain, isolation and preserved post-action evidence; strengthen rail/load correlation and hidden-section coverage.",
@@ -104,18 +137,33 @@
     "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 20, read directly with openpyxl 3.1.5",
     "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
     "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 20 source_ref",
-    "history": "review_round_02_functionality.md lines 517-537", "external_sources": []
+    "history": "review_round_02_functionality.md lines 517-537",
+    "external_sources": []
   },
   "no_automatic_retry": "On route damage, exposed conductor, heat/odor, unsafe interference, abnormal power/thermal evidence or load loss, preserve the route and raw state and stop. Do not reroute, reconnect again, energize, power-cycle or reset without an engineer-approved response.",
-  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
   "regression_result": {
-    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
-    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
-    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
   },
   "per_case_quality_gate": {
-    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
-    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
-    "no_hardware_pass_claimed": true, "record_complete": true
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
   }
 }

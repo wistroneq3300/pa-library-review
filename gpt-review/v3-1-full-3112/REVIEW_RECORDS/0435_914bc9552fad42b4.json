@@ -1,35 +1,163 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 435,
   "library_sequence": 254,
   "source_key": "Functionality|255|Wistron-HW-00270-V002",
   "case_variant_id": "914bc9552fad42b4",
-  "source_ref": {"sheet": "Functionality", "source_row": 255, "code": "Wistron-HW-00270-V002"},
-  "source_integrity": {"exact_xlsx_row_read": true, "original_row_sha256": "687839bdaa086cf0554bb74b5012ca30e751d16a3c5d353ee2595d2187ddfa0a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8", "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true, "historical_revision_search": true, "duplicate_code_search": true, "duplicate_code_result": "No other XLSX row uses Wistron-HW-00270-V002.", "next_source_row_verified": "Functionality|256|Wistron-HW-00271-V003"},
-  "source_snapshot": {"sub_function": "HW", "test_set": "Storage - SSD", "test_name_items": "IOmeter", "procedure": "The source requires each drive as its own volume, OS boot, IOmeter installation, bringing all HDD/SSD/NVMe drives online and formatting them, selecting all volumes in Topology/Disk Targets, setting outstanding I/Os to 16, adding the IOmeter 'Default' access specification, monitoring Results Since Start of Test, starting with the Green Flag, allowing drive preparation, and running at least 48 hours. The full verbatim GUI procedure remains in the source XLSX and was read for this review.", "criteria": "Pass: Test should run with no reported errors, system hangs, or reboots", "script": null, "attended_time": "10", "machine_time": "2880", "latest_updated": "2025-09-12", "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "IOmeter (user provides/configures)", "ai_commands": "GUI-driven; agent could launch a configured worker headlessly if a scriptable config is supplied.", "ai_logs_output": "IOmeter result CSV/log.", "risk": null, "remark": null}},
-  "historical_reviews": {"deepseek": "PARTIAL; recognizes GUI/config dependency but does not cover all-drive online/format scope, exact UI parameters, 48-hour duration or watchdog safety.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED; adds immutable target allowlist, backup, config fidelity, monitoring, abort/recovery and complete-duration evidence.", "round_02": "No separate exact-code round-02 entry was found.", "second_review_handoff": "No V3/V3.1 baseline record exists; the exact long-form source was independently read.", "v3": "No V3 Pilot record exists.", "v3_1": "No V3.1 200-case record exists."},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 255,
+    "code": "Wistron-HW-00270-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "687839bdaa086cf0554bb74b5012ca30e751d16a3c5d353ee2595d2187ddfa0a",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00270-V002.",
+    "next_source_row_verified": "Functionality|256|Wistron-HW-00271-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Storage - SSD",
+    "test_name_items": "IOmeter",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    IOmeter is a storage stress tool. For this test, it is used to test the PCIe and nvme communication busses.\n\n1. Configure each drive as its own volume.\n2. Boot to OS\n3. Install IOmeter software.\n4. Bring all HDD/SSD/NVME drives online and format\n5. Run IOmeter.\n6. Select the system in the “Topology” box to the left.\n7. Under the “Disk Targets” Tab,\na. Select all volumes in the “Targets” box.\nb. Set “# of Outstanding I/Os” to 16.\n8. Under the “Access Specifications” Tab\na. Select “Default” in the box to the right, and click “Add”\n9. Under the “Results Display” Tab\na. In the “Results Since” box click “Start of Test” to monitor the test progress\n10. Click the Green Flag to begin the tests\n11. IOmeter writes a test file to each volume if it is not already present. For larger storage footprints,\nthis can take several hours to complete. While IOmeter is doing this, it will display “Preparing\nDrives” in an info bar.\n12. After this, it will display bar graphs depicting the current results\n13. The test should run for a minimum of 48 hours with no reported errors.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Pass: Test should run with no reported errors, system hangs, or reboots",
+    "bundle": "-",
+    "branch": "Common",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "2880",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL",
+      "ai_packages_needed": "IOmeter (user provides/configures)",
+      "ai_commands": "-- IOmeter benchmark is a GUI-driven tool typically run interactively; needs IOmeter installed + a workload config. Agent can launch the configured IOmeter worker headless if a scriptable config is provided.",
+      "ai_logs_output": "return the IOmeter result CSV/log so user diffs against expected performance. Long sustained run - confirm approval.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL; recognizes GUI/config dependency but does not cover all-drive online/format scope, exact UI parameters, 48-hour duration or watchdog safety.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED; adds immutable target allowlist, backup, config fidelity, monitoring, abort/recovery and complete-duration evidence.",
+    "round_02": "No separate exact-code round-02 entry was found.",
+    "second_review_handoff": "No V3/V3.1 baseline record exists; the exact long-form source was independently read.",
+    "v3": "No V3 Pilot record exists.",
+    "v3_1": "No V3.1 200-case record exists."
+  },
   "original_test_intent": "Stress the PCIe/NVMe/storage communication paths across every approved formatted test volume for at least 48 hours using the pinned IOmeter Default workload with 16 outstanding I/Os, and detect any tool error, system hang or reboot.",
   "original_method": "Create one approved volume per allowlisted drive, install/pin IOmeter, configure all intended targets, outstanding I/Os=16 and the version-defined Default access specification, start the run after drive preparation, monitor continuously for at least 2,880 minutes, and preserve IOmeter, watchdog, drive-health, thermal and system evidence.",
   "automation_classification": "FULLY AUTOMATABLE",
-  "execution_readiness": ["NEEDS_ALL_DRIVE_VOLUME_ALLOWLIST_AND_FORMAT_APPROVAL", "NEEDS_IOMETER_VERSION_DEFAULT_SPEC_AND_CONFIG_EXPORT", "NEEDS_BACKUP_REIMAGE_AND_BOOT_DISK_EXCLUSION", "NEEDS_48_HOUR_POWER_COOLING_MONITORING_AND_WATCHDOG", "NEEDS_ERROR_HANG_REBOOT_AND_ABORT_DEFINITIONS"],
-  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "execution_readiness": [
+    "NEEDS_ALL_DRIVE_VOLUME_ALLOWLIST_AND_FORMAT_APPROVAL",
+    "NEEDS_IOMETER_VERSION_DEFAULT_SPEC_AND_CONFIG_EXPORT",
+    "NEEDS_BACKUP_REIMAGE_AND_BOOT_DISK_EXCLUSION",
+    "NEEDS_48_HOUR_POWER_COOLING_MONITORING_AND_WATCHDOG",
+    "NEEDS_ERROR_HANG_REBOOT_AND_ABORT_DEFINITIONS"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
   "manual_activity": "An authorized user supplies and approves targets, format/configuration, monitoring and recovery and later owns the verdict. The GUI can be driven by approved automation or replaced only by an IOmeter-native configuration that is proven equivalent; no physical human action or observation is intrinsic.",
-  "required_inputs": ["Every target drive serial/controller/volume and proof it is non-system, disposable/backup-protected and approved for online/format", "IOmeter version/hash, exact Default access specification as resolved by that version, target/config export and result format", "Volume/filesystem layout, backup/reimage and cleanup/restoration plan", "Stable power/cooling, 48-hour maintenance window, remote console and independent hang/reboot watchdog", "Abort thresholds, drive/thermal/system log cadence and evidence retention"],
-  "safety_requirements": ["Never online, format or select an OS, boot, mounted production, protected or ambiguous disk; revalidate immutable serials before each state change.", "Preserve all source settings and minimum 48-hour duration; do not substitute a different headless workload merely because it is easier to automate.", "Stop per approved safety plan on wrong target, media/I/O error, critical thermal/power event, hang, reboot or loss of monitoring; preserve evidence.", "Do not auto-retry, reformat again, restart after failure or hide preparation/runtime errors."],
-  "agent_execution_scope": ["Validate targets, IOmeter binary/config, format/backup plan and watchdog; capture pre-test inventory/health/logs.", "After approval, perform exact target online/format actions, launch the pinned IOmeter configuration, record preparation and run state, and monitor full duration.", "Collect IOmeter results, hang/reboot timeline and post-health/logs as Tool Result without declaring PASS/FAIL."],
-  "engineer_actions": ["Approve destructive target/format scope, exact IOmeter configuration and 48-hour safety/recovery plan.", "Remain available for host/storage recovery if watchdog or OOB detects a hang/reboot.", "Review complete-duration evidence and issue the formal verdict."],
-  "command_applicability": {"original_deepseek_command_fit": "A headless worker is acceptable only if its IOmeter-native config is proven to encode the same targets, Default access spec, outstanding I/Os=16, preparation behavior and duration. A generic launch is incomplete.", "executable_command_required": true, "command_recommendation": "Use the exact GUI workflow or a validated IOmeter configuration/export plus worker/control interface, with immutable target assertions and an independent watchdog.", "original_parameters_and_time_preserved": "One volume per drive, all approved HDD/SSD/NVMe targets, outstanding I/Os 16, Default access specification, preparation phase, Results Since Start of Test, Green Flag semantics, minimum 48 hours and 10/2880-minute fields are preserved."},
-  "modernized_recommendation": {"status": "PINNED IOMETER CONFIGURATION WITH INDEPENDENT WATCHDOG", "recommended_method": "Export/hash the IOmeter topology/access configuration, bind targets by serial-to-volume manifest, capture result CSV and process state continuously, and use OOB/heartbeat monitoring to timestamp hangs or reboots.", "applicable_platform": "Approved Windows/IOmeter storage topology and disposable volumes.", "supported_version": "Record OS, IOmeter/controller/drive firmware, BIOS/BMC and watchdog versions.", "official_reference": "IOmeter configuration semantics and project storage recipe must define 'Default'; no alternate stress tool is asserted equivalent.", "difference_from_original_method": "Makes the GUI configuration reproducible and hang/reboot detection independent without changing the workload.", "coverage_difference": "No reduction; all approved volumes and at least 48 hours remain mandatory.", "required_inputs": "Pinned configuration, target manifest and watchdog/recovery plan.", "risks_limitations": "Formatting and test files are destructive; a host hang may prevent in-band log flush, so OOB evidence is essential."},
+  "required_inputs": [
+    "Every target drive serial/controller/volume and proof it is non-system, disposable/backup-protected and approved for online/format",
+    "IOmeter version/hash, exact Default access specification as resolved by that version, target/config export and result format",
+    "Volume/filesystem layout, backup/reimage and cleanup/restoration plan",
+    "Stable power/cooling, 48-hour maintenance window, remote console and independent hang/reboot watchdog",
+    "Abort thresholds, drive/thermal/system log cadence and evidence retention"
+  ],
+  "safety_requirements": [
+    "Never online, format or select an OS, boot, mounted production, protected or ambiguous disk; revalidate immutable serials before each state change.",
+    "Preserve all source settings and minimum 48-hour duration; do not substitute a different headless workload merely because it is easier to automate.",
+    "Stop per approved safety plan on wrong target, media/I/O error, critical thermal/power event, hang, reboot or loss of monitoring; preserve evidence.",
+    "Do not auto-retry, reformat again, restart after failure or hide preparation/runtime errors."
+  ],
+  "agent_execution_scope": [
+    "Validate targets, IOmeter binary/config, format/backup plan and watchdog; capture pre-test inventory/health/logs.",
+    "After approval, perform exact target online/format actions, launch the pinned IOmeter configuration, record preparation and run state, and monitor full duration.",
+    "Collect IOmeter results, hang/reboot timeline and post-health/logs as Tool Result without declaring PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Approve destructive target/format scope, exact IOmeter configuration and 48-hour safety/recovery plan.",
+    "Remain available for host/storage recovery if watchdog or OOB detects a hang/reboot.",
+    "Review complete-duration evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "A headless worker is acceptable only if its IOmeter-native config is proven to encode the same targets, Default access spec, outstanding I/Os=16, preparation behavior and duration. A generic launch is incomplete.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the exact GUI workflow or a validated IOmeter configuration/export plus worker/control interface, with immutable target assertions and an independent watchdog.",
+    "original_parameters_and_time_preserved": "One volume per drive, all approved HDD/SSD/NVMe targets, outstanding I/Os 16, Default access specification, preparation phase, Results Since Start of Test, Green Flag semantics, minimum 48 hours and 10/2880-minute fields are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "PINNED IOMETER CONFIGURATION WITH INDEPENDENT WATCHDOG",
+    "recommended_method": "Export/hash the IOmeter topology/access configuration, bind targets by serial-to-volume manifest, capture result CSV and process state continuously, and use OOB/heartbeat monitoring to timestamp hangs or reboots.",
+    "applicable_platform": "Approved Windows/IOmeter storage topology and disposable volumes.",
+    "supported_version": "Record OS, IOmeter/controller/drive firmware, BIOS/BMC and watchdog versions.",
+    "official_reference": "IOmeter configuration semantics and project storage recipe must define 'Default'; no alternate stress tool is asserted equivalent.",
+    "difference_from_original_method": "Makes the GUI configuration reproducible and hang/reboot detection independent without changing the workload.",
+    "coverage_difference": "No reduction; all approved volumes and at least 48 hours remain mandatory.",
+    "required_inputs": "Pinned configuration, target manifest and watchdog/recovery plan.",
+    "risks_limitations": "Formatting and test files are destructive; a host hang may prevent in-band log flush, so OOB evidence is essential."
+  },
   "project_override_considerations": "A project may approve a subset, different duration or explicit configuration. It must name every difference and can claim only project-plan completion, not the master all-volume 48-hour requirement.",
-  "expected_evidence": ["Drive/controller/volume allowlist, pre-format state, backup/reimage proof and authorization", "IOmeter binary/config hashes with resolved Default workload, target list and outstanding I/Os=16", "Preparation and full 48-hour result/log timeline plus independent hang/reboot/power/thermal monitoring", "Post-drive/filesystem/system health, cleanup/restoration, Tool Result and separate engineer verdict"],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criterion consistently define an all-volume IOmeter stress of at least 48 hours with no errors, hangs or reboots. Version-specific Default workload details are readiness inputs."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "The workload and acceptance are clear. Package, targets, config and approval are readiness inputs; GUI automation or equivalent native configuration permits a fully automated core."},
-  "comparison_to_prior_reviews": {"deepseek": "Retains configuration dependency but corrects PARTIAL and supplies the omitted destructive/long-run controls.", "gpt_v2": "Retains exact target, backup, config and monitoring gates while advancing capability to FULLY AUTOMATABLE under V3.1.", "v3_1_improvement": "Defines GUI-to-config equivalence, independent hang/reboot evidence and explicit project-override claim boundaries."},
+  "expected_evidence": [
+    "Drive/controller/volume allowlist, pre-format state, backup/reimage proof and authorization",
+    "IOmeter binary/config hashes with resolved Default workload, target list and outstanding I/Os=16",
+    "Preparation and full 48-hour result/log timeline plus independent hang/reboot/power/thermal monitoring",
+    "Post-drive/filesystem/system health, cleanup/restoration, Tool Result and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Procedure and criterion consistently define an all-volume IOmeter stress of at least 48 hours with no errors, hangs or reboots. Version-specific Default workload details are readiness inputs."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The workload and acceptance are clear. Package, targets, config and approval are readiness inputs; GUI automation or equivalent native configuration permits a fully automated core."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retains configuration dependency but corrects PARTIAL and supplies the omitted destructive/long-run controls.",
+    "gpt_v2": "Retains exact target, backup, config and monitoring gates while advancing capability to FULLY AUTOMATABLE under V3.1.",
+    "v3_1_improvement": "Defines GUI-to-config equivalence, independent hang/reboot evidence and explicit project-override claim boundaries."
+  },
   "review_improvement": "Turns a vague headless-launch note into a reproducible 48-hour all-volume plan without weakening GUI-defined IOmeter semantics or formatting safety.",
   "independent_technical_reasoning": "Target supply, approval and a GUI do not inherently require a human when the UI or IOmeter-native config can be validated and automated. Since all core state changes, stress, monitoring and evidence are electronic, FULLY AUTOMATABLE is correct after readiness gates.",
-  "source_provenance": {"primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 255, read directly with openpyxl 3.1.5; full long-form procedure read", "deepseek_same_row": "Columns 13-18 and data/tests.json", "gpt_v2": "gpt-review/test_gpt_review.json, exact row 255", "history": "Repository exact-code search; no V3/V3.1 baseline record", "external_sources": []},
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 255, read directly with openpyxl 3.1.5; full long-form procedure read",
+    "deepseek_same_row": "Columns 13-18 and data/tests.json",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact row 255",
+    "history": "Repository exact-code search; no V3/V3.1 baseline record",
+    "external_sources": []
+  },
   "no_automatic_retry": "One approved 48-hour attempt only. Preserve any preparation/runtime failure, hang or reboot; do not relaunch, reformat or alter configuration automatically.",
-  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
-  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true, "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true, "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
-  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+  "review_outcome": "RECLASSIFIED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
 }

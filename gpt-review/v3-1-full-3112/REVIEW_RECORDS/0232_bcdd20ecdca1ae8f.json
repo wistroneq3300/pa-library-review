@@ -1,10 +1,15 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 232,
   "library_sequence": 37,
   "source_key": "Functionality|38|Wistron-HW-00041-V004",
   "case_variant_id": "bcdd20ecdca1ae8f",
-  "source_ref": {"sheet": "Functionality", "source_row": 38, "code": "Wistron-HW-00041-V004"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 38,
+    "code": "Wistron-HW-00041-V004"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "438de2baed2c385a97ced2b0494e3305c8a20220de7e4b172bd6d42e701a0b05",
@@ -21,8 +26,10 @@
     "sub_function": "HW",
     "test_set": "Power Supply - L10 : CRPS -LED",
     "test_name_items": "LED_behavior_from_PWM_Low_State",
-    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED status if PWM Low state\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check LED status if PWM Low state\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
     "criteria": "Check LED status if PWM Low state",
+    "bundle": "-",
+    "branch": "Common",
     "script": null,
     "attended_time": "5",
     "machine_time": "5",
@@ -41,12 +48,21 @@
     "gpt_v2": "BLOCKED / CHANGED. V2 correctly forbids guessed electrical or register stimulus, but V3.1 treats missing project stimulus/spec/tool inputs as readiness conditions rather than a permanent semantic block.",
     "v3": "No V3 Pilot record exists for this source key.",
     "v3_1": "No V3.1 record exists for this source key; the audited adjacent PWM-high variant is MANUAL ONLY with owner-defined safe stimulus.",
-    "related_revisions": ["review_round_02_functionality.md lines 968-988: historical physical/NO result for PWM Low State.", "Final Audit sequence 24 and V3.1 record 0024 for the adjacent PWM High State: missing stimulus method is readiness, while direct LED observation remains MANUAL ONLY."]
+    "related_revisions": [
+      "review_round_02_functionality.md lines 968-988: historical physical/NO result for PWM Low State.",
+      "Final Audit sequence 24 and V3.1 record 0024 for the adjacent PWM High State: missing stimulus method is readiness, while direct LED observation remains MANUAL ONLY."
+    ]
   },
   "original_test_intent": "Apply or establish the platform-defined safe PWM-low condition at the identified CRPS interface and directly verify the corresponding physical PSU LED response against the vendor mapping.",
   "original_method": "The owner supplies the exact signal/control definition and approved fixture or platform method; a qualified operator establishes that condition, confirms stimulus evidence, directly observes and records the target LED, then safely removes/restores the stimulus. The agent may synchronize evidence and collect read-only telemetry only after all parameters are approved.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_TOOL",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
   "execution_status": "NOT EXECUTED",
   "tool_result": "NOT RUN",
   "engineer_verdict": "ENGINEER OWNED; PENDING",

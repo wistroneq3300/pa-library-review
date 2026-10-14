@@ -1,10 +1,15 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 225,
   "library_sequence": 27,
   "source_key": "Functionality|28|Wistron-HW-00031-V002",
   "case_variant_id": "9e692eb73330fbbf",
-  "source_ref": {"sheet": "Functionality", "source_row": 28, "code": "Wistron-HW-00031-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 28,
+    "code": "Wistron-HW-00031-V002"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "937dccc014f92e32c385ddfc04ae5c821a5486c62541029c5ced00a083e71842",
@@ -21,8 +26,10 @@
     "sub_function": "HW",
     "test_set": "Mechanical -Cooling",
     "test_name_items": "Liquid Level Scale Check",
-    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    1. Power on CDU\n2. Check the level\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Power on CDU\n2. Check the level\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
     "criteria": "1. The status should be Okay and could not low level",
+    "bundle": "-",
+    "branch": "Common",
     "script": null,
     "attended_time": "10",
     "machine_time": "60",
@@ -41,12 +48,19 @@
     "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds safe CDU power-on, physical indicator criteria, preserved telemetry and a prohibition on replacing the scale with an unverified remote sensor.",
     "v3": "No V3 Pilot record exists for this source key.",
     "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 716-739: historical physical/NO review for Liquid Level Scale Check."]
+    "related_revisions": [
+      "review_round_02_functionality.md lines 716-739: historical physical/NO review for Liquid Level Scale Check."
+    ]
   },
   "original_test_intent": "Power on the identified CDU under the approved procedure and visually verify that its physical reservoir level indicator reports an acceptable state and is not at the platform-defined low-level boundary during the source-defined 60-minute machine interval.",
   "original_method": "A qualified cooling operator checks the loop and reservoir before start, powers on the CDU using the approved control, directly reads and photographs the physical level scale/status, observes the specified interval, and records any low-level or cooling abnormality. The agent may collect correlated read-only telemetry but cannot certify the visual scale.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
   "execution_status": "NOT EXECUTED",
   "tool_result": "NOT RUN",
   "engineer_verdict": "ENGINEER OWNED; PENDING",

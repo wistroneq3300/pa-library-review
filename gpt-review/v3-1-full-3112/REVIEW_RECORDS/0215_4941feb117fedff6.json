@@ -1,10 +1,15 @@
+
 {
   "schema_version": "v3-1-full-review-record-1.0",
   "review_sequence": 215,
   "library_sequence": 16,
   "source_key": "Functionality|17|Wistron-HW-00016-V002",
   "case_variant_id": "4941feb117fedff6",
-  "source_ref": {"sheet": "Functionality", "source_row": 17, "code": "Wistron-HW-00016-V002"},
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 17,
+    "code": "Wistron-HW-00016-V002"
+  },
   "source_integrity": {
     "exact_xlsx_row_read": true,
     "original_row_sha256": "c6442c282868474b4946c0b842a2ba7307da7be38537e8f2636bbec35381c287",
@@ -21,8 +26,10 @@
     "sub_function": "HW",
     "test_set": "Mechanical -Cable",
     "test_name_items": "PCIe Routing",
-    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
     "criteria": "All components should be seated properly",
+    "bundle": "-",
+    "branch": "Common",
     "script": null,
     "attended_time": "10",
     "machine_time": "0",
@@ -41,12 +48,19 @@
     "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds endpoint mapping, bend/clearance/strain inspection, preserved logs and post-cycle PCIe evidence.",
     "v3": "No V3 Pilot record exists for this source key.",
     "v3_1": "No V3.1 200-case record exists for this source key.",
-    "related_revisions": ["review_round_02_functionality.md lines 445-465: historical physical/NO result for PCIe Routing."]
+    "related_revisions": [
+      "review_round_02_functionality.md lines 445-465: historical physical/NO result for PCIe Routing."
+    ]
   },
   "original_test_intent": "Verify the complete physical route of each selected PCIe cable or interconnect, including correct endpoints, path, clearance, bend control, strain relief and seating, then confirm the expected PCIe endpoint remains detected without new relevant errors after the approved plug cycle.",
   "original_method": "A qualified engineer traces the cable end to end against the platform routing drawing, inspects and performs the approved connector cycle, restores the designed path and seating, and records photographs. An agent may collect mapped PCIe evidence after restoration but cannot judge the physical route.",
   "automation_classification": "MANUAL ONLY",
-  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
   "execution_status": "NOT EXECUTED",
   "tool_result": "NOT RUN",
   "engineer_verdict": "ENGINEER OWNED; PENDING",
@@ -104,8 +118,14 @@
     "Relevant kernel/BMC/PCIe error delta and management-path status",
     "Excluded route sections, safety stops and separate engineer verdict"
   ],
-  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The plug-cycle/detection Procedure and seating Criteria support the PCIe Routing objective. Missing cable-specific geometry and topology are project inputs, not contradictory Master statements."},
-  "blocked_analysis": {"is_blocked": false, "analysis": "End-to-end routing, seating and post-cycle detection are clear. The drawing, topology and limits gate execution but do not make the case permanently blocked."},
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The plug-cycle/detection Procedure and seating Criteria support the PCIe Routing objective. Missing cable-specific geometry and topology are project inputs, not contradictory Master statements."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "End-to-end routing, seating and post-cycle detection are clear. The drawing, topology and limits gate execution but do not make the case permanently blocked."
+  },
   "comparison_to_prior_reviews": {
     "deepseek": "Keep NO/manual-only; add endpoint identity, end-to-end route checkpoints, airflow/thermal interference and mapped post-cycle evidence.",
     "gpt_v2": "Agree with V2's route-specific physical criteria, preserved logs and agent-only post-action collection while making full-route coverage explicit.",
@@ -124,13 +144,26 @@
   "review_outcome": "IMPROVED",
   "second_review_outcome": "IMPROVED",
   "regression_result": {
-    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
-    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
-    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
   },
   "per_case_quality_gate": {
-    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
-    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
-    "no_hardware_pass_claimed": true, "record_complete": true
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
   }
 }
