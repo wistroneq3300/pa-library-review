@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 250,
+  "library_sequence": 55,
+  "source_key": "Functionality|56|Wistron-HW-00059-V004",
+  "case_variant_id": "457fd0318834d2c5",
+  "source_ref": {"sheet": "Functionality", "source_row": 56, "code": "Wistron-HW-00059-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "4fe51c6606a2a407a7d3512831b89d4f379dc92021daf2ed52823d8468c31a6e",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00059-V004.",
+    "next_source_row_verified": "Functionality|57|Wistron-HW-00060-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "Over current on output",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Over current on output (forcing an over-current condition on the PSU output) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator Over current on output (forcing an over-current condition on the PSU output) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It recognizes destructive physical risk but offers speculative fault mechanisms and does not define rail, current/time profile, load fixture or record fields.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly requires a bounded current profile, independent measurement/cutoff, blackbox contract and recovery.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1439-1459: historical NO classification based on physical activity."]
+  },
+  "original_test_intent": "Verify that a controlled output over-current event on a specified PSU rail is persisted in the PSU blackbox with the expected fault status and timeline.",
+  "original_method": "A qualified operator uses an isolated programmable load/fault fixture to apply the approved rail-specific current profile while independent instrumentation and cutoff protect the DUT. The raw blackbox event is then extracted and correlated with measured current, protection response and recovery.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator must configure and supervise the physical load/fault fixture and cutoff. Agent automation may collect measurements and extract/correlate blackbox data only after the complete method is approved.",
+  "required_inputs": [
+    "PSU/DUT identity, target rail and normal load state",
+    "Vendor-approved current threshold/waveform, tolerance, duration and expected OCP response",
+    "Rated programmable load or fault fixture, wiring limits, calibrated current/voltage capture and cutoff",
+    "Blackbox extraction interface/schema and expected over-current record",
+    "Qualified operator, inspection/recovery procedure and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not use an uncontrolled short, unknown load, register write, protection bypass or AC manipulation to create over-current.",
+    "Validate cable/connector/load ratings, isolation, calibration and hard cutoff before energizing.",
+    "Preserve baseline logs and protect unrelated/production loads.",
+    "Stop on uncontrolled current, voltage collapse, overheating, smoke, arcing, damage, shutdown or management loss.",
+    "No automatic reinjection, retry, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate plan/evidence configuration and collect permitted pre-event state.",
+    "After operator stimulus, retain actual current/voltage/time traces and raw blackbox export.",
+    "Correlate OCP behavior, event code/fields and recovery timeline.",
+    "Report facts without driving the load or deciding the verdict."
+  ],
+  "engineer_actions": [
+    "Approve and operate the load/fault fixture and cutoff envelope.",
+    "Inspect wiring/PSU/load and restore the safe state.",
+    "Provide inaccessible blackbox data and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The refusal is directionally safe, but the statement is not a test method and its throttle/AC alternatives are not equivalent to a measured output-current profile.",
+    "executable_command_required": false,
+    "command_recommendation": "Use only the approved programmable-load/fixture SOP and vendor blackbox extraction interface; no generic shell command can define or safely create the event.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 are retained but do not establish a current amplitude or dwell."
+  },
+  "modernized_recommendation": {
+    "status": "CONTROLLED LOAD FAULT PLAN REQUIRED",
+    "recommended_method": "Specify one rail/current/time profile below fixture and wiring limits, synchronize calibrated traces, execute once under operator control, and correlate the immutable blackbox event and protection response.",
+    "applicable_platform": "Only the named PSU, rail, wiring, load and calibrated fixture approved by engineering.",
+    "supported_version": "Record PSU/BMC firmware, fixture/load firmware, calibration and blackbox schema/tool versions.",
+    "official_reference": "Project/vendor OCP and blackbox documentation must be supplied; no current threshold or stimulus is invented.",
+    "difference_from_original_method": "Adds measurable rail/current/time and cutoff boundaries while preserving the blackbox goal.",
+    "coverage_difference": "One rail/profile verifies only that OCP record path, not all loads, rails or short-circuit behavior.",
+    "required_inputs": "Rail/current profile, fixture ratings, monitoring/cutoff, expected record and recovery.",
+    "risks_limitations": "Connector/wiring heating and energy delivery make even a brief current fault hazardous if limits or topology are wrong."
+  },
+  "project_override_considerations": "A project may approve a bounded programmable-load method and reduced current/duration if its coverage is recorded. AC removal, a software workload or an unmeasured short cannot be claimed as equivalent over-current injection.",
+  "expected_evidence": [
+    "Approved OCP profile, rail, load/fixture ratings, calibration and safety checklist",
+    "Operator record and calibrated current/voltage/time trace with cutoff/protection response",
+    "Raw blackbox export with schema/tool version and expected OCP-field comparison",
+    "Preserved platform logs plus wiring/PSU/load inspection and recovery evidence",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item identifies the over-current status whose blackbox persistence is checked. Procedure and criterion are consistent but insufficiently parameterized."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "No rail, current/time envelope, safe fixture or expected record exists. Guessing any of them is unsafe and changes coverage, so this is a genuine BLOCKED condition."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree the agent cannot inject the fault; reject speculative physical methods and the unsupported absolute blackbox-access claim.",
+    "gpt_v2": "Agree with BLOCKED and its rail/profile/fixture/measurement/recovery requirements.",
+    "v3_1_improvement": "Defines which evidence could later be automated and distinguishes OCP coverage from AC or generic fault behavior."
+  },
+  "review_improvement": "This review gives the over-current case a rail-specific measurable contract, identifies wiring/load hazards, and prevents non-equivalent AC or workload substitutions.",
+  "independent_technical_reasoning": "A physical operator cannot compensate for absent current/time and fixture limits. Those parameters determine both electrical safety and whether the blackbox code is meaningfully exercised; execution therefore remains BLOCKED until supplied.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 56, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 56 source_ref",
+    "history": "review_round_02_functionality.md lines 1439-1459", "external_sources": []
+  },
+  "no_automatic_retry": "Execute at most one approved profile. Any limit exceedance, protection anomaly or incomplete recovery requires cutoff, evidence preservation and stop; do not reinject/reset/power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

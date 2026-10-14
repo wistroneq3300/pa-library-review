@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 270,
+  "library_sequence": 77,
+  "source_key": "Functionality|78|Wistron-HW-00081-V003",
+  "case_variant_id": "7b5de77abe38ca00",
+  "source_ref": {"sheet": "Functionality", "source_row": 78, "code": "Wistron-HW-00081-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "90ede13fdc86608ff607fa66d3a1bf6739734be5ccc818f8118f5cd8f70d1655",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00081-V003.",
+    "next_source_row_verified": "Functionality|79|Wistron-HW-00082-V004 is a hash-matched Final Audit baseline; next pending is Functionality|80|Wistron-HW-00083-V004."
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "CPU Stress - AMDSST",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Run stress via SST for 8 hours:\n    $ cd /opt/AMD/SystemStress/\n    $ ./AMDSST --nogui --runtime=08:00:00 --autostart=true --servermode=false  --modules --memory.enable=true --Processor.Fpu.Enable=true --memory.memoryusage=85\n\n2. Check CPU & Memory watts via AVT:\n    $ cd opt/AMD/AVT\n    $ watch -n 1 './AVTCMD -module pmm \"get_pmdata()\"'\n\n3. Check CPU temperature via AVT:\n    $ watch -n 1 './AVTCMD -module thermal \"getDieTemp()\"'\n\nGUI interface:\n1. Run stress via SST for 8 hours.\n2. Check CPU & Memory watts via AVT.\n3. Check CPU temperature via AVT.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "System should be workable and no error message in system log after stress",
+    "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/miramar/hw/cpu/amdsst.git", "attended_time": "30", "machine_time": "500", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "stress-ng (amdsst for AMD SST - user installs)", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"amdsst -p 2>&1 | tail -30; echo ---; amdsst -s 600 2>&1 | tail -30 2>&1\"", "ai_logs_output": "return FULL stress-tool run summary (AMDSST result tail) so the user confirms the CPU survived the stress without throttling/hang; long-run duration is user-confirmed.", "risk": "RISK: long CPU stress raises core temps/power; confirm adequate cooling and user approval before the run.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It recognizes tool/approval needs but replaces the source's eight-hour FPU plus 85% memory workload with an undocumented 600-second interface and omits AVT telemetry.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 restores the source command, package provenance, telemetry and stop thresholds, but classifies package/approval gating as PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2030-2057: historical PARTIAL review based on the generated 600-second command."]
+  },
+  "original_test_intent": "Run the specified AMDSST eight-hour AMD CPU/FPU and 85%-memory workload while sampling AVT CPU/memory power and die temperature, then verify the host remains workable without unexpected system-log errors.",
+  "original_method": "Use the supplied AMDSST no-GUI command for 08:00:00 and the supplied AVTCMD PMM/thermal queries throughout the run; the listed GUI is an alternative view, not a mandatory manual acceptance step. Preserve pre/during/post host and BMC evidence.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_PACKAGE", "NEEDS_PLATFORM_CONFIRMATION", "NEEDS_PARAMETERS", "NEEDS_THRESHOLDS", "NEEDS_ACCESS", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An authorized engineer supplies the approved AMD platform/tool builds, thresholds and run approval. The core workload, telemetry capture, log collection and expected-versus-actual report can run unattended through the source CLI after that gate; GUI use is optional.",
+  "required_inputs": [
+    "AMD CPU/board/firmware/OS compatibility with exact AMDSST and AVT builds",
+    "Validated package provenance, license, paths, modules and command syntax",
+    "Approval of eight hours, FPU scope, 85% memory target and telemetry cadence",
+    "CPU/memory power, die-temperature, throttling, error and management-loss stop thresholds",
+    "Maintenance window, workload evacuation, cooling/power margin, OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not install unverified binaries or begin the high-load run before platform, parameters, limits and recovery are approved.",
+    "Do not clear logs; capture immutable baselines and deltas despite the generic source preamble.",
+    "Stop on approved thermal/power/current limits, throttling, machine check, memory/kernel/BMC error, hang, telemetry failure or management loss.",
+    "Verify AMDSST and AVT processes terminate after completion or safety stop and preserve full, untruncated outputs.",
+    "No automatic retry after a fault or incomplete recovery."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved binaries, exact source options, telemetry calls, storage and stop logic.",
+    "Execute the unchanged approved eight-hour CLI plan and continuously collect AMDSST, AVT, OS and BMC evidence.",
+    "Apply safety stops, verify process termination and assemble expected-versus-actual results.",
+    "Do not set the engineer verdict."
+  ],
+  "engineer_actions": [
+    "Supply and approve compatible AMDSST/AVT packages, limits, maintenance scope and recovery path.",
+    "Resolve the AVT path typo and validate proprietary command semantics on the target build.",
+    "Review evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not applicable: lowercase `amdsst -p/-s 600` is not shown by the source, changes eight hours to 600 seconds, drops FPU/85%-memory options, omits AVT and truncates results. Insecure password SSH is also unsuitable as a default.",
+    "executable_command_required": true,
+    "command_recommendation": "Retain the source AMDSST options after validating the exact proprietary build. Replace interactive `watch` with timestamped, bounded AVTCMD sampling under the approved cadence; verify whether the source AVT directory is `/opt/AMD/AVT` before execution.",
+    "original_parameters_and_time_preserved": "08:00:00, memory usage 85%, FPU enable, one-second example sampling, Attended Time 30 and Machine Time 500 are retained as source facts."
+  },
+  "modernized_recommendation": {
+    "status": "VALIDATE PROPRIETARY BUILD; AUTOMATE SOURCE CLI",
+    "recommended_method": "Run the exact approved AMDSST workload under a supervisor that timestamps complete output, samples AVT PMM and die temperature at the approved cadence, applies explicit stops and archives pre/post system/BMC deltas.",
+    "applicable_platform": "AMD systems explicitly supported by the supplied AMDSST/AVT release.",
+    "supported_version": "Must be recorded from the approved internal package; public compatibility is insufficient to infer it.",
+    "official_reference": "Approved internal AMDSST/AVT package documentation and project script repository; no public version claim is made.",
+    "difference_from_original_method": "Automates the provided no-GUI and telemetry path with durable timestamps and safety supervision instead of interactive watch or truncated output.",
+    "coverage_difference": "Preserves the eight-hour FPU/memory load and AVT watts/temperature coverage; GUI screenshots are unnecessary unless a project explicitly requires them.",
+    "required_inputs": "Validated proprietary builds/paths, platform support, cadence, limits, storage and recovery.",
+    "risks_limitations": "AVT readings and option names are vendor-build specific and cannot be guessed from generic AMD tooling."
+  },
+  "project_override_considerations": "A project may approve a different duration, memory percentage or module set. The agent records completion of that approved plan only and does not claim the original eight-hour/85% scope; parameter approval alone does not reduce automation capability.",
+  "expected_evidence": [
+    "Platform and AMDSST/AVT build identity, package provenance, approved parameters/limits and authorization",
+    "Full AMDSST stdout/stderr, exit status and timestamps for the approved interval",
+    "Timestamped AVT CPU/memory power and die-temperature series with gaps and stop events",
+    "Pre/post CPU, memory, kernel, system, BMC/SEL, thermal/power and management-health deltas",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item, CLI/GUI procedure and criterion consistently define AMD CPU/FPU/memory stress with power/temperature observation. The missing slash in one AVT path is a correctable path defect, not conflicting intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Tool availability, compatible versions, thresholds and approval are execution-readiness inputs. The core operation is defined and can be automated after they are supplied."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its 600-second substitute and tool syntax; it materially reduces duration, workload and telemetry coverage.",
+    "gpt_v2": "Retain V2's source command, provenance and safety requirements but reclassify PARTIAL to FULLY AUTOMATABLE because human input/approval is a gate, not a core manual activity.",
+    "v3_1_improvement": "Separates automation capability from readiness and verdict ownership while preserving the source workload exactly."
+  },
+  "review_improvement": "This review restores the full eight-hour FPU/85%-memory workload and AVT telemetry, identifies the relative-path defect, and correctly treats approval/package supply as readiness rather than partial automation.",
+  "independent_technical_reasoning": "Every core step has a CLI form, including stress launch and power/temperature acquisition. No physical preparation or mandatory human observation appears in the acceptance path, so with supplied packages and thresholds the agent can execute and collect evidence end-to-end; engineer verdict ownership does not change that capability.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 78, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 78 source_ref",
+    "history": "review_round_02_functionality.md lines 2030-2057", "external_sources": []
+  },
+  "no_automatic_retry": "The approved run executes once. Any limit breach, tool failure, hang or evidence gap is retained and stops the run; no silent restart or shortened replacement run is allowed.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

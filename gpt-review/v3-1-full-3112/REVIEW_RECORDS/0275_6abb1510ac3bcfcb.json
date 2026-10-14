@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 275,
+  "library_sequence": 83,
+  "source_key": "Functionality|84|Wistron-HW-00087-V002",
+  "case_variant_id": "6abb1510ac3bcfcb",
+  "source_ref": {"sheet": "Functionality", "source_row": 84, "code": "Wistron-HW-00087-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "4b9f59012a4022544330819fd14a0550bc4dd1f0f16056d5c42c7c5eaf25f13c",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00087-V002.",
+    "next_source_row_verified": "Functionality|85|Wistron-HW-00088-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Memory", "test_name_items": "Power on with patial memory(1DPC)",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check memory information with patial memory.\nDownload and install the latest dmidecode tool from\n   Linux: http://download.savannah.gnu.org/releases/dmidecode/\nExecute \"dmidecode t memory\" in Linux terminal\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. System can power on normally with patial memory.\n2. Memory information should be correct in the slot.",
+    "script": null, "attended_time": "30", "machine_time": "30", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "dmidecode + procps (free)", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t memory 2>&1; echo ---; free -m 2>&1\"", "ai_logs_output": "return FULL `dmidecode -t memory` + `free -m` output after powering on with full memory so user confirms the SUT powers on normally and memory info in the slot is correct. No RISK (read-only).", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES. Its read-only collection is useful, but its description wrongly says full memory and ignores the required physical 1DPC population and power-on.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 restores the operator-defined 1DPC map, physical DIMM action, power transition and restoration plan, but labels the whole case PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2195-2218: historical YES review that did not recognize the physical partial-memory prerequisite."]
+  },
+  "original_test_intent": "Configure the platform in its approved partial-memory one-DIMM-per-channel state, verify that it powers on and boots normally, and confirm that each populated/empty slot and resulting OS capacity match the 1DPC population plan.",
+  "original_method": "A qualified operator powers down, installs/removes DIMMs to create the exact 1DPC map, powers on and observes POST/boot; read-only DMI and OS capacity evidence then verifies the resulting slot population before the approved configuration is restored.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Creating 1DPC requires physical DIMM handling, chassis access and a controlled power transition; successful POST/power-on is part of acceptance. Automated DMI/free collection cannot complete those core activities.",
+  "required_inputs": [
+    "CPU/board channel topology and exact approved 1DPC slot/population map",
+    "DIMM part, capacity, type, speed, rank, ECC and expected OS-visible capacity",
+    "Vendor DIMM service/population procedure, original-population restore plan and expected POST behavior",
+    "Qualified operator, ESD controls, maintenance window, OOB recovery and one-user approval",
+    "Validated dmidecode/procps packages and read-only privilege"
+  ],
+  "safety_requirements": [
+    "The agent must not open the chassis, change DIMMs, choose a 1DPC arrangement or power-cycle the SUT.",
+    "Confirm shutdown, discharge, ESD controls, DIMM compatibility and channel rules before handling memory.",
+    "Do not execute the malformed source command, install an unverified latest tool or clear logs.",
+    "Stop on POST/boot failure, ECC/training/thermal/power fault, wrong slot map or loss of OOB access.",
+    "No automatic retry, DIMM reseat, memory retraining change or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare the expected 1DPC channel/slot/capacity matrix and pre/post evidence plan.",
+    "After the operator confirms the approved state and boot, collect full DMI, meminfo/free, BIOS/BMC exports where available and health logs.",
+    "Compare every slot and capacity with the partial-memory plan and assemble restoration evidence.",
+    "Do not manipulate hardware/power or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Define, approve and physically create the exact 1DPC population under ESD-safe service procedures.",
+    "Control power and observe POST/boot, then restore and verify the approved original population.",
+    "Review the comparison and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The corrected DMI/free commands are valid supporting collection, but do not create or prove the physical 1DPC state. The log description's 'full memory' contradicts this case and must not be used; transport/package/privilege require approval.",
+    "executable_command_required": false,
+    "command_recommendation": "After operator confirmation, retain complete approved `dmidecode -t memory`, `/proc/meminfo` and `free -b` outputs with slot-map reconciliation; do not use the malformed `dmidecode t memory` text.",
+    "original_parameters_and_time_preserved": "1DPC/partial-memory intent and source times 30/30 are preserved; no channel layout is guessed."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN PHYSICAL POPULATION TEST WITH AUTOMATED EVIDENCE",
+    "recommended_method": "Use an owner-approved channel worksheet to record original and 1DPC populations, operator changes, POST/training result and per-slot DMI/firmware/OS evidence, followed by documented restoration.",
+    "applicable_platform": "Only the identified CPU memory-controller, board topology and qualified DIMMs.",
+    "supported_version": "Record CPU, board, BIOS/BMC, OS/SMBIOS and inventory-tool versions.",
+    "official_reference": "Project-approved memory population/service guide; the source does not define a universal 1DPC slot pattern.",
+    "difference_from_original_method": "Corrects command syntax, adds authoritative channel mapping and restoration evidence without substituting software for the physical population.",
+    "coverage_difference": "Automated inventory increases traceability but does not replace physical 1DPC setup or power-on observation.",
+    "required_inputs": "Channel/slot map, DIMM specification, service and restore plans, operator and approved tools.",
+    "risks_limitations": "Firmware may retrain or remap memory, and a booting system can still have missing channels or degraded speed."
+  },
+  "project_override_considerations": "A project defines the exact 1DPC population and may use its approved DIMM count/slots. Completion is claimed only for that plan; supplying the map does not change MANUAL ONLY because hardware and power actions remain central.",
+  "expected_evidence": [
+    "CPU/board/channel/slot identity and approved original/1DPC population matrices",
+    "Timestamped operator record/photos of physical DIMM changes and restoration",
+    "POST/boot/training outcome plus full DMI, meminfo/free and applicable BIOS/BMC evidence",
+    "Per-slot/capacity comparison and ECC/kernel/SEL/BMC/thermal/power health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The source item, during-test statement and criteria consistently require partial 1DPC memory. The malformed command is a syntax defect, while 'full memory' appears only in the DeepSeek augmentation and is rejected rather than treated as master-source conflict."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The 1DPC map and operator plan are project inputs. The intended physical population and power-on test are clear enough for MANUAL ONLY classification."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES and its full-memory wording; read-only outputs cover only the post-boot evidence subset.",
+    "gpt_v2": "Retain V2's operator/population/restoration controls but reclassify PARTIAL to MANUAL ONLY because physical memory setup and power-on are core acceptance steps.",
+    "v3_1_improvement": "Separates manual execution, automated evidence, project readiness and the engineer verdict without mislabeling missing parameters as BLOCKED."
+  },
+  "review_improvement": "This review restores the actual 1DPC state lost in the generated review, requires channel-level rather than merely slot-level validation, and closes the loop with original-population restoration.",
+  "independent_technical_reasoning": "One DIMM per channel is topology-specific and cannot be inferred from the phrase partial memory. The defining action is physical population followed by POST/memory training; DMI/free are downstream observations. Therefore the whole case is MANUAL ONLY even though evidence comparison is readily automated.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 84, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 84 source_ref",
+    "history": "review_round_02_functionality.md lines 2195-2218", "external_sources": []
+  },
+  "no_automatic_retry": "Any POST, training, slot, capacity or health anomaly requires stop and preserved first evidence; do not reseat DIMMs, alter training settings or cycle power automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

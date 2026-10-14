@@ -1,0 +1,119 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 239,
+  "library_sequence": 44,
+  "source_key": "Functionality|45|Wistron-HW-00048-V004",
+  "case_variant_id": "4571d57016994527",
+  "source_ref": {"sheet": "Functionality", "source_row": 45, "code": "Wistron-HW-00048-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "9adacd0d9bb1fd3f2c4fa4af7fc47aaa6811791c21cfcc4bf469561ea52ab3d3",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00048-V004.",
+    "next_source_row_verified": "Functionality|46|Wistron-HW-00049-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Packet Error Checking",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    The PSU shall support packet error checking to support error checking and handling.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "The PSU shall support packet error checking to support error checking and handling.",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power'; echo ---pec_packet_error_checking---; dmesg | grep -iE 'PEC|SMBus|i2c.*(error|fault|pec|crc)' | tail -20\"",
+      "ai_logs_output": "first enumerate the hwmon/PMBus device names on the DUT and return any dmesg SMBus/PEC errors, to confirm the PMBus master is present; the actual a corrupted-PEC packet on the PMBus to confirm the PSU/controller flags a packet error requires a PEC-capable PMBus master + a controlled error injection, which the operator must run - agent reports the PMBus enumeration + existing PEC/SMBus errors only (this is the Packet Error Checking case).",
+      "risk": "RISK: requires a PEC-capable PMBus master and controlled SMBus error-injection hardware; the fault injection (Packet Error Checking) is state-changing and needs the operator. Agent only enumerates PMBus + reads existing PEC/SMBus errors.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It correctly separates passive evidence from packet corruption, but its SSH/log command cannot prove a transmitted corrupted packet or the resulting handler behavior.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds packet/address specification, a PEC-capable injector, expected response and recovery controls.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1139-1162: historical PARTIAL review for Packet Error Checking."]
+  },
+  "original_test_intent": "Verify that the identified CRPS PSU/controller detects and handles a deliberately corrupted PEC-protected transaction according to the applicable packet-error requirements, then returns the bus and platform to the defined healthy state.",
+  "original_method": "An engineer configures a target-locked PEC-capable master/injector and approved corrupted-packet profile. The operator/fixture sends the single controlled transaction, while tools capture the exact packet, response/error indication, bus state and recovery. The agent collects and compares evidence but does not invent packet fields or independently inject.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer maps the physical bus and target, installs and validates the master/injector, approves the exact packet corruption and supervises recovery. Automated capture and analysis follow only after this setup.",
+  "required_inputs": [
+    "PSU/controller/bus/address identity and packet command/format",
+    "PEC calculation and exact intentional corruption profile",
+    "Expected NACK/error/status/alert/timeout and recovery behavior",
+    "Approved PEC-capable master/injector, isolation and versions",
+    "PSU output, BMC/host impact limits and recovery procedure",
+    "Engineer setup and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not send malformed traffic through a guessed bus/address, generic i2c write or undocumented command.",
+    "Do not inject until the single packet, corruption point, timing, isolation and recovery are approved.",
+    "Do not infer packet-error handling from driver presence or historical log strings.",
+    "Stop on bus lockup, unexpected PSU output/fault/alert, heat or BMC/host impact.",
+    "Preserve logs and never automatically resend, scan, reset or power-cycle."
+  ],
+  "agent_execution_scope": [
+    "Collect approved target identity and clean baseline evidence.",
+    "Validate packet/injector metadata and the one-transaction plan.",
+    "After operator authorization, collect raw packet, response, PSU status and kernel/BMC/SEL deltas.",
+    "Compare handling/recovery with the supplied rule without issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Supply and approve the packet, corruption, target and response contract.",
+    "Install/validate the injector and execute the controlled packet action.",
+    "Handle any bus/power recovery and prevent unintended repeats.",
+    "Review evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The command only searches passive context. It also exposes password/host-key weaknesses, may inspect only one hwmon name and truncates logs; it cannot establish injection or packet response.",
+    "executable_command_required": true,
+    "command_recommendation": "Use approved authenticated transport for target-specific read-only collection and retain the fixture's raw packet trace. Preserve the original snippet as provenance; do not use it as proof or invent a generic corrupted-packet command.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. Target packet/address, corruption, expected response and recovery are missing."
+  },
+  "modernized_recommendation": {
+    "status": "SINGLE CONTROLLED CORRUPTED-PACKET TRACE",
+    "recommended_method": "Record a known valid reference transaction and one approved intentionally corrupted PEC packet with raw bytes/timestamps, controller/PSU response and recovery evidence.",
+    "applicable_platform": "Only the mapped PSU/controller/bus and approved injector.",
+    "supported_version": "Record PSU/BMC firmware, packet specification, injector and collector versions.",
+    "official_reference": "Matching vendor/platform packet-error handling documentation; no generic packet or response is asserted.",
+    "difference_from_original_method": "Adds direct packet-level evidence beyond passive log searching while retaining operator-controlled setup.",
+    "coverage_difference": "A passive error string is not packet-error coverage; the exact corrupted transaction and handling must be observed.",
+    "required_inputs": "Packet definition, target, corruption, expected response, injector and recovery method.",
+    "risks_limitations": "Controller offload or filtering may prevent proof that the intended malformed packet reached the validation point."
+  },
+  "project_override_considerations": "The project may select a vendor injector and bounded packet profile. Record actual target and corruption; completing PEC capability enumeration does not complete this distinct malformed-packet handling case.",
+  "expected_evidence": [
+    "PSU/bus/address and packet/PEC specification",
+    "Injector/collector versions and approved packet profile",
+    "Raw valid reference and corrupted packet plus response trace",
+    "Pre/post PSU fault/output, kernel, BMC/SEL and host recovery evidence",
+    "Safety stops, coverage limits and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Procedure and Criteria repeat the same packet-error support requirement. Missing packet and response details are project inputs, not contradictions."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The corrupted-packet handling intent is clear. Missing injector/profile inputs gate execution but do not permanently block the library case."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep PARTIAL but explicitly reject passive logs as functional proof and document its command defects.",
+    "gpt_v2": "Agree with external injector, exact packet and recovery gates; retain PARTIAL and distinguish this row from generic PEC support.",
+    "v3_1_improvement": "Defines packet-level evidence while separating fixture setup, automation, readiness and engineer verdict."
+  },
+  "review_improvement": "This record distinguishes a deliberately corrupted packet from the preceding general PEC-support case and prevents reuse of passive enumeration/log evidence as proof of packet-error handling.",
+  "independent_technical_reasoning": "The physical bus/injector setup and state-changing packet action need engineering control, while deterministic capture and comparison can be automated, so PARTIAL is correct. The source intent is clear enough to review; exact packet parameters are execution inputs.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 45, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 45 source_ref",
+    "history": "review_round_02_functionality.md lines 1139-1162", "external_sources": []
+  },
+  "no_automatic_retry": "On bus lockup, unexpected response/fault/output or management impact, preserve the trace and raw logs and stop. Recover only by the approved procedure; do not resend, try another address/packet, reset or power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

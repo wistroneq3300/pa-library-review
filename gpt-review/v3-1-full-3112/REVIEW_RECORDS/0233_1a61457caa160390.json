@@ -1,0 +1,122 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 233,
+  "library_sequence": 38,
+  "source_key": "Functionality|39|Wistron-HW-00042-V004",
+  "case_variant_id": "1a61457caa160390",
+  "source_ref": {"sheet": "Functionality", "source_row": 39, "code": "Wistron-HW-00042-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "5965d8a988de4b4c0f00e3aa4cfdfe7433234f1220305ee0e6d5f64fe79e1434",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00042-V004.",
+    "next_source_row_verified": "Functionality|40|Wistron-HW-00043-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -LED", "test_name_items": "Color",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED Color match SPEC\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED Color match SPEC", "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED color (amber/green/red) per fault state on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED color (amber/green/red) per fault state and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. Direct physical color observation is correct, but amber/green/red are examples rather than a supplied mapping and cannot be assumed for every PSU.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 requires the specification revision, selected PSU state, color/blink mapping and controlled observation conditions.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 992-1012: historical physical/NO review for Color."]
+  },
+  "original_test_intent": "Verify by direct observation that the identified CRPS PSU LED color and any accompanying blink mode match the applicable vendor/platform specification for the selected operating or fault state.",
+  "original_method": "A qualified operator identifies the PSU and approved state, observes the physical bezel under controlled lighting, records color and temporal mode, and captures identity-linked evidence. Read-only telemetry establishes state context but cannot prove emitted color.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The observer confirms the target module, views the LED directly, distinguishes the expected color from adjacent indicators and mixed/blinking states, notes ambiguity, and captures the bezel with sufficient chassis context.",
+  "required_inputs": [
+    "CRPS slot/serial and indicator location",
+    "Applicable LED color/blink specification and revision",
+    "Selected operating or fault state and expected color/mode",
+    "Lighting, camera white-balance/exposure and observation requirements",
+    "Read-only PSU/BMC state used for correlation",
+    "Qualified observer and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not manipulate, reseat, unlatch, remove or power-cycle the PSU to change color; this row authorizes observation only.",
+    "Do not infer physical color from telemetry or accept a low-quality image, an adjacent LED or a generic vendor color assumption.",
+    "Stop for heat, smoke, arcing, abnormal noise, unexpected power change or a color/mode indicating an unapproved fault.",
+    "Preserve PSU/BMC/SEL and host logs instead of clearing them.",
+    "Record ambiguity rather than repeating the observation through an unapproved state change."
+  ],
+  "agent_execution_scope": [
+    "Collect approved read-only PSU identity, power and health context.",
+    "Prepare the state-to-color/mode comparison matrix from the supplied specification.",
+    "Assist review of operator media while disclosing camera/lighting limitations.",
+    "Collect event deltas and report differences without issuing the visual or formal verdict."
+  ],
+  "engineer_actions": [
+    "Approve the target state and applicable color mapping.",
+    "Directly observe and capture the physical indicator under suitable conditions.",
+    "Resolve mixed, ambiguous or telemetry-inconsistent indications.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The not-runnable boundary is correct; the listed colors must not be treated as the platform's authoritative mapping without its specification.",
+    "executable_command_required": true,
+    "command_recommendation": "Use project-approved read-only PSU/BMC queries only to identify the module and state. No command proves optical color, and no state-changing command is implied.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. No specification revision, selected state, color tolerance, capture method or trigger is supplied."
+  },
+  "modernized_recommendation": {
+    "status": "SPEC-MAPPED COLOR EVIDENCE",
+    "recommended_method": "Use an identity-linked photo/video with controlled exposure and a neutral reference, record both color and blink mode, and correlate it to the exact state and specification revision.",
+    "applicable_platform": "The selected PSU/chassis LED implementation.",
+    "supported_version": "Record PSU/chassis/firmware and LED-spec revisions plus capture metadata.",
+    "official_reference": "Applicable vendor/platform LED color table; no universal amber/green/red meaning is asserted.",
+    "difference_from_original_method": "Adds state, revision and evidence-quality traceability while retaining direct observation.",
+    "coverage_difference": "Improves repeatability but does not replace human confirmation; camera color is supporting evidence.",
+    "required_inputs": "Target/state, color mapping, observation and capture requirements.",
+    "risks_limitations": "Ambient light, glare, white balance, saturation and color-vision differences can distort the result."
+  },
+  "project_override_considerations": "The project selects the PSU state(s) and specification revision. Report each tested mapping and exclusions; a single normal-state color does not cover all fault colors or blink modes.",
+  "expected_evidence": [
+    "PSU identity, selected state and LED-spec revision",
+    "Expected versus observed color and blink-mode matrix",
+    "Timestamped identity-linked media with observation-condition notes",
+    "Raw correlated PSU/BMC status and preserved event delta",
+    "Ambiguity, coverage exclusions and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criterion consistently require a SPEC color comparison. The absent SPEC and state are project inputs, not contradictory facts."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The visual comparison is clear. Execution waits for the applicable color map and state, so readiness is conditional rather than permanently BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep manual-only, but treat amber/green/red as non-authoritative examples until the exact mapping is supplied.",
+    "gpt_v2": "Agree with state and spec revision requirements; strengthen camera limitations and per-state coverage.",
+    "v3_1_improvement": "Separates direct color acceptance, contextual telemetry, project inputs and engineer verdict."
+  },
+  "review_improvement": "This review prevents generic color assumptions and requires the observed light to be tied to a named PSU state and document revision. It also treats camera color as evidence support rather than an automatic verdict.",
+  "independent_technical_reasoning": "Emitted color and blink mode are physical signals, so the complete case is MANUAL ONLY. Telemetry can identify the state but not optical output. A missing platform color table affects readiness and coverage, not the intelligibility of the case or its capability class.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 39, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 39 source_ref",
+    "history": "review_round_02_functionality.md lines 992-1012", "external_sources": []
+  },
+  "no_automatic_retry": "If color/mode is ambiguous or conflicts with the approved state, preserve media and telemetry and stop. Do not change power or fault state, clear faults, reseat/unlatch the PSU, reboot or power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 240,
+  "library_sequence": 45,
+  "source_key": "Functionality|46|Wistron-HW-00049-V004",
+  "case_variant_id": "55ca0b4fc3e0bb86",
+  "source_ref": {"sheet": "Functionality", "source_row": 46, "code": "Wistron-HW-00049-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "7c89769469c8d1ed9ca1a4e04614c182bac0719261691b52d2a6a8337472010d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00049-V004.",
+    "next_source_row_verified": "Functionality|47|Wistron-HW-00050-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Capability and Inventory Reporting  CAPABILITY",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Defines the power supplies PEC support, bus speed, and support of SMBAlert\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Defines the power supplies PEC support, bus speed, and support of SMBAlert",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools ipmitool",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power' || echo no_pmbus_dev; echo ---i2c_buses---; sudo i2cdetect -l 2>/dev/null | grep -iE 'smbus|i2c' || echo no_i2c_tools; echo ---reg_CAPABILITY---; sudo i2cget -f -y ${PMBUS_BUS:?set PSU i2c bus (from i2cdetect above)} ${PMBUS_ADDR:?set PSU i2c addr (7-bit)} 0x19 2>&1\"",
+      "ai_logs_output": "enumerate the hwmon PMBus + i2c buses on the DUT so the CAPABILITY register (0x0x19, PEC support / bus speed / SMBAlert capability) can be read; then, once the user supplies the PSU i2c bus+address, read the register with i2cget/i2ctransfer and return the FULL value. Agent returns the PMBus/i2c enumeration + the register value once bus/addr are given.",
+      "risk": "RISK: requires the PSU to be PMBus-connected and the exact PSU i2c bus/address from the board schematic; reading a raw PMBus register needs i2c-tools on the DUT. State: read-only, but target bus/address must be verified against the board before using i2cget.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It recognizes target/package inputs but hard-codes a proposed address, uses forced raw access and conflates bus enumeration with proof of the three capability fields.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 correctly rejects unsourced 0x19, -f and guessed decode. Under V3.1, those inputs affect readiness, not core automation capability.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1166-1190: historical PARTIAL review and false-completion warning for CAPABILITY."]
+  },
+  "original_test_intent": "Read the selected CRPS PSU capability field through the approved PMBus path, decode PEC support, bus-speed capability and SMBAlert support using the matching specification, and report complete raw and decoded evidence.",
+  "original_method": "After the project supplies and approves PSU identity, bus/address, register/transaction definition and bit layout, the agent performs a read-only query, records raw bytes and exit status, decodes the three capability fields, repeats the read for consistency and collects management/event deltas.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "No physical acceptance action is inherent to this read-only case. A user or engineer supplies the authoritative bus/register/decode map and approves the resolved query; that confirmation does not make the automated core PARTIAL.",
+  "required_inputs": [
+    "PSU model/serial/firmware and board bus/address ownership map",
+    "Authoritative capability command/register, transaction width, byte order and PEC requirements",
+    "Bit definitions and expected PEC, bus-speed and SMBAlert values",
+    "Approved read-only PMBus/vendor tool and version; ipmitool only if used for BMC corroboration",
+    "Non-forced access path, credentials and bus recovery procedure",
+    "One-user approval for the resolved fixed plan"
+  ],
+  "safety_requirements": [
+    "Do not guess bus, address, register, bit layout or response width and do not treat the DeepSeek 0x19 proposal as source truth.",
+    "Do not use forced access, blind scans, writes, resets, block transactions or PEC-mode changes on a BMC-owned bus.",
+    "Use authenticated host verification and do not expose passwords on command lines.",
+    "Stop on target mismatch, invalid response length, bus error or PSU/BMC/host behavior change.",
+    "Preserve existing logs and do not retry with alternate parameters automatically."
+  ],
+  "agent_execution_scope": [
+    "Validate supplied PSU/bus/register/decode identity and show the resolved read-only plan for approval.",
+    "Install/check approved packages and execute the fixed read without bypassing bus ownership.",
+    "Retain raw response, tool version/exit status and repeat-read result; decode all three fields.",
+    "Compare with project expectations and assemble evidence while leaving the formal verdict to the engineer."
+  ],
+  "engineer_actions": [
+    "Provide/approve the authoritative target, command/register and bit mapping.",
+    "Approve the read-only access and recovery plan.",
+    "Resolve vendor-specific or ambiguous decoded values.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Unsafe/incomplete as written: sshpass and disabled host-key checking weaken credentials/trust; `head -n 1` may miss the PSU; `-f` bypasses ownership; 0x19, byte width and decode are not source facts; ipmitool is listed but unused; and `0x0x19` in the log description is malformed.",
+    "executable_command_required": true,
+    "command_recommendation": "Resolve a vendor/board-approved read-only transaction first, use authenticated transport and non-forced access, and store full raw output before decoding. Preserve the original command as provenance only.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The three named capability fields are preserved; bus/register/encoding/expected values remain project inputs."
+  },
+  "modernized_recommendation": {
+    "status": "TARGET-LOCKED READ-ONLY CAPABILITY DECODE",
+    "recommended_method": "Use the approved PMBus/vendor reader with explicit device identity and transaction metadata, capture the full raw field twice, decode PEC/bus-speed/SMBAlert bits from the supplied revision and correlate read-only health evidence.",
+    "applicable_platform": "Only the mapped PSU, controller/bus and matching capability specification.",
+    "supported_version": "Record PSU/BMC firmware, command specification and reader versions.",
+    "official_reference": "Exact project/vendor capability definition and board map are required; no generic address or bit layout is asserted.",
+    "difference_from_original_method": "Removes forced/guessed access and false completion while preserving the read-only register intent.",
+    "coverage_difference": "Complete coverage needs all three decoded fields and raw provenance; enumeration alone covers none of them.",
+    "required_inputs": "Identity/map, transaction/decode definition, tool and expected values.",
+    "risks_limitations": "Kernel/BMC ownership may prohibit direct host I2C reads; use the approved management path when so designed."
+  },
+  "project_override_considerations": "The project may choose a vendor tool or BMC-mediated read instead of host i2c-tools. Record exact target, command and decoded fields. Providing packages, parameters, expectations or approval does not reduce this read-only core from FULLY AUTOMATABLE.",
+  "expected_evidence": [
+    "PSU identity/firmware and authoritative bus/address/register/bit-map provenance",
+    "Reader/tool version, exact resolved transaction and exit status",
+    "Full raw response and repeat-read consistency",
+    "Decoded PEC, bus-speed and SMBAlert values with expected/actual comparison",
+    "Pre/post PSU/BMC health/event delta and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and Criteria consistently name the same three capability outputs. Missing access/decode parameters are project inputs, not contradictory source facts."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read/decode purpose is clear. Missing package, mapping and values gate execution but do not block review or change the automatable capability."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its hard-coded/forced command and false-completion risk; retain the intended raw capability read.",
+    "gpt_v2": "Agree with target/decode validation and safety gates, but reclassify PARTIAL to FULLY AUTOMATABLE because no physical/manual core remains after inputs are supplied.",
+    "v3_1_improvement": "Applies the explicit rule that package/spec/expected/approval dependencies do not by themselves make an automatable case PARTIAL."
+  },
+  "review_improvement": "This review corrects both capability classification and command safety. It preserves full raw provenance and the three-field scope while preventing guessed registers, forced access and enumeration-only false completion.",
+  "independent_technical_reasoning": "Once the approved target and decode are provided, every core action—read, repeat, decode, compare and collect evidence—is automatable. Human confirmation supplies authority and semantics, not a physical test step. Therefore FULLY AUTOMATABLE is the correct classification, with readiness still conditional.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 46, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 46 source_ref",
+    "history": "review_round_02_functionality.md lines 1166-1190", "external_sources": []
+  },
+  "no_automatic_retry": "On target mismatch, invalid length, bus error or management impact, preserve raw output and stop. Do not force access, guess another register/address, rescan, reset or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

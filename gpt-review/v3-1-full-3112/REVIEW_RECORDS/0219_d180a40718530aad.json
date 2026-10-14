@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 219,
+  "library_sequence": 20,
+  "source_key": "Functionality|21|Wistron-HW-00020-V002",
+  "case_variant_id": "d180a40718530aad",
+  "source_ref": {"sheet": "Functionality", "source_row": 21, "code": "Wistron-HW-00020-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "eafd78fbb3d0e13b835126a0b280beb3b15b762dba74fad5ec3e946c553ee5a8",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00020-V002.",
+    "next_source_row_verified": "Functionality|22|Wistron-HW-00021-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cable",
+    "test_name_items": "Power Stability",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: Power Stability is a physical/mechanical check of cable/component connections and seating (easy plug/unplug, device still detected after plug cycle, no bent pin / routing issue) that requires a person at the machine - agent cannot manipulate cables over SSH.",
+      "ai_logs_output": "operator checks Power Stability connections/seating + photos + plug-cycle detect status; agent cannot produce this physical evidence.",
+      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly reserves physical handling for an operator but treats the title as generic connector work and does not resolve whether electrical stability is actually specified.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly narrows the source to physical seating and one approved plug cycle, rejects invented voltage or duration criteria, and preserves supporting power and event evidence.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 541-561: historical physical/NO result for Power Stability."]
+  },
+  "original_test_intent": "Verify the physical seating and serviceability of the selected power-related component or connection and confirm that the expected device remains detectable without a new error after the single approved plug cycle. Despite the item title, the source defines no voltage tolerance, load profile, observation interval, loop count, or electrical-stability threshold.",
+  "original_method": "A qualified engineer identifies the exact power assembly, safely isolates it as required, checks insertion/removal and seating, performs the one source-directed plug cycle, restores it, and records photographs and device/error evidence. The agent may prepare and collect approved read-only evidence but cannot perform or certify the physical operation.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer locates and identifies the applicable power assembly, confirms isolation/discharge and service authorization, evaluates contacts, keying, retention and seating, performs the authorized disconnect/reconnect, and observes any physical abnormality. Remote telemetry cannot establish insertion quality, contact condition or safe manipulation.",
+  "required_inputs": [
+    "Exact power component, cable or connector identity and location",
+    "Source-to-load or PSU-domain map for the affected assembly",
+    "Approved isolation, discharge and reconnection procedure",
+    "Expected device identity and approved post-cycle detection method",
+    "Project-defined physical seating and evidence checklist",
+    "Qualified operator and one-user approval for the unchanged plan"
+  ],
+  "safety_requirements": [
+    "Do not unplug or reconnect the assembly while energized unless the exact interface and operation are explicitly approved for energized service.",
+    "Verify the correct power domain, connector orientation, keying and discharge state before contact; never substitute a BMC power-off, software reboot or unrelated PDU action for the required physical cycle.",
+    "Stop on heat, arcing, odor, damaged insulation or contacts, abnormal resistance, forced insertion, unexpected shutdown, abnormal PSU status, missing device or loss of BMC/host access.",
+    "Preserve existing dmesg, syslog and SEL records; use a timestamped baseline and delta instead of clearing evidence.",
+    "Do not repeat the plug cycle, power-cycle, reboot or apply stress automatically after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Prepare the approved component, power-domain and expected-device checklist.",
+    "Collect read-only pre-action BMC/PSU, host reachability, device enumeration and event evidence with timestamps.",
+    "After the engineer confirms safe physical completion and restoration, collect the corresponding post-action evidence and raw log delta.",
+    "Compare expected and actual observations and flag discrepancies without issuing the formal test verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact assembly, isolation method and single physical plug-cycle plan.",
+    "Perform and document the physical inspection, disconnect/reconnect and final seating.",
+    "Authorize restoration and interpret any electrical or mechanical abnormality.",
+    "Apply the project criterion and issue PASS, FAIL or BLOCKED."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The not-runnable marker correctly rejects remote substitution for the physical core. Its generic mention of bent pins and routing is only relevant when observed on the selected power assembly; it is not a separate source requirement.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only project-approved read-only BMC/PSU, device-enumeration and event collectors mapped to the selected power domain. No generic command proves contact seating or electrical stability, and no control command is authorized by this review.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 remain unchanged. The source specifies one plug cycle and supplies no voltage, load, duration, loop, tool, command or retry parameter."
+  },
+  "modernized_recommendation": {
+    "status": "PHYSICAL POWER-ASSEMBLY CHECK WITH MAPPED TELEMETRY",
+    "recommended_method": "Pair a component-specific isolation and seating checklist with before/after photographs and mapped read-only PSU, device and event evidence. If a project intends electrical stability testing, define it as an approved override with explicit rails, load, sampling interval, limits and duration rather than treating the title as sufficient authority.",
+    "applicable_platform": "The selected chassis, power architecture, connector and attached device.",
+    "supported_version": "Record chassis/assembly revision, applicable service procedure, BMC/firmware and evidence-tool versions.",
+    "official_reference": "Applicable platform power-assembly and service documentation; no universal electrical threshold or hot-service capability is asserted.",
+    "difference_from_original_method": "Makes the physical target and post-cycle evidence correlation explicit without converting the source into an unstated electrical soak test.",
+    "coverage_difference": "The master case remains a one-cycle physical seating/detection check. A project-defined electrical stability overlay adds measurable coverage and must be reported separately.",
+    "required_inputs": "Assembly identity, power-domain map, isolation procedure, expected device/status and physical criterion; electrical limits only if an override adds that scope.",
+    "risks_limitations": "Normal telemetry after restoration cannot prove contact integrity under all loads or long-duration electrical stability."
+  },
+  "project_override_considerations": "A project may add a bounded load, rail-monitoring interval or repetition count after engineering approval. Record that plan and its completed coverage separately; do not claim an unspecified electrical-stability test or the original physical action from software evidence alone.",
+  "expected_evidence": [
+    "Power-assembly identity, location and affected source/load mapping",
+    "Approval plus isolation/discharge and restoration record",
+    "Timestamped operator checklist and photographs of contacts, keying, seating and retention",
+    "Raw pre/post BMC/PSU status, host reachability, expected-device enumeration and event delta",
+    "Any safety stop or coverage exception and the separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure and criterion consistently define physical seating plus post-cycle detection. The broad Power Stability title is underspecified for electrical-stability testing, but it does not contradict the executable source method."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The physical test intent is clear. Missing assembly identity, isolation details and expected evidence are execution-readiness inputs, not a permanent review block."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep NO/manual-only but constrain the case to the actual source-defined physical cycle and explicitly map post-cycle evidence to the affected power domain.",
+    "gpt_v2": "Agree that no voltage threshold or duration may be invented and that log history must be preserved; add explicit separation between the master physical case and any project electrical-stability overlay.",
+    "v3_1_improvement": "Separates manual physical acceptance, tool-observable restoration, engineer verdict and optional project stability coverage without treating missing project values as BLOCKED."
+  },
+  "review_improvement": "This review resolves the misleading title without rewriting the source: Power Stability here is a physical seating and single plug-cycle case. It prevents an agent from inventing an electrical soak or substituting remote power control while still defining useful mapped evidence collection.",
+  "independent_technical_reasoning": "The acceptance depends on manipulating and inspecting a power-related assembly, so the complete case is MANUAL ONLY. The device-detection and log portions are automatable support, not the core acceptance. Because the source provides neither measurable electrical limits nor observation time, calling a voltage or load result would exceed source authority. Readiness inputs and an engineer-owned verdict stay separate from automation classification and execution status.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 21, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 21 source_ref",
+    "history": "review_round_02_functionality.md lines 541-561",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On physical damage, heat/arcing/odor, abnormal resistance, unexpected shutdown, abnormal power status, missing device or new event, preserve the state and evidence and stop. Do not reconnect again, reboot, power-cycle, reset or apply load without a newly approved engineering response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

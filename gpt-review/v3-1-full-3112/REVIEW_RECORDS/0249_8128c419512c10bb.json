@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 249,
+  "library_sequence": 54,
+  "source_key": "Functionality|55|Wistron-HW-00058-V004",
+  "case_variant_id": "8128c419512c10bb",
+  "source_ref": {"sheet": "Functionality", "source_row": 55, "code": "Wistron-HW-00058-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "498b023f7226299471b04fad5c26d2c6b9d0264e0ab4c54d3e6c3367b01200e4",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00058-V004.",
+    "next_source_row_verified": "Functionality|56|Wistron-HW-00059-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "Over voltage on output",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Over voltage on output (forcing an over-voltage condition on the PSU output) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator Over voltage on output (forcing an over-voltage condition on the PSU output) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It recognizes an operator-only destructive event but speculates about AC/throttle methods and assumes blackbox inaccessibility without a supplied interface definition.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly requires the target rail, voltage/time envelope, fixture, independent measurement, protection expectation, record schema and recovery.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1415-1435: historical NO classification based on physical activity."]
+  },
+  "original_test_intent": "Verify that a controlled output over-voltage event is recorded in the target CRPS PSU blackbox with the expected fault status and event correlation.",
+  "original_method": "On an isolated test system, a qualified operator applies the vendor-approved over-voltage profile to a named output rail with independent measurement and cutoff. The approved blackbox interface then exports the raw record for code/field/timestamp comparison and recovery confirmation.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified engineer must configure and control the over-voltage source, independent instrumentation and cutoff. Blackbox extraction/correlation may be automated after the vendor interface and record contract are available.",
+  "required_inputs": [
+    "PSU/DUT identity and exact target output rail",
+    "Vendor-approved voltage waveform, threshold, tolerance, duration and expected protection response",
+    "Isolated fixture, load state, calibrated independent measurement and emergency cutoff",
+    "Blackbox extraction tool/schema and expected over-voltage record fields",
+    "Operator, recovery/inspection plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not generate over-voltage through an unknown fixture, register write, protection bypass, AC manipulation or guessed method.",
+    "Use isolation, independent voltage/current capture, hard cutoff and vendor absolute limits.",
+    "Protect attached loads and preserve baseline logs; do not clear evidence.",
+    "Stop for profile exceedance, failed protection, heat, smoke, arcing, damage, shutdown or management loss.",
+    "No automatic reinjection, retry, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare synchronized evidence capture and verify approved plan inputs.",
+    "Collect permitted pre-event status and post-operator blackbox/BMC/host artifacts.",
+    "Correlate measured voltage/time, protection behavior and raw blackbox fields.",
+    "Report observations without applying voltage or declaring the verdict."
+  ],
+  "engineer_actions": [
+    "Approve/operate the over-voltage fixture and safety envelope.",
+    "Execute emergency cutoff and recovery/inspection as needed.",
+    "Provide inaccessible blackbox artifacts and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Correctly refuses agent execution but is not a method; its physical/AC alternatives are speculative and cannot substitute for a vendor-defined rail voltage profile.",
+    "executable_command_required": false,
+    "command_recommendation": "No generic stimulus command. Use only the approved fixture SOP and vendor blackbox extraction interface after all electrical and record semantics are supplied.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 are retained as source data but not treated as a safe or sufficient dwell profile."
+  },
+  "modernized_recommendation": {
+    "status": "CONTROLLED ELECTRICAL FAULT PLAN REQUIRED",
+    "recommended_method": "Define one rail-specific waveform and abort envelope, synchronize calibrated measurement, perform a single operator-controlled injection, then export and correlate the immutable blackbox record.",
+    "applicable_platform": "Only the named PSU, load/isolation topology and calibrated fixture approved by the owner.",
+    "supported_version": "Record PSU/BMC firmware, fixture/calibration and blackbox tool/schema versions.",
+    "official_reference": "Project/vendor OVP and blackbox documentation must be supplied; no voltage value or injection method is invented.",
+    "difference_from_original_method": "Makes the over-voltage event measurable and bounded while preserving the blackbox-record objective.",
+    "coverage_difference": "One approved rail/profile proves only that fault record path, not all rails or all OVP behavior.",
+    "required_inputs": "Rail, waveform, limits, fixture, measurement/cutoff, expected record and recovery.",
+    "risks_limitations": "An incorrect topology can expose the PSU, load and platform to damaging voltage before protection operates."
+  },
+  "project_override_considerations": "A project may approve a lower-risk vendor injection mechanism or one rail/profile; completion must report actual voltage/time and exact coverage. Software reboot, AC removal or another fault is not an equivalent substitute.",
+  "expected_evidence": [
+    "Approved OVP profile, rail, topology, fixture calibration and safety checklist",
+    "Operator record plus calibrated actual voltage/current/time waveform and protection/cutoff response",
+    "Raw blackbox export with schema/tool version and expected over-voltage field comparison",
+    "Preserved platform logs and verified post-event recovery/inspection",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title identifies the status whose blackbox persistence is checked; procedure and criterion are compatible but omit the electrical and record details."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "A safe over-voltage operation cannot be inferred without a rail, waveform, limits, fixture and expected record. These missing semantics are safety-critical, so BLOCKED is justified rather than ordinary readiness."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree the agent cannot perform the event, but reject the speculative fault mechanisms and unsupported blackbox-access claim.",
+    "gpt_v2": "Agree with BLOCKED and the required independent measurement, fixture, protection and record/recovery contract.",
+    "v3_1_improvement": "Separates operator stimulus from potentially automated evidence extraction and names the exact coverage boundary."
+  },
+  "review_improvement": "This review converts the vague blackbox check into a traceable rail/waveform/record contract, explains the true blocker and forbids non-equivalent AC or software substitutes.",
+  "independent_technical_reasoning": "Over-voltage is a specific but inherently hazardous stimulus. Human operation alone is insufficient when voltage/time limits and protection expectations are absent. Because inventing those values could damage hardware, the case remains BLOCKED until the complete vendor plan exists.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 55, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 55 source_ref",
+    "history": "review_round_02_functionality.md lines 1415-1435", "external_sources": []
+  },
+  "no_automatic_retry": "The approved profile may be applied once. Any limit exceedance, protection anomaly or recovery failure requires immediate cutoff, evidence preservation and stop; no reinjection/reset/power cycle is automatic.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

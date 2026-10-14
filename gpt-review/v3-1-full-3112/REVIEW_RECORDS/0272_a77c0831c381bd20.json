@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 272,
+  "library_sequence": 80,
+  "source_key": "Functionality|81|Wistron-HW-00084-V003",
+  "case_variant_id": "a77c0831c381bd20",
+  "source_ref": {"sheet": "Functionality", "source_row": 81, "code": "Wistron-HW-00084-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "0822ca5110f4e2a52159be95abca21a8b3feec5febc034dd1e8c429c64ea9182",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00084-V003.",
+    "next_source_row_verified": "Functionality|82|Wistron-HW-00085-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Memory", "test_name_items": "3DS RDIMM",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n   Check memory information from BIOS, OS and BMC web hardware inventory.\n    - Enter \"System Setup -> Memory Configuration -> Memory Topology\"\n      Check memory information.\nIn Linux:\n    - Check memory information with commands:\n       1. cat /proc/meminfo\n       2. Download and install the latest dmidecode tool from (http://download.savannah.gnu.org/releases/dmidecode/).\n           dmidecode -t memory\n       3. free (Check total available and free memory size)\n\nIn BMC web hardware inventory:\nCheck the memory healthy is \"OK\", and the detail CPU information is correct (include Name, Vendor, Model, Firmware verison and Status (State).\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Total memory number and size should be correct as DIMM installed.\n2. Total available memory size should be the same in the output of meminfo and free.\n3. Need to confirm: slot 1 to slot 24",
+    "script": null, "attended_time": "1", "machine_time": "1", "latest_updated": "2025-11-11",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "dmidecode", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t memory 2>&1\"", "ai_logs_output": "return FULL raw `dmidecode -t memory` output (each DIMM: size/type/speed/rank/slot) so user confirms total memory number+size match installed DIMMs and are identical in OS. No RISK (read-only).", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It treats generic SMBIOS memory output as sufficient and does not establish 3DS stack identity or cover BIOS/BMC WebUI and OS capacity views.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 adds 3DS part/stack/rank requirements and refuses to infer attributes absent from DMI, but retains PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2108-2133: historical YES review using the same generic dmidecode command."]
+  },
+  "original_test_intent": "Verify a 3DS RDIMM population across all 24 slots, including capacity and 3DS-relevant identity/rank/stack characteristics, through BIOS topology, Linux inventory/capacity and BMC WebUI health, while resolving the copied CPU-detail phrase.",
+  "original_method": "An engineer observes BIOS Setup and BMC WebUI memory evidence; approved Linux commands capture per-device SMBIOS data and OS capacity. All views are correlated to an owner 3DS module and slot matrix, with unavailable stack attributes reported rather than inferred.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_ACCESS", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Required BIOS Setup and BMC WebUI observations are manual acceptance activities. Linux inventory can be automated, but it may not expose the die-stack organization that distinguishes a 3DS RDIMM.",
+  "required_inputs": [
+    "Board slot 1-24 topology and approved 3DS RDIMM part/population list",
+    "Expected capacity, speed, rank, ECC and die-stack organization plus the authoritative source for each attribute",
+    "BIOS/BMC field mapping and correction of the BMC CPU-detail wording",
+    "Rules for installed, reserved and OS-visible memory totals",
+    "Validated dmidecode build/privilege, GUI access and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not install an unverified latest tool, change memory training/BIOS or clear logs.",
+    "Do not label a module 3DS solely from generic size/type/rank fields when the platform does not expose stack construction.",
+    "Use the authoritative board locator map; stop on ambiguous/duplicate slots or cross-layer disagreement.",
+    "Preserve ECC, memory, kernel and SEL evidence and stop on any health alarm.",
+    "No automatic retry, reboot or DIMM manipulation."
+  ],
+  "agent_execution_scope": [
+    "Build the 24-slot expected 3DS attribute matrix and evidence availability map.",
+    "Collect complete approved DMI, meminfo and free evidence with versions/timestamps.",
+    "Correlate Linux results with engineer-provided BIOS/BMC artifacts and explicitly mark unexposed 3DS attributes.",
+    "Do not perform GUI observation, infer stack organization or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Supply authoritative 3DS module construction/specification and correct the BMC subclause.",
+    "Observe BIOS topology and BMC WebUI health/inventory for the relevant slots.",
+    "Resolve attributes unavailable through SMBIOS and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It provides useful per-device SMBIOS evidence but cannot by itself prove 3DS construction and omits Linux capacity, BIOS, BMC and slot-map coverage. Its transport and privilege assumptions require approval.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain full `dmidecode -t memory`, `/proc/meminfo` and `free -b` from an approved package. Supplement only with a validated platform inventory interface when it exposes 3DS-specific fields; do not invent one.",
+    "original_parameters_and_time_preserved": "Slots 1-24 and source times 1/1 remain unchanged; no stack count, rank or capacity is fabricated."
+  },
+  "modernized_recommendation": {
+    "status": "ATTRIBUTE-AWARE CROSS-LAYER REVIEW",
+    "recommended_method": "For every slot, record module part/serial, capacity, speed, configured speed, rank, ECC and 3DS construction from the authoritative evidence source, then correlate BIOS, SMBIOS, BMC health and OS capacity.",
+    "applicable_platform": "Only the named board/firmware and approved 3DS RDIMM population.",
+    "supported_version": "Record board, BIOS, BMC, OS/kernel, SMBIOS and dmidecode versions.",
+    "official_reference": "Owner 3DS RDIMM datasheet/AVL and board population guide; generic DMI output is not an authoritative die-stack source.",
+    "difference_from_original_method": "Separates fields observable through SMBIOS from 3DS attributes requiring the module/AVL specification.",
+    "coverage_difference": "Adds defensible 3DS identity without dropping the source's BIOS/OS/BMC and 24-slot coverage.",
+    "required_inputs": "3DS BOM/AVL, slot map, field mapping, capacity rules and approved tools.",
+    "risks_limitations": "Many firmware interfaces expose rank/capacity but not physical die-stack organization."
+  },
+  "project_override_considerations": "A project may limit applicable slots to its actual topology, but must retain an explicit mapping and identify how 3DS identity is proven. Package/spec supply does not automate required GUI observations.",
+  "expected_evidence": [
+    "Board and 3DS RDIMM identity/specification with expected 24-slot population",
+    "Timestamped BIOS Setup and BMC WebUI memory topology/health artifacts",
+    "Full dmidecode, meminfo and free -b output plus an attribute-source matrix",
+    "Per-slot 3DS/rank/speed/capacity and installed/reserved/visible reconciliation with ECC health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The memory-health BMC step unexpectedly asks for detailed CPU Name/Vendor/Model/Firmware/State. Those fields do not validate 3DS RDIMM identity and conflict with the row's memory scope."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The overall 3DS memory-inventory intent is clear. Missing part/stack data and the copied CPU phrase require readiness inputs/correction, but do not make the manual test operation unknowable."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES and its implication that generic DMI proves 3DS identity or completes BIOS/BMC acceptance.",
+    "gpt_v2": "Keep V2's 3DS-specific evidence limits; change PARTIAL to MANUAL ONLY because firmware/WebUI observation is core, and record the CPU phrase as SOURCE_CONFLICT.",
+    "v3_1_improvement": "Distinguishes module-construction proof from inventory fields and separates manual acceptance from automatable Linux evidence."
+  },
+  "review_improvement": "This review prevents a high-capacity generic RDIMM from being accepted as 3DS merely from dmidecode and requires explicit evidence provenance for each 3DS attribute.",
+  "independent_technical_reasoning": "3DS describes device stacking inside the module; SMBIOS may report capacity, type and ranks without exposing that construction. Therefore the title adds a distinct evidence requirement beyond the adjacent RDIMM case. Required BIOS/BMC GUI views keep the overall case MANUAL ONLY.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 81, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 81 source_ref",
+    "history": "review_round_02_functionality.md lines 2108-2133", "external_sources": []
+  },
+  "no_automatic_retry": "On missing 3DS attributes, slot ambiguity, access error or health mismatch, retain evidence and stop; do not replace tools, reboot, change firmware or handle DIMMs automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

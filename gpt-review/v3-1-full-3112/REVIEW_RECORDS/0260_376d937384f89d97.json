@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 260,
+  "library_sequence": 65,
+  "source_key": "Functionality|66|Wistron-HW-00069-V004",
+  "case_variant_id": "376d937384f89d97",
+  "source_ref": {"sheet": "Functionality", "source_row": 66, "code": "Wistron-HW-00069-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "aa95be169c345a644a43757f11c31a57997afc98e1d0a8f6210ae3cbbec89d37",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00069-V004; other fan-failure names are different source variants.",
+    "next_source_row_verified": "Functionality|67|Wistron-HW-00070-V004 is an already completed Final Audit baseline (audit sequence 2, matching source key, variant 531324e50ed3dd43 and row hash); next pending source is Functionality|68|Wistron-HW-00071-V005."
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : Function", "test_name_items": "Power supply fan failure",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Stop a fan of the power supply. (WARNING: Use only a non-conductive, flexible object to stop the fan. Do not attempt to use any part of your body to stop the fan. )\n2. Remove the obstruction from the power supply fan and check power supply status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. PSU information in sensor list and SEL of BMC should be correct when PSU FAN is jammed\n2. PSU LED should be AMBER when FAN failure.\n3. PSU LED should be GREEN after removed the obstruction and replug power cord.",
+    "script": null, "attended_time": "15", "machine_time": "15", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this case physically stops/jams the power-supply fan (with a non-conductive object) to verify the PSU fault LED turns amber, then removes the obstruction to confirm recovery. This is a physical action (stopping a physical fan) at the machine with visual LED observation; a person must be present. Agent cannot stop the PSU fan or see the physical PSU LED over SSH.",
+      "ai_logs_output": "operator physically stops/jams the power-supply fan (non-conductive object), observes the amber fault LED + BMC PSU SEL, then removes the obstruction; agent cannot stop the fan or see the LED - it reads the BMC PSU SEL after the operator step.",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies the jam and LED observation as physical but omits the criterion's extra replug step and lacks a target-specific duration/thermal boundary.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly finds missing target, safe duration/thermal/abort limits and a procedure-versus-criteria replug mismatch.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1703-1725: historical NO review; duplicate-title variants were searched and not substituted."]
+  },
+  "original_test_intent": "Verify the identified PSU's response to a physically jammed fan: correct BMC sensor/SEL state and amber LED during the fault, followed by restored fan/LED/PSU health after the approved recovery sequence.",
+  "original_method": "A qualified operator would use the specified non-conductive flexible object to jam the selected PSU fan for an approved bounded interval, directly observe LED/fan state, remove the obstruction, and perform any owner-approved cord replug before confirming BMC and system recovery. The source does not safely define that full sequence.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Fan contact/obstruction, direct LED/fan observation and any physical cord replug must be performed by a qualified operator. Agent monitoring cannot make an unresolved physical procedure safe or complete.",
+  "required_inputs": [
+    "Target PSU slot/serial and exact fan access point",
+    "Vendor-approved flexible non-conductive tool, jam method, maximum duration and thermal/tach abort limits",
+    "Load/redundancy state, independent thermal monitoring and immediate obstruction-removal plan",
+    "Owner decision on whether/when cord replug is required, with safe isolation sequence",
+    "Expected LED/BMC/SEL/recovery states and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not use a body part, rigid or conductive object, or touch unknown energized/rotating components.",
+    "Do not begin without target identification, duration, thermal/tach monitoring and an immediate safe removal method.",
+    "Do not add the criterion's cord replug by inference; resolve its exact timing and redundancy/isolation first.",
+    "Stop for tool contact/loss, abnormal noise, heat, smoke, output change or management loss; preserve logs.",
+    "No automatic retry, re-jam, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare phase/timestamp capture and collect baseline PSU/BMC/host/thermal state.",
+    "Wait for operator confirmation of jam, amber LED, obstruction removal and any approved replug.",
+    "Collect BMC sensors/SEL, PSU output/redundancy and recovery evidence for each phase.",
+    "Report observations without touching the fan or deciding the verdict."
+  ],
+  "engineer_actions": [
+    "Resolve the replug mismatch and approve the target-specific jam/recovery SOP.",
+    "Perform physical obstruction/removal and direct LED/fan observations.",
+    "Operate any cord action, safety stop/recovery and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The refusal is safe but incomplete: it omits the source criterion's cord replug and supplies no safe jam envelope. Post-action BMC reads corroborate but cannot prove the physical jam or LED state.",
+    "executable_command_required": false,
+    "command_recommendation": "No executable stimulus command. After adjudication/operator action, use the approved BMC interface for full phase-tagged PSU sensor and SEL capture.",
+    "original_parameters_and_time_preserved": "Attended Time 15 and Machine Time 15 are preserved, but no jam duration is inferred."
+  },
+  "modernized_recommendation": {
+    "status": "SAFE PHYSICAL FAULT SOP REQUIRED",
+    "recommended_method": "Define fan access/tool/duration/thermal abort and exact recovery phases, synchronize operator visual evidence with tach/temperature/BMC/SEL data, execute once, and restore cooling immediately.",
+    "applicable_platform": "Only the named PSU/fan and chassis access design approved by the platform owner.",
+    "supported_version": "Record PSU/BMC firmware, SOP revision and monitoring tool/calibration.",
+    "official_reference": "Project/vendor fan-stall and PSU recovery documentation must be supplied; the source warning alone is insufficient.",
+    "difference_from_original_method": "Adds bounded safety/recovery semantics and resolves the unlisted cord replug while preserving physical jam coverage.",
+    "coverage_difference": "A physical rotor jam is not equivalent to a tach simulation or software fan control unless vendor equivalence is documented.",
+    "required_inputs": "Target/access, tool, duration, load, thermal limits, expected states, replug decision and recovery.",
+    "risks_limitations": "Contact can damage the rotor/tool or cause rapid internal heating; platform sensors may lag."
+  },
+  "project_override_considerations": "A project may approve a vendor simulation instead of physical jamming only with documented coverage equivalence. It must separately state whether the cord replug criterion is retained; an override cannot silently reconcile the master mismatch.",
+  "expected_evidence": [
+    "Owner-approved target/tool/jam duration/thermal limits and resolved replug sequence",
+    "Operator checklist/photos for baseline, jammed amber LED, obstruction removed and recovered green LED",
+    "Phase-tagged fan/tach/temperature, BMC sensors/SEL, output/redundancy and host status",
+    "Cord action evidence if approved plus final recovery/inspection",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The procedure ends with obstruction removal and a status check, while the criterion requires green LED only after obstruction removal and power-cord replug. The omitted power action materially changes recovery and cannot be added silently."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The safe physical jam envelope is undefined and the recovery operation conflicts between procedure and criteria. These are essential operation/safety semantics, so execution remains BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree the physical core is not agent-executable; add the missing replug conflict and safe-duration/thermal gates.",
+    "gpt_v2": "Agree with BLOCKED and its owner-decision, target, tool, thermal and recovery requirements.",
+    "v3_1_improvement": "Records the true SOURCE_CONFLICT and separates physical evidence from automatable BMC corroboration."
+  },
+  "review_improvement": "This review preserves the unusual physical-jam method, exposes the unlisted cord-replug requirement and prevents any execution until the contact and thermal risks are bounded.",
+  "independent_technical_reasoning": "The source names a concrete physical method, but that alone is not safely executable: no duration/thermal stop exists, and the acceptance adds a power-cord action absent from the procedure. Human presence does not cure those semantic and safety gaps, so BLOCKED is correct.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 66, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 66 source_ref",
+    "history": "review_round_02_functionality.md lines 1703-1725 plus duplicate-title search", "external_sources": []
+  },
+  "no_automatic_retry": "At most one owner-approved physical event is permitted. Any contact, thermal, power or recovery anomaly requires immediate safe obstruction removal, evidence preservation and stop; no re-jam/reset/replug/power-cycle is automatic.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

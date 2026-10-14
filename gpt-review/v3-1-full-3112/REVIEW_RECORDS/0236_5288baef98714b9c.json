@@ -1,0 +1,119 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 236,
+  "library_sequence": 41,
+  "source_key": "Functionality|42|Wistron-HW-00045-V004",
+  "case_variant_id": "5288baef98714b9c",
+  "source_ref": {"sheet": "Functionality", "source_row": 42, "code": "Wistron-HW-00045-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "98db974c6818c42da35698574315c85bf4d7c4c6537f15a22efe3a9382f98ad8",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00045-V004.",
+    "next_source_row_verified": "Functionality|43|Wistron-HW-00046-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Input_power_cycling",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    The_PSU_shall_reset_the_warning_and_fault_limits_to_default_values_for_the_following_case.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "The_PSU_shall_reset_the_warning_and_fault_limits_to_default_values_for_the_following_case.",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this case verifies the PSU resets its warning/fault limits to defaults after an input-power cycle, which requires physically cycling AC input to the PSU and then re-reading its limits over PMBus; the physical input-power cycle on the PSU must be done by a person at the machine, and the re-verification needs a PMBus master on the PSU after the cycle.",
+      "ai_logs_output": "operator physically cycles the PSU input power then, with a PMBus master, re-reads warning/fault limit registers to confirm default reset; agent cannot physically cycle PSU input power.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It identifies the likely AC-cycle plus PMBus-read sequence but assumes physical human cycling even though this row does not mandate unplugging or forbid an approved switching fixture.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly lists the missing following-case definition, defaults/register map and recovery controls, but V3.1 treats these as project readiness inputs instead of permanent semantic blockage.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1064-1084: historical physical/NO review for Input_power_cycling.", "ED-32 is case-specific to Seq 182 and is not generalized to this AC-related row."]
+  },
+  "original_test_intent": "Verify that the selected CRPS warning and fault limit fields return to their documented default values after one approved input-power cycle, using raw pre/post register evidence and platform recovery evidence.",
+  "original_method": "Identify the PSU and limit fields, read and preserve current values, perform one project-approved input-power interruption/restoration using the authorized physical or controlled switching method, wait for documented recovery, then re-read the same fields and compare them with vendor defaults. No write to the limit registers is part of this case.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An engineer maps the PSU/AC domain, installs or validates the approved PMBus and input-switching setup, confirms workload/storage safety and authorizes the cycle. If the selected plan uses a physical disconnect, a qualified operator performs it; an approved controllable fixture may instead execute the unchanged plan.",
+  "required_inputs": [
+    "Definition of the referenced 'following case' and exact warning/fault fields",
+    "Vendor register map, data format, default values and comparison tolerance",
+    "PSU identity/address plus approved read-only PMBus master/tool and version",
+    "Input-power domain, cycle off/on timing, discharge and recovery criteria",
+    "Dedicated/test-safe load state, host/storage impact and management recovery path",
+    "Approved switching method or qualified operator and one-user plan approval"
+  ],
+  "safety_requirements": [
+    "Do not guess PMBus registers, addresses or defaults and do not write, reset or reflash the PSU.",
+    "Do not interrupt an unidentified AC domain or a system with unapproved workload, mounted/storage or availability impact.",
+    "Use only a mapped approved outlet/fixture or qualified physical procedure; this review does not require manual unplugging and does not extend ED-32 beyond Seq 182.",
+    "Stop on arcing, abnormal PSU condition, failed restart, BMC/host loss, unexpected load impact or any register-write request.",
+    "Preserve logs and do not automatically retry the cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved PSU/register/default and power-domain plan.",
+    "Collect read-only pre-cycle raw registers, PSU/BMC identity and host/management evidence.",
+    "If the approved plan exposes a safe controlled switching interface, execute exactly the authorized single cycle; otherwise wait for operator completion.",
+    "Collect post-recovery raw values and evidence, compare expected/actual and report without setting the verdict."
+  ],
+  "engineer_actions": [
+    "Resolve the missing case/default/register contract and approve the power-cycle method and recovery criteria.",
+    "Confirm load/workload/storage safety and the exact AC domain.",
+    "Perform any required physical action or supervise the approved fixture and handle safety stops.",
+    "Review field comparison/recovery evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It preserves the likely input-cycle/PMBus intent but incorrectly treats human physical AC action as universal and does not supply executable registers or tools.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only the project/vendor-approved read-only PMBus decoder and a mapped approved input-switching method. Record versions and exact resolved parameters; no generic PMBus command or PDU outlet is proposed.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source supplies one conceptual cycle but no off/on timing, register/default set, tool or recovery window."
+  },
+  "modernized_recommendation": {
+    "status": "APPROVED SINGLE-CYCLE ORCHESTRATION WITH RAW PMBUS DELTA",
+    "recommended_method": "Use a versioned, read-only PSU field collector before and after one approved mapped input cycle, record switching timestamps and recoverability, and compare every field to the supplied default table.",
+    "applicable_platform": "Only the selected PSU, PMBus topology, AC domain and approved switch/fixture.",
+    "supported_version": "Record PSU firmware, register specification, PMBus tool and switching-controller versions.",
+    "official_reference": "Exact vendor/platform register and input-cycle documentation is required; no generic values or commands are asserted.",
+    "difference_from_original_method": "Makes the source's reset assertion auditable and permits an approved automated fixture without changing the functional cycle.",
+    "coverage_difference": "All named limit fields and recovery states must be captured; PSU status alone does not prove default restoration.",
+    "required_inputs": "Field/default table, read tool, power map/timing and recovery plan.",
+    "risks_limitations": "An incorrect AC-domain mapping or PMBus target can affect other loads or compare the wrong PSU."
+  },
+  "project_override_considerations": "A project may select physical AC handling or an approved PDU/fixture and define timing. Record actual method, fields and outage coverage. Do not claim unspecified defaults or a broader power domain, and do not apply Seq 182's physical-removal decision to this distinct row.",
+  "expected_evidence": [
+    "Resolved following-case definition, PSU identity and vendor field/default table",
+    "PMBus tool version and raw pre/post field values",
+    "Approved input-power method, mapped domain and cycle/recovery timestamps",
+    "PSU/BMC/host recovery plus preserved event evidence",
+    "Safety stops, coverage limits and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title and reset-to-default statement are compatible. 'Following case' is incomplete and needs project/vendor resolution, but no two source facts contradict each other."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The reset-after-input-cycle intent is clear. Missing registers/defaults/tool/method gate execution but are project readiness inputs under V3.1, not permanent BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain the input-cycle and PMBus evidence idea, but do not generalize human AC removal when an approved fixture may implement the project method.",
+    "gpt_v2": "Reclassify BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION while retaining all register, power-domain, outage and recovery gates.",
+    "v3_1_improvement": "Separates capability, project method, readiness, execution status and engineer verdict and explicitly prevents ED-32 overgeneralization."
+  },
+  "review_improvement": "This review preserves the functional reset objective and high-risk power boundaries while allowing the project to choose its approved cycle mechanism. It converts missing common-library parameters into explicit execution inputs rather than a permanent block.",
+  "independent_technical_reasoning": "The evidence-producing core—pre/post register read, controlled cycle timing and comparison—can be automated once a PSU-specific fixture and map are approved, while setup or physical switching may require an engineer. Therefore PARTIAL is appropriate. The source does not mandate literal unplugging, and the Seq 182 ruling is expressly case-specific.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 42, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 42 source_ref",
+    "history": "review_round_02_functionality.md lines 1064-1084 and ED-32 case-specific scope", "external_sources": []
+  },
+  "no_automatic_retry": "If the PSU/host does not recover, a field is unreadable/unexpected, or any power/management anomaly occurs, preserve switch, PMBus and platform evidence and stop. Do not repeat the cycle, write defaults, reset BMC/PSU, reboot or change outlets without a newly approved plan.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

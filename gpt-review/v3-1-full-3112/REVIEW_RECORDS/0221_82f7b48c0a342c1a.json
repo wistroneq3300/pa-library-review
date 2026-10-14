@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 221,
+  "library_sequence": 23,
+  "source_key": "Functionality|24|Wistron-HW-00023-V002",
+  "case_variant_id": "82f7b48c0a342c1a",
+  "source_ref": {"sheet": "Functionality", "source_row": 24, "code": "Wistron-HW-00023-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3cd36e6fcfafcafe13fe69a651758d89188530a57ea5d4551daa9058ad8cdf60",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00023-V002.",
+    "next_source_row_verified": "Functionality|25|Wistron-HW-00028-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -AVL",
+    "test_name_items": "SSD",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: SSD is a physical/mechanical check (component seating, plug/unplug ease, cable routing, no bent pin / mismatch / routing issue) that requires a person at the machine handling the hardware - the agent cannot inspect or plug/unplug physical parts over SSH.",
+      "ai_logs_output": "operator performs the mechanical check on SSD and records photos + pass/fail (parts positioned correctly, no bent pin/cable-routing issue); agent cannot produce this physical evidence.",
+      "risk": "RISK: mechanical/visual inspection + physical plug/unplug is human-only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. The physical boundary is correct, but the generic mechanical treatment omits SSD identity, storage availability and data-protection hazards.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds drive/bay identity, approved hot-swap or isolation, data protection and non-destructive post-action enumeration.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 613-633: historical physical/NO result for SSD."]
+  },
+  "original_test_intent": "Verify that the specified SSD is mechanically serviceable and correctly seated in its assigned bay or slot, then confirm the same expected storage identity remains detectable without new storage or platform errors after the approved single removal/reinstallation cycle.",
+  "original_method": "A qualified engineer resolves the SSD and bay identity, protects the active storage path, uses the approved isolated or hot-swap service procedure, inspects and cycles the drive, restores final seating, and records photos. The agent may collect non-destructive identity and health evidence only within the approved plan.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the SSD by bay and serial, verifies whether the slot supports the intended service mode, quiesces or isolates the storage path as required, inspects the carrier and contacts, removes and reinstalls the drive, and judges insertion, latch and final seating.",
+  "required_inputs": [
+    "SSD bay/slot, protocol, model, serial and expected controller-path mapping",
+    "Approved hot-swap or power-isolated service procedure for that exact slot",
+    "OS, mount, RAID, cache, workload and protected-disk status",
+    "Backup or data-protection confirmation and allowed availability impact",
+    "Expected post-cycle identity, controller state and error criteria",
+    "Qualified operator, ESD controls, photographs and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not remove an OS, mounted, in-use, rebuilding, degraded or otherwise protected SSD unless the approved storage procedure explicitly makes that state safe.",
+    "Do not assume hot-swap capability from connector shape; confirm drive, backplane, controller, firmware and operating-state support.",
+    "Do not mount, format, initialize, benchmark, write, discard or repair the SSD as part of evidence collection.",
+    "Stop on wrong identity, active I/O, degraded array, abnormal heat, damaged carrier/contact, forced insertion, unexpected disappearance or new media/controller error.",
+    "Preserve kernel, controller, BMC and SEL history and do not repeat the physical cycle or initiate recovery automatically."
+  ],
+  "agent_execution_scope": [
+    "Correlate the approved SSD bay, serial and controller path before the action.",
+    "Collect read-only storage inventory, array/path state, host availability and event evidence without accessing user data.",
+    "After engineer confirmation, collect the same identity/path evidence and raw kernel/controller/BMC event delta.",
+    "Highlight identity changes, missing paths and new errors while leaving the formal result to the engineer."
+  ],
+  "engineer_actions": [
+    "Confirm that the selected storage path is safe to service and approve the isolation or hot-swap plan.",
+    "Perform the physical SSD inspection and single removal/reinstallation cycle.",
+    "Verify latch, carrier alignment and final seating and authorize post-action collection.",
+    "Assess storage and physical evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The not-runnable designation correctly reserves SSD handling for an operator, but a generic mechanical note is insufficient for a storage device whose bay identity and data path must remain controlled.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the project's approved read-only storage inventory and controller/path collectors for the actual SSD protocol and platform. Record tool versions and raw output; do not issue commands that mount, write, initialize, repair, rescan destructively or alter array membership.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 remain unchanged. The source gives one plug cycle and no bay, protocol, hot-swap mode, command, write workload or retry."
+  },
+  "modernized_recommendation": {
+    "status": "IDENTITY-LOCKED NON-DESTRUCTIVE STORAGE EVIDENCE",
+    "recommended_method": "Bind operator photos and service authorization to bay, serial and controller path, capture preserved pre/post inventory and error deltas, and explicitly record storage quiescence or supported hot-swap state.",
+    "applicable_platform": "The selected SSD, carrier/backplane, storage controller, OS and array/path configuration.",
+    "supported_version": "Record chassis, SSD and controller firmware plus the versions of the approved inventory tools.",
+    "official_reference": "Applicable platform, storage-controller and SSD service documentation; no generic hot-swap or command compatibility is assumed.",
+    "difference_from_original_method": "Adds traceable identity and data-path protections while retaining the physical plug cycle and seating criterion.",
+    "coverage_difference": "Confirms restored identity and path without adding media writes or performance testing; data-integrity and endurance coverage remain outside this case.",
+    "required_inputs": "Bay/serial/path map, service mode, storage-use state, protection plan and expected post-condition.",
+    "risks_limitations": "Successful enumeration cannot prove media integrity, performance or connector reliability under repeated cycles."
+  },
+  "project_override_considerations": "The project may choose a specific SSD subset and an approved hot-swap or isolated method. Record selected bays, excluded bays and availability coverage. A completed subset does not establish all-drive serviceability, and no write workload is implied by the master case.",
+  "expected_evidence": [
+    "SSD bay, model, serial, protocol and controller-path correlation",
+    "Storage quiescence/hot-swap authorization and data-protection record",
+    "Operator photographs and checklist for carrier, contacts, latch and seating",
+    "Raw pre/post read-only inventory, array/path state, host availability and kernel/controller/BMC event delta",
+    "Any safety stop, scope exclusion and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The seating criterion and post-cycle detection step are compatible. The source omits drive identity and safe storage state, but those are necessary execution inputs rather than conflicting requirements."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The review can classify and define the test safely. Execution waits for drive identity, service mode and data-protection inputs, so readiness is conditional rather than permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep the physical NO classification but replace generic connector reasoning with SSD-specific identity, active-data and controller-path controls.",
+    "gpt_v2": "Agree with non-destructive enumeration and hot-swap/isolation gates; strengthen OS/mount/RAID/cache/rebuild checks and serial-to-bay correlation.",
+    "v3_1_improvement": "Separates manual seating acceptance, read-only evidence, storage readiness and engineer verdict without inferring a media test."
+  },
+  "review_improvement": "This review prevents a seemingly simple SSD reseat from being treated like an inert mechanical part. It controls the exact data-bearing device and active path, preserves raw errors, and excludes all unapproved writes while retaining the source's one-cycle physical objective.",
+  "independent_technical_reasoning": "The primary evidence is physical removal, insertion and seating, so the complete case is MANUAL ONLY. SSD enumeration can be automated but is supporting evidence. Because a wrongly selected or active SSD can cause data loss and array degradation, identity and storage-state checks are mandatory readiness gates. Their absence does not change the library classification or automatically make the case BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 24, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 24 source_ref",
+    "history": "review_round_02_functionality.md lines 613-633",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On identity mismatch, active or degraded storage state, physical damage, missing path or new storage error, preserve the current state and raw evidence and stop. Do not reseat again, rescan, repair, rebuild, change array membership, reboot or write to the drive without a newly approved plan.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

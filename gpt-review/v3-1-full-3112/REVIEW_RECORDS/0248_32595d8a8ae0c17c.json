@@ -1,0 +1,118 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 248,
+  "library_sequence": 53,
+  "source_key": "Functionality|54|Wistron-HW-00057-V004",
+  "case_variant_id": "32595d8a8ae0c17c",
+  "source_ref": {"sheet": "Functionality", "source_row": 54, "code": "Wistron-HW-00057-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "8ad425e86c32d689278e9e654645517b4e42539ed58882658aaaff72a89add9d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00057-V004.",
+    "next_source_row_verified": "Functionality|55|Wistron-HW-00058-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "General fault",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must General fault (injecting a general/unknown PSU fault condition) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator General fault (injecting a general/unknown PSU fault condition) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It recognizes physical/destructive risk but invents a menu of throttle/AC actions and assumes the agent cannot access any blackbox, neither of which the source establishes.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly finds that 'General fault' lacks a reproducible stimulus, signature, extraction method and recovery boundary.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1391-1411: historical NO review treating the activity as physical but without defining the fault contract."]
+  },
+  "original_test_intent": "Verify that the PSU blackbox saves a record for a defined general-fault status and that the stored record can be correlated with the applied event and platform timeline.",
+  "original_method": "A qualified operator would apply a vendor-defined bounded general-fault stimulus on an isolated DUT, then the approved interface would extract the raw PSU blackbox record for field/timestamp/status comparison and recovery verification. The source does not define the fault, so execution cannot yet be planned safely.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The eventual classification depends on the approved fault mechanism. Any physical/electrical injection and fixture control belong to a qualified engineer; blackbox extraction and evidence correlation may be automated if the vendor provides an accessible read-only interface.",
+  "required_inputs": [
+    "Vendor definition of 'General fault', including exact trigger, boundaries, duration and expected PSU behavior",
+    "PSU/DUT identity, isolation plan, qualified operator and approved fault fixture",
+    "Blackbox interface/tool, record schema, expected fault code/fields, timestamp behavior and retention rules",
+    "Independent monitoring, abort thresholds, safe restoration and recovery procedure",
+    "One authorized-user approval covering the unchanged plan"
+  ],
+  "safety_requirements": [
+    "Do not invent a general fault through AC removal, PSU extraction, output short, unknown write or software reboot.",
+    "Do not act until the fault envelope, isolation, fixture, monitoring, emergency stop and recovery are documented.",
+    "Keep production/OS/mounted data outside the blast radius and preserve all pre-event logs.",
+    "Stop for abnormal voltage/current/temperature, arcing, smoke, uncontrolled shutdown or management loss.",
+    "Do not retry, reinject, reset or power-cycle after an abnormal result without a new explicit recovery decision."
+  ],
+  "agent_execution_scope": [
+    "Prepare the event timeline and evidence collection plan after the fault definition is supplied.",
+    "Collect permitted read-only pre-event PSU/BMC/host context and, after operator action, raw blackbox/exported logs.",
+    "Decode and correlate fields/timestamps against the approved expected signature.",
+    "Report observed facts and gaps; never claim to perform the physical fault or decide PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Define the reproducible general-fault stimulus and acceptance signature.",
+    "Approve isolation, fixture, monitoring, abort and recovery controls.",
+    "Perform/oversee all physical or destructive activity and restore safe state.",
+    "Provide blackbox artifacts if the interface is not agent-accessible and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It correctly refuses direct agent execution, but it is not an executable method and speculates about AC/throttle/insertion actions. Those alternatives must not be treated as authorized equivalents.",
+    "executable_command_required": false,
+    "command_recommendation": "No generic command is appropriate. Use only the vendor-approved blackbox extraction interface after the owner defines the event; the stimulus remains operator/fixture controlled.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain source facts, but are not credible plan durations until injection, retention and extraction steps are defined."
+  },
+  "modernized_recommendation": {
+    "status": "DEFINED FAULT CONTRACT REQUIRED",
+    "recommended_method": "Create a vendor-approved fault profile with measurable trigger and abort limits, synchronize independent measurements, execute once under operator control, export the blackbox read-only and correlate exact record fields/timestamps.",
+    "applicable_platform": "Only the named PSU/DUT/fixture combination validated by the vendor/platform owner.",
+    "supported_version": "Record PSU/BMC firmware, fixture calibration and blackbox tool/schema versions.",
+    "official_reference": "Project/vendor general-fault and blackbox documentation is absent and must be supplied; no substitute fault is proposed.",
+    "difference_from_original_method": "Turns an undefined status label into a bounded, reproducible event-and-record contract while retaining the original blackbox goal.",
+    "coverage_difference": "One defined general-fault profile covers only that signature, not all PSU fault classes.",
+    "required_inputs": "Fault definition, expected record, fixture, measurement, isolation, extraction tool and recovery plan.",
+    "risks_limitations": "An uncontrolled or overly broad fault can damage power hardware or create a non-repeatable blackbox record."
+  },
+  "project_override_considerations": "A project may define one named general-fault profile and complete that approved plan. The report must name the exact fault and cannot claim coverage of unspecified general/unknown faults or substitute AC removal without an explicit project contract.",
+  "expected_evidence": [
+    "Approved fault profile, target identity, fixture/calibration, isolation and safety checklist",
+    "Operator event record with actual stimulus, measurements, timestamps and abort/recovery state",
+    "Raw blackbox extraction, tool/schema version and expected field/code comparison",
+    "Preserved BMC/SEL/kernel/host correlation and post-recovery health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item and blackbox-check procedure can be read consistently: record a general-fault status. The problem is severe underspecification of that status and stimulus, not two contradictory source facts."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "'General fault' does not define an operation that can be executed reproducibly or safely, and no blackbox signature/extraction method is supplied. Selecting a fault would invent test intent, so this is genuinely BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree that the agent must not inject the physical fault, but reject its speculative list of possible stimuli and absolute assumption about blackbox accessibility.",
+    "gpt_v2": "Agree with BLOCKED and the need for a bounded vendor fault profile, blackbox contract and recovery controls.",
+    "v3_1_improvement": "Separates currently blocked semantics from the later operator/automation split and explicitly limits project-defined coverage."
+  },
+  "review_improvement": "This review explains why the case is BLOCKED rather than merely MANUAL ONLY, retains the blackbox purpose, removes invented AC/throttle alternatives and defines the evidence required to unblock one reproducible fault profile.",
+  "independent_technical_reasoning": "A human can physically create many faults, but that does not make an undefined 'general fault' executable. The missing stimulus and expected blackbox signature determine safety and meaning. Because those are essential operation semantics, V3.1 BLOCKED is correct until an owner supplies them.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 54, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 54 source_ref",
+    "history": "review_round_02_functionality.md lines 1391-1411", "external_sources": []
+  },
+  "no_automatic_retry": "Only one approved event is allowed under the unchanged plan. Any unexpected electrical, thermal, management or record behavior requires evidence preservation and stop; no reinjection, reset or power cycle is automatic.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

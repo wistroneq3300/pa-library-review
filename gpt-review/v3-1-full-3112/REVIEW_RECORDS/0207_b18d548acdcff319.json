@@ -1,0 +1,167 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 207,
+  "library_sequence": 8,
+  "source_key": "Functionality|9|Wistron-HW-00008-V002",
+  "case_variant_id": "b18d548acdcff319",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 9,
+    "code": "Wistron-HW-00008-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "d6064f39e58a7a125db545722ebe434170d9fdd304f8a67105f2a18c129d9bc3",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00008-V002.",
+    "next_source_row_verified": "Functionality|10|Wistron-HW-00009-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_Latch - System",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check hardware accuracy\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check hardware accuracy",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "20",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"Mechanical_Latch - System\" mechanical check requires physically toggling the system latch to confirm it engages/releases correctly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"Mechanical_Latch - System\" (physically toggling the system latch to confirm it engages/releases correctly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. The physical/visual boundary is correct, but 'system latch' is not resolved to a cover, node, tray, drawer or other mechanism, and its hazards are not characterized.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 retains physical engagement/release, adds safe handling and evidence requirements, and avoids routine log clearing, but remains intentionally generic because the source is generic.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 249-269: historical physical/NO result for the system latch."
+    ]
+  },
+  "original_test_intent": "Verify the chassis-level system latch mechanism identified by the project: it follows its designed release and engagement path, retains the associated system member in the correct position, and has no binding, interference, deformation or damage.",
+  "original_method": "A qualified engineer maps 'system latch' to the exact platform drawing, physically operates that latch, observes the member it controls and records released, engaged and retained states. The Master row does not identify the controlled member or authorize opening, withdrawing or removing it.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer must identify the exact system latch and the cover, node, tray, drawer or chassis member it controls; establish its safe state; actuate the latch by hand; observe travel, engagement, release and retention; and inspect for interference or damage. An agent cannot resolve tactile engagement or physically verify retention.",
+  "required_inputs": [
+    "System model/revision and an unambiguous latch identifier/location",
+    "Mechanical drawing or service procedure defining the latch and controlled member",
+    "Permitted action boundary: latch actuation only versus movement/opening of the controlled member",
+    "Power, stored-energy, ESD, rack-support and service-position requirements applicable to that mechanism",
+    "Acceptance criteria for travel, engagement, release, alignment, retention and permissible resistance",
+    "Qualified operator and state-by-state evidence checklist"
+  ],
+  "safety_requirements": [
+    "Resolve the latch identity before contact; do not experiment among multiple handles or retention features.",
+    "Do not open, slide, withdraw or remove the controlled system member unless the approved plan and service procedure explicitly include that motion.",
+    "Before any permitted member movement, establish required power isolation, cable slack, rack anti-tip/support, lifting, stored-energy and hot-surface controls.",
+    "Protect fingers from pinch points and keep the mechanism aligned with hinges, rails, guides or retention pins defined by the platform.",
+    "Stop on binding, unexpected movement or load transfer, incomplete engagement/release, structural deformation, cable strain or visible damage.",
+    "Do not force, improvise leverage, automatically repeat the action or clear existing logs."
+  ],
+  "agent_execution_scope": [
+    "Use the platform drawing to prepare a latch-location and state checklist before the engineer acts.",
+    "Organize operator photographs of the identified mechanism, released state, engaged state and final retained member.",
+    "Collect BMC/chassis events only if the approved mechanism includes an interlock or powered service effect; label them as supporting evidence.",
+    "Report unresolved latch identity or coverage limitations without claiming physical completion."
+  ],
+  "engineer_actions": [
+    "Map the source term 'system latch' to one exact platform mechanism and establish its approved safe-service state.",
+    "Physically actuate the latch through the specified path and only the permitted associated member motion.",
+    "Observe travel, engagement, release, alignment, retention, interference and damage, then restore the required final state.",
+    "Apply the mechanism-specific criteria and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable marker is correct for the system latch's physical state. A remote sensor or chassis event, if one exists, may corroborate an interlock but cannot prove mechanical travel or retention.",
+    "executable_command_required": false,
+    "command_recommendation": "Do not invent a generic chassis command. Only collect a documented platform-specific interlock or presence sensor when the selected mechanism actually has one and the approved plan includes it.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 20 are preserved as planning fields. The source supplies no controlled-member identity, travel, force, cycle count or electrical transition."
+  },
+  "modernized_recommendation": {
+    "status": "NEEDS PLATFORM IDENTIFICATION; NO REMOTE SUBSTITUTE",
+    "recommended_method": "First bind 'system latch' to a labeled drawing callout and controlled member. Then use a state-transition checklist with photographs and mechanism-specific stop conditions; optional interlock telemetry remains secondary.",
+    "applicable_platform": "The selected system/chassis revision and the explicitly identified latch mechanism.",
+    "supported_version": "Record mechanical drawing, chassis and service-procedure revisions.",
+    "official_reference": "Applicable platform chassis mechanical drawing and approved service procedure; no generic latch behavior is asserted beyond the source intent.",
+    "difference_from_original_method": "Eliminates target ambiguity at execution while preserving physical engagement/release acceptance and avoiding an unapproved member-removal test.",
+    "coverage_difference": "Full coverage requires observing the identified latch and its retention function. A sensor-only check omits mechanical behavior; latch-only actuation does not claim coverage of opening or removing the controlled member.",
+    "required_inputs": "Exact latch/member mapping, drawing, permitted motion, safe-service state and acceptance criteria.",
+    "risks_limitations": "The generic source name cannot safely determine rack, power, cover, interlock or component-removal hazards until the target mechanism is selected."
+  },
+  "project_override_considerations": "A project must select the system latch and may bound the test to the latch itself or add movement of its controlled member. Added motion requires mechanism-specific safety and restoration steps, and any omitted movement/interlock coverage must be reported rather than silently treated as complete.",
+  "expected_evidence": [
+    "System/chassis identity plus annotated latch location and controlled-member mapping",
+    "Drawing/service-procedure revision and approved motion/safe-state plan",
+    "Photographs of the same identified latch in initial, released, engaged and final retained states",
+    "Engineer observations of travel, resistance, alignment, engagement, release, retention, interference and damage",
+    "Optional documented interlock/presence evidence only when applicable to the selected mechanism",
+    "Safety stops, excluded member-motion coverage and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "All source fields consistently request a system latch mechanical accuracy check. 'System latch' is broad and requires project mapping, but no source fields select competing latch identities or contradictory actions; incompleteness alone is not SOURCE_CONFLICT."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The capability and test category are clear enough for review. Exact mechanism identity is a mandatory pre-execution input and can produce a temporary readiness hold, but it does not make the Master intent permanently unknowable or unsafe by definition."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with physical/NO; strengthen it by requiring an exact latch/member mapping before action and by forbidding inferred opening or removal scope.",
+    "gpt_v2": "Keep MANUAL ONLY, no-force/no-log-clear controls and operator evidence, while replacing generic system hazards with a platform-selected mechanism model.",
+    "v3_1_improvement": "Separates missing target identity as execution readiness from SOURCE_CONFLICT/BLOCKED and makes optional interlock evidence subordinate to physical retention."
+  },
+  "review_improvement": "The review turns an otherwise ambiguous 'system latch' label into a safe two-stage contract: first identify the exact mechanism and controlled member, then perform only the approved physical state transitions. This prevents accidental operation of the wrong latch and unsupported assumptions about covers, trays or node extraction.",
+  "independent_technical_reasoning": "Unlike a named PSU latch, 'system latch' does not reveal what object is released. The mechanism could control a cover, service node, tray or another chassis member, each with different rack, cable, power and stored-energy risks. It is still clearly a physical engagement/release test, so MANUAL ONLY is determinable. The proper V3.1 treatment is to require platform mapping and permitted-motion inputs before execution, keep remote sensor data auxiliary, and avoid declaring SOURCE_CONFLICT or permanent BLOCKED merely because the Master row is generic.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 9, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 9 source_ref",
+    "history": "review_round_02_functionality.md lines 249-269",
+    "external_sources": []
+  },
+  "no_automatic_retry": "A misidentified mechanism, bind, unexpected member movement, load transfer, cable strain, incomplete engagement or damage is a stop. Preserve the physical state and evidence; do not try another latch, repeat the motion or invoke recovery commands without an engineer-approved response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

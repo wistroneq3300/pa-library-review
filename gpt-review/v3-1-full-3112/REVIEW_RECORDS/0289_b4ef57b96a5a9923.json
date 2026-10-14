@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 289,
+  "library_sequence": 98,
+  "source_key": "Functionality|99|Wistron-HW-00102-V003",
+  "case_variant_id": "b4ef57b96a5a9923",
+  "source_ref": {"sheet": "Functionality", "source_row": 99, "code": "Wistron-HW-00102-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "7757fdd7a94b0f649efa97a1e74f66a2c8ab7fcf17fa152fd2981d9007c717d4",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00102-V003.",
+    "next_source_row_verified": "Functionality|100|Wistron-HW-00103-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "L10 System - LED", "test_name_items": "Onboard power LED",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Power on SUT and check the onboard power LED is GREEN without flashing.\n2. Power off SUT and check the onboard power LED is AMBER without flashing.\n3. Remove AC power from SUT and the onboard power LED should be off.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Onboard power LED should be GREEN without flashing when SUT is on.\n2. Onboard power LED should be AMBER without flashing when SUT is off.\n3. Onboard power LED should be off after remove AC power cable form SUT.",
+    "script": null, "attended_time": "10", "machine_time": "15", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "ipmitool chassis power (agent) + person for LED observation", "ai_commands": "-- Onboard power LED: requires powering the system on/off to observe the LED color. Agent can power the SUT on/off via `sudo ipmitool chassis power` and read power state, but the LED color must be observed by a person at the machine.", "ai_logs_output": "return the power-state change + LED color/blink observed by the operator at each power state so user confirms it matches SPEC.", "risk": "RISK: powering the SUT on/off affects availability; confirm the SUT is free.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It recognizes that LED color needs a person but proposes agent-controlled IPMI power operations and omits the source-required physical AC removal.",
+    "gpt_v2": "MANUAL ONLY / CHANGED. V2 preserves the three physical states, human visual evidence and qualified AC handling, while treating BMC state as correlation rather than proof.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2615-2640: historical PARTIAL review based on agent IPMI power control plus a human observer."]
+  },
+  "original_test_intent": "Verify the physical onboard power LED is steady green while the SUT is on, steady amber while it is off, and extinguished after AC power is physically removed.",
+  "original_method": "A qualified operator powers the SUT on and off, visually checks the onboard LED color and non-flashing state in each condition, physically removes the AC power cable for the third condition, and records photos plus system logs.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_TARGET", "NEEDS_LED_MAP", "NEEDS_POWER_TOPOLOGY", "NEEDS_EXPECTED_STATE_SEMANTICS", "NEEDS_ACCESS", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL", "NEEDS_QUALIFIED_OPERATOR"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified person must identify and visually judge the physical onboard LED for green, amber, off and flashing behavior, perform the approved power on/off sequence, and physically remove and reconnect AC. An agent cannot substitute BMC state, PDU control, software reboot or IPMI power-off for those source-required observations and cable action.",
+  "required_inputs": [
+    "Exact SUT/board and onboard power-LED location, color/flashing semantics and state table",
+    "Meaning of the source off state, discharge/observation timing and expected standby behavior",
+    "PSU feed and AC-cable topology, safe removal/reconnection point and restoration sequence",
+    "Maintenance window, workload evacuation, qualified operator, OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not power off or remove AC until the target, active use, mounted/write activity, redundant-power topology and OOB recovery are checked.",
+    "Only a qualified operator handles the AC cable and observes the onboard LED; remote telemetry is supporting evidence only.",
+    "Preserve logs rather than clearing them, and capture pre/post BMC, host, PSU and SEL state.",
+    "Stop on unexpected PSU state, residual-power ambiguity, wrong cable/target, BMC loss, boot failure, electrical hazard or inability to restore power.",
+    "No automatic retry or unapproved alternate power method."
+  ],
+  "agent_execution_scope": [
+    "Prepare the approved sequence and correlate timestamps with read-only host/BMC/PSU evidence.",
+    "Prompt the qualified operator for each visual and physical step without claiming it was performed remotely.",
+    "Collect photos/observations, power-state records, SEL and recovery evidence and compare them with the supplied state table.",
+    "Report observations and anomalies without issuing the formal verdict."
+  ],
+  "engineer_actions": [
+    "Supply the board LED specification, power-state semantics, PSU/AC topology and safe recovery plan.",
+    "Perform or supervise power transitions, visual checks and physical AC removal/reconnection.",
+    "Review the evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not applicable as the acceptance method. `ipmitool chassis power` can correlate chassis state but cannot establish physical LED color/flashing or the source-required removal of the AC cable.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain the manual source method. Use only owner-approved read-only BMC/PSU/host queries as supporting evidence; do not replace the physical operation with PDU, BMC power-off or software reboot.",
+    "original_parameters_and_time_preserved": "Green/on, amber/off, LED-off after physical AC removal, Attended Time 10 and Machine Time 15 are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN MANUAL METHOD WITH CORRELATED TELEMETRY",
+    "recommended_method": "Use a timestamped operator checklist and photos for all three LED states, correlated with approved read-only BMC chassis/PSU and host reachability records before and after the physical sequence.",
+    "applicable_platform": "The identified board revision and its documented onboard power LED and PSU topology.",
+    "supported_version": "Record board, CPLD/LED-controller, BIOS, BMC and PSU firmware versions.",
+    "official_reference": "Platform board/LED and PSU service documentation supplied by the project; no universal color semantics are asserted.",
+    "difference_from_original_method": "Adds identity, timestamp and recovery evidence without changing the manual observation or physical AC-removal requirement.",
+    "coverage_difference": "No source coverage is removed and remote power control is not treated as equivalent.",
+    "required_inputs": "Board LED specification, off-state definition, PSU/AC map, observation timing and qualified operator.",
+    "risks_limitations": "Residual standby energy and multi-PSU feeds can make an LED remain lit; the exact platform procedure governs safe interpretation."
+  },
+  "project_override_considerations": "A project may specify the target PSU feed, timings and evidence format, but a software, BMC or PDU action cannot silently replace this row's explicit physical cable removal. This case-specific conclusion follows the source text and does not extend ED-32 into a global AC-cycle policy.",
+  "expected_evidence": [
+    "SUT/board/LED identity, approved LED state table, PSU/AC topology and authorization",
+    "Timestamped operator photos/observations showing steady green on, steady amber off and LED off after physical cable removal",
+    "Physical AC/PSU state plus supporting BMC/host/SEL records for each transition",
+    "Restored cable/power/boot/management state and anomaly timeline",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The procedure and criteria consistently require the same green, amber and AC-removed-off states. The missing platform state semantics are readiness inputs, not a contradiction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The case is executable when a qualified operator, platform LED semantics and safe AC topology are supplied. Its intrinsically manual core does not make it BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain its observation that a person must see the LED, but reject agent IPMI power control as a complete method because it omits physical AC removal and cannot prove color.",
+    "gpt_v2": "Agree with MANUAL ONLY and its physical/visual and recovery boundaries, while treating missing project details as readiness rather than permanent blocked conditions.",
+    "v3_1_improvement": "Makes the source-specific physical action explicit without generalizing the Seq 182 engineering decision to other AC-cycle cases."
+  },
+  "review_improvement": "This review preserves every physical state and distinguishes supporting telemetry from the human visual and cable actions that determine acceptance.",
+  "independent_technical_reasoning": "All three acceptance points concern a physical LED, and one explicitly requires cable removal. Neither IPMI chassis state nor software power-off can prove emitted color, steadiness or loss of all AC feeds. The core therefore remains MANUAL ONLY even though an agent can automate evidence correlation.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 99, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 99 source_ref",
+    "history": "review_round_02_functionality.md lines 2615-2640", "external_sources": []
+  },
+  "no_automatic_retry": "Perform the approved manual sequence once. On wrong target, unexpected LED/power behavior, OOB loss or recovery fault, stop and preserve evidence; do not repeat or switch power methods automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

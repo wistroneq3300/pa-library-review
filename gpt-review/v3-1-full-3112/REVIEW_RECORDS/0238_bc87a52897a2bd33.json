@@ -1,0 +1,118 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 238,
+  "library_sequence": 43,
+  "source_key": "Functionality|44|Wistron-HW-00047-V004",
+  "case_variant_id": "bc87a52897a2bd33",
+  "source_ref": {"sheet": "Functionality", "source_row": 44, "code": "Wistron-HW-00047-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "f16b4c3e1fdcd05d946896437f31a2127640f49c19a667ef74d3c3584259d75e",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00047-V004.",
+    "next_source_row_verified": "Functionality|45|Wistron-HW-00048-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Faults and Error Checking",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    The PSU shall support PEC per the SMBus 2.0\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "The PSU shall support PEC per the SMBus 2.0", "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power'; echo ---pec_faults_and_error_checking_(faults)---; dmesg | grep -iE 'PEC|SMBus|i2c.*(error|fault|pec|crc)' | tail -20\"",
+      "ai_logs_output": "first enumerate the hwmon/PMBus device names on the DUT and return any dmesg SMBus/PEC errors, to confirm the PMBus master is present; the actual a fault-bit error-injection on the SMBus/PMBus master to confirm the PSU flags it via PEC requires a PEC-capable PMBus master + a controlled error injection, which the operator must run - agent reports the PMBus enumeration + existing PEC/SMBus errors only (this is the Faults and Error Checking (Faults) case).",
+      "risk": "RISK: requires a PEC-capable PMBus master and controlled SMBus error-injection hardware; the fault injection (Faults and Error Checking (Faults)) is state-changing and needs the operator. Agent only enumerates PMBus + reads existing PEC/SMBus errors.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. The hybrid boundary is correct, but passive hwmon/dmesg text does not demonstrate PEC operation and its command has credential, host-key, enumeration and truncation weaknesses.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds the PEC-capable master, controlled injection, target/specification and recovery gates.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1112-1135: historical PARTIAL review for Faults and Error Checking."]
+  },
+  "original_test_intent": "Demonstrate that the selected CRPS PSU and its SMBus/PMBus path implement the applicable PEC behavior, including a valid PEC transaction and the specified handling of a controlled PEC error, with bus and power recovery evidence.",
+  "original_method": "An engineer maps and installs a PEC-capable master/injector on the approved bus. The approved plan establishes baseline identity/health, performs the specified good and controlled-error transactions, captures raw frames/responses/events, and verifies recovery. The agent automates passive collection and analysis but does not invent or independently initiate fault injection.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies and isolates the correct bus/PSU, installs the PEC-capable master and controlled error fixture, approves the exact transaction/injection profile and supervises recovery. Once configured, evidence collection and response comparison can be automated.",
+  "required_inputs": [
+    "PSU identity, PMBus/SMBus controller, bus and address mapping",
+    "Applicable SMBus 2.0 PEC and PSU-specific response requirements",
+    "Approved valid-transaction and corrupted-PEC/error profiles",
+    "PEC-capable master/injector, versions, isolation and target controls",
+    "Expected PSU/bus/BMC response, timeout and recovery criteria",
+    "Engineer fixture setup and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not use blind i2cdetect scans, arbitrary writes or guessed addresses/packets on the PSU bus.",
+    "Do not inject until target, packet, corruption, duration, isolation and recovery are approved.",
+    "Do not infer PEC support from hwmon presence or absence/presence of existing dmesg strings.",
+    "Stop for bus lockup, PSU output/fault change, unexpected alert/event, heat or BMC/host impact.",
+    "Preserve the baseline and do not automatically retry, reset BMC/PSU or power-cycle."
+  ],
+  "agent_execution_scope": [
+    "Enumerate the approved target with a non-destructive vendor/project method and collect raw baseline state.",
+    "Validate tool/version, target and injection-plan metadata before any run.",
+    "After engineer setup/authorization, collect fixture output, PMBus response, kernel/BMC/SEL and recovery evidence.",
+    "Compare expected/actual PEC handling and report without controlling an unapproved injector or issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Supply the PEC requirement, target and controlled error profile.",
+    "Install/validate the master and fixture and authorize the state-changing injection.",
+    "Supervise safety stops and documented recovery.",
+    "Interpret compliance and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The SSH snippet can at most gather partial context. `sshpass` exposes password handling, disabled host-key checking weakens endpoint trust, `head -n 1` may miss the target hwmon device, and `tail -20` may omit relevant history. It never performs or proves PEC transactions.",
+    "executable_command_required": true,
+    "command_recommendation": "Replace ad hoc SSH with the approved authenticated transport and a target-specific read-only collector plus fixture output. Preserve the original snippet as provenance; do not use it as acceptance evidence or invent a generic injection command.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. Address, packet, expected response, injection and recovery parameters are missing."
+  },
+  "modernized_recommendation": {
+    "status": "CONTROLLED PEC TRANSACTION/ERROR MATRIX",
+    "recommended_method": "Use a target-locked PEC-capable master to record approved valid and intentionally corrupted transactions, PSU/controller responses, error indication and recovery, synchronized with BMC/host evidence.",
+    "applicable_platform": "Only the mapped PSU, bus/controller and approved injector combination.",
+    "supported_version": "Record PSU/BMC firmware, PEC requirement, master/injector and collector versions.",
+    "official_reference": "Applicable SMBus 2.0 and PSU/vendor PEC handling documentation supplied for the project; no generic packet or response is asserted.",
+    "difference_from_original_method": "Adds functional PEC proof beyond passive log searching while retaining controlled external setup and approval.",
+    "coverage_difference": "Passive enumeration/logs are precheck evidence only; full coverage requires the specified transactions and recovery behavior.",
+    "required_inputs": "Target/packet maps, PEC response criteria, injector and recovery method.",
+    "risks_limitations": "Controller offload may hide raw PEC details; evidence must show where validation occurs."
+  },
+  "project_override_considerations": "The project may choose vendor hardware or another approved PEC-capable fixture and a bounded error profile. Record the exact transactions and exclusions; i2c-tools presence alone does not complete this case.",
+  "expected_evidence": [
+    "PSU/bus/address identity and governing PEC requirement",
+    "Master/injector/collector versions and approved transaction profiles",
+    "Raw valid/error transaction and response records",
+    "Pre/post PSU output/fault, kernel, BMC/SEL and host recovery evidence",
+    "Safety stops, coverage limits and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and Criteria repeat the same PEC support requirement. Missing transaction/handling detail is a project/specification input, not a contradiction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "PEC support is a clear test objective. Tools and exact profiles gate execution but do not make the library case permanently BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep PARTIAL, but demote its command to limited precheck evidence and document security/completeness defects.",
+    "gpt_v2": "Agree with the PEC master/injector and recovery gates; retain PARTIAL and sharpen good/error transaction coverage.",
+    "v3_1_improvement": "Separates passive evidence, state-changing injection, execution readiness and engineer verdict."
+  },
+  "review_improvement": "This review prevents passive device names or old logs from being reported as PEC compliance and preserves the original command without endorsing insecure SSH or incomplete collection. It defines the missing functional evidence boundary.",
+  "independent_technical_reasoning": "Hardware setup and controlled injection require an engineer, but capture and analysis of known transactions can be automated, so PARTIAL is correct. The source names a recognized mechanism and is not semantically blocked. Evidence must prove functional handling, not merely that a PMBus driver exists.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 44, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 44 source_ref",
+    "history": "review_round_02_functionality.md lines 1112-1135", "external_sources": []
+  },
+  "no_automatic_retry": "On bus lockup, unexpected fault/output, missing response or management impact, preserve injector output and all raw evidence and stop. Recover only by the approved procedure; do not inject again, scan other addresses, reset or power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

@@ -1,0 +1,168 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 203,
+  "library_sequence": 4,
+  "source_key": "Functionality|5|Wistron-HW-00004-V002",
+  "case_variant_id": "6abaeaa700820a6b",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 5,
+    "code": "Wistron-HW-00004-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "93f0063cb41851c2caf5ca2ca6d60352db2bf4ff3042980e4dc95ec13d4a03fd",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_variants_read": [
+      "Functionality|2008|Wistron-HW-00004-V002"
+    ],
+    "next_source_row_verified": "Functionality|6|Wistron-HW-00005-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_Handle - PSU",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check hardware accuracy\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check hardware accuracy",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "20",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the Mechanical_Handle - PSU mechanical check requires physically operating the PSU handle/latch to confirm hardware accuracy and ease of use; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically operates the PSU handle/latch and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": "same code in 2 workbook rows (multi-row code)"
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. The derived review correctly identifies the PSU handle/latch as a physical acceptance surface, but supplies no risk detail and treats generic hand/eye judgment as sufficient without a platform reference.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds power-state, connector-protection, abnormal-resistance, photo and no-log-clear requirements while keeping the operator responsible.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 153-173: historical physical/NO conclusion.",
+      "Functionality row 2008 is a separate same-code Mellanox BF3 Board variant and is not imported into this PSU-handle review."
+    ]
+  },
+  "original_test_intent": "Physically operate the PSU service handle and its associated latch/retention mechanism to verify correct fit, travel, engagement, release and user serviceability for the specified power-supply assembly.",
+  "original_method": "An engineer examines and actuates the PSU handle, records photographs and judges mechanical accuracy. The source does not state that the PSU must be electrically removed or hot-swapped, so this review does not add either action.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer must observe handle alignment, full travel, latch engagement and release, retention, abnormal free play or resistance, and any contact with the PSU bay or chassis. A remote agent cannot apply or sense the required force and cannot verify that the retention mechanism is mechanically secure.",
+  "required_inputs": [
+    "PSU model, bay and handle/latch identity",
+    "Applicable chassis/PSU mechanical drawing or service specification",
+    "Approved state for handle actuation, including whether the PSU remains installed, de-energized or isolated",
+    "Acceptance limits for travel, retention, alignment, interference, force and visible damage",
+    "Qualified operator and photo/checklist evidence plan"
+  ],
+  "safety_requirements": [
+    "Do not treat handle actuation as authorization to release or remove an energized PSU.",
+    "Confirm redundant-power state, connector exposure and platform service procedure before any action that could unlatch the supply.",
+    "Use required ESD and pinch-point controls and support the PSU if the handle can disengage retention.",
+    "Stop on binding, cracking, failed lock, excessive play, interference, connector movement or an unexpected PSU/BMC event.",
+    "Do not force, repair or repeatedly cycle the handle after an anomaly.",
+    "Do not clear SEL, kernel or BMC evidence for this mechanical inspection."
+  ],
+  "agent_execution_scope": [
+    "Prepare a PSU-handle inspection checklist tied to the supplied drawing/specification.",
+    "Organize engineer-supplied before, engaged, released and restored-state photographs.",
+    "Correlate optional PSU presence, power and event evidence if the approved plan includes a state transition.",
+    "Identify missing mechanical observations while leaving the formal judgment to the engineer."
+  ],
+  "engineer_actions": [
+    "Confirm safe PSU power/service state and physically actuate the specified handle/latch.",
+    "Observe fit, travel, engagement, release, retention and abnormal resistance.",
+    "Restore and verify the intended final mechanical state.",
+    "Apply the platform acceptance reference and set the formal testcase verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The explicit non-runnable marker matches the physical intent. It should not be converted into a BMC power command, PSU inventory read, or hot-swap sequence because none can prove handle accuracy and the source does not require electrical removal.",
+    "executable_command_required": false,
+    "command_recommendation": "No command completes the test. If the approved plan intentionally changes PSU presence or power state, read-only BMC/PSU telemetry may be collected as supporting evidence only.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 20 are preserved as planning metadata. The source provides no repetition count, actuation force, electrical removal, hot-swap or runtime requirement."
+  },
+  "modernized_recommendation": {
+    "status": "KEEP MANUAL MECHANICAL METHOD",
+    "recommended_method": "Use a drawing-linked PSU handle/latch checklist with defined safe service state and photographs at open, engaged and restored positions. Add read-only PSU telemetry only when the approved plan includes an electrical state change.",
+    "applicable_platform": "The selected chassis, PSU FRU and bay design.",
+    "supported_version": "Record chassis/PSU drawing and service-procedure revisions.",
+    "official_reference": "Applicable platform mechanical drawing and approved PSU service procedure; no universal force or travel value is invented.",
+    "difference_from_original_method": "Makes the latch/retention observations and safe power boundary explicit without changing the physical function under test.",
+    "coverage_difference": "None for the handle/latch when all required positions and restoration are observed. PSU electrical behavior is outside scope unless the project explicitly adds it.",
+    "required_inputs": "PSU/bay identity, specification, safe service state and acceptance limits.",
+    "risks_limitations": "Photos cannot establish actuation force or retention strength, and telemetry cannot establish mechanical fit."
+  },
+  "project_override_considerations": "A project may approve a non-removal handle actuation or a controlled service/removal sequence according to its PSU architecture. The exact action and any electrical coverage must be recorded separately. A BMC presence reading does not substitute for handle/latch observation.",
+  "expected_evidence": [
+    "Chassis, PSU FRU and bay identity plus drawing/service-procedure revision",
+    "Approved power/isolation and operator safety state",
+    "Photographs of initial, actuated/engaged, released and restored handle positions",
+    "Engineer checklist for alignment, travel, retention, release, free play, resistance, interference and damage",
+    "Optional PSU/BMC state and event deltas only if the plan includes a service-state transition",
+    "Safety-stop record and separately owned engineering verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The name, procedure and criterion all point to a physical PSU-handle accuracy check. The 5/20 timing difference is planning metadata under V3.1, and the vague word 'accuracy' requires a project specification rather than indicating contradictory source requirements."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The target and core manual operation are identifiable. Missing mechanical limits and safe power state are project inputs that gate execution; they do not make the Master row permanently impossible to review."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Accept the manual-only boundary and PSU-handle target; add the missing electrical-release, connector, pinch and evidence safeguards.",
+    "gpt_v2": "Keep V2's no-force, isolation, no-log-clear and operator-evidence improvements, while avoiding the unrequired assumption that the PSU must be removed.",
+    "v3_1_improvement": "Separates mechanical handle coverage from optional electrical PSU evidence and treats the timing fields and missing accuracy limits correctly as planning/readiness facts."
+  },
+  "review_improvement": "The revised contract defines what 'hardware accuracy' means for this PSU handle without inventing a hot-swap test. It adds the specific risk that actuation can release an energized supply and distinguishes supporting telemetry from the manual mechanical acceptance.",
+  "independent_technical_reasoning": "A PSU handle is a load-bearing service and retention interface. Correct behavior depends on physical travel, latch engagement, release, alignment, resistance and final secure state, none of which a command or BMC sensor can establish. Because handle actuation may disengage a supply, the safe power architecture and service procedure must be known before execution. The source does not explicitly call for PSU removal or power interruption, so adding a hot-swap cycle would expand scope. The case is therefore MANUAL ONLY, readiness-gated by the PSU/bay specification, and not BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 5, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 5 source_ref",
+    "history": "review_round_02_functionality.md lines 153-173; duplicate-code isolation against Functionality row 2008",
+    "external_sources": []
+  },
+  "no_automatic_retry": "A bind, failed latch, connector movement, unexpected power event or restoration problem ends the approved action. Preserve the physical state and evidence; do not automatically cycle the handle again or attempt an electrical recovery.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "unapproved_hot_swap_added": false,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

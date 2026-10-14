@@ -1,0 +1,119 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 241,
+  "library_sequence": 46,
+  "source_key": "Functionality|47|Wistron-HW-00050-V004",
+  "case_variant_id": "8d53f284986bf660",
+  "source_ref": {"sheet": "Functionality", "source_row": 47, "code": "Wistron-HW-00050-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "92fad6eeaeacdb11e37d7ec530212d055ca0bd880a1ea36f947a4e5f90433f0c",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00050-V004.",
+    "next_source_row_verified": "Functionality|48|Wistron-HW-00051-V005"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Capability and Inventory Reporting  QUERY",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Used to determine if the PSU supports a specific command.\nIt should return the proper information about any commands listed in Table 1223 Summary of PMBus commands\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Used to determine if the PSU supports a specific command.\nIt should return the proper information about any commands listed in Table 1223 Summary of PMBus commands",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools ipmitool",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power' || echo no_pmbus_dev; echo ---i2c_buses---; sudo i2cdetect -l 2>/dev/null | grep -iE 'smbus|i2c' || echo no_i2c_tools; echo ---reg_QUERY_MFR_SPECIFIC---; sudo i2cget -f -y ${PMBUS_BUS:?set PSU i2c bus} ${PMBUS_ADDR:?set PSU i2c addr} 0xE0 2>&1\"",
+      "ai_logs_output": "enumerate the hwmon PMBus + i2c buses on the DUT so the QUERY via MFR_SPECIFIC register (0x0xE0, the PSU model/capability query via MFR-specific command) can be read; then, once the user supplies the PSU i2c bus+address, read the register with i2cget/i2ctransfer and return the FULL value. Agent returns the PMBus/i2c enumeration + the register value once bus/addr are given.",
+      "risk": "RISK: requires the PSU to be PMBus-connected and the exact PSU i2c bus/address from the board schematic; reading a raw PMBus register needs i2c-tools on the DUT. State: read-only, but target bus/address must be verified against the board before using i2cget.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It substitutes an unsourced MFR-specific 0xE0 byte read for the source's parameterized QUERY purpose and uses forced raw access.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 correctly requires selection of the Table 1223 command and its transaction/response definition. V3.1 separates those inputs from automatable capability.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1194-1219: historical PARTIAL review and false-completion warning for QUERY."]
+  },
+  "original_test_intent": "For each project-selected command from Table 1223, issue the applicable approved QUERY transaction to the identified CRPS PSU, determine reported command support, and validate the complete response information against the command/vendor definition.",
+  "original_method": "The project supplies the selected command set and, for each entry, target, query transaction, response format and expected support result. The agent executes the approved read-only matrix, retains raw responses/status, decodes and compares each row, repeats for consistency and preserves platform evidence.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "No physical core action is inherent. The engineer chooses the command coverage and supplies authoritative read-only transaction semantics; parameters and approval do not make the automated QUERY matrix PARTIAL.",
+  "required_inputs": [
+    "PSU identity/firmware and board bus/address ownership map",
+    "Table 1223 revision and exact project-selected command list",
+    "Per-command QUERY transaction type, length, PEC, response encoding and expected result",
+    "Vendor-specific mappings and rules for unsupported/invalid responses",
+    "Approved non-forced PMBus/vendor reader and version",
+    "One-user approval and bus recovery procedure"
+  ],
+  "safety_requirements": [
+    "Do not substitute MFR-specific 0xE0 or any other command for the missing selected Table 1223 entry.",
+    "Do not guess transaction width/PEC or use forced access, blind scans, writes, block operations with unknown side effects or a BMC-owned bus without approval.",
+    "Use authenticated transport and protect credentials.",
+    "Stop on target mismatch, ambiguous response length/encoding, bus error or PSU/BMC/host change.",
+    "Preserve logs and do not try another command automatically after an abnormal response."
+  ],
+  "agent_execution_scope": [
+    "Validate and display the resolved command matrix before approval.",
+    "Execute only approved read-only QUERY transactions through the mapped target path.",
+    "Store full raw bytes, exit/transport status, decoded support information and repeat results per command.",
+    "Compare expected/actual coverage and compile evidence without issuing the formal verdict."
+  ],
+  "engineer_actions": [
+    "Select/approve Table 1223 command coverage and authoritative mappings.",
+    "Approve target and read-only access/recovery method.",
+    "Resolve vendor-specific or ambiguous responses.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not suitable as acceptance evidence: it guesses 0xE0, does not encode the selected QUERY transaction, uses `-f`, insecure SSH patterns and only partial enumeration; ipmitool is listed but unused and `0x0xE0` is malformed in the description.",
+    "executable_command_required": true,
+    "command_recommendation": "Generate a target-locked read-only transaction per approved Table 1223 entry using the vendor/board-approved tool and authenticated transport. Preserve the original proposal as provenance only.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source leaves the specific command set to project selection; actual coverage must list every queried entry."
+  },
+  "modernized_recommendation": {
+    "status": "PARAMETERIZED READ-ONLY QUERY MATRIX",
+    "recommended_method": "Build a versioned matrix of selected Table 1223 commands and exact query/response definitions, run it through the approved reader, retain raw outputs and produce per-command support/response results.",
+    "applicable_platform": "Only the mapped PSU/bus and matching table/vendor definitions.",
+    "supported_version": "Record PSU/BMC firmware, Table 1223/vendor map and reader versions.",
+    "official_reference": "The applicable project-supplied Table 1223 and PSU command documentation; no generic 0xE0 selection is asserted.",
+    "difference_from_original_method": "Replaces one guessed register with complete parameterized query evidence.",
+    "coverage_difference": "One command proves only that entry; library or project completion must name the selected command coverage and exclusions.",
+    "required_inputs": "Command matrix, target map, response definitions, tool and expected results.",
+    "risks_limitations": "Some QUERY responses may be vendor-specific or transport-dependent and require engineer interpretation."
+  },
+  "project_override_considerations": "The project may select one, several or all applicable Table 1223 commands. Record the exact set and exclusions. Completion of a limited plan must not be presented as support validation for the full table.",
+  "expected_evidence": [
+    "PSU identity, table/vendor revisions and selected command coverage",
+    "Per-command target/transaction/response definitions and tool version",
+    "Full raw and decoded QUERY responses with exit status and repeat consistency",
+    "Per-command expected/actual matrix plus preserved PSU/BMC event delta",
+    "Coverage exclusions and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "A 'specific command' and commands listed in the table describe a parameterized per-command test. Project selection determines coverage; the source does not assert two incompatible operations."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The parameterized QUERY intent is clear. Missing selection/mapping/package are readiness inputs rather than permanent BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its hard-coded MFR-specific substitution and forced command while preserving the idea of automated read evidence.",
+    "gpt_v2": "Agree with per-command selection and safe read gates, but reclassify from PARTIAL to FULLY AUTOMATABLE once inputs are supplied.",
+    "v3_1_improvement": "Separates command coverage and approval from execution capability and prevents one-entry false completion."
+  },
+  "review_improvement": "This review restores the source's parameterized command scope, records coverage explicitly and removes an unsourced single-register substitution. It also applies the rule that input/spec dependencies do not reduce a fully automatable read-only core.",
+  "independent_technical_reasoning": "After command/response semantics are supplied, the full core—query, capture, repeat, decode and compare—is automatable. Human work is configuration and final judgment, not test execution. Therefore FULLY AUTOMATABLE is correct, with project-selected coverage made explicit.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 47, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 47 source_ref",
+    "history": "review_round_02_functionality.md lines 1194-1219", "external_sources": []
+  },
+  "no_automatic_retry": "On invalid/ambiguous response, bus error or platform change, preserve the exact command/raw state and stop. Do not force, guess another command/address/width, rescan, reset or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

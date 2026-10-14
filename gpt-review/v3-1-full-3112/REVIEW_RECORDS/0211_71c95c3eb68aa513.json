@@ -1,0 +1,168 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 211,
+  "library_sequence": 12,
+  "source_key": "Functionality|13|Wistron-HW-00012-V002",
+  "case_variant_id": "71c95c3eb68aa513",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 13,
+    "code": "Wistron-HW-00012-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "4b3c705f8c8b17f17bef0fc70bcc44ad6c9a25a9a1f4e7ba4feeddce17591f3a",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00012-V002.",
+    "next_source_row_verified": "Functionality|14|Wistron-HW-00013-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "PDB",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"PDB\" mechanical check requires visually and physically inspecting the PDB to confirm all components are seated properly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"PDB\" (visually and physically inspecting the PDB to confirm all components are seated properly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly assigns physical PDB seating to an operator, but omits the plug-cycle detection requirement and all power/stored-energy boundaries.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 restores the approved plug/reconnect cycle and optional post-action evidence, rejects log clearing and notes system-availability risk, but does not resolve what PDB functions are detectable.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 345-365: historical physical/NO result for PDB.",
+      "Other source rows mention PDB FRU, heartbeat LED or PDB_BD, but those distinct tests do not define this row's component list, electrical interfaces or expected post-cycle observations."
+    ]
+  },
+  "original_test_intent": "Verify the project-defined PDB assembly and its in-scope mating components through an approved plug/reconnect cycle: connectors and retainers remain correctly aligned and fully seated, and the affected board identity, power-distribution indications or downstream functions return to their specified state without new relevant errors.",
+  "original_method": "A qualified engineer identifies the exact PDB and all approved interfaces, establishes the required isolated and discharged state, performs the physical cycle, inspects final seating and supplies photographs. An agent may collect project-mapped read-only post-restoration evidence but cannot touch the board or declare seating correct.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer maps PDB to the actual board and its power/signal connectors, applies the platform isolation and discharge procedure, disconnects/reconnects only approved interfaces, inspects contact and keying condition, controls cable/busbar strain, secures retention hardware and directly confirms final seating. These core actions remain manual even if management evidence can be read afterward.",
+  "required_inputs": [
+    "Authoritative PDB expansion/function, board FRU/revision and physical location",
+    "PDB power/signal connector and downstream-load map with approved in-scope components",
+    "Platform isolation, lockout or AC-removal responsibility, discharge verification and ESD procedure",
+    "Mechanical retention/torque requirements and permitted plug-cycle method",
+    "Expected post-restoration FRU, sensor, rail/status, LED or downstream device observations for this platform",
+    "Approved read-only collectors, qualified operator and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Treat the PDB as power-path hardware until the authoritative board function and energy boundaries are confirmed; do not handle it on an assumed low-voltage or de-energized basis.",
+    "Use the project-approved isolation and discharge verification. If physical AC removal is required, it is an engineer action and must not be replaced by BMC power-off or software shutdown without an explicit case plan.",
+    "Do not loosen or disturb busbars, high-current joints or torque-controlled connections unless those exact actions are approved and specified.",
+    "Protect keyed power/signal connectors from skew, arcing, contamination and cable strain; verify polarity/orientation from the drawing rather than memory.",
+    "Stop on residual-energy concern, discoloration/heat damage, unexpected resistance, damaged contact, loose high-current joint, alarm or failure to restore a downstream load.",
+    "Do not repeat the cycle, energize for troubleshooting or clear SEL/telemetry after an abnormal result without engineering direction."
+  ],
+  "agent_execution_scope": [
+    "Prepare a PDB connector/load evidence matrix from the project schematic, drawing and approved service procedure.",
+    "Collect approved pre-action FRU/status/sensor/downstream snapshots without operating power controls or clearing history.",
+    "After the engineer confirms physical restoration and authorizes energization, collect the mapped post-action observations and new events.",
+    "Correlate mechanical photos, board identity, rail/status and downstream results; report differences without issuing a formal verdict."
+  ],
+  "engineer_actions": [
+    "Confirm PDB identity, energy sources, downstream impact, isolation/discharge state and exact physical interfaces in scope.",
+    "Perform the approved connector/component cycle and final retention/seating inspection.",
+    "Authorize any re-energization only after verifying orientation, retention and absence of damage or foreign objects.",
+    "Evaluate mechanical and post-restoration functional evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable conclusion is correct for physical PDB work, but the source also requests detection without error. Whether that means board FRU, power sensors, LEDs, rail/status data or downstream devices is platform-specific and cannot be inferred from other PDB cases.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only project-approved read-only BMC/host collectors mapped to the selected PDB's actual observable functions. Do not copy a FRU, sensor or device command from another row as a universal PDB check, and do not invoke power control as an evidence command.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 remain unchanged. No connector list, cycle count, electrical limit, discharge time, torque, expected telemetry or command is supplied by the Master row."
+  },
+  "modernized_recommendation": {
+    "status": "PLATFORM POWER MAP REQUIRED",
+    "recommended_method": "Bind the manual PDB cycle to a revision-controlled connector/load map, verified isolation/discharge checklist and per-interface seating evidence. Add read-only board identity, power-state and downstream observations only where the platform documentation defines them.",
+    "applicable_platform": "The selected PDB FRU, chassis power architecture and populated downstream interfaces.",
+    "supported_version": "Record board/chassis schematics, mechanical/service procedure, BMC/firmware and evidence-tool versions.",
+    "official_reference": "Applicable platform PDB schematic, mechanical drawing, energy-isolation procedure and service documentation; no generic command or electrical limit is asserted.",
+    "difference_from_original_method": "Preserves plug/reseat and detection while adding the energy-control and connector-to-observable mapping needed to make the test safe and auditable.",
+    "coverage_difference": "Full coverage requires the approved PDB interfaces to be mechanically verified and their defined post-restoration functions observed. A FRU read or healthy system state alone cannot prove every connector is correctly seated.",
+    "required_inputs": "PDB identity/function, power and connector map, isolation/discharge method, mechanical criteria, expected observations and collectors.",
+    "risks_limitations": "Management data can remain readable despite a marginal high-current connection, and a downstream fault can have causes other than PDB seating."
+  },
+  "project_override_considerations": "The project may approve a connector subset and specific observable functions. It must record excluded high-current/signal interfaces and downstream loads as coverage delta. A project plan may require engineer-performed AC isolation, but that case-specific need must not be generalized to all AC-cycle tests or replaced by a software power action.",
+  "expected_evidence": [
+    "PDB FRU/revision, board function, chassis location and connector/downstream-load map",
+    "Authorized isolation/discharge and re-energization record with operator timestamps",
+    "Photographs of approved connector/contact condition, alignment, retention and final seating",
+    "Raw mapped pre/post board identity, rail/status/sensor or downstream-function evidence",
+    "Relevant new BMC/SEL/host events and an explicit expected-versus-observed comparison",
+    "Safety stops, excluded connector/load coverage and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Procedure and Criteria consistently require PDB component plug/reconnect, post-cycle detection and proper seating. The exact PDB function and observable set are missing project context rather than contradictory source facts; separate PDB rows are not imported as this case's specification."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The mechanical-plus-restoration intent is understandable and reviewable. A specific project run must wait for the PDB/power map and approved isolation method, but those safety-critical readiness inputs do not make the library case permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain NO for physical action, but restore the post-cycle detection clause and add PDB-specific energy, high-current interface and re-energization controls.",
+    "gpt_v2": "Agree with MANUAL ONLY and operator-owned cycling; refine optional post-action evidence into board-mapped identity/power/downstream observations and explicitly separate software shutdown from physical isolation.",
+    "v3_1_improvement": "Treats missing power architecture as execution readiness, preserves a one-user approved plan, prohibits automatic recovery and prevents other PDB test commands from being copied without applicability proof."
+  },
+  "review_improvement": "The record adds the safety model uniquely required by a PDB context while declining to invent its expansion, voltage, connector set or management interface. It preserves the source's functional detection objective through a project-specific observable map instead of a generic device-enumeration claim.",
+  "independent_technical_reasoning": "The source clearly requires physical connector cycling and seating, so MANUAL ONLY is fixed by the core acceptance. PDB is a project hardware label whose exact board and observable interfaces are not defined in this row; related FRU and LED cases show possible evidence domains but cannot define this test. Because the board may participate in the chassis power path, safe planning must require authoritative isolation, discharge and downstream-impact data before any action. Once those inputs exist, an agent can gather read-only before/after evidence, but it cannot replace physical seating or decide PASS/FAIL. Missing project data therefore affects readiness rather than permanent capability.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 13, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 13 source_ref",
+    "history": "review_round_02_functionality.md lines 345-365 plus distinct PDB occurrence search",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On uncertain isolation, residual-energy concern, damaged or incompletely seated interface, abnormal rail/status, downstream loss or new relevant event, preserve the safe state and evidence. Do not reconnect again, energize, power-cycle, clear alarms or substitute BMC/software power control without a new engineer-approved response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

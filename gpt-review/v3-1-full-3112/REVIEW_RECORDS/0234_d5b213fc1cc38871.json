@@ -1,0 +1,118 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 234,
+  "library_sequence": 39,
+  "source_key": "Functionality|40|Wistron-HW-00043-V004",
+  "case_variant_id": "d5b213fc1cc38871",
+  "source_ref": {"sheet": "Functionality", "source_row": 40, "code": "Wistron-HW-00043-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "2f3f7fe197387a53af147145fdf8714faa04421433f671f8cb365a42746035f2",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00043-V004.",
+    "next_source_row_verified": "Functionality|41|Wistron-HW-00044-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -LED", "test_name_items": "Flashing_Eight_Times",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED Flashing from 1 to 8 Times\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED Flashing from 1 to 8 Times", "script": null, "attended_time": "40", "machine_time": "40", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED flashing eight times as the fault signature on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED flashing eight times as the fault signature and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO, but it selects exactly eight flashes from the item name and does not preserve the procedure/criteria alternative of one through eight times.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly flags the source ambiguity between exact-eight and 1-to-8 behavior and requires vendor resolution.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1016-1036: historical physical/NO review for Flashing_Eight_Times."]
+  },
+  "original_test_intent": "Observe and document a CRPS PSU LED flash-count fault signature, but preserve the unresolved source alternatives: the item says eight flashes, while both Procedure and Criteria say flashing from one to eight times. These may mean one exact eight-flash code or a family/sweep of counts 1 through 8.",
+  "original_method": "After the owner resolves the intended sequence and approved state, a qualified operator identifies the PSU, records the complete physical LED pattern through the 40-minute source window, counts flashes/repeats and correlates the observed code with vendor state evidence. The agent may analyze operator video and telemetry only.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator observes the correct PSU bezel, counts the resolved pattern, records color, cadence, pauses and repeat behavior, and captures a complete time-linked sequence without manipulating the PSU.",
+  "required_inputs": [
+    "Engineering resolution: exactly eight flashes versus separate/variable counts 1 through 8",
+    "Target CRPS slot/serial and applicable fault-code specification revision",
+    "Starting/trigger state, color, cadence, pause, repeat and tolerance",
+    "Expected PSU/BMC fault state for correlation",
+    "Observation plan covering the original 40 attended and 40 machine minutes",
+    "Qualified observer, recording method and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not induce a fault, manipulate, reseat, unlatch, remove or power-cycle the PSU merely to obtain a flash code unless separately approved.",
+    "Do not resolve the exact-eight versus 1-to-8 conflict by assumption.",
+    "Stop for heat, smoke, arcing, abnormal noise, unexpected power transition or management loss.",
+    "Preserve event history and do not clear logs.",
+    "Do not automatically retrigger an incomplete, unexpected or ambiguous sequence."
+  ],
+  "agent_execution_scope": [
+    "Prepare separate evidence plans for the two source interpretations and record the owner's selected one.",
+    "Collect read-only PSU identity, state and event context.",
+    "Analyze operator-provided video for counts and timing after the interpretation is resolved.",
+    "Report discrepancies without claiming direct observation or choosing the source meaning."
+  ],
+  "engineer_actions": [
+    "Resolve the source conflict against the governing vendor/platform requirement.",
+    "Approve the target state, pattern, observation window and safe test plan.",
+    "Directly observe and record the physical sequence.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual boundary is correct, but its exact-eight interpretation discards the explicit 1-to-8 wording in Procedure and Criteria.",
+    "executable_command_required": true,
+    "command_recommendation": "Use read-only PSU/BMC queries only for identity/state context and analyze approved operator video after source resolution. No command or fault injection is inferred.",
+    "original_parameters_and_time_preserved": "Attended Time 40 and Machine Time 40 remain unchanged. The flash-count conflict, color, cadence, repeats, tolerance and trigger are unresolved."
+  },
+  "modernized_recommendation": {
+    "status": "SOURCE MEANING MUST BE RESOLVED BEFORE CAPTURE",
+    "recommended_method": "After owner resolution, record identity-linked timestamped video across the full pattern and use frame-based count/timing analysis correlated with vendor fault-state evidence.",
+    "applicable_platform": "Only the selected CRPS implementation and resolved fault-code definition.",
+    "supported_version": "Record PSU/chassis/firmware, fault-code table and capture metadata.",
+    "official_reference": "The governing vendor/platform fault-code table is required; no interpretation is selected by this review.",
+    "difference_from_original_method": "Makes the source decision and temporal evidence auditable without altering the physical criterion.",
+    "coverage_difference": "Exact-eight evidence does not cover a 1-to-8 matrix, and a mixed 1-to-8 set does not prove one defined eight-flash signature.",
+    "required_inputs": "Resolved sequence, code semantics, timing/tolerance and capture plan.",
+    "risks_limitations": "Incomplete capture or state transitions can miscount fault codes."
+  },
+  "project_override_considerations": "The project may choose the interpretation only through an approved engineering decision linked to the vendor requirement. Record the chosen scope and never claim both interpretations were covered unless both are explicitly executed.",
+  "expected_evidence": [
+    "Documented source-conflict decision and governing reference",
+    "PSU identity, state and resolved color/count/cadence/repeat rule",
+    "Operator worksheet and complete time-linked visual recording",
+    "Raw PSU/BMC health/fault context and preserved event delta",
+    "Actual duration/coverage and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The item requires 'Eight Times' while Procedure and Criteria require 'from 1 to 8 Times'. Exact-eight and a count range/matrix produce materially different stimuli, evidence and coverage, so the review cannot silently choose one."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The capability and physical evidence method are clear. Execution needs an engineer decision on the recorded source conflict; that pending decision is tracked separately rather than changing the case to permanent BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its silent exact-eight choice while retaining MANUAL ONLY.",
+    "gpt_v2": "Agree with the identified source ambiguity and required vendor definition; keep it as an explicit SOURCE_CONFLICT rather than burying it in readiness text.",
+    "v3_1_improvement": "Separates stable manual capability, source decision, execution readiness and final engineer verdict."
+  },
+  "review_improvement": "This record preserves both conflicting source facts and quantifies their different coverage, preventing the title from overwriting the Procedure/Criteria or vice versa.",
+  "independent_technical_reasoning": "Counting a physical fault pattern is MANUAL ONLY even if supplied video can be analyzed. The source conflict is genuine because exact eight and 1-to-8 define different cases. It requires an owner decision but does not erase the understandable test domain or justify an unsafe automatic trigger.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 40, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 40 source_ref",
+    "history": "review_round_02_functionality.md lines 1016-1036", "external_sources": []
+  },
+  "no_automatic_retry": "On incomplete capture, unexpected count, fault escalation or power/management change, preserve the recording and state and stop. Do not retrigger, clear faults, reseat/unlatch the PSU, reboot or power-cycle automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW_WITH_SOURCE_CONFLICT"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

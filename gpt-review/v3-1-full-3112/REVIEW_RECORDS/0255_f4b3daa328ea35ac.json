@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 255,
+  "library_sequence": 60,
+  "source_key": "Functionality|61|Wistron-HW-00064-V004",
+  "case_variant_id": "f4b3daa328ea35ac",
+  "source_ref": {"sheet": "Functionality", "source_row": 61, "code": "Wistron-HW-00064-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "30bd871cc280c6c07fa48f6af51a50f74b9768031d84a1b5a723e1797f558d74",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00064-V004.",
+    "next_source_row_verified": "Functionality|62|Wistron-HW-00065-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : Function", "test_name_items": "Plug-in",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Insert all Power supply with power cord plugged\n2. Check PSU status with vision\n3. Check PSU status by BMC (sensor list and SEL)\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Power supply should be inserted without any problem.\n2. Power supply should be workable after inserted (LED and FAN should be working)\n3. PSU information in sensor list and SEL of BMC should be correct",
+    "script": null, "attended_time": "15", "machine_time": "15", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU Function case (plugging all PSUs with power cords and visually checking the PSU + BMC sensor/SEL) requires physically inserting/removing/cycling the PSU module and its power-cord at the machine and visually observing the PSU LED/status; a person must be present at the hardware. The agent can only read the post-operator BMC PSU sensors/SEL, which the operator records after the physical step.",
+      "ai_logs_output": "operator physically plugging all PSUs with power cords and visually checking the PSU + BMC sensor/SEL then records PSU LED/status; after that the agent can run ipmitool (on agent host) sdr elist 2>&1 | grep -iE \"psu|power supply\" ; echo ---sel---; ipmitool (on agent host) sel list last 30 2>&1 | tail -30 ; echo ---psu_plugging_all_psus---; ipmitool (on agent host) sensor list 2>&1 | grep -iE \"psu|power supply\" to confirm BMC sees the PSU state, but the physical action must be human.",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly preserves physical insertion and visual inspection, but overstates removal/cycling not present in this row and provides only illustrative post-action commands.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly requires slot/serial identity, hot-plug/isolation approval and direct seating/LED/fan evidence; BMC is corroboration.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1559 onward: historical NO review based on physical insertion and vision."]
+  },
+  "original_test_intent": "Verify that every specified CRPS PSU can be physically inserted with its power cord connected, becomes operational with correct LED and fan behavior, and appears correctly in BMC sensors and SEL.",
+  "original_method": "A qualified operator identifies each module/slot, follows the platform-approved energized hot-plug or de-energized insertion procedure, confirms seating/latch/cord plus LED/fan visually, and then correlates the physical result with read-only BMC sensor and SEL evidence.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Core acceptance includes inserting all PSU modules and direct observation of mechanical seating, LED and fan operation; these cannot be replaced by remote BMC telemetry. The agent may collect and correlate digital evidence afterward.",
+  "required_inputs": [
+    "PSU slot/serial/cord map and required module population",
+    "Approved hot-plug versus de-energized insertion SOP, ESD/PPE and redundancy/load state",
+    "Expected latch/seating, LED and fan behavior per PSU model",
+    "BMC sensor/SEL mapping and stabilization timing",
+    "Recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not insert energized hardware unless the platform explicitly supports the exact procedure.",
+    "Do not force a module, latch, connector or cord; stop on misalignment, bent contacts, arcing, heat or power change.",
+    "Verify slot/serial/cord identity and safe redundancy/load state before each action.",
+    "Preserve logs; do not clear the insertion evidence.",
+    "No automatic re-insertion, reset or power cycle after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Prepare per-slot checklist and capture baseline BMC/SEL/redundancy state.",
+    "Wait for operator confirmation/photos of insertion, seating, LED and fan.",
+    "Collect approved read-only BMC sensors/SEL and host/redundancy evidence for each module.",
+    "Correlate evidence without claiming physical observation or issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Approve and perform every insertion/cord action.",
+    "Observe seating/latch/LED/fan and supply timestamped evidence.",
+    "Handle safety stop/recovery and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual boundary is correct, but removal/cycling is not in this source. Its post-action ipmitool snippets need real BMC credentials/interface and platform-specific sensor mapping; they cannot prove seating or visual state.",
+    "executable_command_required": false,
+    "command_recommendation": "Use the approved BMC interface after each operator-confirmed insertion to export full PSU sensors and timestamped SEL, retaining slot/serial correlation rather than grep-only evidence.",
+    "original_parameters_and_time_preserved": "Attended Time 15 and Machine Time 15 remain unchanged; 'all Power supply' coverage must enumerate every required slot."
+  },
+  "modernized_recommendation": {
+    "status": "OPERATOR CHECKLIST PLUS BMC CORRELATION",
+    "recommended_method": "Use a per-slot/serial checklist with photos for latch, cord, LED and fan, paired with full before/after BMC sensor/SEL exports and stabilization timestamps.",
+    "applicable_platform": "The identified chassis, PSU population and documented hot-plug/isolation design.",
+    "supported_version": "Record PSU/BMC firmware, BMC interface/tool version and platform SOP revision.",
+    "official_reference": "Project platform service/hot-plug and BMC sensor mapping documents; no generic command is asserted.",
+    "difference_from_original_method": "Adds identity/timeline correlation and non-destructive log preservation without replacing physical checks.",
+    "coverage_difference": "BMC evidence corroborates presence/health but does not cover connector seating, latch feel, LED or airflow observation.",
+    "required_inputs": "Population map, SOP, expected physical states, BMC mapping, timing and recovery.",
+    "risks_limitations": "Sensor lag or incorrect entity mapping can associate a valid BMC state with the wrong physical PSU."
+  },
+  "project_override_considerations": "A project may reduce the required population only through an approved plan that lists tested/excluded slots. It may choose hot-plug or powered-off insertion, but must record the actual method and cannot remove the direct visual/mechanical acceptance.",
+  "expected_evidence": [
+    "Per-PSU slot/serial/cord checklist and approved insertion state/SOP",
+    "Timestamped photos or operator record of seating/latch, LED and fan for each PSU",
+    "Full pre/post BMC sensor and SEL output mapped to every module",
+    "Redundancy/load, host/BMC health and anomaly/recovery evidence",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criteria consistently require insertion, visual operation and BMC reporting for all PSUs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The operation is clear. Missing platform SOP and mappings are readiness inputs; with an operator and approved plan the test can proceed."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with NO/manual core; remove unsupported removal/cycling wording and retain agent post-action support.",
+    "gpt_v2": "Agree with MANUAL ONLY, physical/BMC evidence separation and hot-plug/isolation gates.",
+    "v3_1_improvement": "Makes 'all PSUs' traceable by slot/serial and preserves full evidence rather than grep-only output."
+  },
+  "review_improvement": "This review narrows the action to insertion, makes all-module coverage explicit, and prevents BMC presence from substituting for mechanical/visual acceptance.",
+  "independent_technical_reasoning": "The acceptance criteria explicitly require human mechanical handling and visual LED/fan observation. Those are core, not setup-only, so MANUAL ONLY is correct even though BMC evidence collection is automatable.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 61, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 61 source_ref",
+    "history": "review_round_02_functionality.md lines 1559-1583", "external_sources": []
+  },
+  "no_automatic_retry": "On seating, electrical, visual or BMC anomaly, preserve the per-slot evidence and stop. Do not force/reinsert, reset or power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

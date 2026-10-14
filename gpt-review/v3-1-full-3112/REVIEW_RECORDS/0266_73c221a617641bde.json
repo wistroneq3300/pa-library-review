@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 266,
+  "library_sequence": 72,
+  "source_key": "Functionality|73|Wistron-HW-00076-V002",
+  "case_variant_id": "73c221a617641bde",
+  "source_ref": {"sheet": "Functionality", "source_row": 73, "code": "Wistron-HW-00076-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "0bb799cb917264563163d718173a645d9c250300ed59ea1527642b24030b2c22",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00076-V002.",
+    "next_source_row_verified": "Functionality|74|Wistron-HW-00077-V002 is a hash-matched Final Audit baseline; next pending is Functionality|75|Wistron-HW-00078-V002."
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "CPU Error LED",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check CPU error led in motherboard and sel in BMC.\n1. Check LED location in motherboard\n2. Inject CPU error to check LED display.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1.LED location should match motherboard spec.\n2.LED working mode need to match SPEC",
+    "script": null, "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "-- not runnable by agent: this case verifies the CPU error/fault LED behavior - a visual check of the physical CPU error LED on the board/bezel (only meaningful when a CPU error condition exists). A person must be present to see the LED. Agent cannot observe the physical LED over SSH.", "ai_logs_output": "operator visually inspects the CPU error LED (and triggers the CPU fault condition); agent cannot see the physical LED.", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies the physical LED observation but does not resolve how a CPU error may be injected safely or recovered.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 identifies the missing LED semantics, supported injection method and recovery procedure as a genuine safety blocker.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1898-1921: historical physical/NO review."]
+  },
+  "original_test_intent": "Induce a defined CPU error and verify that the motherboard CPU-error LED is in the specified physical location and displays the specified state while the BMC SEL records the corresponding fault.",
+  "original_method": "A qualified engineer locates the board LED, applies an approved CPU fault-injection mechanism, observes and photographs the physical indication, and correlates it by time and fault identity with unmodified BMC SEL evidence.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_EXPECTED", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A human must inspect the actual board/bezel LED and operate any physical fault fixture. The agent may collect SEL only after the fault method is approved; SEL text is not a substitute for visual LED evidence.",
+  "required_inputs": [
+    "Exact motherboard revision and CPU-error LED reference designator/location",
+    "Expected LED off/on/color/blink/latch/clear behavior for the selected CPU fault",
+    "Vendor- or project-approved CPU fault-injection method with target, severity and duration",
+    "Expected SEL sensor/event signature and time-correlation rule",
+    "Qualified operator, maintenance window, OOB access, recovery/clear procedure and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not guess a fault by removing/disabling a CPU, shorting signals, modifying firmware or issuing an undocumented injection command.",
+    "Do not power-cycle, clear SEL, repeat injection or alter error policy automatically.",
+    "Protect active workloads and confirm OOB/KVM access before any approved disruptive injection.",
+    "Stop on loss of management, unexpected uncorrectable error, boot/power/thermal fault or failure to clear the injected state.",
+    "Preserve the first fault and recovery evidence without hiding collateral events."
+  ],
+  "agent_execution_scope": [
+    "Request and validate the named injection/LED/SEL contract and prepare the evidence timeline.",
+    "After engineer approval and operator injection, collect read-only SEL, BMC health and host-event artifacts.",
+    "Correlate timestamps and decoded sensor/event identity, identify discrepancies and assemble the report.",
+    "Do not inject the fault, observe the physical LED or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Select and approve the supported CPU fault-injection method and recovery boundaries.",
+    "Perform or supervise the injection and visually record LED location and working mode.",
+    "Restore the known-good state, confirm recovery and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Appropriately refuses remote visual execution, but it supplies no executable collection command and leaves the hazardous injection undefined.",
+    "executable_command_required": false,
+    "command_recommendation": "No injection command may be proposed until the exact platform and documented mechanism are supplied. Use only validated read-only BMC/SEL export after approval.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 0 remain source facts; no error type, LED state or injection duration is invented."
+  },
+  "modernized_recommendation": {
+    "status": "BLOCKED PENDING PLATFORM METHOD",
+    "recommended_method": "Define one attributable CPU fault, its supported injection/clear procedure, expected LED transition table and SEL tuple; record synchronized pre-fault, active-fault and restored states.",
+    "applicable_platform": "Only the named board/BMC/CPU revision for which the injection and LED behavior are documented.",
+    "supported_version": "Record board revision, BIOS/BMC/CPLD firmware and event-decoder versions.",
+    "official_reference": "Platform motherboard LED specification and approved fault-injection/recovery procedure; neither is present in the source row.",
+    "difference_from_original_method": "Turns the undefined 'inject CPU error' phrase into a bounded, attributable stimulus and a three-state visual/SEL evidence sequence.",
+    "coverage_difference": "BMC SEL correlation strengthens diagnosis but cannot replace physical LED location/mode observation.",
+    "required_inputs": "Board/LED spec, fault type, approved injection and recovery, SEL mapping and operator.",
+    "risks_limitations": "A simulated management event may not exercise the physical CPU-error indication path and must not silently replace the intended fault."
+  },
+  "project_override_considerations": "A project may choose an approved hardware fixture or documented platform injection facility, but must identify the fault path and coverage. A BMC software event alone is acceptable only if the approved test intent explicitly covers that same end-to-end LED path.",
+  "expected_evidence": [
+    "Board/CPU/firmware identity, LED reference and approved fault/injection/recovery contract",
+    "Timestamped photos of LED baseline, asserted mode and cleared state",
+    "Raw SEL/BMC/host evidence with sensor, event, severity and time correlation",
+    "Operator stimulus/restoration record and post-recovery boot/thermal/power health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title, procedure and criteria consistently address CPU-error LED location/mode; the problem is missing operational detail rather than contradictory source facts."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The required CPU-error stimulus is undefined and potentially destructive. Choosing CPU removal, firmware injection or another mechanism would materially alter risk and coverage, so safe execution cannot be specified from the source."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain its physical-visibility boundary but strengthen NO to a true BLOCKED state because the fault creation itself is undefined.",
+    "gpt_v2": "Agree with V2 BLOCKED and preserve its no-substitution, recovery and time-correlated evidence requirements.",
+    "v3_1_improvement": "Separates the unavailable visual activity from the unresolved hazardous stimulus and makes clear that a missing project parameter alone is not the blocker."
+  },
+  "review_improvement": "This review prevents an arbitrary CPU fault from being created merely to light an LED and defines the minimum fault-to-indicator-to-SEL attribution needed after the owner supplies a safe method.",
+  "independent_technical_reasoning": "Visual inspection alone would make the case MANUAL ONLY, not BLOCKED. Here, however, the case also requires an unspecified CPU error. Different injections exercise different hardware/firmware paths and recovery risks; without a selected supported path, neither safety nor coverage can be established.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 73, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 73 source_ref",
+    "history": "review_round_02_functionality.md lines 1898-1921", "external_sources": []
+  },
+  "no_automatic_retry": "The case must not run while blocked. After an approved injection, any abnormal indication, collateral error or incomplete recovery requires stop and evidence preservation; never reinject automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 264,
+  "library_sequence": 70,
+  "source_key": "Functionality|71|Wistron-HW-00074-V002",
+  "case_variant_id": "11c103bb9b0ef315",
+  "source_ref": {"sheet": "Functionality", "source_row": 71, "code": "Wistron-HW-00074-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "60c9d00a9903ce291e36d43112b3e3899c81d9280297ca3f098058686885c639",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00074-V002.",
+    "next_source_row_verified": "Functionality|72|Wistron-HW-00075-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "Last Level Cache",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check CPU cache under OS.\n1. Install CPU in motherboard.\n2. Power on SUT\n3. Boot into OS (windows & Linux) to check CPU core number\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. CPU can be install  in motherboard normally.2. CPU information can check in setup menu and follow spec. (for example : socket 0 ,1)3, CPU information can check in OS successfully.",
+    "script": null, "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "YES", "ai_packages_needed": "util-linux (lscpu) dmidecode",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lscpu 2>&1 | grep -iE 'cache' 2>&1\"",
+      "ai_logs_output": "return FULL Last Level Cache output (lscpu 2>&1 | grep -iE \"cache\") so the user confirms the value(s) match the spec/datasheet. No RISK (read-only).", "risk": null, "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It follows the item title with one filtered lscpu query, but does not cover per-socket cache topology, physical installation, Windows, BIOS/BMC or the core-number wording.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 correctly requires per-CPU sysfs/cache evidence and owner mismatch resolution, but does not classify the unresolved operation as BLOCKED.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1843-1867: historical YES review and SSH quoting defect."]
+  },
+  "original_test_intent": "UNRESOLVED SOURCE CONTRACT: the item and opening instruction request last-level-cache validation, while the numbered OS step requests CPU core count and the criteria define only generic installation/socket/CPU information with no cache acceptance.",
+  "original_method": "Preserve two candidate paths pending owner correction: (A) per-socket LLC level/type/size/sharing topology across approved OS/firmware views, or (B) CPU core-count/topology verification. Physical CPU installation, power-on and any BIOS view remain operator actions.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_PACKAGE", "NEEDS_EXPECTED", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The row includes CPU installation/power-on and setup-menu evidence; OS cache collection could be automated only after the owner resolves whether LLC or core topology is the intended test.",
+  "required_inputs": [
+    "Owner correction selecting LLC or core-number intent",
+    "CPU/board/socket/BIOS/microcode compatibility and operator installation plan",
+    "If LLC: expected cache level/type/size, sharing/cluster topology and per-socket mapping",
+    "If core count: expected sockets/cores/threads/SMT/online CPU map",
+    "Validated Linux/Windows/firmware tools, recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not install CPUs, power-cycle or alter BIOS/microcode/cache/SMT settings autonomously.",
+    "Do not treat a generic aggregate `lscpu | grep cache` line as per-socket LLC evidence.",
+    "Use authenticated transport and validated packages; do not clear logs.",
+    "Stop on installation/boot/thermal/power/identity or cross-layer mismatch.",
+    "No automatic retry, hardware reseat or configuration change."
+  ],
+  "agent_execution_scope": [
+    "Document the semantic conflict and prepare distinct LLC/topology evidence plans.",
+    "After correction/operator action, collect complete approved lscpu, sysfs cache, DMI and firmware evidence.",
+    "Map raw cache or core data to CPU/socket and compare with supplied expectations.",
+    "Do not choose intent or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Correct the authoritative item/procedure/criteria.",
+    "Approve/perform CPU installation, power-on and GUI observations.",
+    "Supply expected topology and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not acceptance-ready: insecure SSH, aggregate grep output and no per-socket index/type/shared_cpu_list mapping; it also omits Windows/BIOS/BMC and cannot resolve LLC versus core count.",
+    "executable_command_required": false,
+    "command_recommendation": "No final command until correction. For LLC, retain full `lscpu` plus every applicable sysfs cache index level/type/size/shared map and validated firmware/OS evidence.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 0 remain source facts; no cache target or scope is invented."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER CORRECTION REQUIRED",
+    "recommended_method": "Split LLC validation from core-count validation. For LLC, create a per-socket/cache-domain matrix from complete sysfs/lscpu/firmware evidence and compare to the CPU specification.",
+    "applicable_platform": "To be defined by corrected CPU/firmware/OS requirements.",
+    "supported_version": "Record CPU stepping, BIOS/microcode, OS/kernel and tool versions.",
+    "official_reference": "Project CPU cache/topology specification; no target is present in the row.",
+    "difference_from_original_method": "Replaces one aggregate cache line with level/type/size/sharing evidence and separates the conflicting core-count test.",
+    "coverage_difference": "LLC capacity/topology does not prove physical core count, and aggregate cache totals may differ from per-domain values.",
+    "required_inputs": "Corrected intent, expected map, OS/firmware scope, tools and operator plan.",
+    "risks_limitations": "Hybrid/chiplet/clustered cache domains may not map one-to-one to sockets."
+  },
+  "project_override_considerations": "A project may resolve one path via approved override but must state coverage and retain the master conflict. Linux aggregate cache output alone cannot satisfy Windows/firmware or per-socket expectations.",
+  "expected_evidence": [
+    "Owner correction/override and CPU/board/firmware/operator record",
+    "LLC path: complete per-index level/type/size/shared-domain evidence and expected map",
+    "Core path: full socket/core/thread/online/NUMA evidence and expected map",
+    "Required BIOS/BMC/OS artifacts plus boot/thermal/power/log health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "Last Level Cache in the item/opening statement conflicts with CPU core number in the numbered procedure and generic CPU/socket criteria. LLC and core count are not interchangeable."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The measurement domain is unresolved. Selecting cache or core topology would rewrite the source, so execution is BLOCKED pending owner correction."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES and the assumption that one aggregate cache line completes the row.",
+    "gpt_v2": "Retain its per-socket and safety improvements but strengthen PARTIAL to BLOCKED for unresolved operation semantics.",
+    "v3_1_improvement": "Records the true SOURCE_CONFLICT and prevents Linux cache output from substituting for core/GUI/physical coverage."
+  },
+  "review_improvement": "This review exposes the copied core-number procedure, requires cache-domain evidence if LLC is retained, and avoids inventing an acceptance target.",
+  "independent_technical_reasoning": "The absence of a cache size alone would be readiness, but the row also commands a different core-count test and never accepts LLC. That semantic fork requires owner correction, so BLOCKED is justified.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 71, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 71 source_ref",
+    "history": "review_round_02_functionality.md lines 1843-1867", "external_sources": []
+  },
+  "no_automatic_retry": "No execution before correction. Afterward, any install/boot/topology anomaly requires preservation and stop; do not alter BIOS/microcode/SMT, reseat or power-cycle automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

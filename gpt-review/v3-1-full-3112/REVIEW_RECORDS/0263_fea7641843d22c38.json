@@ -1,0 +1,116 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 263,
+  "library_sequence": 69,
+  "source_key": "Functionality|70|Wistron-HW-00073-V002",
+  "case_variant_id": "fea7641843d22c38",
+  "source_ref": {"sheet": "Functionality", "source_row": 70, "code": "Wistron-HW-00073-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "2634aeb522c6e9f7117bcc9af85c7c616b9a88404ae4c479ff885ae0efd34d1a",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00073-V002.",
+    "next_source_row_verified": "Functionality|71|Wistron-HW-00074-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "Frequency",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check CPU frequency under OS.\n1. Install CPU in motherboard.\n2. Power on SUT\n3. Boot into OS (windows & Linux) to check CPU core number\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. CPU can be install  in motherboard normally.2. CPU information can check in setup menu and follow spec. (for example : socket 0 ,1)3, CPU information can check in OS successfully.",
+    "script": null, "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "YES", "ai_packages_needed": "util-linux (lscpu) dmidecode",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lscpu 2>&1 | grep -iE 'model name|cpu mhz|max mhz|min mhz'; echo ---; cat /proc/cpuinfo | grep -iE 'cpu mhz|model name' | head 2>&1\"",
+      "ai_logs_output": "return FULL Frequency output (lscpu 2>&1 | grep -iE \"model name|cpu mhz|max mhz|min mhz\") so the user confirms the value(s) match the spec/datasheet. No RISK (read-only).", "risk": null, "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It selects the title's frequency interpretation, but its truncated Linux snapshot cannot cover physical installation, Windows, BIOS, core-number wording or undefined frequency semantics.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 flags the physical steps and missing frequency contract but does not elevate the conflicting core-number versus frequency operations to BLOCKED.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1815 onward: historical YES review followed the item title only."]
+  },
+  "original_test_intent": "UNRESOLVED SOURCE CONTRACT: the item and opening instruction request CPU frequency validation, but the numbered procedure changes the OS check to CPU core number and the criteria define only installation/generic BIOS/OS CPU information with no frequency acceptance.",
+  "original_method": "Preserve both possible paths pending correction: (A) a CPU frequency measurement under specified OS/load/governor/power conditions with base/boost/tolerance rules, or (B) a CPU socket/core enumeration test. Physical installation, power-on and any BIOS inspection remain operator work.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_PACKAGE", "NEEDS_EXPECTED", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The unresolved test includes physical CPU installation/power-on and likely BIOS Setup observation. After intent correction, OS collection may be automated, but the current core operation and acceptance cannot be chosen by the agent.",
+  "required_inputs": [
+    "Owner correction selecting frequency or core/topology purpose",
+    "CPU/board/socket/BIOS/microcode compatibility and operator installation plan",
+    "If frequency: base/boost/current semantics, OS scope, load/governor/power state, sampling and tolerance",
+    "If core count: per-socket core/thread/NUMA expected map and BIOS setting",
+    "Validated tools, recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not install CPUs, power-cycle, change governors/power limits/BIOS or create load autonomously.",
+    "Do not claim frequency from a transient/truncated `/proc/cpuinfo` value or use it to satisfy core-count wording.",
+    "Use authenticated transport and validated packages; preserve logs.",
+    "Stop on hardware/boot/thermal/power/identity or cross-OS mismatch.",
+    "No automatic retry, policy change or alternate workload."
+  ],
+  "agent_execution_scope": [
+    "Record the source conflict and prepare separate frequency and topology evidence plans.",
+    "After owner correction/operator installation, collect complete approved read-only OS/firmware evidence.",
+    "Compare under the declared condition and retain raw samples/status.",
+    "Do not infer intent or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Correct the authoritative purpose/procedure/criteria.",
+    "Approve and perform CPU installation, power-on and GUI observations.",
+    "Supply expected values/conditions and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not acceptance-ready: insecure SSH, `head` truncation and grep summaries omit CPUs/OSes and cannot resolve base/current/max semantics or the source's core-number path.",
+    "executable_command_required": false,
+    "command_recommendation": "No final command until intent is corrected. A frequency path needs complete timestamped per-policy/per-CPU samples under declared conditions; a topology path needs full per-socket core/thread/NUMA evidence.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 0 remain source facts but are not treated as a valid sampling plan."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER CORRECTION REQUIRED",
+    "recommended_method": "Split the row into a deterministic frequency test with defined operating conditions and a separate topology/core-count test, rather than accepting one generic CPU-info snapshot for both.",
+    "applicable_platform": "To be defined by corrected CPU/board/OS requirements.",
+    "supported_version": "Record CPU, BIOS/microcode, OS/kernel and tool versions.",
+    "official_reference": "Project CPU frequency or topology specification; no target is present in the row.",
+    "difference_from_original_method": "Makes the measurement domain and acceptance explicit while retaining physical setup history.",
+    "coverage_difference": "Frequency behavior and core/socket enumeration are independent; neither proves the other.",
+    "required_inputs": "Corrected intent, expected values, condition/method, tools and operator plan.",
+    "risks_limitations": "Dynamic frequency fields differ by OS/kernel/driver and operating condition."
+  },
+  "project_override_considerations": "A project may choose one path through an approved override, but must state its coverage and retain the master conflict. A Linux-only frequency sample cannot be reported as Windows/Linux plus BIOS/core validation.",
+  "expected_evidence": [
+    "Owner correction/override and CPU/board/firmware/operator record",
+    "Frequency path: declared condition plus complete timestamped per-CPU samples and expected comparison",
+    "Topology path: BIOS/OS socket/core/thread/NUMA evidence and expected map",
+    "Boot/thermal/power/BMC/log health and tool versions",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "Frequency in the item/opening instruction conflicts with core-number in the numbered step and generic installation/socket criteria. They are different measurements, and the criteria contain no frequency threshold."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The required measurement itself is unresolved, not merely its expected number. Choosing frequency or topology would rewrite source intent, so execution is BLOCKED pending correction."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES and its title-only frequency interpretation.",
+    "gpt_v2": "Retain its safety/condition requirements but strengthen PARTIAL to BLOCKED because the operation and acceptance contract conflict.",
+    "v3_1_improvement": "Records the true SOURCE_CONFLICT and prevents a Linux sample from silently replacing physical/BIOS/Windows coverage."
+  },
+  "review_improvement": "This review exposes that the row mixes two different CPU tests, rejects truncated dynamic data as proof and provides a safe owner correction path.",
+  "independent_technical_reasoning": "Missing a frequency target alone would be readiness, but the source also instructs a different core-number operation and never accepts frequency. That semantic fork cannot be resolved by supplying a spec; the owner must select/correct the test, so BLOCKED is warranted.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 70, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 70 source_ref",
+    "history": "review_round_02_functionality.md lines 1815-1839", "external_sources": []
+  },
+  "no_automatic_retry": "No execution before correction. Afterward, any install/boot/measurement anomaly requires evidence preservation and stop; do not change policy/load/BIOS, reinstall or power-cycle automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

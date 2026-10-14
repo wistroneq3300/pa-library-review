@@ -1,0 +1,119 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 235,
+  "library_sequence": 40,
+  "source_key": "Functionality|41|Wistron-HW-00044-V004",
+  "case_variant_id": "812c9cc70a44ba4c",
+  "source_ref": {"sheet": "Functionality", "source_row": 41, "code": "Wistron-HW-00044-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "9d1ed36fdef027da840b88124804051e73daf602214c16e4d8eacee73094c356",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00044-V004.",
+    "next_source_row_verified": "Functionality|42|Wistron-HW-00045-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -LED", "test_name_items": "Frequecy_0.5_to_8_Hz",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check LED Flashing 0.5、1、2、3、4、5、6、7、8 Frequency\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED Flashing 0.5、1、2、3、4、5、6、7、8 Frequency",
+    "script": null, "attended_time": "40", "machine_time": "40", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED blink frequency falling in the 0.5 to 8 Hz spec band on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED blink frequency falling in the 0.5 to 8 Hz spec band and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It incorrectly compresses the explicit list into a 0.5-to-8 Hz band and relies on human visual judgment that is weak for quantitative frequency acceptance.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 saw replacement characters and treated the criterion as corrupted; direct UTF-8/code-point inspection of the XLSX shows U+3001 ideographic commas separating nine unambiguous points: 0.5, 1, 2, 3, 4, 5, 6, 7 and 8 Hz.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1040-1060 preserves the nine discrete frequency values."]
+  },
+  "original_test_intent": "Verify the physical CRPS LED flashing frequency at each of nine discrete target points—0.5, 1, 2, 3, 4, 5, 6, 7 and 8 Hz—against project/vendor tolerances, rather than merely showing that one measured value falls somewhere inside a continuous band.",
+  "original_method": "An engineer establishes each approved LED frequency condition and positions a safe optical measurement setup. A validated camera/optical detector or timing tool records the indicator, after which the agent can calculate frequency, preserve raw timing data and compare all nine points; the engineer owns fixture setup, state interpretation and verdict.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the PSU/LED, establishes each vendor-approved frequency state, safely aligns and validates the optical fixture, confirms color/mode and observation conditions, and handles any platform state transition. The measurement and comparison can then be automated.",
+  "required_inputs": [
+    "Target PSU/LED and method to establish each of the nine frequency conditions",
+    "Per-point tolerance, duty-cycle/color/mode and minimum observation cycles/window",
+    "Approved non-contact camera/optical detector or other safe measurement instrument and calibration status",
+    "Capture sampling/frame rate, exposure and aliasing validation",
+    "Expected PSU/BMC state and recovery procedure",
+    "Engineer fixture setup and one-user approval"
+  ],
+  "safety_requirements": [
+    "Prefer non-contact optical measurement; do not attach an electrical probe or source to the PSU without an explicitly approved isolation/interface procedure.",
+    "Do not guess how to generate a frequency state and do not infer all nine points from one observation.",
+    "Validate capture timing so frame-rate aliasing cannot report a false frequency, especially at 8 Hz.",
+    "Stop on wrong color/mode, abnormal PSU/power behavior, unsafe fixture placement or management loss and preserve logs.",
+    "Do not automatically retry a failed point or change PSU state after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Validate the nine-point plan, tool identity/calibration metadata and approved tolerance table.",
+    "Process raw timestamped optical samples/video to calculate per-point period/frequency, duty cycle and uncertainty.",
+    "Collect read-only PSU/BMC context and produce a nine-row expected/actual evidence matrix.",
+    "Flag missing points, aliasing or out-of-tolerance results without changing the fixture/state or issuing PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Approve the frequency-generation method, tolerance, instrument and safety setup.",
+    "Establish each of the nine conditions and confirm correct physical target and mode.",
+    "Respond to anomalies and authorize any remeasurement as a new plan decision.",
+    "Review uncertainty/coverage and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its no-SSH visual boundary is too restrictive for objective optical automation and its continuous-band reading loses eight discrete coverage points.",
+    "executable_command_required": true,
+    "command_recommendation": "Use a project-approved calibrated optical capture/analysis package with raw timestamp export. Record version and timing validation. No generic PSU stimulus command or electrical attachment is proposed.",
+    "original_parameters_and_time_preserved": "Attended Time 40 and Machine Time 40 and all nine XLSX frequency points are preserved. Tolerance, observation cycles, state-generation method and instrument are missing project inputs."
+  },
+  "modernized_recommendation": {
+    "status": "NON-CONTACT QUANTITATIVE OPTICAL MEASUREMENT",
+    "recommended_method": "Capture each discrete state with a timing-validated camera or optical sensor, retain raw samples/timestamps, calculate measured frequency and uncertainty, and compare against the approved per-point tolerance.",
+    "applicable_platform": "The selected CRPS LED and the project-approved frequency-state source.",
+    "supported_version": "Record PSU/chassis/firmware, specification, instrument/calibration and analysis-tool versions.",
+    "official_reference": "Applicable vendor/platform LED frequency specification and measurement SOP; no tolerance or stimulus method is invented.",
+    "difference_from_original_method": "Replaces unreliable visual estimation with objective measurement while retaining the physical LED and every source frequency point.",
+    "coverage_difference": "Nine independent results are required; treating 0.5–8 Hz as one range check is a coverage regression.",
+    "required_inputs": "Nine-point state plan, tolerance, optical instrument, timing validation and observation cycles.",
+    "risks_limitations": "Rolling shutter, auto exposure, dropped frames and aliasing can corrupt results unless validated."
+  },
+  "project_override_considerations": "A project may approve a subset or different tolerance/instrument. Record every tested and omitted point and actual duration; do not claim the master nine-point coverage from a range endpoint or subset.",
+  "expected_evidence": [
+    "PSU/LED identity and approved nine-point frequency/tolerance plan",
+    "Instrument/tool versions, calibration and capture-timing validation",
+    "Raw optical samples/video and computed result/uncertainty for each point",
+    "Per-point expected/actual matrix plus correlated PSU/BMC event evidence",
+    "Coverage omissions, safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Direct XLSX inspection confirms ideographic commas, not corrupt symbols, and consistently lists the same nine points in Procedure and Criteria. The title's 0.5_to_8_Hz is a summary, not a contradictory continuous-range requirement."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The required frequency set is clear. Missing tolerance, fixture and state-generation details are project readiness inputs, so V2's permanent BLOCKED result is not retained."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Change its continuous-band/manual-only interpretation to nine discrete objective measurements with manual setup and automated analysis.",
+    "gpt_v2": "Correct the encoding diagnosis using direct XLSX code points and reclassify BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION while preserving measurement-safety concerns.",
+    "v3_1_improvement": "Preserves all source points, separates fixture setup from automatable measurement and treats missing project values as readiness."
+  },
+  "review_improvement": "This review recovers the exact XLSX punctuation and prevents two regressions: discarding discrete frequency coverage and relying on visual estimation for a quantitative 8 Hz endpoint.",
+  "independent_technical_reasoning": "The physical target needs engineer setup, but frequency extraction and evidence generation are objective and automatable once raw optical data exists, so the case is PARTIAL using the formal classification REQUIRES PACKAGE / USER CONFIRMATION. The XLSX is not semantically corrupted; its nine values are explicit. Missing tolerance and tooling do not make it permanently blocked.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 41, read directly with openpyxl 3.1.5; U+3001 separators verified by UTF-8 JSON/code-point output",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 41 source_ref",
+    "history": "review_round_02_functionality.md lines 1040-1060", "external_sources": []
+  },
+  "no_automatic_retry": "On aliasing, missed capture, wrong state, out-of-tolerance result or PSU/platform anomaly, retain the raw data and stop. Do not repeat the point, change frequency/state, attach a different instrument, reboot or power-cycle without engineer approval.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

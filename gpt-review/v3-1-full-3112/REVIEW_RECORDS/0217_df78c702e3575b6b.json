@@ -1,0 +1,137 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 217,
+  "library_sequence": 18,
+  "source_key": "Functionality|19|Wistron-HW-00018-V002",
+  "case_variant_id": "df78c702e3575b6b",
+  "source_ref": {"sheet": "Functionality", "source_row": 19, "code": "Wistron-HW-00018-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "f43d63fbf1a8489baf48fa2e2c088934e32b4b7f73d04ce2a2866a569b9331d5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00018-V002.",
+    "next_source_row_verified": "Functionality|20|Wistron-HW-00019-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cable",
+    "test_name_items": "Power Connector",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: Power Connector is a physical/mechanical check of cable/component connections and seating (easy plug/unplug, device still detected after plug cycle, no bent pin / routing issue) that requires a person at the machine - agent cannot manipulate cables over SSH.",
+      "ai_logs_output": "operator checks Power Connector connections/seating + photos + plug-cycle detect status; agent cannot produce this physical evidence.",
+      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. The manual boundary is correct, but the review does not identify the connector's power domain, isolation/discharge method, downstream blast radius or post-cycle power evidence.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds connector/power-path mapping, high-current hazards, preserved BMC/PSU evidence and no-repeat recovery.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 493-513: historical physical/NO result for Power Connector."]
+  },
+  "original_test_intent": "Verify that the selected power connector can complete the approved disconnect/reconnect cycle without mechanical or electrical damage, is correctly aligned, fully seated and retained afterward, and restores the expected power path and affected component availability without new relevant faults.",
+  "original_method": "A qualified engineer maps the connector to its source and loads, establishes the required isolated/discharged state, inspects and performs the physical cycle, and documents final seating. An agent may collect approved power/status evidence after restoration, but cannot operate or certify the connector.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies whether the connector is AC, DC, PSU-side, board-side or an internal harness; isolates every relevant source; verifies discharge; inspects keying, contacts, housing and retention; performs the approved unplug/reconnect; and directly confirms full engagement without abnormal force, heat or damage. These are the core acceptance activities.",
+  "required_inputs": [
+    "Power-connector identifier, type, location, source/rail and downstream-load map",
+    "Connector mechanical/electrical drawing and approved service procedure",
+    "Isolation, stored-energy/discharge verification and re-energization procedure",
+    "Connector seating/retention criteria and any torque or secondary-lock requirement",
+    "Expected post-cycle PSU/rail/power state, host/component availability and acceptable event pattern",
+    "Qualified operator, independent recovery access and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Do not infer AC removal, hot-plug or a power-control substitute from the generic title; use the exact connector and platform method.",
+    "Verify physical isolation and discharge for every feeding source before contact unless the exact connector is explicitly approved for energized service.",
+    "Treat the interface as a potentially high-current path; protect against arcing, shorting, reversed/key-defeating insertion, damaged insulation and exposed contacts.",
+    "Do not force the connector, pull on conductors or re-energize with incomplete seating, damaged retention, contamination or a displaced secondary lock.",
+    "Stop on heat, odor, discoloration, arcing evidence, damaged contact/housing, abnormal resistance, unexpected power loss or management-path loss.",
+    "Preserve logs and do not repeat the cycle, power-cycle or retry automatically after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Prepare a connector/source/load evidence map and isolation checklist from approved platform documents.",
+    "Collect read-only pre-action power, PSU/rail, host/component and event evidence without operating power controls.",
+    "After the engineer confirms safe final seating and authorizes re-energization, collect the mapped post-action evidence and raw event delta.",
+    "Correlate observations and photos without claiming the physical action or formal verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact connector, energy boundary, physical cycle and recovery plan.",
+    "Establish and verify safe isolation/discharge and physically inspect, disconnect, reconnect and retain the connector.",
+    "Verify final orientation/seating and authorize any re-energization and post-check.",
+    "Interpret mechanical, electrical and availability evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The physical non-runnable statement is correct. The generic plug-cycle status is insufficient because power evidence depends on the exact connector domain, rail/source and downstream load.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only project-approved read-only BMC/PSU/rail and host/component collectors mapped to the selected power path. Do not issue BMC power-off, PDU, reboot or software shutdown as a substitute for the source-defined physical connector cycle.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are retained. No connector identity, voltage/current, discharge time, cycle count, telemetry command or expected event sequence is specified."
+  },
+  "modernized_recommendation": {
+    "status": "CONNECTOR AND POWER-PATH MAP REQUIRED",
+    "recommended_method": "Bind the manual connector cycle to a revision-controlled source/load map, verified isolation/discharge record, state-by-state photographs and mapped read-only power/availability evidence before and after restoration.",
+    "applicable_platform": "The selected connector, rail/source, chassis power architecture and downstream population.",
+    "supported_version": "Record electrical/mechanical drawing, service procedure, BMC/firmware and evidence-tool versions.",
+    "official_reference": "Applicable platform power-distribution and connector service documentation; no generic voltage, discharge time or hot-service capability is asserted.",
+    "difference_from_original_method": "Adds explicit energy boundaries and power-path observability while retaining the human physical cycle and seating acceptance.",
+    "coverage_difference": "Complete coverage includes physical connector condition/seating and restoration of its mapped loads. Software power status alone cannot prove connector engagement, and photographs alone cannot prove restored power integrity.",
+    "required_inputs": "Connector/source/load map, isolation/discharge method, seating criteria, expected observations and collectors.",
+    "risks_limitations": "A healthy rail or running host may not expose a marginal high-current contact, while an unexpected outage can have causes beyond connector seating."
+  },
+  "project_override_considerations": "The project may select one connector and a specific isolated cycle. It must record untested connectors, rails and loads as coverage delta. If the connector is physically AC-related, the approved action remains engineer-owned; remote power controls cannot silently replace it or broaden ED-32 beyond its case-specific scope.",
+  "expected_evidence": [
+    "Connector identity/type, source/rail and downstream-load mapping",
+    "Authorized isolation/discharge and re-energization record",
+    "Photographs of contacts/housing where visible, orientation, seating, retention and secondary lock",
+    "Raw mapped pre/post PSU/rail/power state, host/component availability and relevant events",
+    "Observed heat, odor, discoloration, arcing, abnormal resistance or other safety stop",
+    "Coverage deviations and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The source consistently requires a power-connector plug cycle, seating and detection without error. Missing connector and power-path details are project inputs, not contradictory statements."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The physical connector/restoration objective is clear. Exact energy boundaries and expected observations gate execution but do not make the Master case permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain NO/manual-only and add connector-domain, stored-energy, source/load and post-restoration evidence requirements.",
+    "gpt_v2": "Agree with V2's high-current risk, isolation, preserved telemetry and no-repeat boundary; make AC/DC/PSU/internal identity explicit rather than assumed.",
+    "v3_1_improvement": "Separates physical action, approved isolation, read-only tool results and engineer verdict, and prevents remote power control from substituting for connector coverage."
+  },
+  "review_improvement": "The record makes a generic power-connector test safe and auditable without assuming connector domain. It links the physical interface to its energy sources and affected loads and prevents a healthy software state from being mistaken for mechanical completion.",
+  "independent_technical_reasoning": "The source's core is a physical power-interface cycle and seating inspection, so MANUAL ONLY applies despite useful post-action telemetry. Unlike a data connector, the unknown power domain creates stored-energy, arcing and downstream-outage hazards; the project must identify the connector and isolation method before execution. Those inputs are readiness gates, not permanent BLOCKED conditions. Remote power actions cannot reproduce the source's physical contact and retention coverage.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 19, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 19 source_ref",
+    "history": "review_round_02_functionality.md lines 493-513",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On isolation uncertainty, connector damage, heat/arcing evidence, abnormal power state, load loss or management-path loss, preserve the safe state and raw evidence. Do not reconnect again, energize, substitute remote power control or initiate recovery without an engineer-approved response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

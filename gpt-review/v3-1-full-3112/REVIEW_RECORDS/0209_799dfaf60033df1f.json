@@ -1,0 +1,167 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 209,
+  "library_sequence": 10,
+  "source_key": "Functionality|11|Wistron-HW-00010-V002",
+  "case_variant_id": "799dfaf60033df1f",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 11,
+    "code": "Wistron-HW-00010-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "186da5904f431574bd31b4141dd7cbf9b0b3057b7c6a063013f0f71a185c5fdf",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00010-V002.",
+    "next_source_row_verified": "Functionality|12|Wistron-HW-00011-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "CEM Riser",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"CEM Riser\" mechanical check requires visually and physically inspecting the CEM riser to confirm it is seated and locked properly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"CEM Riser\" (visually and physically inspecting the CEM riser to confirm it is seated and locked properly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies riser seating/locking as physical, but drops the source's post-cycle device detection requirement and does not resolve slot/device topology.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 preserves the riser plug/reconnect cycle, requires PCIe/device identity mapping, permits post-action enumeration and rejects log clearing.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 297-317: historical physical/NO result for the CEM Riser."
+    ]
+  },
+  "original_test_intent": "Verify that the selected CEM riser assembly and its defined attached components can be disconnected/reconnected using the intended retainers and alignment features, are fully seated and locked afterward, and restore the expected device topology without new relevant errors.",
+  "original_method": "A qualified engineer performs and observes the riser/approved component plug cycle, connector alignment, retention and seating. Before/after platform-approved PCIe or device inventory can support the source's detection check after physical restoration, but cannot establish mechanical seating by itself.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the riser, host connector, retention mechanism and any in-scope add-in devices; establishes the approved service state; releases, removes or reconnects only the authorized assembly; aligns and seats it without rocking or forcing; secures every retainer; and visually/tactually confirms final seating. An agent cannot perform or certify these mechanical steps.",
+  "required_inputs": [
+    "CEM riser FRU/revision, chassis location, host connector and retention design",
+    "Installed add-in device/slot topology, expected bus-device-function or equivalent identities, and configured bifurcation where applicable",
+    "Platform riser service procedure, torque/fastener requirements if any, and approved power/ESD state",
+    "Scope of the plug cycle: riser-to-host interface, riser-mounted devices, or both",
+    "Expected post-cycle device presence and, when specified, link width/speed/state plus allowed differences",
+    "Approved inventory/error collectors, qualified operator and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Do not remove or insert the riser or its cards while energized unless the exact platform procedure explicitly supports that operation.",
+    "Control card mass and auxiliary power/cable connections; release every specified retainer before movement and reconnect only to the mapped locations.",
+    "Protect the riser edge/host connector, add-in card contacts, slot latches, brackets and chassis alignment features from skew and side load.",
+    "Stop on unexpected resistance, connector misalignment, partially engaged retainer, damaged contact, cable strain, power alarm or unrelated device loss.",
+    "Do not automatically repeat a reseat or initiate a reset/rescan to hide a missing or degraded link.",
+    "Preserve existing kernel/BMC/error records and use timestamped snapshots rather than clearing them."
+  ],
+  "agent_execution_scope": [
+    "Build a riser/slot/device identity map and evidence checklist from the approved platform recipe.",
+    "Capture the approved pre-action device topology and relevant error baseline without clearing history.",
+    "After operator confirmation of final seating and power restoration, capture post-action topology, device presence and specified link/error properties.",
+    "Diff the two states, retain raw output and photographs, and highlight missing, relocated or degraded devices without deciding the verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact riser interfaces, attached-device scope, service state and expected topology.",
+    "Physically perform the defined release, plug/reconnect, alignment, seating and retention actions.",
+    "Inspect connectors, guides, brackets, latches, auxiliary connections and final mechanical state, then authorize post-check collection.",
+    "Evaluate mechanical evidence and any device/link/error differences and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable result is correct for riser manipulation and seating, but incomplete for the explicit device-detection objective. Approved PCIe/device topology collection is useful only after the hardware map and OS/firmware context are known.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the project's established PCIe/device inventory and error collectors for the selected OS and platform. Compare identities and any specified link attributes; do not prescribe a generic command, rescan or reset without knowing the topology and approved procedure.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are preserved. No slot list, cycle count, topology, link criterion, command or acceptable error threshold appears in the Master source."
+  },
+  "modernized_recommendation": {
+    "status": "PLATFORM TOPOLOGY REQUIRED",
+    "recommended_method": "Combine the manual riser reseat checklist with a revision-controlled slot/device topology manifest and immutable pre/post inventory/error snapshots. Correlate each physical interface with its expected device and configured link properties.",
+    "applicable_platform": "The selected CEM riser, host slot, installed cards, firmware and operating environment.",
+    "supported_version": "Record riser/chassis drawings, service procedure, firmware/BIOS settings, OS and evidence-tool versions.",
+    "official_reference": "Applicable platform riser mechanical/service documentation and official documentation for the project's chosen PCIe/device inventory tools; commands remain pending until the environment is selected.",
+    "difference_from_original_method": "Makes the source's detection requirement traceable to a known riser topology while preserving human seating/locking acceptance.",
+    "coverage_difference": "Full coverage requires both physical interface/retention observations and restoration of the expected device topology. Enumeration alone does not prove seating; photographs alone do not prove device/link recovery.",
+    "required_inputs": "Riser identity, physical interface scope, slot/device map, safe-state procedure, expected topology and approved collectors.",
+    "risks_limitations": "A device may enumerate through a marginal connection, and changed bus numbering after firmware/configuration changes can cause a false mismatch if identity matching is not defined."
+  },
+  "project_override_considerations": "A project may cycle only the riser-to-host interface, only selected riser-mounted cards, or a bounded subset. The report must identify which connectors and devices were exercised and which topology/link checks were omitted; completion of that plan cannot be presented as coverage of all riser components.",
+  "expected_evidence": [
+    "Riser FRU/revision, chassis/host-slot location and mapped attached-device identities",
+    "Approved service state and exact physical interfaces included in the plug cycle",
+    "Photographs of connector/retainer condition, alignment, final seating, brackets and auxiliary connections",
+    "Raw pre/post topology and device inventory with the project's identity-matching method",
+    "Specified link width/speed/state and time-correlated PCIe/kernel/BMC errors when those are part of the approved criteria",
+    "Safety stops, topology/coverage deviations and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The Procedure requires plug/unplug serviceability and post-cycle detection, while Criteria requires proper seating; these are compatible mechanical and functional observations. DeepSeek's narrower summary is incomplete but does not change the source."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The riser reseat and detection objectives are understandable. Exact topology, safe procedure and expected link/device state are project inputs required for execution, not evidence of an irresolvable intent or permanent block."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain the manual-only physical conclusion, but restore the post-cycle device-detection requirement and require a riser/slot/device map.",
+    "gpt_v2": "Agree with MANUAL ONLY, physical evidence ownership, pre/post PCIe evidence and no automatic reseat; refine detection into identity/topology and optional configured link attributes.",
+    "v3_1_improvement": "Separates hardware manipulation from agent evidence collection and formal verdict, and records exactly how a subset or missing topology changes project coverage without modifying the Master case."
+  },
+  "review_improvement": "The record replaces a generic 'CEM Riser seated' statement with a traceable relationship between the operated riser interfaces, their retainers and the devices expected behind them. It preserves both mechanical and functional source coverage without inventing a universal PCIe command.",
+  "independent_technical_reasoning": "A riser creates both a mechanical chain and an enumeration topology: the host connector, riser PCB, retention hardware and any attached devices all can affect the result. Human handling is indispensable for alignment, seating and locking, so the complete case remains MANUAL ONLY even though inventory comparison is automatable. A meaningful post-cycle check requires a known slot/device map and expected configuration; otherwise a generic device list cannot distinguish the correct restored path from an unrelated or relocated device. These missing project values are readiness inputs rather than BLOCKED conditions.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 11, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 11 source_ref",
+    "history": "review_round_02_functionality.md lines 297-317",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On seating/retention failure, damaged contacts, missing or degraded devices, or new relevant errors, preserve raw pre/post evidence and stop. Do not reseat again, rescan the bus, reset a device, reload a driver or power-cycle unless an engineer approves a new recovery plan.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

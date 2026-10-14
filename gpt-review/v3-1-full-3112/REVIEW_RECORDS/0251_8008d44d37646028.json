@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 251,
+  "library_sequence": 56,
+  "source_key": "Functionality|57|Wistron-HW-00060-V004",
+  "case_variant_id": "8008d44d37646028",
+  "source_ref": {"sheet": "Functionality", "source_row": 57, "code": "Wistron-HW-00060-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "415b6f9e550edc0efebd055e10411d911ec68a7df9f1eb113f57adb9f033502f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00060-V004.",
+    "next_source_row_verified": "Functionality|58|Wistron-HW-00061-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "Loss of AC input",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Loss of AC input (cutting AC input to the PSU) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator Loss of AC input (cutting AC input to the PSU) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It assumes the AC event and blackbox access are necessarily physical/manual and offers unrelated fault mechanisms, although the source does not require cord removal.",
+    "gpt_v2": "MANUAL ONLY / CHANGED. V2 correctly preserves the AC-loss objective and safety gates, but treats any approved isolated switch as operator-only.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "ED-32 applies only to Seq 182 and cannot be generalized to this row.",
+    "related_revisions": ["review_round_02_functionality.md lines 1463-1483: historical NO classification based on an assumed physical event."]
+  },
+  "original_test_intent": "Verify that a controlled loss of AC input to the identified CRPS PSU is stored in its blackbox with the expected event identity/timing and that the approved test system recovers.",
+  "original_method": "After a human establishes an isolated, target-locked AC control path and safe load/recovery plan, the approved interruption and restoration can be actuated by a programmable fixture or by the operator. Raw blackbox data and synchronized platform evidence are then collected and correlated.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An engineer must identify the correct PSU feed, establish/verify isolation and the switching fixture, confirm load impact and arm recovery. If the approved method is a physical cord operation, the operator performs it; if it is a programmable isolated switch, the unchanged timed event and collection may be automated.",
+  "required_inputs": [
+    "PSU/DUT identity, exact AC feed, connected-load scope and isolation map",
+    "Approved loss duration, restore behavior, expected PSU/host response and blackbox record fields",
+    "Approved isolated manual switch or programmable PDU/fixture with verified target mapping",
+    "Blackbox extraction interface/tool/schema and timestamp synchronization",
+    "Recovery plan, qualified operator availability and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not assume physical unplugging, PDU control or BMC power-off are interchangeable; use only the project-approved AC-input method.",
+    "Do not use BMC Power Off or software reboot as a substitute for loss of PSU AC input.",
+    "Verify target/outlet isolation and protect production, mounted or unrelated loads; preserve logs.",
+    "Stop for arcing, heat, smoke, unexpected load impact, failed restore or management loss.",
+    "No automatic retry or second AC cycle after an abnormal event."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved AC target map and collect pre-event evidence.",
+    "If explicitly approved and fixture-controlled, execute the unchanged off/on timing once; otherwise wait for operator confirmation.",
+    "Collect raw blackbox, switch telemetry and PSU/BMC/host recovery evidence.",
+    "Correlate timestamps and report observed results without claiming a manual AC action or formal verdict."
+  ],
+  "engineer_actions": [
+    "Select and approve the AC-loss method, duration, load scope and recovery plan.",
+    "Establish/verify the physical fixture and perform any required cord/manual switching.",
+    "Restore/isolate the system on safety stop and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its refusal is too broad: the source requires loss of AC input but not necessarily cord removal. It also incorrectly groups throttle and other faults with AC loss and assumes all blackbox access is manual.",
+    "executable_command_required": false,
+    "command_recommendation": "Use the existing project power-cycle controller or approved target-locked PDU/fixture API only when its outlet mapping and AC-input equivalence are documented; otherwise retain operator execution.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. Interruption duration is absent and must be project-approved."
+  },
+  "modernized_recommendation": {
+    "status": "APPROVED ISOLATED AC CONTROL",
+    "recommended_method": "Map one PSU feed to an isolated switch, capture baseline and synchronized timestamps, perform one approved loss/restore event, export raw blackbox data and verify recovery without retry.",
+    "applicable_platform": "Only the verified PSU/outlet/fixture and load topology in the approved plan.",
+    "supported_version": "Record PDU/fixture firmware/API, PSU/BMC firmware and blackbox tool/schema versions.",
+    "official_reference": "Project AC topology, PSU blackbox and switching-fixture documentation must be supplied; no universal control command is asserted.",
+    "difference_from_original_method": "Makes target mapping, timing and blackbox correlation reproducible while preserving actual AC-input loss.",
+    "coverage_difference": "Programmable AC switching is equivalent only if it removes the same PSU input feed; BMC/software power state is not equivalent.",
+    "required_inputs": "Feed map, switch method, duration, load/recovery contract, expected record and extraction interface.",
+    "risks_limitations": "A wrong outlet mapping can interrupt unrelated systems; management access may disappear during the event."
+  },
+  "project_override_considerations": "The project may choose manual cord removal, an isolated switch or a target-locked PDU. Record the actual method and coverage. ED-32's mandatory physical removal is case-specific to Seq 182 and does not impose that method here.",
+  "expected_evidence": [
+    "Approved PSU/feed/outlet topology, method, duration, load scope and safety checklist",
+    "Operator confirmation or fixture command/telemetry with loss/restore timestamps",
+    "Raw PSU blackbox record with event code/fields and extraction metadata",
+    "Preserved PSU/BMC/host shutdown/recovery evidence and anomalies",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item and blackbox procedure consistently require an AC-input-loss event record. The source leaves the switching mechanism and duration to the project."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The necessary operation is clear. Missing feed mapping, duration, tool and expected fields are readiness/safety inputs; the library is not permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its blanket manual-only conclusion and unrelated fault alternatives; preserve its warning that the agent must not claim a physical action.",
+    "gpt_v2": "Retain its safety and recovery gates but reclassify from MANUAL ONLY to PARTIAL because an approved isolated programmable AC fixture can execute the core after human setup.",
+    "v3_1_improvement": "Applies ED-32 narrowly and separates actual AC loss from non-equivalent BMC/software power operations."
+  },
+  "review_improvement": "This review avoids overgeneralizing Seq 182, permits automation only when the project proves true AC-input control, and keeps operator-only handling for physical switching while preserving blackbox/recovery evidence.",
+  "independent_technical_reasoning": "Loss of AC is unambiguous, unlike the prior undefined fault cases. The source does not prescribe unplugging, so an approved isolated switch may automate the event after human setup. Under V3.1 this is PARTIAL, not BLOCKED and not universally MANUAL ONLY.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 57, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 57 source_ref",
+    "history": "review_round_02_functionality.md lines 1463-1483; V3_1_ENGINEERING_DECISIONS.md ED-32", "external_sources": []
+  },
+  "no_automatic_retry": "Perform at most the one approved loss/restore cycle. On wrong-target indication, incomplete recovery or any safety anomaly, preserve evidence and stop; do not repeat, reset or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 216,
+  "library_sequence": 17,
+  "source_key": "Functionality|18|Wistron-HW-00017-V002",
+  "case_variant_id": "4606d5241d10b1c1",
+  "source_ref": {"sheet": "Functionality", "source_row": 18, "code": "Wistron-HW-00017-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "ed70ea2b4cec5073e33664270066081fa44daad6b8f3812801ccc14338525a06",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00017-V002.",
+    "next_source_row_verified": "Functionality|19|Wistron-HW-00018-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Mechanical -Cable", "test_name_items": "PCIe Stability",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly", "script": null,
+    "attended_time": "10", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: PCIe Stability is a physical/mechanical check of cable/component connections and seating (easy plug/unplug, device still detected after plug cycle, no bent pin / routing issue) that requires a person at the machine - agent cannot manipulate cables over SSH.",
+      "ai_logs_output": "operator checks PCIe Stability connections/seating + photos + plug-cycle detect status; agent cannot produce this physical evidence.",
+      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies the physical single-cycle/seating boundary, but does not resolve endpoint identity or explain that the title alone does not authorize a repeated or timed stability workload.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds identity, safe plug-cycle, preserved baseline and post-action PCIe evidence without inventing stress execution.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 469-489: historical physical/NO result for PCIe Stability."]
+  },
+  "original_test_intent": "Verify mechanical and functional stability across the one source-defined PCIe plug cycle: the selected assembly remains correctly seated and retained, the expected endpoint returns, and no new relevant PCIe or platform error is observed after restoration.",
+  "original_method": "A qualified engineer inspects and performs the approved disconnect/reconnect cycle and confirms final seating. An agent may preserve mapped PCIe identity and error evidence before and after the action. No soak duration, repeated cycle count or stress workload is specified by this row.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the exact PCIe connector/card/cable assembly, establishes its approved service state, inspects contacts and retention, performs the single authorized plug/reconnect, evaluates resistance/alignment and confirms full seating. Those core mechanical observations cannot be performed or established remotely.",
+  "required_inputs": [
+    "PCIe assembly, slot/connector and expected endpoint identity/topology",
+    "Approved power-isolation or hot-plug procedure and ESD controls",
+    "Mechanical seating/retention criteria and endpoint identity-matching rule",
+    "Expected post-cycle device/link state and relevant error acceptance",
+    "Any project-added duration, repetition or workload explicitly labeled as an override",
+    "Qualified operator, recovery path and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Do not infer multiple cycles, a soak or stress workload from the word Stability; the Master Procedure describes one plug cycle.",
+    "Do not handle the PCIe assembly energized unless the exact interface and platform explicitly approve hot-plug.",
+    "Release retention and auxiliary power correctly and avoid skew, side load or force on contacts and cables.",
+    "Stop on damage, abnormal resistance, power anomaly, missing endpoint, new PCIe errors or management-path loss.",
+    "Do not repeat the cycle, rescan, reset, reload or reboot automatically after an anomaly.",
+    "Preserve prior logs and use timestamped before/after evidence instead of clearing them."
+  ],
+  "agent_execution_scope": [
+    "Prepare the mapped connector/endpoint checklist and approved single-cycle evidence plan.",
+    "Collect pre-action endpoint/topology, specified link properties and error baseline without changing state.",
+    "After operator restoration confirmation, repeat the approved read-only collection and retain raw output.",
+    "Report endpoint/link/error differences and any project-added stability coverage without assigning the verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact assembly, physical sequence, safe state and Master-versus-project stability scope.",
+    "Perform and document the physical cycle, seating and retention inspection.",
+    "Confirm restoration before post-check collection and control any separately approved workload.",
+    "Evaluate physical and functional evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its non-runnable conclusion fits the core physical work. Read-only PCIe inventory/error collection is applicable supporting evidence, but no command or stress run is present in the source.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the project's existing read-only PCIe topology/link/error collector after endpoint mapping. Do not add stress, loop, rescan or recovery commands unless the project explicitly approves them as separate override scope.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are retained. No stability duration, loop count, traffic load, BDF, link threshold or command is specified."
+  },
+  "modernized_recommendation": {
+    "status": "SINGLE-CYCLE MASTER; PROJECT MAY ADD BOUNDED MONITORING",
+    "recommended_method": "Correlate the manual single plug cycle with an endpoint-identity manifest and immutable pre/post topology, link and error evidence. Record any approved post-restoration monitoring duration as project coverage, not a Master rewrite.",
+    "applicable_platform": "The selected PCIe assembly, endpoint, chassis and OS/firmware environment.",
+    "supported_version": "Record service document, firmware/BIOS, OS and evidence-tool versions.",
+    "official_reference": "Applicable platform PCIe service documentation and project-approved evidence-tool documentation; no unstated stability workload is asserted.",
+    "difference_from_original_method": "Clarifies the stability evidence boundary and prevents the title from silently creating repetition or stress requirements.",
+    "coverage_difference": "The Master covers one mechanical cycle and immediate restored state. Any duration, load or repeated-cycle evidence is additional project coverage and must be labeled separately.",
+    "required_inputs": "Assembly/endpoint map, service state, seating criteria, expected device/link/error state and any approved override.",
+    "risks_limitations": "Immediate enumeration does not prove long-duration signal stability, while an added workload cannot prove physical seating by itself."
+  },
+  "project_override_considerations": "A project may approve a monitoring window, workload or loop count. Completion must report the actual approved values and the delta from this one-cycle Master method; it must not claim an unspecified universal stability duration.",
+  "expected_evidence": [
+    "PCIe assembly/slot/endpoint identity and approved source-defined single-cycle plan",
+    "Photographs and engineer observations of connector condition, alignment, seating and retention",
+    "Raw mapped pre/post endpoint/topology, specified link and error evidence",
+    "Actual duration/workload/loop evidence only when separately approved",
+    "Safety stops, coverage difference and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Items, Procedure and Criteria consistently support a physical plug-cycle/seating check. The broad title does not contradict the one-cycle method and does not independently impose duration or repetition."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The single-cycle intent is clear. Endpoint mapping, service state and any added stability parameters are execution inputs, not permanent blockers."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep NO/manual-only, add endpoint and error mapping, and explicitly reject an inferred stress/loop requirement.",
+    "gpt_v2": "Agree with V2's manual cycle, preserved evidence and post-action collection; distinguish immediate Master coverage from any project-added duration.",
+    "v3_1_improvement": "Separates Master method, approved override, actual execution and coverage delta so Stability does not become an invented workload."
+  },
+  "review_improvement": "The record resolves the semantic risk in the title: stability here is evidenced by correct seating and detection after the stated plug cycle, not by an unspecified soak or stress run. It preserves optional project expansion without rewriting the Master.",
+  "independent_technical_reasoning": "The Procedure and Criteria, not the title alone, define execution. They require physical plug/reconnect, seating and post-cycle detection, so the core remains MANUAL ONLY. Because no duration or repetition appears, adding a stress test would be unsupported and could change both risk and coverage. Read-only PCIe evidence can corroborate the restored state after operator action, while any extended monitoring must remain an approved project overlay.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 18, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 18 source_ref",
+    "history": "review_round_02_functionality.md lines 469-489", "external_sources": []
+  },
+  "no_automatic_retry": "On physical anomaly, endpoint loss, new PCIe error or management loss, preserve the first-cycle evidence and stop. Do not repeat, rescan, reset, reload, reboot or start an added workload without a new engineer-approved plan.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

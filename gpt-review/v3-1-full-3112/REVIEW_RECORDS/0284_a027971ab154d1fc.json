@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 284,
+  "library_sequence": 93,
+  "source_key": "Functionality|94|Wistron-HW-00097-V003",
+  "case_variant_id": "a027971ab154d1fc",
+  "source_ref": {"sheet": "Functionality", "source_row": 94, "code": "Wistron-HW-00097-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "012d5800bcedac0615f53b6194cdd2bbe88bd3e284d8c1d2e43bdaa8be325769",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00097-V003.",
+    "next_source_row_verified": "Functionality|95|Wistron-HW-00098-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "Check bandwidth",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    For ethernet NIC:\n  Use iPerf to test the bandwidth of network interface\nFor IB NIC :\n  Use Mellanox tools ib_write_bw to test the bandwidth of IB interface\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Bandwidth should match with SPEC definition.\n2. Need to confirm: 1G Lan",
+    "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/hw/nic-network/check-bandwidth", "attended_time": "20", "machine_time": "20", "latest_updated": "2026-05-11",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "iperf3 (Ethernet) or Mellanox OFED ib_write_bw (IB) + a reachable 2nd host", "ai_commands": "-- Check bandwidth: for Ethernet run iPerf against a 2nd host sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"iperf3 -c ${PEER_IP:?operator must set the peer host ip for iperf3} -t 30 2>&1\"; for IB/NVLink use Mellanox ib_write_bw; needs a peer server + the correct tool. Agent runs the bandwidth test and captures throughput.", "ai_logs_output": "return the iperf3/ib_write_bw throughput result so the user confirms it matches the spec. Needs the 2nd-host IP/tool from the user.", "risk": "RISK: high-bandwidth test saturates the link; run only against a dedicated peer host, not production traffic.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It identifies peer/tool dependencies but invents a 30-second Ethernet duration, adds NVLink not present in the source and does not resolve Ethernet-versus-IB acceptance scope.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds target/tolerance, direction, streams, isolation and counters, but retains PARTIAL because inputs and peer are supplied by the owner.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2475-2499: historical PARTIAL review with an illustrative 30-second command."]
+  },
+  "original_test_intent": "Measure bandwidth of the approved network interface against an owner specification using iPerf for Ethernet or ib_write_bw for InfiniBand, while resolving why the criteria mention only 1G LAN although the procedure includes IB.",
+  "original_method": "Use the existing project script or selected transport-native tool between the SUT and a dedicated peer, with explicit interface, direction, streams, duration, MTU and target/tolerance; collect both endpoints, counters and health before restoring the traffic state.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_TARGET", "NEEDS_PACKAGE", "NEEDS_PEER", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The owner selects Ethernet, IB or both and supplies the isolated interface/peer plus target matrix. Once endpoints and tools are accessible, server/client control, monitoring, evidence capture and comparison can run automatically; no human observation is intrinsic.",
+  "required_inputs": [
+    "Corrected transport scope: 1G Ethernet, InfiniBand or both",
+    "Stable physical/logical interface and dedicated peer/server identities with authenticated access",
+    "Bandwidth target/tolerance, direction, parallel streams/queue parameters, duration/repetitions and MTU",
+    "Tool/version and transport configuration, isolation, cooling/peer capacity, stop/recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not guess interface, peer, tool, target or duration and do not test a production/BMC/sole-management path.",
+    "Validate link/route/MTU/VLAN/bond/RDMA state and peer capacity before generating traffic.",
+    "Stop on packet/error/retransmit surge, link flap, route/management impact, peer overload or unexpected transport.",
+    "Preserve dmesg/SEL and full client/server output; do not treat a single throughput number as the verdict.",
+    "No automatic retry or parameter escalation after a failed run."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved transport/interface/peer/tool matrix and capture both-end baselines.",
+    "Start the approved peer server and SUT/client roles, run the exact test and collect full outputs/counters.",
+    "Compare measured direction/streams/throughput/errors to supplied tolerances and restore traffic state.",
+    "Do not choose unresolved transport scope or issue PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Resolve the procedure's Ethernet/IB scope against the 1G-only criterion.",
+    "Supply/approve targets, peer isolation, tools, duration and recovery plan.",
+    "Review complete results and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Only an illustrative Ethernet client. The unsourced 30 seconds, missing interface bind/direction/streams/server capture and added NVLink scope cannot be promoted. IB requires its own confirmed parameters and peer role.",
+    "executable_command_required": true,
+    "command_recommendation": "Prefer the approved existing project bandwidth script. Otherwise instantiate iPerf or ib_write_bw only from the owner matrix and capture complete client/server commands, versions, status and raw outputs.",
+    "original_parameters_and_time_preserved": "Both Ethernet and IB procedure paths, the 1G criterion, project script and source times 20/20 are retained; no duration or target is invented."
+  },
+  "modernized_recommendation": {
+    "status": "SCOPE CORRECTION AND PARAMETERIZED AUTOMATION",
+    "recommended_method": "Represent Ethernet and IB as separate parameter sets and evidence records, run each on a dedicated peer/path, and compare sustained directional bandwidth plus retransmit/error/counter data to explicit tolerances.",
+    "applicable_platform": "The named Ethernet or RDMA adapter, driver/firmware, link and matching peer/tool stack.",
+    "supported_version": "Record the existing script, iPerf or perftest/OFED versions and adapter/driver/firmware versions.",
+    "official_reference": "Project bandwidth specification and existing approved script; no new default target is inferred.",
+    "difference_from_original_method": "Makes transport, peer, direction, duration, target and counter evidence explicit instead of a tool name alone.",
+    "coverage_difference": "Ethernet TCP/UDP throughput and IB RDMA write bandwidth exercise different stacks and cannot substitute for each other.",
+    "required_inputs": "Transport scope, interface/peer, target/tolerance, workload matrix, isolation and recovery.",
+    "risks_limitations": "Host/peer CPU, NUMA, PCIe, MTU and stream settings can limit throughput independently of link capability."
+  },
+  "project_override_considerations": "A project can select only its applicable transport and approved duration/target, and the agent reports completion of that plan only. Providing peer/spec/parameters does not make the core automated measurement PARTIAL.",
+  "expected_evidence": [
+    "Corrected transport scope, interface/peer/topology and approved performance matrix",
+    "Full tool versions, exact client/server commands, status and raw bidirectional/stream results",
+    "Negotiated link/RDMA state, MTU/routes/NUMA and pre/post NIC/peer counters",
+    "Packet/retransmit/error, kernel/driver/BMC/SEL health and traffic restoration",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The procedure explicitly covers both Ethernet and InfiniBand, while the criteria scope names only 1G LAN and supplies no IB acceptance target. The required transport coverage is therefore inconsistent/incomplete."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Both candidate operations are well understood and automatable. The owner can resolve applicable transport through a project decision without inventing a new global policy, so readiness is pending but the case is not permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject the unsourced 30-second default, NVLink expansion and incomplete peer/evidence plan.",
+    "gpt_v2": "Retain V2's isolation and performance matrix, but reclassify PARTIAL to FULLY AUTOMATABLE because supplied peer/targets are inputs rather than manual core activity.",
+    "v3_1_improvement": "Records the Ethernet/IB scope discrepancy while keeping capability, readiness and verdict independent."
+  },
+  "review_improvement": "This review prevents Ethernet iPerf and IB RDMA-write results from being treated as interchangeable and requires both endpoint evidence so a peer bottleneck is visible.",
+  "independent_technical_reasoning": "The core test is programmatic traffic generation and measurement. A dedicated peer and owner target are necessary inputs, but no physical observation is required once they are available. Transport ambiguity is a source scope conflict, not a reason to label the automated run partial.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 94, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 94 source_ref",
+    "history": "review_round_02_functionality.md lines 2475-2499", "external_sources": []
+  },
+  "no_automatic_retry": "The approved matrix runs once per stated repetition. On link, peer, management, counter or tool anomaly, stop, preserve both endpoints and restore traffic state; do not rerun with changed streams/duration automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 226,
+  "library_sequence": 29,
+  "source_key": "Functionality|30|Wistron-HW-00033-V004",
+  "case_variant_id": "c07bd9f5c3c3a871",
+  "source_ref": {"sheet": "Functionality", "source_row": 30, "code": "Wistron-HW-00033-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "74e88b90d749b388d2d21889b7eca003d8fb996a867e32c43b5b184b454f831e",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00033-V004.",
+    "next_source_row_verified": "Functionality|31|Wistron-HW-00034-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Power Supply - L10 : CRPS -Latch on fault",
+    "test_name_items": "Latch connecter check",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check latch connecter can lock and won't broken\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check latch connecter can lock and won't broken",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "physical PSU latch/handle (operator)",
+      "ai_commands": "-- Latch connecter check: physically verify the PSU (CRPS) latch connector locks and does not break. This is a physical insertion/actuation check of the PSU handle/latch that requires hands and visual confirmation.",
+      "ai_logs_output": "operator manually latches and unlatches the PSU connector and confirms it locks and is not broken; agent cannot physically touch the chassis.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly makes latch actuation and damage inspection human-only but does not define PSU identity, retention, power-state safety or failure handling.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds CRPS isolation/hot-plug gating, retention evidence, power-state correlation and stop conditions.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 770-793: historical physical/NO review for Latch connecter check."]
+  },
+  "original_test_intent": "Physically verify that the identified CRPS PSU latch/retention mechanism can transition to its designed locked state, retain the module or connector, and remain intact without breakage or abnormal force during the single source-directed check.",
+  "original_method": "A qualified engineer identifies the PSU and latch, establishes the approved energized hot-plug or isolated condition, inspects alignment and existing damage, actuates the latch through the required lock/release behavior, verifies retention and final seating, and records photographs. The agent may collect supporting PSU and system state only.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer locates the correct CRPS module, evaluates latch/handle/guide alignment, operates the mechanism by hand, judges force and travel, confirms the designed lock and retention, inspects for cracks, deformation or looseness, and restores the final approved state.",
+  "required_inputs": [
+    "CRPS PSU slot, serial and latch/retention design identity",
+    "Approved insertion, latch actuation and energized hot-plug or isolation procedure",
+    "Power redundancy, load margin and allowed service impact",
+    "Defined locked/unlocked positions, retention and damage criteria",
+    "Expected PSU presence, input/output and BMC/host state after the check",
+    "Qualified operator, photographs and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not unlatch, remove or insert a CRPS PSU while energized unless the exact platform, slot and load state are approved for hot-plug service.",
+    "Confirm redundancy and load margin before any action that could disengage the PSU; the latch check must not silently reduce power protection.",
+    "Do not force or repeatedly cycle the mechanism and stop on misalignment, abnormal resistance, cracks, deformation, damaged connector, heat, arcing or loose retention.",
+    "Preserve PSU/BMC/SEL and host evidence and stop on unexpected power change, PSU loss or management-path loss.",
+    "Do not reseat, exchange modules, reboot or power-cycle automatically after an abnormal latch result."
+  ],
+  "agent_execution_scope": [
+    "Correlate PSU slot/serial and capture approved read-only redundancy, load and PSU/BMC state before the action.",
+    "Prepare the latch-position, retention, force and damage evidence checklist.",
+    "After operator confirmation, collect post-action PSU presence, power/health, host availability and raw event deltas.",
+    "Report state changes and evidence gaps without claiming the physical mechanism passed."
+  ],
+  "engineer_actions": [
+    "Approve the target PSU, safe power state and permitted latch movement.",
+    "Inspect and actuate the latch, verify lock/release, retention and absence of damage, and capture photos.",
+    "Restore and confirm final seating before authorizing post-checks.",
+    "Interpret mechanical and power evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The text is an accurate manual instruction, not an executable command. It identifies the physical core but omits the power-redundancy and final-retention evidence required for CRPS service.",
+    "executable_command_required": true,
+    "command_recommendation": "Use project-approved read-only PSU/BMC inventory, load and health collection mapped to the selected slot. No command can actuate or certify the latch, and no power control or recovery action is added.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source defines no force limit, cycle count beyond the single check, hot-plug state, command or retry."
+  },
+  "modernized_recommendation": {
+    "status": "IDENTITY-LINKED LATCH AND RETENTION CHECK",
+    "recommended_method": "Record PSU slot/serial, pre-action redundancy/load, latch positions and retention photographs, then correlate restored PSU/BMC status and event deltas without adding repeated durability cycles.",
+    "applicable_platform": "The selected CRPS PSU, chassis slot, power backplane and active load configuration.",
+    "supported_version": "Record chassis, PSU, latch/handle, backplane and applicable service-procedure revisions.",
+    "official_reference": "Applicable CRPS platform mechanical and hot-plug service documentation; no generic latch force or cycle-life value is asserted.",
+    "difference_from_original_method": "Adds identity, power-state and retention traceability while preserving the one physical latch check.",
+    "coverage_difference": "This confirms functional lock and visible integrity once; it does not establish mechanical endurance or connector mating-cycle life.",
+    "required_inputs": "PSU/slot identity, service mode, redundancy/load state and mechanical acceptance criteria.",
+    "risks_limitations": "A locked handle does not alone prove full electrical connector engagement, and normal PSU telemetry does not prove latch integrity."
+  },
+  "project_override_considerations": "A project may approve observation-only verification, one lock/release actuation or a removed spare-module fixture based on service constraints. Record the chosen method and coverage; do not imply an energized hot-plug, connector reseat or endurance cycle unless explicitly approved and performed.",
+  "expected_evidence": [
+    "CRPS slot/serial, latch design and approved power/hot-plug state",
+    "Pre-action redundancy, load and PSU/BMC status",
+    "Operator checklist and timestamped photos of alignment, lock/release positions, retention and physical condition",
+    "Raw post-action PSU presence/health, host availability and BMC/SEL event delta",
+    "Any abnormal resistance/damage or safety stop and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure and criterion repeat the same latch-lock and no-break requirement. Missing force, service-state and retention details are project inputs, not contradictions."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The physical acceptance is understandable. A project must supply the exact latch design and safe service state before execution, but the review itself is not blocked."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep NO/manual-only and add PSU identity, redundancy/load, retention and explicit no-repeat boundaries.",
+    "gpt_v2": "Agree with hot-plug/isolation and power evidence; clarify the single functional check does not imply removal or durability cycling.",
+    "v3_1_improvement": "Separates mechanical acceptance, automatable state evidence, readiness and engineer verdict without expanding the source method."
+  },
+  "review_improvement": "This record preserves the simple lock/no-break objective while preventing it from becoming an unplanned PSU removal or repeated latch durability test. It adds the CRPS power-state and retention evidence needed to perform the physical check safely.",
+  "independent_technical_reasoning": "Latch travel, force, locking, retention and damage are physical qualities, so the core is MANUAL ONLY. PSU telemetry is only supporting evidence that the selected module and system remained healthy. Because the source does not authorize hot removal or repeated cycles, those actions cannot be inferred from the title or prior generic wording.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 30, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 30 source_ref",
+    "history": "review_round_02_functionality.md lines 770-793",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On misalignment, abnormal resistance, crack/deformation, failed retention, connector damage, PSU loss or power/management change, preserve the latch position and raw evidence and stop. Do not actuate again, reseat/remove the PSU, exchange modules, reboot or power-cycle without a newly approved recovery plan.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

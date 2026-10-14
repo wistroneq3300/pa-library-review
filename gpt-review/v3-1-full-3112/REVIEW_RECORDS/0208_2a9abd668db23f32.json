@@ -1,0 +1,167 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 208,
+  "library_sequence": 9,
+  "source_key": "Functionality|10|Wistron-HW-00009-V002",
+  "case_variant_id": "2a9abd668db23f32",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 10,
+    "code": "Wistron-HW-00009-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "028c131f6b03af9b764e593f34796dbea9a0380375812c99fb93f27c4bffabc6",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00009-V002.",
+    "next_source_row_verified": "Functionality|11|Wistron-HW-00010-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Front IOB",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"Front IOB\" mechanical check requires visually and physically inspecting the Front IOB board to confirm all components are seated properly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"Front IOB\" (visually and physically inspecting the Front IOB board to confirm all components are seated properly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It captures the manual seating boundary, but omits the source's explicit post-plug-cycle detection-without-error requirement and does not define the IOB component set.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 restores the physical plug/reconnect cycle and allows approved post-action enumeration/log collection while keeping seating and physical action operator-owned.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 273-293: historical physical/NO result for Front IOB; it does not carry forward the detection sub-objective in technical detail."
+    ]
+  },
+  "original_test_intent": "Validate the Front I/O board assembly across two coupled objectives: its defined pluggable components can be physically disconnected and reconnected without abnormal mechanical resistance or seating error, and every affected device is detected in the expected identity/state without new relevant errors after the approved plug cycle.",
+  "original_method": "A qualified engineer inspects and performs the platform-approved Front IOB component plug/unplug/reseat actions, verifies final seating, and supplies physical evidence. An agent may capture a pre-action device baseline and post-action detection/error evidence after the engineer confirms restoration, but cannot perform or certify the physical cycle.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies each in-scope Front IOB connector/component, places the system in its approved service state, disconnects and reconnects only those interfaces, observes mating alignment and resistance, confirms all retainers and components are fully seated, and inspects for bent contacts or damage. These physical actions and seating judgments are central acceptance criteria, so automatable post-cycle detection does not convert the complete case to PARTIAL.",
+  "required_inputs": [
+    "Front IOB board assembly/FRU revision and chassis configuration",
+    "Complete in-scope component, connector, cable and device-identity matrix",
+    "Platform Front IOB removal/reseat procedure, connector keying/retention details and safe service state",
+    "Expected pre/post device inventory and allowed identity/state differences",
+    "Approved interface-specific detection and error-evidence commands with OS/BMC/firmware versions",
+    "Qualified operator, photographic checklist and one authorized test-plan approval"
+  ],
+  "safety_requirements": [
+    "Do not interpret 'all components' without a project component matrix; operate only named Front IOB interfaces.",
+    "De-energize, discharge and apply ESD controls unless the platform procedure explicitly designates a particular interface as hot-pluggable under the selected state.",
+    "Protect keyed connectors, board edges, cable strain relief, latches and exposed contacts; align before insertion and do not use force to overcome resistance.",
+    "Stop on bent/damaged contacts, unexpected resistance, cracked latch, cable strain, incomplete seating, power or thermal alarm, or loss of an unrelated device.",
+    "Do not automatically repeat a plug cycle when detection fails; preserve the physical position, inventories and errors for engineering review.",
+    "Do not clear kernel, BMC or SEL history; use timestamps or snapshots to distinguish new evidence."
+  ],
+  "agent_execution_scope": [
+    "Prepare a component-by-component operator checklist and a before/after evidence map from the approved Front IOB specification.",
+    "Collect the approved pre-cycle inventory without modifying hardware or clearing prior evidence.",
+    "After explicit operator confirmation that the assembly is restored, collect the approved post-cycle inventory and relevant new kernel/BMC/firmware error evidence.",
+    "Diff expected versus observed identities/states, organize photographs and raw logs, and report discrepancies without assigning the formal verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact Front IOB component list, safe state, plug-cycle sequence and expected inventory.",
+    "Physically disconnect/reconnect and seat each approved interface while inspecting keying, retention, alignment, contacts and resistance.",
+    "Confirm final physical seating and authorize post-action evidence collection.",
+    "Evaluate both mechanical and detection/error evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek correctly rejects remote physical execution but is incomplete because the source explicitly requires device detection without error after the cycle. A platform-approved inventory/log collector is applicable only to that secondary observable portion.",
+    "executable_command_required": true,
+    "command_recommendation": "Select commands only after the project maps each Front IOB device to its actual bus and management interface. Capture immutable pre/post snapshots and new error events; do not assume one generic PCIe, USB, network or BMC command covers every component.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are retained. The source provides no component list, cycle count, bus mapping, detection command or acceptable error set; no values are invented."
+  },
+  "modernized_recommendation": {
+    "status": "PLATFORM MAPPING REQUIRED",
+    "recommended_method": "Use a project-approved component/connector matrix that links each manual Front IOB action to a physical evidence item and a bus-appropriate pre/post identity/error collector. Preserve raw snapshots and correlate them to operator timestamps.",
+    "applicable_platform": "The selected Front IOB FRU, connector population, firmware and OS/BMC stack.",
+    "supported_version": "Record board/chassis drawing, service procedure, firmware, OS and evidence-tool versions.",
+    "official_reference": "Applicable platform Front IOB schematic/mechanical/service documentation and the official documentation for each selected inventory interface; no vendor-neutral command is asserted before device mapping.",
+    "difference_from_original_method": "Retains manual plug/reseat and seating inspection while making the source's post-cycle detection requirement auditable per component.",
+    "coverage_difference": "A complete plan covers every listed component mechanically and its corresponding detected identity/error state. Photographs alone omit detection; automated enumeration alone omits connector handling and seating.",
+    "required_inputs": "Board revision, component matrix, connector/service method, expected inventory, approved collectors and safe state.",
+    "risks_limitations": "A device may enumerate despite marginal seating, while a missing device can reflect software, firmware, power or mapping issues rather than mechanical seating alone."
+  },
+  "project_override_considerations": "The project may approve a subset of Front IOB components or a bounded plug-cycle count, but must identify that subset and report excluded connectors/devices as coverage delta. Completing the approved subset satisfies that project plan only and does not claim that every Master-library component was cycled.",
+  "expected_evidence": [
+    "Front IOB FRU/revision, chassis configuration and enumerated in-scope connector/component matrix",
+    "Approved safe-state and plug-cycle sequence with operator timestamps",
+    "Photographs of connector/contact condition where visible, retention features and final seating for each operated component",
+    "Raw pre-cycle and post-cycle device identity/state snapshots using interface-appropriate approved tools",
+    "Time-correlated new kernel/BMC/firmware errors plus an explicit expected-versus-observed diff",
+    "All safety stops, uncovered components, deviations and separately owned engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The Procedure's plug-cycle/detection requirements and Criteria's proper-seating requirement are complementary: physical seating is the primary mechanical acceptance and detection without error is a post-cycle functional observable. DeepSeek is incomplete, not a conflicting Master source."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The two-part intent is clear. The project must provide the component matrix, safe procedure, expected inventory and collectors before execution; these missing values affect readiness but do not make the case permanently unreviewable or unsafe."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain NO for the physical action, but restore the omitted source requirement to verify detection without error after the plug cycle.",
+    "gpt_v2": "Agree with MANUAL ONLY because plug/reseat and seating are core. Preserve V2's pre/post evidence concept, no-log-clear rule and no-repeat recovery boundary.",
+    "v3_1_improvement": "Separates manual mechanical acceptance, agent-executable evidence collection, execution status, tool result and engineer verdict, and requires per-component coverage rather than a generic device check."
+  },
+  "review_improvement": "This record corrects the historical under-specification by retaining both the physical and post-cycle detection objectives. It also explains why automation of inventory/log collection does not change the case from MANUAL ONLY: the central plug/reseat and seating acceptance remains human-operated and human-observed.",
+  "independent_technical_reasoning": "The Front IOB row explicitly couples a mechanical serviceability check with functional persistence after a plug cycle. The operator must manipulate connectors and judge seating, so the complete acceptance cannot be remotely automated. However, ignoring the detection clause would lose source coverage. The correct design is a manual-only case with a substantial agent evidence-assistance scope: a component-mapped, platform-approved before/after inventory and error comparison following operator restoration. Missing mappings and commands are project readiness inputs, not BLOCKED, and no single bus command can be selected safely until the Front IOB population is known.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 10, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 10 source_ref",
+    "history": "review_round_02_functionality.md lines 273-293",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If any connector cannot seat normally, a contact/retainer is damaged, a device is absent, or a new relevant error appears, preserve the current evidence and stop. Do not request another physical cycle, reset, rescan, driver reload or power cycle until the engineer selects a response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

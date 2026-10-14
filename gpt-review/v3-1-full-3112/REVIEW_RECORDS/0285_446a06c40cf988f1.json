@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 285,
+  "library_sequence": 94,
+  "source_key": "Functionality|95|Wistron-HW-00098-V004",
+  "case_variant_id": "446a06c40cf988f1",
+  "source_ref": {"sheet": "Functionality", "source_row": 95, "code": "Wistron-HW-00098-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "ca1ae719c0dd4745d18888e1361758645f9a03f5f3170a8383018e46c4ee87ec",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00098-V004.",
+    "next_source_row_verified": "Functionality|96|Wistron-HW-00099-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Front and Rear Panel", "test_name_items": "VGA - Resolution test",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. update aspeed driver to lastest\n2.Change screen resolution.\n   - In Linux, \"Setting -> Display\"\n   - In Windows, click right button of mouse, select \"Screen resolution\"\nCheck all supported resolutions ( e.g. , 800x600, 1024x768, 1280x1024 )\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Resolutions should be changed successfully and monitor should display correctly (No moire, screen flicker or color difference).",
+    "script": null, "attended_time": "30", "machine_time": "30", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "x11-utils mesa-utils xrandr", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"xrandr --query 2>&1; echo ---; cat /sys/class/drm/card*/modes 2>/dev/null | head 2>&1\"", "ai_logs_output": "return FULL `xrandr --query` + DRM modes so the user confirms the VGA resolution options/current mode; actually changing the on-screen resolution is a GUI/display action needing a person to view the monitor.", "risk": "RISK: display tests need a physical monitor head + a person to observe rendering; agent runs the read-only/headless probe for mode/status evidence only.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It correctly limits itself to mode discovery and acknowledges visual observation, but truncates DRM modes and does not control the mandatory driver-update risk or Windows scope.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds exact ASPEED version/package/rollback and a per-OS visual matrix, but labels the case PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2503-2526: historical PARTIAL review based on read-only xrandr/DRM probing."]
+  },
+  "original_test_intent": "With the approved ASPEED display driver, select every supported VGA resolution in the required Linux and Windows GUI paths and visually verify stable, correct physical-monitor output without moire, flicker or color difference.",
+  "original_method": "An engineer approves and, if required, applies a specific compatible ASPEED driver with rollback, then changes each owner-defined resolution/refresh/color mode through the OS display UI and visually inspects a known monitor; read-only DRM/xrandr evidence corroborates the selected state.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_OS_SCOPE", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A person must operate/observe the physical display and judge moire, flicker and color differences for each Linux/Windows mode. Automated mode listings or screenshots cannot establish the physical rendering criterion.",
+  "required_inputs": [
+    "Exact ASPEED device, current/target signed driver package/version, supported OS and rollback",
+    "Required Linux/Windows resolution, refresh, color-depth and timing matrix",
+    "Physical VGA port, monitor, cable and expected EDID/connector mapping",
+    "Qualified visual observer, console/KVM/OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not interpret 'latest' as authorization to install an unverified driver; confirm compatibility, integrity and rollback first.",
+    "Do not change driver/mode or restart display services without a recoverable console/KVM path.",
+    "Do not use xrandr/DRM enumeration as proof of visible artifact-free output.",
+    "Stop on black screen, flicker/moire/color defect, unsupported mode, EDID failure or display-driver crash and preserve logs.",
+    "No automatic retry, driver reinstall, reboot or fallback mode change."
+  ],
+  "agent_execution_scope": [
+    "Prepare the approved driver/mode/OS/monitor matrix and capture read-only driver, connector, EDID and mode baselines.",
+    "Support only explicitly approved driver or mode actions and collect selected-mode/status/log evidence.",
+    "Correlate engineer observations with each exact mode and assemble recovery/restoration evidence.",
+    "Do not visually accept the display or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact ASPEED driver package/version and recovery path; perform/confirm any update.",
+    "Select and visually inspect every required mode on the physical monitor in each required OS.",
+    "Restore the approved state and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Useful Linux discovery only. `head` can discard required modes; it cannot change modes, cover Windows, verify driver update or judge physical artifacts. Password SSH and disabled host-key validation also require replacement.",
+    "executable_command_required": false,
+    "command_recommendation": "Preserve full untruncated approved xrandr/DRM connector/mode/EDID evidence on Linux. Use the project's validated driver and OS-native display path; no generic latest-driver command is recommended.",
+    "original_parameters_and_time_preserved": "Example resolutions 800x600, 1024x768 and 1280x1024, both OS paths and source times 30/30 are retained as source facts, not treated as the complete owner matrix."
+  },
+  "modernized_recommendation": {
+    "status": "EXACT DRIVER/MODE MATRIX AND VISUAL ACCEPTANCE",
+    "recommended_method": "Record one evidence row per OS/mode/refresh/color-depth combination with driver/connector/EDID state, selected-mode confirmation, timed visual observation and safe revert path.",
+    "applicable_platform": "The named ASPEED VGA device, OS image, physical port, cable and monitor.",
+    "supported_version": "Use and record the project-approved driver/OS/firmware versions; do not assume latest.",
+    "official_reference": "Owner compatibility/mode specification and signed driver source; not provided in the row.",
+    "difference_from_original_method": "Replaces ambiguous latest-driver handling with an approved version/rollback and makes the visual matrix traceable.",
+    "coverage_difference": "Digital mode evidence supports but does not replace physical moire/flicker/color evaluation or Windows GUI coverage.",
+    "required_inputs": "Driver package/version, OS/mode matrix, monitor path, observer and recovery.",
+    "risks_limitations": "Remote screenshots may not reveal analog VGA artifacts visible on the physical panel."
+  },
+  "project_override_considerations": "A project may approve a subset of resolutions/OSes and report only that plan's completion, with omitted source coverage explicit. Supplying a package/matrix does not change MANUAL ONLY because physical rendering judgment remains central.",
+  "expected_evidence": [
+    "ASPEED device/current-target driver/package hash/compatibility/rollback and approval",
+    "Monitor/cable/port/EDID plus exact OS resolution/refresh/color matrix",
+    "Raw untruncated driver/xrandr/DRM/connector evidence and selected-mode status per test",
+    "Timestamped operator photos/notes for moire, flicker, color and stable output plus restoration logs",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Driver preparation, OS mode changes and visual criteria consistently support VGA resolution validation. 'Latest' is unsafe/underspecified but does not contradict the test purpose."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Exact driver, matrix and observer are readiness inputs. The manual operation and visual acceptance are clear once supplied, so MANUAL ONLY is sufficient."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain its visual limitation but reject partial completion from truncated Linux mode discovery and restore driver/Windows/physical coverage.",
+    "gpt_v2": "Keep V2's driver rollback and visual matrix, but reclassify PARTIAL to MANUAL ONLY because GUI selection and physical quality judgment are core.",
+    "v3_1_improvement": "Separates risky driver readiness from manual display acceptance and engineer verdict ownership."
+  },
+  "review_improvement": "This review prevents 'latest' from triggering an uncontrolled driver update and ensures mode enumeration is not misreported as visible analog VGA quality validation.",
+  "independent_technical_reasoning": "The acceptance defects—moire, flicker and color difference—occur on the physical signal/monitor path and may be absent from digital screenshots or mode status. Because the source also explicitly uses OS GUIs, the complete case requires human observation and is MANUAL ONLY.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 95, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 95 source_ref",
+    "history": "review_round_02_functionality.md lines 2503-2526", "external_sources": []
+  },
+  "no_automatic_retry": "Any driver, mode, EDID or visible-output anomaly requires stop and evidence preservation; do not install another driver, reboot, change mode or retry automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

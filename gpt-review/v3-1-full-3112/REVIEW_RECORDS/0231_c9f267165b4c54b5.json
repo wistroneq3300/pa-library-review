@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 231,
+  "library_sequence": 35,
+  "source_key": "Functionality|36|Wistron-HW-00039-V004",
+  "case_variant_id": "c9f267165b4c54b5",
+  "source_ref": {"sheet": "Functionality", "source_row": 36, "code": "Wistron-HW-00039-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "63bf7ba7a05c115a312e1ae91621ffdcf7ae9ac2426e8e0573b18df9cf7e93f7",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00039-V004.",
+    "next_source_row_verified": "Functionality|37|Wistron-HW-00040-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Power Supply - L10 : CRPS -LED",
+    "test_name_items": "LED_Blink_N_Times_then_On",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED Blinking behavior\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED Blinking behavior",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED blinking N times then turning on on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED blinking N times then turning on and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly preserves human counting and final illumination but assumes N and the final light meaning without source parameters.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 requires N, starting state, cadence/color/tolerance and the defined steady-ON end code.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 920-940: historical physical/NO review for LED_Blink_N_Times_then_On."]
+  },
+  "original_test_intent": "Verify by direct observation that the identified CRPS LED produces exactly the approved N flashes and then transitions to the required steady illuminated color/state, rather than an unrelated standby, identify, warning or fault indication.",
+  "original_method": "A qualified operator identifies the PSU and initial state, captures the full physical sequence, counts completed flashes, measures color/timing and confirms the specified steady-on dwell. The agent may analyze operator-provided media and collect read-only context but cannot originate the visual evidence.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator observes the correct bezel from before the first flash, counts N cycles, records color/cadence and confirms the final continuously illuminated state for the defined dwell without touching the PSU.",
+  "required_inputs": [
+    "CRPS slot/serial and indicator location",
+    "Numeric N and completed-flash counting rule",
+    "Initial state and approved sequence trigger or natural condition",
+    "Blink color/cadence/tolerance and final steady-ON color/dwell",
+    "PSU/BMC state distinguishing intended ON from warning, fault or identify",
+    "Qualified observer, time-linked recording and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not manipulate, reseat, unlatch, remove or power-cycle the PSU to trigger the sequence without a separately approved stimulus plan.",
+    "Do not accept arbitrary illumination as the final state; verify color, continuity and platform meaning.",
+    "Stop for wrong count/color/timing, heat, smoke, arcing, abnormal noise, power change or management loss.",
+    "Preserve PSU/BMC/SEL and host history instead of clearing logs.",
+    "Do not automatically re-trigger after an incomplete or ambiguous capture."
+  ],
+  "agent_execution_scope": [
+    "Collect read-only PSU identity, power and health context before and after observation.",
+    "Prepare the N, timing and final-ON evidence worksheet.",
+    "Measure operator-supplied video while recording frame-rate/exposure limitations.",
+    "Report deviations without claiming direct observation or issuing the formal verdict."
+  ],
+  "engineer_actions": [
+    "Approve N, initial/final states, color, timing and tolerance.",
+    "Directly observe and record the complete physical sequence.",
+    "Distinguish intended final ON from alternate LED codes.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual-only statement is correct but cannot be executed until N and final illumination semantics are resolved.",
+    "executable_command_required": true,
+    "command_recommendation": "Use approved read-only PSU/BMC queries to corroborate identity and state only. No remote command proves the flash count or final optical output, and no trigger command is inferred.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. N, trigger, color, cadence, tolerance, final dwell and retry are absent."
+  },
+  "modernized_recommendation": {
+    "status": "COUNTED TRANSITION VIDEO TO VERIFIED STEADY ON",
+    "recommended_method": "Capture timestamped/frame-rate-verified video from before the first flash through the final steady-on dwell, count complete cycles and correlate the final LED code with read-only PSU state.",
+    "applicable_platform": "The selected CRPS PSU, bezel indicator and platform state machine.",
+    "supported_version": "Record PSU/chassis/firmware, LED-code document and capture metadata.",
+    "official_reference": "Applicable PSU/chassis LED sequence documentation; no N, rate or color is invented.",
+    "difference_from_original_method": "Makes count and transition evidence auditable without replacing human acquisition.",
+    "coverage_difference": "Covers one defined sequence and final dwell, not repeated reliability or other LED codes.",
+    "required_inputs": "N, count rule, start state, blink parameters, final-ON semantics and capture specification.",
+    "risks_limitations": "Dropped frames, aliasing, exposure and white balance can miscount flashes or misrepresent final color."
+  },
+  "project_override_considerations": "The project must define N and state/timing parameters. Record any approved alternative sequence and actual coverage; do not claim the master sequence from an incomplete recording or silently reuse a different PSU vendor's code.",
+  "expected_evidence": [
+    "PSU identity plus approved N, initial state and final-ON definition",
+    "Color, cadence/tolerance, counting rule and final dwell",
+    "Operator worksheet and complete time-linked visual recording",
+    "Raw pre/post PSU/BMC power/health and preserved event delta",
+    "Capture limitations, discrepancies and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title defines the sequence shape and the body requests blinking behavior. Missing N and state semantics are project inputs, not a true contradiction."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The sequence intent is clear. Undefined N and LED semantics gate execution but do not make the common case permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep manual-only but expose N and final-code semantics as required inputs.",
+    "gpt_v2": "Agree with physical counting and state correlation; strengthen complete-capture, color and no-retrigger constraints.",
+    "v3_1_improvement": "Separates human acquisition, optional media analysis, readiness and engineer verdict without inventing a sequence."
+  },
+  "review_improvement": "This review distinguishes a valid steady-ON ending from any illuminated warning or identification code and requires complete capture of N flashes, preventing both count and state false positives.",
+  "independent_technical_reasoning": "The flash count and final optical state require physical viewing, so the case is MANUAL ONLY. Agent video analysis can support measurement but cannot replace operator acquisition. Undefined N and LED code are execution inputs rather than permission to guess or classify the library row permanently BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 36, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 36 source_ref",
+    "history": "review_round_02_functionality.md lines 920-940",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If capture starts late, count/timing/color is wrong, final ON is ambiguous, or power/management changes, preserve media and telemetry and stop. Do not re-trigger, alter power, clear faults, reseat/unlatch the PSU, reboot or power-cycle automatically.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

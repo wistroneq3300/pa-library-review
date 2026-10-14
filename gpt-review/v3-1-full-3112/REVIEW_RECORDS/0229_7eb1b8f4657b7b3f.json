@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 229,
+  "library_sequence": 33,
+  "source_key": "Functionality|34|Wistron-HW-00037-V004",
+  "case_variant_id": "7eb1b8f4657b7b3f",
+  "source_ref": {"sheet": "Functionality", "source_row": 34, "code": "Wistron-HW-00037-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3d400030be2bd331c0d4dec4fb4499d6d928269e0f9e8caf53d3db1d47a4fb52",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00037-V004.",
+    "next_source_row_verified": "Functionality|35|Wistron-HW-00038-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Power Supply - L10 : CRPS -LED",
+    "test_name_items": "LED_Blinking",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED Blinking status\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED Blinking status",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED blinking at the expected rate on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED blinking at the expected rate and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly treats the time-varying physical indicator as human evidence, but says expected rate although the source defines no cadence, color or tolerance.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 identifies the missing operating state, color, cadence, window and tolerance and limits automation to corroborating context.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 872-892: historical physical/NO review for LED_Blinking."]
+  },
+  "original_test_intent": "Directly observe the identified CRPS PSU LED and verify that it repeats the vendor-defined blink pattern, color and timing in the approved operating condition, distinguishing the intended code from transient, standby, identification, warning or fault behavior.",
+  "original_method": "A qualified operator identifies the PSU and starting state, observes the physical bezel for the defined window, measures or records the on/off cadence and color across repeated cycles, and captures identity-linked video or timed observations. The agent may analyze the submitted sequence and collect read-only context but cannot originate the physical observation.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator verifies the target PSU, directly observes the indicator through multiple cycles, records color, on/off durations, cadence and transitions, and captures a time-bearing visual sequence without touching the module.",
+  "required_inputs": [
+    "Target CRPS slot/serial and indicator location",
+    "Operating condition that should produce the blink code",
+    "Required color, on/off cadence or frequency, duty cycle and tolerance",
+    "Observation duration and minimum repeated cycles",
+    "Expected PSU/BMC health context and excluded fault/identify codes",
+    "Qualified observer, time-linked recording method and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not manipulate, unlatch, reseat, remove or power-cycle the PSU to induce or change blinking.",
+    "Do not accept remote status, a still image or an unspecified blink as proof of the required timed pattern.",
+    "Use a safe viewing position and stop for heat, smoke, arcing, abnormal noise, unexpected power transition or management loss.",
+    "Preserve PSU/BMC/SEL and host history rather than clearing it.",
+    "Stop on wrong color, cadence, transition or telemetry conflict and do not retry by changing state automatically."
+  ],
+  "agent_execution_scope": [
+    "Collect approved read-only PSU identity, operating state and health context before the observation.",
+    "Prepare a cadence/color worksheet and verify the operator recording identifies the correct bezel.",
+    "Analyze supplied time-linked video for intervals and repetition as supporting evidence, reporting measurement limits.",
+    "Collect post-observation PSU/BMC evidence and raw event deltas without issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Approve the expected blink code, tolerance and observation window.",
+    "Directly observe and record the target physical indicator without manipulating the PSU.",
+    "Resolve pattern or telemetry ambiguity against the vendor specification.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual-only instruction correctly rejects SSH, but its expected-rate phrase cannot be executed until the platform supplies timing and color semantics.",
+    "executable_command_required": true,
+    "command_recommendation": "Use project-approved read-only PSU/BMC queries only for identity and operating context. Video timing analysis may support the operator evidence, but no command proves or induces optical blinking.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source provides no color, cadence, duty cycle, tolerance, observation count, trigger command or retry."
+  },
+  "modernized_recommendation": {
+    "status": "TIME-RESOLVED VISUAL PATTERN CAPTURE",
+    "recommended_method": "Capture an identity-linked video with reliable timestamps or frame rate across the approved number of cycles, measure on/off intervals and color, and correlate with read-only PSU state.",
+    "applicable_platform": "The selected CRPS PSU, bezel indicator and platform power-state implementation.",
+    "supported_version": "Record PSU/chassis revision, firmware, LED-code document and capture-tool/frame-rate metadata.",
+    "official_reference": "Applicable PSU and chassis LED behavior documentation; no generic blink rate or color is asserted.",
+    "difference_from_original_method": "Makes cadence, repetition and state correlation auditable instead of relying on an untimed visual statement.",
+    "coverage_difference": "Time-resolved media improves pattern evidence but remains dependent on operator access and verified capture timing.",
+    "required_inputs": "PSU identity, trigger state, color/cadence/tolerance, observation cycles and capture metadata.",
+    "risks_limitations": "Camera frame rate, rolling shutter, exposure and automatic white balance can alias or distort the pattern."
+  },
+  "project_override_considerations": "The project must supply the expected code and may choose observation cycles or recording equipment. Report measured coverage and tolerances; do not treat any repeated light as passing or silently substitute a different vendor's blink semantics.",
+  "expected_evidence": [
+    "CRPS identity, approved operating state and vendor blink-code reference",
+    "Required color, cadence/duty cycle, tolerance and observation window",
+    "Operator worksheet and time-linked video showing repeated physical pattern",
+    "Raw read-only PSU/BMC state and preserved event delta",
+    "Measurement limitations, discrepancies and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure and criterion consistently request blinking. Undefined timing and color make the common row incomplete for execution but do not create contradictory source facts."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The physical intent is clear. Project-specific code and tolerance are readiness inputs, so the library case is not permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep NO/manual-only but make the missing expected rate, color and observation window explicit rather than implied.",
+    "gpt_v2": "Agree with the time-dependent manual classification and contextual telemetry; strengthen capture timing and aliasing limitations.",
+    "v3_1_improvement": "Separates physical acquisition, optional video analysis, readiness and engineer verdict without inventing a blink code."
+  },
+  "review_improvement": "This record treats blinking as a measurable sequence rather than a binary visual state. It prevents acceptance of an arbitrary fault/identify pattern and defines how timed media can support, but not replace, the operator's physical observation.",
+  "independent_technical_reasoning": "Blink color and timing are physical, time-varying outputs, so the full case remains MANUAL ONLY. An agent can quantify operator-supplied video, yet it cannot access the bezel or establish the approved state. Missing cadence and tolerance are project inputs, not permission to guess or a permanent review block.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 34, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 34 source_ref",
+    "history": "review_round_02_functionality.md lines 872-892",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If the state or target is uncertain, the pattern is wrong/ambiguous, or power/management changes, preserve the recording and telemetry and stop. Do not alter power, clear faults, trigger another sequence, reseat/unlatch the PSU, reboot or power-cycle automatically.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

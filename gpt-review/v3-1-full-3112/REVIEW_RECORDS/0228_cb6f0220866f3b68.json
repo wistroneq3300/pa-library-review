@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 228,
+  "library_sequence": 32,
+  "source_key": "Functionality|33|Wistron-HW-00036-V004",
+  "case_variant_id": "cb6f0220866f3b68",
+  "source_ref": {"sheet": "Functionality", "source_row": 33, "code": "Wistron-HW-00036-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3a31f0f760b518bbd5336bd25dfe022c52988cb3716f5cdd57ea58a709f99a61",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00036-V004.",
+    "next_source_row_verified": "Functionality|34|Wistron-HW-00037-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Power Supply - L10 : CRPS -LED",
+    "test_name_items": "LED_ON",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED On status\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED On status",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED showing a steady ON state on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED showing a steady ON state and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly treats the illuminated bezel state as physical evidence, but any light is not sufficient without the intended operating condition, color and steady-state semantics.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds PSU identity, state/color definition, steady-versus-blink distinction and read-only health context.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 848-868: historical physical/NO review for LED_ON."]
+  },
+  "original_test_intent": "Directly confirm that the identified CRPS PSU bezel LED is illuminated with the required color and steady behavior in the approved LED_ON operating condition, rather than accepting any visible light that could represent standby, identification, warning or fault.",
+  "original_method": "A qualified operator identifies the target PSU, establishes the specified stable operating condition without unplanned manipulation, observes the physical indicator and captures an identity-linked photograph showing color and steady illumination. The agent may collect read-only PSU/BMC context but cannot establish optical output.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator verifies the PSU slot/serial and safe view, observes the correct physical LED long enough to distinguish steady from blinking or transition behavior, identifies the color, and records the illuminated bezel and chassis context without touching the module.",
+  "required_inputs": [
+    "Target CRPS slot/serial and exact indicator location",
+    "Approved operating condition expected to produce LED_ON",
+    "Vendor/platform required color, steady-state meaning and excluded blink/fault codes",
+    "Minimum observation interval and media requirements",
+    "Expected PSU presence, input/output and health telemetry",
+    "Qualified observer, safe line of sight and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not press, unlatch, reseat, remove or power-cycle the PSU to make the LED illuminate; the source authorizes observation only.",
+    "Do not treat PSU-present or healthy telemetry as proof that the physical LED is on, and do not accept an unspecified color or blink pattern.",
+    "Use a safe observation position and stop for heat, smoke, arcing, abnormal noise or an unexpected power transition.",
+    "Preserve BMC/SEL and host evidence and use a timestamped baseline instead of clearing logs.",
+    "Stop on wrong color, blinking, intermittent output, ambiguous target or telemetry conflict; do not alter state automatically."
+  ],
+  "agent_execution_scope": [
+    "Collect approved read-only PSU identity, presence, input/output, power and health context before observation.",
+    "Prepare the expected color/state checklist and verify that operator media identifies the correct module.",
+    "Assist with evidence review for visible color and continuity while explicitly deferring the direct observation and verdict.",
+    "Collect post-observation telemetry and raw event deltas without controlling the PSU."
+  ],
+  "engineer_actions": [
+    "Define and approve the target operating state and LED_ON code.",
+    "Directly observe and photograph the correct indicator without manipulating the PSU.",
+    "Resolve wrong-color, blink or telemetry discrepancies.",
+    "Issue the formal verdict against the platform specification."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The not-runnable statement correctly reserves the optical result for a person. Its steady ON wording still requires a platform-defined color and operating-state meaning.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only project-approved read-only PSU/BMC identity and health queries as context. No remote command proves physical illumination, and no command to induce the state is authorized by this row.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source provides no target state, color, observation interval, control command or retry."
+  },
+  "modernized_recommendation": {
+    "status": "COLOR-AND-STATE CORRELATED VISUAL EVIDENCE",
+    "recommended_method": "Capture an identity-linked visual sequence under controlled exposure that shows the required color remains steady for the approved interval, paired with timestamped read-only PSU health context.",
+    "applicable_platform": "The selected CRPS PSU, bezel indicator and chassis power-management implementation.",
+    "supported_version": "Record PSU/chassis revision, firmware and LED-code document revision.",
+    "official_reference": "Applicable PSU and chassis LED behavior documentation; no universal ON color or meaning is asserted.",
+    "difference_from_original_method": "Adds color, continuity, identity and operating-state traceability without replacing the physical observation.",
+    "coverage_difference": "A still photo proves one instant and may distort color; a short sequence improves steady-state evidence but remains operator-acquired.",
+    "required_inputs": "PSU identity, operating state, color/code semantics, observation interval and media requirements.",
+    "risks_limitations": "Exposure, white balance, glare and adjacent indicators can misrepresent color or target identity."
+  },
+  "project_override_considerations": "The project may define the precise state, required color and visual capture method. Record the approved condition and completed observation; do not count a standby, identification, warning or fault light as LED_ON merely because it is illuminated.",
+  "expected_evidence": [
+    "CRPS slot/serial and approved LED_ON operating condition",
+    "Vendor/platform color and steady-state semantics",
+    "Operator checklist plus timestamped identity-linked photo or video of required illumination",
+    "Raw read-only PSU/BMC presence, power, health and preserved event delta",
+    "Any wrong-color/blink/telemetry conflict and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure and criterion consistently request LED_ON. The omitted condition, color and semantics are readiness inputs rather than contradictory source requirements."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The visual purpose is clear. A project must supply the state and LED code before execution, but the common library case is not permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep manual-only and direct photography, but require correct color, target and operating-state interpretation rather than any steady light.",
+    "gpt_v2": "Agree that telemetry is contextual and the source lacks state/color; add evidence-quality limitations and an observation-only boundary.",
+    "v3_1_improvement": "Separates physical light acceptance, automated corroboration, readiness and engineer verdict without inventing vendor semantics."
+  },
+  "review_improvement": "This review prevents an illuminated warning, standby or identification code from being mistaken for the required LED_ON state. It also forbids unplanned state manipulation and defines a verifiable identity-linked visual evidence package.",
+  "independent_technical_reasoning": "Physical illumination, color and temporal behavior require direct observation, so the full case is MANUAL ONLY. Read-only PSU data cannot prove what the lamp emits. Missing vendor semantics affect execution readiness and verdict interpretation, not the stable automation classification or permanent blocked status.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 33, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 33 source_ref",
+    "history": "review_round_02_functionality.md lines 848-868",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If the target or state is uncertain, the LED is wrong-color, blinking/intermittent, or PSU/power state changes, preserve media and telemetry and stop. Do not change power, clear faults, reseat/unlatch the PSU, reboot or power-cycle to obtain another indication.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

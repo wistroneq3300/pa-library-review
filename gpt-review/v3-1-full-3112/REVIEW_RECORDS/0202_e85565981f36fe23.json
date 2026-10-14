@@ -1,0 +1,169 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 202,
+  "library_sequence": 3,
+  "source_key": "Functionality|4|Wistron-HW-00003-V002",
+  "case_variant_id": "e85565981f36fe23",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 4,
+    "code": "Wistron-HW-00003-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "2a3dbcf787d99303a6b6fac928d9867fec4e7d4f8a301c212a766d16f66d775b",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_variants_read": [
+      "Functionality|2004|Wistron-HW-00003-V002",
+      "Functionality|2007|Wistron-HW-00003-V002"
+    ],
+    "next_source_row_verified": "Functionality|5|Wistron-HW-00004-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_install_and_uninstall",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check nodes and components for installation\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Nodes and componnets should be installed and uninstalled easily",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the OSFP Module mechanical check requires physically seating/unseating the OSFP module and re-booting to confirm it is still detected after the plug cycle; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs OSFP Module seating/unseating and reboot/detection confirmation and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": "same code in 3 workbook rows (multi-row code)"
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO, but the same-row columns incorrectly narrow the generic node/component installation case to the separate OSFP Module variant and add an unsupported reboot/detection step.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED, but the row-4 V2 purpose and procedure repeat the OSFP/reboot contamination instead of limiting the case to the exact row-4 source facts.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 129-149: generic physical conclusion for row 4.",
+      "Functionality rows 2004 and 2007: distinct same-code variants for OSFP Module and Mellanox BF3 Cable; they are not row-4 authority."
+    ]
+  },
+  "original_test_intent": "Have a qualified engineer install and remove the project-specified system nodes and components and judge their mechanical fit, alignment, retention, access and ease of service without forcing, damage or unintended interference.",
+  "original_method": "The source calls for physical installation/uninstallation of nodes and components with photographs and an engineer judgment that the operations are easy. It does not identify OSFP, require a reboot, or define device enumeration as acceptance for this variant.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_INPUT",
+    "NEEDS_SPEC",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified engineer must manipulate each in-scope node/component, observe alignment and clearance, feel abnormal resistance, confirm retention/release behavior, and document any interference or damage. These mechanical serviceability observations cannot be established by an agent through inventory output.",
+  "required_inputs": [
+    "Exact project node/component population and the list of parts covered by this row",
+    "Applicable mechanical drawing, service procedure or assembly specification",
+    "Required power, hot-service, ESD, lifting and access state for each component type",
+    "Acceptance definition for 'installed and uninstalled easily,' including prohibited force, interference, misalignment and damage",
+    "Qualified operator, component identifiers and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Do not infer that the target is an OSFP module; resolve the actual component list from the project plan.",
+    "Use the component-specific power/isolation, ESD, lifting and retention procedure before manipulation.",
+    "Do not force a node, latch, rail, connector or captive fastener when alignment or required release steps are uncertain.",
+    "Stop on abnormal resistance, cross-threading, bent pins, latch/rail damage, collision, dropped load or loss of safe support.",
+    "Do not add an unapproved reboot, hot-plug action or repeated reseat merely to obtain electronic evidence.",
+    "Preserve existing logs; generic log clearing is not required to judge mechanical serviceability."
+  ],
+  "agent_execution_scope": [
+    "Build a component-by-component checklist from the approved project population and service procedures.",
+    "Organize before/after photographs, part identities and engineer observations.",
+    "Collect optional pre/post enumeration only for components whose approved project plan requires electronic presence evidence.",
+    "Identify missing coverage or mismatched part identity without claiming the physical operation or formal verdict."
+  ],
+  "engineer_actions": [
+    "Select the in-scope nodes/components and establish their approved safe service state.",
+    "Install and remove each component according to its own procedure.",
+    "Record fit, alignment, clearance, retention, release, abnormal force and damage observations.",
+    "Restore the platform configuration and decide the formal result."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable classification is directionally correct, but the OSFP target, plug-cycle reboot and detection check belong to another physical row sharing the same code. They do not test the generic row-4 scope as written.",
+    "executable_command_required": false,
+    "command_recommendation": "No generic command can measure installation/removal ease. Optional inventory commands must be chosen only after the project identifies a component with machine-readable presence and may not replace the mechanical judgment.",
+    "original_parameters_and_time_preserved": "Attended Time and Machine Time are both 5 and retained as planning metadata. No source loop count, reboot or electronic detection parameter exists for this variant."
+  },
+  "modernized_recommendation": {
+    "status": "ORIGINAL PHYSICAL METHOD RETAINED",
+    "recommended_method": "Use the project bill of materials plus component-specific approved service procedures to create a traceable installation/removal matrix. Capture identity, safe state, fit/retention observations and restoration for each target.",
+    "applicable_platform": "The selected server configuration and its actual node/component population.",
+    "supported_version": "Record each drawing/service-procedure revision; no universal component procedure is asserted.",
+    "official_reference": "Applicable platform mechanical drawing, assembly specification and approved component service procedure.",
+    "difference_from_original_method": "Adds explicit target identity and per-component coverage without narrowing the source to OSFP or adding a reboot.",
+    "coverage_difference": "Any component omitted from the approved in-scope matrix remains an explicit Master coverage gap.",
+    "required_inputs": "Population/BOM, service procedures, safe-state requirements and acceptance criteria.",
+    "risks_limitations": "Different nodes and components can have incompatible service states and retention mechanisms; one generic handling instruction is unsafe."
+  },
+  "project_override_considerations": "The project may define the component population and an approved subset for a run, but it must record excluded nodes/components as coverage differences. Selecting only an OSFP module or BF3 cable does not complete this generic variant unless the project explicitly limits scope and records that deviation.",
+  "expected_evidence": [
+    "Platform configuration and full in-scope component matrix with stable identifiers",
+    "Applicable service/drawing revision and safe-state record for each component type",
+    "Before/after photographs showing alignment, latches, rails, connectors and restored state",
+    "Engineer observations for insertion/removal force, interference, retention, release and damage",
+    "Optional pre/post enumeration for explicitly selected electronically detectable components",
+    "Coverage exceptions, safety stops and separate engineering verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The row's Items, Procedure and Criteria consistently request generic mechanical serviceability. OSFP/reboot text appears only in derived DeepSeek/GPT V2 material and is a historical review defect, not a contradiction within the source row."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The manual purpose is understandable. The exact component list and measurable interpretation of 'easily' are project readiness inputs. Once supplied, a deterministic manual inspection can be planned without inventing source semantics."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain NO/MANUAL capability but reject the unrelated OSFP target, reboot and detection procedure.",
+    "gpt_v2": "Retain the physical-operation, ESD, no-force, no-log-clear and engineer-verdict safeguards; remove the row-2004 OSFP scope from this row-4 variant.",
+    "v3_1_improvement": "Restores variant identity, separates the project component matrix from the Master row, and prevents optional electronic evidence from replacing the serviceability judgment."
+  },
+  "review_improvement": "This review corrects a cross-variant target contamination caused by a three-row shared code. It restores the generic node/component scope, removes the unsupported reboot requirement, and requires a project-specific component matrix before safe manual execution.",
+  "independent_technical_reasoning": "Installation and removal ease depends on component-specific alignment, retention, clearance, access and physical force. Those facts require a person at the hardware. The same code also labels an OSFP Module row and a Mellanox BF3 Cable row, but source identity includes sheet and physical row; importing their targets would silently rewrite row 4. Machine enumeration can confirm presence for some targets after the manual work, yet it cannot establish whether rails bind, latches release correctly or service access is acceptable. The complete case therefore remains MANUAL ONLY and readiness depends on the actual population and mechanical reference.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 4, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 4 source_ref",
+    "history": "review_round_02_functionality.md lines 129-149; duplicate-code comparison with Functionality rows 2004 and 2007",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If a component binds, is misaligned, damages a connector/rail/latch, or cannot be restored, preserve the state and evidence. Do not automatically repeat installation, reseat, reboot or substitute another component.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "cross_variant_contamination_removed": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_WITH_HISTORICAL_TARGET_CORRECTION"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

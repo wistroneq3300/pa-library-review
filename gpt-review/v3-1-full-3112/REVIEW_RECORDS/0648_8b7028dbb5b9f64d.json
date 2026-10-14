@@ -1,0 +1,159 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 648,
+  "library_sequence": 473,
+  "source_key": "Functionality|474|Wistron-BIOS-00141-V002",
+  "case_variant_id": "8b7028dbb5b9f64d",
+  "source_ref": {"sheet": "Functionality", "source_row": 474, "code": "Wistron-BIOS-00141-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "98aec85a0b3438249329b51b2b9ea9f375d79eabbb3bc51265f1971e2695c076",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row was returned for Wistron-BIOS-00141-V002.",
+    "next_source_row_verified": "Functionality|475|Wistron-BIOS-00142-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "BIOS",
+    "test_set": "Check NUMA code configure",
+    "test_name_items": "Check NUMA code configure",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Change BIOS setting, and boot into OS.\n2. Send Command : lscpu\n   Check NUMA node CPU(s).\n3. Repeat 1-2 steps for different options: NPS1,NPS2,NPS4.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1.  Command execute successfully.\n2.  After the BIOS setting takes place, each NPS setting needs to have an appropriate allocation.\nex:\nNPS1 [node0~1]\nNPS2 [node0~3]\nNPS4 [node0~7]",
+    "script": null,
+    "attended_time": "120",
+    "machine_time": "120",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL",
+      "ai_packages_needed": "util-linux (lscpu) + numactl",
+      "ai_commands": "# Check NUMA node configuration after operator sets BIOS NPS (NPS1/2/4)\nsshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lscpu 2>&1 | grep -E '^NUMA|Socket|Core|On-line'; echo '---node memory---'; numactl --hardware 2>&1 | grep -i node\"",
+      "ai_logs_output": "return lscpu NUMA lines + numactl --hardware node map so the user confirms the NPS setting yields the expected node allocation (NPS1 node0~1, NPS2 node0~3, NPS4 node0~7).",
+      "risk": "RISK: changing NPS in BIOS is an operator action; the agent only reads the resulting NUMA layout.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL; retains operator NPS selection and read-only OS topology checks, but filters evidence and treats generic node examples too literally.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED; adds topology-specific expectations, raw lscpu/numactl evidence, recovery, health checks and restoration.",
+    "round_02": "No additional exact-code technical record found.",
+    "second_review_handoff": "No V3/V3.1 record exists for this variant.",
+    "v3": "None.",
+    "v3_1": "None."
+  },
+  "original_test_intent": "Verify that each approved BIOS NUMA-per-socket mode (NPS1, NPS2 and NPS4) produces the platform-specific CPU and memory-node allocation after reboot without boot, memory-training or health regression.",
+  "original_method": "An engineer selects one NPS mode in BIOS and reboots; the agent then collects raw lscpu and numactl topology plus BIOS/BMC/OS health for comparison with the approved socket, CPU and DIMM population map before repeating the bounded mode matrix.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "NEEDS_PLATFORM_NPS_CONTROL_AND_SUPPORTED_MODE_MATRIX",
+    "NEEDS_SOCKET_CPU_DIMM_TOPOLOGY_AND_EXPECTED_NODE_MAP",
+    "NEEDS_APPROVED_MAINTENANCE_AND_REBOOT_SEQUENCE",
+    "NEEDS_UTIL_LINUX_AND_NUMACTL_VERSION_CONFIRMATION",
+    "NEEDS_OOB_RECOVERY_AND_FINAL_NPS_STATE"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An engineer must enter BIOS, select each supported NPS value, save and initiate the required reboot. After each confirmed boot, topology and health collection can be automated.",
+  "required_inputs": [
+    "Board, CPU, socket, DIMM, BIOS and AGESA identity",
+    "Exact BIOS NPS control and supported NPS1/NPS2/NPS4 matrix",
+    "Expected per-mode CPU and memory-node allocation for the installed topology",
+    "Approved reboot order, dwell and final NPS state",
+    "Validated util-linux/lscpu and numactl versions",
+    "Console/BMC recovery path for memory-training or boot failure"
+  ],
+  "safety_requirements": [
+    "Do not infer a PASS from the generic node-number examples; derive expectations from the actual socket and memory population.",
+    "Do not change NPS or reboot outside the approved maintenance plan; preserve console/BMC recovery and the known-good prior mode.",
+    "Preserve pre/post kernel and SEL evidence rather than clearing the only diagnostic history.",
+    "Stop on unsupported mode, memory-training failure, boot failure, topology mismatch, thermal/power alarm or management loss.",
+    "Restore the approved final NPS state; no automatic retry."
+  ],
+  "agent_execution_scope": [
+    "After an engineer confirms each BIOS transition and boot, collect unfiltered lscpu and numactl --hardware output with tool versions.",
+    "Capture read-only BIOS/BMC identity, OS/kernel topology and health evidence and compare it with the approved per-mode map.",
+    "Do not operate BIOS, reboot autonomously, invent topology expectations or decide PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Approve the actual NPS/topology matrix, maintenance sequence, recovery and final state.",
+    "Apply each supported NPS mode in BIOS and confirm the system has completed boot/memory training.",
+    "Interpret cross-layer topology and health evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "lscpu and numactl --hardware are appropriate read-only evidence sources, but password-on-command-line sshpass, disabled host-key checking and grep-filtered output should not be the authoritative evidence path.",
+    "executable_command_required": true,
+    "command_recommendation": "Preserve lscpu and numactl --hardware, use the project's approved authenticated transport, record tool versions and archive raw output before producing a focused comparison.",
+    "original_parameters_and_time_preserved": "NPS1/NPS2/NPS4, the lscpu method and 120/120-minute fields are retained; unsupported modes may be excluded only by an approved project plan."
+  },
+  "modernized_recommendation": {
+    "status": "RAW CROSS-LAYER NUMA TOPOLOGY MATRIX",
+    "recommended_method": "For every approved NPS mode, retain raw lscpu --extended/--json where supported and numactl --hardware output, bind it to BIOS/AGESA and installed CPU/DIMM identity, then compare CPU and memory nodes against a project-owned expectation matrix.",
+    "applicable_platform": "AMD server platforms exposing the named NPS control and Linux topology interfaces.",
+    "supported_version": "Record BIOS/AGESA, kernel, util-linux and numactl versions; confirm option availability before use.",
+    "official_reference": "Platform BIOS NPS documentation plus installed util-linux lscpu and numactl documentation.",
+    "difference_from_original_method": "Keeps the original tools while adding raw evidence, memory-node topology, version binding and per-platform expectations.",
+    "coverage_difference": "No reduction; preserves all approved NPS modes and adds attribution and health coverage.",
+    "required_inputs": "Installed topology, supported modes, expected mapping and versions.",
+    "risks_limitations": "OS topology output proves enumeration after boot but not the BIOS selection by itself; BIOS evidence remains required."
+  },
+  "project_override_considerations": "A project may approve only the NPS modes supported by its CPU/socket/DIMM population and may define a different final mode. The report must name excluded modes and cannot claim the source's entire NPS1/NPS2/NPS4 matrix if fewer modes ran.",
+  "expected_evidence": [
+    "Approval, platform/BIOS/AGESA/CPU/socket/DIMM identity and expected per-mode map",
+    "Pre-change NPS, raw lscpu/numactl baseline and BIOS/BMC/OS health",
+    "Per-mode BIOS capture, reboot/memory-training completion and raw versioned topology output",
+    "Per-mode CPU and memory-node comparison plus kernel/SEL/thermal/power health",
+    "Final approved NPS restoration and engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The source consistently requires NPS changes followed by lscpu validation. Generic node examples are incomplete project data, not a contradiction."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The intended NPS transition and topology check are clear. Missing topology expectations or packages affect run readiness but do not permanently block the master case."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retains its human BIOS boundary and OS tools, while rejecting insecure transport assumptions and filtered-only evidence.",
+    "gpt_v2": "Agrees with its partial classification and topology/recovery controls, but does not treat ordinary missing project inputs as BLOCKED.",
+    "v3_1_improvement": "Separates manual BIOS state changes, automated evidence collection, execution status and the engineer-owned verdict."
+  },
+  "review_improvement": "Makes the acceptance topology-specific and auditable across BIOS, CPU and memory layers without converting a human BIOS transition into an agent action.",
+  "independent_technical_reasoning": "The core sequence requires repeated human BIOS configuration, but the post-boot topology and health evidence is software-readable. This is the locked hybrid boundary: REQUIRES PACKAGE / USER CONFIRMATION, not MANUAL ONLY and not BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 474, openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 and data/tests.json",
+    "gpt_v2": "gpt-review/test_gpt_review.json row 474",
+    "history": "Repository exact-code search",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

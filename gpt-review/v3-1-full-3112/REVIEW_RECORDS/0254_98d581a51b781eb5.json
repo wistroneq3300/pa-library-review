@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 254,
+  "library_sequence": 59,
+  "source_key": "Functionality|60|Wistron-HW-00063-V004",
+  "case_variant_id": "98d581a51b781eb5",
+  "source_ref": {"sheet": "Functionality", "source_row": 60, "code": "Wistron-HW-00063-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "4c525299a21460ad43a39fbfeaf3d37daa4b616bec88f1b1805e54631710911c",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00063-V004.",
+    "next_source_row_verified": "Functionality|61|Wistron-HW-00064-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "Over temperature",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Over temperature (forcing an over-temperature condition inside the PSU) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator Over temperature (forcing an over-temperature condition inside the PSU) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It recognizes physical thermal risk but supplies no sensor, thermal profile, stimulus, monitoring or record contract and mentions irrelevant AC/throttle alternatives.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly requires the affected sensor/region, threshold/time envelope, thermal method, monitoring/cooling, blackbox fields and recovery.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1535-1555: historical NO classification based on physical activity."]
+  },
+  "original_test_intent": "Verify that a defined PSU over-temperature condition is saved in the CRPS blackbox with the expected sensor/status identity, protection behavior and timeline.",
+  "original_method": "A qualified operator uses a vendor-approved chamber/heating or safe simulation method on the identified thermal region while independent sensors and a hard cooling/cutoff path constrain the profile. The raw blackbox record is extracted and correlated with the measured temperatures and recovery.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified engineer must identify the thermal target, establish the chamber/fixture and supervise heating/cooling. Agent automation may monitor and correlate evidence only after the approved profile exists.",
+  "required_inputs": [
+    "PSU/DUT identity and exact internal sensor/region represented by the fault",
+    "Vendor threshold, ramp, dwell, tolerance, load condition and expected protection response",
+    "Approved chamber/thermal fixture or documented simulation, independent sensors and emergency cooling/cutoff",
+    "Blackbox extraction tool/schema and expected over-temperature fields",
+    "Operator, inspection/recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not heat the PSU, obstruct cooling, manipulate fan control or write thresholds through an undocumented method.",
+    "Validate sensor placement, chamber/fixture limits, ramp/dwell and immediate cooling/cutoff before stimulus.",
+    "Preserve baseline logs and protect nearby hardware/load.",
+    "Stop for envelope exceedance, smoke, odor, damage, protection failure, unexpected shutdown or management loss.",
+    "No automatic repeat, alternate sensor/profile, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved thermal/evidence plan and collect baseline telemetry.",
+    "After operator-controlled stimulus, retain independent and PSU temperatures, load/protection timeline and raw blackbox export.",
+    "Correlate sensor threshold, event fields and cooling recovery.",
+    "Do not control unapproved heating or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Define/approve and supervise the thermal target/profile and fixture.",
+    "Operate emergency cooling/cutoff and inspect/recover hardware.",
+    "Provide inaccessible blackbox data and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It safely refuses direct execution but is not a method; its generic physical/AC language cannot define an over-temperature stimulus and its blackbox-access claim is unsupported.",
+    "executable_command_required": false,
+    "command_recommendation": "Use only the approved chamber/thermal-fixture SOP or documented vendor simulation plus the vendor blackbox extractor after profile and sensor semantics are fixed.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain source facts; they do not define a ramp or dwell."
+  },
+  "modernized_recommendation": {
+    "status": "SENSOR-SPECIFIC THERMAL PLAN REQUIRED",
+    "recommended_method": "Select one documented thermal sensor/region, define ramp/dwell/abort limits, synchronize independent measurements, execute once under operator control, restore cooling and correlate the blackbox record.",
+    "applicable_platform": "Only the named PSU, sensor region, load and validated thermal fixture.",
+    "supported_version": "Record PSU/BMC firmware, fixture controller, sensor calibration and blackbox schema/tool versions.",
+    "official_reference": "Project/vendor OTP and blackbox documentation must be supplied; no threshold/profile is invented.",
+    "difference_from_original_method": "Makes the over-temperature condition measurable and recoverable while preserving blackbox validation.",
+    "coverage_difference": "One sensor/profile does not cover other hotspots, ambient over-temperature or fan-fault paths.",
+    "required_inputs": "Sensor, threshold/profile, load, fixture, monitoring/cooling, expected record and recovery.",
+    "risks_limitations": "Internal hotspots can rise faster than visible BMC sensors; external temperature alone may not prove the intended condition."
+  },
+  "project_override_considerations": "A project may select a chamber, local heater or vendor simulation only with documented equivalence to the intended blackbox sensor. Report sensor/profile coverage; do not substitute fan failure or generic stress.",
+  "expected_evidence": [
+    "Approved sensor/profile/load, fixture and sensor calibration, safety checklist",
+    "Operator record and synchronized independent/PSU temperature, fan/load, protection and cooling timeline",
+    "Raw blackbox export with schema/tool version and expected OTP fields",
+    "Preserved platform logs plus inspection and thermal recovery evidence",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title and procedure consistently target blackbox capture of over-temperature. Missing sensor/profile and record fields are underspecification, not conflict."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "Sensor choice, thermal profile and safe stimulus define the operation and coverage. Guessing them can damage the PSU, so the case is genuinely BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree the agent must not improvise heating; reject its generic alternatives and unsupported blackbox limitation.",
+    "gpt_v2": "Agree with BLOCKED and the sensor/profile/monitoring/cooling/record/recovery gates.",
+    "v3_1_improvement": "Separates sensor-specific OTP evidence from fan fault or ambient heat and identifies automatable monitoring after setup."
+  },
+  "review_improvement": "This review defines the missing sensor and thermal envelope, preserves raw correlation and blocks unsafe inference of heating or threshold manipulation.",
+  "independent_technical_reasoning": "Over-temperature has no executable meaning until the sensor/region, threshold, profile and safe method are known. These choices alter both hazard and blackbox signature; therefore their absence is a real BLOCKED condition, not a routine missing parameter.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 60, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 60 source_ref",
+    "history": "review_round_02_functionality.md lines 1535-1555", "external_sources": []
+  },
+  "no_automatic_retry": "Apply only one approved thermal profile. Any limit, protection or recovery anomaly requires immediate cooling/cutoff, evidence preservation and stop; do not repeat/reset/power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

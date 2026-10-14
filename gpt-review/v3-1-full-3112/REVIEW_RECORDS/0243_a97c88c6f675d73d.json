@@ -1,0 +1,118 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 243,
+  "library_sequence": 48,
+  "source_key": "Functionality|49|Wistron-HW-00052-V005",
+  "case_variant_id": "a97c88c6f675d73d",
+  "source_ref": {"sheet": "Functionality", "source_row": 49, "code": "Wistron-HW-00052-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "c8fae89815089f7e6dcaef5d88ce435b4768fe5d30a9ada68bff8cd70b33de4f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00052-V005.",
+    "next_source_row_verified": "Functionality|50|Wistron-HW-00053-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Capability and Inventory Reporting  MFR_TEMP1_MAX",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Defines the maximum inlet temperature to generate a warning condition in the STATUS_TEMPERATURE command.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Defines the maximum inlet temperature to generate a warning condition in the STATUS_TEMPERATURE command.",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools ipmitool",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power' || echo no_pmbus_dev; echo ---i2c_buses---; sudo i2cdetect -l 2>/dev/null | grep -iE 'smbus|i2c' || echo no_i2c_tools; echo ---reg_MFR_TEMP1_MAX---; sudo i2cget -f -y ${PMBUS_BUS:?set PSU i2c bus} ${PMBUS_ADDR:?set PSU i2c addr} 0xB0 2>&1\"",
+      "ai_logs_output": "enumerate the hwmon PMBus + i2c buses on the DUT so the MFR_TEMP1_MAX register (0x0xB0, max temperature-1 factory limit) can be read; then, once the user supplies the PSU i2c bus+address, read the register with i2cget/i2ctransfer and return the FULL value. Agent returns the PMBus/i2c enumeration + the register value once bus/addr are given.",
+      "risk": "RISK: requires the PSU to be PMBus-connected and the exact PSU i2c bus/address from the board schematic; reading a raw PMBus register needs i2c-tools on the DUT. State: read-only, but target bus/address must be verified against the board before using i2cget.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It maps MFR_TEMP1_MAX to an unverified forced byte read at 0xB0 and does not establish temperature format, units or acceptance value.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 correctly distinguishes reading the configured limit from inducing the warning and requires the vendor mapping.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1251-1275: historical PARTIAL review and warning that interface enumeration is not register evidence."]
+  },
+  "original_test_intent": "Read and report the manufacturer's maximum inlet-temperature threshold used to generate the PSU STATUS_TEMPERATURE warning, with the correct sensor meaning, units and encoding.",
+  "original_method": "Identify the CRPS PSU and its inlet-temperature limit definition, issue the approved read-only MFR_TEMP1_MAX transaction, retain and decode the complete value, compare it with the project/vendor threshold, and correlate read-only status context without injecting temperature.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The core is a deterministic threshold read and decode. An engineer supplies the vendor register definition, expected inlet limit and approval; no chamber operation, heat injection or visual observation is required by this source row.",
+  "required_inputs": [
+    "PSU model/firmware and board PMBus bus/address ownership map",
+    "Vendor definition of MFR_TEMP1_MAX, including inlet sensor identity, transaction type, width, PEC, numeric encoding and units",
+    "Approved expected maximum inlet threshold and comparison tolerance/rule",
+    "Approved read-only PMBus/vendor tool and version",
+    "Authenticated access, one-user approval and bus recovery procedure"
+  ],
+  "safety_requirements": [
+    "Do not assume 0xB0, byte width, Linear11/Linear16, signedness, scaling, units or the TEMP1 sensor mapping.",
+    "Keep the action read-only; do not change the threshold, inject heat, manipulate STATUS_TEMPERATURE or use forced access/blind scans.",
+    "Do not clear logs; preserve pre-read context and the post-read delta.",
+    "Use authenticated transport and stop on ambiguous decoding, wrong target, bus error or PSU/BMC/host change.",
+    "Do not automatically retry with another register, access width, address, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Verify the target, inlet-sensor mapping and resolved read-only transaction before approval.",
+    "Capture the full raw threshold response, decode temperature with units and retain tool/transport status.",
+    "Repeat the unchanged query for consistency and compare the decoded threshold with the approved value.",
+    "Collect read-only STATUS_TEMPERATURE context and preserved logs; report facts without a formal verdict."
+  ],
+  "engineer_actions": [
+    "Provide the vendor mapping, expected inlet threshold and comparison rule.",
+    "Approve the target/read path and recovery procedure.",
+    "Resolve any device-specific encoding or threshold semantics.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not acceptance-ready: 0xB0 and byte-read semantics are not sourced, `-f` can bypass ownership, SSH handling is insecure, only one hwmon name is inspected, ipmitool is unused and `0x0xB0` is malformed in the narrative.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the vendor/board-approved non-forced read-only transaction through authenticated transport and decode the raw value with the documented inlet-temperature format.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 are retained. The source supplies the functional meaning but no numeric expected limit."
+  },
+  "modernized_recommendation": {
+    "status": "VENDOR-MAPPED THRESHOLD READ",
+    "recommended_method": "Create a versioned mapping from MFR_TEMP1_MAX to the inlet sensor and numeric format, take two unchanged approved reads, decode with units, and compare to the project threshold while preserving status/log context.",
+    "applicable_platform": "Only the mapped PSU model/firmware and PMBus path.",
+    "supported_version": "Record vendor register-map revision, PSU/BMC firmware and reader version.",
+    "official_reference": "Project-supplied PSU vendor command/thermal documentation; the review does not assert generic 0xB0 semantics.",
+    "difference_from_original_method": "Adds traceable raw-to-temperature decoding and an explicit expected comparison without turning the definition check into a thermal-stress test.",
+    "coverage_difference": "The threshold read verifies the configured/advertised limit only; it does not prove a physical warning is asserted at that temperature.",
+    "required_inputs": "Sensor/register map, encoding, units, expected limit, target map and approved tool.",
+    "risks_limitations": "A wrong format can yield a plausible temperature; read-only status correlation cannot replace warning trip validation."
+  },
+  "project_override_considerations": "The project may approve a BMC API, vendor utility or direct PMBus reader if raw/decoded equivalence is documented. A project threshold may complete that approved plan, but must not be presented as a universal library value or as proof of warning activation.",
+  "expected_evidence": [
+    "PSU/firmware identity, inlet-sensor definition, vendor map and tool versions",
+    "Exact read-only transaction and two full raw responses",
+    "Documented encoding, decoded temperature and units",
+    "Approved expected threshold/tolerance and explicit comparison",
+    "Read-only STATUS_TEMPERATURE context, preserved log delta and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criteria consistently describe the inlet warning threshold definition. Their omission of a numeric value and encoding is a project input gap, not a contradiction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The requested quantity and its relationship to STATUS_TEMPERATURE are clear. Vendor mapping and expected value affect readiness, not the feasibility of the review or automated core."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject the unsourced 0xB0 forced byte read while preserving the need for full raw output.",
+    "gpt_v2": "Agree that this is not a heat-injection test and that mapping/encoding must be supplied; reclassify from PARTIAL because the approved read/decode/compare core is fully automatable.",
+    "v3_1_improvement": "Separates deterministic threshold acquisition from engineer-supplied semantics and explicitly prevents false warning-trip coverage."
+  },
+  "review_improvement": "This record makes the inlet sensor, numeric format, units and expected comparison auditable, preserves the original definition-only scope and removes the unsupported assumption that a single forced byte at 0xB0 is sufficient.",
+  "independent_technical_reasoning": "MFR_TEMP1_MAX is a static manufacturer threshold query, not an environmental stimulus. Once the authoritative mapping and expected threshold are supplied, acquisition, repeatability checking, decoding and comparison are automated; engineer input and verdict do not make it PARTIAL.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 49, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 49 source_ref",
+    "history": "review_round_02_functionality.md lines 1251-1275", "external_sources": []
+  },
+  "no_automatic_retry": "If target, sensor mapping, response format or platform state is abnormal, preserve raw output and stop. Do not guess a new command/address/width, force the bus, write a limit, reset or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

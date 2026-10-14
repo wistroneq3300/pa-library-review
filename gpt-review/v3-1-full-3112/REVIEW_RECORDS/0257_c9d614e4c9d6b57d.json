@@ -1,0 +1,116 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 257,
+  "library_sequence": 62,
+  "source_key": "Functionality|63|Wistron-HW-00066-V004",
+  "case_variant_id": "c9d614e4c9d6b57d",
+  "source_ref": {"sheet": "Functionality", "source_row": 63, "code": "Wistron-HW-00066-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "675d03d85cbe7314e3082ac47989803e85b1bcfe232222884467c016b024c44a",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00066-V004.",
+    "next_source_row_verified": "Functionality|64|Wistron-HW-00067-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : Function", "test_name_items": "Repair",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Unplug the power cord of PSU 1\n2. Check PSU 1 status with vision\n3. Check PSU 1 status by BMC (sensor list and SEL)\n4. Plug back the power cord of PSU 1\n5. Check PSU 1 status again\n6. Repeat step 1 ~ 5 for the all the rest of PSU\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Power cord should be unplugged without any problem\n2. Power supply should be OFF when power cord is unplugged (FAN should be off. LED should be AMBER.)\n3. PSU information in sensor list and SEL of BMC should be correct when power cord is unplugged\n4. PSU information in sensor list and SEL of BMC should be correct when power cord is plugged back\n5. All the reset PSU should have the same behavior as PSU 1",
+    "script": null, "attended_time": "15", "machine_time": "15", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU Function case (repairing/replacing a failed PSU and re-verifying PSU status) requires physically inserting/removing/cycling the PSU module and its power-cord at the machine and visually observing the PSU LED/status; a person must be present at the hardware. The agent can only read the post-operator BMC PSU sensors/SEL, which the operator records after the physical step.",
+      "ai_logs_output": "operator physically repairing/replacing a failed PSU and re-verifying PSU status then records PSU LED/status; after that the agent can run ipmitool (on agent host) sdr elist 2>&1 | grep -iE \"psu|power supply\" ; echo ---sel---; ipmitool (on agent host) sel list last 30 2>&1 | tail -30 ; echo ---psu_repairing/replacing_a_fa---; ipmitool (on agent host) sensor list 2>&1 | grep -iE \"psu|power supply\" to confirm BMC sees the PSU state, but the physical action must be human.",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It interprets the title as physical repair/replacement, but the source procedure contains only the same cord unplug/replug sequence as the preceding Fail case.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly requires owner adjudication between repair/replacement and the written cord-cycle procedure.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1613 onward: historical NO review did not resolve the title/procedure mismatch."]
+  },
+  "original_test_intent": "UNRESOLVED SOURCE CONTRACT: the item says Repair, but the procedure/criteria specify only an all-PSU power-cord fail/recovery cycle and define no failed part, diagnosis, replacement or repair acceptance.",
+  "original_method": "Preserve two distinct paths pending owner decision: (A) the written one-at-a-time cord unplug/replug and visual/BMC recovery test, or (B) a defined PSU diagnosis/repair/replacement service operation with compatibility and post-service criteria. Do not combine or infer them.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Both possible paths require operator physical work: cord manipulation/visual checks for path A, or diagnosis/removal/replacement for path B. Agent evidence collection cannot resolve which physical action the source author intended.",
+  "required_inputs": [
+    "Owner decision and corrected authoritative wording selecting cord-cycle or repair/service",
+    "If repair: fault diagnosis, target slot/serial, allowed repair/replacement action and part compatibility",
+    "If cord-cycle: exact PSU population, cord map, expected LED/fan/BMC states and sequence",
+    "Approved isolation/hot-plug/service SOP, recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not remove, repair, replace or cycle a PSU based on the title alone.",
+    "Do not treat the written cord cycle as proof of a hardware repair or add an unmentioned replacement action.",
+    "Verify identity, redundancy/load, isolation/hot-plug state, replacement compatibility and ESD controls for the resolved path.",
+    "Preserve failure and recovery logs; stop on damage, arcing, heat, power/redundancy or management anomaly.",
+    "No automatic retry, reseat, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Record the conflict and prepare separate evidence plans for both candidate intents.",
+    "After adjudication, collect baseline and operator-confirmed physical/service artifacts.",
+    "Collect authenticated BMC/SEL/host/redundancy evidence tied to the resolved slot/serial.",
+    "Do not choose the repair action or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Adjudicate and correct the test intent.",
+    "Approve and perform the resolved cord-cycle or service action.",
+    "Confirm physical result/part identity, recover the platform and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not executable and not source-faithful: it assumes repair/replacement absent from the procedure, while generic post-action ipmitool output cannot prove either repair or physical cord operations.",
+    "executable_command_required": false,
+    "command_recommendation": "No command until adjudication. For either resolved path, use full platform-specific BMC/SEL exports only as corroboration of operator/service evidence.",
+    "original_parameters_and_time_preserved": "Attended Time 15 and Machine Time 15 are preserved, but do not resolve the intended service scope."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER ADJUDICATION AND CASE CORRECTION REQUIRED",
+    "recommended_method": "Rename this row to cord fail/recovery if the written steps are authoritative, or replace them with an explicit diagnosis/repair/replacement workflow including part identity, service steps and post-repair acceptance.",
+    "applicable_platform": "To be established by the resolved PSU/service contract.",
+    "supported_version": "Record corrected case revision, platform SOP and PSU/BMC firmware.",
+    "official_reference": "Project/platform PSU service and redundancy documentation must accompany the selected path.",
+    "difference_from_original_method": "Eliminates a material title/procedure contradiction without discarding either source fact.",
+    "coverage_difference": "Cord recovery does not demonstrate repair; successful replacement does not exercise every PSU cord unless separately required.",
+    "required_inputs": "Owner decision, service or cord-cycle contract, identity, criteria, SOP and recovery.",
+    "risks_limitations": "Executing the wrong path can disturb power hardware while producing evidence irrelevant to the named purpose."
+  },
+  "project_override_considerations": "A named project may choose one path through an approved override, but must report that coverage and retain the unresolved master-source conflict. The override must not silently redefine the library row.",
+  "expected_evidence": [
+    "Owner adjudication/corrected source or explicit project override",
+    "Resolved target/action/SOP, PSU slot/serial and safety/recovery approval",
+    "Repair path: diagnosis, part identity/compatibility, operator service/photos and post-repair health",
+    "Cord path: per-PSU unplug/visual/replug and phase-tagged BMC/SEL/recovery evidence",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "'Repair' denotes diagnosis/service/restoration, but the full procedure and criteria duplicate a cord-removal fail/recovery test and contain no repair action or repair-specific result. These are materially different coverage claims."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The core operation is unresolved. Choosing cord cycling or hardware service would rewrite source intent, so execution is genuinely BLOCKED pending owner adjudication."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its unsupported assumption that repair/replacement is the actual procedure, while retaining the human physical-work boundary.",
+    "gpt_v2": "Agree with BLOCKED and the need to resolve Repair versus cord cycle before action.",
+    "v3_1_improvement": "Records a true SOURCE_CONFLICT and keeps both possible coverage contracts auditable."
+  },
+  "review_improvement": "This review prevents a cord-cycle result from being reported as a repair and prevents an unrequested replacement from being performed, while giving the owner precise correction options.",
+  "independent_technical_reasoning": "The title and operational steps cannot both describe the same acceptance coverage: a PSU can pass a cord recovery cycle without any repair, and a repair can occur without cycling every PSU. This is a substantive source conflict, not missing parameters.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 63, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 63 source_ref",
+    "history": "review_round_02_functionality.md lines 1613-1637", "external_sources": []
+  },
+  "no_automatic_retry": "No action is authorized before adjudication. After resolution, any physical/service anomaly requires evidence preservation and stop without repeated cycling, reseating, reset or power cycle.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

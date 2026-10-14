@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 267,
+  "library_sequence": 74,
+  "source_key": "Functionality|75|Wistron-HW-00078-V002",
+  "case_variant_id": "3eef5778691080cd",
+  "source_ref": {"sheet": "Functionality", "source_row": 75, "code": "Wistron-HW-00078-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "768bc5630f7932280355e2114c2fa85dea18752634957e298e1c3ef33ccd8beb",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00078-V002.",
+    "next_source_row_verified": "Functionality|76|Wistron-HW-00079-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "Remove test",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Test if can remove CPU in motherboard successfully , and setup menu can display remove CPU information.\n1. Follow guildline to remove CPU on socket , make sure CPU size is follow spec and motherboar socket.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. CPU size is follow spec , and can remove in motherboard.",
+    "script": null, "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "-- not runnable by agent: this case performs CPU removing a physical cpu from the socket and checks the board functions; removing a physical CPU from the socket is a physical task at the hardware (socket handling, TIM application). A person must be present; agent cannot mount/remove a physical CPU over SSH.", "ai_logs_output": "operator physically removing a physical CPU from the socket and verifies the board; agent cannot handle the physical CPU.", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly limits CPU removal to an onsite person but gives no discharge, extraction, socket-protection or post-removal acceptance detail.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds exact CPU/socket identity, powered-off ESD-safe removal, no-force controls and post-removal recovery evidence.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1924 onward: historical physical/NO review."]
+  },
+  "original_test_intent": "Verify that the specified CPU can be removed from the correct motherboard socket without mechanical damage and that the resulting processor population is represented as intended in setup.",
+  "original_method": "A qualified hardware operator follows the applicable powered-off CPU/socket removal guide, extracts and protects the CPU, inspects the socket and part, and records the approved post-removal setup/inventory state.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_METHOD", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Shutdown/discharge, chassis access, cooler/TIM handling, CPU extraction, socket inspection and setup-menu observation require a qualified engineer. Read-only inventory and health collection may only support that manual acceptance.",
+  "required_inputs": [
+    "Target CPU, socket, board revision and approved post-removal population",
+    "Vendor CPU/cooler/socket removal, discharge, ESD, TIM and storage procedure",
+    "Expected setup/BIOS/BMC inventory state after removal and whether boot is permitted",
+    "Qualified operator, maintenance window, workload evacuation, OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not power off, open the chassis, release the cooler, extract the CPU or power on autonomously.",
+    "Confirm de-energization, discharge, temperature and ESD controls before touching the assembly.",
+    "Never force extraction or assume the CPU may be hot-removed; stop on adhesion, abnormal resistance or contact damage.",
+    "Protect the exposed socket and removed CPU, preserve logs and do not repeatedly reseat as diagnosis.",
+    "No automatic retry or recovery power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare the target population, shutdown and recovery checklist.",
+    "Collect read-only pre/post CPU/FRU inventory, power/thermal/boot and SEL/host evidence after authorized operator actions.",
+    "Compare the reported population to the approved post-removal state and organize photos/logs.",
+    "Do not handle hardware, control power or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Approve and perform the powered-off ESD-safe CPU/cooler removal and inspect/protect hardware.",
+    "Observe the physical and setup-menu states and decide whether post-removal boot is supported.",
+    "Restore or secure the system and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Correctly states that no remote command can remove the CPU, but does not cover controlled power-down, cooler adhesion, socket protection or the required setup observation.",
+    "executable_command_required": false,
+    "command_recommendation": "No command substitutes for removal. After operator completion, use only approved read-only inventory and health interfaces for the named platform.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 0 remain source facts; no unsupported hot-removal or boot behavior is inferred."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN PHYSICAL METHOD WITH PRECISE CONTROLS",
+    "recommended_method": "Use a per-socket removal worksheet covering power/discharge, cooler release, TIM adhesion control, CPU extraction, contact inspection, CPU/socket protection and the approved post-removal inventory state.",
+    "applicable_platform": "Only the identified CPU, socket, cooler and board revision.",
+    "supported_version": "Record board, CPU, cooler/retention and BIOS/BMC revisions.",
+    "official_reference": "Project-approved vendor service/removal guide; none is embedded in the source row.",
+    "difference_from_original_method": "Expands the vague guideline reference into traceable de-energization, extraction, inspection, protection and post-state gates without replacing the physical action.",
+    "coverage_difference": "Remote inventory can verify reported population but cannot establish safe extraction or physical condition.",
+    "required_inputs": "Exact hardware identity, service procedure, post-removal state, operator and recovery plan.",
+    "risks_limitations": "Thermal-interface adhesion can lift a CPU improperly; unsupported socket populations may not boot."
+  },
+  "project_override_considerations": "The project may select the target socket and whether setup/boot verification is valid for the reduced population. If no post-removal boot is supported, that coverage change must be explicit rather than silently omitting the setup statement.",
+  "expected_evidence": [
+    "Target CPU/socket/board identity, approved removal procedure and operator approval",
+    "Timestamped pre/post photos of cooler, CPU, socket contacts and protected storage",
+    "Power/discharge/removal record and approved setup/BMC/OS population evidence",
+    "Post-action power, thermal, boot, SEL and host health or documented no-boot constraint",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item, procedure and criterion consistently require physical CPU removal. The setup statement adds post-removal visibility but does not reverse the removal intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The exact hardware, procedure and post-removal population are required project inputs. The physical operation is clear enough to remain MANUAL ONLY rather than globally BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree that the agent cannot execute the physical removal, while adding the omitted power, cooler, socket and recovery boundaries.",
+    "gpt_v2": "Agree with MANUAL ONLY and retain V2's powered-off, no-force and post-removal evidence controls.",
+    "v3_1_improvement": "Clarifies that missing project particulars affect readiness, not the stable manual automation classification."
+  },
+  "review_improvement": "This review distinguishes removal from installation, addresses cooler-to-CPU adhesion and exposed-socket protection, and prevents an unsupported post-removal power-on assumption.",
+  "independent_technical_reasoning": "The acceptance event is successful physical extraction, not a digital CPU inventory read. Removal has hazards distinct from installation—residual power, hot hardware, adhered TIM and exposed socket contacts—so agent-collected post-state evidence cannot change the MANUAL ONLY classification.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 75, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 75 source_ref",
+    "history": "review_round_02_functionality.md lines 1924 onward", "external_sources": []
+  },
+  "no_automatic_retry": "On resistance, socket damage, recognition mismatch or recovery failure, stop and preserve the first evidence; do not repeat removal/reseat or power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

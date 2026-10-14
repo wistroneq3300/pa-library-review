@@ -3,31 +3,176 @@
   "branch": "codex/testcase-review-v3-1-full-3112",
   "logic_version": "V3.1 Final Audit + ED-32 locked baseline",
   "target_count": 3112,
-  "completed_count": 200,
-  "new_full_review_records_count": 0,
-  "remaining_count": 2912,
+  "completed_count": 891,
+  "new_full_review_records_count": 691,
+  "remaining_count": 2221,
   "completed_baseline_reference": "gpt-review/v3-1-final-audit/AUDIT_RECORDS/",
-  "next_unreviewed_source_key": "Functionality|3|Wistron-HW-00002-V005",
-  "next_unreviewed_case_variant_id": "c41f3bde2fe9e892",
+  "next_unreviewed_source_key": "Functionality|724|Wistron-BMC-00014-V004",
+  "next_unreviewed_case_variant_id": "ab8191604688ed61",
   "classification_statistics": {
-    "MANUAL ONLY": 27,
-    "REQUIRES PACKAGE / USER CONFIRMATION": 139,
-    "FULLY AUTOMATABLE": 12,
-    "BLOCKED": 22
+    "MANUAL ONLY": 322,
+    "REQUIRES PACKAGE / USER CONFIRMATION": 169,
+    "FULLY AUTOMATABLE": 315,
+    "BLOCKED": 85
   },
-  "blocked_count": 22,
-  "source_conflict_count": 48,
-  "engineering_decisions_pending": [],
+  "blocked_count": 85,
+  "source_conflict_count": 129,
+  "engineering_decisions_pending": [
+    {
+      "source_key": "Functionality|340|Wistron-BIOS-00007-V003",
+      "question": "Should this case execute an AFULnx BIOS upgrade as named, or the AFUEFI same-version reflash specified by its Procedure?"
+    },
+    {
+      "source_key": "Functionality|341|Wistron-BIOS-00008-V003",
+      "question": "Should this case execute an AFULnx BIOS downgrade as named, or the AFUEFI same-version reflash specified by its Procedure?"
+    },
+    {
+      "source_key": "Functionality|342|Wistron-BIOS-00009-V003",
+      "question": "Should the AFULnx-labeled same-version reflash use AFULnx or the AFUEFI command specified by its Procedure?"
+    },
+    {
+      "source_key": "Functionality|343|Wistron-BIOS-00010-V005",
+      "question": "Define whether the 100 operations are alternating upgrades/downgrades, upgrade-downgrade pairs, or same-version reflashes, including image order and cycle acceptance."
+    },
+    {
+      "source_key": "Functionality|347|Wistron-BIOS-00014-V002",
+      "question": "Is the intended rejection condition corrupt content, a lower-version anti-rollback check, or a deliberately combined stimulus?"
+    },
+    {
+      "source_key": "Functionality|375|Wistron-BIOS-00042-V002",
+      "question": "Should this case validate only the global BIOS Hot-Plug/padding setting plus guest/VF enumeration, or also perform physical PCI hot-plug; and what per-state guest/VF behavior proves the setting?"
+    },
+    {
+      "source_key": "Functionality|387|Wistron-BIOS-00054-V002",
+      "question": "Does this case test User Password as named by Items, or Administrator Password as repeatedly specified by the Procedure? Provide the role-specific prompt, password rules, lockout behavior and recovery method."
+    },
+    {
+      "source_key": "Functionality|388|Wistron-BIOS-00055-V002",
+      "question": "Should the unsigned-OS boot attempt occur with Secure Boot enabled for rejection, or after the update-secureboot-policy/MOK sequence disables or changes the state? Define the signed/unsigned artifacts and exact state matrix."
+    },
+    {
+      "source_key": "Functionality|391|Wistron-BIOS-00058-V003",
+      "question": "Is this case a Quiet Boot POST-presentation test as named by Items/Procedure, or a Boot Option Priority enumeration/order/execution test as required by Criteria? Align the complete acceptance scope and evidence."
+    },
+    {
+      "source_key": "Functionality|397|Wistron-BIOS-00064-V002",
+      "question": "Should Discard Changes and Exit prove that the edited value is NOT saved as the Procedure says, or that it is saved as Criteria 2 says? Correct the operation or acceptance result before execution."
+    },
+    {
+      "source_key": "Functionality|399|Wistron-BIOS-00066-V002",
+      "question": "For Discard Changes and Reset, should the edited value be absent after reset as the Procedure states, or saved as Criteria 2 states? Align the reset-specific expected result before execution."
+    },
+    {
+      "source_key": "Functionality|401|Wistron-BIOS-00068-V002",
+      "question": "For the standalone Discard Changes control, should the pending edit be removed as the item implies, or saved as the Criteria require? Correct the operation or acceptance state before execution."
+    },
+    {
+      "source_key": "Functionality|404|Wistron-BIOS-00071-V002",
+      "question": "Accept or correct a recall/application criterion for Restore User Defaults; the current save-only Criteria do not prove that the stored profile was recalled."
+    },
+    {
+      "source_key": "Functionality|429|Wistron-BIOS-00096-V003",
+      "question": "Does Select Image file test only non-destructive file selection/cancellation, a staged image that persists through reboot, or an actual firmware update? Define target component, commit trigger, expected lifecycle and recovery."
+    },
+    {
+      "source_key": "Functionality|430|Wistron-BIOS-00097-V003",
+      "question": "Replace the generic BIOS-setting persistence/default sequence with the intended Firmware Update lifecycle: identify target component, version direction, approved image/update path, activation, configuration-preservation expectations and rollback/recovery criteria."
+    },
+    {
+      "source_key": "Functionality|432|Wistron-BIOS-00099-V003",
+      "question": "Is this a read-only SMBIOS Event Log viewer test as Items states, or a settings persistence/default test as Procedure and Criteria require? Select one scope and align the expected evidence."
+    },
+    {
+      "source_key": "Functionality|435|Wistron-BIOS-00102-V003",
+      "question": "Confirm whether BMC self test log is a read-only diagnostic view, a page with persistent policy fields, or both; then provide scope-matched procedure, expected records or field/default matrix, and log-ownership semantics."
+    },
+    {
+      "source_key": "Functionality|437|Wistron-BIOS-00104-V003",
+      "question": "Should View System Event Log remain a read-only viewer test with expected record/UI behavior, or become a separate settings persistence/default case? Align the complete Procedure and Criteria with one scope."
+    },
+    {
+      "source_key": "Functionality|453|Wistron-BIOS-00120-V003",
+      "question": "Is AMD Mem Configuration Status a read-only topology/training/status page, a writable memory-configuration page, or two cases? Align Items, Procedure and Criteria and provide scope-specific expected fields and recovery."
+    },
+    {
+      "source_key": "Functionality|458|Wistron-BIOS-00125-V003",
+      "question": "Should PCIe Compliance Mode be a default-only inspection as the same-row DeepSeek command says, or an active bounded settings-persistence/compliance test as the Procedure requires? Define affected ports, expected link or instrumented behavior and recovery."
+    },
+    {
+      "source_key": "Functionality|464|Wistron-BIOS-00131-V003",
+      "question": "Does Select Image file test non-destructive browse/cancel, transient selection, persistent staging, or an actual firmware update? Define target, commit boundary, pending-state/reboot semantics and recovery before any image is selected."
+    },
+    {
+      "source_key": "Functionality|465|Wistron-BIOS-00132-V003",
+      "question": "Replace the generic BIOS setting persistence/default sequence with the intended Update Image lifecycle: target, source/target version, signed image, supported update/activation path, configuration/region preservation, stable power and rollback/recovery."
+    },
+    {
+      "source_key": "Functionality|467|Wistron-BIOS-00134-V003",
+      "question": "Should View SMBIOS Event Log remain a read-only viewer test with expected record/navigation behavior, or become a separate settings persistence/default case? Align Items, Procedure and Criteria and protect existing log evidence."
+    },
+    {
+      "source_key": "Functionality|470|Wistron-BIOS-00137-V003",
+      "question": "Confirm whether BMC self test log is a read-only diagnostic viewer, a status page, a page with persistent policy fields, or split scopes; then define expected records/fields, ownership and evidence-preservation rules."
+    },
+    {
+      "source_key": "Functionality|472|Wistron-BIOS-00139-V003",
+      "question": "Should View System Event Log remain a read-only SEL viewer with expected record/navigation behavior, or become a separate settings persistence/default case? Align the source and protect existing event evidence."
+    },
+    {
+      "source_key": "Functionality|477|Wistron-BIOS-00144-V002",
+      "question": "Define the exact AMD PSP component/version field, authoritative read-only BIOS/BMC/OS path, expected value source and acceptance criteria; both Procedure and Criteria are TBD."
+    },
+    {
+      "source_key": "Functionality|557|Wistron-BIOS-00224-V005",
+      "question": "Identify the authoritative SMBIOS/vendor field and offset intended by `Cache SRAM Type`, and decide whether this row is an alias/duplicate of Supported SRAM Type, Current SRAM Type, or a distinct vendor-defined field with its own encoding and baseline."
+    },
+    {
+      "source_key": "Functionality|628|Wistron-BIOS-00295-V005",
+      "question": "Does `Type 17 - Memory Device Record - Reserved` intend a specific Type 17 enum/bit region, or the six Reserved bytes of SMBIOS Type 32 suggested by the adjacent Boot Status row? Provide the exact structure, offset/length, version and expected raw value, and correct or split the testcase/script."
+    },
+    {
+      "source_key": "Functionality|629|Wistron-BIOS-00296-V005",
+      "question": "Correct `Type 17 - Memory Device Record - Boot Status`: should it become an SMBIOS Type 32 System Boot Information Boot Status case, or target a different real Type 17 field? Define exact offsets/version, expected status/additional-data semantics, stimulus and recovery."
+    },
+    {
+      "source_key": "Functionality|659|Wistron-BIOS-00326-V005",
+      "question": "Identify the exact SMBIOS Type 38 field intended by the label `BYTE`, including offset/length, version, semantics and expected value; decide whether this is a distinct case, an alias/duplicate of an adjacent field, or a source artifact."
+    },
+    {
+      "source_key": "Functionality|708|Wistron-BIOS-00376-V002",
+      "question": "Decide whether this case validates whole SMM TSEG range coverage or the absence of SmiHandler4 in a debug SOL trace; align title, procedure and criteria, define the exact register/range or handler evidence model, and supply a compatible debug BIOS/rollback and safe RU/IO/SOL procedure."
+    },
+    {
+      "source_key": "Functionality|713|Wistron-BMC-00003-V008",
+      "question": "Define the exact BMC upgrade/downgrade version pair and order, and clarify `after BMC reset only one time`: who or what initiates the reset, whether the WebUI automatic reset counts, the allowed count/timing per transition, and the expected result and recovery path for each direction."
+    },
+    {
+      "source_key": "Functionality|714|Wistron-BMC-00004-V007",
+      "question": "Define the exact BMC Redfish upgrade/downgrade matrix, order, host power state and one-reset/apply behavior; provide the target's advertised/vendor-approved UpdateService action URI, payload/content type and task semantics; and replace embedded credentials/TLS bypass with approved secret and CA handling plus tested recovery."
+    },
+    {
+      "source_key": "Functionality|718|Wistron-BMC-00008-V007",
+      "question": "Resolve the booted-host requirement versus the same-row powered-off risk guidance, define the exact FPGA upgrade/downgrade matrix and order, and clarify the sole BMC reset initiator, timing and count per transition; provide the target-advertised/vendor-approved FPGA UpdateService action, payload/task/activation semantics, safe secret/TLS handling and tested recovery."
+    },
+    {
+      "source_key": "Functionality|720|Wistron-BMC-00010-V007",
+      "question": "Correct the destructive target: Items and Script identify HIB-CPLD, but Procedure says FPGA. Then align the component image/version/order, booted-versus-powered-off state, one-BMC-reset semantics, advertised Redfish action/task/activation contract, secure authentication and tested recovery."
+    },
+    {
+      "source_key": "Functionality|722|Wistron-BMC-00012-V008",
+      "question": "Correct the destructive target: Items and Script identify DCSCM-CPLD, while Procedure says FPGA. Define the device selector and image/version order, reconcile booted versus powered-off state, define the sole BMC reset, and provide a vendor Redfish action/task/activation contract with secure authentication and DCSCM-independent recovery."
+    }
+  ],
   "project_readiness_inputs_pending": "Tracked per testcase; not counted as unresolved global engineering decisions.",
   "checkpoint_push_targets": [
-    700,
+    1000,
     1200,
     1700,
     2200,
     2700,
     3112
   ],
-  "last_remote_checkpoint": 200,
+  "last_remote_checkpoint": 891,
   "hardware_tested": false,
   "formal_test_verdicts_set": false
 }

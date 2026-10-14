@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 268,
+  "library_sequence": 75,
+  "source_key": "Functionality|76|Wistron-HW-00079-V002",
+  "case_variant_id": "5e85801716383dc6",
+  "source_ref": {"sheet": "Functionality", "source_row": 76, "code": "Wistron-HW-00079-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "2e33cecf7cfd1ac9015488fcff740eb09e440369b27c4541ac07cde7305f3b16",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00079-V002.",
+    "next_source_row_verified": "Functionality|77|Wistron-HW-00080-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "Mechanical Check(每個socket皆需要)",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check CPU heatsink can lock CPU successfully.\n1. Plug heatsink into CPU socket.\n2. Use tool to lock down CPU and heatsink.\n3. Power on SUT to check.\n4. Power down SUT and remove CPU from heatsink.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Heatsink can lock down CPU .\n2. CPU information can show correctly.\n3. Remove CPU on heatsink normally.",
+    "script": null, "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "-- not runnable by agent: this case inspects the mechanical seating/bracket of each CPU socket - a physical/visual inspection at the machine. A person must be present. Agent cannot perform the mechanical inspection over SSH.", "ai_logs_output": "operator mechanically inspects each socket (seating, bracket, retainer) per socket and records it; agent cannot inspect physical hardware.", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly recognizes a physical inspection but reduces the case to generic socket seating and omits the heatsink lock, powered thermal check and CPU-to-heatsink separation.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 restores heatsink/bracket/TIM/torque/removal scope and thermal safety gates.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1971 onward: historical physical/NO review for every socket."]
+  },
+  "original_test_intent": "For every populated or required CPU socket, verify that the specified heatsink/retention assembly locks the CPU correctly, permits a safe powered recognition check, and can subsequently be removed without abnormal mechanical behavior.",
+  "original_method": "A qualified operator installs and locks the specified CPU/heatsink assembly with the approved tools, performs a controlled power-on recognition/thermal check, powers down and cools the system, then separates and inspects the CPU/heatsink assembly for each socket.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_METHOD", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Heatsink orientation, fastener sequencing/torque, retention, TIM contact, power control, cooling, separation and visual inspection are the core acceptance. The agent can only support inventory and health evidence.",
+  "required_inputs": [
+    "Per-socket CPU, motherboard, heatsink, bracket and fastener identity",
+    "Vendor mounting/removal sequence, torque values/order, tool calibration and TIM requirements",
+    "Expected CPU recognition and allowable pre/post power-on thermal behavior",
+    "Qualified operator, ESD-safe station, maintenance window, OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not open the chassis, mount/unmount the heatsink, handle CPU/TIM, apply torque or control power autonomously.",
+    "Never power on unless retention, fastener sequence, torque and thermal contact are verified.",
+    "Never remove a hot or adhered assembly by force; use the vendor release/cool-down procedure.",
+    "Stop on wrong hardware, damaged contacts, abnormal resistance, thermal excursion, CPU recognition failure or lost OOB access.",
+    "Preserve first-failure logs; no automatic retry, reseat or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare a socket-by-socket identity, torque and evidence checklist.",
+    "After approved operator actions, collect read-only BIOS/BMC/OS CPU inventory and thermal/power/event evidence.",
+    "Correlate each physical record with its socket and flag missing or abnormal evidence.",
+    "Do not perform mechanical work, visual acceptance or the formal verdict."
+  ],
+  "engineer_actions": [
+    "Approve and perform the complete mount, lock, power, cool-down and removal sequence for every applicable socket.",
+    "Verify physical retention/contact and record calibrated torque/tool and timestamped photos.",
+    "Inspect the removed hardware, restore a safe state and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable conclusion is correct, but its generic seating description omits the source's locking, power-on recognition and post-power separation steps.",
+    "executable_command_required": false,
+    "command_recommendation": "No remote command substitutes for the mechanical sequence. Platform-approved read-only inventory and sensor collection may support the powered check after operator confirmation.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 0 remain source facts; the title's every-socket scope is preserved and no torque is invented."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN MANUAL FIXTURE PROCEDURE",
+    "recommended_method": "Use one traceable worksheet per socket for part identity, orientation, fastener sequence, calibrated torque, TIM/contact, locked state, powered recognition/temperature and cooled removal condition.",
+    "applicable_platform": "Only the approved socket, retention module, CPU and heatsink combination.",
+    "supported_version": "Record all hardware revisions, firmware and torque-tool calibration identifiers.",
+    "official_reference": "Project-approved vendor mechanical/thermal service procedure; exact values are absent from the source row.",
+    "difference_from_original_method": "Clarifies that the heatsink mounts through an approved retention system—not by an undefined 'plug' action—and makes every-socket evidence explicit.",
+    "coverage_difference": "Digital temperature/inventory data supports but cannot replace mechanical lock, TIM contact and removal inspection.",
+    "required_inputs": "Assembly specification, torque/TIM procedure, socket list, thermal limits, operator and recovery path.",
+    "risks_limitations": "A successful boot does not prove correct torque/contact; thermal damage may occur rapidly if mounting is wrong."
+  },
+  "project_override_considerations": "The project defines which sockets are applicable and the exact retention/TIM procedure. Reducing the socket set or omitting removal/powered recognition changes coverage and must be recorded explicitly.",
+  "expected_evidence": [
+    "Per-socket part/revision map and approved mechanical/thermal procedure",
+    "Timestamped photos and operator record for orientation, lock, fasteners, torque, TIM/contact and removal condition",
+    "Per-socket BIOS/BMC/OS recognition plus temperature, power and event evidence during the approved powered check",
+    "Final CPU/socket/heatsink condition and safe restored state",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Despite awkward wording, title, procedure and criteria consistently describe heatsink/CPU mechanical retention, recognition and removal for every socket."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Exact torque, TIM and hardware are project inputs. The intended operation is sufficiently clear for MANUAL ONLY classification once those inputs are supplied."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree on physical non-automation, but restore heatsink locking, thermal power-on and CPU/heatsink removal coverage.",
+    "gpt_v2": "Agree with MANUAL ONLY and retain its critical torque, TIM, cool-down and no-force safeguards.",
+    "v3_1_improvement": "Makes the every-socket identity/evidence matrix explicit and separates automatable health collection from manual acceptance."
+  },
+  "review_improvement": "This review prevents the ambiguous word 'plug' from authorizing an unsafe action and distinguishes retention, thermal contact and post-run separation as three independent mechanical acceptance points.",
+  "independent_technical_reasoning": "The test is not merely a CPU inventory check: incorrect mounting can still boot while producing unsafe contact pressure or temperature. Because every decisive condition depends on physical assembly and inspection, it remains MANUAL ONLY; sensor collection is supporting evidence.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 76, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 76 source_ref",
+    "history": "review_round_02_functionality.md lines 1971 onward", "external_sources": []
+  },
+  "no_automatic_retry": "Any fit, torque, thermal, recognition or removal anomaly requires stop and preserved evidence; never re-torque, reseat, power-cycle or repeat another socket automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

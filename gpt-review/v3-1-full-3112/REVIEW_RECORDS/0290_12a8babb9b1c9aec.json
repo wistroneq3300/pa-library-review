@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 290,
+  "library_sequence": 99,
+  "source_key": "Functionality|100|Wistron-HW-00103-V004",
+  "case_variant_id": "12a8babb9b1c9aec",
+  "source_ref": {"sheet": "Functionality", "source_row": 100, "code": "Wistron-HW-00103-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "0347150bec1c41ca569b1fa4772b0035611bee43bc2d2aba2b960d8c3c364baa",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00103-V004.",
+    "next_source_row_verified": "Functionality|101|Wistron-HW-00104-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "L10 System - LED", "test_name_items": "UID (include rear and front)",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Press UID manually\n2. Check the color of UID\n3. Send command: ipmitool raw 0x00 0x04 0 0x01 to turn on UID.\n4. Check the color of UID\n5. Send command: ipmitool raw 0x00 0x04 0 0 to turn off UID\n6. Check the color of UID\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. UID LED should be bright Blue when turning on manually\n2. UID LED should be OFF when turning off manually\n3. UID LED should be bright Blue when turning on by IPMI command\n4. UID LED should be OFF when turning on by IPMI command",
+    "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/hw/led/uid-include-rear-and-front", "attended_time": "10", "machine_time": "10", "latest_updated": "2026-05-11",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "ipmitool (or curl for Redfish)", "ai_commands": "-- UID (include rear and front): drive the UID/identify LED with `sudo ipmitool chassis identify <on|off>` (or Redfish IndicatorLED PATCH), then confirm color (Blue) + blink on/off. Agent can toggle and read the LED state; visual color confirmation by a person at the machine.", "ai_logs_output": "return the `ipmitool chassis identify` result + indicator-LED state readback (and note the LED color seen) so user confirms the Blue UID LED on/off behavior.", "risk": "RISK: turning the UID LED on/off changes an indicator state; restore it to Off after the check.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It correctly keeps a human color observation but substitutes generic chassis-identify or Redfish control for the source raw bytes without proving platform equivalence.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 finds the contradictory final criterion and requires command validation, but capability remains understated because the physical button and visual acceptance are core.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2644-2670: historical PARTIAL review with generic identify control and physical observation."]
+  },
+  "original_test_intent": "Verify both front and rear physical UID indicators respond to a manual UID-button action and the specified IPMI raw on/off controls, showing bright blue when enabled and off when disabled.",
+  "original_method": "A qualified operator presses the physical UID control and observes both LEDs, then the approved operator/agent issues the exact source raw on and off commands while the same operator records front/rear color and off state.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_TARGET", "NEEDS_LED_MAP", "NEEDS_COMMAND_VALIDATION", "NEEDS_CRITERIA_DECISION", "NEEDS_ACCESS", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL", "NEEDS_QUALIFIED_OPERATOR"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Manual button actuation and visual confirmation of both physical LEDs' color, brightness and off state are core acceptance steps. The agent may issue a validated command and collect readback, but cannot replace those observations.",
+  "required_inputs": [
+    "Front/rear UID LED and physical-button map plus expected color, blink and state semantics",
+    "BMC vendor/firmware, IPMI privilege and validation that raw 0x00 0x04 arguments target the intended indicators",
+    "Engineer resolution of criterion 4, which says off when turning on although procedure step 5 turns off",
+    "Approved script revision, final indicator state, visual operator, OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not issue vendor raw bytes or a substitute command until the target BMC and argument semantics are validated.",
+    "Do not infer front/rear color or brightness from an IPMI/Redfish state value; preserve visual evidence.",
+    "Stop on wrong indicator, unexpected raw-command response, BMC/OOB loss or inability to restore the approved final state.",
+    "Preserve baseline and delta logs instead of clearing them; protect BMC credentials.",
+    "No automatic retry."
+  ],
+  "agent_execution_scope": [
+    "Validate the project-approved raw command or documented equivalent and collect BMC/SEL baselines.",
+    "Issue only the approved on/off action after the operator completes the manual-button step.",
+    "Correlate raw status/readback and logs with timestamped front/rear visual records and restore the approved state.",
+    "Report the unresolved criterion wording separately and leave the verdict to the engineer."
+  ],
+  "engineer_actions": [
+    "Resolve criterion 4 and supply the UID map, visual semantics and command mapping.",
+    "Press the physical button and observe/record both front and rear LEDs at every state.",
+    "Approve the write action and formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Unproven. Generic `ipmitool chassis identify` or Redfish IndicatorLED may not exercise the source's vendor-specific raw command or both front/rear indicators.",
+    "executable_command_required": true,
+    "command_recommendation": "Retain raw 0x00 0x04 0 0x01 and raw 0x00 0x04 0 0 only after validating them against the exact BMC/platform or the referenced project script. A documented alternative may be recorded as additional coverage, not silently substituted.",
+    "original_parameters_and_time_preserved": "Manual press, exact raw on/off values, front/rear scope, bright-blue/off expectations and both 10-minute fields are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "VALIDATE ORIGINAL COMMAND BEFORE USE",
+    "recommended_method": "Use the project script or exact raw commands only after platform validation, capture full command status and indicator readback, and pair every state with timestamped front/rear operator photos.",
+    "applicable_platform": "Only the BMC/platform for which raw netfn/cmd/data semantics and both indicator mappings are documented.",
+    "supported_version": "Record BMC/CPLD/LED-controller firmware, ipmitool and script revision.",
+    "official_reference": "Platform BMC command specification and the source-linked project script; no public universal mapping is asserted.",
+    "difference_from_original_method": "Adds command provenance, readback and deterministic restoration while preserving manual/button/visual coverage.",
+    "coverage_difference": "No loss; generic identify or Redfish may be additive only after proving the same front/rear control path.",
+    "required_inputs": "Platform command map, criterion correction, LED map and operator.",
+    "risks_limitations": "An incorrect raw payload can affect an unintended BMC function, and state readback cannot prove physical color."
+  },
+  "project_override_considerations": "A project may approve a documented standard identify interface instead of the raw bytes only if it demonstrates equivalent front/rear coverage and records the deviation. It cannot remove the source-required manual button and visual checks.",
+  "expected_evidence": [
+    "SUT/BMC/firmware/script identity, front/rear UID map, command validation and criterion-4 decision",
+    "Timestamped photos/observations for physical-button on/off and command-controlled on/off states",
+    "Exact raw or approved equivalent command, return status and indicator readback for each action",
+    "BMC/SEL/host health and restoration to the approved final UID state",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "Procedure step 5 explicitly sends the off payload, but criterion 4 says the UID should be off when turning on by IPMI. Criterion 3 already defines the on-command state as bright blue. The likely typo is evident, yet the formal criterion must be corrected or dispositioned by the engineer rather than silently rewritten."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The procedure and the preceding criteria make the intended sequence reviewable, and unaffected evidence can be prepared. Execution readiness still requires an engineer criterion disposition and command validation; that does not turn the automation classification into BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Preserve its human visual requirement, but reject unverified generic control substitution and add the source contradiction.",
+    "gpt_v2": "Retain its command validation and conflict finding; change the capability classification to MANUAL ONLY because physical actuation and visual acceptance are mandatory.",
+    "v3_1_improvement": "Separates the executable BMC portion from the intrinsically manual core and records the true criterion conflict without guessing a formal correction."
+  },
+  "review_improvement": "This record protects the vendor-specific control path, both physical LED locations and the manual-button coverage while isolating the exact acceptance-text conflict.",
+  "independent_technical_reasoning": "A command can automate only half of this case. The case explicitly starts with a physical button and repeatedly asks to check LED color, so the acceptance core is human. The final wording conflict is real but narrowly bounded: it requires owner disposition without erasing the observable procedure sequence.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 100, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 100 source_ref",
+    "history": "review_round_02_functionality.md lines 2644-2670", "external_sources": []
+  },
+  "no_automatic_retry": "Run each approved manual or BMC transition once. On unexpected command or LED behavior, stop, restore only through the validated method and preserve evidence; do not resend automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

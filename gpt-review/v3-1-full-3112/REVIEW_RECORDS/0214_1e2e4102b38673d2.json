@@ -1,0 +1,140 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 214,
+  "library_sequence": 15,
+  "source_key": "Functionality|16|Wistron-HW-00015-V002",
+  "case_variant_id": "1e2e4102b38673d2",
+  "source_ref": {"sheet": "Functionality", "source_row": 16, "code": "Wistron-HW-00015-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "6d85468806dbd74e38dcb5d098c1ebbf22d0e868a821be089588016d72def2ee",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The same code also exists at Functionality row 1816 for I3C CPU1 (row hash 5900fa55953d483ecf4c16f7e39e280ed10be94e794c0cc3f7d60ea590df82a4). Its I3C command was copied into this PCIe Connector row and is not applicable.",
+    "next_source_row_verified": "Functionality|17|Wistron-HW-00016-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cable",
+    "test_name_items": "PCIe Connector",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL",
+      "ai_packages_needed": "i2c-tools (i3c support if vendor provides)",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"echo ---i3c_cpu1---; ls /sys/bus/i3c 2>&1; sudo i3cdetect -l 2>&1; ls /sys/bus/i3c/devices 2>&1; dmesg | grep -iE 'i3c.*(cpu[1]|i3c[0-9])' | tail -20; dmesg | grep -iE 'i3c|i2c' | tail -10\"",
+      "ai_logs_output": "return FULL kernel/sysfs I3C presence + dmesg i3c/i2c lines so the user confirms the CPU1 I3C controller/bus is enumerated per spec; actual I3C target probe may need vendor i3c tooling.",
+      "risk": "RISK: I3C probing needs vendor tooling that may not be installed; agent reports sysfs/dmesg enumeration and leaves the deep I3C probe to the operator if tooling is absent.",
+      "remark": "same code in 2 workbook rows (multi-row code)"
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL is invalid for this variant because all packages, commands, evidence and risks address the separate I3C CPU1 row sharing the code. The command does not exercise or observe a PCIe connector.",
+    "gpt_v2": "MANUAL ONLY / CHANGED. V2 correctly separated the duplicate variants, restored physical PCIe plug/seating scope and limited automation to post-operator PCIe evidence.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 418-440 exposes the erroneous I3C command under PCIe Connector.",
+      "Functionality row 1816 and its exact GPT V2 record confirm I3C CPU1 is the distinct command-bearing variant."
+    ]
+  },
+  "original_test_intent": "Physically exercise the approved PCIe connector/card or cable interface through one plug/reconnect cycle, verify alignment and complete seating/retention, and confirm that the expected PCIe endpoint returns without new relevant PCIe, kernel or platform errors.",
+  "original_method": "A qualified engineer identifies the exact slot/connector and endpoint, performs the platform-approved power isolation or hot-plug sequence, inspects the mating interface and restores seating. An agent may preserve mapped PCIe inventory/error evidence before and after the action but cannot perform or certify the physical cycle.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer must map the connector to its slot, cable/card and endpoint; establish the authorized service state; release retainers; inspect contacts/keying/alignment; perform the single approved disconnect/reconnect; fully seat and secure the interface; and assess tactile resistance and physical condition. This is the core acceptance and has no remote substitute.",
+  "required_inputs": [
+    "PCIe connector type, chassis/slot/location, attached endpoint identity and topology map",
+    "Applicable mechanical drawing and service or hot-plug procedure",
+    "Approved powered/de-energized state, auxiliary-power/cable handling and ESD controls",
+    "Expected endpoint identity and topology matching method that does not assume a fixed BDF",
+    "Mechanical seating/retention criteria and accepted PCIe/link/error observations",
+    "Qualified operator, management recovery path and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Do not use the I3C/i2c tooling from the duplicate-code row; it targets a different bus and provides no PCIe connector coverage.",
+    "Do not remove or insert the PCIe interface while energized unless the exact platform and slot explicitly support the approved hot-plug procedure.",
+    "Isolate auxiliary power and control card/cable mass; fully release latches/brackets before movement and avoid side load on contacts or slot.",
+    "Stop on bent/damaged contacts, unexpected resistance, arcing/power anomaly, incomplete retention, loss of management access or an unrelated device change.",
+    "Do not automatically repeat the physical cycle, rescan, reset, reload a driver or reboot after a missing endpoint or new error.",
+    "Preserve full pre-existing kernel/BMC evidence and collect timestamped deltas instead of clearing logs."
+  ],
+  "agent_execution_scope": [
+    "Validate the source key and selected PCIe topology so evidence cannot be confused with the I3C CPU1 variant.",
+    "Collect an approved pre-action endpoint/topology and error baseline without using I3C commands or changing state.",
+    "After explicit operator restoration confirmation, collect the mapped endpoint, current path/link observations and relevant new errors.",
+    "Diff raw evidence and organize physical photographs without claiming connector operation or formal acceptance."
+  ],
+  "engineer_actions": [
+    "Approve the exact PCIe interface, endpoint, service state, physical sequence and recovery path.",
+    "Inspect and perform the connector plug/reconnect cycle, alignment, seating and retention steps.",
+    "Confirm safe final restoration before post-action collection.",
+    "Interpret physical and PCIe evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not applicable. The entire i3c sysfs/i3cdetect/dmesg command set belongs to Functionality row 1816 I3C CPU1. Running it here would test a different function and falsely leave the PCIe connector untouched.",
+    "executable_command_required": true,
+    "command_recommendation": "Discard the I3C command for this variant. Use only the project's approved read-only PCIe topology/inventory and error collectors after slot/endpoint mapping; preserve complete raw output and do not initiate rescan or recovery automatically.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 remain planning fields. The source specifies a plug cycle but no connector count, endpoint, hot-plug capability, BDF, link criteria or evidence command."
+  },
+  "modernized_recommendation": {
+    "status": "REPLACE WRONG-VARIANT EVIDENCE METHOD",
+    "recommended_method": "Keep the manual connector cycle and bind it to a slot/endpoint topology manifest, labeled physical evidence and immutable pre/post PCIe inventory/error snapshots selected by the project.",
+    "applicable_platform": "The chosen PCIe connector/slot, endpoint, chassis and OS/firmware environment.",
+    "supported_version": "Record chassis/slot drawing, service procedure, firmware/BIOS, OS and evidence-tool versions.",
+    "official_reference": "Applicable platform PCIe connector/service documentation and official documentation for the project-approved inventory tools; no universal command is asserted.",
+    "difference_from_original_method": "Removes unrelated I3C evidence and restores PCIe-specific physical and functional coverage without replacing the manual operation.",
+    "coverage_difference": "The corrected plan covers connector condition/seating plus expected endpoint restoration. I3C enumeration covers none of this; PCIe enumeration alone still cannot prove physical seating.",
+    "required_inputs": "Slot/endpoint map, service state, connector criteria, expected topology/link properties and approved collectors.",
+    "risks_limitations": "BDF values can change, and an endpoint may enumerate despite marginal seating; identity and physical evidence must be evaluated together."
+  },
+  "project_override_considerations": "The project may choose a specific connector, endpoint and one approved cycle. It must state whether hot-plug, full power isolation or cable/card removal is used and record untested connectors or link properties as coverage delta. It cannot reuse the same-code I3C method as an override for PCIe coverage.",
+  "expected_evidence": [
+    "Exact source key/variant, connector/slot and endpoint/topology identity",
+    "Approved service state and physical cycle record",
+    "Timestamped photographs of contacts where visible, alignment, seating and retention",
+    "Raw mapped pre/post PCIe endpoint/topology and specified link-state evidence",
+    "Relevant kernel/BMC/PCIe error delta plus management-path status",
+    "Safety stops, coverage deviations and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The PCIe Connector row's Items, Procedure and Criteria are mutually consistent. The I3C material is a derived-review cross-variant contamination caused by a duplicate code, not contradictory Master source facts."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The physical PCIe objective is clear. Slot/endpoint mapping and service procedure are execution inputs; the wrong DeepSeek command can be rejected without making the case permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its PARTIAL classification and all I3C content for this variant; it belongs to row 1816.",
+    "gpt_v2": "Agree with V2's MANUAL ONLY correction, duplicate-variant separation, physical boundary and mapped post-action evidence.",
+    "v3_1_improvement": "Adds explicit variant provenance, preserves Master/Project separation and prevents a wrong-domain tool result from being treated as connector completion."
+  },
+  "review_improvement": "This record resolves a concrete identity defect rather than merely adding detail. The same code names two different variants; row-level source keys and hashes prove that the I3C command cannot be applied to the PCIe connector. The corrected review restores manual PCIe handling and appropriate supporting evidence.",
+  "independent_technical_reasoning": "The PCIe Connector row explicitly requires physical plug/unplug, final seating and post-cycle detection. Human manipulation and observation are central, so MANUAL ONLY applies even though inventory evidence is automatable. The inherited I3C command interrogates an unrelated management bus and cannot satisfy any connector criterion. Because the Master PCIe fields themselves agree, this is not SOURCE_CONFLICT; it is a cross-variant prior-review error caused by using code without row identity.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 16, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 16 source_ref",
+    "history": "review_round_02_functionality.md lines 418-440 and exact duplicate row 1816 inspection",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On connector damage, abnormal power, missing endpoint, new PCIe errors or lost management access, preserve all evidence and stop. Do not repeat the cycle, rescan, reset, reload or reboot without a newly approved recovery plan.",
+  "review_outcome": "RECLASSIFIED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 282,
+  "library_sequence": 91,
+  "source_key": "Functionality|92|Wistron-HW-00095-V002",
+  "case_variant_id": "21baa981a6c75418",
+  "source_ref": {"sheet": "Functionality", "source_row": 92, "code": "Wistron-HW-00095-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "292dd47e787e8ebc570fcd063546544caa2d36accb2e0e592233810191260d8a",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00095-V002.",
+    "next_source_row_verified": "Functionality|93|Wistron-HW-00096-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "Link flap",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Repeat link up and down in OS (5 times per port)\n2. Check Network function during link flap\n3. Check BMC network function during link flap\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. NIC should work when it link up and not work when it link down\n2. NIC should still be normal after 5 times link flap\n3. BMC network should work without problem during test.\n4. Need to confirm: 1G Lan, PDB BMC NIC, BMC dedicate NIC",
+    "script": null, "attended_time": "120", "machine_time": "120", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "iproute2 (ip)", "ai_commands": "-- Link flap: repeat link up/down 5x per port via sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"for i in $(seq 1 5); do ip link set ${IFACE:?operator must set the target NIC interface name} down; sleep 1; ip link set ${IFACE:?operator must set the target NIC interface name} up; sleep 2; ip link show ${IFACE:?operator must set the target NIC interface name}; done 2>&1\" then check the interface + BMC network recovered.", "ai_logs_output": "return the 5x link flap loop output (link state per iteration) + final `ip link show` + BMC ping check so the user confirms the NIC and BMC network survived.", "risk": "RISK: link flapping drops networking on that port 5x; use a non-management test port to avoid losing the SSH session.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It defines five host-OS administrative flaps for one supplied interface but cannot cover PDB/dedicated BMC ports and checks BMC only after recovery.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds per-port scope and independent OOB safeguards, but leaves unresolved how OS link commands apply to BMC-only ports and how BMC remains working while its own link is down.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2416-2441: historical PARTIAL review based on one OS-visible IFACE."]
+  },
+  "original_test_intent": "UNRESOLVED PORT-SPECIFIC CONTRACT: perform five link down/up cycles per required 1G LAN, PDB BMC NIC and dedicated BMC NIC, verify expected loss/recovery, and also verify BMC network function during the test.",
+  "original_method": "The source states host-OS link toggling, which can cover an OS-visible NIC. A separate owner-defined stimulus and independent management path are required for BMC-only ports; per-cycle link, traffic, recovery and BMC evidence must be preserved once that method is corrected.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_EXPECTED", "NEEDS_PORT_MAP", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An operator may need a switch/fixture or physical action for BMC-only ports, but the source does not define it. Host OS-visible ports could be automated after correction; no port stimulus is authorized while the combined contract remains unresolved.",
+  "required_inputs": [
+    "Physical/logical map for each 1G LAN, PDB BMC and dedicated BMC port",
+    "Port-specific flap mechanism: OS administrative, peer/switch, approved fixture or physical cable operation",
+    "Definition of 'BMC network should work during test' for the BMC port being flapped",
+    "Five-cycle down/up dwell, recovery timeout, traffic proof and acceptance thresholds",
+    "Independent OOB path, original-state rollback, maintenance window and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not run a generic OS link loop on an unknown or sole-management interface.",
+    "Do not invent a switch, cable or BMC operation for ports not exposed to the host OS.",
+    "Do not require uninterrupted reachability through the same dedicated BMC link while intentionally downing it; define an independent observation path.",
+    "Stop on management/OOB loss, failure to recover, peer impact, route change or driver/PCIe error; preserve logs.",
+    "No automatic retry or further cycles after a stop condition."
+  ],
+  "agent_execution_scope": [
+    "Document the port/method/acceptance conflict and prepare separate OS-NIC and BMC-port cycle evidence plans.",
+    "After owner correction, validate stable interface identity and the independent OOB path and execute only the approved automated subset.",
+    "Collect per-cycle state, traffic, counters, recovery latency, BMC/OOB and event evidence.",
+    "Do not choose the BMC-port stimulus or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Define the test method and expected BMC reachability for each port class.",
+    "Approve/perform any physical or switch-side BMC-port stimulus and maintain an independent recovery path.",
+    "Resolve the master wording and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Potentially usable only for an approved OS-visible non-management NIC. It cannot address PDB/dedicated BMC interfaces, relies on insecure SSH, lacks traffic/counter/route evidence, and its final ping does not prove BMC function during each flap.",
+    "executable_command_required": false,
+    "command_recommendation": "No common command until each port is mapped to a supported stimulus. Retain the five-cycle OS `ip link` method only for explicitly approved host interfaces with an independent control channel.",
+    "original_parameters_and_time_preserved": "Five cycles per port, all three port categories and source times 120/120 are preserved; no generic one-second/two-second dwell is promoted."
+  },
+  "modernized_recommendation": {
+    "status": "PORT-SPECIFIC METHOD CORRECTION REQUIRED",
+    "recommended_method": "Split host-NIC administrative flap from BMC-port link flap. Define stimulus, control path and reachability expectation per port, then capture five independent down/up transitions with traffic, recovery latency and event deltas.",
+    "applicable_platform": "Only mapped ports whose control and independent observation paths are explicitly supported.",
+    "supported_version": "Record NIC/BMC/CPLD/driver/switch firmware and control-tool versions.",
+    "official_reference": "Project port architecture and approved link-flap procedure; no universal BMC-port control exists in the source.",
+    "difference_from_original_method": "Eliminates the false assumption that every listed port is an OS interface and distinguishes intentional BMC-link outage from independent BMC health monitoring.",
+    "coverage_difference": "Host administrative down tests OS/driver state; peer/physical down tests PHY/cable detection; BMC-port flap tests a different management path. They are not interchangeable.",
+    "required_inputs": "Per-port stimulus, expected reachability, dwell/recovery, OOB and rollback.",
+    "risks_limitations": "A dedicated BMC link cannot both be intentionally down and remain reachable over that same link."
+  },
+  "project_override_considerations": "A project may define separate approved methods for its actual port classes and complete only those stated plans. It must not extrapolate a host `ip link` result to PDB/dedicated BMC ports or claim uninterrupted BMC reachability through a deliberately downed path.",
+  "expected_evidence": [
+    "Corrected per-port map, stimulus, reachability expectation, cycle timing, recovery and approval",
+    "Per-cycle requested/observed down/up state, traffic result, counters, routes and recovery latency",
+    "Independent BMC/OOB health plus kernel/driver/PCIe/BMC/SEL event deltas",
+    "Original-state restoration and port-specific coverage statement",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The procedure requires OS link toggles for every listed port, including PDB/dedicated BMC NICs that may not be host interfaces, while the criterion says BMC network must work during the flap. For the dedicated BMC link, intentional down and uninterrupted reachability through that same path are incompatible."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "Essential operation and acceptance semantics for the BMC port classes are unresolved. Selecting host, switch, fixture or physical link control would change coverage and risk, so a unified run cannot be safely specified from the source."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject the generic single-IFACE loop as full coverage; it covers only one host-visible path and weakens during-cycle BMC evidence to a final ping.",
+    "gpt_v2": "Retain V2's OOB/per-cycle safeguards but strengthen PARTIAL to BLOCKED until the BMC-port control and reachability contradiction is corrected.",
+    "v3_1_improvement": "Distinguishes a true operation-semantic blocker from ordinary missing target/timing parameters and preserves each candidate port-specific method."
+  },
+  "review_improvement": "This review exposes that three differently controlled port classes were collapsed into one OS command and prevents a host-NIC result from being reported as BMC-port coverage.",
+  "independent_technical_reasoning": "Administrative down, peer-side/physical loss and dedicated BMC link loss exercise different layers. Because the source mandates all port categories yet supplies only an OS action and a simultaneously-alive BMC criterion, the operation cannot be made coherent merely by filling in IFACE; owner correction is required.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 92, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 92 source_ref",
+    "history": "review_round_02_functionality.md lines 2416-2441", "external_sources": []
+  },
+  "no_automatic_retry": "No link changes while blocked. Under a corrected plan, stop on the first recovery, management or peer anomaly and preserve that cycle; do not continue or retry automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

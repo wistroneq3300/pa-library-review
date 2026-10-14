@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 252,
+  "library_sequence": 57,
+  "source_key": "Functionality|58|Wistron-HW-00061-V004",
+  "case_variant_id": "70e9803938196fc5",
+  "source_ref": {"sheet": "Functionality", "source_row": 58, "code": "Wistron-HW-00061-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "a7239c741b385878f677e15b5177fdf850d1928135c4cbcbf56636d400e61cf5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00061-V004.",
+    "next_source_row_verified": "Functionality|59|Wistron-HW-00062-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "Input voltage fault",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Input voltage fault (injecting a bad/out-of-range input voltage) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator Input voltage fault (injecting a bad/out-of-range input voltage) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It identifies physical risk but provides no voltage profile, source topology, measurement or record contract and speculates about non-equivalent fault methods.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly requires the input waveform, protection expectation, programmable source/measurement, blackbox schema and recovery.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1487-1507: historical NO classification based on physical activity."]
+  },
+  "original_test_intent": "Verify that a defined out-of-range input-voltage event is persisted in the CRPS PSU blackbox with the expected fault identity/timing and protection behavior.",
+  "original_method": "A qualified operator uses an isolated programmable AC source/fault fixture to apply a vendor-approved input waveform while calibrated independent instrumentation and cutoff protect the DUT. The raw blackbox record is then correlated with the actual waveform and recovery.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified engineer must configure, isolate and supervise the programmable input source and emergency cutoff. Automation may control an approved fixture and collect evidence only after the electrical contract is supplied.",
+  "required_inputs": [
+    "PSU/DUT identity, nominal input range, phase/feed topology and load state",
+    "Vendor-approved fault waveform/threshold/direction, tolerance, ramp, duration and expected protection response",
+    "Isolated programmable source/fixture, calibrated independent voltage/current measurement and cutoff",
+    "Blackbox extraction interface/schema and expected input-fault record fields",
+    "Operator, inspection/recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not vary mains manually, use an undocumented source, bypass protection or guess an out-of-range voltage.",
+    "Verify source ratings, isolation, grounding, topology, calibration and hard cutoff before energizing.",
+    "Protect attached/unrelated loads and preserve baseline logs.",
+    "Stop on envelope exceedance, arcing, smoke, heat, damage, unexpected shutdown or management loss.",
+    "No automatic retry, alternate waveform, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved waveform and evidence plan without energizing hardware.",
+    "Collect permitted baseline and, after operator action, calibrated waveform plus raw blackbox data.",
+    "Correlate input fault, protection behavior, record fields and recovery timeline.",
+    "Report facts without selecting a voltage profile or formal verdict."
+  ],
+  "engineer_actions": [
+    "Define/approve and supervise the input-voltage profile, source topology and cutoff.",
+    "Inspect and restore the PSU/load after the event.",
+    "Provide inaccessible blackbox artifacts and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It safely refuses agent execution but is not a reproducible method; generic throttle/AC language cannot define the waveform and its absolute blackbox-access claim is unsupported.",
+    "executable_command_required": false,
+    "command_recommendation": "Use only the approved programmable-source SOP/API and vendor blackbox extractor after target waveform, limits and topology are documented.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain source facts but supply no voltage/time profile."
+  },
+  "modernized_recommendation": {
+    "status": "PROGRAMMABLE INPUT FAULT PLAN REQUIRED",
+    "recommended_method": "Specify one nominal-to-fault waveform and abort envelope, synchronize independent measurement, run it once under operator control, then export and correlate the immutable blackbox event.",
+    "applicable_platform": "Only the named PSU, input topology, load and calibrated source approved by the owner.",
+    "supported_version": "Record PSU/BMC firmware, source firmware/API, calibration and blackbox schema/tool versions.",
+    "official_reference": "Project/vendor input-protection and blackbox documentation must be supplied; no voltage is invented.",
+    "difference_from_original_method": "Makes the vague voltage fault measurable, bounded and traceable while retaining the blackbox objective.",
+    "coverage_difference": "One waveform validates only that input-fault record path; sag, swell, dropout and surge are distinct unless separately approved.",
+    "required_inputs": "Topology, waveform, limits, source, monitoring/cutoff, expected record and recovery.",
+    "risks_limitations": "Incorrect mains topology or excessive energy can damage the PSU and connected platform before protection acts."
+  },
+  "project_override_considerations": "A project may choose a named sag/swell/dropout profile within an approved source envelope; it must report the exact waveform and cannot claim all input-voltage faults. Simple AC loss is separate coverage.",
+  "expected_evidence": [
+    "Approved profile/topology, source and measurement calibration, safety checklist",
+    "Operator record and calibrated input voltage/current/time waveform with cutoff/protection response",
+    "Raw blackbox export with schema/tool version and expected input-fault comparison",
+    "Preserved platform logs plus inspection and recovery evidence",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title and blackbox check align; the source omits which out-of-range input event and record fields, but does not assert incompatible facts."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "Input direction, voltage/time waveform, source topology and safe limits are essential operation semantics. Guessing them is unsafe and changes coverage, so BLOCKED is justified."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree an agent must not improvise the event; reject its unspecified fault alternatives and unsupported blackbox limitation.",
+    "gpt_v2": "Agree with BLOCKED and the complete waveform/source/measurement/protection/recovery gates.",
+    "v3_1_improvement": "Distinguishes input-voltage profiles from simple AC loss and defines the later operator/automation split."
+  },
+  "review_improvement": "This review names the missing electrical semantics, prevents AC loss from being substituted for an arbitrary input fault, and defines traceable waveform-to-blackbox evidence.",
+  "independent_technical_reasoning": "'Input voltage fault' spans materially different sag, swell, dropout and surge profiles. Each has different limits, risk and expected record. Without selecting one from authoritative requirements, there is no safe executable operation; BLOCKED is therefore correct.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 58, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 58 source_ref",
+    "history": "review_round_02_functionality.md lines 1487-1507", "external_sources": []
+  },
+  "no_automatic_retry": "Execute only one approved waveform. Any envelope, protection or recovery anomaly requires cutoff, evidence preservation and stop; do not apply another profile/reset/power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

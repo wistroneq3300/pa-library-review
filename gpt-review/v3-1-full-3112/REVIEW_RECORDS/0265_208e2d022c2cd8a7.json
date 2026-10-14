@@ -1,0 +1,116 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 265,
+  "library_sequence": 71,
+  "source_key": "Functionality|72|Wistron-HW-00075-V002",
+  "case_variant_id": "208e2d022c2cd8a7",
+  "source_ref": {"sheet": "Functionality", "source_row": 72, "code": "Wistron-HW-00075-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "73fb97697b9b55521c524ebd43ce1cba7fb64ad37bbb3fef6de6a6d09186cb33",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00075-V002.",
+    "next_source_row_verified": "Functionality|73|Wistron-HW-00076-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "Core number",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check CPU core number under OS.\n1. Install CPU in motherboard.\n2. Power on SUT\n3. Boot into OS (windows & Linux) to check CPU core number\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. CPU can be install  in motherboard normally.2. CPU information can check in setup menu and follow spec. (for example : socket 0 ,1)3, CPU information can check in OS successfully.",
+    "script": null, "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "YES", "ai_packages_needed": "util-linux (lscpu) dmidecode",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lscpu 2>&1 | grep -iE '^CPU\\(s\\)|core|socket|thread|model name' 2>&1\"",
+      "ai_logs_output": "return FULL Core number output (lscpu 2>&1 | grep -iE \"^CPU\\(s\\)|core|socket|thread|model name\") so the user confirms the value(s) match the spec/datasheet. No RISK (read-only).", "risk": null, "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It proposes a filtered Linux lscpu query and user comparison, but omits the required CPU installation, power-on, setup-menu observation and Windows scope.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 adds per-socket core/thread/online-CPU evidence, owner expectations and operator controls, but treats the row as PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1871-1895: historical YES review and SSH quoting defect."]
+  },
+  "original_test_intent": "Verify that an approved CPU can be physically installed and powered on, and that its socket/core topology is visible in setup and in both required operating-system contexts against the approved processor configuration.",
+  "original_method": "A qualified operator installs the CPU and powers on the SUT, observes processor information in setup, boots the required Windows and Linux environments, and checks OS-reported topology; post-test artifacts and unexpected platform logs are retained.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_ACCESS", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "CPU installation, system power-on and setup-menu inspection are explicit acceptance activities. An agent may automate read-only OS collection afterward, but it cannot complete or attest to the physical installation or visual firmware-menu result.",
+  "required_inputs": [
+    "Approved CPU/board/socket population and compatibility specification",
+    "Expected sockets, physical cores per socket, threads per core, logical/online CPU counts, SMT policy and NUMA mapping",
+    "Qualified operator, maintenance window, cooling/torque/service procedure and recovery path",
+    "Required Windows and Linux versions plus validated topology tools and authenticated access",
+    "Expected setup-menu fields, artifact location and one authorized-user approval"
+  ],
+  "safety_requirements": [
+    "The agent must not install or remove a CPU, open the chassis, power-cycle the SUT or alter BIOS/SMT/CPU-online state.",
+    "Use the board/CPU service procedure, ESD controls, approved cooling installation and an outage window for physical work.",
+    "Do not clear dmesg, system logs or SEL before evidence capture, despite the generic source preamble.",
+    "Stop on socket/CPU identity mismatch, boot failure, unexpected offline CPUs, thermal/power fault or BIOS/BMC/OS disagreement.",
+    "No automatic retry, reseat, power-cycle or configuration change."
+  ],
+  "agent_execution_scope": [
+    "Prepare the approved topology matrix and evidence plan before operator work.",
+    "After the operator confirms installation and boot, collect full read-only Linux and approved Windows topology artifacts plus BMC/firmware exports where interfaces exist.",
+    "Derive and compare per-socket physical-core, thread and online-CPU counts without issuing the formal verdict.",
+    "Correlate boot, thermal, power and event logs and flag mismatches."
+  ],
+  "engineer_actions": [
+    "Approve and perform CPU installation and system power-on under the platform service procedure.",
+    "Observe and record the setup-menu processor information and supply Windows evidence when no approved remote interface exists.",
+    "Confirm the expected CPU topology and issue the formal PASS/FAIL verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Useful only as a Linux summary. It is not full output because grep discards topology fields and it does not prove physical installation, setup-menu visibility, Windows results, per-socket mapping or online/offline state. Password-on-command-line SSH and disabled host-key validation are not acceptable defaults.",
+    "executable_command_required": false,
+    "command_recommendation": "Preserve the original command as history. For an approved run, retain complete lscpu output, /sys/devices/system/cpu/online, per-CPU topology, NUMA data and validated Windows processor/topology output; use managed authenticated transport.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 0 remain source facts; no missing core count or duration is invented."
+  },
+  "modernized_recommendation": {
+    "status": "METHOD CLARIFICATION; NO FUNCTIONAL SUBSTITUTE",
+    "recommended_method": "Use an owner-approved topology matrix keyed by socket, physical core, thread, online state and NUMA node. Retain complete native OS outputs and a timestamped setup-menu artifact after the operator completes installation.",
+    "applicable_platform": "Only the approved motherboard, CPU population, firmware and required Windows/Linux images.",
+    "supported_version": "Record CPU stepping, board revision, BIOS/microcode, OS/kernel and tool versions at execution.",
+    "official_reference": "Project CPU population and motherboard service/processor specification; exact expected values are not present in the source row.",
+    "difference_from_original_method": "Makes physical, firmware and OS evidence independently traceable and distinguishes sockets, cores, threads and online logical CPUs.",
+    "coverage_difference": "OS topology collection strengthens evidence but cannot replace CPU installation or setup-menu observation; Linux-only output cannot satisfy the stated Windows-and-Linux scope.",
+    "required_inputs": "Approved topology matrix, platform scope, operator record, access and evidence paths.",
+    "risks_limitations": "SMT, disabled cores, hotplug/offline CPUs and heterogeneous topology can make aggregate CPU counts misleading."
+  },
+  "project_override_considerations": "A project may specify the CPU population, OS scope and approved collection tools, but any reduction from both Windows and Linux or omission of setup evidence must be recorded as reduced coverage. Providing those parameters does not change the MANUAL ONLY classification.",
+  "expected_evidence": [
+    "CPU/board/socket identity, compatibility/specification and operator installation/power record",
+    "Timestamped setup-menu processor/socket evidence",
+    "Complete Windows and Linux socket/core/thread/online/NUMA outputs with command status and tool versions",
+    "Expected-versus-actual topology matrix plus boot, thermal, power, kernel and SEL health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item, during-test statement and numbered OS step consistently target CPU core/topology validation. The criteria broaden the required views but do not contradict that intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Expected counts, platform choice and operator scheduling are project readiness inputs. The operation remains intelligible and safely executable once supplied, so the library case is not permanently BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES because a filtered Linux query covers only a supporting evidence subset and incorrectly calls it full output.",
+    "gpt_v2": "Retain V2's topology matrix and safety controls, but reclassify PARTIAL to MANUAL ONLY because physical installation and setup-menu observation are explicit acceptance criteria.",
+    "v3_1_improvement": "Separates manual acceptance from automatable evidence collection and separates execution status, tool result and engineer verdict."
+  },
+  "review_improvement": "This review preserves the required Windows, Linux, firmware and physical scopes, rejects aggregate CPU(s) as core count, and prevents automated evidence collection from being reported as completion of the manual case.",
+  "independent_technical_reasoning": "Core number is a topology property, not simply lscpu CPU(s): SMT and offline CPUs alter logical counts, while socket and NUMA mapping can expose population faults. Because the acceptance criteria explicitly include installation and setup-menu observation, these are not merely preparatory conditions; the complete case is MANUAL ONLY even though OS collection is automatable.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 72, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 72 source_ref",
+    "history": "review_round_02_functionality.md lines 1871-1895", "external_sources": []
+  },
+  "no_automatic_retry": "Any installation, boot, topology, thermal or cross-layer anomaly requires evidence preservation and engineer review; do not reseat, reboot, alter SMT/CPU-online settings or rerun automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

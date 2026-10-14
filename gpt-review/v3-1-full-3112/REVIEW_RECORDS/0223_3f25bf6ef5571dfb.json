@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 223,
+  "library_sequence": 25,
+  "source_key": "Functionality|26|Wistron-HW-00029-V002",
+  "case_variant_id": "3f25bf6ef5571dfb",
+  "source_ref": {"sheet": "Functionality", "source_row": 26, "code": "Wistron-HW-00029-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "a0f0e44a2caebd839723c16db696e834c2a44c48a2233d808511f0470e54fdba",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00029-V002.",
+    "next_source_row_verified": "Functionality|27|Wistron-HW-00030-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cooling",
+    "test_name_items": "Connector",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "10",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none (physical inspection - human)",
+      "ai_commands": "-- Connector: liquid-cooling connector inspection verifies the physical connector seating/seal; human visual/physical check at the cooling loop.",
+      "ai_logs_output": "operator visually inspects + records the cooling connector; agent cannot inspect hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly resolves the Mechanical-Cooling context to a liquid-cooling connector and manual seal/seating inspection, but supplies no hazard or recovery analysis.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds loop isolation, pressure and spill controls, seal evidence, preserved telemetry and explicit stop conditions.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 662-685: historical physical/NO review for the cooling Connector."]
+  },
+  "original_test_intent": "Verify that the specified liquid-cooling connector is serviceable, correctly mated and sealed, then confirm that the affected platform remains detectable and free of new cooling or system errors after the single approved connection cycle.",
+  "original_method": "A qualified cooling technician identifies the connector and branch, establishes the approved depressurized or isolated condition, inspects the mating and seal surfaces, performs the authorized disconnect/reconnect, confirms final latch/seating and absence of leakage, and records photographs. The agent may collect approved telemetry after safe restoration.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The technician isolates the correct liquid branch, verifies pressure and temperature are safe, contains coolant, inspects connector body, latch, keying, seal and residue, performs the approved physical cycle, restores the connection and directly observes seating and leak condition.",
+  "required_inputs": [
+    "Cooling connector and branch identity with mating-part and flow-path map",
+    "Approved shutdown, depressurization, isolation, drain/fill and reconnection procedure",
+    "Connector seal, latch, seating and allowable-residue criteria",
+    "Coolant PPE, spill containment, cleanup and electronics-protection plan",
+    "Expected pump/flow/pressure/temperature/leak-sensor and platform state where instrumented",
+    "Qualified cooling operator, observation interval, photographs and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not disconnect or reconnect the liquid connector while pressurized, hot or otherwise outside the exact service procedure.",
+    "Protect energized electronics from coolant and confirm the approved electrical and cooling isolation sequence before opening the loop.",
+    "Stop on wetness, residue that cannot be explained, damaged seal/latch, abnormal force, spill, trapped air concern, abnormal pressure/flow/temperature or leak alarm.",
+    "Do not invent a universal leak, pressure or observation threshold; use the platform and connector specification.",
+    "Preserve BMC/SEL and cooling telemetry and do not reconnect again, energize, pump, purge or reset automatically after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Prepare a connector/branch identity checklist and timestamped pre-action telemetry plan from approved documentation.",
+    "Collect read-only thermal, pump, flow, pressure and leak-sensor state where the platform exposes those signals.",
+    "After the technician confirms safe reconnection and restoration, collect the same telemetry plus host/BMC availability and raw event deltas.",
+    "Compare observations and flag deviations without claiming seal integrity or formal acceptance."
+  ],
+  "engineer_actions": [
+    "Approve the connector, isolation/restoration procedure and observation criteria.",
+    "Perform the physical connector/seal inspection and approved single connection cycle with containment.",
+    "Confirm dry condition, correct seating and safe loop restoration before instrumentation resumes.",
+    "Interpret physical and telemetry evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The comment accurately marks the operation as a physical cooling-loop check, not an executable command. It lacks the pressure, spill and restoration constraints required to make the manual method safe.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only project-approved read-only cooling and BMC collectors for sensors actually mapped to this branch. No command proves connector seating or sealing, and no pump, valve, power or recovery control is authorized by this review.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 10 remain unchanged. The source gives one plug cycle but no connector model, pressure, flow, leak threshold, observation interval, tool or retry."
+  },
+  "modernized_recommendation": {
+    "status": "BRANCH-MAPPED LEAK AND THERMAL EVIDENCE",
+    "recommended_method": "Tie connector photos and isolation/restoration records to the exact cooling branch, then capture raw mapped telemetry and a project-defined dry observation period after reconnection.",
+    "applicable_platform": "The selected connector, coolant branch, loop controls, sensors and affected compute hardware.",
+    "supported_version": "Record connector/loop revision, coolant/service procedure, BMC/firmware and telemetry collector versions.",
+    "official_reference": "Applicable platform and liquid-cooling service documentation; no universal serviceability, pressure or leak threshold is asserted.",
+    "difference_from_original_method": "Adds branch correlation, containment and auditable restoration evidence while preserving the physical cycle.",
+    "coverage_difference": "Sensor telemetry supports post-restoration health but cannot replace direct seal and residue inspection; an uninstrumented branch remains visually assessed.",
+    "required_inputs": "Connector/branch map, service procedure, physical criteria, mapped signals and observation interval.",
+    "risks_limitations": "A short dry observation and normal telemetry may not reveal a slow leak or latent seal damage."
+  },
+  "project_override_considerations": "The project may select observation duration, mapped signals and whether the connector is disconnected or only seating is inspected if the service procedure restricts cycling. Record any method change and resulting coverage; do not claim an unperformed disconnect or unspecified leak test.",
+  "expected_evidence": [
+    "Connector/branch identity and approved isolation/depressurization/restoration record",
+    "Operator photographs of connector body, latch, seals, mating state and surrounding dry area",
+    "Containment/cleanup readiness and physical cycle checklist",
+    "Raw mapped pre/post cooling telemetry, platform availability and BMC/SEL event delta",
+    "Observation interval, any leak/safety stop and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Within the Mechanical-Cooling test set, the physical plug-cycle and seating criterion coherently apply to the cooling connector. The undefined detection target and thresholds require project mapping but do not contradict the source."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The intent is clear and can be planned safely once the connector, isolation procedure and acceptance criteria are supplied. Their absence is an execution-readiness condition, not permanent BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep NO/manual-only and the cooling-seal interpretation, but add missing isolation, spill, telemetry and recovery boundaries.",
+    "gpt_v2": "Agree with loop hazards and preserved evidence; strengthen exact branch mapping and distinguish sensor support from physical seal acceptance.",
+    "v3_1_improvement": "Separates the manual cooling action, read-only telemetry, project-defined observation coverage and engineer verdict without inventing thresholds."
+  },
+  "review_improvement": "This record turns an under-specified comment into a connector-specific cooling safety plan. It protects against pressurized manipulation and coolant/electronics interaction while preserving the source's one-cycle physical method and preventing telemetry from being used as a seal substitute.",
+  "independent_technical_reasoning": "Connector seating, seal condition and leakage are physical observations, so the core is MANUAL ONLY. Cooling telemetry is valuable after restoration but only for sensors mapped to the affected branch, and it cannot prove an intact seal. Missing loop parameters are project inputs. The title and test set do not justify an unapproved pressure or flow test.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 26, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 26 source_ref",
+    "history": "review_round_02_functionality.md lines 662-685",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On wetness, seal/latch damage, abnormal force, spill, cooling alarm, abnormal telemetry or platform loss, preserve the physical state and raw evidence and stop. Do not reconnect again, operate pumps/valves, purge, energize, reboot or reset without a cooling engineer's approved recovery plan.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

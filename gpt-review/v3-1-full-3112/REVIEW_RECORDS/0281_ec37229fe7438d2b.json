@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 281,
+  "library_sequence": 90,
+  "source_key": "Functionality|91|Wistron-HW-00094-V003",
+  "case_variant_id": "ec37229fe7438d2b",
+  "source_ref": {"sheet": "Functionality", "source_row": 91, "code": "Wistron-HW-00094-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "7edd0b6203d17947a3b1928fb0bdc10b2859b4f6caa32637f16ef0d25bb33b87",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00094-V003.",
+    "next_source_row_verified": "Functionality|92|Wistron-HW-00095-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "MAC Address",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Check MAC Address in OS.\n2. Check MAC Address in BIOS.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "MAC Addresses in both OS & BIOS should be correct.",
+    "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/hw/nic-network/mac_address.sh", "attended_time": "10", "machine_time": "20", "latest_updated": "2026-05-11",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "iproute2 (ip, usually present)", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"ip -o link 2>&1 | grep -vE 'lo:|docker|veth' 2>&1\"", "ai_logs_output": "return `ip -o link` MAC addresses for all physical NICs so the user confirms the OS MAC matches the BIOS/asset MAC. (BIOS MAC is read in Setup - person/KVM.)", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES, while acknowledging a person/KVM must read BIOS. Its broad name filter does not reliably identify every physical PF, VF, representor or management adapter.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 adds stable PCI/port/serial mapping and permanent/current MAC distinctions, but classifies the manual BIOS half as PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2388-2411: historical YES review with SSH quoting/filter limitations."]
+  },
+  "original_test_intent": "Verify that each owner-mapped physical NIC MAC address is correct and consistent between the operating system and the corresponding BIOS/firmware view.",
+  "original_method": "Collect complete read-only OS NIC identity, map interfaces to stable PCI/port/serial hardware, have an engineer record BIOS Setup MAC values, and compare normalized addresses to the approved asset/port inventory without changing network state.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PORT_MAP", "NEEDS_PACKAGE", "NEEDS_ACCESS", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "BIOS Setup MAC inspection is an explicit half of both procedure and criterion. OS enumeration/comparison is automatable, but cannot replace or attest to the firmware-screen observation.",
+  "required_inputs": [
+    "Expected MAC inventory per physical NIC, BMC/management port and BIOS entry",
+    "Stable PCI/BDF, port, NIC serial/FRU and logical-interface mapping",
+    "Rules for permanent versus current, locally administered, bond/bridge/VF/representor addresses",
+    "Qualified BIOS/KVM observer, validated iproute2/script path and one-user approval"
+  ],
+  "safety_requirements": [
+    "Use read-only queries only; never change MAC/NVRAM, interface state, routes, bonds, bridges or network service.",
+    "Do not use interface naming or a broad grep exclusion as the sole physical-NIC determination.",
+    "Protect management identity and stop on duplicate, missing, locally administered or cross-layer mismatch.",
+    "Do not clear logs or infer the BIOS value from the OS value.",
+    "No automatic retry with a different filter or network reconfiguration."
+  ],
+  "agent_execution_scope": [
+    "Collect complete OS link details, permanent/current MAC where exposed, PCI/driver/port/serial context and tool status.",
+    "Build a stable hardware-to-interface table and incorporate engineer-provided BIOS/KVM artifacts.",
+    "Normalize/compare values and flag duplicates, mapping uncertainty and virtual-interface exclusions.",
+    "Do not perform BIOS observation, change networking or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Supply the authoritative asset/port/MAC map and virtual-interface rules.",
+    "Observe and record each corresponding BIOS Setup/firmware MAC field.",
+    "Resolve mapping/mismatch cases and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Useful as a preliminary OS list, but the grep exclusion cannot prove physical-NIC completeness and no stable PCI/port association or permanent/current distinction is retained. The SSH security defaults also require correction.",
+    "executable_command_required": false,
+    "command_recommendation": "Use the approved project script or full read-only link-detail plus PCI/driver inventory through managed authentication; retain unfiltered raw data and classify interfaces from stable hardware relationships.",
+    "original_parameters_and_time_preserved": "OS and BIOS scope, linked project script and source times 10/20 are preserved; no expected MAC is fabricated."
+  },
+  "modernized_recommendation": {
+    "status": "STABLE IDENTITY MAPPING; RETAIN BIOS OBSERVATION",
+    "recommended_method": "Generate a per-port table keyed by PCI BDF/serial/FRU and physical label, containing permanent/current OS MAC, interface role and timestamped BIOS/firmware value, then compare against the asset source.",
+    "applicable_platform": "The named NIC and firmware inventory implementation, including BMC ports when in scope.",
+    "supported_version": "Record BIOS/BMC, NIC firmware, driver, OS and iproute2/script revisions.",
+    "official_reference": "Project asset/MAC allocation and port map plus the existing approved project script.",
+    "difference_from_original_method": "Avoids name-based filtering and separates permanent hardware identity from runtime/virtual addresses.",
+    "coverage_difference": "Improves OS mapping but does not replace the source-required BIOS evidence.",
+    "required_inputs": "Authoritative MAC/port map, interface-role rules, BIOS observer and approved tools.",
+    "risks_limitations": "SR-IOV, representors, bonds and locally administered addresses can make interface-order/name comparisons misleading."
+  },
+  "project_override_considerations": "A project defines whether BMC MACs, VFs and virtual interfaces are included. Any omitted physical port or BIOS-only field is reduced coverage; supplying values/tools does not make the required BIOS observation automated.",
+  "expected_evidence": [
+    "Expected per-port asset/MAC inventory and stable physical/logical mapping",
+    "Raw OS link/PCI/driver/permanent-current MAC output with version/status/timestamps",
+    "Timestamped BIOS/KVM/firmware MAC artifacts from the qualified observer",
+    "Per-port normalized comparison, duplicate/virtual-address analysis and management health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item, two procedure steps and criterion consistently require OS-versus-BIOS MAC comparison. Missing mappings and values are readiness inputs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The comparison is clear and can proceed when the owner map and BIOS observer are available, so it is MANUAL ONLY rather than BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES for the complete case because it explicitly concedes BIOS must be read by a person and its OS filter is incomplete.",
+    "gpt_v2": "Retain V2's stable mapping/permanent-current safeguards but reclassify PARTIAL to MANUAL ONLY because BIOS observation is core acceptance.",
+    "v3_1_improvement": "Separates automated OS evidence from manual BIOS evidence and the engineer-owned formal decision."
+  },
+  "review_improvement": "This review eliminates interface-order and name-filter assumptions, preventing a virtual or representor MAC from being compared to the wrong physical BIOS port.",
+  "independent_technical_reasoning": "MAC equality has meaning only after stable physical mapping; the OS can expose multiple runtime identities for one adapter. Because the source independently requires BIOS observation, even perfect OS automation cannot complete the case, so MANUAL ONLY is appropriate.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 91, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 91 source_ref",
+    "history": "review_round_02_functionality.md lines 2388-2411", "external_sources": []
+  },
+  "no_automatic_retry": "On missing/ambiguous mapping or MAC mismatch, preserve raw evidence and stop; do not change network/firmware state or retry with guessed exclusions.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

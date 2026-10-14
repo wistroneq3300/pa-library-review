@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 262,
+  "library_sequence": 68,
+  "source_key": "Functionality|69|Wistron-HW-00072-V003",
+  "case_variant_id": "a642a61994a60178",
+  "source_ref": {"sheet": "Functionality", "source_row": 69, "code": "Wistron-HW-00072-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "a40c883dfbb7990b9351cc946c01345d3997c3b90b161d7f666f67f260391d12",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00072-V003.",
+    "next_source_row_verified": "Functionality|70|Wistron-HW-00073-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "Power on with two sockets",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Install two sockets processor on MB.\nCheck CPU information from BIOS, OS and BMC web hardware inventory.\nIn BIOS:\nEnter \"Setup -> Processor Configuration\". Check CPU information.\nIn Linux:\n    - Check CPU information with commands:\n       1. cat /proc/cpuinfo\n       2. Download and install the latest dmidecode tool from (http://download.savannah.gnu.org/releases/dmidecode/).\n           dmidecode -t processor\n       3. lscpu\nIn BMC web hardware inventory:\nCheck the CPU healthy is \"OK\", and the detail CPU information is correct (include Name, Vendor, Model, Firmware verison and Status (State). \n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. System can power on normally with full CPU.\n2. CPU information should match with SPEC.\n3. Core/Thread should be correct as the setting in BIOS setup menu.",
+    "script": null, "attended_time": "20", "machine_time": "25", "latest_updated": "2025-11-11",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "numactl util-linux",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"lscpu 2>&1 | grep -iE 'socket|core|model name'; echo ---; ls /sys/devices/system/cpu 2>&1 | head; echo ---numa---; numactl -H 2>&1 | head 2>&1\"",
+      "ai_logs_output": "return FULL lscpu socket count + NUMA topology so the user confirms two CPU sockets are populated and enumerated; the physical install of the second socket CPU is done by the operator.",
+      "risk": "RISK: reading socket/NUMA is read-only; the physical dual-socket install is operator.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It covers only truncated Linux socket/NUMA evidence and omits the required physical install, power-on, BIOS view and BMC WebUI inventory fields.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds compatibility, operator and cross-layer evidence, but still treats the manual BIOS/BMC WebUI acceptance as setup rather than core observation.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1785-1811: historical PARTIAL review and SSH quoting defect."]
+  },
+  "original_test_intent": "Install a supported dual-socket CPU population, prove the system powers on, and reconcile per-socket identity, health, firmware/status and core/thread topology across BIOS Setup, Linux and the BMC WebUI against the approved specification.",
+  "original_method": "A qualified operator installs the two CPUs and powers on the system; the operator inspects BIOS Setup and BMC WebUI inventory while the agent can collect Linux topology/identity data and organize a per-socket cross-layer comparison.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Physical CPU installation/power-on and direct BIOS Setup plus BMC WebUI inspection are explicit acceptance steps. Automated Linux collection is substantial support but does not make the entire core automatable.",
+  "required_inputs": [
+    "Motherboard/BIOS/BMC compatibility and two-CPU model/stepping/socket population plan",
+    "DIMM, heatsink, thermal interface, torque/service and power requirements",
+    "Expected per-socket name/vendor/model/firmware/health, cores/threads and NUMA map",
+    "Validated OS packages/tools and approved BIOS/BMC access",
+    "Qualified operator, maintenance/recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Agent must not open the chassis, install CPUs, apply thermal material or power-cycle the SUT.",
+    "Verify socket/CPU/BIOS compatibility, ESD, orientation, pins, heatsink torque and thermal/power readiness.",
+    "Do not download an unverified 'latest' dmidecode over HTTP; use a validated package/source.",
+    "Preserve logs and stop on socket damage, boot, thermal, power, topology or management anomaly.",
+    "No automatic reseat, retry, BIOS change or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare per-socket expected matrix and collect approved Linux `lscpu`, `/proc/cpuinfo`, `dmidecode` and NUMA evidence.",
+    "Receive operator screenshots/observations from BIOS Setup and BMC WebUI.",
+    "Reconcile identities, health and core/thread totals across all layers.",
+    "Report discrepancies without claiming installation/WebUI observation or issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Approve/perform CPU installation and power-on/recovery.",
+    "Navigate BIOS Setup and BMC WebUI and supply the required visual evidence.",
+    "Resolve cross-layer/spec discrepancies and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Insufficient and insecure: sshpass/disabled host verification are unsuitable, `head` truncates CPU/NUMA coverage, and the command omits dmidecode, BIOS and BMC WebUI inventory/health. It cannot prove physical installation or normal power-on.",
+    "executable_command_required": false,
+    "command_recommendation": "Use authenticated access and retain complete unfiltered Linux topology/identity output after operator confirmation; obtain separate BIOS/BMC WebUI artifacts rather than substituting Linux data.",
+    "original_parameters_and_time_preserved": "Attended Time 20 and Machine Time 25 remain unchanged; two physical sockets and all specified layers remain in scope."
+  },
+  "modernized_recommendation": {
+    "status": "CROSS-LAYER PER-SOCKET EVIDENCE",
+    "recommended_method": "Build a per-socket matrix keyed by socket and CPU identity, populate it from operator-captured BIOS/BMC views and complete Linux topology/DMI/NUMA output, then compare to the approved population specification.",
+    "applicable_platform": "The named motherboard, firmware and supported dual-socket population.",
+    "supported_version": "Record BIOS/BMC/microcode/OS and lscpu/dmidecode/numactl versions.",
+    "official_reference": "Project CPU/board population, BIOS and BMC inventory documentation; validated OS packages only.",
+    "difference_from_original_method": "Adds identity-locked cross-layer reconciliation and safe package provenance without removing GUI inspection.",
+    "coverage_difference": "Linux enumeration alone does not validate BIOS setup presentation, BMC WebUI health fields or physical installation quality.",
+    "required_inputs": "Population spec, expected topology/fields, access paths, tools and operator artifacts.",
+    "risks_limitations": "Firmware/SMBIOS naming differences require field mapping, not silent normalization."
+  },
+  "project_override_considerations": "A project may define exact CPU/DIMM/topology expectations, but must retain all three BIOS/OS/BMC layers unless an approved coverage override names what is excluded. Automated APIs cannot be assumed equivalent to required WebUI presentation.",
+  "expected_evidence": [
+    "Approved CPU/board/DIMM/firmware population plan and operator installation record",
+    "Normal power-on/boot plus thermal/power/SEL health",
+    "BIOS Processor Configuration and BMC WebUI inventory screenshots per socket",
+    "Complete timestamped Linux lscpu/proc/dmidecode/NUMA output and version/status",
+    "Per-socket comparison and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criteria align on dual-socket installation, boot and cross-layer CPU/topology validation; missing model-specific values are project inputs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The operations are clear. Compatibility/spec/tool inputs gate readiness but do not make the case semantically blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its PARTIAL conclusion because it covers only Linux and ignores manual GUI/hardware core steps.",
+    "gpt_v2": "Keep its safety and cross-layer improvements but reclassify from PARTIAL to MANUAL ONLY under the explicit V3.1 manual-observation rule.",
+    "v3_1_improvement": "Separates automated OS evidence from required human BIOS/BMC WebUI acceptance."
+  },
+  "review_improvement": "This review prevents Linux topology from substituting for BIOS/BMC GUI and physical installation, fixes truncated/insecure command guidance and makes per-socket evidence traceable.",
+  "independent_technical_reasoning": "The case is not merely human setup followed by automated core execution: physical installation/power-on and two GUI observations are themselves acceptance steps. Therefore MANUAL ONLY is the precise V3.1 capability, with strong agent-assisted collection afterward.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 69, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 69 source_ref",
+    "history": "review_round_02_functionality.md lines 1785-1811", "external_sources": []
+  },
+  "no_automatic_retry": "On installation, boot, thermal or cross-layer mismatch, preserve all evidence and stop. Do not reseat, reconfigure BIOS, reinstall tools or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

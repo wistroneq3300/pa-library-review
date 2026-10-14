@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 274,
+  "library_sequence": 82,
+  "source_key": "Functionality|83|Wistron-HW-00086-V002",
+  "case_variant_id": "7fbed9ce66facccf",
+  "source_ref": {"sheet": "Functionality", "source_row": 83, "code": "Wistron-HW-00086-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "63e5e40b542d586eada69d6085de497679d2ad138186728fa8362576d0d6923b",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00086-V002.",
+    "next_source_row_verified": "Functionality|84|Wistron-HW-00087-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Memory", "test_name_items": "Memory Slot",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check memory information in slot\nDownload and install the latest dmidecode tool from\n   Linux: http://download.savannah.gnu.org/releases/dmidecode/\nExecute \"dmidecode t memory\" in Linux terminal\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All memoty slot should be checked\nMemory information should be correct in the slot.",
+    "script": null, "attended_time": "1", "machine_time": "1", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "dmidecode", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t memory 2>&1\"", "ai_logs_output": "return FULL raw `dmidecode -t memory` output (each DIMM: size/type/speed/rank/slot) so user confirms total memory number+size match installed DIMMs and are identical in OS. No RISK (read-only).", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It corrects the missing option hyphen and captures full DMI records, but does not require an authoritative all-slot map or explicit empty/unreported-slot accounting.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 adds package provenance and complete slot reconciliation, but classifies input/package gating as PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2167-2191: historical YES review using corrected dmidecode syntax."]
+  },
+  "original_test_intent": "Enumerate every memory slot exposed for the target motherboard and verify each populated or empty slot's reported state and module information against the authoritative physical slot/population map.",
+  "original_method": "Run the intended read-only dmidecode memory query, retain every Memory Device record, map firmware locators to physical slots, and compare populated, empty and unreported positions with the project specification and memory-health logs.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_PRIVILEGE", "NEEDS_ACCESS", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The owner supplies the motherboard slot map, expected population and approved read-only package/privilege. No physical manipulation or required human visual observation appears in the source; collection and reconciliation can then run automatically.",
+  "required_inputs": [
+    "Exact board revision, total slot count and physical slot-to-SMBIOS locator map",
+    "Expected populated/empty state and DIMM part/size/type/speed/rank/ECC per slot",
+    "Approved dmidecode package/version and least-privilege read access",
+    "Host identity, authenticated transport, health-log scope and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not download an unspecified latest binary during execution; use an approved repository/package artifact.",
+    "Do not clear dmesg/syslog/SEL or modify DIMMs, BIOS memory settings or training state.",
+    "Do not assume missing DMI records represent empty physical slots or that locator text equals chassis labeling.",
+    "Stop on command/decode failure, duplicate/unknown locator, unaccounted slot or ECC/memory health fault.",
+    "No automatic retry with a different tool or privilege path."
+  ],
+  "agent_execution_scope": [
+    "Validate target identity, approved dmidecode version/privilege and the owner locator map.",
+    "Collect complete unfiltered DMI memory output, exit status, version and relevant health-log deltas.",
+    "Parse every Memory Device handle and reconcile populated, empty and absent physical slots.",
+    "Report discrepancies and evidence completeness without deciding PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Supply/approve the authoritative board slot map and expected module population.",
+    "Resolve ambiguous firmware locator-to-physical-slot mappings.",
+    "Review the generated comparison and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The corrected `dmidecode -t memory` form is appropriate read-only collection, unlike the malformed source text `dmidecode t memory`. The SSH password/host-key defaults must be replaced and package/sudo access approved.",
+    "executable_command_required": true,
+    "command_recommendation": "Retain complete `sudo dmidecode -t memory` output and status through managed authenticated access; capture the tool version and do not filter away empty Memory Device entries.",
+    "original_parameters_and_time_preserved": "The criterion's all-slot scope and source Attended/Machine times of 1/1 are preserved; no slot count is invented."
+  },
+  "modernized_recommendation": {
+    "status": "CORRECT SOURCE SYNTAX; RETAIN READ-ONLY METHOD",
+    "recommended_method": "Use the approved dmidecode package to export all Type 16/17 context, correlate handles/locators to an owner board map and emit a row for every expected physical slot, including empty and missing entries.",
+    "applicable_platform": "Systems whose firmware SMBIOS memory records and board locator map are validated.",
+    "supported_version": "Record rather than assume the OS package and SMBIOS versions.",
+    "official_reference": "Approved project package repository and board slot map; no new vendor command is proposed.",
+    "difference_from_original_method": "Fixes the missing `-t` option, avoids an uncontrolled latest download and adds explicit accounting for empty/unreported slots.",
+    "coverage_difference": "Strengthens the source's all-slot criterion without changing the read-only inventory intent.",
+    "required_inputs": "Board locator map, expected population and approved package/privilege.",
+    "risks_limitations": "Firmware may omit a physical slot or use labels that differ from silkscreen names."
+  },
+  "project_override_considerations": "Projects provide the applicable slot count and map. A smaller board legitimately has fewer slots; the report must name that approved topology rather than treat a generic number as universal. Input confirmation does not make the operation partial.",
+  "expected_evidence": [
+    "Board/firmware identity, authoritative physical slot map and expected population",
+    "Raw unfiltered dmidecode memory output, exit status, version and timestamp",
+    "Per-slot populated/empty/missing comparison with locator/handle mapping rationale",
+    "ECC/memory/kernel/BMC/SEL health and any decode limitations",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The malformed command omits the hyphen before `t`, but the item, procedure, criteria and same-row DeepSeek field consistently identify a dmidecode memory-slot enumeration. This is a syntax defect, not contradictory intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Slot map, package and privilege are ordinary project readiness inputs. The read-only operation and acceptance domain are clear and automatable once supplied."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with YES capability and corrected syntax, but require complete all-slot/empty-slot reconciliation and safe transport/package handling.",
+    "gpt_v2": "Retain V2's owner map and package safeguards but reclassify PARTIAL to FULLY AUTOMATABLE because human input/approval is not a core activity.",
+    "v3_1_improvement": "Separates readiness from capability and preserves the formal engineer verdict after automated evidence generation."
+  },
+  "review_improvement": "This review converts 'all slots' into a deterministic completeness check, retains missing records as evidence, and distinguishes a command typo from a true source conflict.",
+  "independent_technical_reasoning": "A DMI query can be executed and parsed without human intervention, but completeness depends on an external board topology because SMBIOS may omit empty sockets or use nonphysical labels. Supplying that expected map is an input gate, not manual execution, so FULLY AUTOMATABLE is appropriate.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 83, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 83 source_ref",
+    "history": "review_round_02_functionality.md lines 2167-2191", "external_sources": []
+  },
+  "no_automatic_retry": "On decode/access failure or an unaccounted slot, preserve the raw result and stop; do not install a different package, elevate through another path or change firmware/memory automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

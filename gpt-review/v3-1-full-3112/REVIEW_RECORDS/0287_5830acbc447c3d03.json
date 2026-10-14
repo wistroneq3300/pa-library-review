@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 287,
+  "library_sequence": 96,
+  "source_key": "Functionality|97|Wistron-HW-00100-V003",
+  "case_variant_id": "5830acbc447c3d03",
+  "source_ref": {"sheet": "Functionality", "source_row": 97, "code": "Wistron-HW-00100-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "39bfdcaf5e52c52e863849eb8290997fda9c0d058443319c647581c6646ee487",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00100-V003.",
+    "next_source_row_verified": "Functionality|98|Wistron-HW-00101-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Front and Rear Panel", "test_name_items": "VGA - Screensaver test",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Enable a screensaver.\n2. Set a timing for the screensaver (unit : minutes)\n3. Check for \"On resume, display logon screen\"\n4. Log in system\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. System should enter screensaver after time-out of system idle.\n2. System should display logon screen when resume.\n3. System should be logged in successfully.",
+    "script": null, "attended_time": "10", "machine_time": "10", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "x11-utils mesa-utils xrandr", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"echo ---dpms---; for m in /sys/class/drm/card*/status; do echo $m=$(cat $m 2>/dev/null); done 2>&1\"", "ai_logs_output": "return FULL DRM connector status before/after a screensaver/DPMS cycle; observing the screensaver render on the physical monitor needs a person present.", "risk": "RISK: display tests need a physical monitor head + a person to observe rendering; agent runs the read-only/headless probe for mode/status evidence only.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It acknowledges a human must see the monitor, but DRM connector status does not prove screensaver activation, lock-screen resume or successful login.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 adds exact policy, timeout, test account, recovery and restoration but does not reclassify the manual GUI acceptance.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2558-2583: historical PARTIAL review based on DRM connector status."]
+  },
+  "original_test_intent": "Configure a specified idle screensaver and resume-lock policy, verify the physical display enters the screensaver after the full idle timeout, presents a logon screen on resume and permits the authorized account to log in successfully.",
+  "original_method": "An engineer applies the approved temporary screensaver/lock setting, leaves the session genuinely idle for the specified minutes, visually observes the screensaver and resume logon UI, authenticates with a test account, and restores the prior policy; digital session/display logs support the observation.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_OS_SCOPE", "NEEDS_PARAMETERS", "NEEDS_EXPECTED", "NEEDS_TEST_ACCOUNT", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Physical observation of the screensaver and logon screen plus authorized interactive login are explicit acceptance steps. DRM status cannot establish any of them, and credentials must not be automated or exposed without a separate approved method.",
+  "required_inputs": [
+    "OS/display-session implementation and exact idle timeout in minutes",
+    "Approved screensaver, DPMS and resume-lock policy plus idle definition",
+    "Authorized test account/credential handling and expected login behavior",
+    "Physical monitor, qualified observer, KVM/OOB recovery, restore plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not change screensaver/DPMS/lock policy, log out or submit credentials before exact approval and recovery are confirmed.",
+    "Do not expose credentials in commands/logs or rely on the tested session as the only recovery channel.",
+    "Do not interpret DRM connector status as proof of screensaver or lock-screen UI.",
+    "Stop on lockout, black screen, unexpected logout/suspend, display failure or recovery loss and restore prior policy.",
+    "No automatic retry or alternate credential use."
+  ],
+  "agent_execution_scope": [
+    "Capture approved pre-test screensaver/DPMS/lock/session/display settings and prepare the observation timeline.",
+    "Collect non-secret session, display, DRM, authentication-event and system-health evidence around engineer actions.",
+    "Verify the configured policy and timestamps and document restoration without asserting the visual/login result.",
+    "Do not handle credentials or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Approve/apply the temporary policy and protect the authorized test credentials.",
+    "Observe timeout, screensaver, wake/logon screen and perform the login.",
+    "Restore the original policy, verify access and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Only corroborates connector presence. It neither configures/reads the actual screensaver policy nor proves idle timeout, visible screensaver, lock screen or authentication, and its shell/SSH handling requires validation.",
+    "executable_command_required": false,
+    "command_recommendation": "Use only the OS/session-specific approved read-only policy and event interfaces. No generic setting or login command is recommended until the OS/session manager and credential workflow are supplied.",
+    "original_parameters_and_time_preserved": "The timeout unit is minutes and source times are 10/10; no timeout value, OS or account is invented."
+  },
+  "modernized_recommendation": {
+    "status": "OS-SPECIFIC MANUAL UI TEST",
+    "recommended_method": "Record the before/temporary/restored policy, establish a timestamped no-input idle window, capture observer results for screensaver and wake/login UI, and correlate with session/authentication events without recording secrets.",
+    "applicable_platform": "The named OS, desktop/session/lock manager, display path and authorized test account.",
+    "supported_version": "Record OS, display/session manager, policy mechanism and driver versions.",
+    "official_reference": "Project security/display policy and OS-approved configuration path; absent from the row.",
+    "difference_from_original_method": "Adds credential protection, true-idle timing, recovery and policy restoration while retaining interactive observation.",
+    "coverage_difference": "Session events support timing/authentication but cannot replace visible screensaver/logon verification.",
+    "required_inputs": "OS/session, timeout/policy, test account, observer and recovery.",
+    "risks_limitations": "Remote activity can reset the idle timer, and screensaver, DPMS blanking and lock may be separate mechanisms."
+  },
+  "project_override_considerations": "The project selects timeout, OS/session and test account. It may approve a different timeout and claim that plan only; supplying settings/account does not change the MANUAL ONLY classification.",
+  "expected_evidence": [
+    "OS/session identity, original and approved temporary screensaver/DPMS/lock settings",
+    "Exact timeout, no-input interval and timestamped operator observation of screensaver and resume logon UI",
+    "Sanitized successful test-account login/session evidence without credentials",
+    "Display/session/BMC/host health and verified policy restoration",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The steps and criteria consistently require screensaver timeout, resume logon screen and successful login. Missing OS, timeout and account are readiness inputs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "With an authorized account, recovery and operator, the manual behavior is clear; the library case is not permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject DRM status as completion evidence; retain only its physical-observation boundary.",
+    "gpt_v2": "Retain V2's account/recovery/policy controls but reclassify PARTIAL to MANUAL ONLY because all acceptance steps are interactive and visual.",
+    "v3_1_improvement": "Separates optional telemetry from manual UI/login execution and engineer verdict ownership."
+  },
+  "review_improvement": "This review distinguishes screensaver, DPMS and lock behavior and protects credentials, preventing a connected display from being misreported as a completed resume/login test.",
+  "independent_technical_reasoning": "Connector state normally remains connected through screensaver and lock transitions, so the proposed DRM query is nearly orthogonal to acceptance. The required timeout UI and authentication are human-observed/interacted, making MANUAL ONLY correct.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 97, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 97 source_ref",
+    "history": "review_round_02_functionality.md lines 2558-2583", "external_sources": []
+  },
+  "no_automatic_retry": "On lockout, timeout, display or login anomaly, preserve the timeline and restore via the approved recovery path; do not retry credentials or policies automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

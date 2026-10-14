@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 269,
+  "library_sequence": 76,
+  "source_key": "Functionality|77|Wistron-HW-00080-V003",
+  "case_variant_id": "cf6a74d26e0b78b5",
+  "source_ref": {"sheet": "Functionality", "source_row": 77, "code": "Wistron-HW-00080-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "85714603a77862d82aeea2c8e96ec7572e28848f563f474a52609776f4bcb159",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00080-V003.",
+    "next_source_row_verified": "Functionality|78|Wistron-HW-00081-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Processor", "test_name_items": "CPU Stress",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Test if CPU can be stress and work normally.\n1. Install supported CPU on socket\n2. Make sure system can boot to OS\n3. Reboot system over 24 hours\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. System can power on without error2. Slot number is correct in BIOS/BMC/OS 3. system still can work without error4. No error in BMC log",
+    "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/x-wing/power-cycle/1.reboot-cycle_hour", "attended_time": "5", "machine_time": "0", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "stress-ng (amdsst for AMD SST - user installs)", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"stress-ng --cpu $(nproc) --timeout 600s 2>&1 | tail 2>&1\"", "ai_logs_output": "return FULL stress-tool run summary (stress-ng metrics tail) so the user confirms the CPU survived the stress without throttling/hang; long-run duration is user-confirmed.", "risk": "RISK: long CPU stress raises core temps/power; confirm adequate cooling and user approval before the run.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It invents a 600-second stress-ng workload not present in the numbered procedure and does not implement the source-linked 24-hour reboot cycle.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 preserves both stress and reboot concerns but assumes an owner can simply define the missing combined plan.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2000-2027: historical PARTIAL review based on the generated stress-ng command."]
+  },
+  "original_test_intent": "UNRESOLVED SOURCE CONTRACT: the item and opening sentence name CPU stress, but the only specified 24-hour operation and linked project script are reboot cycling; the criteria verify boot, slot visibility and logs without defining a stress workload result.",
+  "original_method": "Preserve two distinct candidate methods pending correction: (A) an approved sustained CPU workload with thermal/power monitoring, or (B) a 24-hour reboot-cycle endurance test using the linked project cycle script. CPU installation remains operator work.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified operator installs the CPU and confirms the physical/platform baseline. After the source intent is corrected, an agent could run an approved stress or reboot plan and collect evidence, but cannot select between those materially different tests.",
+  "required_inputs": [
+    "Owner correction selecting CPU workload stress, reboot-cycle endurance, or an explicitly defined combined sequence",
+    "CPU/platform identity, installed population and BIOS/BMC/OS slot expectations",
+    "For stress: approved tool/version, workload modules, workers, duration and thermal/power stop thresholds",
+    "For reboot: approved script/version, cycle count/cadence, reconnect/boot timeout and completion rule",
+    "Maintenance window, workload evacuation, cooling/power margin, OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not install a CPU, start stress or reboot the SUT before the authoritative operation is resolved and approved.",
+    "Do not replace 24 hours with 600 seconds or add stress-ng merely because the title contains 'Stress'.",
+    "Do not clear dmesg, system logs or SEL; preserve baseline and first-failure deltas.",
+    "Stop on thermal/power limits, throttling, machine-check/kernel/BMC error, boot/reconnect failure or management loss.",
+    "No automatic retry or hidden continuation after a safety stop."
+  ],
+  "agent_execution_scope": [
+    "Document the semantic conflict and prepare separate stress and reboot evidence plans.",
+    "After owner correction and approval, validate the selected tool/script and collect complete per-interval or per-cycle evidence.",
+    "Compare boot/slot/health outcomes against the supplied expectation and report anomalies.",
+    "Do not choose the operation or issue PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Correct the master intent or provide a scoped project override defining the relationship between stress and reboot cycling.",
+    "Approve/perform CPU installation and confirm platform cooling, power and recovery readiness.",
+    "Supply acceptance thresholds and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not applicable to the stated procedure: it adds stress-ng, changes the only explicit 24-hour duration to 600 seconds, truncates output with tail and omits reboot-cycle execution and per-cycle evidence. Shell expansion and insecure SSH handling also require correction.",
+    "executable_command_required": false,
+    "command_recommendation": "No executable command until intent is corrected. Preserve and validate the linked PA/project reboot script if reboot endurance is selected; use an owner-approved workload command only if CPU stress is selected.",
+    "original_parameters_and_time_preserved": "The source's 'over 24 hours', linked reboot-cycle script, Attended Time 5 and Machine Time 0 are retained; the DeepSeek 600 seconds is not promoted."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER CORRECTION REQUIRED",
+    "recommended_method": "Split into CPU workload stress and reboot-cycle endurance records, or define an explicit combined timeline. Each requires its own parameters, stop rules and evidence schema.",
+    "applicable_platform": "To be defined by the corrected CPU/platform and selected test path.",
+    "supported_version": "Record CPU/firmware/OS, selected tool or linked cycle-script revision and monitoring versions.",
+    "official_reference": "Project CPU stress specification and/or approved reboot-cycle procedure; the row does not resolve them.",
+    "difference_from_original_method": "Prevents an invented 600-second workload from replacing the explicit 24-hour reboot operation and separates two different fault domains.",
+    "coverage_difference": "Sustained compute load tests thermal/power/execution stability; repeated reboot tests initialization, firmware and recovery. Neither proves the other.",
+    "required_inputs": "Corrected intent, full parameter matrix, expected results, tool/script and recovery plan.",
+    "risks_limitations": "Combining load and reboot without a defined sequence makes attribution and completion ambiguous."
+  },
+  "project_override_considerations": "A project may approve a shorter stress duration or a specific reboot count and claim completion of that project plan only. It must state which branch of the source conflict it covers and may not claim the unresolved master 24-hour/stress contract was completed.",
+  "expected_evidence": [
+    "Owner correction/override, CPU/platform identity and approved operation matrix",
+    "Stress path: complete workload output, utilization/frequency/thermal/power/error timeline and exit status",
+    "Reboot path: per-cycle start, shutdown, boot, reconnect, slot inventory and recovery timeline",
+    "Uncleared kernel/system/SEL/BMC deltas and final stable health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "CPU Stress in the item/opening statement conflicts with a numbered procedure and linked script that only specify reboot cycling over 24 hours. The criteria do not identify which operation constitutes completion."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The core operation is unresolved. Selecting stress-ng or a reboot loop changes coverage, hazards and evidence, so execution would rewrite rather than instantiate the source."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject the 600-second stress-ng substitution and its PARTIAL conclusion because it ignores the explicit reboot-cycle path.",
+    "gpt_v2": "Retain V2's safety/parameter gates but strengthen PARTIAL to BLOCKED until the owner resolves stress versus reboot semantics.",
+    "v3_1_improvement": "Identifies a genuine SOURCE_CONFLICT, preserves both candidate methods and prevents missing parameters from being confused with the semantic blocker."
+  },
+  "review_improvement": "This review exposes that the linked implementation is a reboot-cycle script, not a CPU workload, and prevents a generated command from silently changing both test type and duration.",
+  "independent_technical_reasoning": "Stress and reboot endurance exercise different phases: one holds processors under sustained computational and thermal load, while the other repeatedly traverses firmware/OS initialization. Because the source specifies one in its name and another in its steps, an agent cannot safely infer a combined or replacement method.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 77, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 77 source_ref",
+    "history": "review_round_02_functionality.md lines 2000-2027", "external_sources": []
+  },
+  "no_automatic_retry": "No execution while the operation is unresolved. Under a later approved plan, stop on the first safety or recovery condition and preserve evidence; do not automatically rerun workload or reboot cycles.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

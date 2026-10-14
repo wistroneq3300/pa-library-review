@@ -1,0 +1,164 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 204,
+  "library_sequence": 5,
+  "source_key": "Functionality|6|Wistron-HW-00005-V002",
+  "case_variant_id": "9ada32a0f11bf022",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 6,
+    "code": "Wistron-HW-00005-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "882cd315c3d4a5fa0eff3cc8c0180b8d2ad47147a6c7a47451ea0271ef3488d3",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "next_source_row_verified": "Functionality|7|Wistron-HW-00006-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_Handle - NV GPU Sled",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check hardware accuracy\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check hardware accuracy",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "20",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the Mechanical_Handle - NV GPU Sled mechanical check requires physically operating the NV-GPU-sled handle to confirm the sled slides and locks correctly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically operates the NV GPU sled handle, confirms slide/lock behavior and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly recognizes that handle, slide and lock behavior are physical, but the original row lacks the risk and evidence details needed for a heavy GPU sled interface.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 retains the physical boundary, calls out rails, latch, connector and chassis risk, removes log clearing, and asks for operator photographs.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 177-197: historical physical/NO result for the NV GPU sled handle."
+    ]
+  },
+  "original_test_intent": "Operate the NV GPU sled service handle and verify that the sled moves on its intended guides, aligns and seats without interference, and reaches a secure locked state with correct mechanical behavior.",
+  "original_method": "A qualified person physically operates and observes the NV GPU sled handle and records photographs. The source says only 'hardware accuracy'; the platform drawing and service procedure must supply the sled-specific acceptance details.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer must control and support the NV GPU sled while actuating the service handle, observe rail engagement and alignment, sense binding or excessive resistance, confirm the latch reaches its intended lock/release positions, and verify the sled is physically retained and restored. Agent-visible inventory cannot establish these mechanical facts.",
+  "required_inputs": [
+    "Exact NV GPU sled, chassis bay and handle/latch revision",
+    "Applicable sled installation/removal drawing and service procedure",
+    "Approved power-down, discharge, thermal-cooldown, ESD and mechanical-support state",
+    "Acceptance criteria for travel, alignment, seating, connector engagement, retention and permissible resistance",
+    "Qualified operator and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Use the project-approved support or lifting method for the sled mass; the handle must not be assumed to carry unsupported load outside its design.",
+    "Confirm power removal, stored-energy and hot-surface conditions before any movement that can expose or disengage GPU power/high-speed connectors.",
+    "Keep the sled aligned with its rails/guides and protect blind-mate connectors, cables and adjacent hardware.",
+    "Stop on rail binding, unexpected weight transfer, handle deformation, incomplete latch travel, connector resistance, collision or loss of support.",
+    "Do not force or automatically repeat the slide/handle cycle after an anomaly.",
+    "Do not clear existing host/BMC logs merely to create a baseline for this mechanical check."
+  ],
+  "agent_execution_scope": [
+    "Prepare a sled-handle checklist from the approved mechanical drawing and service procedure.",
+    "Organize operator-supplied rail, handle, latch, connector-area and final-seating photographs.",
+    "Optionally correlate post-restoration GPU identity/topology only when the approved plan includes electrical reconnection.",
+    "Report coverage gaps and observations without claiming to have moved or locked the sled."
+  ],
+  "engineer_actions": [
+    "Establish the approved safe handling/support state and physically operate the NV GPU sled handle.",
+    "Observe rail travel, alignment, seating, latch engagement/release and final retention.",
+    "Inspect for deformation, interference, connector damage or foreign objects and restore the approved final position.",
+    "Apply the platform mechanical criteria and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable marker and NV GPU sled scope fit the source. A GPU inventory or BMC readback can only support a separately approved reconnection check and cannot verify rail, handle or latch accuracy.",
+    "executable_command_required": false,
+    "command_recommendation": "No machine command completes the acceptance. Do not introduce a power cycle, GPU reset or topology command unless the project test plan explicitly includes post-restoration electrical evidence.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 20 are retained as planning fields. No source cycle count, force threshold, removal distance or electrical restart is specified."
+  },
+  "modernized_recommendation": {
+    "status": "NO REMOTE SUBSTITUTE",
+    "recommended_method": "Retain the physical handle/rail inspection and bind it to a sled-specific drawing, supported-handling method and position-by-position checklist. Add post-restoration inventory only as secondary evidence when applicable.",
+    "applicable_platform": "The selected NV GPU sled and chassis bay revision.",
+    "supported_version": "Record mechanical drawing and service-procedure revisions.",
+    "official_reference": "Applicable platform NV GPU sled mechanical drawing and approved service procedure; no vendor-neutral force or connector limit is asserted.",
+    "difference_from_original_method": "Makes rail support, blind-mate connector protection and evidence ownership explicit without changing the manual acceptance.",
+    "coverage_difference": "None if the full handle travel, rail path, seating and lock/release states are inspected; software enumeration alone leaves all mechanical coverage untested.",
+    "required_inputs": "Sled/bay identity, drawing, support method, safe electrical/thermal state and acceptance limits.",
+    "risks_limitations": "Images cannot quantify handle force or prove internal connector engagement, and an inventory match cannot prove correct mechanical retention."
+  },
+  "project_override_considerations": "The project may approve a bounded handle/partial-travel inspection instead of full sled withdrawal, but must record the untested rail, connector and removal coverage. If full removal is approved, its electrical, thermal, lifting and restoration steps are additional project scope and do not rewrite the Master row.",
+  "expected_evidence": [
+    "Sled serial/FRU, bay and chassis revision with drawing/service-procedure reference",
+    "Approved power, cooldown, ESD and physical-support state",
+    "Photographs of initial position, rail/handle engagement, latch positions and restored seated state",
+    "Engineer observations of travel, alignment, resistance, seating, retention, release, interference and damage",
+    "Optional post-restoration GPU inventory/topology and error evidence when electrical reconnection is in the approved plan",
+    "Safety stops, coverage deviations and separate engineering verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Items, Procedure and Criteria consistently indicate an NV GPU sled handle mechanical check. 'Hardware accuracy' is underspecified but not contradictory, and the 5/20 time difference is retained as non-normative planning metadata."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The target and manual action are clear. Sled revision, safe handling state and acceptance limits must be provided by the project before execution, but those readiness gaps do not make the review or capability indeterminate."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with NO/manual-only and the slide/lock focus; add sled-mass support, rail, blind-mate connector and safe-state controls.",
+    "gpt_v2": "Retain V2's MANUAL ONLY, no-force, no-log-clear and physical-evidence conclusions while defining what optional GPU evidence can and cannot prove.",
+    "v3_1_improvement": "Separates Master mechanical coverage from project-approved removal distance and electrical restoration, and records any partial-travel override as a coverage delta."
+  },
+  "review_improvement": "The record turns the vague 'hardware accuracy' phrase into a source-faithful NV GPU sled handle/rail/retention contract, adds load-support and blind-mate connector hazards, and prevents a successful GPU inventory read from being mistaken for mechanical completion.",
+  "independent_technical_reasoning": "The NV GPU sled handle is part of a mechanical insertion, extraction and retention system. Its acceptance depends on guided travel, alignment, leverage, latch state, final seating and the absence of binding or damage. Those properties require a human at the sled, especially because the assembly may be heavy and may mate power and high-speed connectors. Software can later show that GPUs enumerate, but enumeration neither measures handle force nor proves rail/retention correctness. The complete case is MANUAL ONLY; project-specific support, safe-state and mechanical criteria are readiness gates rather than a reason to mark BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 6, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 6 source_ref",
+    "history": "review_round_02_functionality.md lines 177-197",
+    "external_sources": []
+  },
+  "no_automatic_retry": "A bind, incomplete latch, unsupported load, connector concern or failed restoration ends the approved action. Preserve the position and evidence; do not request another handle/slide cycle or software recovery without a new engineering decision.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

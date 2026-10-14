@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 276,
+  "library_sequence": 84,
+  "source_key": "Functionality|85|Wistron-HW-00088-V002",
+  "case_variant_id": "164e50f0eb6118ef",
+  "source_ref": {"sheet": "Functionality", "source_row": 85, "code": "Wistron-HW-00088-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "94a77d74026b7b4049fccacdce2dd5ad7567b1bbd016a08887cb74ece6f684da",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00088-V002.",
+    "next_source_row_verified": "Functionality|86|Wistron-HW-00089-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Memory", "test_name_items": "Power on with full memory",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check memory information with full memory.\nDownload and install the latest dmidecode tool from\n   Linux: http://download.savannah.gnu.org/releases/dmidecode/\nExecute \"dmidecode t memory\" in Linux terminal\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. System can power on normally with full memory.\n2. Memory information should be correct in the slot.",
+    "script": null, "attended_time": "20", "machine_time": "25", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "dmidecode + procps (free)", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t memory 2>&1; echo ---; free -m 2>&1\"", "ai_logs_output": "return FULL `dmidecode -t memory` + `free -m` output after powering on with full memory so user confirms the SUT powers on normally and memory info in the slot is correct. No RISK (read-only).", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It supplies appropriate post-boot DMI/free evidence but treats a physically established full-memory population and power-on as if the entire test were read-only.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 adds the qualified DIMM operator, full population map and power/recovery controls, but retains PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2223-2246: historical YES review centered on OS collection."]
+  },
+  "original_test_intent": "Populate the platform with its complete approved memory configuration, verify normal power-on/POST and confirm every slot and resulting capacity are recognized correctly.",
+  "original_method": "A qualified operator establishes the owner-defined full DIMM population and powers on the SUT; boot/training behavior and physical population are recorded, then DMI and OS capacity evidence are reconciled against every expected slot.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Full DIMM population, chassis work, power-on and POST/training observation are central acceptance steps. The agent can automate only the resulting inventory, capacity and log reconciliation.",
+  "required_inputs": [
+    "CPU/board/channel topology and authoritative full-memory slot matrix",
+    "Approved DIMM part/capacity/speed/rank/ECC mixing and population rules",
+    "Expected installed/OS-visible capacity, configured speed and POST/training result",
+    "Qualified operator, ESD/service procedure, maintenance window, OOB recovery and one-user approval",
+    "Validated dmidecode/procps package and read-only access"
+  ],
+  "safety_requirements": [
+    "The agent must not install/remove DIMMs, open the chassis, infer the full population or control power.",
+    "Verify all modules, channels, power/cooling capacity, ESD state and population rules before power-on.",
+    "Do not install an unverified latest tool, execute malformed syntax or clear logs.",
+    "Stop on POST/training failure, missing channel, ECC/memory/power/thermal fault or management loss.",
+    "No automatic retry, reseat, BIOS change or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Prepare a complete channel/slot/module/capacity acceptance matrix.",
+    "After operator confirmation, collect full DMI, meminfo/free and available firmware/BMC inventory plus health logs.",
+    "Reconcile every slot, total capacity, configured speed and error state and package the evidence.",
+    "Do not perform hardware/power actions or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Define and physically establish the approved full-memory population under the service procedure.",
+    "Control power and observe POST/training and any required BIOS/BMC views.",
+    "Confirm final physical state and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Appropriate supporting post-boot evidence, but not proof of the physical full population or power-on/training. Its SSH/package/privilege defaults need approval and complete outputs must be tied to the owner map.",
+    "executable_command_required": false,
+    "command_recommendation": "After manual setup, preserve full approved `dmidecode -t memory`, `/proc/meminfo` and `free -b` results and relevant firmware/BMC exports; reject the malformed `dmidecode t memory` form.",
+    "original_parameters_and_time_preserved": "Full-memory scope and source Attended Time 20/Machine Time 25 remain unchanged; no universal slot count is assumed."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN FULL-POPULATION HARDWARE TEST",
+    "recommended_method": "Use a signed-off full-population worksheet covering module identity, channel/slot, mechanical action, first POST/training duration/result, negotiated speed, capacity and cross-layer health, followed by automated reconciliation.",
+    "applicable_platform": "The identified CPU memory controller, board and approved complete DIMM population.",
+    "supported_version": "Record CPU, board, BIOS/BMC, OS/SMBIOS and collection-tool versions.",
+    "official_reference": "Project-approved platform memory population/service guide; the source does not define the full map.",
+    "difference_from_original_method": "Adds explicit physical and training evidence, safe package handling and complete slot/capacity reconciliation.",
+    "coverage_difference": "Automation improves post-boot evidence but does not replace full population, first power-on or POST/training observation.",
+    "required_inputs": "Full slot/BOM matrix, service procedure, expected training/capacity/speed, operator and recovery plan.",
+    "risks_limitations": "A system can boot with deconfigured or down-trained memory, so normal power-on alone is insufficient."
+  },
+  "project_override_considerations": "Full memory means the project's approved maximum/complete population, not an assumed universal 24-slot count. Any reduced population must be named as a different plan and cannot be reported as completion of this full-memory case.",
+  "expected_evidence": [
+    "Platform and complete expected channel/slot/module population matrix",
+    "Timestamped operator installation and first power-on/POST/training record",
+    "Full DMI, meminfo/free and applicable BIOS/BMC topology/health evidence",
+    "Per-slot, capacity, speed and ECC/kernel/SEL/BMC reconciliation",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item, procedure and criteria consistently require a full-memory power-on and per-slot check. The missing command hyphen is a syntax defect, not conflicting test intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The exact full population is a project-specific readiness input. The physical operation is clear and therefore MANUAL ONLY, not permanently BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES for the complete case; DMI/free cannot establish hardware population, first POST or power-on success.",
+    "gpt_v2": "Keep V2's operator, full-map and recovery controls but reclassify PARTIAL to MANUAL ONLY because physical setup and power-on are core.",
+    "v3_1_improvement": "Explicitly distinguishes full-population execution from automated post-boot evidence and engineer verdict ownership."
+  },
+  "review_improvement": "This review adds first-training behavior and negotiated-speed/deconfiguration checks so a booting but degraded full-memory configuration is not mistaken for success.",
+  "independent_technical_reasoning": "Maximum population stresses routing, training, power and firmware behavior differently from partial 1DPC. The decisive conditions occur during physical assembly and first POST, before OS inventory exists; therefore the complete case is MANUAL ONLY despite automatable collection afterward.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 85, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 85 source_ref",
+    "history": "review_round_02_functionality.md lines 2223-2246", "external_sources": []
+  },
+  "no_automatic_retry": "Any POST, training, deconfiguration, capacity or health anomaly is preserved and stops the plan; do not reseat modules, alter BIOS or cycle power automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

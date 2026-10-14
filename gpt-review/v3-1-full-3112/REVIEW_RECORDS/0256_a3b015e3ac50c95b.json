@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 256,
+  "library_sequence": 61,
+  "source_key": "Functionality|62|Wistron-HW-00065-V004",
+  "case_variant_id": "a3b015e3ac50c95b",
+  "source_ref": {"sheet": "Functionality", "source_row": 62, "code": "Wistron-HW-00065-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "eb1ecff5b3442d61ed83d8f28ebd9216d470c417f0c81b915e9d565d58719634",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00065-V004.",
+    "next_source_row_verified": "Functionality|63|Wistron-HW-00066-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : Function", "test_name_items": "Fail",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Unplug the power cord of PSU 1\n2. Check PSU 1 status with vision\n3. Check PSU 1 status by BMC (sensor list and SEL)\n4. Plug back the power cord of PSU 1\n5. Check PSU 1 status again\n6. Repeat step 1 ~ 5 for the all the rest of PSU\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Power cord should be unplugged without any problem\n2. Power supply should be OFF when power cord is unplugged (FAN should be off. LED should be AMBER.)\n3. PSU information in sensor list and SEL of BMC should be correct when power cord is unplugged\n4. PSU information in sensor list and SEL of BMC should be correct when power cord is plugged back\n5. All the reset PSU should have the same behavior as PSU 1",
+    "script": null, "attended_time": "15", "machine_time": "15", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU Function case (forcing a PSU fail state and observing the resulting PSU/LED/BMC fault status) requires physically inserting/removing/cycling the PSU module and its power-cord at the machine and visually observing the PSU LED/status; a person must be present at the hardware. The agent can only read the post-operator BMC PSU sensors/SEL, which the operator records after the physical step.",
+      "ai_logs_output": "operator physically forcing a PSU fail state and observing the resulting PSU/LED/BMC fault status then records PSU LED/status; after that the agent can run ipmitool (on agent host) sdr elist 2>&1 | grep -iE \"psu|power supply\" ; echo ---sel---; ipmitool (on agent host) sel list last 30 2>&1 | tail -30 ; echo ---psu_forcing_a_psu---; ipmitool (on agent host) sensor list 2>&1 | grep -iE \"psu|power supply\" to confirm BMC sees the PSU state, but the physical action must be human.",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly recognizes physical cord and vision requirements but loosely adds module insertion/removal not required by this source and lacks per-PSU phase correlation.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly preserves explicit cord unplug/replug, one-at-a-time sequencing, visual amber/fan checks and BMC corroboration.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "ED-32 is not needed to classify this row because its own procedure explicitly requires cord unplugging.",
+    "related_revisions": ["review_round_02_functionality.md lines 1585 onward: historical NO review based on physical cord and visual actions."]
+  },
+  "original_test_intent": "For every installed PSU, physically remove and restore that PSU's AC cord one at a time, verify the off/amber/fan-stopped state and BMC fault reporting during removal, then verify correct recovery after restoration.",
+  "original_method": "A qualified operator confirms redundancy/load safety, unplugs the identified PSU 1 cord, directly observes fan and amber LED, captures BMC sensors/SEL, restores the same cord and verifies recovery; the same isolated sequence is repeated for every remaining PSU only after the prior module stabilizes.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Cord unplug/replug and direct LED/fan observation are explicit core steps and must be performed/confirmed by a person. The agent can collect timestamped BMC/SEL/host evidence after each operator-confirmed phase but cannot replace or claim the physical actions.",
+  "required_inputs": [
+    "Complete PSU slot/serial/cord/outlet map and required sequence",
+    "Approved redundancy/load and one-cord-at-a-time isolation procedure",
+    "Platform-specific amber LED, fan-off, BMC sensor/SEL and recovery criteria",
+    "Stabilization time and abort/recovery procedure",
+    "Qualified operator and one-user approval"
+  ],
+  "safety_requirements": [
+    "Unplug only the identified cord after proving remaining power capacity; never remove multiple PSU feeds together.",
+    "Do not substitute BMC Power Off, software reboot, PDU control or module extraction for the source-required physical cord action.",
+    "Stop on wrong-cord indication, arcing, heat, damage, unexpected power/redundancy change or management loss.",
+    "Preserve logs and phase-specific evidence rather than clearing them.",
+    "Do not proceed to the next PSU or automatically retry until the current PSU fully recovers and the plan permits continuation."
+  ],
+  "agent_execution_scope": [
+    "Prepare the per-PSU phase checklist and capture baseline BMC/SEL/redundancy/host state.",
+    "Wait for operator confirmation of each unplug, visual state and replug.",
+    "Collect full BMC sensor/SEL and platform evidence during unplugged and recovered phases.",
+    "Compare all PSU behaviors and report deviations without setting the formal verdict."
+  ],
+  "engineer_actions": [
+    "Approve safe redundancy/load conditions and perform every cord unplug/replug.",
+    "Visually verify fan and LED states and provide timestamped proof.",
+    "Stop/recover the platform on anomalies and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual boundary is correct, but module insertion/removal is not part of this row. Grep-limited ipmitool output is illustrative only and must be replaced by complete, authenticated, phase-tagged platform evidence.",
+    "executable_command_required": false,
+    "command_recommendation": "After each operator-confirmed phase, use the approved BMC interface to export full PSU sensor/SEL data with timestamps and explicit slot/serial mapping.",
+    "original_parameters_and_time_preserved": "Attended Time 15 and Machine Time 15 are retained; coverage remains every PSU, not a sample."
+  },
+  "modernized_recommendation": {
+    "status": "PHASE-TAGGED MANUAL CORD CYCLE",
+    "recommended_method": "Use a per-slot/serial checklist and synchronized before/unplugged/restored captures for physical LED/fan, BMC sensors, SEL, redundancy and host health; gate each next PSU on stable recovery.",
+    "applicable_platform": "The identified redundant PSU population and explicitly mapped cords/outlets.",
+    "supported_version": "Record PSU/BMC firmware, BMC interface/tool version and power-service SOP revision.",
+    "official_reference": "Project power redundancy, cord identification and BMC mapping documents; no generic command or timing is asserted.",
+    "difference_from_original_method": "Adds unambiguous module/phase identity and recovery gates while retaining physical cord manipulation.",
+    "coverage_difference": "Automation of evidence does not cover the required physical unplug or visual observation; every installed PSU remains in scope.",
+    "required_inputs": "Cord map, sequence, redundancy/load limit, expected states, timing and recovery.",
+    "risks_limitations": "A wrong cord or premature next cycle can defeat redundancy and interrupt the chassis."
+  },
+  "project_override_considerations": "A project may approve a subset only if it names tested/excluded PSUs and does not claim all-PSU completion. Because the source explicitly says unplug the power cord, a PDU/BMC/software substitute changes the method and cannot silently replace it.",
+  "expected_evidence": [
+    "Approved per-PSU slot/serial/cord map, sequence and redundancy/load checklist",
+    "Timestamped operator/photo evidence of each unplugged amber/fan-off and restored state",
+    "Full phase-tagged BMC sensors/SEL tied to the correct PSU",
+    "Per-cycle and final redundancy/host/BMC recovery plus anomaly record",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title is broad, but the procedure and criteria clearly define the intended PSU cord-fail/recovery sequence and acceptance states."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The physical operation is explicit. Platform mappings and safety parameters are readiness gates, not unresolved test semantics."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with NO/manual core; remove invented module cycling and improve per-phase evidence identity.",
+    "gpt_v2": "Agree with MANUAL ONLY, one-at-a-time sequence and direct visual/BMC distinction.",
+    "v3_1_improvement": "Records that physical cord removal is source-specific here and enforces all-PSU coverage/recovery gating."
+  },
+  "review_improvement": "This review follows the exact cord method, removes non-source hardware actions, ties every phase to a PSU identity and prevents a PDU/software shortcut from reducing coverage.",
+  "independent_technical_reasoning": "The core explicitly requires human cord manipulation and visual fan/LED judgment for every PSU. Those cannot be automated or treated as fixture setup, so MANUAL ONLY is correct even though BMC collection is automatable.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 62, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 62 source_ref",
+    "history": "review_round_02_functionality.md lines 1585-1609", "external_sources": []
+  },
+  "no_automatic_retry": "Each PSU receives at most its approved single unplug/replug sequence. On any wrong target, abnormal state or incomplete recovery, preserve evidence and stop; do not retry or advance automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

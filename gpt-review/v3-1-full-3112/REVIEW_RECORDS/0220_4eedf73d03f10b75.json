@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 220,
+  "library_sequence": 22,
+  "source_key": "Functionality|23|Wistron-HW-00022-V002",
+  "case_variant_id": "4eedf73d03f10b75",
+  "source_ref": {"sheet": "Functionality", "source_row": 23, "code": "Wistron-HW-00022-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "41af9979efcec3dcf494df6d3be5eb634cc45b293e9a1a4156e2c2337ca7a5c8",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00022-V002.",
+    "next_source_row_verified": "Functionality|24|Wistron-HW-00023-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -AVL",
+    "test_name_items": "Mechanical_Adapters",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check adapters for installation in each slot\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Adapters should be installed and removed easily",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: Mechanical_Adapters is a physical/mechanical check (component seating, plug/unplug ease, cable routing, no bent pin / mismatch / routing issue) that requires a person at the machine handling the hardware - the agent cannot inspect or plug/unplug physical parts over SSH.",
+      "ai_logs_output": "operator performs the mechanical check on Mechanical_Adapters and records photos + pass/fail (parts positioned correctly, no bent pin/cable-routing issue); agent cannot produce this physical evidence.",
+      "risk": "RISK: mechanical/visual inspection + physical plug/unplug is human-only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It identifies the physical boundary but does not require a slot-by-slot AVL identity map and adds generic cable-routing and bent-pin language beyond the stated adapter-fit criterion.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly defines per-slot identity, safe handling and preserved post-action evidence.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 589-609: historical physical/NO result for Mechanical_Adapters."]
+  },
+  "original_test_intent": "Verify, for every Mechanical-AVL slot in the approved plan, that the assigned adapter is installed in the correct position and can be removed and reinstalled without binding, forced fit, damage or loss of required seating.",
+  "original_method": "A qualified engineer matches each selected slot to the approved adapter identity, physically removes and reinstalls the adapter using the platform procedure, and documents installation position and handling result. Approved read-only detection and event evidence may support but cannot replace the physical assessment.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies each adapter and slot, controls ESD and energy state, inspects guides and mating features, removes and reinstalls the adapter, judges abnormal resistance and final seating, and records the result per slot.",
+  "required_inputs": [
+    "Mechanical-AVL adapter list with part/revision and approved slot mapping",
+    "Slots included in the project plan and any approved exclusions",
+    "Platform installation/removal, ESD and power or hot-service procedure",
+    "Per-slot fit, orientation, retention and seating criteria",
+    "Expected detectable device state where the adapter has an electronic endpoint",
+    "Qualified operator, evidence checklist and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not remove or install an adapter in an energized slot unless the platform explicitly supports and the plan approves that exact hot-service operation.",
+    "Verify adapter identity, orientation, keying and permitted slot before insertion; do not test fit in an unapproved position.",
+    "Stop on mismatch, binding, abnormal resistance, bent contacts, damaged guides, cable interference or need to use force.",
+    "Protect adjacent components and cabling and preserve all existing kernel, system and BMC/SEL records.",
+    "Do not repeat a failed insertion or attempt a different slot as an automatic recovery."
+  ],
+  "agent_execution_scope": [
+    "Generate the per-slot adapter identity and evidence checklist from approved project inputs.",
+    "Collect approved read-only pre-action chassis, slot or device state without clearing history.",
+    "After operator confirmation, collect post-action device/BMC state and timestamped event deltas where applicable.",
+    "Report missing slots, mismatched identities and evidence gaps without judging physical fit."
+  ],
+  "engineer_actions": [
+    "Approve the adapter/slot scope and safe handling method.",
+    "Perform each physical removal/reinstallation and document fit, orientation, retention and seating.",
+    "Resolve any mismatch or unsafe resistance without forcing the part.",
+    "Apply the Mechanical-AVL criteria and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual-only statement is correct. Its generic routing and pin checks may be useful observations but are not substitutes for the source's per-slot adapter installation/removal criterion.",
+    "executable_command_required": false,
+    "command_recommendation": "No universal command applies to an unspecified mechanical adapter. If a selected adapter exposes a detectable endpoint, use only its project-approved read-only inventory method after the slot and device mapping are known.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source provides no slot list, adapter identities, cycle count, force limit, command or automated retry."
+  },
+  "modernized_recommendation": {
+    "status": "PER-SLOT AVL TRACEABILITY",
+    "recommended_method": "Use a matrix that records slot, approved adapter part/revision, observed identity, orientation, removal/reinstallation result, final seating and photographs, with optional mapped device-state evidence.",
+    "applicable_platform": "The selected chassis and Mechanical-AVL adapter population.",
+    "supported_version": "Record chassis revision, adapter part/revision and service-procedure revision.",
+    "official_reference": "Applicable platform Mechanical-AVL, adapter and service documentation; no generic fit-force value is asserted.",
+    "difference_from_original_method": "Turns the generic each-slot instruction into auditable identity and coverage traceability while keeping the physical action unchanged.",
+    "coverage_difference": "Complete master coverage requires every scoped slot; a project subset must identify excluded slots rather than claiming library-wide completion.",
+    "required_inputs": "Adapter AVL, slot map, fit/seating criteria and safe handling procedure.",
+    "risks_limitations": "Software enumeration cannot prove mechanical ease, correct adapter geometry or absence of binding."
+  },
+  "project_override_considerations": "A project may approve a defined subset of slots or adapters. The completed report must name that subset and exclusions; passing one adapter type cannot be generalized to other geometries or revisions.",
+  "expected_evidence": [
+    "Per-slot adapter part/revision and approved-position matrix",
+    "Operator checklist for orientation, removal/reinstallation ease, retention and final seating",
+    "Timestamped photographs covering each scoped slot and any defect",
+    "Optional mapped pre/post device or BMC state with preserved raw event delta",
+    "Coverage exclusions, safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure's each-slot installation check and the criterion's install/remove ease describe the same physical acceptance. Missing identities and slot map are project inputs, not contradictory source facts."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The test intent is actionable once the platform supplies its adapter AVL, slot map and safe handling procedure; those readiness gaps do not make the library case permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain the physical NO boundary but replace a generic mechanical conclusion with per-slot identity and AVL coverage.",
+    "gpt_v2": "Agree with the Mechanical-AVL map and safe handling gates; clarify that electronic detection is conditional because the source does not state every adapter is software-visible.",
+    "v3_1_improvement": "Separates subjective fit acceptance from conditional telemetry and defines how project subsets affect coverage."
+  },
+  "review_improvement": "This record distinguishes the Mechanical-AVL adapter population from the neighboring cable-adapter case: acceptance is traceable to approved adapter identity and position for each slot, not a generic connector or cable check.",
+  "independent_technical_reasoning": "Ease of installation and removal is a physical property involving geometry, alignment and operator-observed resistance. It therefore requires manual acceptance even if a connected device can later be enumerated. The lack of an adapter list and slot map affects readiness and coverage, not classification or permanent blocked status.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 23, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 23 source_ref",
+    "history": "review_round_02_functionality.md lines 589-609",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If an adapter mismatches, binds, damages a guide/contact, interferes with cabling or does not restore an expected endpoint, retain its position and evidence and stop. Do not force, reseat again, swap slots, reboot or reset automatically.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

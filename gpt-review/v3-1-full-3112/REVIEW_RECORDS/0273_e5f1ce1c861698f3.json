@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 273,
+  "library_sequence": 81,
+  "source_key": "Functionality|82|Wistron-HW-00085-V003",
+  "case_variant_id": "e5f1ce1c861698f3",
+  "source_ref": {"sheet": "Functionality", "source_row": 82, "code": "Wistron-HW-00085-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "f962f64e3b325bfbde5505c164ac296627d8224c7e6c7b5cff6160cf3c4cddc5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00085-V003.",
+    "next_source_row_verified": "Functionality|83|Wistron-HW-00086-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Memory", "test_name_items": "MRDIMM",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check memory information from BIOS, OS and BMC web hardware inventory.\nIn BIOS:\n    - Enter \"System Setup -> Memory Configuration -> Memory Topology\"\n      Check memory information.\nIn Linux:\n    - Check memory information with commands:\n       1. cat /proc/meminfo\n       2. Download and install the latest dmidecode tool from (http://download.savannah.gnu.org/releases/dmidecode/).\n           dmidecode -t memory\n       3. free (Check total available and free memory size)\nIn BMC web hardware inventory:\nCheck the memory healthy is \"OK\", and the detail CPU information is correct (include Name, Vendor, Model, Firmware verison and Status (State).\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Total memory number and size should be correct as DIMM installed.\n2. Total available memory size should be the same in the output of meminfo and free.\n3. Also remind you that Genoa CPU can’t test with 6400 DIMM, please use 5600 DIMM with Genoa.\n4. Need to confirm: slot 1 to slot 24",
+    "script": null, "attended_time": "1", "machine_time": "1", "latest_updated": "2025-11-11",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "dmidecode", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t memory 2>&1\"", "ai_logs_output": "return FULL raw `dmidecode -t memory` output (each DIMM: size/type/speed/rank/slot) so user confirms total memory number+size match installed DIMMs and are identical in OS. No RISK (read-only).", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It provides generic DMI output but ignores MRDIMM compatibility, the source's Genoa 5600/6400 rule and mandatory firmware/WebUI views.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 preserves the Genoa rule and adds platform/speed confirmation, but retains PARTIAL despite manual GUI acceptance.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2137-2162: historical YES review with no Genoa/MRDIMM-specific analysis."]
+  },
+  "original_test_intent": "Verify the approved MRDIMM population, speed and capacity across slots 1-24 in BIOS, Linux and BMC WebUI, enforcing the source-specific rule that a Genoa test population uses 5600 rather than 6400 DIMMs, while resolving the copied CPU-detail phrase.",
+  "original_method": "Identify the processor/platform first, record BIOS and BMC WebUI memory topology/health, collect Linux SMBIOS and capacity data, and reconcile each slot against the approved MRDIMM matrix and the retained Genoa speed restriction.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_ACCESS", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An engineer must inspect BIOS Setup and BMC WebUI, confirm the actual platform and physical MRDIMM population, and apply the project-approved interpretation of the Genoa 5600 restriction. Linux collection is supporting automation.",
+  "required_inputs": [
+    "Exact CPU family/stepping and owner confirmation of whether the Genoa rule applies",
+    "Board slot 1-24 map, MRDIMM AVL/BOM, capacity, speed, rank, ECC and population",
+    "Authoritative meaning and scope of the source's 5600-versus-6400 requirement",
+    "BIOS/BMC memory fields and correction of the BMC CPU-information clause",
+    "Validated dmidecode privilege/package, capacity reservation rule, GUI access and approval"
+  ],
+  "safety_requirements": [
+    "Do not swap DIMMs, alter memory speed/training or BIOS settings as part of this read-only review path.",
+    "Do not download an unverified latest dmidecode or clear kernel/system/SEL evidence.",
+    "Do not infer CPU family, MRDIMM compatibility or the applicability of the Genoa rule from a single DMI string.",
+    "Stop on a disallowed 6400 population under the approved rule, slot ambiguity, ECC alarm or cross-layer disagreement.",
+    "No automatic reboot, retry or hardware change."
+  ],
+  "agent_execution_scope": [
+    "Prepare a platform-aware slot and speed acceptance matrix.",
+    "Collect approved CPU/platform identity plus full DMI, meminfo and free evidence.",
+    "Correlate engineer-supplied BIOS/BMC artifacts and explicitly evaluate the approved 5600/6400 rule.",
+    "Report discrepancies without changing memory state or issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Confirm CPU platform and authoritative scope of the Genoa MRDIMM speed rule.",
+    "Observe BIOS topology and BMC WebUI memory health/inventory and correct the CPU-detail wording.",
+    "Confirm physical population/compatibility and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Useful for read-only SMBIOS memory records but insufficient for CPU-family applicability, MRDIMM support, configured speed, BIOS/BMC views and all 24 physical slots. Transport/package/privilege assumptions need approval.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain full approved `dmidecode -t memory`, `/proc/meminfo` and `free -b` and collect read-only CPU identity. Use BIOS/BMC artifacts for negotiated speed and health; do not invent a vendor command.",
+    "original_parameters_and_time_preserved": "The literal Genoa/5600/6400 rule, slots 1-24 and source times 1/1 are preserved without generalizing the rule to other CPUs."
+  },
+  "modernized_recommendation": {
+    "status": "PLATFORM-AWARE INVENTORY; OWNER RULE CONFIRMATION",
+    "recommended_method": "Gate the slot matrix on verified CPU family and approved memory AVL, then record expected module speed versus BIOS-configured/operating speed and health for every slot across BIOS, SMBIOS and BMC.",
+    "applicable_platform": "Only the identified platform and MRDIMM population; the source's Genoa rule is case-specific until the owner documents broader scope.",
+    "supported_version": "Record CPU stepping, board, BIOS, BMC, OS/SMBIOS and dmidecode versions.",
+    "official_reference": "Owner-approved CPU/MRDIMM compatibility matrix and the retained source criterion; no unsupplied vendor claim is added.",
+    "difference_from_original_method": "Makes CPU-family applicability and expected-versus-configured module speed explicit before per-slot reconciliation.",
+    "coverage_difference": "Adds defensible compatibility gating while retaining all BIOS/OS/BMC and capacity checks.",
+    "required_inputs": "CPU identity, MRDIMM AVL/speed rule, slot map, GUI fields and approved package.",
+    "risks_limitations": "A module's rated speed and actual configured data rate are distinct; generic DMI may report either incompletely."
+  },
+  "project_override_considerations": "A project may document a different supported population only through an approved compatibility override. It must not silently discard the master Genoa/5600 rule, and providing that decision does not automate BIOS/BMC WebUI observation.",
+  "expected_evidence": [
+    "CPU/platform identity, approved MRDIMM AVL and explicit Genoa-rule applicability decision",
+    "Expected 24-slot part/capacity/rank/ECC/rated/configured-speed matrix",
+    "Timestamped BIOS and BMC WebUI memory topology/health artifacts",
+    "Full Linux DMI/meminfo/free evidence, capacity reconciliation and ECC/SEL/kernel health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The BMC memory-health instruction then asks for detailed CPU inventory fields. CPU metadata cannot satisfy MRDIMM health/identity acceptance and must be corrected; the Genoa speed rule itself is retained as a case-specific source fact."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The inventory operation and special speed gate are intelligible. Platform/AVL inputs and the local CPU wording correction affect readiness and final interpretation, not the ability classification."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES because generic DMI neither evaluates the Genoa speed gate nor completes BIOS/BMC WebUI acceptance.",
+    "gpt_v2": "Retain V2's platform-aware 5600/6400 analysis but reclassify PARTIAL to MANUAL ONLY and record the BMC CPU phrase as SOURCE_CONFLICT.",
+    "v3_1_improvement": "Preserves the unusual source-specific compatibility rule without converting it into an unsupported global vendor policy."
+  },
+  "review_improvement": "This review makes CPU-family applicability a first-class input, separates rated and configured speed, and prevents a generic DMI dump from bypassing the source's MRDIMM compatibility gate.",
+  "independent_technical_reasoning": "Unlike generic RDIMM enumeration, this row contains an explicit processor-dependent speed restriction. The agent can evaluate it only after the owner identifies the platform and rule scope. BIOS and BMC WebUI remain required observations, so the complete case is MANUAL ONLY rather than PARTIAL or fully automated.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 82, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 82 source_ref",
+    "history": "review_round_02_functionality.md lines 2137-2162", "external_sources": []
+  },
+  "no_automatic_retry": "On platform ambiguity, prohibited speed, missing slot, health alarm or evidence disagreement, stop and retain the result; do not swap DIMMs, alter BIOS or repeat automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

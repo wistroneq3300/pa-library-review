@@ -1,0 +1,118 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 237,
+  "library_sequence": 42,
+  "source_key": "Functionality|43|Wistron-HW-00046-V004",
+  "case_variant_id": "b9dbc7db6784c14f",
+  "source_ref": {"sheet": "Functionality", "source_row": 43, "code": "Wistron-HW-00046-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "0e984a458e99eca8f9d2cd527bbebf9dadda4f4cf86ff918e0732d330bf29729",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00046-V004.",
+    "next_source_row_verified": "Functionality|44|Wistron-HW-00047-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "PSON_power_cycling",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Fault behavior checking\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Fault behavior checking", "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this case verifies the PSU behavior across PSON power cycling, which requires toggling the PSON signal on the PSU and observing output/fault behavior; asserting/removing PSON on the physical PSU requires a person/harness at the machine and an observer to read the resulting PSU state.",
+      "ai_logs_output": "operator toggles PSON on the PSU and records output/fault behavior; agent cannot drive the PSON line on the physical PSU.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It identifies the PSON harness boundary but assumes all stimulus and observation are inherently manual rather than separating fixture setup from controlled acquisition.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly prohibits guessed PSON drive and lists signal/recovery gaps; V3.1 treats those as readiness inputs and retains a hybrid executable path after approval.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1088-1108: historical physical/NO review for PSON_power_cycling."]
+  },
+  "original_test_intent": "Verify CRPS output, power-good and fault behavior through the platform-defined PSON assertion/deassertion cycle and recovery sequence, with the stimulus and response measured against vendor timing and state criteria.",
+  "original_method": "An engineer maps and installs the approved PSON control/measurement fixture and validates the connected load. Under one approved plan, the fixture or operator applies the specified transition sequence while tools capture PSON, outputs, power-good, fault and management state; the engineer adjudicates behavior and recovery.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the PSON interface, installs/verifies the isolated harness and probes, confirms PSU/load safety, and handles abnormal recovery. After setup, an approved fixture may drive the defined transitions and automate response capture.",
+  "required_inputs": [
+    "Target PSU and exact PSON pin/control interface, polarity and reference",
+    "Logic thresholds, source/sink limits, timing, debounce, sequence and cycle count",
+    "Expected output, power-good, fault/latch and recovery states with tolerances",
+    "Approved isolated harness/fixture and calibrated measurement channels",
+    "Connected load/host impact, safe initial/final state and recovery procedure",
+    "Engineer setup plus one-user approval for the unchanged plan"
+  ],
+  "safety_requirements": [
+    "Do not guess or blind-probe a PSON pin, GPIO, PMBus register, connector or logic level, and do not use a generic relay without interface approval.",
+    "Confirm isolation, grounding, polarity, drive/current limits and connected-load impact before applying a transition.",
+    "Stop on out-of-profile signal/output, fault latch, heat, arcing, unexpected power transition, BMC/host loss or fixture malfunction.",
+    "Preserve all raw waveforms and event history rather than clearing logs.",
+    "Do not repeat, reset or power-cycle automatically after an abnormal cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate the resolved PSON signal/fixture/timing plan and collect read-only PSU/BMC baselines.",
+    "After engineer setup and approval, orchestrate only the exact supported fixture sequence if its control semantics are verified.",
+    "Capture raw PSON/output/power-good/fault timing plus management and host evidence.",
+    "Compare expected/actual transitions and report anomalies without issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Supply and approve the signal contract, harness, load state and recovery plan.",
+    "Install and validate the physical fixture/probes and confirm safe start state.",
+    "Supervise the sequence and recover any unsafe or unexpected state.",
+    "Interpret timing/fault behavior and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It correctly avoids a generic remote command, but its all-manual conclusion ignores that an approved PSON fixture can automate the controlled sequence and evidence after manual setup.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only the owner-approved fixture/control API and measurement channels with recorded versions and resolved signal parameters. No generic GPIO, PMBus or relay command is supplied.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. Signal mapping, levels, timing, cycles, expected behavior and tool are absent project inputs."
+  },
+  "modernized_recommendation": {
+    "status": "FIXTURE-CONTROLLED PSON TRANSITION CAPTURE",
+    "recommended_method": "After isolated harness validation, synchronize PSON drive and raw output/power-good/fault measurements with BMC/host event collection and retain the complete transition timeline.",
+    "applicable_platform": "Only the selected PSU, PSON interface, load and approved fixture combination.",
+    "supported_version": "Record PSU/chassis firmware, PSON spec, fixture/controller and measurement-tool versions.",
+    "official_reference": "Exact vendor/platform PSON and power-sequencing documentation is required; no generic signal values are asserted.",
+    "difference_from_original_method": "Separates manual safe setup from repeatable automated stimulus/measurement without replacing the PSON test.",
+    "coverage_difference": "Full coverage requires each approved transition and response; passive telemetry alone cannot prove PSON behavior.",
+    "required_inputs": "Signal contract, harness, sequence, expected states, load and recovery plan.",
+    "risks_limitations": "Incorrect mapping or grounding can interrupt or damage the power path; fixture control must be platform-specific."
+  },
+  "project_override_considerations": "The project may choose manual harness actuation or an approved automated fixture and may define one cycle or a bounded sequence. Record actual transitions and coverage; do not generalize to other PSON implementations or silently repeat failures.",
+  "expected_evidence": [
+    "PSON interface/specification and PSU/load identity",
+    "Harness/fixture versions, isolation check and approved sequence",
+    "Raw PSON, output, power-good and fault timing",
+    "Correlated PSU/BMC/host state and preserved events before/during/after",
+    "Recovery evidence, safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title supplies PSON cycling context and the body consistently requests fault behavior. Sparse parameters are omissions requiring project definition, not contradictory facts."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The control/response intent is clear. Missing interface, fixture and expected profile prevent immediate execution but do not justify permanent BLOCKED under V3.1."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain the no-guessed-drive boundary but split manual fixture setup from automatable controlled measurement.",
+    "gpt_v2": "Reclassify BLOCKED to REQUIRES PACKAGE / USER CONFIRMATION while preserving all signal, load, recovery and approval gates.",
+    "v3_1_improvement": "Separates capability from readiness and keeps the state-changing action within one approved fixed plan."
+  },
+  "review_improvement": "This review does not pretend PSON is remotely accessible, yet it recognizes that a validated external fixture can automate the test core after engineer setup. It preserves all high-risk electrical and recovery constraints.",
+  "independent_technical_reasoning": "PSON cycling is neither inherently manual-only nor safely executable from generic software. A manual harness/fixture setup is required, but stimulus and timed response capture can be automated once the interface contract is known, so PARTIAL is the correct stable capability class. Missing values are readiness gates, not a permanent semantic block.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 43, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 43 source_ref",
+    "history": "review_round_02_functionality.md lines 1088-1108", "external_sources": []
+  },
+  "no_automatic_retry": "On unexpected PSON/output/fault response, fixture error, shutdown or management loss, preserve raw waveforms and logs and stop. Restore only the documented safe state; do not transition again, reset, reboot or power-cycle without renewed approval.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

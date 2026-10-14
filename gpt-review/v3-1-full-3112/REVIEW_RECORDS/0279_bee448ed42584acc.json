@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 279,
+  "library_sequence": 88,
+  "source_key": "Functionality|89|Wistron-HW-00092-V002",
+  "case_variant_id": "bee448ed42584acc",
+  "source_ref": {"sheet": "Functionality", "source_row": 89, "code": "Wistron-HW-00092-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "06b817f61b2e0976d8b9c8de1b170c9319272bbe73ae4224df85f81a50a28d60",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00092-V002.",
+    "next_source_row_verified": "Functionality|90|Wistron-HW-00093-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "NIC LED Check (Activity)",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check the status of Activity LED.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. OFF - No network activity\n2. Green (Blinking) - Linked and activity on the network\n3. Need to confirm: 1G Lan, PDB BMC NIC, BMC dedicate NIC",
+    "script": null, "attended_time": "35", "machine_time": "35", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "-- not runnable by agent: NIC LED Check (Activity) requires visually watching the Activity LED blink during network traffic; a physical/visual check needing a person at the machine.", "ai_logs_output": "operator records Activity LED behavior (off/solid/blinking) while generating traffic; agent cannot see LEDs.", "risk": "RISK: LED inspection is physical/visual - human only.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly requires human observation and distinguishes off/solid/blinking, but does not define a safe traffic stimulus.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds idle-versus-traffic states, isolated peer/management protection and read-only counter correlation.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2333-2355: historical physical/NO review."]
+  },
+  "original_test_intent": "Visually confirm that the activity LED is off when the selected port has no network activity and blinks green while approved traffic traverses each required 1G LAN, PDB BMC NIC and dedicated BMC NIC port.",
+  "original_method": "A qualified observer records each physical activity LED during a verified idle window and a bounded traffic window; the exact interface, peer, packet counters, link state and management impact are time-correlated as supporting evidence.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PORT_MAP", "NEEDS_TRAFFIC_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Only a person with line-of-sight can confirm physical blink/color behavior. An agent may generate an approved isolated traffic stream and collect counters, but those do not establish that the LED actually blinked.",
+  "required_inputs": [
+    "Physical-to-logical port map for each required LAN/PDB/BMC port",
+    "Per-port expected off/color/blink semantics",
+    "Approved idle definition and isolated traffic peer, direction, rate, duration and packet pattern",
+    "Management-route protection, stop/recovery plan, qualified observer and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not generate traffic on an unknown, production or sole-management path.",
+    "Do not manipulate cables, routes, switches or power without explicit inclusion in the approved plan.",
+    "Stop traffic on reachability loss, link flap, packet storm, peer overload or BMC/host impact.",
+    "Do not clear logs or treat interface counters as proof of the physical LED.",
+    "No automatic retry or alternate-port traffic."
+  ],
+  "agent_execution_scope": [
+    "Prepare the per-port idle/traffic observation matrix and validate route/management isolation.",
+    "Collect baseline counters and, if approved, run the bounded traffic stimulus while recording command/status/timestamps.",
+    "Correlate operator observations with counter deltas, link state and peer evidence and restore the quiet state.",
+    "Do not claim the visual result or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Supply the port/LED table and approve the safe traffic plan.",
+    "Observe and record each LED in both idle and active traffic states.",
+    "Confirm restoration and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Correctly refuses visual execution. It mentions traffic but supplies no target/interface/peer/rate/duration, so no generic traffic command is safe or acceptance-ready.",
+    "executable_command_required": false,
+    "command_recommendation": "Use only the project-approved traffic tool and exact isolated endpoint after route/management verification; collect complete counters, but keep operator observation as the acceptance evidence.",
+    "original_parameters_and_time_preserved": "The three required port categories and source times 35/35 are retained; traffic parameters are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "VISUAL TWO-STATE TEST WITH CONTROLLED STIMULUS",
+    "recommended_method": "For each mapped port, record a quiet interval with no counter increase and an active interval with known packet flow, synchronized to video or timestamped operator notes of LED color/blink behavior.",
+    "applicable_platform": "The specified NIC/PDB/BMC ports and their hardware LED definitions.",
+    "supported_version": "Record NIC/BMC/CPLD firmware, driver and traffic-tool versions where applicable.",
+    "official_reference": "Project port/LED definition and approved isolated traffic plan; none is supplied by the source.",
+    "difference_from_original_method": "Defines measurable idle and active stimulus windows while preserving the required human visual decision.",
+    "coverage_difference": "Counters prove packet activity, not LED output; observation proves LED behavior, not traffic correctness. Both are retained.",
+    "required_inputs": "Port map, LED table, isolated peer/traffic parameters, observer and recovery path.",
+    "risks_limitations": "Background management packets may prevent a true idle state, especially on BMC interfaces."
+  },
+  "project_override_considerations": "A project may define a low-risk packet count instead of sustained load, but must show both idle and active conditions for each applicable port. A management port may require a passive/controlled plan; omission must be reported as reduced coverage.",
+  "expected_evidence": [
+    "Port/LED map and approved idle/traffic stimulus plan",
+    "Timestamped visual photos/video or operator notes for idle and active states on every port",
+    "Traffic command/peer/status and interface counter deltas synchronized to observation",
+    "Link, route, peer and management health plus restoration record",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title, procedure and criteria consistently distinguish off/no-activity from green-blinking/activity. Missing stimulus and port details are project inputs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "A qualified observer and approved isolated traffic plan make the case executable. Their absence is readiness, not a permanent semantic blocker."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with human-only LED observation while making its implied traffic action subject to a precise safe plan.",
+    "gpt_v2": "Agree with MANUAL ONLY and retain V2's isolation, idle/active and management safety requirements.",
+    "v3_1_improvement": "Makes clear that optional agent-generated traffic does not convert visual acceptance to PARTIAL or automated."
+  },
+  "review_improvement": "This review addresses background packets on management ports by requiring a verified idle interval, avoiding the false assumption that an unblinking LED necessarily means no activity.",
+  "independent_technical_reasoning": "The activity indication is dynamic and can be missed or confused with link color; it must be observed during a known traffic interval. Traffic and counters are automatable, but the required physical blink observation remains the core verdict evidence, so MANUAL ONLY is correct.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 89, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 89 source_ref",
+    "history": "review_round_02_functionality.md lines 2333-2355", "external_sources": []
+  },
+  "no_automatic_retry": "On traffic, link, peer or visibility anomaly, stop and preserve the first observation/counters; do not reroute, increase load or repeat automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

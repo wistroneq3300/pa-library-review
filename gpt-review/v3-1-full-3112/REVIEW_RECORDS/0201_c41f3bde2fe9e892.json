@@ -1,0 +1,162 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 201,
+  "library_sequence": 2,
+  "source_key": "Functionality|3|Wistron-HW-00002-V005",
+  "case_variant_id": "c41f3bde2fe9e892",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 3,
+    "code": "Wistron-HW-00002-V005"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "d544eb0bae2165ecf5bb3996529c82495b24bd96318cbd09579532db738ec485",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "next_source_row_verified": "Functionality|4|Wistron-HW-00003-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_Sharp_edge",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check appearance of chassis and nodes for sharp edges\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "There should be no sharp edges to effect users' operation",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2026-01-28",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the Mechanical_Sharp_edge mechanical check requires running a hand along every exterior edge/sheet to confirm no sharp edges that could injure the user; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs Mechanical_Sharp_edge and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. The row was treated as a physical and visual mechanical inspection that an agent cannot perform.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly identified tactile and visual injury-prevention acceptance, rejected remote completion, removed log-clearing as a prerequisite, and requested an operator checklist and photographs.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 105-125: historical NO/physical conclusion with generic five-segment coverage.",
+      "gpt-review/test_gpt_review.json: same-row GPT V2 record."
+    ]
+  },
+  "original_test_intent": "Inspect the accessible chassis and node surfaces that a user can encounter during intended operation or handling and determine, by qualified physical observation, whether any edge presents a sharp-edge injury or handling hazard.",
+  "original_method": "A person physically examines the chassis and nodes for sharp edges, records the inspection and photographs, and applies the source criterion that user operation must not be affected. The source also requests pre/post log handling, but host/BMC logs do not establish tactile sharpness.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified engineer must identify all accessible user-contact edges, perform the approved visual and tactile/mechanical inspection, stop before touching any energized, hot, damaged, or otherwise unsafe area, and own the formal observation. Photographs can document coverage or defects but cannot by themselves prove the tactile condition of every edge.",
+  "required_inputs": [
+    "Target platform and configuration/recipe identity",
+    "Project mechanical-safety specification defining accessible surfaces and the acceptable sharp-edge condition",
+    "Approved inspection SOP, PPE and power/ESD state",
+    "Coverage checklist for chassis panels, node faces, handles and other intended user-contact surfaces",
+    "Qualified inspecting engineer and evidence destination"
+  ],
+  "safety_requirements": [
+    "Do not use an unprotected bare-hand sweep as an improvised test method.",
+    "Do not inspect energized, hot, moving, damaged or inaccessible internal areas without the approved isolation and access procedure.",
+    "Stop and isolate the area if a suspected cutting, snagging or damaged-sheet-metal hazard is found.",
+    "Do not file, bend, deburr or otherwise repair the chassis as part of this review or acceptance step.",
+    "Preserve existing OS/BMC logs; clearing logs is unnecessary for the core mechanical acceptance and would destroy unrelated evidence."
+  ],
+  "agent_execution_scope": [
+    "Prepare a source-faithful inspection checklist after the platform scope and SOP are supplied.",
+    "Organize engineer-supplied photographs and coverage annotations.",
+    "Flag missing surfaces, missing timestamps or contradictory evidence.",
+    "Report the supplied observations without claiming tactile inspection or assigning PASS/FAIL/BLOCKED."
+  ],
+  "engineer_actions": [
+    "Establish a safe physical state and perform the approved inspection.",
+    "Identify every inspected and inaccessible surface.",
+    "Record the formal observation and any defect location.",
+    "Decide the final testcase verdict against the applicable mechanical specification."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable marker correctly prevents remote execution, but its instruction to run a hand along every edge is not a self-sufficient safe SOP and must not be treated as authorization.",
+    "executable_command_required": false,
+    "command_recommendation": "No DUT command can complete the sharp-edge acceptance. Optional inventory or log collection is ancillary and is not evidence of tactile conformance.",
+    "original_parameters_and_time_preserved": "The source's 5-minute attended and 5-minute machine fields are retained as planning metadata; the row defines no command, loop, or machine-executable duration."
+  },
+  "modernized_recommendation": {
+    "status": "NO AUTOMATED SUBSTITUTE",
+    "recommended_method": "Retain the physical inspection and bind it to the approved project mechanical-safety specification, access-state procedure and surface coverage checklist. Use photographs only as supporting traceability.",
+    "applicable_platform": "The selected chassis and node configuration.",
+    "supported_version": "Project-controlled inspection SOP and specification revision must be recorded.",
+    "official_reference": "Applicable project mechanical-safety specification and approved inspection SOP; no public document is asserted as the testcase-specific acceptance source.",
+    "difference_from_original_method": "Clarifies coverage, safe access and evidence ownership without replacing the physical examination.",
+    "coverage_difference": "None when every source-relevant accessible chassis/node edge is included; photographs alone are incomplete coverage.",
+    "required_inputs": "Platform surface map, specification revision, approved inspection method and qualified operator.",
+    "risks_limitations": "A camera or remote agent cannot determine tactile sharpness reliably, and the source does not provide a quantitative edge threshold."
+  },
+  "project_override_considerations": "A project may identify which chassis/node surfaces are accessible in its configuration and may use its approved inspection method, but it may not replace the physical sharp-edge acceptance with OS logs, BMC telemetry, photographs alone, or an agent inference. Any excluded surface is an explicit coverage difference.",
+  "expected_evidence": [
+    "Platform/configuration identity and inspection SOP/specification revision",
+    "Coverage checklist mapping each accessible chassis/node surface and any inaccessible area",
+    "Timestamped overview and defect-location photographs where applicable",
+    "Engineer-authored observation identifying any snagging, cutting or handling hazard and its exact location",
+    "Safety stop or isolation record if a suspected sharp edge is found",
+    "Engineering verdict recorded separately from the agent's evidence organization"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Items, Procedure and Criteria consistently describe a physical sharp-edge inspection. The qualitative phrase 'effect users' operation' needs a project acceptance reference, but missing specificity is a readiness input rather than contradictory source intent."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The purpose and manual operation are clear enough to plan safely. Missing platform scope, SOP and acceptance reference prevent execution readiness but do not make the Master testcase permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with the physical/non-agent conclusion; correct the unsafe implication that an unqualified hand sweep is a complete method and separate irrelevant log collection from core acceptance.",
+    "gpt_v2": "Retain V2's MANUAL ONLY classification, no-log-clearing safeguard, checklist, photos and operator-owned observation.",
+    "v3_1_improvement": "Separates Master intent from project surface map/SOP, distinguishes readiness from capability, states photographs are supporting evidence only, and keeps execution status/tool result/engineer verdict independent."
+  },
+  "review_improvement": "The record makes the physical acceptance surface, safe-access boundary, evidence limitations and engineer ownership explicit. It preserves the original inspection while preventing log collection or photographic analysis from being misreported as completion.",
+  "independent_technical_reasoning": "Sharpness is a physical property of an accessible edge and the source acceptance concerns user injury/handling. Remote telemetry has no causal relationship to edge geometry, and a photograph cannot reliably establish burr height, edge radius or tactile snagging across all surfaces. Therefore the complete acceptance is manual. The row is not BLOCKED because the action and qualitative objective are coherent; the project must bind the exact accessible-surface set and acceptance method before execution.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 3, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 3 source_ref",
+    "history": "review_round_02_functionality.md lines 105-125",
+    "external_sources": []
+  },
+  "no_automatic_retry": "Not applicable to a machine loop. If the engineer stops for a suspected injury hazard or inaccessible unsafe area, the agent must not request repeated contact or reinterpret the stopped inspection as completed.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

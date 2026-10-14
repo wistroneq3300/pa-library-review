@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 253,
+  "library_sequence": 58,
+  "source_key": "Functionality|59|Wistron-HW-00062-V004",
+  "case_variant_id": "302f601c664fd58c",
+  "source_ref": {"sheet": "Functionality", "source_row": 59, "code": "Wistron-HW-00062-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "e1a3770a29ce0a5b2084e4b41457dc528bf12a18c060646c95269c56fe28c90d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00062-V004; other fan-failure codes are separate source variants.",
+    "next_source_row_verified": "Functionality|60|Wistron-HW-00063-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Blackbox to log fault conditions", "test_name_items": "Fan failure",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check data is saved to blackbox is this status\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check data is saved to blackbox is this status",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this CRPS-blackbox case must Fan failure (forcing the PSU fan to fail) so the PSU blackbox records it, using fault-injection hardware/throttle/AC on the physical PSU, and then reads the blackbox/fault log - a physical, destructive fault injection a person must perform. Agent cannot inject PSU input/output faults or read the physical blackbox.",
+      "ai_logs_output": "operator Fan failure (forcing the PSU fan to fail) and then extracts the PSU blackbox fault record; agent cannot inject the fault or access the physical blackbox (only the BMC SEL after the fact, which the operator captures).",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It flags physical risk but does not define whether the fan is stopped, disconnected or simulated and mixes irrelevant AC/throttle mechanisms into the method.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly requires a vendor fan-fault mechanism, tach/thermal limits, monitoring, blackbox schema and recovery.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1511-1531: historical NO review; same-title cases at other codes have different objectives and are not substituted."]
+  },
+  "original_test_intent": "Verify that a defined CRPS internal fan-failure condition is saved in the PSU blackbox with the expected event identity and thermal/protection timeline.",
+  "original_method": "A qualified operator applies a vendor-approved fan-fault simulation to the identified PSU under an approved load and thermal envelope, with independent tachometer/temperature monitoring and immediate cooling restoration. The raw blackbox event is extracted and correlated afterward.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_TOOL", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified engineer must establish and supervise any fan disconnection/simulation fixture and restore cooling. Agent monitoring and blackbox correlation are possible only after the specific safe method is approved.",
+  "required_inputs": [
+    "PSU model/firmware and exact internal fan/tach channel",
+    "Vendor-approved fault method, load, duration, thermal/tach limits and expected protection behavior",
+    "Fixture/service procedure, independent temperature/tach monitoring and emergency cooling/cutoff",
+    "Blackbox tool/schema and expected fan-failure record fields",
+    "Operator, inspection/recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not obstruct, unplug, damage or command the fan through an undocumented interface.",
+    "Do not infer that an AC event or workload throttle is a fan-failure equivalent.",
+    "Validate independent thermal/tach monitoring and immediate cooling restoration; preserve baseline logs.",
+    "Stop for limit approach, abnormal noise, smoke, output/protection anomaly or management loss.",
+    "No automatic reinjection, retry, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate the approved method and capture permitted baseline telemetry.",
+    "After operator action, collect tach/temperature/load timeline and raw blackbox export.",
+    "Correlate event fields, protection behavior and cooling recovery.",
+    "Do not manipulate the fan or issue the formal verdict."
+  ],
+  "engineer_actions": [
+    "Define/approve and perform the fan-fault mechanism within the thermal envelope.",
+    "Restore cooling and inspect/recover the PSU/load.",
+    "Provide inaccessible blackbox evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It safely refuses automation but is not a reproducible test command; its generic physical/AC language cannot select a fan-fault mechanism and its blackbox-access assumption is unsupported.",
+    "executable_command_required": false,
+    "command_recommendation": "Use only the vendor-approved fan-fault fixture/service SOP and blackbox extractor after the exact fan, thermal envelope and record contract are defined.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain source facts; no fault duration is inferred."
+  },
+  "modernized_recommendation": {
+    "status": "VENDOR FAN-FAULT CONTRACT REQUIRED",
+    "recommended_method": "Define one non-destructive fan-failure simulation where possible, synchronize tach/temperature/load data, execute once under operator control, restore cooling immediately, and correlate the raw blackbox record.",
+    "applicable_platform": "Only the specified PSU/fan channel, load and approved fixture.",
+    "supported_version": "Record PSU/BMC firmware, fixture/monitor versions/calibration and blackbox schema/tool versions.",
+    "official_reference": "Project/vendor fan-fault, thermal and blackbox documentation must be supplied; no method is invented.",
+    "difference_from_original_method": "Makes the fault channel, thermal envelope and recovery measurable while retaining blackbox verification.",
+    "coverage_difference": "A simulated tach loss may not cover a mechanically stalled rotor or airflow-loss signature unless vendor equivalence is documented.",
+    "required_inputs": "Fan identity, fault method, load, duration, thermal/tach limits, expected record and recovery.",
+    "risks_limitations": "PSU internal cooling loss can cause fast local temperature rise not visible in platform sensors."
+  },
+  "project_override_considerations": "A project may use a vendor simulation instead of mechanical obstruction if equivalence to the blackbox fan-fault path is documented. Record whether coverage is tach loss, rotor stall or airflow loss; do not generalize across them.",
+  "expected_evidence": [
+    "Approved fan/channel/fault method, load, thermal envelope, monitoring and safety checklist",
+    "Operator record plus synchronized tach/temperature/load and restoration timeline",
+    "Raw blackbox export with schema/tool version and expected fan-fault fields",
+    "Preserved platform logs and verified cooling/PSU/load recovery",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The item and procedure align on blackbox capture of a fan-failure status. The missing failure mechanism and limits are severe underspecification, not contradiction."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "Different fan-fault mechanisms exercise different paths and thermal risks. With no safe mechanism, envelope or expected record, execution cannot proceed without inventing the test."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree the agent must not induce the fault; reject its generic AC/throttle alternatives and unsupported access assertion.",
+    "gpt_v2": "Agree with BLOCKED and its fan-specific thermal/monitoring/record/recovery gates.",
+    "v3_1_improvement": "Separates tach, stall and airflow coverage and identifies which post-stimulus work can later be automated."
+  },
+  "review_improvement": "This review prevents unsafe inference of obstruction/unplugging, defines channel-specific thermal evidence and avoids conflating this PSU-blackbox case with other library fan-failure variants.",
+  "independent_technical_reasoning": "The named fault is clear at a high level but not operationally: stopping drive, losing tach and blocking airflow are materially different. Since choosing one changes safety and coverage, the missing method is a genuine blocker rather than a normal parameter gap.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 59, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 59 source_ref",
+    "history": "review_round_02_functionality.md lines 1511-1531 plus duplicate-title search", "external_sources": []
+  },
+  "no_automatic_retry": "Apply only one approved fault event. Any thermal, fan, output or recovery anomaly requires immediate cooling restoration, evidence preservation and stop; do not repeat/reset/power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

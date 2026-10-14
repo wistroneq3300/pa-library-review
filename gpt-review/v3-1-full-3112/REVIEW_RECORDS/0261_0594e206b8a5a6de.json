@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 261,
+  "library_sequence": 67,
+  "source_key": "Functionality|68|Wistron-HW-00071-V005",
+  "case_variant_id": "0594e206b8a5a6de",
+  "source_ref": {"sheet": "Functionality", "source_row": 68, "code": "Wistron-HW-00071-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "0b9f27d12470a3d9d6fc592a2ad59c2a583eb24ab25cfe7400d5855bfd5117dc",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00071-V005.",
+    "next_source_row_verified": "Functionality|69|Wistron-HW-00072-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : Function", "test_name_items": "PSU rule redundent",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Check if system could power on with 1 PSU connected with power cable. Add PSU one by one and check if system could power on.\n2. Boot system to OS with full PSU.\n3. Remove power cable and PSU of 1st slot. And check if system is still normal or shutdown.\n4. Plug PSU and power cable. Check LED of PSU.\n5. Repeat steps 3~4 to all the reset of PSU.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. System should be unable to power on with 2PSU\n2. System should not shutdowm when hot-remove one PSU\n3. System should shutdowm when hot-remove two PSU",
+    "script": null, "attended_time": "60", "machine_time": "60", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this case powers the SUT with increasing PSU counts and hot-removes a PSU to check redundancy - each step physically adds/removes PSU modules and power cords at the machine and observes whether the system powers on/off. A person must be present; agent cannot insert/remove PSUs or pull power cords over SSH.",
+      "ai_logs_output": "operator physically equips/removes PSUs and power cords per the quantity matrix and records whether the SUT powers on; agent cannot do the physical PSU/AC operations.",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly recognizes physical PSU/cord actions, but assumes a quantity matrix that the contradictory source never establishes.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 preserves the human physical core and adds a hard pre-run owner correction for the two-PSU contradiction.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1759-1781: historical NO review did not analyze the quantity contradiction."]
+  },
+  "original_test_intent": "Physically exercise the platform PSU population/redundancy rules by booting across approved PSU counts and removing/restoring PSU modules and cords while observing power continuity, shutdown and PSU LED behavior.",
+  "original_method": "After the owner corrects the expected count matrix, a qualified operator populates and powers the approved configurations, boots with full PSU population, removes/restores named PSU modules and cords in the authorized order, and records physical power/LED plus BMC/host evidence at every state.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Installing/removing modules and cords and directly observing power/LED state are the core. Agent telemetry collection cannot substitute. No physical sequence may start until the conflicting two-PSU expectation is corrected.",
+  "required_inputs": [
+    "Owner-corrected PSU count/population/removal expected-state matrix",
+    "Chassis PSU slot/serial/cord/AC-feed topology and redundancy rule",
+    "Approved hot-service/isolation sequence, load/workload scope and maintenance window",
+    "Expected power-on, OS continuity, shutdown, LED, BMC and SEL states at each matrix point",
+    "OOB recovery plan, qualified operator and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not guess whether two PSUs should or should not power the system; resolve the source contradiction first.",
+    "Do not remove a sole/required feed, multiple paths or the management recovery path outside the approved matrix.",
+    "Use vendor hot-plug rules and stop on unexpected shutdown, PSU/AC fault, heat, smoke or BMC loss.",
+    "Preserve per-step logs and physical evidence.",
+    "Do not automatically proceed to the next removal or retry after any unexpected state."
+  ],
+  "agent_execution_scope": [
+    "Render the corrected count/removal matrix and capture baseline BMC/host/power evidence.",
+    "Wait for operator confirmation/photos for every population/removal/restoration state.",
+    "Collect phase-tagged PSU FRU/sensor/redundancy, SEL and host boot/reachability evidence.",
+    "Compare observed results to the corrected matrix without assigning the verdict."
+  ],
+  "engineer_actions": [
+    "Correct/approve the count matrix and physical plan.",
+    "Perform all PSU/cord/population and power actions and visual observations.",
+    "Execute recovery/safety stop and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Correctly non-runnable by the agent but incomplete: it assumes an undefined matrix and offers no BMC/host evidence method or correction for the contradictory 2PSU criterion.",
+    "executable_command_required": false,
+    "command_recommendation": "After owner correction and each operator-confirmed state, use approved read-only BMC/host/power collection; no software command may replace physical PSU/AC changes.",
+    "original_parameters_and_time_preserved": "Attended Time 60 and Machine Time 60 remain unchanged; no PSU count expectation is silently corrected."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER-CORRECTED REDUNDANCY MATRIX REQUIRED",
+    "recommended_method": "Create a state table for installed/energized PSU count, removed slots, expected boot/runtime/shutdown and LED/BMC results, then execute each authorized physical state once with synchronized evidence and recovery gates.",
+    "applicable_platform": "Only the named chassis power topology and PSU population.",
+    "supported_version": "Record platform redundancy specification, PSU/BMC firmware and collection-tool versions.",
+    "official_reference": "Project/platform PSU redundancy and AC topology documents must resolve the source count error.",
+    "difference_from_original_method": "Makes each quantity/removal state explicit while retaining physical operations and both boot/runtime coverage.",
+    "coverage_difference": "Testing one-remove tolerance does not establish two-remove shutdown or reduced-population boot behavior; each matrix row is separate coverage.",
+    "required_inputs": "Corrected matrix, topology, load, service rules, expected telemetry and recovery.",
+    "risks_limitations": "An incorrect count/feed map can unexpectedly remove all usable power or management access."
+  },
+  "project_override_considerations": "A project override may define the correct PSU counts for its chassis, but must preserve the master conflict and report the exact states executed. Completing a subset cannot be claimed as the full quantity matrix.",
+  "expected_evidence": [
+    "Owner correction and approved PSU/AC state matrix/topology",
+    "Per-state physical slot/serial/cord photos/checklist and LED/power observations",
+    "Phase-tagged BMC FRU/sensors/redundancy/SEL and host boot/reachability",
+    "Unexpected-state stop/recovery and final restored population",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The procedure begins with one PSU and adds units to test power-on, while criterion 1 says the system should be unable to power on with 2PSU. This is incompatible with the later one-removal survival/two-removal shutdown expectations unless a missing larger population rule is supplied."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The core is unequivocally a manual physical redundancy test. The contradictory expected count prevents readiness and verdict but does not change the MANUAL ONLY capability; it is tracked as NEEDS_ENGINEER_DECISION/SOURCE_CONFLICT rather than permanent automation BLOCKED."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with human-only physical work; add the missing source conflict and evidence matrix.",
+    "gpt_v2": "Agree with MANUAL ONLY and its hard pre-run correction, topology and recovery gates.",
+    "v3_1_improvement": "Separates automation capability from execution readiness and records the true contradiction without guessing a corrected count."
+  },
+  "review_improvement": "This review retains the full physical redundancy scope but refuses to guess the likely count typo, turning each approved population state into traceable evidence.",
+  "independent_technical_reasoning": "The physical core remains manual regardless of which count is correct. The conflict affects safe execution and expected outcomes, not whether a person must manipulate PSUs. Therefore MANUAL ONLY plus NEEDS_ENGINEER_DECISION is more precise than classifying every missing expected value as BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 68, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 68 source_ref",
+    "history": "review_round_02_functionality.md lines 1759-1781", "external_sources": []
+  },
+  "no_automatic_retry": "Each approved matrix state is performed once. Any unexpected power, PSU, BMC or recovery result requires evidence preservation and stop; no further removal/restoration or retry is automatic.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

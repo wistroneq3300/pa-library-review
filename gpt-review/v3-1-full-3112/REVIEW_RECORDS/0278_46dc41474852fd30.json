@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 278,
+  "library_sequence": 87,
+  "source_key": "Functionality|88|Wistron-HW-00091-V002",
+  "case_variant_id": "46dc41474852fd30",
+  "source_ref": {"sheet": "Functionality", "source_row": 88, "code": "Wistron-HW-00091-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "a54271e074a57628f6ff60cc1fb5f2292f512c1492d61440e46c2e2f4b3fe06d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00091-V002.",
+    "next_source_row_verified": "Functionality|89|Wistron-HW-00092-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "NIC LED Check (Link)",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check the status of Link  LED.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. OFF - Link is not eastablished or System is OFF\n2. LED color should match the speed definition\n3. Need to confirm: 1G Lan, PDB BMC NIC, BMC dedicate NIC",
+    "script": null, "attended_time": "35", "machine_time": "35", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none", "ai_commands": "-- not runnable by agent: NIC LED Check (Link) requires visually inspecting the physical Link LED (color/solid/off per speed) on the NIC/PDB/BMC ports; that is a physical/visual check a person must perform at the machine - the agent cannot see LEDs over SSH.", "ai_logs_output": "operator visually records Link LED state (off/green/amber, per 1G Lan, PDB BMC NIC, BMC dedicate NIC); agent cannot see LEDs.", "risk": "RISK: LED inspection is physical/visual - human only; agent must not attempt.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies physical color/state observation as unavailable to an agent.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds the per-port mapping, speed/color table, power/link context and management-path protections.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2307-2329: historical physical/NO review."]
+  },
+  "original_test_intent": "Visually verify the physical link-LED off/on/color state against the negotiated-speed definition for the required 1G LAN, PDB BMC NIC and dedicated BMC NIC ports, with link and system-power context recorded.",
+  "original_method": "A qualified observer identifies each physical port and records its link LED while the corresponding interface/peer state, negotiated speed and SUT power state are known; read-only link telemetry corroborates but does not replace sight of the LED.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PORT_MAP", "NEEDS_ACCESS", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A person must locate and visually distinguish off, lit color and any specified steady state at each physical port. Interface state or a BMC/software status cannot prove the emitted LED color.",
+  "required_inputs": [
+    "Chassis/board port map for 1G LAN, PDB BMC NIC and dedicated BMC NIC",
+    "Per-port speed-to-color/state table and whether the LED is powered in S5/system-off",
+    "Expected link partner, cable/media and negotiated speed for each linked state",
+    "Qualified observer, safe management/recovery path and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not manipulate cables, switches, routes or system power merely to create a state unless that transition is separately approved.",
+    "Protect the sole BMC/management link and retain OOB recovery before any approved link change.",
+    "Do not clear logs or claim color/state from ethtool, counters or screenshots of software inventory.",
+    "Stop on ambiguous labeling, inaccessible LED, unexpected link flap or management loss.",
+    "No automatic retry or link/power cycling."
+  ],
+  "agent_execution_scope": [
+    "Prepare the per-port observation matrix and collect read-only interface, negotiated-speed, power-state and reachability evidence.",
+    "Time-correlate operator photos/notes with the correct interface and peer context.",
+    "Identify discrepancies between visual state and digital link evidence and assemble the report.",
+    "Do not perform visual acceptance, disturb the management path or issue the verdict."
+  ],
+  "engineer_actions": [
+    "Supply the physical port and speed/color specification.",
+    "Observe and record every required link LED in the approved states.",
+    "Resolve any physical-to-logical mapping discrepancy and issue the verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The refusal to claim a remote result is correct. No command can establish emitted LED color; read-only interface telemetry is corroboration only.",
+    "executable_command_required": false,
+    "command_recommendation": "Use platform-approved read-only interface/link-speed and BMC reachability collection only to label the operator's visual evidence; no replacement command is recommended.",
+    "original_parameters_and_time_preserved": "Required port categories and source times 35/35 remain unchanged; no color mapping is guessed."
+  },
+  "modernized_recommendation": {
+    "status": "RETAIN VISUAL METHOD WITH DIGITAL CORRELATION",
+    "recommended_method": "Use a timestamped per-port worksheet/photo containing physical label, logical interface, cable/peer, system power, link state, negotiated speed and observed LED color/state.",
+    "applicable_platform": "The identified NIC/PDB/BMC hardware revision and its LED specification.",
+    "supported_version": "Record NIC/BMC/CPLD firmware and driver versions where they can affect link indication.",
+    "official_reference": "Project hardware LED definition and chassis/port map; not supplied in the row.",
+    "difference_from_original_method": "Adds deterministic port/state correlation without replacing the physical observation.",
+    "coverage_difference": "Digital telemetry can show negotiated link but cannot prove physical LED color, location or visibility.",
+    "required_inputs": "Port map, LED table, peer/link conditions, observer and management safety plan.",
+    "risks_limitations": "Sole-management ports cannot be safely disrupted just to demonstrate OFF without a separately approved recovery plan."
+  },
+  "project_override_considerations": "The project identifies which port instances exist and supplies their LED mappings. Omitting a listed category or an OFF/link-down condition changes coverage and must be recorded; the case remains MANUAL ONLY.",
+  "expected_evidence": [
+    "Port map and per-speed/state LED definition for all required NIC categories",
+    "Timestamped operator photos/notes showing each physical port and LED state/color",
+    "Correlated interface, negotiated speed, peer/cable, system-power and reachability evidence",
+    "Per-port comparison and management-health record",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title, procedure and criteria consistently define physical link-LED state/color validation; project-specific port/color values are missing inputs rather than contradictions."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "A qualified observer and platform LED table make the operation safe and clear. Their absence affects readiness but does not make the library case permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with NO/manual visual boundary and retain the prohibition on remote substitution.",
+    "gpt_v2": "Agree with MANUAL ONLY and preserve V2's port mapping and sole-management-path safeguards.",
+    "v3_1_improvement": "Separates human LED acceptance from automatable link corroboration and formal verdict ownership."
+  },
+  "review_improvement": "This review distinguishes LED-off because of link-down from LED-off because the SUT/LED rail is unpowered, preventing the same observation from being accepted without state context.",
+  "independent_technical_reasoning": "Negotiated speed and carrier state are digital properties, whereas the acceptance target is an emitted physical indication whose color mapping is hardware-specific. Therefore remote link data may corroborate but cannot satisfy the test, making MANUAL ONLY the stable classification.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 88, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 88 source_ref",
+    "history": "review_round_02_functionality.md lines 2307-2329", "external_sources": []
+  },
+  "no_automatic_retry": "On ambiguous state or link/management disturbance, stop and retain observations; do not toggle link, cable or power automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

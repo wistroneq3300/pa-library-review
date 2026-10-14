@@ -1,0 +1,167 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 206,
+  "library_sequence": 7,
+  "source_key": "Functionality|8|Wistron-HW-00007-V002",
+  "case_variant_id": "06afe6586f11b96a",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 8,
+    "code": "Wistron-HW-00007-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "702b72cbf85b7778aa226d0174ee8898f5830937558258a8700baa12308890c2",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00007-V002.",
+    "next_source_row_verified": "Functionality|9|Wistron-HW-00008-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_Latch - PSU",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check hardware accuracy\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check hardware accuracy",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "20",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"Mechanical_Latch - PSU\" mechanical check requires physically toggling the PSU latch to confirm it engages/releases correctly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"Mechanical_Latch - PSU\" (physically toggling the PSU latch to confirm it engages/releases correctly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly treats PSU latch engagement/release as physical, but supplies neither PSU-specific power-path boundaries nor a distinction between latch actuation and PSU extraction.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 preserves the physical latch scope, identifies connector and power-path risk, rejects forced repetition and removes routine log clearing.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 225-245: historical physical/NO result for the PSU latch."
+    ]
+  },
+  "original_test_intent": "Physically verify that the selected PSU's retention latch has correct fit and travel, positively engages the PSU in its installed position, releases by the intended action, and shows no binding, deformation or damage.",
+  "original_method": "A qualified engineer operates the PSU latch and observes its engagement and release against the platform PSU mechanical specification, recording the visible latch and retention states. The Master row does not itself authorize PSU withdrawal, hot-plug, power interruption or load transfer.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the correct PSU and latch, establishes the approved electrical and retention state, physically actuates the latch without unintended PSU movement, feels for binding or incomplete travel, observes engagement/release and confirms the final retained state. This tactile and physical acceptance cannot be completed through BMC or OS telemetry.",
+  "required_inputs": [
+    "PSU FRU/revision, installed bay and chassis power configuration",
+    "PSU latch/retention mechanical drawing and approved service procedure",
+    "Explicit boundary stating whether the action is latch-only or includes any PSU translation/removal",
+    "Approved powered or de-energized state and, if energized work is contemplated, redundancy/load and hot-service authorization",
+    "Acceptance criteria for latch travel, engagement, release, retention, alignment and permissible resistance",
+    "Qualified operator and evidence checklist"
+  ],
+  "safety_requirements": [
+    "Treat latch actuation and PSU removal as separate actions; do not translate or extract the PSU unless the approved project plan explicitly adds that scope.",
+    "If latch movement could unseat the PSU, verify the required power-off state or approved redundant power/load condition before touching it.",
+    "Keep hands clear of pinch points and protect the PSU connector, latch hook, bay guides and adjacent cables.",
+    "Stop on unexpected PSU movement, arcing indication, power alarm, connector resistance, cracked/deformed latch, binding or failure to retain.",
+    "Do not force or automatically repeat a failed latch action, and do not use a tool as extra leverage unless the service procedure requires it.",
+    "Do not erase pre-existing SEL, PSU or system logs for this mechanical inspection."
+  ],
+  "agent_execution_scope": [
+    "Prepare a PSU-latch checklist from the approved drawing and record the selected bay, PSU identity and permitted action.",
+    "Organize operator photographs of the initial, released, engaged and final retained states.",
+    "When an approved plan includes an electrical effect, collect PSU presence, input/output, redundancy and event evidence as a separate supporting layer.",
+    "Compare documented observations with criteria and flag anomalies without claiming latch operation or formal acceptance."
+  ],
+  "engineer_actions": [
+    "Confirm power-path safety, the latch-only versus removal boundary and physical access to the selected PSU.",
+    "Actuate the PSU latch using the specified motion while controlling the PSU against unintended movement.",
+    "Observe engagement, release, retention, alignment, resistance and visible condition, then restore the required final state.",
+    "Determine the formal verdict from the project mechanical criteria and any approved electrical evidence."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable conclusion fits the tactile PSU latch acceptance. BMC/PMBus or OS PSU telemetry may reveal a power event but cannot demonstrate latch travel, positive engagement or physical retention.",
+    "executable_command_required": false,
+    "command_recommendation": "No command is needed to complete the Master latch check. Add platform-approved PSU telemetry only if the project intentionally includes an electrical/hot-service observation; do not invent vendor commands or make telemetry a substitute for latch inspection.",
+    "original_parameters_and_time_preserved": "The original 5-minute attended and 20-minute machine fields are retained. No removal distance, cycle count, force, load threshold or hot-swap sequence is present in the source."
+  },
+  "modernized_recommendation": {
+    "status": "NO REMOTE SUBSTITUTE",
+    "recommended_method": "Use a revision-controlled PSU latch drawing and a latch-state photo/checklist that explicitly prevents unapproved PSU translation. If electrical behavior is separately in scope, correlate time-stamped PSU telemetry and events without changing the manual latch verdict boundary.",
+    "applicable_platform": "The selected PSU FRU, bay and chassis power configuration.",
+    "supported_version": "Record PSU, chassis and service-procedure revisions.",
+    "official_reference": "Applicable platform PSU mechanical drawing and approved service procedure; project power architecture is required before any energized action.",
+    "difference_from_original_method": "Defines latch-only scope, unintended-extraction protection and optional electrical corroboration while preserving the physical test.",
+    "coverage_difference": "The documented latch check preserves engagement/release/retention coverage. Telemetry-only evidence omits all mechanical acceptance; latch-only evidence does not claim PSU hot-swap or load-transfer coverage.",
+    "required_inputs": "PSU/bay identity, latch specification, allowed motion, safe power state and acceptance criteria.",
+    "risks_limitations": "A latch can appear closed without correct retention, and a healthy PSU reading does not prove the latch is mechanically engaged."
+  },
+  "project_override_considerations": "The project may approve latch actuation on a seated PSU or expand the plan to a controlled remove/reinsert operation. Any expansion must add power redundancy/load, connector, insertion and restoration controls and report that coverage separately; it must not be inferred from this Master row.",
+  "expected_evidence": [
+    "PSU FRU/serial, bay and chassis power configuration with drawing/service-procedure revision",
+    "Approved latch-only/removal scope and safe electrical state",
+    "Photographs showing initial state, release position, positive engagement and final PSU retention",
+    "Engineer observations of travel, tactile stop, alignment, binding, unintended PSU motion and damage",
+    "Optional time-correlated PSU/BMC telemetry and event records only for an approved electrical-effect plan",
+    "Safety stops, deviations, uncovered removal/hot-swap behavior and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The Item, generic Procedure/Criteria and DeepSeek fields consistently identify PSU latch engagement/release. The source is underspecified about exact PSU and motion, but contains no contradictory instructions; its timing fields remain planning metadata."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The manual latch objective is clear. PSU identity, latch limits and safe power state must be supplied before execution, but these are normal project inputs rather than an irreconcilable test-intent or safety block."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with NO/manual-only; add the essential boundary that toggling the latch does not automatically authorize PSU extraction or hot-service activity.",
+    "gpt_v2": "Retain its physical classification, connector/power-path caution, no-force stop and evidence ownership while making optional PSU telemetry explicitly secondary.",
+    "v3_1_improvement": "Separates mechanical latch completion from electrical PSU presence and hot-swap coverage, and treats missing power/project parameters as readiness inputs instead of BLOCKED."
+  },
+  "review_improvement": "The revised record provides a PSU-specific acceptance contract and closes a hazardous ambiguity: a latch release test is not permission to remove or de-energize a supply. It also prevents healthy PSU telemetry from being presented as proof of correct mechanical retention.",
+  "independent_technical_reasoning": "A PSU latch is a physical retention and release mechanism adjacent to a live power path. The core evidence is the latch's actual travel, engagement, release, retention and condition, which a remote agent cannot operate or feel. At the same time, the source does not say to withdraw the PSU, so broadening the procedure into hot-swap testing would alter intent and introduce load-transfer risk. The safe review result is MANUAL ONLY with a latch-only default boundary, project-specific power and mechanical inputs, optional telemetry only when an approved expanded plan requires it, and no permanent BLOCKED label for missing project values.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 8, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 8 source_ref",
+    "history": "review_round_02_functionality.md lines 225-245",
+    "external_sources": []
+  },
+  "no_automatic_retry": "If the latch binds, fails to retain, moves the PSU unexpectedly, produces a power event or appears damaged, stop in the safest stable state and preserve evidence. Do not repeat, force, reseat, power-cycle or clear an alarm without a newly approved response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

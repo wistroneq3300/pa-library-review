@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 247,
+  "library_sequence": 52,
+  "source_key": "Functionality|53|Wistron-HW-00056-V004",
+  "case_variant_id": "7aaaee235e872a4b",
+  "source_ref": {"sheet": "Functionality", "source_row": 53, "code": "Wistron-HW-00056-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "e199fe5c966bdc444f0480189ecd3e20c9703c7549d3437816708e0f9605299f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00056-V004.",
+    "next_source_row_verified": "Functionality|54|Wistron-HW-00057-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Capability and Inventory Reporting  APP_PROFILE_SUPPORT",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Fault behavior checking\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Fault behavior checking",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools ipmitool",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power' || echo no_pmbus_dev; echo ---i2c_buses---; sudo i2cdetect -l 2>/dev/null | grep -iE 'smbus|i2c' || echo no_i2c_tools; echo ---reg_APP_PROFILE_SUPPORT---; sudo i2cget -f -y ${PMBUS_BUS:?set PSU i2c bus} ${PMBUS_ADDR:?set PSU i2c addr} 0xEA 2>&1\"",
+      "ai_logs_output": "enumerate the hwmon PMBus + i2c buses on the DUT so the APP_PROFILE_SUPPORT register (0x0xEA, application-profile support flag) can be read; then, once the user supplies the PSU i2c bus+address, read the register with i2cget/i2ctransfer and return the FULL value. Agent returns the PMBus/i2c enumeration + the register value once bus/addr are given.",
+      "risk": "RISK: requires the PSU to be PMBus-connected and the exact PSU i2c bus/address from the board schematic; reading a raw PMBus register needs i2c-tools on the DUT. State: read-only, but target bus/address must be verified against the board before using i2cget.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It silently chooses a capability-register interpretation and guesses 0xEA, although the source procedure and criterion instead say only fault behavior checking.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly identifies two materially different intents and refuses both an unsourced register read and an undefined fault injection.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1363-1387: historical PARTIAL result based on the capability-name path but no resolution of the procedure mismatch."]
+  },
+  "original_test_intent": "UNRESOLVED SOURCE CONTRACT: the item names an APP_PROFILE_SUPPORT capability report, while both procedure and criterion demand unspecified 'Fault behavior checking'. The source does not establish whether to read a capability flag or inject and observe a fault.",
+  "original_method": "Preserve both possible source interpretations pending owner adjudication: (A) an approved APP_PROFILE_SUPPORT bitfield read and decode, or (B) an explicitly defined application-profile-related fault stimulus, response observation and recovery. Neither may be selected by inference.",
+  "automation_classification": "BLOCKED",
+  "execution_readiness": ["NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_METHOD", "NEEDS_EXPECTED", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Cannot be determined until the owner resolves the source conflict. A capability read could be fully automated; a fault behavior test could require a physical fixture/operator and automated monitoring. This review does not pre-classify either unresolved path.",
+  "required_inputs": [
+    "Owner decision selecting capability-reporting or fault-behavior intent, with corrected authoritative wording",
+    "If capability: PSU identity, APP_PROFILE_SUPPORT command/bit layout, bus mapping, expected profiles and approved reader",
+    "If fault behavior: exact stimulus, fixture, limits, expected response, blackbox/status evidence and operator duties",
+    "Target firmware/platform applicability, recovery procedure and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not use the guessed 0xEA value, forced access, a blind probe or a write while the intent is unresolved.",
+    "Do not inject a fault, change profiles or alter PSU state without an owner-defined stimulus envelope and recovery plan.",
+    "Preserve existing logs; do not erase evidence before an unresolved fault test.",
+    "Use authenticated transport and stop on bus, PSU, BMC or host anomalies.",
+    "No automatic retry, alternate-register guess, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Record the conflict and prepare the two alternative execution contracts for owner review.",
+    "After adjudication only, validate the resolved target/method and collect approved raw evidence.",
+    "For a capability path, automate read/decode/compare; for a fault path, automate only the parts permitted after operator/fixture setup.",
+    "Never issue the formal verdict."
+  ],
+  "engineer_actions": [
+    "Adjudicate and correct the authoritative test intent.",
+    "Supply the complete command/bitfield contract or fault stimulus/response/recovery contract.",
+    "Approve the resolved safe plan and assign any physical activity.",
+    "Issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Invalid for the unresolved row: it chooses a register-read intent not stated by the procedure, assumes 0xEA and byte semantics, uses forced access and insecure SSH, and cannot establish fault behavior.",
+    "executable_command_required": false,
+    "command_recommendation": "No execution command should be approved before owner adjudication. Preserve the DeepSeek command only as historical provenance, not a candidate acceptance method.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 are preserved, but they do not resolve the semantic conflict."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER ADJUDICATION REQUIRED",
+    "recommended_method": "Split or correct the case: define a capability-bit query with expected profile bits, or define a bounded application-profile fault scenario with stimulus, response and recovery. Do not combine both in one implicit test.",
+    "applicable_platform": "To be defined by the resolved PSU/application-profile specification.",
+    "supported_version": "Record the corrected source revision and applicable PSU/BMC firmware.",
+    "official_reference": "No authoritative mapping is present in the library row; project/vendor documentation must be supplied.",
+    "difference_from_original_method": "Converts an irreproducible mixed contract into one explicit, testable intent while retaining both source facts in the audit trail.",
+    "coverage_difference": "Capability support and runtime fault behavior are different coverage dimensions; one cannot substitute for the other.",
+    "required_inputs": "Owner decision plus the full selected-path specification, expected result, tool/fixture and recovery plan.",
+    "risks_limitations": "Proceeding without adjudication can produce a technically valid register read that fails to test the stated behavior, or an unsafe fault injection."
+  },
+  "project_override_considerations": "A project override may resolve this case for a named project but must not rewrite the master source silently. The override must identify which path is executed, its coverage, and that the unresolved library wording remains a source conflict.",
+  "expected_evidence": [
+    "Owner adjudication/corrected source or approved project override",
+    "Resolved intent, applicability, expected result and recovery plan",
+    "Capability path: raw response, bitfield decode, supported-profile comparison and tool status",
+    "Fault path: exact stimulus/fixture record, observed response, recovery and correlated logs",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The item explicitly names APP_PROFILE_SUPPORT capability reporting, while the procedure and criterion both specify only fault behavior checking. A static support flag and dynamic fault response are not equivalent and cannot be reconciled by parameter completion."},
+  "blocked_analysis": {"is_blocked": true, "analysis": "The necessary operation itself is unresolved, not merely a missing package or expected value. Choosing either a read or a fault stimulus would invent source policy, so execution remains BLOCKED pending owner adjudication."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its silent selection of the capability-read path and unverified 0xEA transaction.",
+    "gpt_v2": "Agree with BLOCKED and its identification of the semantic conflict; retain both alternatives explicitly for future adjudication.",
+    "v3_1_improvement": "Records a true SOURCE_CONFLICT and distinguishes unresolved operation semantics from ordinary readiness inputs."
+  },
+  "review_improvement": "This review prevents an attractive but unsupported register query from masking a contradictory fault-behavior requirement and gives the owner a precise two-path decision without creating a new global rule.",
+  "independent_technical_reasoning": "The noun APP_PROFILE_SUPPORT normally suggests a capability bitfield, but source precedence prevents replacing the explicit procedure/criterion. Conversely, 'Fault behavior checking' lacks any stimulus or expected signature. Because the two operations differ in capability, safety and evidence, this is a genuine source conflict and BLOCKED case.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 53, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 53 source_ref",
+    "history": "review_round_02_functionality.md lines 1363-1387", "external_sources": []
+  },
+  "no_automatic_retry": "No action is authorized while semantics are unresolved. After adjudication, any ambiguous response, unexpected fault or platform change must be preserved and stopped without alternate guesses, reinjection, reset or power cycle.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "BLOCKED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

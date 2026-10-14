@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 283,
+  "library_sequence": 92,
+  "source_key": "Functionality|93|Wistron-HW-00096-V002",
+  "case_variant_id": "692d6998c35d7caf",
+  "source_ref": {"sheet": "Functionality", "source_row": 93, "code": "Wistron-HW-00096-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "41177b80b196d0ca83dead20be8cae8aba3f8d4de62dfd326cd16d9fdbd51565",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00096-V002.",
+    "next_source_row_verified": "Functionality|94|Wistron-HW-00097-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "NIC (Network)", "test_name_items": "Driver reload",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Unload NIC driver. Check the network interface.\n2. Load NIC driver. Check the network interface again.\n3. Repeat steps 1-2 5 times per port.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Network interface should be removed when driver unload and should be identified when driver loaded.\n2. BMC network should work without problem during test.\n3. Need to confirm: 1G Lan",
+    "script": null, "attended_time": "40", "machine_time": "40", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "the NIC kernel driver (present) + rescan support", "ai_commands": "-- Driver reload: unload/reload the NIC driver 5x per port via sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"for i in $(seq 1 5); do echo 1 > /sys/bus/pci/drivers/${DRV_MODULE:?operator must set the NIC kernel driver module name}/remove; sleep 1; echo 1 > /sys/bus/pci/rescan; sleep 1; ip link 2>&1; done 2>&1\" and confirm the interface returns each time.", "ai_logs_output": "return the 5x unload/reload loop output (interface present/absent each iteration) so the user confirms the driver reloads cleanly and the BMC/IPMI stays up.", "risk": "RISK: removing a NIC driver drops that interface during the test; use a secondary port and never the SSH/management NIC.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It recognizes management risk but substitutes PCI driver-device remove plus global PCI rescan for the source's driver unload/load, changing reset and enumeration coverage.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 restores the vendor/kernel-supported module reload semantics and dependency mapping but treats approval/target inputs as partial automation.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2446-2471: historical PARTIAL review based on the generated PCI remove/rescan substitute."]
+  },
+  "original_test_intent": "Unload and reload the exact NIC driver five times for the approved 1G LAN target, verifying interface disappearance/reappearance, stable device identity and independent BMC network health after every cycle.",
+  "original_method": "On a non-management target with independent OOB access, use the platform-supported driver unload/load operation—not PCI remove/rescan—then verify module, PCI device, netdev, link, routes and BMC/host health per cycle and restore the original network state.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_TARGET", "NEEDS_METHOD", "NEEDS_PACKAGE", "NEEDS_DEPENDENCY_MAP", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The owner supplies the exact module/device/dependency map, validates the supported reload method and approves the isolated target/recovery plan. The five cycles and all evidence checks can then run automatically.",
+  "required_inputs": [
+    "Physical 1G port, stable netdev/PCI identity, kernel module and all interfaces/devices sharing it",
+    "Vendor/kernel-supported unload/load method and expected interface/device behavior",
+    "Routes, bonds, bridges, VFs, dependent services and workload impact map",
+    "Five-cycle timing/recovery thresholds, original-state rollback, independent OOB and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not unload a guessed/shared module or any driver serving the control, storage, console or sole-management path.",
+    "Do not substitute PCI remove/rescan for driver unload/load without a separately approved coverage change.",
+    "Stop on unload refusal, interface/PCI identity not returning, route/link loss, BMC/OOB loss or driver/kernel/PCIe error.",
+    "Preserve per-cycle logs and restore original network configuration; do not clear dmesg/SEL.",
+    "No automatic retry or next-cycle continuation after failure."
+  ],
+  "agent_execution_scope": [
+    "Validate the exact module/device/dependency/management map and supported reload commands.",
+    "Execute the approved unload/load sequence up to five cycles with per-cycle gates.",
+    "Collect module, PCI, netdev, link, route, counters, BMC/OOB and event evidence and restore state.",
+    "Stop according to the approved plan and do not issue PASS/FAIL."
+  ],
+  "engineer_actions": [
+    "Supply/approve the exact module, targets, dependencies and supported driver-reload method.",
+    "Confirm independent recovery and acceptable service interruption.",
+    "Review evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Rejected as a substitution: writing PCI driver remove and global rescan can reset/re-enumerate hardware beyond module unload/load and the path shown confuses driver directory naming with a module target. It also lacks dependency and per-cycle recovery gates.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only the owner-validated kernel/vendor driver unload/load sequence for the named module and dependencies. Preserve the original operation; do not publish a generic command until the target mapping is supplied.",
+    "original_parameters_and_time_preserved": "Five cycles per approved 1G port and source times 40/40 are retained; no PCI-rescan behavior is substituted."
+  },
+  "modernized_recommendation": {
+    "status": "VALIDATE MODULE DEPENDENCIES; AUTOMATE ORIGINAL RELOAD",
+    "recommended_method": "Drive a five-state loop that captures pre-unload state, verifies expected netdev removal while PCI identity remains as specified, reloads the driver, verifies stable identity/configuration/reachability, and gates the next cycle on full recovery.",
+    "applicable_platform": "The named NIC/kernel/driver combination with documented safe unload/reload behavior.",
+    "supported_version": "Record kernel, driver/module, NIC firmware and management-stack versions.",
+    "official_reference": "Platform-approved driver reload procedure; no unverified generic module command is added.",
+    "difference_from_original_method": "Adds dependency, isolation, identity and recovery checks without changing driver reload into PCI removal.",
+    "coverage_difference": "Preserves module lifecycle coverage; PCI hot-remove/rescan would be a different, broader reset test.",
+    "required_inputs": "Exact module/dependencies, target map, supported commands, recovery and thresholds.",
+    "risks_limitations": "One module may own multiple ports, so 'per port' cycles may actually disrupt all devices bound to it."
+  },
+  "project_override_considerations": "A project may approve a vendor-specific device-level reload instead of module-wide unload, but must state the coverage difference. Target and approval inputs do not reduce automation capability once the complete plan is fixed.",
+  "expected_evidence": [
+    "NIC/PCI/netdev/module/dependency/management map, supported method and authorization",
+    "Exact per-cycle commands/status and module/PCI/interface absence/presence timeline",
+    "Per-cycle link/routes/counters/BMC/OOB/driver/kernel/SEL health and recovery latency",
+    "Stable device identity and verified original network restoration",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The master item, steps and criteria consistently require driver unload/load. The conflict is introduced by the DeepSeek PCI remove/rescan augmentation, which is rejected rather than treated as source truth."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Exact module, dependencies and supported method are project readiness inputs. Once supplied, the original CLI lifecycle and evidence collection are fully automatable."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject its PCI remove/rescan commands because they test a different and potentially wider operation.",
+    "gpt_v2": "Retain V2's module/dependency/OOB safeguards but reclassify PARTIAL to FULLY AUTOMATABLE: owner input and approval are gates, not manual core steps.",
+    "v3_1_improvement": "Separates automation capability from execution readiness while preserving the exact source lifecycle."
+  },
+  "review_improvement": "This review prevents a PCI bus rescan from being mislabeled as driver reload and identifies module-wide blast radius that can exceed the named port.",
+  "independent_technical_reasoning": "Driver lifecycle and PCI device lifecycle are distinct. The former can be scripted end-to-end with explicit dependencies and OOB safety, so no human observation is intrinsically required. The absence of target/module details delays execution but does not make the capability partial.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 93, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 93 source_ref",
+    "history": "review_round_02_functionality.md lines 2446-2471", "external_sources": []
+  },
+  "no_automatic_retry": "Each approved cycle runs once. Any dependency, reload, identity, route, BMC/OOB or kernel anomaly stops the plan and is preserved; do not proceed or retry automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

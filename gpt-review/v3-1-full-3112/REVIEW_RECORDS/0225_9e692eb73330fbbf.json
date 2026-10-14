@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 225,
+  "library_sequence": 27,
+  "source_key": "Functionality|28|Wistron-HW-00031-V002",
+  "case_variant_id": "9e692eb73330fbbf",
+  "source_ref": {"sheet": "Functionality", "source_row": 28, "code": "Wistron-HW-00031-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "937dccc014f92e32c385ddfc04ae5c821a5486c62541029c5ced00a083e71842",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00031-V002.",
+    "next_source_row_verified": "Functionality|29|Wistron-HW-00032-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cooling",
+    "test_name_items": "Liquid Level Scale Check",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    1. Power on CDU\n2. Check the level\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. The status should be Okay and could not low level",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "60",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none (physical observation - human)",
+      "ai_commands": "-- Liquid Level Scale Check: liquid-level-scale check reads the coolant reservoir level visually; the scale reading requires a person observing the physical level indicator.",
+      "ai_logs_output": "operator records the liquid level scale reading; agent cannot see the physical level.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies the physical scale reading as human observation but omits CDU power-on gating, the undefined low-level boundary and cooling-system hazards.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds safe CDU power-on, physical indicator criteria, preserved telemetry and a prohibition on replacing the scale with an unverified remote sensor.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 716-739: historical physical/NO review for Liquid Level Scale Check."]
+  },
+  "original_test_intent": "Power on the identified CDU under the approved procedure and visually verify that its physical reservoir level indicator reports an acceptable state and is not at the platform-defined low-level boundary during the source-defined 60-minute machine interval.",
+  "original_method": "A qualified cooling operator checks the loop and reservoir before start, powers on the CDU using the approved control, directly reads and photographs the physical level scale/status, observes the specified interval, and records any low-level or cooling abnormality. The agent may collect correlated read-only telemetry but cannot certify the visual scale.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator identifies the CDU and reservoir, confirms the physical level is safe before energization, verifies loop closure and spill condition, performs or supervises CDU power-on, reads the physical scale at the required observation points, and judges Okay versus low using the model-specific markings.",
+  "required_inputs": [
+    "CDU and reservoir identity plus physical scale/status location",
+    "Manufacturer/project definition of Okay and the low-level boundary",
+    "Approved CDU pre-start, power-on, observation and shutdown procedure",
+    "Confirmation that the loop is closed, filled and free of visible leaks",
+    "Observation schedule within the original Machine Time 60 and any mapped remote sensors",
+    "Qualified operator, photographs, emergency response and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not power on the CDU if the reservoir is visibly low, the loop is open, coolant leakage is present, valves are incorrectly positioned or pump operation is not safe.",
+    "Do not guess a numeric low-level threshold or interpret an unverified remote sensor as the physical scale reading.",
+    "Stop on low-level indication, pump cavitation or fault, leak, abnormal noise/vibration, abnormal flow/pressure/temperature, spill, unexpected shutdown or loss of management access.",
+    "Keep existing thermal, cooling, BMC and SEL evidence; replace log clearing with a timestamped baseline and delta.",
+    "Do not automatically restart or power-cycle the CDU after any abnormal indication."
+  ],
+  "agent_execution_scope": [
+    "Prepare the CDU identity, scale criterion and 60-minute observation checklist.",
+    "Collect approved read-only pre-start and during-test coolant, pump, flow, pressure, temperature, alarm, host and BMC evidence where available.",
+    "Correlate operator photographs/readings with timestamps and report discrepancies between physical and remote indicators.",
+    "Compile raw evidence and deviations while leaving the physical observation and formal verdict to the engineer."
+  ],
+  "engineer_actions": [
+    "Approve the CDU power-on plan, low-level criterion and observation schedule.",
+    "Confirm safe pre-start state, power on the CDU and directly read/photograph the physical indicator.",
+    "Monitor and respond to any cooling abnormality under the approved procedure.",
+    "Evaluate physical and supporting telemetry evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The comment correctly states that the physical level requires a person, but it is not an executable method and omits the source's CDU power-on and 60-minute machine time.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only the approved CDU/BMC read-only interfaces for mapped sensors and alarms. A remote power-on command, if a project proposes one, requires explicit control-path verification and approval and still cannot replace the physical scale observation.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 60 remain unchanged. The source provides no numeric level threshold, sampling cadence, CDU control command or retry count."
+  },
+  "modernized_recommendation": {
+    "status": "PHYSICAL SCALE WITH CORRELATED CDU TELEMETRY",
+    "recommended_method": "Capture the physical level at defined timestamps across the 60-minute interval and correlate it with approved remote level/alarm, pump and thermal signals without treating those signals as a substitute unless the project validates that equivalence.",
+    "applicable_platform": "The selected CDU, reservoir, coolant loop and monitoring integration.",
+    "supported_version": "Record CDU model/firmware, scale revision, low-level specification and collector versions.",
+    "official_reference": "Applicable CDU and platform cooling documentation; no universal level threshold or sensor-to-scale equivalence is asserted.",
+    "difference_from_original_method": "Adds timestamp correlation and explicit pre-start gating while retaining direct visual acceptance and the original duration.",
+    "coverage_difference": "Remote telemetry can improve trend evidence but cannot prove the physical indicator or fluid meniscus without validated mapping.",
+    "required_inputs": "CDU identity, scale criterion, start/shutdown SOP, 60-minute observation schedule and mapped sensors.",
+    "risks_limitations": "Parallax, foam, vibration, scale ambiguity or sensor calibration can cause physical/remote disagreement requiring engineer interpretation."
+  },
+  "project_override_considerations": "A project may define additional observation points, a validated digital level channel or a different approved duration. Record the override and completed interval explicitly; do not claim the original 60-minute scope if a shorter plan is approved, and do not erase the required physical check unless the source is formally revised.",
+  "expected_evidence": [
+    "CDU/reservoir identity and approved Okay/low physical-scale criterion",
+    "Safe pre-start and power-on record with loop and spill checks",
+    "Timestamped physical-scale photographs/readings across the planned interval",
+    "Raw correlated level/alarm, pump, flow, pressure, temperature, host and BMC event evidence",
+    "Any discrepancy or safety stop, actual duration/coverage and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure's physical level check and criterion's Okay/not-low condition are consistent. The grammar and missing numeric boundary require project interpretation but do not create contradictory facts."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The physical intent is clear. The CDU-specific low-level boundary and safe power-on procedure are readiness inputs; their absence prevents execution but does not permanently block the library review."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain manual-only physical observation and add the omitted CDU start, original duration, acceptance boundary and safety gates.",
+    "gpt_v2": "Agree with no remote-sensor substitution and safe power-on; strengthen explicit 60-minute coverage and physical/remote discrepancy handling.",
+    "v3_1_improvement": "Separates the human scale result, automatable telemetry, execution duration and engineer verdict without inventing a level threshold."
+  },
+  "review_improvement": "This review preserves the overlooked Machine Time 60 and treats CDU power-on as a controlled prerequisite rather than a casual step. It defines how telemetry can support the observation while preventing an unvalidated sensor from replacing the physical acceptance criterion.",
+  "independent_technical_reasoning": "The named scale and Okay/not-low criterion require direct physical observation, so the full case is MANUAL ONLY. Instrumentation may be automated but is secondary. Because the source does not define the boundary or cadence, those values must come from the selected CDU/project plan. The 60-minute field remains part of the master baseline and must not silently disappear.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 28, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 28 source_ref",
+    "history": "review_round_02_functionality.md lines 716-739",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On low level, leak, pump fault, abnormal noise/vibration, thermal/flow/pressure alarm or platform loss, preserve the physical reading and raw telemetry and stop. Do not restart or power-cycle the CDU, refill, open valves, clear alarms or reset the platform without an approved recovery response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

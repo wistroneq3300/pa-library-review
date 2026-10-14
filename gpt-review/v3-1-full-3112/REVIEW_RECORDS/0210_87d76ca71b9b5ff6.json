@@ -1,0 +1,168 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 210,
+  "library_sequence": 11,
+  "source_key": "Functionality|12|Wistron-HW-00011-V002",
+  "case_variant_id": "87d76ca71b9b5ff6",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 12,
+    "code": "Wistron-HW-00011-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "e89958316d8c55a73fe170786e0237acb14b0f9208f14c01b44a6d11555f4ca9",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00011-V002.",
+    "next_source_row_verified": "Functionality|13|Wistron-HW-00012-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "HIB",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"HIB\" mechanical check requires visually and physically inspecting the HIB to confirm all components are seated properly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"HIB\" (visually and physically inspecting the HIB to confirm all components are seated properly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly retains physical HIB seating as operator work but omits the source's post-cycle detection clause and leaves the HIB acronym and component boundary unresolved.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 restores the approved HIB plug/reconnect cycle and optional post-action detection evidence, while requiring identity/criteria and rejecting log clearing.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 321-341: historical physical/NO result for HIB.",
+      "Other library rows use HIB inside sensor names, but they do not define this row's board expansion, connector population or plug-cycle method and are not imported as source facts."
+    ]
+  },
+  "original_test_intent": "Verify the project-defined HIB assembly and each in-scope mating interface through an approved plug/reconnect cycle: components remain physically aligned, retained and fully seated, and the devices or functions behind those interfaces return to their expected detectable state without new relevant errors.",
+  "original_method": "The project first resolves HIB to the exact board/FRU and connector population. A qualified engineer then performs and observes the physical cycle and final seating; an agent may collect only the approved interface-specific pre/post identity and error evidence after the assembly is restored.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer must identify the HIB board and every connector/component included in 'all components,' establish the board-specific safe service state, disconnect/reconnect only those interfaces, evaluate keying/alignment/resistance, secure their retention features and directly confirm final seating. Software visibility cannot establish the physical quality of these actions.",
+  "required_inputs": [
+    "Project definition of HIB, board FRU/revision and chassis location",
+    "HIB connector/component population map with cable/end-point and expected device/function identities",
+    "Board-specific service procedure, allowed plug-cycle scope, power/discharge/thermal/ESD state and retention details",
+    "Expected before/after state for every affected device, sensor or management function",
+    "Approved per-interface inventory and error collectors with environment/tool versions",
+    "Qualified operator, photographic checklist and approved test plan"
+  ],
+  "safety_requirements": [
+    "Do not expand the acronym or choose a physical board from context alone; verify the HIB identity against the project BOM and drawing.",
+    "Operate only connectors listed in the approved HIB interface map and label both ends before disconnection to prevent cross-connection.",
+    "Use the board-specific de-energized/discharged/thermal/ESD state unless a documented interface is explicitly serviceable under power.",
+    "Protect fine-pitch, board-to-board, cable and retention interfaces from skew, side load, contamination and cable strain.",
+    "Stop on unexpected resistance, pin/contact damage, unlabeled ambiguity, incomplete seating, power/thermal alert or loss of an unrelated function.",
+    "Do not automatically repeat the cycle or clear existing logs after a detection difference."
+  ],
+  "agent_execution_scope": [
+    "Check the project BOM/drawing for the authoritative HIB expansion, FRU and interface map and prepare a per-connector checklist.",
+    "Capture approved pre-action device/sensor/function snapshots without changing hardware or deleting history.",
+    "After operator restoration confirmation, run only the mapped post-action collectors and preserve raw outputs and timestamps.",
+    "Compare expected versus observed states, correlate photographs and identify unmapped coverage without issuing a verdict."
+  ],
+  "engineer_actions": [
+    "Define the HIB board, in-scope connectors/components, safe state and expected downstream functions.",
+    "Physically perform each approved disconnect/reconnect action and inspect contacts, alignment, retention and seating.",
+    "Confirm the assembly is safely restored before authorizing post-action collection.",
+    "Interpret mechanical and functional evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek's non-runnable result fits physical HIB work but does not cover the source's functional detection requirement. No specific collector can be validated until HIB and its downstream interfaces are resolved.",
+    "executable_command_required": true,
+    "command_recommendation": "Select read-only collectors per mapped HIB endpoint after the platform is known; possible evidence domains may differ, so do not copy PCIe, sensor, USB, network or BMC commands from another case by acronym association.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are retained. The Master row supplies no HIB expansion, component list, cycle count, device map, command or error threshold."
+  },
+  "modernized_recommendation": {
+    "status": "BOARD AND INTERFACE MAP REQUIRED",
+    "recommended_method": "Create a revision-controlled HIB interface matrix joining physical connector labels, mating endpoints, retention/seating evidence and expected post-cycle device/sensor/function observations. Use it to drive both operator steps and read-only before/after collection.",
+    "applicable_platform": "Only the project-selected board explicitly identified as HIB and its actual populated interfaces.",
+    "supported_version": "Record BOM, board/chassis drawing, service procedure, firmware/OS and selected evidence-tool versions.",
+    "official_reference": "Project platform BOM, HIB schematic/mechanical drawing and approved service documentation; interface-tool references are selected after mapping, not inferred here.",
+    "difference_from_original_method": "Preserves manual plug/reseat and seating acceptance while converting the ambiguous HIB label and detection clause into an auditable per-interface plan.",
+    "coverage_difference": "Complete coverage requires every approved HIB interface to have both physical and corresponding functional evidence. Generic device logs cannot demonstrate that all HIB components were cycled or seated.",
+    "required_inputs": "HIB identity, interface matrix, safe-state procedure, expected endpoints and approved collectors.",
+    "risks_limitations": "The same acronym can be platform-specific, and downstream functionality may span multiple buses or controllers; assuming one interpretation can target the wrong hardware or miss evidence."
+  },
+  "project_override_considerations": "The project may approve a defined subset of HIB connectors/components. That subset and its downstream functions must be explicit, and excluded interfaces must be reported as coverage delta. A project-specific acronym expansion or tool does not rewrite the Master source for other platforms.",
+  "expected_evidence": [
+    "Authoritative HIB expansion, board FRU/revision, chassis location and interface/component matrix",
+    "Approved service state and per-interface plug-cycle checklist with operator timestamps",
+    "Photographs of labels, visible contacts, retainers and final seating for each operated interface",
+    "Raw mapped pre/post device, sensor or management-function snapshots and relevant new error records",
+    "Expected-versus-observed results linked to each interface rather than a single generic system status",
+    "Safety stops, unmapped/excluded coverage and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Procedure and Criteria consistently require HIB component cycling, detection and seating. The undefined acronym/component set is missing project context, not a contradiction among source facts; other HIB-named cases cannot authoritatively fill it."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The generic mechanical-plus-detection intent is clear. HIB identity and interface mapping are mandatory execution inputs and may hold a project run until supplied, but they do not make independent classification or safe planning impossible."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree that physical HIB handling is not remotely executable; restore the detection objective and refuse to infer the acronym, interfaces or commands.",
+    "gpt_v2": "Retain MANUAL ONLY, operator cycle, optional evidence and no-log-clear/no-repeat boundaries; refine them into a board-specific interface matrix.",
+    "v3_1_improvement": "Makes acronym resolution and endpoint mapping explicit readiness inputs, prevents cross-case command copying, and preserves separation of tool results from the engineer verdict."
+  },
+  "review_improvement": "This record addresses the case's unique ambiguity without labeling it permanently BLOCKED: the project must first resolve HIB and its interface population, after which manual seating and mapped functional evidence can be collected safely. It also prevents unrelated sensor rows from being used to invent this board's definition.",
+  "independent_technical_reasoning": "The source supplies a concrete type of activity but only an acronym for the target. It is technically unsafe to assume what HIB expands to or which buses and connectors it contains. Nevertheless, the procedure clearly calls for physical plug/reconnect and seating, making the full case MANUAL ONLY, with automatable evidence assistance after the board is mapped. The post-cycle detection requirement must be retained, but its collectors are necessarily platform-specific. Treating the missing expansion and map as execution inputs satisfies V3.1 without fabricating commands or converting an understandable case into permanent BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 12, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 12 source_ref",
+    "history": "review_round_02_functionality.md lines 321-341 plus acronym occurrence search",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On an unmapped connector, seating/retention anomaly, missing endpoint, new relevant error or unexpected system effect, stop and preserve the interface state, photos and raw snapshots. Do not repeat, reseat another component, reset, rescan or power-cycle without engineering direction.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

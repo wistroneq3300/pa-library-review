@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 224,
+  "library_sequence": 26,
+  "source_key": "Functionality|27|Wistron-HW-00030-V002",
+  "case_variant_id": "b39693019f2cbc21",
+  "source_ref": {"sheet": "Functionality", "source_row": 27, "code": "Wistron-HW-00030-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "b313ae89176d44d3b8137d0ebb6dfb66c4ad365ccdebb9bcfae8f241e8a4ab87",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00030-V002.",
+    "next_source_row_verified": "Functionality|28|Wistron-HW-00031-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cooling",
+    "test_name_items": "Manifold",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "10",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none (physical inspection - human)",
+      "ai_commands": "-- Manifold: cooling manifold inspection is a physical visual/seal check of the liquid manifold; human-only.",
+      "ai_logs_output": "operator inspects the manifold and records; agent cannot inspect hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies a human visual/seal inspection but does not cover the manifold's mounting, multiple ports, branch-wide impact or safe isolation/recovery.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds port-by-port coverage, manifold mounting, cooling isolation, spill control and branch telemetry.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 689-712: historical physical/NO review for Manifold."]
+  },
+  "original_test_intent": "Verify that the liquid-cooling manifold is securely mounted and that every scoped port and attached branch connection is serviceable, correctly seated and sealed, then confirm the affected cooling/platform state is restored without new errors after the approved single physical cycle.",
+  "original_method": "A qualified cooling technician maps the manifold and branches, isolates and depressurizes the loop as required, inspects mounting and each scoped port, performs only the approved disconnect/reconnect action, restores all branches, and records physical evidence. The agent may collect mapped cooling telemetry after safe restoration.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The technician identifies every inlet, outlet and selected branch; establishes safe loop state; inspects manifold mounting, port bodies, seals, latches and connected-line routing; performs the approved physical cycle; and confirms seating and dry condition across the affected distribution point.",
+  "required_inputs": [
+    "Manifold part/revision, location and complete inlet/outlet/branch port map",
+    "Approved cooling shutdown, isolation, depressurization, drain/fill and restoration procedure",
+    "Mounting, port, seal, latch, routing and dry-condition criteria",
+    "PPE, spill containment, cleanup and nearby-electronics protection plan",
+    "Mapped pump, flow, pressure, temperature and leak/alarm expectations per affected branch",
+    "Qualified cooling operator, photographs, observation interval and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not disturb any manifold port while the loop is pressurized, hot or outside the exact service state.",
+    "Control all affected branches and protect energized electronics; a manifold action can release coolant or remove cooling from multiple loads.",
+    "Stop on loose mounting, wetness, residue, damaged port/seal/latch, forced fit, wrong branch, spill, abnormal pressure/flow/temperature or leak alarm.",
+    "Do not invent universal pressure, flow or leak limits and do not assume one healthy sensor covers every branch.",
+    "Preserve cooling and BMC event history; do not repeat connections, operate pumps/valves, purge, energize or reset automatically after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Build the manifold port/branch checklist and map available sensors to the affected cooling paths.",
+    "Collect approved read-only pre-action pump, flow, pressure, temperature, leak/alarm, host and BMC evidence.",
+    "After technician confirmation of complete restoration, collect the same mapped telemetry and raw event delta.",
+    "Check that evidence covers each scoped port and report gaps or deviations without accepting mounting or seals."
+  ],
+  "engineer_actions": [
+    "Approve the manifold/port scope, isolation/restoration method and branch-specific criteria.",
+    "Perform the physical mounting and port/seal inspection and authorized single connection cycle.",
+    "Confirm all branches are correctly restored and dry before recommissioning.",
+    "Evaluate physical and telemetry evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The comment correctly rejects remote execution, but it reduces a multi-port distribution assembly to a generic seal check and supplies no executable evidence collection or safety controls.",
+    "executable_command_required": true,
+    "command_recommendation": "Use only project-approved read-only cooling/BMC collectors mapped to this manifold and its branches. No command proves mounting, port seating or seals, and no pump, valve, power or recovery control is authorized.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 10 remain unchanged. The source provides one plug cycle and no port scope, pressure, flow, leak limit, observation interval, command or retry."
+  },
+  "modernized_recommendation": {
+    "status": "PORT-BY-PORT MANIFOLD TRACEABILITY",
+    "recommended_method": "Use a manifold matrix listing each scoped port, branch, seal/latch/mounting observation, photograph and mapped sensor response before and after the approved action.",
+    "applicable_platform": "The selected manifold, coolant branches, connected loads and monitoring system.",
+    "supported_version": "Record manifold/connector revisions, loop design, service procedure, CDU/BMC firmware and collector versions.",
+    "official_reference": "Applicable platform manifold, coolant-loop and service documentation; no generic flow, pressure or leak threshold is asserted.",
+    "difference_from_original_method": "Makes multi-port coverage and branch restoration auditable while retaining physical inspection and the one approved cycle.",
+    "coverage_difference": "A single manifold photo or aggregate telemetry does not cover every port and branch; project exclusions must be explicit.",
+    "required_inputs": "Port/branch map, isolation plan, physical criteria, mapped signals and observation interval.",
+    "risks_limitations": "Normal aggregate telemetry may hide an individual branch restriction or slow leak."
+  },
+  "project_override_considerations": "A project may limit the action to selected ports or replace disconnection with an inspection-only method when the service procedure forbids cycling. Record every included and excluded branch and the coverage delta; do not generalize a subset result to the entire manifold.",
+  "expected_evidence": [
+    "Manifold identity, mounting points and complete scoped port/branch matrix",
+    "Approved isolation/depressurization/restoration and containment record",
+    "Timestamped photos for mounting, each port/seal/latch, line route and surrounding dry area",
+    "Raw mapped pre/post pump, flow, pressure, temperature, leak/alarm, host and BMC event evidence",
+    "Observation interval, exclusions, safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The Mechanical-Cooling context, physical cycle and seating criterion consistently support a manifold/port inspection. Missing port and sensor definitions are project-specific inputs rather than contradictions."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The manifold acceptance intent is clear. A project needs its port map, safe isolation and criteria before execution, but the case is not permanently BLOCKED."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain manual-only but expand the analysis from one visual seal check to manifold mounting and port/branch coverage with safety stops.",
+    "gpt_v2": "Agree with multi-port and loop-isolation treatment; strengthen sensor-to-branch mapping and explicit subset coverage.",
+    "v3_1_improvement": "Separates physical manifold acceptance, mapped automation support, project scope and engineer verdict without inventing hydraulic criteria."
+  },
+  "review_improvement": "This review distinguishes the manifold from the preceding single-connector case. One defect or incomplete restoration can affect several branches, so evidence and safety controls are defined per port and connected load rather than as a generic cooling photo.",
+  "independent_technical_reasoning": "Manifold mounting, port seating and seal condition require direct physical inspection, making the core MANUAL ONLY. Automation can collect mapped telemetry, but aggregate signals cannot prove every branch or seal. Project port maps and thresholds are readiness inputs; absent values must not be guessed or converted into permanent BLOCKED status.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 27, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 27 source_ref",
+    "history": "review_round_02_functionality.md lines 689-712",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On loose mounting, port/seal damage, wetness, spill, branch mismatch, abnormal cooling telemetry or platform loss, preserve the manifold and raw state and stop. Do not reconnect another port, operate loop controls, purge, energize, reboot or reset without a cooling engineer's approved recovery plan.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 242,
+  "library_sequence": 47,
+  "source_key": "Functionality|48|Wistron-HW-00051-V005",
+  "case_variant_id": "f3b15852f7479378",
+  "source_ref": {"sheet": "Functionality", "source_row": 48, "code": "Wistron-HW-00051-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "d0ec36b57991f2cb1abe7dcf332600ce036e769fde5b1196544950a50bc5eed4",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00051-V005.",
+    "next_source_row_verified": "Functionality|49|Wistron-HW-00052-V005"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : CRPS -Fault Behavior", "test_name_items": "Capability and Inventory Reporting  PMBUS_REVISION",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Used to verify the PMBUS_REVISION the PSU is based on. This shall be set to revision 1.2.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Used to verify the PMBUS_REVISION the PSU is based on. This shall be set to revision 1.2.",
+    "script": null, "attended_time": "5", "machine_time": "5", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "PARTIAL", "ai_packages_needed": "i2c-tools ipmitool",
+      "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no \"$DUT_USER@$DUT_IP\"  \"echo ---pmbus_names---; head -n 1 /sys/class/hwmon/hwmon*/name 2>/dev/null | grep -iE 'pmbus|psu|power' || echo no_pmbus_dev; echo ---i2c_buses---; sudo i2cdetect -l 2>/dev/null | grep -iE 'smbus|i2c' || echo no_i2c_tools; echo ---reg_PMBUS_REVISION---; sudo i2cget -f -y ${PMBUS_BUS:?set PSU i2c bus} ${PMBUS_ADDR:?set PSU i2c addr} 0x98 2>&1\"",
+      "ai_logs_output": "enumerate the hwmon PMBus + i2c buses on the DUT so the PMBUS_REVISION register (0x0x98, PMBus protocol revision - expected 1.2) can be read; then, once the user supplies the PSU i2c bus+address, read the register with i2cget/i2ctransfer and return the FULL value. Agent returns the PMBus/i2c enumeration + the register value once bus/addr are given.",
+      "risk": "RISK: requires the PSU to be PMBus-connected and the exact PSU i2c bus/address from the board schematic; reading a raw PMBus register needs i2c-tools on the DUT. State: read-only, but target bus/address must be verified against the board before using i2cget.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It proposes a forced raw byte read at 0x98 and passive discovery, but the source does not establish that command value, transaction format or response encoding.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / IMPROVED. V2 correctly requires authoritative target and revision-decoding semantics and rejects forced access.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1223-1247: historical PARTIAL review and warning that enumeration alone cannot prove PMBUS_REVISION."]
+  },
+  "original_test_intent": "Read the PMBus protocol revision reported by the identified CRPS PSU, decode the complete response according to the approved PMBus/vendor definition, and verify that the reported revision is 1.2.",
+  "original_method": "With the project-supplied PSU identity, bus ownership map and exact read-only PMBUS_REVISION transaction, capture the raw response, decode its revision representation, compare it with 1.2, repeat the same read for consistency and retain management-log context.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_PACKAGE", "NEEDS_INPUT", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "No physical operation or subjective observation is part of the core revision check. Supplying the target mapping, transaction definition, package and one-user approval are readiness inputs, not manual execution.",
+  "required_inputs": [
+    "PSU model/firmware and authoritative board bus/address ownership map",
+    "Applicable PMBus/vendor document defining PMBUS_REVISION command, transfer type, width, PEC and revision encoding",
+    "Expected raw/decoded representation of revision 1.2",
+    "Approved non-forced PMBus/vendor reader and version",
+    "Authenticated DUT access, one-user approval and documented bus recovery procedure"
+  ],
+  "safety_requirements": [
+    "Do not treat 0x98 or byte-read semantics as source-confirmed; resolve them from the applicable specification and target map.",
+    "Do not use `i2cget -f`, blind scans, writes, an unapproved PEC/width or bypass BMC ownership.",
+    "Use authenticated transport without command-line passwords or disabled host verification.",
+    "Stop on target mismatch, invalid response form, bus error or PSU/BMC/host state change.",
+    "Preserve existing logs and do not automatically retry with another address, command, width, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Validate and present the resolved target and exact read-only revision transaction before approval.",
+    "Execute the approved query, retain the full raw response and transport/tool status, and decode the revision.",
+    "Repeat the unchanged read for consistency and compare the decoded value with 1.2.",
+    "Collect the before/after PSU, BMC and host evidence without issuing the formal case verdict."
+  ],
+  "engineer_actions": [
+    "Supply/approve the applicable target mapping, PMBus definition and expected 1.2 representation.",
+    "Approve the read-only path and recovery procedure.",
+    "Resolve any vendor-specific or ambiguous revision encoding.",
+    "Issue the formal PASS/FAIL/BLOCKED verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Not suitable as acceptance evidence: it assumes 0x98 and byte-read semantics, forces raw bus access, uses insecure SSH, examines only the first hwmon name, lists ipmitool without using it and describes the register as malformed `0x0x98`.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the project/vendor-approved target-locked, non-forced read-only PMBUS_REVISION transaction through authenticated transport; record the exact command only after command number, width, PEC and encoding are established.",
+    "original_parameters_and_time_preserved": "The source criterion revision 1.2, Attended Time 5 and Machine Time 5 remain unchanged."
+  },
+  "modernized_recommendation": {
+    "status": "TARGET-LOCKED READ AND DECODE",
+    "recommended_method": "Resolve the exact PMBUS_REVISION transaction from the applicable PMBus/vendor definition and board map, then capture two unchanged raw reads, decode each explicitly and compare with revision 1.2.",
+    "applicable_platform": "Only the identified CRPS PSU and mapped bus path for the approved firmware/platform.",
+    "supported_version": "Record PMBus/vendor document revision, PSU/BMC firmware and reader version.",
+    "official_reference": "Applicable project-supplied PMBus and PSU vendor documentation; no generic register or encoding is asserted by this review.",
+    "difference_from_original_method": "Adds explicit target/transaction provenance, raw-response retention and repeat consistency without changing the 1.2 requirement.",
+    "coverage_difference": "This establishes the reported protocol revision only; it does not demonstrate support for every feature of PMBus 1.2.",
+    "required_inputs": "Target map, transaction and encoding definition, expected representation, approved reader and recovery procedure.",
+    "risks_limitations": "A plausible raw byte can be falsely decoded when transaction width, nibble semantics or bus ownership is wrong."
+  },
+  "project_override_considerations": "A project may select a vendor API, BMC bridge or direct PMBus path if it preserves the same revision-register semantics and raw evidence. An override may change access method but cannot change the source-required revision 1.2 without an approved project requirement that is reported separately.",
+  "expected_evidence": [
+    "PSU identity/firmware, board bus/address map and PMBus/vendor document revision",
+    "Exact approved read-only transaction, reader version and tool exit/transport status",
+    "Two full raw PMBUS_REVISION responses with explicit encoding and decoded revision",
+    "Comparison against revision 1.2 and preserved PSU/BMC/host event delta",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Procedure and criteria consistently require the PSU's reported PMBus revision to be 1.2. Missing transaction details are inputs, not contradictory source facts."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The measurement and acceptance value are unambiguous. Target and encoding details are project readiness dependencies rather than a permanent inability to review or execute."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain the idea of raw read evidence but reject its unverified 0x98, forced access and insecure transport.",
+    "gpt_v2": "Agree with its safety gates and explicit decode requirement, but reclassify from PARTIAL because all core read/capture/decode/compare steps are automatable after inputs are supplied.",
+    "v3_1_improvement": "Separates readiness inputs from automation capability and limits the result to reported revision rather than implied full protocol conformance."
+  },
+  "review_improvement": "This review preserves the exact 1.2 criterion, removes an unsourced command assumption, defines raw-to-decoded traceability and prevents the revision read from being overstated as complete PMBus 1.2 feature compliance.",
+  "independent_technical_reasoning": "The case is a deterministic read/decode/compare operation. Once the target and transaction semantics are approved, no human manipulation or visual judgment remains in the core. It is therefore FULLY AUTOMATABLE, while an engineer retains the formal verdict and resolution of vendor-specific encoding.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 48, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 48 source_ref",
+    "history": "review_round_02_functionality.md lines 1223-1247", "external_sources": []
+  },
+  "no_automatic_retry": "On invalid response, target mismatch, bus error or platform change, preserve the exact raw state and stop. Do not force access, guess another register/address/width, reset or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

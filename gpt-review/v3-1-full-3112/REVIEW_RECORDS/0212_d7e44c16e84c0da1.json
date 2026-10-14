@@ -1,0 +1,136 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 212,
+  "library_sequence": 13,
+  "source_key": "Functionality|14|Wistron-HW-00013-V002",
+  "case_variant_id": "d7e44c16e84c0da1",
+  "source_ref": {"sheet": "Functionality", "source_row": 14, "code": "Wistron-HW-00013-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "e942b75e2a7faf6aa3cc6a0f09666586211259d0688d4e0d85eceb27dd4186d5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00013-V002.",
+    "next_source_row_verified": "Functionality|15|Wistron-HW-00014-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Fan module",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"Fan module\" mechanical check requires visually and physically inspecting the fan module to confirm it is seated and the connector mates correctly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"Fan module\" (visually and physically inspecting the fan module to confirm it is seated and the connector mates correctly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. Correctly identifies seating and connector mating as physical, but does not retain the source's post-cycle detection clause or the fan-specific thermal and rotating-part boundaries.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 preserves operator plug/reconnect, permits post-action fan/BMC evidence, adds cooling/identity checks and rejects log clearing.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 369-389: historical physical/NO result for the fan module."]
+  },
+  "original_test_intent": "Verify that each approved fan module can be physically released and reinstalled using its intended guides and connector, is fully seated and retained afterward, and returns to the expected fan-presence, speed and fault state without new relevant errors.",
+  "original_method": "A qualified engineer performs and observes the fan-module plug cycle, connector alignment, retention and final seating. The agent may capture approved fan/BMC telemetry before and after restoration, but telemetry cannot prove the physical seating operation.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies the correct fan bay, establishes the approved powered or de-energized service state, releases and controls the module, keeps fingers and objects clear of the rotor, aligns its guides and connector, seats and latches it, and directly checks retention and abnormal mechanical resistance. The agent cannot perform or certify these steps.",
+  "required_inputs": [
+    "Fan-module FRU/revision, bay-to-sensor map and chassis cooling-zone topology",
+    "Platform fan service procedure stating whether this module is hot-serviceable",
+    "Approved system load, redundancy, thermal limits and maximum permitted removal interval if energized service is allowed",
+    "Mechanical seating/retention criteria and expected post-cycle fan presence, RPM/PWM and fault state",
+    "Approved BMC/management collector and qualified operator evidence checklist"
+  ],
+  "safety_requirements": [
+    "Do not assume hot-swap capability from the removable form factor; use the exact platform procedure and approved load/thermal state.",
+    "Keep hands, tools, loose clothing and cables clear of rotating blades and wait for coast-down when required.",
+    "Monitor the affected cooling zone during any approved energized removal and obey the project's thermal or redundancy stop threshold.",
+    "Protect guide rails, blind-mate connector and latch from skew or force; stop on damage, binding, incomplete seating or unexpected resistance.",
+    "Stop on fan fault, missing sensor, abnormal RPM, thermal escalation or unrelated fan-control change; do not automatically repeat or swap another module.",
+    "Preserve pre-existing BMC/SEL evidence and use time correlation rather than clearing logs."
+  ],
+  "agent_execution_scope": [
+    "Prepare the fan bay/FRU/sensor mapping and operator checklist from the approved service document.",
+    "Collect approved pre-action fan presence, RPM/PWM, temperatures and events without changing fan control.",
+    "After operator confirmation of final seating, collect the same mapped observations and preserve raw timestamps.",
+    "Compare the states, organize photos and flag thermal, identity or fault differences without assigning the verdict."
+  ],
+  "engineer_actions": [
+    "Approve the exact module, service state, load, thermal controls and permitted removal interval.",
+    "Physically release, remove/reconnect as authorized, seat and latch the fan module while observing connector and guide condition.",
+    "Confirm final retention and authorize post-action monitoring.",
+    "Judge the combined mechanical and cooling evidence and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The non-runnable marker fits the core physical operation, but omits the source's detection-without-error objective. Platform-mapped BMC fan telemetry is valid supporting evidence after the engineer restores the module.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the project's established read-only fan/BMC collector for the selected bay and sensor names. Do not prescribe a generic sensor command until the bay map and BMC interface are confirmed, and do not send fan-control or reset commands.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are retained. The source has no cycle count, fan bay, removal interval, thermal limit, RPM/PWM range or command."
+  },
+  "modernized_recommendation": {
+    "status": "PLATFORM FAN MAP REQUIRED",
+    "recommended_method": "Combine a manual bay-specific removal/seating checklist with time-aligned fan presence, RPM/PWM, cooling-zone temperature and event snapshots before and after the single approved cycle.",
+    "applicable_platform": "The selected chassis, fan-module FRU, bay and BMC firmware mapping.",
+    "supported_version": "Record chassis/service document, BMC firmware and evidence-tool versions.",
+    "official_reference": "Applicable platform fan-module service and thermal-control documentation; no universal hot-swap interval or sensor name is asserted.",
+    "difference_from_original_method": "Adds fan identity, rotating-part and thermal-continuity controls while preserving physical seating and post-cycle detection.",
+    "coverage_difference": "Full coverage includes manual seating/retention plus the mapped fan's functional return. Telemetry alone cannot prove connector seating, and photos alone cannot prove cooling recovery.",
+    "required_inputs": "Fan/bay map, serviceability, thermal plan, mechanical criteria, expected telemetry and approved collector.",
+    "risks_limitations": "RPM may recover despite marginal retention, and transient control changes can be normal only if the platform specification defines them."
+  },
+  "project_override_considerations": "The project may select one or more fan bays and a bounded hot-service interval. It must record untested bays/zones and any reduced load as coverage differences. Completion of that plan does not establish every fan module or unrestricted hot-swap coverage.",
+  "expected_evidence": [
+    "Fan FRU/serial, bay and sensor/cooling-zone mapping",
+    "Approved service state, load, thermal limits and operator timestamps",
+    "Photographs of module/connector condition, guides, latch and final seating",
+    "Raw mapped pre/post presence, RPM/PWM, temperature and fault/event evidence",
+    "Any thermal or cooling redundancy stop plus uncovered fan bays",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Plug-cycle detection and proper seating are complementary. The missing fan map and hot-service limits are project inputs, not contradictory source requirements."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The fan-module mechanical and post-cycle objectives are clear. Platform identity, serviceability and thermal limits gate execution but do not make the review permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain physical/NO, but restore post-cycle detection and add rotor, cooling-zone and thermal stop controls.",
+    "gpt_v2": "Agree with MANUAL ONLY and post-action BMC evidence; refine it into a bay-specific telemetry and cooling-continuity check without assuming hot-swap.",
+    "v3_1_improvement": "Separates the manual core from agent evidence collection, project thermal inputs, tool result and engineer verdict, with no automatic retry."
+  },
+  "review_improvement": "The review makes the fan case auditable by connecting the exact physical bay and module to its management sensor and cooling zone. It retains both seating and detection coverage while preventing an unverified hot-swap assumption.",
+  "independent_technical_reasoning": "Fan-module acceptance depends on human handling, guide alignment, connector mating, latch engagement and retention, so the complete case is MANUAL ONLY. The source also requires post-cycle detection without error, which can be supported by mapped fan telemetry. Fan service uniquely introduces rotating-part and rapid thermal risks; safe execution therefore needs the exact bay, hot-service authorization, load and thermal stop limits. Those missing project values affect readiness, not the capability classification or a permanent BLOCKED decision.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 14, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 14 source_ref",
+    "history": "review_round_02_functionality.md lines 369-389",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On mechanical anomaly, missing/faulted fan, abnormal RPM or thermal escalation, preserve the state and raw evidence and stop under the approved thermal plan. Do not reseat again, change fan control, reset BMC or power-cycle without a new engineer-approved response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

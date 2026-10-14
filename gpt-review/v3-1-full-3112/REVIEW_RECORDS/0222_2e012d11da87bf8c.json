@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 222,
+  "library_sequence": 24,
+  "source_key": "Functionality|25|Wistron-HW-00028-V002",
+  "case_variant_id": "2e012d11da87bf8c",
+  "source_ref": {"sheet": "Functionality", "source_row": 25, "code": "Wistron-HW-00028-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "be9f5cb76dce73a900da1be0094a8f15fddd7c452b0f62e5be0a6868d177ff1f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00028-V002.",
+    "next_source_row_verified": "Functionality|26|Wistron-HW-00029-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -AVL",
+    "test_name_items": "Mechanical_Connection",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check the connections of nodes, components and cables\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. All parts should be connected and positioned correctly\n2. There should be no mismatch, bent pin or cable routing issue when connecting",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: Mechanical_Connection is a physical/mechanical check (component seating, plug/unplug ease, cable routing, no bent pin / mismatch / routing issue) that requires a person at the machine handling the hardware - the agent cannot inspect or plug/unplug physical parts over SSH.",
+      "ai_logs_output": "operator performs the mechanical check on Mechanical_Connection and records photos + pass/fail (parts positioned correctly, no bent pin/cable-routing issue); agent cannot produce this physical evidence.",
+      "risk": "RISK: mechanical/visual inspection + physical plug/unplug is human-only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly recognizes the visual/mechanical boundary but generically implies plug/unplug even though this source row requires connection inspection, not an explicit cycle.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 requires a connection drawing and target list and makes any plug cycle conditional on an approved procedure.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 637-658: historical physical/NO result for Mechanical_Connection."]
+  },
+  "original_test_intent": "Inspect every scoped node, component and cable connection against the approved Mechanical-AVL design to verify correct mating and position, absence of mismatch or bent pins, and acceptable cable routing. The source does not require disconnecting or cycling an already connected part.",
+  "original_method": "A qualified engineer follows an approved connection map, visually and physically examines each scoped endpoint and route, and records photographs and defects. The agent may prepare the coverage matrix and collect associated read-only state, but it must not add a plug cycle that the source did not request.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer resolves the connection topology, inspects mating identity, orientation, pin and latch condition, seating, strain relief and cable route at every listed node/component/cable endpoint, and judges physical compliance from direct access.",
+  "required_inputs": [
+    "Approved node/component/cable connection diagram and complete target list",
+    "Connector identities, orientations, retention features and mating criteria",
+    "Cable route, bend, clearance, strain and keep-out requirements",
+    "Power/ESD handling rules for inspection and any separately approved manipulation",
+    "Expected device or management state for supporting evidence",
+    "Qualified operator, per-connection photo checklist and one-user approval"
+  ],
+  "safety_requirements": [
+    "Inspection alone does not authorize disconnecting, reseating or plug-cycling a connection; obtain explicit project approval if manipulation is added.",
+    "Do not touch an energized or hazardous connection unless the exact procedure permits it; protect ESD-sensitive nodes and adjacent cabling.",
+    "Do not force, rotate or probe a connector, and stop on mismatch, bent pins, damaged latch, pinching, abrasion, excessive strain or unsafe proximity to heat or moving parts.",
+    "Preserve dmesg, syslog and SEL history and use timestamped deltas instead of clearing evidence.",
+    "Do not automatically reseat, reroute, reboot or power-cycle to investigate an observed defect."
+  ],
+  "agent_execution_scope": [
+    "Build a traceable connection checklist from approved topology and routing drawings.",
+    "Collect permitted read-only pre-inspection device, host and BMC state without changing connections.",
+    "Index operator photographs to each endpoint and flag missing coverage or observable discrepancies for engineer review.",
+    "Collect approved post-inspection event deltas only if the plan includes a physical action."
+  ],
+  "engineer_actions": [
+    "Approve the connection scope and whether observation-only or any physical manipulation is permitted.",
+    "Inspect every scoped endpoint and route and document physical condition.",
+    "Stop and control any mismatch, damage or unsafe route without unplanned corrective action.",
+    "Apply Mechanical-AVL criteria and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual-only marker fits the source, but its plug/unplug wording exceeds this row. Remote status can support inventory but cannot prove pin condition, mating, position or route.",
+    "executable_command_required": false,
+    "command_recommendation": "No universal command applies across nodes, components and cables. Use only project-mapped read-only inventory or health collection when it supports a named connection; do not infer mechanical compliance from normal enumeration.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. The source defines neither a plug cycle nor loop count, command, correction action or retry."
+  },
+  "modernized_recommendation": {
+    "status": "TOPOLOGY-BASED PHYSICAL COVERAGE MATRIX",
+    "recommended_method": "Map every source-to-destination connection to connector IDs and route checkpoints, attach photographs for mating, retention and routing, and correlate only relevant read-only device state.",
+    "applicable_platform": "The selected node interconnect, component population and cable topology.",
+    "supported_version": "Record chassis, node, board, cable and drawing revisions plus any evidence-tool versions.",
+    "official_reference": "Applicable Mechanical-AVL, connection and cable-routing documentation; no generic connector or bend criteria are asserted.",
+    "difference_from_original_method": "Makes all connections auditable and distinguishes inspection from optional manipulation without changing the acceptance criteria.",
+    "coverage_difference": "Complete coverage requires all scoped endpoints and routes. Software-visible endpoints alone do not cover passive, hidden or mechanical features.",
+    "required_inputs": "Topology, connector map, routing rules, inspection scope and acceptance criteria.",
+    "risks_limitations": "Photographs may not reveal hidden pins or internal contact quality; normal device state does not prove physical conformance."
+  },
+  "project_override_considerations": "A project may narrow inspection to defined nodes, assemblies or cable paths and may separately approve a reseat. Record both the subset and any added manipulation; do not report uninspected connections or an unrequested plug cycle as master-case coverage.",
+  "expected_evidence": [
+    "Connection inventory with source/destination, connector ID and approved orientation",
+    "Per-connection checklist and timestamped photographs of mating, pins/latches, position and routing",
+    "Route exceptions, inaccessible areas and any observed mismatch or damage",
+    "Mapped read-only device/BMC state and preserved event delta where applicable",
+    "Safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure and both criteria consistently require inspection of connection, position, pins and routing. The absent topology is a project input, not an internal contradiction."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The inspection intent is clear. A specific project cannot execute until it supplies the target list and drawings, but the library review is not blocked."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain NO/manual-only, remove the unsupported assumption that a plug cycle is part of this row, and require endpoint/route traceability.",
+    "gpt_v2": "Agree with connection drawings and conditional post-action evidence; explicitly separate observation-only source scope from a project-added manipulation.",
+    "v3_1_improvement": "Defines complete physical coverage and prevents an automation or safety regression caused by unrequested reseating."
+  },
+  "review_improvement": "This review retains the source as a connection inspection rather than turning it into the neighboring plug-cycle pattern. It also requires an auditable node/component/cable topology so generic photos cannot stand in for complete coverage.",
+  "independent_technical_reasoning": "Correct mating, position, pin condition and routing are physical properties, so the core cannot be completed remotely. Because the source only says check, adding disconnect/reconnect would increase risk and alter the method. Read-only state is useful supporting evidence but cannot replace direct inspection. Missing drawings affect execution readiness rather than creating a permanent BLOCKED classification.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 25, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 25 source_ref",
+    "history": "review_round_02_functionality.md lines 637-658",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On mismatch, bent pin, damaged latch, unsafe routing, missing endpoint or new system error, preserve photographs and raw state and stop. Do not reseat, reroute, substitute a cable, reboot or power-cycle unless a new engineer-approved plan authorizes it.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

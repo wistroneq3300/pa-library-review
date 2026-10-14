@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 271,
+  "library_sequence": 79,
+  "source_key": "Functionality|80|Wistron-HW-00083-V004",
+  "case_variant_id": "adba94b047d40d12",
+  "source_ref": {"sheet": "Functionality", "source_row": 80, "code": "Wistron-HW-00083-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "88495e4122c92f9e1b64d239aee823848f46a6ebd6d34a1b618780f046db9627",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00083-V004.",
+    "next_source_row_verified": "Functionality|81|Wistron-HW-00084-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Memory", "test_name_items": "RDIMM",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    Check memory  information from BIOS and OS and BMC web hardware inventory.\nIn BIOS:\n    - Enter \"System Setup -> Memory Configuration -> Memory Topology\"\n      Check memory information.\nIn Linux:\n    - Check memory information with commands:\n       1. cat /proc/meminfo\n       2. Download and install the latest dmidecode tool from (http://download.savannah.gnu.org/releases/dmidecode/).\n           dmidecode -t memory\n       3. free (Check total available and free memory size)\n\nIn BMC web hardware inventory:\nCheck the memory healthy is \"OK\", and the detail CPU information is correct (include Name, Vendor, Model, Firmware verison and Status (State).\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Total memory number and size should be correct as DIMM installed.\n2. Total available memory size should be the same in the output of meminfo and free.\n3. Need to confirm: slot 1 to slot 24",
+    "script": null, "attended_time": "1", "machine_time": "1", "latest_updated": "2025-11-11",
+    "deepseek_columns": {"ai_can_execute": "YES", "ai_packages_needed": "dmidecode", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"sudo dmidecode -t memory 2>&1\"", "ai_logs_output": "return FULL raw `dmidecode -t memory` output (each DIMM: size/type/speed/rank/slot) so user confirms total memory number+size match installed DIMMs and are identical in OS. No RISK (read-only).", "risk": null, "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "YES. It captures only Linux DMI and omits BIOS, BMC WebUI, meminfo/free reconciliation and explicit slots 1-24.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION / CHANGED. V2 restores the 24-slot map and cross-layer comparison but still treats visual BIOS/BMC acceptance as PARTIAL.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2085 onward: historical YES review centered on dmidecode."]
+  },
+  "original_test_intent": "Verify the installed RDIMM population, per-slot identity and capacity across BIOS memory topology, Linux DMI/OS totals and BMC WebUI health for slots 1 through 24, subject to correction of the BMC sentence that unexpectedly asks for CPU details.",
+  "original_method": "An engineer records BIOS Setup and BMC WebUI memory topology/health, while read-only Linux dmidecode, /proc/meminfo and free data are collected and reconciled with the approved physical 24-slot RDIMM population.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_ENGINEER_DECISION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_PACKAGE", "NEEDS_ACCESS", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "BIOS Setup navigation and BMC WebUI memory-health/inventory observation are explicit acceptance views. The agent can automate Linux collection and comparison but cannot attest to those GUI observations or the installed physical population.",
+  "required_inputs": [
+    "Motherboard revision and authoritative logical-to-physical slot 1-24 map",
+    "Expected RDIMM part number, size, type, speed, rank, ECC and population per slot",
+    "Expected BIOS and BMC WebUI fields plus correction of 'detail CPU information' in the memory step",
+    "Memory reservation rule for comparing DMI installed capacity, MemTotal and free total",
+    "Validated dmidecode package/privilege, engineer GUI access and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not download an unverified latest binary, modify memory/BIOS settings or clear diagnostic logs.",
+    "Use read-only DMI privilege and authenticated transport; preserve exact raw output and tool status.",
+    "Do not infer physical slot numbers from DMI locator strings without the board mapping.",
+    "Stop on missing/duplicate slot identity, ECC/health alarms, unsupported population or unexplained BIOS/BMC/OS disagreement.",
+    "No DIMM reseat, reboot or automatic retry."
+  ],
+  "agent_execution_scope": [
+    "Prepare the expected 24-slot matrix and Linux/GUI evidence checklist.",
+    "Collect full approved dmidecode, /proc/meminfo and unit-normalized free output.",
+    "Reconcile populated/empty slots and installed versus OS-visible capacity, incorporating engineer-supplied BIOS/BMC artifacts.",
+    "Flag the CPU-versus-memory wording conflict and do not issue the verdict."
+  ],
+  "engineer_actions": [
+    "Correct whether the BMC step expects memory fields or additional CPU inventory.",
+    "Observe and record BIOS memory topology and BMC WebUI memory health/details for every applicable slot.",
+    "Confirm the physical population/reservation policy and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Useful Linux DMI evidence but incomplete: it omits meminfo/free, BIOS, BMC WebUI and the 24-slot expected map. Password SSH and disabled host-key validation are unsuitable defaults; sudo/package availability must be approved.",
+    "executable_command_required": false,
+    "command_recommendation": "Preserve full `dmidecode -t memory`, `/proc/meminfo` and `free -b` outputs with timestamps using a validated package and managed privilege; do not scrape-install an unspecified latest release.",
+    "original_parameters_and_time_preserved": "Slots 1-24, Attended Time 1 and Machine Time 1 remain source facts; no RDIMM population is invented."
+  },
+  "modernized_recommendation": {
+    "status": "CROSS-LAYER INVENTORY WITH SOURCE CORRECTION",
+    "recommended_method": "Build a 24-row slot matrix containing expected module FRU/spec, BIOS entry, SMBIOS device locator/attributes, BMC WebUI health/inventory and physical-population evidence; separately reconcile installed and OS-usable capacity.",
+    "applicable_platform": "The identified board/BIOS/BMC whose slot locators are mapped to physical slots 1-24.",
+    "supported_version": "Record board, BIOS, BMC, OS/kernel and dmidecode versions.",
+    "official_reference": "Project board slot/population specification and approved OS package repository; the source URL does not establish a validated version.",
+    "difference_from_original_method": "Adds explicit per-slot correlation and evidence-preserving package handling while retaining all BIOS, OS and BMC views.",
+    "coverage_difference": "Linux automation improves reconciliation but does not replace BIOS/BMC WebUI observation or physical-population truth.",
+    "required_inputs": "Slot map, RDIMM BOM/spec, GUI fields, reservation rule and approved tools.",
+    "risks_limitations": "SMBIOS locators may not equal chassis numbering, and OS available/free values are not the same as installed capacity."
+  },
+  "project_override_considerations": "A project may define fewer applicable slots only if its board topology differs and the override records coverage. Supplying a map/package does not make the required BIOS/BMC WebUI acceptance automated.",
+  "expected_evidence": [
+    "Board/BIOS/BMC identity, authoritative 24-slot map and expected RDIMM population",
+    "Timestamped BIOS Setup and BMC WebUI memory topology/health artifacts",
+    "Full raw dmidecode, /proc/meminfo and free -b output with version and status",
+    "Per-slot and installed/reserved/OS-visible capacity reconciliation plus ECC/SEL/kernel health",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The row is an RDIMM/memory test and first asks BMC memory health, then requires detailed CPU information (Name, Vendor, Model, Firmware, State). CPU inventory is not interchangeable with DIMM inventory and needs owner correction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The dominant memory intent and required views remain executable. The conflicting BMC subclause can be recorded for engineer correction without making the complete manual capability unknowable."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Reject YES because a single DMI command cannot perform the explicit BIOS/BMC WebUI observations or full capacity reconciliation.",
+    "gpt_v2": "Retain V2's 24-slot map and package safeguards but reclassify PARTIAL to MANUAL ONLY due to required GUI observations, and elevate the CPU wording to SOURCE_CONFLICT.",
+    "v3_1_improvement": "Separates manual acceptance, automatable evidence, readiness and the local source wording defect without globally blocking the case."
+  },
+  "review_improvement": "This review preserves all three inventory planes, identifies the erroneous CPU-detail clause, and avoids treating DMI's aggregate/per-device data as proof of BIOS/BMC or physical slot correctness.",
+  "independent_technical_reasoning": "A correct DMI total can coexist with a mislabeled physical slot or BMC health problem. Since the source explicitly calls for BIOS Setup and BMC WebUI evidence, those are core observations. The CPU-detail phrase is a real local conflict but does not obscure that the overall test is RDIMM population validation.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 80, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 80 source_ref",
+    "history": "review_round_02_functionality.md lines 2085 onward", "external_sources": []
+  },
+  "no_automatic_retry": "On slot ambiguity, access error, health alarm or capacity mismatch, preserve raw outputs and stop; do not install another tool, change BIOS, reseat memory or reboot automatically.",
+  "review_outcome": "SOURCE_CONFLICT", "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

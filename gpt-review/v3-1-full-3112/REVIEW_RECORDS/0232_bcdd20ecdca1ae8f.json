@@ -1,0 +1,154 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 232,
+  "library_sequence": 37,
+  "source_key": "Functionality|38|Wistron-HW-00041-V004",
+  "case_variant_id": "bcdd20ecdca1ae8f",
+  "source_ref": {"sheet": "Functionality", "source_row": 38, "code": "Wistron-HW-00041-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "438de2baed2c385a97ced2b0494e3305c8a20220de7e4b172bd6d42e701a0b05",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00041-V004.",
+    "next_source_row_verified": "Functionality|39|Wistron-HW-00042-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Power Supply - L10 : CRPS -LED",
+    "test_name_items": "LED_behavior_from_PWM_Low_State",
+    "procedure": "�iBefore Test�j\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    �iDuring Test�j\n    Check LED status if PWM Low state\n\n    �iAfter Test�j\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check LED status if PWM Low state",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "5",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU LED case requires visually reading the PSU LED behavior driven from a PWM low state on the physical PSU bezel and photographing it; a person must be physically present at the machine to see the LED state/color/blink pattern. The agent cannot see or photograph the PSU LED over SSH.",
+      "ai_logs_output": "operator visually inspects and photographs the PSU LED behavior driven from a PWM low state and records it; agent cannot observe the physical PSU LED.",
+      "risk": "RISK: physical/visual PSU check at the machine - human only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly reserves the physical LED observation for a person but does not expose that the PWM-low stimulus itself is undefined and potentially hazardous.",
+    "gpt_v2": "BLOCKED / CHANGED. V2 correctly forbids guessed electrical or register stimulus, but V3.1 treats missing project stimulus/spec/tool inputs as readiness conditions rather than a permanent semantic block.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 record exists for this source key; the audited adjacent PWM-high variant is MANUAL ONLY with owner-defined safe stimulus.",
+    "related_revisions": ["review_round_02_functionality.md lines 968-988: historical physical/NO result for PWM Low State.", "Final Audit sequence 24 and V3.1 record 0024 for the adjacent PWM High State: missing stimulus method is readiness, while direct LED observation remains MANUAL ONLY."]
+  },
+  "original_test_intent": "Apply or establish the platform-defined safe PWM-low condition at the identified CRPS interface and directly verify the corresponding physical PSU LED response against the vendor mapping.",
+  "original_method": "The owner supplies the exact signal/control definition and approved fixture or platform method; a qualified operator establishes that condition, confirms stimulus evidence, directly observes and records the target LED, then safely removes/restores the stimulus. The agent may synchronize evidence and collect read-only telemetry only after all parameters are approved.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_TOOL", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The operator connects or selects the approved low-state source/control under the documented interface limits, verifies the stimulus is actually present, observes the physical bezel response, and restores the interface. Direct optical acceptance remains human even if a project automates stimulus timing.",
+  "required_inputs": [
+    "Target PSU, LED and exact PWM signal/interface or approved control-path identity",
+    "Vendor-defined logic-low range, polarity, frequency/duty context, source/sink and isolation limits",
+    "Compatible approved fixture/tool and version or validated platform control method",
+    "Expected LED color/pattern/timing for PWM low and observation window",
+    "Safe connection, stimulus removal/restoration and recovery procedure",
+    "Qualified operator, time-linked visual capture and one-user approval"
+  ],
+  "safety_requirements": [
+    "Do not guess a pin, voltage, current, polarity, duty cycle, PMBus/I2C register, GPIO or control command and do not blind-probe the PSU interface.",
+    "Do not attach a signal source until fixture compatibility, electrical limits, reference/grounding and isolation are documented for the exact PSU/platform.",
+    "Do not infer PWM low from a software label; retain measured or tool-reported stimulus proof linked to the observation time.",
+    "Stop on out-of-range stimulus, wrong LED response, heat, smoke, arcing, PSU/power change or BMC/host loss; preserve all logs.",
+    "Do not repeat the stimulus, reset, reflash or power-cycle automatically after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Validate that supplied stimulus parameters and tool identity match the approved project documentation without inventing values.",
+    "Collect read-only PSU/BMC identity, power and health baselines and synchronize them with fixture output and operator media.",
+    "Analyze the submitted LED recording and compare expected/actual observations after the human applies the stimulus.",
+    "Report gaps or abnormal responses without applying the stimulus or issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Supply and approve the PWM-low electrical/control contract, fixture and recovery method.",
+    "Apply and verify the low state, directly observe the LED and capture the physical evidence.",
+    "Remove/restore the stimulus safely and confirm platform stability.",
+    "Interpret the visual response and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The no-remote-observation conclusion is correct, but the comment is not a safe stimulus method and cannot establish PWM low.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain the original non-executable/manual statement until the owner supplies an exact vendor-approved fixture or control method. Do not modernize with a guessed PMBus, GPIO, PWM or bench-generator procedure.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 5 remain unchanged. Signal location, low threshold, frequency/duty context, fixture, expected response and recovery are not supplied."
+  },
+  "modernized_recommendation": {
+    "status": "OWNER-DEFINED SAFE STIMULUS REQUIRED",
+    "recommended_method": "Synchronize measured fixture/control evidence for the exact PWM-low condition with identity-linked operator video and read-only PSU telemetry, using only the approved interface contract.",
+    "applicable_platform": "Only the PSU/platform/fixture combination documented by the project owner.",
+    "supported_version": "Record PSU/chassis firmware, signal specification, fixture/tool and procedure revisions.",
+    "official_reference": "Exact vendor/platform PWM and LED behavior documentation must be supplied; no public generic substitute is asserted.",
+    "difference_from_original_method": "Adds stimulus provenance, electrical safety and synchronized evidence without replacing visual acceptance.",
+    "coverage_difference": "A validated low-state method plus visual response completes this case; telemetry alone or an unverified command does not.",
+    "required_inputs": "Signal contract, fixture/control method, expected LED response and recovery path.",
+    "risks_limitations": "The label does not reveal whether low means voltage level, duty state or logical command, so cross-platform reuse is unsafe."
+  },
+  "project_override_considerations": "A project may implement the low state with an approved fixture or validated platform control. Record actual voltage/logic, timing and tool version. Missing common-library parameters do not make the case permanently BLOCKED, but no execution may start until the project supplies them.",
+  "expected_evidence": [
+    "PSU/LED and PWM interface identity plus governing specification revision",
+    "Approved low-state electrical/control parameters and fixture/tool version",
+    "Timestamped stimulus output and identity-linked operator photo/video of the LED",
+    "Raw pre/post PSU/BMC power/health and preserved event delta",
+    "Restoration record, safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The procedure and criterion consistently ask for LED behavior under PWM low. The source omits the stimulus contract and expected response, but omission is not a contradiction."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The test intent and required physical observation are understandable. Missing signal, fixture and expected response prevent execution now but are project readiness inputs under V3.1, consistent with the audited PWM-high sibling."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep the human visual boundary and add the missing electrical-stimulus and recovery controls.",
+    "gpt_v2": "Change permanent BLOCKED to MANUAL ONLY with conditional readiness; retain every prohibition against guessed stimulus and unsafe interface access.",
+    "v3_1_improvement": "Applies the audited PWM-high precedent symmetrically, separating capability from readiness without lowering safety."
+  },
+  "review_improvement": "This review corrects V2's permanent BLOCKED classification while preserving its safety analysis. The core remains a human LED observation under an owner-defined stimulus, and execution stays gated until the exact low-state method is supplied.",
+  "independent_technical_reasoning": "The missing PWM contract makes execution unsafe today but does not make the intended test unknowable. Because final acceptance is direct physical LED behavior, the stable capability class is MANUAL ONLY. V3.1 explicitly separates readiness inputs from capability and the audited adjacent high-state case confirms the same treatment. No generic electrical method is introduced.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 38, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 38 source_ref",
+    "history": "review_round_02_functionality.md lines 968-988 and audited adjacent PWM-high V3.1/Final Audit records",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On stimulus mismatch, unexpected LED response, electrical/thermal abnormality or platform-state change, stop and preserve fixture output, media and raw logs. Remove the stimulus only by the approved procedure; do not apply it again, try alternate pins/registers, reset, reflash, reboot or power-cycle automatically.",
+  "review_outcome": "RECLASSIFIED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

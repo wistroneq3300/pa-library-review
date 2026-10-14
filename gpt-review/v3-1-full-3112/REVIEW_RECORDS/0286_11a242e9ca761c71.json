@@ -1,0 +1,111 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 286,
+  "library_sequence": 95,
+  "source_key": "Functionality|96|Wistron-HW-00099-V003",
+  "case_variant_id": "11a242e9ca761c71",
+  "source_ref": {"sheet": "Functionality", "source_row": 96, "code": "Wistron-HW-00099-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "4966df52cb62ea2a1af31b18145f9fa2bde2929c097cda810d34d43aa403fb98",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00099-V003.",
+    "next_source_row_verified": "Functionality|97|Wistron-HW-00100-V003"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Front and Rear Panel", "test_name_items": "Front and Rear_Resolution Multiplexing Functionality",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. With a monitor already plugged into the back video out port of the system, hot plug a different monitor into the front video out port.\n2. Now hot unplug and hot plug one of the connected monitors and reconnect it. Repeat this process with each of the monitors connected to the system several times.\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. To verify that you can hot plug a monitor into a multiple VGA port system without loss of video functionality and with proper detection of monitors.\n2. Only one VGA port is driven at a time and the front VGA port overrides the back VGA port when both are connected.",
+    "script": null, "attended_time": "20", "machine_time": "20", "latest_updated": "2025-09-12",
+    "deepseek_columns": {"ai_can_execute": "PARTIAL", "ai_packages_needed": "x11-utils mesa-utils xrandr", "ai_commands": "sshpass -p \"$DUT_PASS\" ssh -o StrictHostKeyChecking=no $DUT_USER@$DUT_IP \"xrandr --query 2>&1; cat /sys/class/drm/card*/modes 2>/dev/null; for m in /sys/class/drm/card*/status; do echo $m=$(cat $m 2>/dev/null); done 2>&1\"", "ai_logs_output": "return FULL `xrandr` + DRM connector status/modes to identify the front/rear display mux present; confirming mux switching output actually multiplexes needs a person to observe the physical monitors.", "risk": "RISK: display tests need a physical monitor head + a person to observe rendering; agent runs the read-only/headless probe for mode/status evidence only.", "remark": null}
+  },
+  "historical_reviews": {
+    "deepseek": "PARTIAL. It supplies connector/mode corroboration and admits physical observation, but cannot perform the repeated cable operations or prove the active output and front-over-rear priority.",
+    "gpt_v2": "MANUAL ONLY / CHANGED. V2 correctly elevates physical hot-plug and visible mux behavior to manual core activity and adds recovery/restore controls.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 2530-2554: historical PARTIAL review based on read-only connector telemetry."]
+  },
+  "original_test_intent": "Physically exercise front/rear VGA hot-plug multiplexing and verify monitor detection, continuous/recovered visible video and the specified rule that only one output is driven and the front port overrides the rear when both are connected.",
+  "original_method": "A qualified operator begins with the rear monitor connected, hot-plugs the front monitor, repeats disconnect/reconnect for each mapped monitor/port the approved number of times, and visually records which monitor is driven; the agent correlates DRM/EDID/driver events.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_ENGINEER_ACTION", "NEEDS_SPEC", "NEEDS_EXPECTED", "NEEDS_REPEAT_COUNT", "NEEDS_ACCESS", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Cable hot-plug/unplug and visible determination of active output, video continuity and priority are the core test. Read-only connector state cannot substitute for the physical actions or the observed picture.",
+  "required_inputs": [
+    "Exact front/rear VGA port map and mux priority specification",
+    "Approved monitor/cable/EDID matrix, resolution state and numeric repeat count for each connector",
+    "Expected detection/switch/recovery timing and visible acceptance conditions",
+    "Qualified operator, known-good display path, KVM/OOB recovery and one-user approval"
+  ],
+  "safety_requirements": [
+    "The agent must not manipulate monitors/cables or claim mux output from DRM status alone.",
+    "Do not disconnect the only console without an independent KVM/OOB path and known-good restoration sequence.",
+    "Stop on black screen, connector/EDID failure, unexpected simultaneous output, driver crash or port/cable damage.",
+    "Preserve per-step display/driver/log evidence and do not clear logs.",
+    "No automatic retry or additional hot-plug cycles after an anomaly."
+  ],
+  "agent_execution_scope": [
+    "Prepare the exact physical step/expected-output matrix and capture baseline connector/mode/EDID state.",
+    "Collect read-only xrandr/DRM/driver/host evidence after each operator-confirmed physical transition.",
+    "Correlate timestamps, active connector state and operator visual evidence and assemble restoration results.",
+    "Do not perform cable actions, visible acceptance or the verdict."
+  ],
+  "engineer_actions": [
+    "Define the connector/monitor/repetition matrix and approve the physical sequence.",
+    "Perform every hot-plug/unplug/reconnect and visually record output continuity and priority.",
+    "Restore the approved display configuration and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Useful supporting Linux connector evidence, but shell-side variable expansion/quoting and interface naming must be validated. It cannot prove visible output, mux priority or physical repetition and does not cover Windows if required.",
+    "executable_command_required": false,
+    "command_recommendation": "Retain complete unfiltered approved xrandr/DRM connector, mode and EDID evidence around each physical state through managed authentication; no software replacement for hot-plug is recommended.",
+    "original_parameters_and_time_preserved": "Front-over-rear priority, both physical ports and source times 20/20 are retained; 'several times' remains an owner-supplied repeat count."
+  },
+  "modernized_recommendation": {
+    "status": "MANUAL STATE MATRIX WITH DIGITAL CORRELATION",
+    "recommended_method": "Define each rear-only, dual-connected/front-active, front-disconnected/rear-recovery and repeated reconnect state with monitor IDs, expected driven output, timing, visual result and connector/EDID logs.",
+    "applicable_platform": "The specified dual-VGA/mux hardware, firmware, display driver, ports, monitors and cables.",
+    "supported_version": "Record BMC/CPLD/BIOS/display-driver/OS versions and monitor EDIDs.",
+    "official_reference": "Project front/rear VGA mux and connector specification; not supplied in the row.",
+    "difference_from_original_method": "Converts 'several times' into a traceable state sequence without replacing physical actions.",
+    "coverage_difference": "DRM status proves detection; only physical observation proves visible active-port priority and video quality/continuity.",
+    "required_inputs": "Mux map, monitors/cables, repeat count, timing/acceptance, operator and recovery.",
+    "risks_limitations": "Some muxes expose only one logical connector, so software status may not identify the physical active port."
+  },
+  "project_override_considerations": "A project sets the repeat count and supported monitor/cable combinations. It may complete that approved plan only and must not claim undefined additional repetitions; the physical/visual core remains MANUAL ONLY.",
+  "expected_evidence": [
+    "Front/rear connector and mux priority map plus monitor/cable/EDID/repetition plan",
+    "Timestamped operator photos/notes for every hot-plug state and visible active output",
+    "Raw xrandr/DRM/EDID/driver/log state correlated with each physical transition",
+    "Console/KVM/BMC recovery and final restored connection state",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The procedure and criteria consistently define front/rear physical hot-plug multiplexing and front-port priority. The undefined repetition count is a readiness parameter, not contradictory intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "With a port map, numeric repeat count and qualified operator, the manual operation is clear and safe enough to plan; therefore it is not permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Retain connector telemetry as corroboration but reject PARTIAL as the final classification because all decisive actions/observations are physical.",
+    "gpt_v2": "Agree with MANUAL ONLY and preserve V2's recovery, repeat-count and per-step evidence controls.",
+    "v3_1_improvement": "Separates supporting automation from the manual mux acceptance and formal verdict."
+  },
+  "review_improvement": "This review turns an undefined repeated cable exercise into explicit mux states and recognizes that connector detection and visible active-output priority are separate acceptance facts.",
+  "independent_technical_reasoning": "A mux can report a connector as detected while routing no visible signal to that monitor, or it may expose only one logical connector. Because the test's defining actions and expected priority are physical/visual, MANUAL ONLY is the only non-substitutive classification.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 96, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 96 source_ref",
+    "history": "review_round_02_functionality.md lines 2530-2554", "external_sources": []
+  },
+  "no_automatic_retry": "Any black screen, detection, mux-priority or recovery anomaly stops the physical sequence and preserves that state; do not repeat cable actions automatically.",
+  "review_outcome": "RECLASSIFIED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

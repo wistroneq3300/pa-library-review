@@ -1,0 +1,165 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 205,
+  "library_sequence": 6,
+  "source_key": "Functionality|7|Wistron-HW-00006-V004",
+  "case_variant_id": "1887f34b0acd9ec8",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 7,
+    "code": "Wistron-HW-00006-V004"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "37161236cfa7ac9f22884e344cc3410e9e1f94aeaf359f408cb54edd1857abc5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "next_source_row_verified": "Functionality|8|Wistron-HW-00007-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -System",
+    "test_name_items": "Mechanical_Handle - AMD GPU Sled",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    Check hardware accuracy\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "Check hardware accuracy",
+    "script": null,
+    "attended_time": "5",
+    "machine_time": "20",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: the \"Mechanical_Handle - AMD GPU Sled\" mechanical check requires physically operating the AMD-GPU-sled handle to confirm the sled slides and locks correctly; all of these are physical/visual hardware operations that the agent cannot perform or visually confirm over SSH. Criteria are judged by hand/eye on the physical unit.",
+      "ai_logs_output": "operator physically performs \"Mechanical_Handle - AMD GPU Sled\" (physically operating the AMD-GPU-sled handle to confirm the sled slides and locks correctly) and reports the visual/mechanical result; agent cannot operate or see the hardware.",
+      "risk": null,
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. The row-level review correctly keeps AMD GPU sled handle movement outside remote execution, but does not define safe support, rail/connector boundaries or acceptance evidence.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 identifies slide, seating, lock/release, rail, latch, connector and chassis exposure, and rejects clearing logs for the physical check.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": [
+      "review_round_02_functionality.md lines 201-221: historical physical/NO result for the AMD GPU sled handle."
+    ]
+  },
+  "original_test_intent": "Verify the AMD GPU sled service handle as the platform's intended mechanical interface: the sled follows its guides, seats at the defined position, and its handle/latch reaches the specified locked and released states without interference or damage.",
+  "original_method": "A qualified engineer physically operates and observes the AMD GPU sled handle and preserves photographs. Because the Master source states only 'hardware accuracy,' the selected AMD sled/chassis mechanical drawing and service procedure define travel, seating and lock acceptance.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": [
+    "NEEDS_SPEC",
+    "NEEDS_INPUT",
+    "NEEDS_APPROVAL",
+    "NEEDS_MANUAL_ACTION"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer must place the AMD GPU sled in the approved safe state, support it as required, actuate the correct service handle, observe guide/rail tracking and final seating, evaluate binding or abnormal resistance, confirm lock and release behavior, and inspect the restored position. Remote inventory, BMC telemetry or photographs alone cannot establish tactile travel and retention.",
+  "required_inputs": [
+    "Selected AMD GPU sled FRU/revision, chassis bay and handle/latch configuration",
+    "Applicable AMD GPU sled installation/removal drawing and approved service procedure",
+    "Permitted handle operation and sled travel for this review, including whether connector disengagement is in scope",
+    "Approved power, stored-energy, thermal-cooldown, ESD and mechanical-support conditions",
+    "Acceptance criteria for guide engagement, travel, seating, locking, release, retention and allowable resistance",
+    "Qualified operator and case-specific photographic checklist"
+  ],
+  "safety_requirements": [
+    "Do not treat the handle as a lifting point unless the selected platform procedure explicitly permits it; support the AMD GPU sled with the specified fixture or personnel method.",
+    "Before travel that can disengage internal connections, establish the approved de-energized, discharged and cooled state and verify that no cable, coolant or other platform interface remains constrained.",
+    "Maintain alignment with the correct guides and protect blind-mate power/high-speed connectors and adjacent chassis structures.",
+    "Stop at unexpected resistance, loss of support, skew, handle/latch deformation, incomplete lock/release, collision, connector concern or any visible damage.",
+    "Do not force the mechanism or automatically repeat an unsuccessful movement.",
+    "Preserve pre-existing host and BMC logs; the source's generic clear-log step is not required to judge the mechanical handle."
+  ],
+  "agent_execution_scope": [
+    "Build an operator checklist from the approved AMD GPU sled mechanical drawing and service procedure.",
+    "Label and organize operator-supplied evidence for initial state, handle states, guide alignment, seating and final restoration.",
+    "If the approved plan includes disconnect/reconnect, collect a separate post-restoration AMD GPU inventory/topology snapshot as supporting evidence.",
+    "Identify omitted mechanical coverage and summarize observations without claiming physical operation or a formal verdict."
+  ],
+  "engineer_actions": [
+    "Confirm the exact AMD sled/bay configuration and safe support, electrical, thermal and ESD state.",
+    "Physically operate the intended handle through only the approved travel while observing guides, alignment, resistance, seating and latch state.",
+    "Inspect the handle, rails, retention features, accessible connector area and chassis for interference or damage, then restore the approved position.",
+    "Apply the platform-specific criteria and issue the formal PASS/FAIL/BLOCKED verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The DeepSeek non-runnable statement is appropriate for AMD sled handle movement. Any OS/BMC GPU status command is ancillary after an approved reconnection and cannot verify handle force, guide tracking, lock engagement or mechanical retention.",
+    "executable_command_required": false,
+    "command_recommendation": "No command replaces this acceptance. Do not add reset, rescan, power-cycle or accelerator diagnostics unless the project explicitly includes electrical restoration evidence and supplies the platform-approved method.",
+    "original_parameters_and_time_preserved": "Attended Time 5 and Machine Time 20 remain unchanged planning metadata. The source specifies no cycle count, travel distance, force limit, removal depth or power transition."
+  },
+  "modernized_recommendation": {
+    "status": "NO REMOTE SUBSTITUTE",
+    "recommended_method": "Keep the physical AMD sled-handle inspection, but execute it against a revision-controlled sled/bay drawing, a supported-travel plan, explicit stop conditions and a state-by-state evidence checklist. Use electrical enumeration only as secondary restoration evidence when that operation is approved.",
+    "applicable_platform": "The project-selected AMD GPU sled and mating chassis bay revision.",
+    "supported_version": "Record the mechanical drawing and service-procedure revisions used for the selected hardware.",
+    "official_reference": "Applicable platform AMD GPU sled mechanical drawing and approved service procedure; no generic force, lift or connector limit is inferred.",
+    "difference_from_original_method": "Clarifies support, permitted travel, interface protection and evidence boundaries while retaining the original manual handle check.",
+    "coverage_difference": "No loss when all approved handle, guide, seating, lock and release states are observed. A photo-only or inventory-only check omits tactile travel and retention coverage.",
+    "required_inputs": "AMD sled/bay revision, permitted motion, approved handling and safe state, mechanical criteria and operator evidence plan.",
+    "risks_limitations": "External photographs may miss internal guide or connector conditions, and successful device enumeration does not prove the sled is correctly retained."
+  },
+  "project_override_considerations": "A project may limit the action to handle actuation or partial sled travel when full withdrawal/disconnection is not approved. The record must name the untested guide, connector, removal and restoration coverage; this bounded plan completion must not be represented as completion of a fuller Master interpretation.",
+  "expected_evidence": [
+    "AMD GPU sled FRU/serial, bay and chassis revision with drawing/service-procedure identifiers",
+    "Approved support, power, discharge, cooldown, ESD and permitted-travel state",
+    "Photographs of initial seating, handle/latch released and locked states, visible guide alignment and restored state",
+    "Engineer observations for resistance, skew, interference, seating, retention, release and visible damage",
+    "Optional post-restoration AMD GPU inventory/topology and relevant error records only when reconnection is within the approved plan",
+    "All safety stops, coverage deviations and the separately owned engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Items, Procedure, Criteria and same-row DeepSeek fields all point to a physical AMD GPU sled handle accuracy check. The generic wording and 5/20 time fields are incomplete planning detail, not mutually incompatible source facts."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The physical target and acceptance category are understandable. Hardware revision, safe handling details and limits are project readiness inputs; their absence does not justify a permanent BLOCKED classification."
+  },
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree that the AMD GPU sled action cannot be performed or verified over SSH; add platform-specific support, safe-state, rail/connector and evidence controls.",
+    "gpt_v2": "Retain MANUAL ONLY, the no-force/no-log-clear boundaries and operator evidence ownership, while separating optional electrical restoration evidence from the mechanical result.",
+    "v3_1_improvement": "Makes permitted sled travel an explicit project choice and prevents a partial-motion plan or successful GPU enumeration from silently claiming complete mechanical coverage."
+  },
+  "review_improvement": "This review resolves the vague 'hardware accuracy' phrase into AMD-sled-specific handle, guide, seating and retention observations, identifies the support and interface hazards that gate execution, and records how a restricted project motion changes coverage without altering the Master source.",
+  "independent_technical_reasoning": "This row is not an accelerator health test; it is a mechanical interface test named for an AMD GPU sled. Valid acceptance depends on human control of the assembly and direct observation of the service handle, guides, alignment, resistance, seating and locking states. Those properties cannot be concluded from OS/BMC reachability or device enumeration. Because the source does not define whether the sled is merely unlocked, partially translated or fully withdrawn, the project must bound the permitted motion against the exact drawing and safe-state procedure. That missing execution detail is a readiness dependency, not a reason to change MANUAL ONLY to BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 7, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 7 source_ref",
+    "history": "review_round_02_functionality.md lines 201-221",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On binding, skew, unsupported load, incomplete lock/release, suspected interface damage or abnormal restoration, preserve the position and evidence. Do not request another movement, force correction, rescan, reset or power recovery without an engineer-approved response.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "original_method_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

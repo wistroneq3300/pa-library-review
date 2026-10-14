@@ -1,0 +1,136 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 215,
+  "library_sequence": 16,
+  "source_key": "Functionality|17|Wistron-HW-00016-V002",
+  "case_variant_id": "4941feb117fedff6",
+  "source_ref": {"sheet": "Functionality", "source_row": 17, "code": "Wistron-HW-00016-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "c6442c282868474b4946c0b842a2ba7307da7be38537e8f2636bbec35381c287",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00016-V002.",
+    "next_source_row_verified": "Functionality|18|Wistron-HW-00017-V002"
+  },
+  "source_snapshot": {
+    "sub_function": "HW",
+    "test_set": "Mechanical -Cable",
+    "test_name_items": "PCIe Routing",
+    "procedure": "\ufffdiBefore Test\ufffdj\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    \ufffdiDuring Test\ufffdj\n    1. All components are easy to plug and unplug.\n2. Check if device still be detect without error after plug cycle\n\n    \ufffdiAfter Test\ufffdj\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "All components should be seated properly",
+    "script": null,
+    "attended_time": "10",
+    "machine_time": "0",
+    "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: PCIe Routing is a physical/mechanical check of cable/component connections and seating (easy plug/unplug, device still detected after plug cycle, no bent pin / routing issue) that requires a person at the machine - agent cannot manipulate cables over SSH.",
+      "ai_logs_output": "operator checks PCIe Routing connections/seating + photos + plug-cycle detect status; agent cannot produce this physical evidence.",
+      "risk": "RISK: cable/connector inspection + plug cycling is human-only; agent must not attempt.",
+      "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. Correctly recognizes the physical route/seating boundary and plug-cycle evidence, but does not define endpoints, route controls, link identity or cooling/mechanical interference.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 adds endpoint mapping, bend/clearance/strain inspection, preserved logs and post-cycle PCIe evidence.",
+    "v3": "No V3 Pilot record exists for this source key.",
+    "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 445-465: historical physical/NO result for PCIe Routing."]
+  },
+  "original_test_intent": "Verify the complete physical route of each selected PCIe cable or interconnect, including correct endpoints, path, clearance, bend control, strain relief and seating, then confirm the expected PCIe endpoint remains detected without new relevant errors after the approved plug cycle.",
+  "original_method": "A qualified engineer traces the cable end to end against the platform routing drawing, inspects and performs the approved connector cycle, restores the designed path and seating, and records photographs. An agent may collect mapped PCIe evidence after restoration but cannot judge the physical route.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_APPROVAL", "NEEDS_MANUAL_ACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The engineer identifies both endpoints and every routing checkpoint, inspects clearances from fans, sharp edges, hot surfaces and moving/service parts, evaluates bend and torsion, confirms clips and strain relief, performs only the approved disconnect/reconnect, and verifies both ends are fully seated and retained. These spatial and tactile properties require direct human observation.",
+  "required_inputs": [
+    "PCIe cable/interconnect FRU, endpoint-to-endpoint and slot/device topology map",
+    "Approved routing drawing with clips, channels, keep-outs, bend/clearance and strain-relief criteria",
+    "Connector service procedure, power/hot-plug state and ESD requirements",
+    "Expected endpoint identity and post-cycle topology/link/error criteria",
+    "Qualified operator and photo plan covering the full route rather than only endpoints"
+  ],
+  "safety_requirements": [
+    "Do not move or disconnect a PCIe cable under power unless the exact interface and platform procedure explicitly authorize hot-plug.",
+    "Do not infer a generic bend radius or pull limit; use the selected cable/drawing values and avoid torsion, connector side load and conductor strain.",
+    "Keep routing out of fan paths, service travel, sharp edges, pinch points and hot surfaces and preserve required airflow/clearance.",
+    "Stop on chafing, crushed/kinked cable, damaged latch/contact, route mismatch, unexpected resistance, thermal obstruction or incomplete seating.",
+    "Do not automatically repeat the cycle, reroute ad hoc, rescan, reset or reboot after endpoint loss or a new PCIe error.",
+    "Preserve existing kernel/BMC evidence; use timestamped deltas rather than clearing logs."
+  ],
+  "agent_execution_scope": [
+    "Convert the approved route drawing into an endpoint and checkpoint checklist with required photo views.",
+    "Capture the approved pre-action PCIe endpoint/topology and error baseline without altering devices.",
+    "After operator confirmation, collect mapped post-action topology/link observations and new relevant errors.",
+    "Organize full-route images and raw diffs and flag missing coverage without claiming routing acceptance."
+  ],
+  "engineer_actions": [
+    "Approve the cable, endpoints, route, plug-cycle state and acceptance limits.",
+    "Trace and inspect the full route, perform the approved connector cycle and restore clips, clearances, strain relief and seating.",
+    "Confirm physical completion and safe state before post-check collection.",
+    "Apply routing and functional criteria and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its physical non-runnable reason is applicable. The row nevertheless has a post-cycle detection objective, so project-approved PCIe topology/error collection is useful only as supporting evidence after the manual route and connector work.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the existing project PCIe inventory/error collector after mapping both cable endpoints and expected device identity. Do not hard-code a transient BDF or run rescan/reset/recovery as part of evidence collection.",
+    "original_parameters_and_time_preserved": "Attended Time 10 and Machine Time 0 are preserved. No cable ID, route values, cycle count, endpoint identity, link criteria or command is supplied."
+  },
+  "modernized_recommendation": {
+    "status": "PLATFORM ROUTING MAP REQUIRED",
+    "recommended_method": "Use a route-checkpoint photo matrix linked to cable FRU and both PCIe endpoints, then correlate the single approved cycle with immutable pre/post endpoint and error evidence.",
+    "applicable_platform": "The selected chassis, PCIe cable/interconnect, endpoints and firmware/OS topology.",
+    "supported_version": "Record routing drawing, cable/chassis revision, service procedure, firmware/OS and evidence-tool versions.",
+    "official_reference": "Applicable platform routing/mechanical and connector-service documentation; no universal bend, clearance or link value is asserted.",
+    "difference_from_original_method": "Makes end-to-end route coverage and functional correlation explicit without replacing the manual inspection.",
+    "coverage_difference": "A complete record covers the full route, both connectors and endpoint restoration. Endpoint enumeration cannot prove route compliance, and endpoint-only photos omit mid-route hazards.",
+    "required_inputs": "Cable/endpoints, drawing, route limits, service state, expected topology/link properties and collectors.",
+    "risks_limitations": "Hidden route sections can remain unverified, and a device can enumerate despite excessive bend, chafing or marginal seating."
+  },
+  "project_override_considerations": "A project may select specific cables or observable route segments. It must record inaccessible sections, excluded endpoints and any omitted link checks as coverage delta; an approved subset does not complete all platform PCIe routing.",
+  "expected_evidence": [
+    "Cable FRU/label, both endpoints, slot/device map and approved routing drawing revision",
+    "Checklist and photographs for endpoints, clips/channels, bends, clearances, keep-outs and strain relief across the full route",
+    "Approved physical cycle and safe-state timestamps",
+    "Raw pre/post mapped endpoint/topology and specified link evidence",
+    "Relevant kernel/BMC/PCIe error delta and management-path status",
+    "Excluded route sections, safety stops and separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The plug-cycle/detection Procedure and seating Criteria support the PCIe Routing objective. Missing cable-specific geometry and topology are project inputs, not contradictory Master statements."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "End-to-end routing, seating and post-cycle detection are clear. The drawing, topology and limits gate execution but do not make the case permanently blocked."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Keep NO/manual-only; add endpoint identity, end-to-end route checkpoints, airflow/thermal interference and mapped post-cycle evidence.",
+    "gpt_v2": "Agree with V2's route-specific physical criteria, preserved logs and agent-only post-action collection while making full-route coverage explicit.",
+    "v3_1_improvement": "Separates manual route acceptance from automatable endpoint evidence and records inaccessible segments or selected-cable scope as coverage delta."
+  },
+  "review_improvement": "This record treats routing as an end-to-end spatial test rather than a generic connector reseat. It requires both endpoints and all route checkpoints, covers airflow and service interference, and prevents successful PCIe enumeration from masking a mechanically unsafe path.",
+  "independent_technical_reasoning": "PCIe routing acceptance depends on physical path, bend, strain, clearance, clips and seating. Those cannot be established remotely, and the source requires a physical plug cycle, so the complete case is MANUAL ONLY. Device detection after the cycle remains a distinct automatable evidence layer. The exact routing geometry and topology are platform facts; requiring them as readiness inputs preserves the Master intent without inventing generic limits or marking the case BLOCKED.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 17, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 17 source_ref",
+    "history": "review_round_02_functionality.md lines 445-465",
+    "external_sources": []
+  },
+  "no_automatic_retry": "On route/connector damage, unsafe interference, missing endpoint, new PCIe error or management loss, preserve photos and raw state and stop. Do not reroute, reseat again, rescan, reset or reboot without a new engineer-approved plan.",
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}

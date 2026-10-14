@@ -1,0 +1,117 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 258,
+  "library_sequence": 63,
+  "source_key": "Functionality|64|Wistron-HW-00067-V004",
+  "case_variant_id": "a1cf528bcc45c49b",
+  "source_ref": {"sheet": "Functionality", "source_row": 64, "code": "Wistron-HW-00067-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true, "original_row_sha256": "f2cefef868bd37fc54ff5a54b497ff6406bfde907ab4be86b74a3696d5ff026f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true, "tests_json_cross_check": true, "gpt_v2_read": true,
+    "historical_revision_search": true, "duplicate_code_search": true,
+    "duplicate_code_result": "No other XLSX row uses Wistron-HW-00067-V004; other remove-test codes are separate variants.",
+    "next_source_row_verified": "Functionality|65|Wistron-HW-00068-V004"
+  },
+  "source_snapshot": {
+    "sub_function": "HW", "test_set": "Power Supply - L10 : Function", "test_name_items": "Remove",
+    "procedure": "【Before Test】\n    1. Check that the SUT configuration (e.g., hardware, firmware, drivers, etc.) matches the specifications/recipe definition.\n    2. Clear logs (e.g., dmesg, syslog, SEL, etc.).\n\n    【During Test】\n    1. Unplug the power cord of PSU 1\n2. Remove PSU 1\n3. Check PSU 1 status by BMC (sensor list and SEL)\n4. Check status of all other modules in use (USB devices, FANs, PCIe cards, BMC etc)\n5. Insert PSU 1\n6. Plug back the power cord of PSU1\n7. Check PSU 1 status again with vision and BMC\n8. Check status of all other modules in use ( USB devices, FANs, PCIe cards, BMC etc)\n9. Repeat step 1 to step 8 for all the rest of PSU\n\n    【After Test】\n    1. Collect test results and photos, and save them to specific folders.\n    2. Check if there are unexpected logs (e.g., dmesg, syslog, SEL, etc.) generate after test.",
+    "criteria": "1. Power cord should be unplugged without any problem\n2. Power supply should be removed without any problem\n3. Power supply should be OFF when power cord is unplugged (FAN and LED should be OFF)\n4. PSU information in sensor list and SEL of BMC should be correct when PSU is removed\n5. Power supply should be inserted without any problem\n6. PSU information in sensor list and SEL of BMC should be correct when power cord is plugged back\n7. All other modules in use should keep working without any interference\n8. All reset of PSU should have the same behavior as PSU 1",
+    "script": null, "attended_time": "15", "machine_time": "15", "latest_updated": "2025-09-12",
+    "deepseek_columns": {
+      "ai_can_execute": "NO", "ai_packages_needed": "none",
+      "ai_commands": "-- not runnable by agent: this PSU Function case (removing a PSU from its slot and checking the SUT/BMC behavior) requires physically inserting/removing/cycling the PSU module and its power-cord at the machine and visually observing the PSU LED/status; a person must be present at the hardware. The agent can only read the post-operator BMC PSU sensors/SEL, which the operator records after the physical step.",
+      "ai_logs_output": "operator physically removing a PSU from its slot and checking the SUT/BMC behavior then records PSU LED/status; after that the agent can run ipmitool (on agent host) sdr elist 2>&1 | grep -iE \"psu|power supply\" ; echo ---sel---; ipmitool (on agent host) sel list last 30 2>&1 | tail -30 ; echo ---psu_removing_a_psu---; ipmitool (on agent host) sensor list 2>&1 | grep -iE \"psu|power supply\" to confirm BMC sees the PSU state, but the physical action must be human.",
+      "risk": "RISK: physical PSU insertion/pull/AC operation at the machine - human only; agent must not attempt.", "remark": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "NO. It correctly identifies physical removal/reinsertion and vision but under-specifies the source's required USB, fan, PCIe, BMC and host continuity checks.",
+    "gpt_v2": "MANUAL ONLY / IMPROVED. V2 correctly adds cord isolation, slot/serial identity, redundancy, ESD and full other-module comparison.",
+    "v3": "No V3 Pilot record exists for this source key.", "v3_1": "No V3.1 200-case record exists for this source key.",
+    "related_revisions": ["review_round_02_functionality.md lines 1641 onward: historical NO review based on physical removal."]
+  },
+  "original_test_intent": "For each PSU, verify safe cord isolation, physical module removal and reinsertion, correct BMC absent/recovered states, direct post-insertion visual status, and uninterrupted operation of all other in-use modules.",
+  "original_method": "A qualified operator maps the PSU, disconnects its cord, removes the identified module, records BMC and other-module state, reinserts the same module, restores its cord and visually/BMC verifies recovery; repeat one PSU at a time only after full system stabilization.",
+  "automation_classification": "MANUAL ONLY",
+  "execution_readiness": ["NEEDS_SPEC", "NEEDS_INPUT", "NEEDS_EXPECTED", "NEEDS_SAFETY_PLAN", "NEEDS_RECOVERY_PLAN", "NEEDS_APPROVAL"],
+  "execution_status": "NOT EXECUTED", "tool_result": "NOT RUN", "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Cord disconnection, module removal/reinsertion, connector/latch handling and direct visual verification are core acceptance actions. The agent may automate BMC/OS inventory comparisons but cannot perform or claim the physical work.",
+  "required_inputs": [
+    "All-PSU slot/serial/cord map and same-module tracking",
+    "Approved isolation/hot-service SOP, redundancy/load state, ESD/PPE and stabilization time",
+    "Expected absent/recovered PSU LED/fan/BMC/SEL states",
+    "Baseline identity/health rules for USB, fans, PCIe, BMC, host and other in-use modules",
+    "Recovery plan and one-user approval"
+  ],
+  "safety_requirements": [
+    "Disconnect the correct cord before module removal and verify remaining redundancy/load capacity.",
+    "Do not force handle, latch, connector or module; avoid energized contacts and use ESD controls.",
+    "Stop on damage, misalignment, arcing, heat, power change, other-module loss or management degradation.",
+    "Preserve logs and phase baselines; BMC data does not replace direct physical evidence.",
+    "No automatic repeat, reseat, reset or power cycle."
+  ],
+  "agent_execution_scope": [
+    "Build per-PSU checklist and capture BMC/SEL/USB/PCIe/fan/host baseline.",
+    "Wait for operator evidence at cord-off, removed, inserted and cord-restored phases.",
+    "Collect and compare approved read-only inventories/health data for PSU and all other modules.",
+    "Report deviations and coverage without issuing the verdict."
+  ],
+  "engineer_actions": [
+    "Approve/perform all cord, removal, insertion and visual actions.",
+    "Confirm module identity, connector condition and other-module continuity.",
+    "Handle recovery/safety stop and issue the formal verdict."
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The manual classification is correct, but grep-only PSU/SEL output does not satisfy all-other-module coverage or reliably bind phases and module identity.",
+    "executable_command_required": false,
+    "command_recommendation": "Use platform-approved full BMC/SEL plus OS USB/PCIe/fan/host inventory captures after each operator-confirmed phase, with slot/serial and timestamp labels.",
+    "original_parameters_and_time_preserved": "Attended Time 15 and Machine Time 15 remain unchanged; every PSU and all named other-module classes remain in scope."
+  },
+  "modernized_recommendation": {
+    "status": "PER-MODULE SERVICE CHECKLIST AND SYSTEM DIFF",
+    "recommended_method": "Pair operator photos/checklist for cord, handle, connector, removal/insertion and LED/fan with phase-tagged BMC/SEL and OS inventory/health diffs; gate each next PSU on complete recovery.",
+    "applicable_platform": "The identified chassis, PSU population and serviceable redundant topology.",
+    "supported_version": "Record platform SOP, PSU/BMC firmware and inventory-tool versions.",
+    "official_reference": "Project power-service, ESD and device inventory documents; no universal commands are asserted.",
+    "difference_from_original_method": "Adds complete module identity and automated other-device diffing without replacing physical removal.",
+    "coverage_difference": "A PSU-only sensor query misses explicit USB/PCIe/fan/BMC/host continuity requirements.",
+    "required_inputs": "Population map, SOP, baseline inventory, expected states, timing and recovery.",
+    "risks_limitations": "Transient re-enumeration and sensor lag need timestamped stabilization rules to avoid false differences."
+  },
+  "project_override_considerations": "A project may limit PSU population or module inventory only by an approved plan that lists exclusions. Completion must not be claimed for all PSUs or all in-use modules when only a sample was exercised.",
+  "expected_evidence": [
+    "Per-PSU slot/serial/cord and operator removal/reinsertion checklist/photos",
+    "Connector/handle/latch/LED/fan state and approved isolation/redundancy record",
+    "Phase-tagged full BMC sensors/SEL and PSU identity",
+    "Before/during/after USB, fan, PCIe, BMC and host health diff plus recovery",
+    "Separate engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Title, procedure and criteria consistently define removal/reinsertion and continuity checks, despite minor grammar in 'all reset of PSU'."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The physical sequence and acceptance domains are clear. Platform-specific SOP/mappings are readiness requirements, not semantic blockers."},
+  "comparison_to_prior_reviews": {
+    "deepseek": "Agree with manual core; expand evidence to all explicitly named modules and remove reliance on grep-only PSU data.",
+    "gpt_v2": "Agree with MANUAL ONLY, isolation/identity gates and wider blast-radius checks.",
+    "v3_1_improvement": "Makes all-PSU and all-other-module coverage machine-checkable without weakening physical acceptance."
+  },
+  "review_improvement": "This review preserves the entire source sequence, adds per-phase identity and validates the explicit collateral-device requirement rather than treating it as a PSU-only test.",
+  "independent_technical_reasoning": "The core includes human mechanical service and direct observation, so MANUAL ONLY is unavoidable. Automated system diffs are valuable supporting evidence but cannot prove safe removal, insertion or connector condition.",
+  "source_provenance": {
+    "primary": "data/REVISED_commands_merged_with_raw.xlsx, Functionality row 64, read directly with openpyxl 3.1.5",
+    "deepseek_same_row": "Columns 13-18 of the same XLSX row and data/tests.json cross-check",
+    "gpt_v2": "gpt-review/test_gpt_review.json, exact Functionality row 64 source_ref",
+    "history": "review_round_02_functionality.md lines 1641-1665 plus duplicate-title search", "external_sources": []
+  },
+  "no_automatic_retry": "On mechanical, power or other-module anomaly, preserve the phase evidence and stop. Do not reseat/repeat, reset or power-cycle automatically.",
+  "review_outcome": "IMPROVED", "second_review_outcome": "AGREE",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "original_method_preserved": true,
+    "coverage_regression": false, "safety_regression": false, "software_substitution_rejected": true,
+    "unsupported_modern_command_added": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true,
+    "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true, "record_complete": true
+  }
+}
