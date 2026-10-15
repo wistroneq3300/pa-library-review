@@ -319,3 +319,26 @@ documentation, undefined intent, and a missing external specification are
 recorded respectively as readiness, private-document, unclear-intent, or
 semantic-block conditions; they are not called source conflicts unless two
 source statements actually disagree.
+
+## 24. Approved engineering clarifications (ED-33 through ED-52)
+
+The controlling register for the 2026-10-15 rulings is
+`v3-1-full-3112/ENGINEERING_DECISIONS_APPROVED_20261015.md`.
+
+The Master Source remains immutable. Tool choice, target values, firmware,
+Expected, parameters and execution environment are project bindings. An
+approved alternative method is recorded as an overlay with its coverage delta;
+it cannot erase the source-named method or claim that unexecuted tool coverage
+passed. A missing project binding is normally execution-readiness pending, not
+permanent `BLOCKED`.
+
+Read-only evidence may supplement a functional test but may not replace a
+required write, flash, setting change or compliance-mode action. BIOS fields are
+handled according to actual platform writability, with readback/restoration for
+writable fields and authoritative comparison for read-only fields. Static review
+completion remains separate from execution and engineer-owned DUT verdict.
+
+Apply ED-39 through ED-52 only to their named source variants. Preserve every
+original contradiction in the record while placing the approved engineering
+interpretation in the additive V3.1 decision layer. BIOS 00376 remains the sole
+explicitly unresolved case in this decision set.

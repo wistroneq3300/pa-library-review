@@ -322,3 +322,12 @@ its wording or approval status. The gap is preserved intentionally.
   not rewrite the historical meaning of Decisions 01–28.
 - Decision 32 was added by the user's 2026-10-13 Full Library Review handoff.
   It resolves only sequence 182 and does not create a global AC-cycle rule.
+
+## Decisions 33–52
+
+The user-approved 2026-10-15 general and case-bound rulings are maintained in
+`gpt-review/v3-1-full-3112/ENGINEERING_DECISIONS_APPROVED_20261015.md`.
+They are part of this decision register by reference. ED-33 through ED-38 are
+general Master-source, project-tool, coverage, readiness, BIOS-writability and
+verdict-boundary rules. ED-39 through ED-52 apply to the explicitly named BIOS
+and BMC variants. ED-51 intentionally leaves BIOS 00376 unresolved.
