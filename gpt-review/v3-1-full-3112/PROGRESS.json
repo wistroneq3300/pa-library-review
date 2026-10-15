@@ -3,12 +3,12 @@
   "branch": "codex/testcase-review-v3-1-full-3112",
   "logic_version": "V3.1 Final Audit + ED-32 + ED-33..52",
   "target_count": 3112,
-  "completed_count": 1077,
-  "new_full_review_records_count": 877,
-  "remaining_count": 2035,
+  "completed_count": 1078,
+  "new_full_review_records_count": 878,
+  "remaining_count": 2034,
   "completed_baseline_reference": "gpt-review/v3-1-final-audit/AUDIT_RECORDS/",
-  "next_unreviewed_source_key": "Functionality|917|Wistron-BMC-00207-V004",
-  "next_unreviewed_case_variant_id": "c5c56f50c587c88f",
+  "next_unreviewed_source_key": "Functionality|918|Wistron-BMC-00208-V003",
+  "next_unreviewed_case_variant_id": "2d24545fc9957035",
   "classification_statistics": {
     "MANUAL ONLY": 349,
     "REQUIRES PACKAGE / USER CONFIRMATION": 325,
@@ -16,8 +16,12 @@
     "BLOCKED": 88
   },
   "blocked_count": 88,
-  "source_conflict_count": 207,
+  "source_conflict_count": 208,
   "engineering_decisions_pending": [
+    {
+      "source_key": "Functionality|917|Wistron-BMC-00207-V004",
+      "question": "Decide whether the authoritative target is the SEL time base written by `ipmitool sel time set`, the BMC system/WebUI clock, or an explicitly synchronized set of clocks; define required cross-surface coverage, timezone/tolerance/NTP policy, time-sensitive impact and restoration while preserving the conflicting Master source."
+    },
     {
       "source_key": "Functionality|909|Wistron-BMC-00199-V002",
       "question": "Confirm that `Reboot system with WebUI` means the BMC rather than host/chassis, identify the exact WebUI control and warm/cold/graceful reset semantics, define staged management and sensor readiness deadlines plus persistent-setting scope/recovery, and approve any ipmitool/Redfish/vendor-tool override with its uncovered WebUI coverage."
