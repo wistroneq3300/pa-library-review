@@ -1,0 +1,71 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1407,
+  "library_sequence": 1258,
+  "source_key": "Functionality|1259|Wistron-BMC-00549-V003",
+  "case_variant_id": "87da2e85741ff998",
+  "source_ref": {"sheet": "Functionality", "source_row": 1259, "code": "Wistron-BMC-00549-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3099b006420730ed30f2108f15d9cacfda5b12a9db90a8a495d1aa8d5ac6d83e",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The IB setter does not exercise remote-session loss or rediscovery, while the following IB getter cannot authorize or recover this OOB mutation.",
+    "next_source_row_verified": "Functionality|1260|Wistron-BMC-00550-V003 / 84800ae810f8b8b7 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set DCMI Configuration Parameters (OOB)",
+    "procedure": "Use LANPlus raw 0x2c 0x12 0xdc <selector> 0 <data> for Activate DHCP, Discovery Configuration or DHCP Timing 1-3, with data referenced to DCMI Table 6-6.",
+    "criteria": "Command is sent without error.",
+    "script": "Private Wistron set-get DCMI configuration repository.",
+    "deepseek": "PARTIAL with an operator-supplied generic parameter and subsequent get, but credentials are passed on argv and no endpoint-change or identity-safe reconnection plan is defined.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with exact bytes, baseline, explicit approval, alternate access, bounded reconnection and restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "It recognizes the mutation and need for operator input, but a generic CLI parameter cannot establish raw payload equivalence or safe recovery after the OOB route moves.",
+    "gpt_v2": "Correctly adds the OOB access-loss gate and retains this as a prerequisite-driven case rather than labeling it permanently blocked.",
+    "history": "The invalidated prior-run location was found but excluded as authority; the separately committed IB setter was examined to isolate the remote-channel risk unique to this record.",
+    "v3_1": "Reconnection must be tied to immutable target identity, not merely the first address that responds after DHCP/discovery changes."
+  },
+  "original_test_intent": "Change one approved DCMI DHCP/discovery configuration parameter over the out-of-band interface, prove the intended state and connectivity effect, and recover the original state safely.",
+  "original_method": "Keep the source LANPlus raw 0x2c 0x12 0xdc request and selector definitions, but execute only one specification-encoded value after a getter baseline, explicit approval and preparation for loss or movement of the current endpoint.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "STATE_CHANGING_DCMI_CONFIGURATION", "OUT_OF_BAND_ROUTE", "SELF_DISCONNECTION_RISK", "NEEDS_EXACT_BYTES_BASELINE_APPROVAL_AND_FALLBACK", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The network/BMC owner approves one exact selector/value and its expected address/discovery effect, provides immutable BMC identity, a maintenance window, an independent console or secondary path, bounded rediscovery rules and exact restoration.",
+  "required_inputs": ["Verified SUT/BMC firmware and immutable BMC identity", "Current BMC address, VLAN, MAC and route", "Approved DCMI specification/profile and matching encoder/decoder", "Exactly one selector and revision/data payload", "Getter baseline for that selector", "Expected DHCP/discovery or timing outcome", "Independent recovery access and credentials", "Bounded reconnect/rediscovery policy", "Exact baseline restore request"],
+  "safety_requirements": ["Explicit approval for exact bytes", "One write only", "No guessed selector or default value", "Secret-safe LANPlus authentication", "Independent access before mutation", "Rediscover only within an allowlisted network and verify immutable identity", "Preserve logs", "Stop on ambiguity", "No blind retry", "Restore only by approved path"],
+  "agent_execution_scope": ["Bind current endpoint to immutable target identity", "Read and decode the selected baseline", "Validate write and restore bytes against the approved profile", "Confirm fallback and monitoring", "Issue one approved OOB request", "Record disconnect and address-change timeline", "Re-establish the same BMC identity within bounds", "Read back and validate semantics", "Restore and verify when required", "Archive redacted session and recovery evidence"],
+  "engineer_actions": ["Approve the selector/value and expected endpoint transition", "Ensure independent access and network isolation", "Own intervention after unexpected loss and final PASS, FAIL or BLOCKED"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "A generic `dcmi set_conf_param` call does not prove the source raw bytes, and credential-bearing argv plus an unbounded follow-up against the old address cannot safely handle DHCP/discovery transition.",
+    "executable_command_required": true,
+    "command_recommendation": "Capture the selector with the approved 0x13 getter; after approval, send one secret-safe LANPlus raw 0x2c 0x12 0xdc <selector> 0 <validated-data>, then rediscover only the same immutable BMC identity, read back and restore under the plan.",
+    "original_parameters_and_time_preserved": "The five selector meanings, revision byte, OOB route and 10/5 timing remain preserved; exact values and reconnect assumptions are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Model the write as an endpoint-transition transaction: snapshot address and selector state, arm independent recovery, submit once, observe session loss, rediscover by allowlisted immutable identity, verify the value and restore deterministically.",
+    "difference_from_original_method": "Adds identity-safe disconnect/reconnect handling, secret controls and a verified rollback instead of accepting only command completion.",
+    "coverage_difference": "The IB setter validates parameter semantics but cannot prove the behavior of the LANPlus session or remote reachability when its own network configuration changes.",
+    "risks_limitations": "Activating DHCP or changing discovery can strand management, land the BMC at an unexpected address, collide with another endpoint or cause automation to reconnect to the wrong device."
+  },
+  "project_override_considerations": "A vendor management tool is equivalent only if it exposes the exact changed selector, before/after bytes, endpoint transition and same-device identity proof; otherwise raw OOB coverage remains missing.",
+  "expected_evidence": ["Approved target/spec/selector/value and immutable identity", "Current address/VLAN/MAC plus raw getter baseline", "Exact redacted write request/response and completion", "Timestamped session loss or continuity and bounded rediscovery", "Cryptographic or hardware-backed proof that the new endpoint is the same BMC", "Post-change raw read-back and network-behavior result", "Restored address/value/reachability when required", "No unrelated command or log-clear audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master consistently describes an OOB DCMI configuration write, provides its selector family and delegates variable bytes to a cited specification table. The placeholders and weak criterion are incomplete, and self-disconnection is an unhandled risk, but there is no internal semantic contradiction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The setter and route are identifiable. Exact bytes, approval, baseline, independent access and recovery are concrete prerequisites, so the case remains REQUIRES PACKAGE / USER CONFIRMATION."},
+  "review_improvement": "Turns a potentially self-disconnecting remote write into a single approved endpoint-transition transaction with identity-bound rediscovery, semantic verification and rollback.",
+  "independent_technical_reasoning": "Unlike the in-band variant, this command can invalidate the very address and session carrying it. Success may therefore appear as a timeout, and a responding replacement address may belong to another device. Safe automation must treat disconnect as an expected but bounded transition, anchor reconnection to immutable identity, then verify the selector and restore without repeating the write.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1259 reopened directly", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1259 review", "history": "Reviewed IB setter/following getter and invalidated-run location search", "external_sources": ["Source-preserved private Wistron DQMS GitLab URL and cited DCMI Table 6-6; their contents were unavailable here and were not assumed."]},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
