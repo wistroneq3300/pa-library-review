@@ -1,0 +1,86 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1381,
+  "library_sequence": 1231,
+  "source_key": "Functionality|1232|Wistron-BMC-00522-V002",
+  "case_variant_id": "397854c8e8dc2702",
+  "source_ref": {"sheet": "Functionality", "source_row": 1232, "code": "Wistron-BMC-00522-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "77563490892d0bf51c46ca6cfc26cd980399f1c440c59408c42533bfd71e070d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "This getter establishes per-sensor event-message/scanning and optional individual-mask state only; the setter, PEF and event receiver cases retain separate coverage.",
+    "next_source_row_verified": "Functionality|1233|Wistron-BMC-00523-V002 / 5951b93730f9d94b directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get Sensor Event Enable (OOB)",
+    "procedure": "TBD with generic pre-test log clearing.",
+    "criteria": "TBD",
+    "deepseek": "NO because the source has no executable steps or criteria.",
+    "gpt_v2": "FULLY AUTOMATABLE through read-only raw 0x04/0x29 with sensor/SDR-aware control and event-mask parsing."
+  },
+  "historical_reviews": {
+    "deepseek": "Safely refuses to guess from the TBD source but misses the standard read implied by the title.",
+    "gpt_v2": "Correctly identifies the read-only command and separates it from event-policy writes.",
+    "history": "The preceding 0x28 setter is a confirmed mutation; thresholds, hysteresis, PEF and event receiver are distinct controls.",
+    "v3_1": "The response length is variable from two through six data bytes and must be validated against the returned all-events state, not forced to a fixed mask length."
+  },
+  "original_test_intent": "Read one verified sensor's all-event-message state, scanning state and any returned individual assertion/deassertion enable masks over OOB without changing monitoring policy.",
+  "original_method": "Preserve Master TBD; Review maps the title to IPMI v2.0 Table 35-11 raw 0x04/0x29 <sensor number> and its permitted variable-length response.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_TBD_PRESERVED", "READ_ONLY", "NEEDS_SENSOR_SDR_MAPPING", "NEEDS_VARIABLE_LENGTH_EVENT_MASK_PARSER", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Project supplies the sensor number, matched SDR event-control capability and expected monitoring state; no write approval is required for the read.",
+  "required_inputs": ["Verified BMC/session and sensor number", "Matched SDR and Sensor Event Message Control Support", "Table 35-11 response schema", "Threshold-event or discrete-state mask decoder", "Approved expected monitoring/scanning baseline"],
+  "safety_requirements": ["Read only", "Do not clear logs", "Never guess the sensor number or event type", "Accept only the protocol-permitted 2-to-6-byte response shape", "Ignore reserved bits", "Do not issue 0x28, PEF or event receiver writes", "No automatic retry"],
+  "agent_execution_scope": [
+    "Bind the sensor number to one SDR and event-reading type",
+    "Issue raw 0x04/0x29 <sensor number> once",
+    "Validate completion, all-event-message bit, scanning bit and conditional response length",
+    "Decode only returned assertion/deassertion mask bytes using threshold or discrete semantics",
+    "Compare the state with the SDR capability and approved monitoring baseline",
+    "Archive raw and decoded no-mutation evidence"
+  ],
+  "engineer_actions": ["Approve sensor mapping and expected monitoring state", "Review unsupported or contradictory capability states", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek is safe but overly restrictive: after sensor mapping, the standard 0x04/0x29 read is deterministic and does not need mutation approval.",
+    "executable_command_required": true,
+    "command_recommendation": "Use one secret-safe raw 0x04 0x29 <sensor number> request as defined by IPMI v2.0 Table 35-11; parse the all-event-message and scanning bits, then decode any returned assertion/deassertion masks according to the matched SDR and permitted 2-to-6-byte response.",
+    "original_parameters_and_time_preserved": "No Master command or sensor is invented; source TBD and 10/5 timing remain unchanged."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_PROJECT_INPUTS",
+    "recommended_method": "Perform one sensor-bound read, validate the response length conditionally, decode global/scanning state separately from individual masks and compare the result with SDR capability and monitoring policy.",
+    "difference_from_original_method": "Adds a conditional standard read in the Review layer while preserving the original TBD state.",
+    "coverage_difference": "This does not prove 0x28 write behavior, event delivery under stimulus, PEF routing, event receiver configuration or SEL logging.",
+    "risks_limitations": "When all event messages are disabled, omitted mask bytes are valid and must not be reported as truncation; unsupported per-event control cannot be inferred from zeros."
+  },
+  "project_override_considerations": "A high-level API is equivalent only if it exposes the same sensor identity, all-event-message and scanning states, individual masks when supported, and the distinction between unavailable and zero.",
+  "expected_evidence": ["Target/firmware/channel and sensor/SDR identity", "Redacted raw 0x29 request/response", "Completion, response length and global/scanning bits", "Decoded assertion/deassertion masks with event-type mapping", "SDR capability and monitoring-baseline comparison", "No-write and no-log-clear audit"],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title consistently identifies Get Sensor Event Enable while Procedure and Criteria are TBD. Missing command, parsing and acceptance semantics plus generic log clearing are source omissions rather than contradictory source requirements; the Review mapping remains conditional and preserves Master TBD."
+  },
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read function and response schema are defined. Sensor mapping, SDR capability and expected state are normal Project readiness inputs; unsupported or malformed results must be reported without guessing."},
+  "review_improvement": "Handles the protocol's conditional response length and distinguishes global event-message disable, scanning disable and individual mask state rather than interpreting absent bytes as zero.",
+  "independent_technical_reasoning": "Table 35-11 permits two through six response bytes and allows individual mask bytes to be omitted when all event messages are disabled. The parser must first interpret the global/scanning status and SDR capability, then decide which mask bytes are meaningful. A fixed-length assumption would falsely label a valid disabled state as truncation or fabricate zero masks.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1232 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1232 review",
+    "history": "Adjacent Set Sensor Event Enable, threshold, hysteresis and event-policy records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, section 35.11 and Table 35-11 (Get Sensor Event Enable, NetFn 04h, Cmd 29h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
