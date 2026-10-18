@@ -1,1 +1,148 @@
-{"schema_version":"v3-1-full-review-record-1.0","review_sequence":1373,"library_sequence":1223,"source_key":"Functionality|1224|Wistron-BMC-00514-V003","case_variant_id":"16e819c3ebe01987","source_ref":{"sheet":"Functionality","source_row":1224,"code":"Wistron-BMC-00514-V003"},"source_integrity":{"exact_xlsx_row_read":true,"original_row_sha256":"8640fbe47f9aa690b75750447f7e3dd79c42109e84e206d8df725cde2ddf8520","source_xlsx_sha256":"e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8","deepseek_same_row_read":true,"tests_json_cross_check":true,"gpt_v2_read":true,"historical_revision_search":true,"duplicate_code_search":true,"duplicate_code_result":"The preceding summary case supplies counts and this row's next reservation case supplies a lifecycle token; neither independently proves bounded record enumeration.","next_source_row_verified":"Functionality|1225|Wistron-BMC-00515-V003 / bb327cbc4ab7d082 directly reopened from XLSX and manifest before this write."},"source_snapshot":{"items":"Get Device SDR (OOB)","procedure":"Raw 0x04/0x21 with positional 0 0, a placeholder Record ID, offset 0, and requested length 0xFF; source clears logs.","criteria":"Command should be sent without any error.","script":"get-device-sdr_oob","deepseek":"PARTIAL; says the operation needs an implementation-specific sequence and exact bytes.","gpt_v2":"FULLY AUTOMATABLE with target-defined reservation, ID, offset and bounded-length semantics."},"historical_reviews":{"deepseek":"Correctly refuses a single incomplete placeholder command, but does not assemble the definable read-only iterator.","gpt_v2":"Adds summary/reservation prerequisites, next-record validation and bounded parsing.","history":"Device SDR summary, reservation and repository mutation cases were checked; this row remains read-only record retrieval.","v3_1":"Raw coverage is retained and no reservation or read response authorizes record mutation."},"original_test_intent":"Enumerate the selected device's SDR records over OOB, reconstruct each bounded record and decode its identity and schema without modifying the device SDR repository.","original_method":"Retain raw Sensor/Event command 0x04/0x21, but replace the source's ambiguous placeholders and 0xFF request with verified reservation, record ID, offset and safe chunk fields.","automation_classification":"FULLY AUTOMATABLE","execution_readiness":["REVIEW_COMPLETE","READ_ONLY_ENUMERATION","NEEDS_TARGET_DEVICE_SDR_CONTRACT","NEEDS_BOUNDED_ITERATOR","NO_DUT_EXECUTION_PERFORMED"],"execution_status":"NOT EXECUTED","tool_result":"NOT RUN","engineer_verdict":"ENGINEER OWNED; PENDING","manual_activity":"Project supplies the applicable device-SDR record types, reservation requirement and an inventory expectation or comparison baseline; no interactive write approval is needed.","required_inputs":["Verified BMC and device-SDR owner","0x04/0x20 summary response","Whether 0x04/0x22 reservation is required","0x04/0x21 request/response layout","Maximum safe chunk size","Record and total-byte budgets","Supported record decoders"],"safety_requirements":["Use a secret-safe authenticated session","Read only","Never assume zero reservation fields are valid","Do not request unbounded 0xFF data","Detect cyclic or non-advancing record IDs","Stop on reservation loss or malformed record","Do not clear logs","No automatic retry"],"agent_execution_scope":["Verify target and collect device-SDR summary","Obtain one reservation only when the contract requires it","Start from the documented first record ID","Read each record in bounded chunks with validated offsets","Reconstruct and decode supported records","Stop on validated end marker or budget","Archive raw records and iterator diagnostics"],"engineer_actions":["Approve parser coverage and inventory expectations","Review malformed or vendor-specific records","Own the final DUT verdict"],"command_applicability":{"original_deepseek_command_fit":"DeepSeek is right that the source line is not safe as a single literal command; however, the raw read is automatable once its standard fields and target reservation contract are packaged.","executable_command_required":true,"command_recommendation":"Use raw 0x04/0x20 for bounds, optional approved 0x04/0x22 reservation, then raw 0x04/0x21 with validated reservation ID, record ID, offset and small read length; follow only verified returned next-record semantics.","original_parameters_and_time_preserved":"The Master command family, OOB path and 10/5 timing remain preserved; placeholder zeros and 0xFF are recorded as source defects, not silently executed."},"modernized_recommendation":{"status":"READY_AFTER_PROJECT_INPUTS","recommended_method":"Perform a finite reservation-aware iterator, validate every completion and response length, reassemble each declared record length, decode supported types and preserve unsupported bytes without guessing.","difference_from_original_method":"Turns one unsafe placeholder request into the bounded read sequence needed by the title while leaving Master unchanged.","coverage_difference":"This proves readable device-SDR contents, not Add/Delete/Clear behavior or correctness of every sensor reading.","risks_limitations":"Reservation loss, corrupt next-record IDs or unsupported record types may leave an intentionally incomplete inventory boundary."},"project_override_considerations":"A vendor inventory API is equivalent only if it exposes record identity, complete raw content and termination semantics; otherwise the raw 0x04/0x21 path remains unverified.","expected_evidence":["Target/firmware/channel and parser versions","Summary and reservation context","Every redacted request/response with record ID, offset and length","Reassembled raw-record hashes","Decoded record identities/types","Termination/budget diagnostics","No-mutation proof"],"source_conflict_analysis":{"is_source_conflict":true,"analysis":"The source presents zero placeholders and a maximum-looking 0xFF count without defining reservation, record-ID byte order, returned length, next-ID handling or termination; success-only criteria cannot establish a complete inventory."},"blocked_analysis":{"is_blocked":false,"analysis":"The read purpose and command are identifiable; target contract, parser and inventory expectations are execution prerequisites rather than permanent semantic blockers."},"review_improvement":"Prevents oversized or cyclic reads, ties each chunk to one verified record, and makes an incomplete enumeration boundary visible instead of guessing past it.","independent_technical_reasoning":"Device-SDR retrieval is an iterator, not a one-shot fetch: the client must manage reservation scope when required, record identity, offsets, declared length, returned next ID and a finite termination rule. A 0xFF request and command-success criterion can hide truncation or loops. Complete raw reconstruction plus schema-aware decoding is the minimum evidence for the title.","source_provenance":{"primary":"XLSX Functionality physical row 1224 reopened directly","deepseek_same_row":"XLSX AI columns and data/tests.json exact row","gpt_v2":"Exact Functionality row 1224 review","history":"Adjacent summary/reservation and device-SDR mutation records","external_sources":[]},"no_automatic_retry":true,"review_outcome":"SOURCE_CONFLICT","second_review_outcome":"CHANGED","regression_result":{"intent_preserved":true,"procedure_preserved":true,"criteria_preserved":true,"coverage_regression":false,"safety_regression":false,"hardware_pass_claimed":false,"status":"PASS_STATIC_REVIEW"},"per_case_quality_gate":{"exact_xlsx_row_read":true,"deepseek_same_row_read":true,"gpt_v2_read":true,"history_searched":true,"reasoning_is_case_specific":true,"source_identity_verified":true,"next_key_verified_from_xlsx":true,"no_hardware_pass_claimed":true,"record_complete":true}}
+{
+    "schema_version": "v3-1-full-review-record-1.0",
+    "review_sequence": 1373,
+    "library_sequence": 1223,
+    "source_key": "Functionality|1224|Wistron-BMC-00514-V003",
+    "case_variant_id": "16e819c3ebe01987",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1224,
+        "code": "Wistron-BMC-00514-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "original_row_sha256": "8640fbe47f9aa690b75750447f7e3dd79c42109e84e206d8df725cde2ddf8520",
+        "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "deepseek_same_row_read": true,
+        "tests_json_cross_check": true,
+        "gpt_v2_read": true,
+        "historical_revision_search": true,
+        "duplicate_code_search": true,
+        "duplicate_code_result": "The preceding summary case supplies counts and this row's next reservation case supplies a lifecycle token; neither independently proves bounded record enumeration.",
+        "next_source_row_verified": "Functionality|1225|Wistron-BMC-00515-V003 / bb327cbc4ab7d082 directly reopened from XLSX and manifest before this write."
+    },
+    "source_snapshot": {
+        "items": "Get Device SDR (OOB)",
+        "procedure": "Raw 0x04/0x21 with positional 0 0, a placeholder Record ID, offset 0, and requested length 0xFF; source clears logs.",
+        "criteria": "Command should be sent without any error.",
+        "script": "get-device-sdr_oob",
+        "deepseek": "PARTIAL; says the operation needs an implementation-specific sequence and exact bytes.",
+        "gpt_v2": "FULLY AUTOMATABLE with target-defined reservation, ID, offset and bounded-length semantics."
+    },
+    "historical_reviews": {
+        "deepseek": "Correctly refuses a single incomplete placeholder command, but does not assemble the definable read-only iterator.",
+        "gpt_v2": "Adds summary/reservation prerequisites, next-record validation and bounded parsing.",
+        "history": "Device SDR summary, reservation and repository mutation cases were checked; this row remains read-only record retrieval.",
+        "v3_1": "Raw coverage is retained and no reservation or read response authorizes record mutation."
+    },
+    "original_test_intent": "Enumerate the selected device's SDR records over OOB, reconstruct each bounded record and decode its identity and schema without modifying the device SDR repository.",
+    "original_method": "Retain raw Sensor/Event command 0x04/0x21, but replace the source's ambiguous placeholders and 0xFF request with verified reservation, record ID, offset and safe chunk fields.",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "execution_readiness": [
+        "REVIEW_COMPLETE",
+        "READ_ONLY_ENUMERATION",
+        "NEEDS_TARGET_DEVICE_SDR_CONTRACT",
+        "NEEDS_BOUNDED_ITERATOR",
+        "NO_DUT_EXECUTION_PERFORMED"
+    ],
+    "execution_status": "NOT EXECUTED",
+    "tool_result": "NOT RUN",
+    "engineer_verdict": "ENGINEER OWNED; PENDING",
+    "manual_activity": "Project supplies the applicable device-SDR record types, reservation requirement and an inventory expectation or comparison baseline; no interactive write approval is needed.",
+    "required_inputs": [
+        "Verified BMC and device-SDR owner",
+        "0x04/0x20 summary response",
+        "Whether 0x04/0x22 reservation is required",
+        "0x04/0x21 request/response layout",
+        "Maximum safe chunk size",
+        "Record and total-byte budgets",
+        "Supported record decoders"
+    ],
+    "safety_requirements": [
+        "Use a secret-safe authenticated session",
+        "Read only",
+        "Never assume zero reservation fields are valid",
+        "Do not request unbounded 0xFF data",
+        "Detect cyclic or non-advancing record IDs",
+        "Stop on reservation loss or malformed record",
+        "Do not clear logs",
+        "No automatic retry"
+    ],
+    "agent_execution_scope": [
+        "Verify target and collect device-SDR summary",
+        "Obtain one reservation only when the contract requires it",
+        "Start from the documented first record ID",
+        "Read each record in bounded chunks with validated offsets",
+        "Reconstruct and decode supported records",
+        "Stop on validated end marker or budget",
+        "Archive raw records and iterator diagnostics"
+    ],
+    "engineer_actions": [
+        "Approve parser coverage and inventory expectations",
+        "Review malformed or vendor-specific records",
+        "Own the final DUT verdict"
+    ],
+    "command_applicability": {
+        "original_deepseek_command_fit": "DeepSeek is right that the source line is not safe as a single literal command; however, the raw read is automatable once its standard fields and target reservation contract are packaged.",
+        "executable_command_required": true,
+        "command_recommendation": "Use raw 0x04/0x20 for bounds, optional approved 0x04/0x22 reservation, then raw 0x04/0x21 with validated reservation ID, record ID, offset and small read length; follow only verified returned next-record semantics.",
+        "original_parameters_and_time_preserved": "The Master command family, OOB path and 10/5 timing remain preserved; placeholder zeros and 0xFF are recorded as source defects, not silently executed."
+    },
+    "modernized_recommendation": {
+        "status": "READY_AFTER_PROJECT_INPUTS",
+        "recommended_method": "Perform a finite reservation-aware iterator, validate every completion and response length, reassemble each declared record length, decode supported types and preserve unsupported bytes without guessing.",
+        "difference_from_original_method": "Turns one unsafe placeholder request into the bounded read sequence needed by the title while leaving Master unchanged.",
+        "coverage_difference": "This proves readable device-SDR contents, not Add/Delete/Clear behavior or correctness of every sensor reading.",
+        "risks_limitations": "Reservation loss, corrupt next-record IDs or unsupported record types may leave an intentionally incomplete inventory boundary."
+    },
+    "project_override_considerations": "A vendor inventory API is equivalent only if it exposes record identity, complete raw content and termination semantics; otherwise the raw 0x04/0x21 path remains unverified.",
+    "expected_evidence": [
+        "Target/firmware/channel and parser versions",
+        "Summary and reservation context",
+        "Every redacted request/response with record ID, offset and length",
+        "Reassembled raw-record hashes",
+        "Decoded record identities/types",
+        "Termination/budget diagnostics",
+        "No-mutation proof"
+    ],
+    "source_conflict_analysis": {
+        "is_source_conflict": false,
+        "analysis": "The source consistently targets Get Device SDR through raw 0x04/0x21. Its zero placeholders, 0xFF request length, missing iterator semantics, and success-only criterion make the procedure incomplete and unsafe to execute literally, but no two source statements require incompatible behavior; the review supplies bounded read semantics without treating the gaps as a source conflict."
+    },
+    "blocked_analysis": {
+        "is_blocked": false,
+        "analysis": "The read purpose and command are identifiable; target contract, parser and inventory expectations are execution prerequisites rather than permanent semantic blockers."
+    },
+    "review_improvement": "Prevents oversized or cyclic reads, ties each chunk to one verified record, and makes an incomplete enumeration boundary visible instead of guessing past it.",
+    "independent_technical_reasoning": "Device-SDR retrieval is an iterator, not a one-shot fetch: the client must manage reservation scope when required, record identity, offsets, declared length, returned next ID and a finite termination rule. A 0xFF request and command-success criterion can hide truncation or loops. Complete raw reconstruction plus schema-aware decoding is the minimum evidence for the title.",
+    "source_provenance": {
+        "primary": "XLSX Functionality physical row 1224 reopened directly",
+        "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+        "gpt_v2": "Exact Functionality row 1224 review",
+        "history": "Adjacent summary/reservation and device-SDR mutation records",
+        "external_sources": []
+    },
+    "no_automatic_retry": true,
+    "review_outcome": "IMPROVED",
+    "second_review_outcome": "CHANGED",
+    "regression_result": {
+        "intent_preserved": true,
+        "procedure_preserved": true,
+        "criteria_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "hardware_pass_claimed": false,
+        "status": "PASS_STATIC_REVIEW"
+    },
+    "per_case_quality_gate": {
+        "exact_xlsx_row_read": true,
+        "deepseek_same_row_read": true,
+        "gpt_v2_read": true,
+        "history_searched": true,
+        "reasoning_is_case_specific": true,
+        "source_identity_verified": true,
+        "next_key_verified_from_xlsx": true,
+        "no_hardware_pass_claimed": true,
+        "record_complete": true
+    }
+}
