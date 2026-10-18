@@ -1,1 +1,143 @@
-{"schema_version":"v3-1-full-review-record-1.0","review_sequence":1377,"library_sequence":1227,"source_key":"Functionality|1228|Wistron-BMC-00518-V002","case_variant_id":"d5dbf3a56d331ece","source_ref":{"sheet":"Functionality","source_row":1228,"code":"Wistron-BMC-00518-V002"},"source_integrity":{"exact_xlsx_row_read":true,"original_row_sha256":"7823d6a9a8fdc9208e1ce163be3bce7a922c0ae42e8f83c7aa0040b025582726","source_xlsx_sha256":"e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8","deepseek_same_row_read":true,"tests_json_cross_check":true,"gpt_v2_read":true,"historical_revision_search":true,"duplicate_code_search":true,"duplicate_code_result":"This getter validates hysteresis support and values only; the preceding setter, threshold fields and event-enable masks remain separate coverage.","next_source_row_verified":"Functionality|1229|Wistron-BMC-00519-V003 / 9b1a6235442bed16 directly reopened from XLSX and manifest."},"source_snapshot":{"items":"Get Sensor Hysteresis (OOB)","procedure":"TBD; generic pre-step clears logs.","criteria":"TBD","deepseek":"NO because specification is absent.","gpt_v2":"FULLY AUTOMATABLE via read-only raw 0x04/0x25 with sensor/SDR-aware parsing."},"historical_reviews":{"deepseek":"Avoids guessing but misses the identifiable standard read.","gpt_v2":"Adds support/direction parsing and no-mutation boundary.","history":"Set hysteresis is a separate confirmed mutation; threshold getter/setter use other fields.","v3_1":"A conditional Review command can resolve TBD readiness without editing Master."},"original_test_intent":"Read the positive and negative hysteresis values and their support semantics for one verified sensor over OOB without changing monitoring policy.","original_method":"Preserve Master TBD; Review maps the title to raw Sensor/Event 0x04/0x25 with an approved sensor number.","automation_classification":"FULLY AUTOMATABLE","execution_readiness":["REVIEW_COMPLETE","MASTER_TBD_PRESERVED","READ_ONLY","NEEDS_SENSOR_SDR_MAPPING","NEEDS_HYSTERESIS_SCHEMA","NO_DUT_EXECUTION_PERFORMED"],"execution_status":"NOT EXECUTED","tool_result":"NOT RUN","engineer_verdict":"ENGINEER OWNED; PENDING","manual_activity":"Project provides the sensor number, SDR unit/scaling context and expected support state; no write approval is required.","required_inputs":["Verified BMC/session","Sensor number and SDR identity","0x04/0x25 response layout","Direction/support semantics","Expected range or baseline"],"safety_requirements":["Read only","Never clear logs","No hysteresis or threshold write","Validate exact response length","Respect unsupported/reserved indicators","No automatic retry"],"agent_execution_scope":["Bind sensor number to SDR","Issue raw 0x04/0x25 once","Validate completion and payload","Decode positive/negative support and values","Compare with SDR/approved baseline","Archive raw and decoded evidence"],"engineer_actions":["Approve sensor mapping and acceptance bounds","Own DUT verdict"],"command_applicability":{"original_deepseek_command_fit":"DeepSeek is safe but unnecessarily leaves a standard read unrunnable; it becomes deterministic after sensor mapping.","executable_command_required":true,"command_recommendation":"Use secret-safe raw 0x04 0x25 <sensor number> once and decode support/direction/value fields exactly.","original_parameters_and_time_preserved":"No Master value is invented; source timing remains 10/5."},"modernized_recommendation":{"status":"READY_AFTER_PROJECT_INPUTS","recommended_method":"Validate sensor identity, response shape, support indicators and both hysteresis values in raw and engineering-unit context.","difference_from_original_method":"Adds a Review-layer read while preserving the original TBD text.","coverage_difference":"The read does not demonstrate the functional effect of changing hysteresis.","risks_limitations":"An unsupported direction or nonlinear sensor may not have two meaningful values; zeros must not be treated automatically as PASS."},"project_override_considerations":"High-level output is equivalent only if it exposes the same sensor identity, support flags and raw values; otherwise 0x04/0x25 remains unverified.","expected_evidence":["Target/channel/sensor/SDR identity","Redacted raw request/response","Completion and response length","Decoded support/direction and values","Baseline comparison","No-mutation audit"],"source_conflict_analysis":{"is_source_conflict":true,"analysis":"The title is a defined read but the source is entirely TBD and clears evidence; it lacks sensor identity, response schema and semantic criteria."},"blocked_analysis":{"is_blocked":false,"analysis":"The read semantics are known; project sensor mapping and parser details are readiness inputs."},"review_improvement":"Distinguishes unsupported hysteresis from a valid zero value and prevents data from the wrong sensor or direction being accepted.","independent_technical_reasoning":"Hysteresis bytes only have meaning together with the sensor's supported event direction and SDR scaling. Therefore the response must be tied to one SDR, checked for supported fields and retained in raw form; merely receiving two bytes cannot establish correct monitoring state.","source_provenance":{"primary":"XLSX Functionality physical row 1228 reopened directly","deepseek_same_row":"XLSX AI columns and data/tests.json exact row","gpt_v2":"Exact Functionality row 1228 review","history":"Adjacent Set Sensor Hysteresis and threshold cases","external_sources":[]},"no_automatic_retry":true,"review_outcome":"SOURCE_CONFLICT","second_review_outcome":"CHANGED","regression_result":{"intent_preserved":true,"procedure_preserved":true,"criteria_preserved":true,"coverage_regression":false,"safety_regression":false,"hardware_pass_claimed":false,"status":"PASS_STATIC_REVIEW"},"per_case_quality_gate":{"exact_xlsx_row_read":true,"deepseek_same_row_read":true,"gpt_v2_read":true,"history_searched":true,"reasoning_is_case_specific":true,"source_identity_verified":true,"next_key_verified_from_xlsx":true,"no_hardware_pass_claimed":true,"record_complete":true}}
+{
+    "schema_version": "v3-1-full-review-record-1.0",
+    "review_sequence": 1377,
+    "library_sequence": 1227,
+    "source_key": "Functionality|1228|Wistron-BMC-00518-V002",
+    "case_variant_id": "d5dbf3a56d331ece",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1228,
+        "code": "Wistron-BMC-00518-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "original_row_sha256": "7823d6a9a8fdc9208e1ce163be3bce7a922c0ae42e8f83c7aa0040b025582726",
+        "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "deepseek_same_row_read": true,
+        "tests_json_cross_check": true,
+        "gpt_v2_read": true,
+        "historical_revision_search": true,
+        "duplicate_code_search": true,
+        "duplicate_code_result": "This getter validates hysteresis support and values only; the preceding setter, threshold fields and event-enable masks remain separate coverage.",
+        "next_source_row_verified": "Functionality|1229|Wistron-BMC-00519-V003 / 9b1a6235442bed16 directly reopened from XLSX and manifest."
+    },
+    "source_snapshot": {
+        "items": "Get Sensor Hysteresis (OOB)",
+        "procedure": "TBD; generic pre-step clears logs.",
+        "criteria": "TBD",
+        "deepseek": "NO because specification is absent.",
+        "gpt_v2": "FULLY AUTOMATABLE via read-only raw 0x04/0x25 with sensor/SDR-aware parsing."
+    },
+    "historical_reviews": {
+        "deepseek": "Avoids guessing but misses the identifiable standard read.",
+        "gpt_v2": "Adds support/direction parsing and no-mutation boundary.",
+        "history": "Set hysteresis is a separate confirmed mutation; threshold getter/setter use other fields.",
+        "v3_1": "A conditional Review command can resolve TBD readiness without editing Master."
+    },
+    "original_test_intent": "Read the positive and negative hysteresis values for one verified sensor over OOB, interpret their applicability from that sensor's SDR, and avoid changing monitoring policy.",
+    "original_method": "Preserve Master TBD; Review maps the title to the IPMI v2.0 Table 35-7 Sensor/Event request raw 0x04/0x25 <sensor number> 0xff.",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "execution_readiness": [
+        "REVIEW_COMPLETE",
+        "MASTER_TBD_PRESERVED",
+        "READ_ONLY",
+        "NEEDS_SENSOR_SDR_MAPPING",
+        "NEEDS_HYSTERESIS_SCHEMA",
+        "NO_DUT_EXECUTION_PERFORMED"
+    ],
+    "execution_status": "NOT EXECUTED",
+    "tool_result": "NOT RUN",
+    "engineer_verdict": "ENGINEER OWNED; PENDING",
+    "manual_activity": "Project provides the sensor number, SDR unit/scaling context and expected support state; no write approval is required.",
+    "required_inputs": [
+        "Verified BMC/session",
+        "Sensor number and SDR identity",
+        "0x04/0x25 request and response layout, including required 0xFF reserved byte",
+        "SDR hysteresis support and event-direction context",
+        "Expected range or baseline"
+    ],
+    "safety_requirements": [
+        "Read only",
+        "Never clear logs",
+        "No hysteresis or threshold write",
+        "Validate exact response length",
+        "Respect unsupported/reserved indicators",
+        "No automatic retry"
+    ],
+    "agent_execution_scope": [
+        "Bind sensor number to SDR",
+        "Issue raw 0x04/0x25 <sensor number> 0xff once",
+        "Validate completion and the two-byte positive/negative payload",
+        "Decode the positive and negative hysteresis values and interpret applicability from the SDR",
+        "Compare with SDR/approved baseline",
+        "Archive raw and decoded evidence"
+    ],
+    "engineer_actions": [
+        "Approve sensor mapping and acceptance bounds",
+        "Own DUT verdict"
+    ],
+    "command_applicability": {
+        "original_deepseek_command_fit": "DeepSeek is safe but unnecessarily leaves a standard read unrunnable; it becomes deterministic after sensor mapping.",
+        "executable_command_required": true,
+        "command_recommendation": "Use secret-safe raw 0x04 0x25 <sensor number> 0xff once, as defined by IPMI v2.0 Table 35-7, and decode the returned positive and negative hysteresis bytes exactly; obtain support and event-direction context from the matched SDR rather than inventing response flags.",
+        "original_parameters_and_time_preserved": "No Master value is invented; source timing remains 10/5."
+    },
+    "modernized_recommendation": {
+        "status": "READY_AFTER_PROJECT_INPUTS",
+        "recommended_method": "Validate sensor identity and Table 35-7 response shape, decode both hysteresis bytes, then evaluate them in raw and engineering-unit context using the matched SDR's support and event-direction metadata.",
+        "difference_from_original_method": "Adds a Review-layer read while preserving the original TBD text.",
+        "coverage_difference": "The read does not demonstrate the functional effect of changing hysteresis.",
+        "risks_limitations": "An unsupported direction or nonlinear sensor may not have two meaningful values; zeros must not be treated automatically as PASS."
+    },
+    "project_override_considerations": "High-level output is equivalent only if it exposes the same sensor identity and raw positive/negative values and can be correlated with the SDR support context; otherwise 0x04/0x25 remains unverified.",
+    "expected_evidence": [
+        "Target/channel/sensor/SDR identity",
+        "Redacted raw request/response, including sensor number and 0xFF reserved byte",
+        "Completion and response length",
+        "Decoded positive/negative values and matched SDR support/direction context",
+        "Baseline comparison",
+        "No-mutation audit"
+    ],
+    "source_conflict_analysis": {
+        "is_source_conflict": false,
+        "analysis": "The title consistently identifies Get Sensor Hysteresis while the Master Procedure and Criteria are TBD. Missing sensor identity, request bytes, response parsing and acceptance semantics, plus generic log-clearing boilerplate, are source omissions rather than contradictory source requirements; the conditional Review mapping preserves the Master TBD."
+    },
+    "blocked_analysis": {
+        "is_blocked": false,
+        "analysis": "The read semantics are known; project sensor mapping and parser details are readiness inputs."
+    },
+    "review_improvement": "Uses the SDR to distinguish unsupported hysteresis from a valid zero value, preserves the complete request including the required 0xFF byte, and prevents values from the wrong sensor from being accepted.",
+    "independent_technical_reasoning": "Table 35-7 returns positive and negative hysteresis bytes, not embedded support or direction flags. Those bytes only have meaning with the matched sensor's SDR capabilities, event direction and scaling. Therefore the complete request and two-byte response must be tied to one SDR and retained in raw form; merely receiving two bytes cannot establish correct monitoring state.",
+    "source_provenance": {
+        "primary": "XLSX Functionality physical row 1228 reopened directly",
+        "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+        "gpt_v2": "Exact Functionality row 1228 review",
+        "history": "Adjacent Set Sensor Hysteresis and threshold cases",
+        "external_sources": [
+            "Intel, IPMI v2.0 rev. 1.1 specification update, section 35.7 and Table 35-7 (Get Sensor Hysteresis, NetFn 04h, Cmd 25h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"
+        ]
+    },
+    "no_automatic_retry": true,
+    "review_outcome": "IMPROVED",
+    "second_review_outcome": "CHANGED",
+    "regression_result": {
+        "intent_preserved": true,
+        "procedure_preserved": true,
+        "criteria_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "hardware_pass_claimed": false,
+        "status": "PASS_STATIC_REVIEW"
+    },
+    "per_case_quality_gate": {
+        "exact_xlsx_row_read": true,
+        "deepseek_same_row_read": true,
+        "gpt_v2_read": true,
+        "history_searched": true,
+        "reasoning_is_case_specific": true,
+        "source_identity_verified": true,
+        "next_key_verified_from_xlsx": true,
+        "no_hardware_pass_claimed": true,
+        "record_complete": true
+    }
+}
