@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1387,
+  "library_sequence": 1238,
+  "source_key": "Functionality|1239|Wistron-BMC-00529-V003",
+  "case_variant_id": "f822aedbd8291289",
+  "source_ref": {"sheet": "Functionality", "source_row": 1239, "code": "Wistron-BMC-00529-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "a56bc12a85747b75dfe502ee6b89ce1dd752360ad0fded5145754e47d7430c97",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Standard BMC or Redfish firmware inventory may provide comparison evidence, but it cannot prove this Wistron OEM response layout or its system/HIB FPGA fields.",
+    "next_source_row_verified": "Functionality|1240|Wistron-BMC-00530-V003 / fc678c742ebcefe6 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get Firmware Info",
+    "procedure": "In-band raw 0x30/0x20 includes an <Ethernet Interface Select> byte, OOB raw 0x30/0x20 omits it, while the note declares Request N/A; response bytes 2-10 are mapped to BMC, BIOS, system FPGA and HIB FPGA revisions.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron e-wing bios-configuration path.",
+    "deepseek": "YES with OOB raw 0x30/0x20 and the source byte map, but it omits the unresolved selector conflict.",
+    "gpt_v2": "FULLY AUTOMATABLE only after the vendor contract establishes the exact request form and response schema."
+  },
+  "historical_reviews": {
+    "deepseek": "Its literal no-data request silently chooses one side of the source contradiction and therefore is not execution-ready authority.",
+    "gpt_v2": "Adds conditional vendor-contract validation but understates that the required contract is currently absent and the source request forms conflict.",
+    "history": "Firmware-version inventory cases were distinguished from update/activation coverage; no public Wistron 0x30/0x20 specification is present in the repository.",
+    "v3_1": "An OEM command cannot be modernized by assuming a standard request layout; the selector and version encoding require vendor/project approval."
+  },
+  "original_test_intent": "Read a verified platform's BMC, BIOS, system-FPGA and HIB-FPGA revision tuple through the Wistron OEM command and compare it with an approved firmware inventory baseline.",
+  "original_method": "Preserve both source request variants and the stated no-request note. Do not execute until the approved Wistron command contract resolves whether NetFn 0x30 Cmd 0x20 takes an interface-selector byte and confirms the ten-byte response layout.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_INTENT", "SOURCE_REQUEST_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_EXPECTED_FIRMWARE_MATRIX", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The platform owner supplies and approves the firmware-scoped Wistron 0x30/0x20 contract, resolves selector/no-request semantics, identifies the target and provides expected component versions.",
+  "required_inputs": ["Verified platform/BMC identity and firmware family", "Approved Wistron OEM 0x30/0x20 request schema", "Decision on Ethernet Interface Select presence and allowed values", "Approved response length and field encoding", "BMC/BIOS/system-FPGA/HIB-FPGA component identity map", "Expected version matrix and formatting rules", "Reviewed parser revision"],
+  "safety_requirements": ["Read only", "Do not clear logs", "Do not guess or probe selector values", "Do not assume in-band and OOB payloads differ without specification", "Validate completion and approved response length", "Preserve unknown bytes without decoding", "Do not update/reset/power-cycle any component", "No automatic retry"],
+  "agent_execution_scope": ["Verify target and approved OEM contract", "Construct exactly one approved in-band or OOB request", "Capture the full redacted request and response", "Validate completion and response length", "Decode only approved component/version fields", "Compare each component with the expected matrix", "Archive raw bytes and no-mutation evidence"],
+  "engineer_actions": ["Resolve the source request contradiction and approve the contract", "Approve component identities and expected versions", "Own unknown-field interpretation and final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek's no-data OOB request matches one Procedure branch but contradicts the in-band selector and Request N/A ambiguity; it must not be executed as the authoritative form.",
+    "executable_command_required": true,
+    "command_recommendation": "After the Wistron contract is approved, issue exactly one secret-safe raw 0x30 0x20 [approved-interface-selector-if-required] request on the specified path, then decode only the contract-defined BMC/BIOS/system-FPGA/HIB-FPGA bytes.",
+    "original_parameters_and_time_preserved": "Both source request variants, the Request N/A note, response map and 10/5 timing are preserved pending resolution."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Pin the OEM schema to platform and firmware, resolve the request bytes before execution, validate the entire returned structure and compare a named four-component version tuple with an approved matrix.",
+    "difference_from_original_method": "Makes the source contradiction explicit and prevents one path from silently overriding another.",
+    "coverage_difference": "Standard BMC inventory or a subset of components cannot replace the OEM command's system/HIB FPGA coverage; this read does not authorize firmware updates.",
+    "risks_limitations": "OEM layouts may vary across firmware families, and revision bytes may be packed or formatted differently than simple decimal major/minor values."
+  },
+  "project_override_considerations": "An alternate Redfish/vendor inventory is equivalent only if it exposes all four named components with a documented one-to-one mapping and canonical version encoding; otherwise OEM coverage remains open.",
+  "expected_evidence": ["Approved vendor contract and target/platform/firmware identity", "Resolved request-path and selector decision", "Redacted full raw request/response and completion", "Response-length and field-boundary validation", "Decoded four-component version tuple plus expected-matrix comparison", "Unknown-byte preservation and no-mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The Procedure requires an Ethernet Interface Select byte for the in-band request, omits it for the OOB request, and separately states Request N/A. These are incompatible request schemas for the same OEM command and require an approved Wistron/firmware ruling before execution."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read-only purpose and affected components are clear. The missing OEM contract and owner resolution are identifiable prerequisites, so the review is REQUIRES PACKAGE / USER CONFIRMATION rather than irreducibly BLOCKED."},
+  "review_improvement": "Stops the unreviewed no-data command from winning by convenience, binds the OEM layout to platform/firmware and turns the response into a named four-component inventory comparison.",
+  "independent_technical_reasoning": "OEM NetFn 0x30 does not provide portable semantics. An extra selector byte changes the request framing, so the source's with-selector, without-selector and Request N/A forms cannot all be authoritative. Even a successful response cannot be decoded safely unless the platform-specific length and revision encoding are pinned. The correct boundary is therefore a read-only but contract-gated execution, not speculative probing.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1239 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1239 review",
+    "history": "Firmware inventory/update cases and duplicate-code search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab bios-configuration URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
