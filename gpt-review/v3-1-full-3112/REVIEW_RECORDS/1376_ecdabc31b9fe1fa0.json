@@ -1,1 +1,151 @@
-{"schema_version":"v3-1-full-review-record-1.0","review_sequence":1376,"library_sequence":1226,"source_key":"Functionality|1227|Wistron-BMC-00517-V002","case_variant_id":"ecdabc31b9fe1fa0","source_ref":{"sheet":"Functionality","source_row":1227,"code":"Wistron-BMC-00517-V002"},"source_integrity":{"exact_xlsx_row_read":true,"original_row_sha256":"8bacd10ea06b6863d6cb754a7f12606e4d835648772bcd00e4343fdf1bae1bb7","source_xlsx_sha256":"e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8","deepseek_same_row_read":true,"tests_json_cross_check":true,"gpt_v2_read":true,"historical_revision_search":true,"duplicate_code_search":true,"duplicate_code_result":"Get Sensor Hysteresis provides baseline/readback only; threshold and event-enable setters affect different policy fields and cannot satisfy this write case.","next_source_row_verified":"Functionality|1228|Wistron-BMC-00518-V002 / d5dbf3a56d331ece directly reopened from XLSX and manifest."},"source_snapshot":{"items":"Set Sensor Hysteresis (OOB)","procedure":"TBD with pre-test log clearing.","criteria":"TBD","deepseek":"NO; awaits specification and provides no command.","gpt_v2":"REQUIRES a validated raw 0x04/0x24 write with approval, readback, event observation and restoration."},"historical_reviews":{"deepseek":"Correctly refuses to invent sensor/value bytes.","gpt_v2":"Retains the functional mutation and provides a reversible one-sensor boundary.","history":"The following 0x25 getter is the natural baseline/readback; sensor thresholds and event masks are independent settings.","v3_1":"A read-only substitute would be coverage reduction and is prohibited."},"original_test_intent":"Change the approved positive and/or negative hysteresis field for one writable sensor over OOB, verify the changed event sensitivity, then restore the exact prior value.","original_method":"Master remains TBD. Review identifies Sensor/Event raw 0x04/0x24 only after the target defines sensor number, writable fields and byte encoding.","automation_classification":"REQUIRES PACKAGE / USER CONFIRMATION","execution_readiness":["REVIEW_COMPLETE","MASTER_TBD_PRESERVED","STATE_CHANGING_SENSOR_POLICY","NEEDS_WRITABLE_SENSOR_CONFIRMATION","NEEDS_VALUE_AND_EVENT_ORACLE","NEEDS_BASELINE_RESTORE","NO_DUT_EXECUTION_PERFORMED"],"execution_status":"NOT EXECUTED","tool_result":"NOT RUN","engineer_verdict":"ENGINEER OWNED; PENDING","manual_activity":"The monitoring owner approves the dedicated target, exact sensor and positive/negative values, bounded stimulus/observation window, abort conditions and byte-for-byte restoration.","required_inputs":["Verified BMC/sensor/SDR mapping","0x04/0x24 request schema","Writable direction/support flags","Current 0x04/0x25 values","Approved new raw and engineering-unit values","Event stimulus and expected transition","Restore payload"],"safety_requirements":["Dedicated non-production target","Do not clear SEL or OS/BMC logs","Do not guess unsupported fields","One approved write only","Do not change thresholds or event enables","Abort on event storm or monitoring loss","Read back and restore","No automatic retry"],"agent_execution_scope":["Verify sensor identity and writable capability","Capture 0x25 hysteresis plus threshold/event baseline","Present exact byte diff for approval","Issue one 0x24 write","Read back and observe bounded event behavior","Restore original bytes and reverify","Archive preserved logs"],"engineer_actions":["Approve sensor/value/stimulus and maintenance window","Own recovery if restoration fails","Decide final DUT verdict"],"command_applicability":{"original_deepseek_command_fit":"DeepSeek appropriately refuses the TBD mutation; execution becomes possible only through a target-specific package and explicit owner confirmation.","executable_command_required":true,"command_recommendation":"After approval, issue one secret-safe raw 0x04 0x24 request containing the verified sensor number and documented hysteresis fields; verify through raw 0x04 0x25 and restore.","original_parameters_and_time_preserved":"No sensor number or value is invented; Master TBD and timing fields are preserved."},"modernized_recommendation":{"status":"PROJECT_EXECUTION_READINESS_PENDING","recommended_method":"Establish support and baseline, apply one safe in-range hysteresis delta, verify both byte-level readback and the intended assertion/deassertion boundary, then restore.","difference_from_original_method":"Adds a complete reversible Review procedure without modifying the source.","coverage_difference":"A 0x25 read proves current values only and cannot replace the required 0x24 functional write.","risks_limitations":"Hysteresis can suppress legitimate alerts or create repeated transitions; an artificial stimulus may not be safe for every physical sensor."},"project_override_considerations":"A vendor configuration API is equivalent only if it identifies the same sensor/fields, produces field-level readback and supports exact restore; otherwise raw 0x04/0x24 coverage remains unverified.","expected_evidence":["Approval and dedicated-target identity","Sensor/SDR support and initial hysteresis","Exact proposed and issued bytes","Set completion and 0x25 readback","Bounded event/monitoring trace","SEL/OS/BMC logs","Restored values and no-collateral-change audit"],"source_conflict_analysis":{"is_source_conflict":true,"analysis":"The title requires a policy write while Procedure and Criteria are entirely TBD and boilerplate clears the event evidence needed to judge the change."},"blocked_analysis":{"is_blocked":false,"analysis":"The function and standard command are identifiable. Sensor capability, values and stimulus are Project SPEC readiness inputs; execution becomes BLOCKED only if safe restore or semantics remain indeterminate after those artifacts are supplied."},"review_improvement":"Preserves the original write coverage while limiting it to one proven-writable sensor and requiring event-level proof and restoration instead of command-success evidence.","independent_technical_reasoning":"Hysteresis changes the distance between assertion and deassertion, so a readback byte alone does not demonstrate the intended monitoring behavior. Conversely, provoking a physical sensor without validated limits can be unsafe. The correct boundary is a supported sensor, approved in-range delta, controlled observation, preserved event logs and exact rollback.","source_provenance":{"primary":"XLSX Functionality physical row 1227 reopened directly","deepseek_same_row":"XLSX AI columns and data/tests.json exact row","gpt_v2":"Exact Functionality row 1227 review","history":"Adjacent 0x25 getter and distinct threshold/event-policy records","external_sources":[]},"no_automatic_retry":true,"review_outcome":"SOURCE_CONFLICT","second_review_outcome":"CHANGED","regression_result":{"intent_preserved":true,"procedure_preserved":true,"criteria_preserved":true,"coverage_regression":false,"safety_regression":false,"hardware_pass_claimed":false,"status":"PASS_STATIC_REVIEW"},"per_case_quality_gate":{"exact_xlsx_row_read":true,"deepseek_same_row_read":true,"gpt_v2_read":true,"history_searched":true,"reasoning_is_case_specific":true,"source_identity_verified":true,"next_key_verified_from_xlsx":true,"no_hardware_pass_claimed":true,"record_complete":true}}
+{
+    "schema_version": "v3-1-full-review-record-1.0",
+    "review_sequence": 1376,
+    "library_sequence": 1226,
+    "source_key": "Functionality|1227|Wistron-BMC-00517-V002",
+    "case_variant_id": "ecdabc31b9fe1fa0",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1227,
+        "code": "Wistron-BMC-00517-V002"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "original_row_sha256": "8bacd10ea06b6863d6cb754a7f12606e4d835648772bcd00e4343fdf1bae1bb7",
+        "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "deepseek_same_row_read": true,
+        "tests_json_cross_check": true,
+        "gpt_v2_read": true,
+        "historical_revision_search": true,
+        "duplicate_code_search": true,
+        "duplicate_code_result": "Get Sensor Hysteresis provides baseline/readback only; threshold and event-enable setters affect different policy fields and cannot satisfy this write case.",
+        "next_source_row_verified": "Functionality|1228|Wistron-BMC-00518-V002 / d5dbf3a56d331ece directly reopened from XLSX and manifest."
+    },
+    "source_snapshot": {
+        "items": "Set Sensor Hysteresis (OOB)",
+        "procedure": "TBD with pre-test log clearing.",
+        "criteria": "TBD",
+        "deepseek": "NO; awaits specification and provides no command.",
+        "gpt_v2": "REQUIRES a validated raw 0x04/0x24 write with approval, readback, event observation and restoration."
+    },
+    "historical_reviews": {
+        "deepseek": "Correctly refuses to invent sensor/value bytes.",
+        "gpt_v2": "Retains the functional mutation and provides a reversible one-sensor boundary.",
+        "history": "The following 0x25 getter is the natural baseline/readback; sensor thresholds and event masks are independent settings.",
+        "v3_1": "A read-only substitute would be coverage reduction and is prohibited."
+    },
+    "original_test_intent": "Set the approved positive and negative hysteresis bytes for one writable sensor over OOB, verify the changed event sensitivity, then restore both exact prior values.",
+    "original_method": "Master remains TBD. Review identifies the IPMI v2.0 Table 35-6 Sensor/Event request raw 0x04/0x24 <sensor number> 0xff <positive hysteresis> <negative hysteresis>, only after the target defines the sensor and both values.",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": [
+        "REVIEW_COMPLETE",
+        "MASTER_TBD_PRESERVED",
+        "STATE_CHANGING_SENSOR_POLICY",
+        "NEEDS_WRITABLE_SENSOR_CONFIRMATION",
+        "NEEDS_VALUE_AND_EVENT_ORACLE",
+        "NEEDS_BASELINE_RESTORE",
+        "NO_DUT_EXECUTION_PERFORMED"
+    ],
+    "execution_status": "NOT EXECUTED",
+    "tool_result": "NOT RUN",
+    "engineer_verdict": "ENGINEER OWNED; PENDING",
+    "manual_activity": "The monitoring owner approves the dedicated target, exact sensor and positive/negative values, bounded stimulus/observation window, abort conditions and byte-for-byte restoration.",
+    "required_inputs": [
+        "Verified BMC/sensor/SDR mapping",
+        "0x04/0x24 request schema, including required 0xFF reserved byte",
+        "Sensor hysteresis-set support",
+        "Current 0x04/0x25 values",
+        "Approved new positive and negative raw values plus their engineering-unit interpretation",
+        "Event stimulus and expected transition",
+        "Restore payload"
+    ],
+    "safety_requirements": [
+        "Dedicated non-production target",
+        "Do not clear SEL or OS/BMC logs",
+        "Do not guess unsupported fields",
+        "One approved write only",
+        "Do not change thresholds or event enables",
+        "Abort on event storm or monitoring loss",
+        "Read back and restore",
+        "No automatic retry"
+    ],
+    "agent_execution_scope": [
+        "Verify sensor identity and writable capability",
+        "Capture raw 0x04/0x25 <sensor number> 0xff hysteresis plus threshold/event baseline",
+        "Present exact byte diff for approval",
+        "Issue one raw 0x04/0x24 <sensor number> 0xff <positive hysteresis> <negative hysteresis> write",
+        "Read back with raw 0x04/0x25 <sensor number> 0xff and observe bounded event behavior",
+        "Restore original bytes and reverify",
+        "Archive preserved logs"
+    ],
+    "engineer_actions": [
+        "Approve sensor/value/stimulus and maintenance window",
+        "Own recovery if restoration fails",
+        "Decide final DUT verdict"
+    ],
+    "command_applicability": {
+        "original_deepseek_command_fit": "DeepSeek appropriately refuses the TBD mutation; execution becomes possible only through a target-specific package and explicit owner confirmation.",
+        "executable_command_required": true,
+        "command_recommendation": "After approval, issue one secret-safe raw 0x04 0x24 <sensor number> 0xff <positive hysteresis> <negative hysteresis> request as defined by IPMI v2.0 Table 35-6; verify through raw 0x04 0x25 <sensor number> 0xff and restore both baseline bytes.",
+        "original_parameters_and_time_preserved": "No sensor number or value is invented; Master TBD and timing fields are preserved."
+    },
+    "modernized_recommendation": {
+        "status": "PROJECT_EXECUTION_READINESS_PENDING",
+        "recommended_method": "Establish support and read both baseline bytes, apply one approved in-range positive/negative pair using the complete Table 35-6 payload, verify both byte-level readback and the intended assertion/deassertion boundary, then restore the original pair.",
+        "difference_from_original_method": "Adds a complete reversible Review procedure without modifying the source.",
+        "coverage_difference": "A 0x25 read proves current values only and cannot replace the required 0x24 functional write.",
+        "risks_limitations": "Hysteresis can suppress legitimate alerts or create repeated transitions; an artificial stimulus may not be safe for every physical sensor."
+    },
+    "project_override_considerations": "A vendor configuration API is equivalent only if it identifies the same sensor/fields, produces field-level readback and supports exact restore; otherwise raw 0x04/0x24 coverage remains unverified.",
+    "expected_evidence": [
+        "Approval and dedicated-target identity",
+        "Sensor/SDR support and initial hysteresis",
+        "Exact proposed and issued sensor, 0xFF reserved, positive-hysteresis and negative-hysteresis bytes",
+        "Set completion and 0x25 readback",
+        "Bounded event/monitoring trace",
+        "SEL/OS/BMC logs",
+        "Restored values and no-collateral-change audit"
+    ],
+    "source_conflict_analysis": {
+        "is_source_conflict": false,
+        "analysis": "The title consistently identifies Set Sensor Hysteresis while the Master Procedure and Criteria are TBD. The missing payload, acceptance oracle and restore contract, together with generic log-clearing boilerplate, are source omissions rather than mutually incompatible requirements; the conditional Review procedure preserves the Master TBD and requires explicit approval before any write."
+    },
+    "blocked_analysis": {
+        "is_blocked": false,
+        "analysis": "The function and standard command are identifiable. Sensor capability, values and stimulus are Project SPEC readiness inputs; execution becomes BLOCKED only if safe restore or semantics remain indeterminate after those artifacts are supplied."
+    },
+    "review_improvement": "Preserves the original write coverage while limiting it to one proven-writable sensor and requiring event-level proof and restoration instead of command-success evidence.",
+    "independent_technical_reasoning": "Hysteresis changes the distance between assertion and deassertion, so a readback byte alone does not demonstrate the intended monitoring behavior. Conversely, provoking a physical sensor without validated limits can be unsafe. The correct boundary is a supported sensor, approved in-range delta, controlled observation, preserved event logs and exact rollback.",
+    "source_provenance": {
+        "primary": "XLSX Functionality physical row 1227 reopened directly",
+        "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+        "gpt_v2": "Exact Functionality row 1227 review",
+        "history": "Adjacent 0x25 getter and distinct threshold/event-policy records",
+        "external_sources": [
+            "Intel, IPMI v2.0 rev. 1.1 specification update, section 35.6 and Table 35-6 (Set Sensor Hysteresis, NetFn 04h, Cmd 24h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"
+        ]
+    },
+    "no_automatic_retry": true,
+    "review_outcome": "IMPROVED",
+    "second_review_outcome": "CHANGED",
+    "regression_result": {
+        "intent_preserved": true,
+        "procedure_preserved": true,
+        "criteria_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "hardware_pass_claimed": false,
+        "status": "PASS_STATIC_REVIEW"
+    },
+    "per_case_quality_gate": {
+        "exact_xlsx_row_read": true,
+        "deepseek_same_row_read": true,
+        "gpt_v2_read": true,
+        "history_searched": true,
+        "reasoning_is_case_specific": true,
+        "source_identity_verified": true,
+        "next_key_verified_from_xlsx": true,
+        "no_hardware_pass_claimed": true,
+        "record_complete": true
+    }
+}
