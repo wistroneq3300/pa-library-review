@@ -1,0 +1,71 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1406,
+  "library_sequence": 1257,
+  "source_key": "Functionality|1258|Wistron-BMC-00548-V004",
+  "case_variant_id": "0260abc2d5f3b91a",
+  "source_ref": {"sheet": "Functionality", "source_row": 1258, "code": "Wistron-BMC-00548-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "7d88685148cd1bccb6d4d6c51f4d17dcc5985ced0a5553bf051221b7e9fbf2a1",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Capability getters do not authorize this write, and the following OOB setter has separate session-loss exposure; neither substitutes for this local mutation.",
+    "next_source_row_verified": "Functionality|1259|Wistron-BMC-00549-V003 / 87da2e85741ff998 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set DCMI Configuration Parameters (IB)",
+    "procedure": "Local raw 0x2c 0x12 0xdc <selector> 0 <data> for Activate DHCP, Discovery Configuration or DHCP Timing 1-3, with data delegated to DCMI Table 6-6.",
+    "criteria": "Command is sent without error.",
+    "script": "Private Wistron set-get DCMI configuration repository.",
+    "deepseek": "PARTIAL and operator-gated, but uses a generic parameter name, remote sshpass path and an unscoped get of all parameters; its risk label incorrectly describes all changes as power/thermal.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION for one exact selector/value with baseline, specification-backed encoding, read-back, alternate access and restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly refuses unattended execution, but it does not prove the source raw payload or provide an exact per-parameter rollback.",
+    "gpt_v2": "Correctly converts the open write into a one-parameter approved transaction and treats missing material as prerequisites, not automatic BLOCKED.",
+    "history": "The invalidated prior-run location was found but excluded as authority; the DCMI capability records were checked and remain read-only/non-authorizing.",
+    "v3_1": "Network configuration writes require exact bytes, observable semantics and an independent access path before execution."
+  },
+  "original_test_intent": "Change one approved DCMI DHCP/discovery configuration parameter through the local in-band path, verify the resulting value and relevant behavior, and restore the baseline when required.",
+  "original_method": "Preserve raw 0x2c 0x12 0xdc and the five selector definitions, but select exactly one parameter, derive its revision/data bytes from the approved specification, capture its getter baseline, write once and perform semantic read-back.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "STATE_CHANGING_DCMI_CONFIGURATION", "IN_BAND_ROUTE", "NEEDS_EXACT_SELECTOR_AND_TABLE_6_6_BYTES", "NEEDS_BASELINE_APPROVAL_AND_RECOVERY", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The network/BMC owner selects and approves one exact parameter/value, validates its DCMI Table 6-6 encoding and expected effect, and provides a maintenance window, alternate access and verified baseline restore path.",
+  "required_inputs": ["Verified DUT/BMC and local IPMI route", "Approved DCMI specification revision and matching package", "Exactly one selector and revision/data byte sequence", "Decoded baseline from the corresponding get operation", "Expected DHCP/discovery or timing behavior", "Network environment and lease/timing observations", "Independent console or management path", "Exact restore bytes and approval"],
+  "safety_requirements": ["Never choose a default selector or value", "One approved parameter write only", "Validate reserved bits, range and payload length", "Capture baseline before mutation", "Maintain independent access for DHCP/discovery changes", "Preserve logs", "Stop on ambiguous completion or read-back", "Restore only under the approved plan", "No automatic retry"],
+  "agent_execution_scope": ["Verify target and approved specification profile", "Read and decode the selected parameter baseline", "Present exact write and restore bytes for approval", "Monitor alternate access", "Issue one approved local raw write", "Re-read exact selector and observe intended network behavior", "Restore baseline when required", "Archive all raw, semantic and reachability evidence"],
+  "engineer_actions": ["Approve the selector, exact value, expected effect and recovery", "Ensure the test is isolated from production management", "Own final PASS, FAIL or BLOCKED"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The generic `DCMI_PARAM` CLI form neither preserves the Master raw request nor identifies exact bytes, and its SSH transport is not the named local in-band execution path.",
+    "executable_command_required": true,
+    "command_recommendation": "Read the chosen selector baseline with the approved getter; after explicit approval, issue one local raw 0x2c 0x12 0xdc <selector> 0 <validated-data>, then re-read that selector and verify its network semantics before any planned restore.",
+    "original_parameters_and_time_preserved": "All five selector meanings, revision byte position, in-band route and 10/5 timing are retained; no configuration bytes are guessed."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat each selector as its own typed transaction with a specification-derived encoder/decoder, baseline token, exact approval, alternate-path monitor and idempotence-free rollback workflow.",
+    "difference_from_original_method": "Adds value authorization, getter pairing, network-effect oracle and recovery while leaving the Master placeholders intact.",
+    "coverage_difference": "Command completion or getter output alone cannot prove that DHCP activation, discovery policy or timing behavior changed as intended.",
+    "risks_limitations": "An incorrect DHCP/discovery value can move the BMC address, disrupt discovery or delay lease behavior; the local host path may survive while remote manageability is lost."
+  },
+  "project_override_considerations": "A vendor CLI may replace the raw setter only with documented byte-for-byte semantics and equivalent read-back/effect evidence; if raw coverage is omitted, that difference must be recorded.",
+  "expected_evidence": ["Target/spec/package identity and approved selector/value", "Baseline raw getter response and decoded state", "Exact approved set request/response and completion", "Post-write selector read-back", "DHCP/discovery/timing behavior observed against a named oracle", "Continuous alternate-access evidence", "Restored baseline and reachability when required", "No unrelated write/reset/log-clear audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master consistently identifies a DCMI configuration setter, its selectors and the external table governing variable data. Placeholders, success-only acceptance and log clearing are incomplete or unsafe, but they do not contradict the named operation."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The operation and selector family are identifiable. Exact bytes, desired value, baseline and recovery are obtainable execution prerequisites, so the case remains REQUIRES PACKAGE / USER CONFIRMATION."},
+  "review_improvement": "Narrows an open-ended network setter to one specification-encoded, approved and reversible transaction with both byte-level and behavioral verification.",
+  "independent_technical_reasoning": "The five selectors do not share one generic value domain: activation flags, discovery settings and timing fields have different lengths and effects. A safe agent must bind one selector to its exact schema, preserve the old state, keep access independent of the setting being changed, and test the resulting behavior rather than treating a zero completion code as success.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1258 reopened directly", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1258 review", "history": "Adjacent DCMI getters/OOB setter and invalidated-run location search", "external_sources": ["Source-preserved private Wistron DQMS GitLab URL and cited DCMI Table 6-6; their contents were not available here and were not invented."]},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
