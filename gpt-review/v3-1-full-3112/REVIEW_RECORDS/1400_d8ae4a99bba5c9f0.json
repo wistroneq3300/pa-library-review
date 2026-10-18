@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1400,
+  "library_sequence": 1251,
+  "source_key": "Functionality|1252|Wistron-BMC-00542-V005",
+  "case_variant_id": "d8ae4a99bba5c9f0",
+  "source_ref": {"sheet": "Functionality", "source_row": 1252, "code": "Wistron-BMC-00542-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "6f02277937e4a6d01e26bfc4fa386aced7a7dc5d6ed3f4a5f2a2aaa9597e89da",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The following setter and standard SEL inventory commands do not resolve whether 0x82 or 0x43 is the private getter or define its storage-mode enumeration.",
+    "next_source_row_verified": "Functionality|1253|Wistron-BMC-00543-V005 / 98827c65c3f44d61 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get SEL Storage Mode",
+    "procedure": "In-band uses raw 0x30 0x82 plus an interface selector, while OOB uses raw 0x30 0x43 with no data; no response layout or mode enum is supplied.",
+    "criteria": "Command success plus a comparison to unrelated ipmitool lan print output.",
+    "script": "Private Wistron get-sel-storage-mode path.",
+    "deepseek": "YES by selecting OOB 0x30/0x43, without resolving 0x82, selector, response semantics or the unrelated LAN criterion.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION until the vendor mapping, response decoder and expected SEL retention policy are approved."
+  },
+  "historical_reviews": {
+    "deepseek": "Its command may be one valid path, but silently discards the source's distinct in-band opcode and cannot interpret storage mode from untyped bytes.",
+    "gpt_v2": "Correctly gates the read on package-owner resolution and prohibits clearing the evidence under review.",
+    "history": "The invalidated prior-run record was found but not used as authority; SEL clear, storage-mode set and general LAN inventory are separate functions.",
+    "v3_1": "Conflicting private opcodes are a source-identity problem, not a reason to probe both on a live BMC."
+  },
+  "original_test_intent": "Read the current SEL storage/retention mode from one verified BMC and compare the decoded value with the project logging policy without changing or clearing event records.",
+  "original_method": "Keep both source opcodes visible and issue neither until the Wistron artifact maps each transport, selector and response enum; lan print is excluded as a storage-mode oracle.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_INTENT", "SOURCE_OPCODE_AND_CRITERIA_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_STORAGE_MODE_DECODER_AND_POLICY", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The logging/package owner decides the authoritative in-band and OOB opcode mapping, selector requirements, mode enumeration and expected SEL retention policy.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved mapping for in-band 0x30/0x82 and OOB 0x30/0x43", "Interface-selector rule", "Response length, mode enum and reserved values", "Expected SEL retention/storage policy", "Reviewed secret-safe runner and decoder"],
+  "safety_requirements": ["Read only", "Do not clear SEL, dmesg or syslog", "Do not probe both conflicting opcodes", "Do not issue Set SEL Storage Mode", "Do not use lan print as evidence", "Validate completion and exact response length", "Preserve unknown bytes", "No reset, power action or automatic retry"],
+  "agent_execution_scope": ["Verify target and approved route/opcode contract", "Preserve current SEL inventory and logging evidence", "Issue exactly one approved getter request", "Capture the complete redacted frame", "Validate completion, length, enum and reserved fields", "Compare decoded mode with logging policy", "Archive a no-write/no-clear command audit"],
+  "engineer_actions": ["Resolve 0x82 versus 0x43 identity", "Approve selector and decoder", "Define expected retention policy", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "OOB 0x30/0x43 matches one Procedure line but does not establish its relation to in-band 0x30/0x82 or provide the mode decoder; the result cannot be validated by lan print.",
+    "executable_command_required": true,
+    "command_recommendation": "After vendor mapping approval, issue only the route-specific getter opcode with its documented selector, parse the exact storage-mode enum and compare it with the approved SEL policy.",
+    "original_parameters_and_time_preserved": "Both source opcodes, selector placeholder and 10/5 timing are preserved pending resolution; no opcode equivalence or mode value is inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Pin one getter to transport and firmware, validate its response structurally, decode storage policy through the vendor enum and retain SEL evidence untouched.",
+    "difference_from_original_method": "Adds protocol identity and a SEL-policy oracle while removing unrelated LAN validation and evidence deletion.",
+    "coverage_difference": "The read does not validate changing the mode, rollover behavior, event retention under capacity or SEL clearing.",
+    "risks_limitations": "Executing the wrong private opcode may call an unrelated OEM function even when completion is zero; an undocumented mode byte can invert overwrite-versus-stop-on-full interpretation."
+  },
+  "project_override_considerations": "A vendor API may substitute only if it reports the identical storage-policy enum and route mapping; standard lan print and generic SEL listing are not equivalent.",
+  "expected_evidence": ["Approved target/firmware/opcode/route mapping and parser version", "Preserved pre-existing SEL/log evidence", "Redacted exact request/response, completion and timestamp", "Length, enum and reserved-field validation", "Decoded mode and expected-policy comparison", "No set, clear, reset, power or other logging mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The Master assigns different opcodes to in-band (0x82) and OOB (0x43) without documenting equivalence, supplies a selector only for one path and judges SEL mode through unrelated LAN output. These cannot establish one authoritative getter."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The SEL storage-mode read purpose is clear. A vendor mapping, decoder and policy oracle are identifiable prerequisites, so the record is REQUIRES PACKAGE / USER CONFIRMATION rather than irreducibly BLOCKED."},
+  "review_improvement": "Stops live probing of conflicting OEM opcodes and turns the eventual read into a route-qualified, policy-decoded operation that preserves the SEL it is meant to characterize.",
+  "independent_technical_reasoning": "Private opcode identity is part of the test purpose: two different command bytes cannot be treated as equivalent based on a shared title. Because storage mode controls future retention rather than LAN state, the only valid oracle is a documented mode enum plus the approved logging policy, with existing events preserved as diagnostic evidence.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1252 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1252 review",
+    "history": "SEL mode/set/clear cases and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab get-sel-storage-mode URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
