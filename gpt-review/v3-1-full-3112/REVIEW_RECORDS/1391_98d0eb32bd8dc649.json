@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1391,
+  "library_sequence": 1242,
+  "source_key": "Functionality|1243|Wistron-BMC-00533-V005",
+  "case_variant_id": "98d0eb32bd8dc649",
+  "source_ref": {"sheet": "Functionality", "source_row": 1243, "code": "Wistron-BMC-00533-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "9a93482d0169564ed07feb5934d103ff539a9b9a452cc2c7fa5a14ac4b2db2f4",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Standard FRU read/write cases can provide backup and checksum mechanics, but they do not establish this private 0x30/0x24 manufacturing-date field or encoding.",
+    "next_source_row_verified": "Functionality|1244|Wistron-BMC-00534-V004 / 80c1a1cf18bafdd2 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set FRU MFG Date",
+    "procedure": "The only test action is in-band ipmitool raw 0x30 0x24 with no request bytes, FRU device, field selector or date encoding.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron set-fru-mfg-date path.",
+    "deepseek": "PARTIAL and calls for a user-set value, but still shows a parameterless OOB command, offers lan-print as read-back and does not define the target or encoding.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with exact vendor schema, complete FRU backup, one approved write, checksum/neighbor validation and restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly identifies a persistent write but its displayed command cannot carry the claimed date and changes the source's in-band transport without explaining equivalence.",
+    "gpt_v2": "Supplies the necessary field-integrity and recovery gates and preserves the unresolved in-band/OOB scope as an owner input.",
+    "history": "The invalidated prior-run artifact was located but excluded as authority; existing FRU cases reinforce full-image backup, checksum verification and protection of adjacent identity fields.",
+    "v3_1": "Missing vendor payload and operator-selected persistent metadata are package/confirmation prerequisites, not grounds to invent bytes or mark the purpose irreducibly blocked."
+  },
+  "original_test_intent": "Write one approved manufacturing date to the intended FRU field using the platform's OEM encoding, verify the decoded value and FRU integrity, then restore the original date unless retention is explicitly approved.",
+  "original_method": "Keep the in-band 0x30/0x24 command as the named interface but treat it as non-executable until the private script/spec defines the complete request and read-back path.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "PERSISTENT_FRU_METADATA_WRITE", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_APPROVED_DATE_AND_TARGET", "NEEDS_FRU_BACKUP_AND_RESTORE", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The FRU owner identifies the exact device and field, supplies the approved manufacturing date and encoding, confirms whether the test value is temporary, and authorizes the maintenance window and restore plan.",
+  "required_inputs": ["Verified BMC/SUT and FRU device identity", "Approved 0x30/0x24 request schema", "Manufacturing-date epoch, units, byte order, timezone and valid range", "Current decoded date and complete FRU binary export", "Approved test date and exact encoded bytes", "Read-back method and checksum rules", "Original-date restore payload or approved retained final value", "Pinned private-script/spec revision", "Explicit owner approval"],
+  "safety_requirements": ["Dedicated non-production asset", "Do not clear logs", "Never guess date bytes, FRU index or field offset", "Hash and validate a complete pre-image before writing", "Perform one approved field write only", "Reject impossible or out-of-range dates", "Verify all FRU checksums and neighboring fields", "Stop on partial write or any unrelated byte change", "Restore through a verified path", "No automatic retry"],
+  "agent_execution_scope": ["Verify target FRU and approved vendor contract", "Export and hash the complete FRU image", "Decode the current manufacturing date and validate checksums", "Present the exact encoded request for OK", "Issue one approved in-band 0x30/0x24 request", "Read back the full affected area and compare every neighboring field", "Restore the original date when required and revalidate the full image", "Archive byte-level and no-unapproved-mutation evidence"],
+  "engineer_actions": ["Approve the target field, encoding, test value and final retained/restored state", "Validate the private command/script and recovery package", "Decide any OOB equivalence separately from the source's in-band path", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "A bare raw 0x30 0x24 request cannot convey the claimed user date, and ipmitool lan print cannot validate FRU manufacturing metadata; the suggested OOB transport also exceeds the source's in-band-only action without an equivalence contract.",
+    "executable_command_required": true,
+    "command_recommendation": "After the private schema is approved, issue exactly one in-band raw 0x30 0x24 <complete-approved-FRU/date-payload>, then read back the target field and full FRU integrity data before restoring the original value if required.",
+    "original_parameters_and_time_preserved": "The source command identity and 10/5 timing are retained; target, date bytes, transport equivalence and final-state policy are explicitly unresolved rather than inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Make the change byte-exact and transactional: verified full backup, one encoded field write, full checksum/neighbor comparison, and deterministic restoration with a separately stored recovery image.",
+    "difference_from_original_method": "Adds the missing payload contract and changes acceptance from command completion to correct decoded metadata plus FRU integrity and recovery.",
+    "coverage_difference": "A generic FRU write utility does not prove the OEM 0x30/0x24 path; displaying a date does not prove unchanged checksums and neighboring identity fields.",
+    "risks_limitations": "Wrong epoch, units, offset or endianness can produce a plausible but false asset date, while a misplaced write can corrupt serial, product or checksum data used by inventory and warranty systems."
+  },
+  "project_override_considerations": "A vendor FRU editor may substitute only when it targets the same field with documented byte equivalence and the report identifies untested raw-command coverage; generic lan settings are never valid verification.",
+  "expected_evidence": ["Approved target/field/schema/date and owner confirmation", "Complete pre-image, hash, decoded fields and checksum report", "Exact encoded date bytes and redacted 0x30/0x24 request/response", "Post-write decoded date, raw bytes, all checksums and neighboring-field diff", "Restore request/result or approved retained final-state record", "Final full-image hash and preserved FRU/BMC/SEL/OS evidence"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The source is materially incomplete but not internally contradictory: it names an in-band OEM setter and provides no payload schema. The absent target, date and read-back must be supplied as prerequisites rather than treated as conflicting source instructions."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The persistent manufacturing-date operation is identifiable. An approved vendor schema, date input, backup and restore package can make it safely reviewable, so missing artifacts are REQUIRES PACKAGE / USER CONFIRMATION rather than irreducible BLOCKED."},
+  "review_improvement": "Converts a parameterless persistent write into a target-specific, byte-audited metadata transaction with checksum protection and an independent recovery copy.",
+  "independent_technical_reasoning": "FRU manufacturing date is identity metadata, not a harmless display setting. The same calendar date can encode differently by epoch, granularity and byte order, and a successful completion cannot show which device or offset changed. Full-image comparison is therefore needed both to prove the intended field changed and to prove serial/product/checksum neighbors did not.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1243 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1243 review",
+    "history": "FRU integrity cases, duplicate-code/item search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab set-fru-mfg-date URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
