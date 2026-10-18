@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1397,
+  "library_sequence": 1248,
+  "source_key": "Functionality|1249|Wistron-BMC-00539-V004",
+  "case_variant_id": "f30546a338ca5f41",
+  "source_ref": {"sheet": "Functionality", "source_row": 1249, "code": "Wistron-BMC-00539-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "84e2bf2723bda16bd5d7cd69074434dfe64fadc85d438dabf819ea65321045ed",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "NTP-server configuration, direct clock setting and firmware/network persistence cases do not substitute for this enable-state transition and synchronization observation.",
+    "next_source_row_verified": "Functionality|1250|Wistron-BMC-00540-V003 / 8a49d1538db83da5 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set NTP Status",
+    "procedure": "The in-band raw 0x30 0x42 request appends an Ethernet Interface Select, OOB supplies no data, while the note says request byte 1 is NTP Status 0x01/0x00.",
+    "criteria": "Command success plus an unrelated requirement that UBB IP remain available after BMC firmware flash.",
+    "script": "Private Wistron set-ntp-status path.",
+    "deepseek": "PARTIAL but shows a bare OOB command while claiming user-selected 0x01/0x00, offers lan-print verification and does not address time synchronization or the unrelated firmware criterion.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with exact interface/status request, NTP ownership, baseline chronology, synchronization observation, read-back and restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "Recognizes state change but omits the status byte and cannot verify NTP through LAN configuration output.",
+    "gpt_v2": "Correctly rejects the firmware/IP criterion and makes clock/log chronology part of the evidence boundary.",
+    "history": "The invalidated earlier-run artifact was located but excluded as authority; time-setting and NTP-server cases affect related state but have different commands and acceptance oracles.",
+    "v3_1": "A time-service mutation requires owner approval and evidence preservation because timestamps, certificates and incident chronology can change."
+  },
+  "original_test_intent": "Change one BMC interface's NTP enable state to an approved value, verify actual synchronization or unsynchronized behavior over a bounded interval, and restore the original time-service policy without losing chronology evidence.",
+  "original_method": "Preserve both request forms, the 0x00/0x01 note and the unrelated firmware criterion as source evidence; do not execute until the vendor contract identifies the actual first byte and a review-layer NTP acceptance oracle is approved.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "STATE_CHANGING_TIME_SERVICE_POLICY", "SOURCE_REQUEST_AND_CRITERIA_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_NTP_READBACK_AND_CHRONOLOGY_ORACLE", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The time-service owner selects enable or disable, approves the BMC/interface and authoritative NTP servers, defines synchronization/offset and timestamp tolerances, coordinates competing time managers and authorizes restoration.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved 0x30/0x42 request and response schema", "Resolution of selector versus NTP-status first-byte semantics", "Current NTP enable state and supported read-back method", "Configured authoritative servers and network reachability", "BMC timezone, RTC and time-sync ownership", "Acceptable synchronization state, offset, jitter and timeout", "SEL/BMC/OS timestamp correlation baseline", "Original-policy restore command and explicit owner approval"],
+  "safety_requirements": ["Do not clear SEL, BMC or OS logs", "Do not change NTP servers, timezone or clock value in this case", "Never guess selector/status placement", "One approved enable/disable transition only", "Capture wall-clock and monotonic references before mutation", "Monitor for clock steps and competing time writers", "Do not use firmware flash or UBB-IP availability as acceptance", "Restore the original status on every exit", "Verify post-restore synchronization and chronology", "No automatic retry"],
+  "agent_execution_scope": ["Verify target, time ownership and approved OEM schema", "Capture NTP configuration/state, server reachability and correlated timestamps", "Present exact request and expected temporal effect for OK", "Send one approved 0x30/0x42 request", "Read back state and observe synchronization, offset and log chronology", "Stop on unsafe drift, certificate/time errors or competing writer", "Restore the original NTP status and confirm stable chronology", "Archive raw and time-series evidence"],
+  "engineer_actions": ["Resolve request-byte framing", "Remove firmware flash/UBB-IP from this case's acceptance while preserving the conflict", "Approve time source, tolerances, observation window and recovery", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its bare 0x30/0x42 request includes neither the source's interface selector nor the note's enable/disable byte, so it cannot request a defined NTP state; lan print does not establish synchronization.",
+    "executable_command_required": true,
+    "command_recommendation": "After contract approval, send exactly one raw 0x30 0x42 <approved-status-and-selector-layout> request, read back the NTP state through the vendor-defined path, observe synchronization/offset and timestamp continuity, then restore the captured status.",
+    "original_parameters_and_time_preserved": "The source's enable=0x01, disable=0x00 and 10/5 timing are retained; selector ordering, sync timeout and tolerances are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Evaluate NTP as a time-dependent control transition: capture correlated clocks and logs, make one byte-defined status change, verify read-back and convergence/holdover behavior, and restore with chronology intact.",
+    "difference_from_original_method": "Replaces command success and unrelated post-flash reachability with state, source, offset and timestamp-continuity evidence.",
+    "coverage_difference": "Reachable BMC IP does not prove NTP; status read-back alone does not prove synchronization to the approved source or correct event chronology.",
+    "risks_limitations": "Enabling or disabling synchronization can step or drift BMC time, reorder event timestamps, affect certificate validation and obscure causality if evidence is cleared or clocks are not correlated first."
+  },
+  "project_override_considerations": "A WebUI, Redfish or service-manager toggle is equivalent only with documented mapping to the same status bit and identical convergence/restoration evidence; firmware-network persistence remains a separate testcase.",
+  "expected_evidence": ["Approved target/interface/schema/status, time source and owner confirmation", "Baseline NTP state/configuration, reachability and correlated clocks", "Redacted exact request/response, completion and timing", "Vendor read-back plus synchronization source/state, offset/jitter and bounded convergence or holdover behavior", "SEL/BMC/OS timestamp chronology and any certificate/network effects", "Restored status and stable post-restore synchronization", "No firmware flash, server/timezone/clock or log mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The in-band Procedure uses its only data position for an Ethernet Interface Select, the note defines request byte 1 as NTP Status, and the OOB Procedure omits data entirely. Criteria 2 then asks for UBB-IP availability after an unperformed BMC firmware flash, which is unrelated to the named NTP status operation."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The enable/disable purpose and time-service effects are identifiable, and the unrelated criterion can be excluded in the review while preserved as a conflict. Vendor framing, synchronization oracle and owner inputs are resolvable prerequisites."},
+  "review_improvement": "Prevents a bare command and unrelated firmware check from passing, resolves the review around actual NTP state and convergence, and protects the timestamp evidence needed to assess the change.",
+  "independent_technical_reasoning": "NTP enablement is not instantaneous command semantics; its outcome appears as source selection, synchronization state and bounded offset over time. A single request byte cannot simultaneously be an interface selector and status without a vendor-defined layout. Because time changes also alter the chronology used for diagnosis, logs must be preserved and correlated before, during and after restoration.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1249 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1249 review",
+    "history": "NTP server/time setting and firmware/network persistence cases, duplicate-code search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab set-ntp-status URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
