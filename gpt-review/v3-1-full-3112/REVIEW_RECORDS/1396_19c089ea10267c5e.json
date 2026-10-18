@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1396,
+  "library_sequence": 1247,
+  "source_key": "Functionality|1248|Wistron-BMC-00538-V004",
+  "case_variant_id": "19c089ea10267c5e",
+  "source_ref": {"sheet": "Functionality", "source_row": 1248, "code": "Wistron-BMC-00538-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "f7d81ddbf101848e70623b05e6429154bd2d3b18ce8b201037a563d172b5fd20",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "BMC cold/warm reset and reboot cases do not replace factory-default coverage because they should preserve configuration rather than erase it.",
+    "next_source_row_verified": "Functionality|1249|Wistron-BMC-00539-V004 / f30546a338ca5f41 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Factory Reset",
+    "procedure": "The in-band raw 0x30 0x41 request appends an Ethernet Interface Select, while the OOB request supplies no data. The source clears logs first and provides no reset-scope, default-state or recovery specification.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron factory-reset path.",
+    "deepseek": "PARTIAL but offers a no-data OOB command, describes both IB and OOB without the selector discrepancy, and proposes lan-print rather than a complete post-reset default comparison.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with exact reset scope/interface, immutable configuration export, independent recovery, one destructive action and post-reconnect default/reprovision verification."
+  },
+  "historical_reviews": {
+    "deepseek": "Recognizes a destructive change but its command and evidence cannot establish which settings were erased or how access will be recovered.",
+    "gpt_v2": "Correctly treats factory reset as configuration loss rather than ordinary reboot and requires recovery independent of current BMC credentials and network state.",
+    "history": "The invalidated earlier-run artifact was located but excluded as authority; reset/reboot reviews preserve settings and therefore cannot supply this case's default-state oracle.",
+    "v3_1": "A reset/factory operation needs explicit target, scope, backup and recovery approval; successful command dispatch is never a hardware PASS."
+  },
+  "original_test_intent": "Reset one dedicated BMC to the documented factory configuration, measure disconnect and recovery, verify every approved default and then reprovision only the authorized baseline.",
+  "original_method": "Preserve both raw 0x30 0x41 source forms, but execute neither until the vendor contract resolves selector/no-data framing and defines exactly which configuration, identity and evidence stores are reset.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "DESTRUCTIVE_BMC_CONFIGURATION_RESET", "SOURCE_REQUEST_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_IMMUTABLE_BACKUP_AND_DEFAULT_MATRIX", "NEEDS_INDEPENDENT_RECOVERY", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The system owner approves the exact BMC and destructive scope, maintenance outage, immutable backup manifest, documented default matrix, bootstrap credentials, independent console/physical recovery and limited reprovision plan.",
+  "required_inputs": ["Verified BMC/SUT, board and firmware identity", "Approved 0x30/0x41 request schema and selector decision", "Authoritative factory-reset scope by configuration class", "Immutable exports of LAN, users/roles, certificates, services, time/NTP, logging, policies, FRU/customization and relevant inventory", "Vendor/project default-state matrix", "Expected disconnect, reset and readiness deadlines", "Independent recovery channel and bootstrap credentials", "Approved reprovision sequence and secrets source", "Explicit destructive-action approval"],
+  "safety_requirements": ["Dedicated non-production SUT", "Two-source target and scope verification", "Do not clear logs", "Do not rely on the active BMC session for recovery", "Hash and store backups outside the BMC", "One factory-reset action only", "Do not substitute cold reset, reboot or power cycle", "Expect credentials and network addressing to change", "Never expose bootstrap or restored secrets", "Stop on identity mismatch or broader-than-approved erasure", "No automatic retry"],
+  "agent_execution_scope": ["Verify target and approved destructive contract", "Export and hash the complete authorized configuration/evidence manifest", "Confirm independent recovery and bootstrap access", "Present exact request and expected erased/preserved scope for OK", "Issue one approved 0x30/0x41 request", "Track disconnect, restart and management readiness", "Compare actual defaults field-by-field with the approved matrix", "Reprovision only the approved baseline and verify recovered access", "Archive reset and recovery evidence"],
+  "engineer_actions": ["Resolve selector versus empty-request framing", "Approve the erase/preserve scope and default matrix", "Approve independent access, bootstrap secrets and reprovision boundaries", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its no-data OOB request chooses one source form without resolving the in-band selector and provides no way to distinguish factory reset from a restart or partial reset.",
+    "executable_command_required": true,
+    "command_recommendation": "After scope and recovery approval, issue exactly one raw 0x30 0x41 [approved-interface-selector-if-required] request, then reconnect independently and verify the documented erased, preserved and defaulted fields before controlled reprovisioning.",
+    "original_parameters_and_time_preserved": "Both request forms and the source's 10/5 timing are retained as evidence, but the actual reset/recovery timeout comes from the vendor contract and is not inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Run the reset as a destructive lifecycle with off-target immutable backup, independent access, explicit scope matrix, one command, bounded readiness observation, field-by-field default comparison and controlled reprovision.",
+    "difference_from_original_method": "Replaces command-success acceptance and evidence deletion with post-reset state proof and recoverability.",
+    "coverage_difference": "A reconnect or lan print proves only limited network availability; a warm/cold reset cannot prove factory-default erasure of users, certificates, services and policy.",
+    "risks_limitations": "The action may remove management IP, credentials, trust anchors, users, logging destinations and custom policy; incomplete vendor scope can strand the target or erase evidence needed to diagnose failure."
+  },
+  "project_override_considerations": "A WebUI, Redfish or vendor utility factory reset is equivalent only when its erased/preserved scope matches 0x30/0x41 and the original raw-command coverage difference is disclosed; ordinary BMC reset is not equivalent.",
+  "expected_evidence": ["Approved target/scope/request contract and destructive-action confirmation", "Immutable pre-reset configuration/evidence manifest with hashes", "Independent recovery proof and secured bootstrap plan", "Redacted exact request/response, completion and disconnect/reconnect timeline", "Post-reset identity, firmware and field-by-field default/preserved matrix", "Approved reprovision actions and recovered management verification", "Preserved off-target logs and no-repeat/no-extra-mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The in-band Procedure requires an Ethernet Interface Select byte for 0x30/0x41 while the OOB Procedure sends no data for the same factory-reset action. Without a vendor ruling, those request schemas are incompatible for an irreversible configuration reset."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The destructive factory-default purpose is clear. An approved request contract, reset-scope matrix, complete backup and independent recovery are identifiable prerequisites, so the review remains REQUIRES PACKAGE / USER CONFIRMATION rather than irreducibly BLOCKED."},
+  "review_improvement": "Exposes the request-framing conflict, preserves rather than clears evidence and defines success by documented post-reset defaults plus recoverable access instead of command completion.",
+  "independent_technical_reasoning": "Factory reset invalidates the configuration context used to launch it, so the pre-reset session cannot be the evidence or recovery anchor. A completion response precedes the destructive effect and cannot prove its extent. Only an external backup, independent access and a field-level before/default/after comparison can distinguish correct factory reset from reboot, partial erasure or wrong-target damage.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1248 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1248 review",
+    "history": "BMC reset/reboot and configuration recovery cases, duplicate-code search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab factory-reset URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
