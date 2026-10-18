@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1390,
+  "library_sequence": 1241,
+  "source_key": "Functionality|1242|Wistron-BMC-00532-V002",
+  "case_variant_id": "ec59b9a4c3471a14",
+  "source_ref": {"sheet": "Functionality", "source_row": 1242, "code": "Wistron-BMC-00532-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "c9bbfc2c6c522090a0d4b738d5e3200a05195f2ea77b0b993eda75fe6fd0ed2c",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Other LED cases can help identify individual physical indicators but cannot define this global Wistron OEM override or justify the source's factory-reset statement.",
+    "next_source_row_verified": "Functionality|1243|Wistron-BMC-00533-V005 / 98d0eb32bd8dc649 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set LED Control",
+    "procedure": "In-band raw 0x30 0x23 uses placeholder Request1 plus an Ethernet Interface Select, while OOB uses only Request1. The note defines the request as one mode byte: release 0x00, all-on 0x01 or all-off 0x02, then unexpectedly states 'BMC will factory reset'.",
+    "criteria": "The worksheet Criteria requires only command success, conflicting with the embedded factory-reset criterion and omitting observable LED behavior.",
+    "script": "No script is supplied.",
+    "deepseek": "PARTIAL with a bare 0x30/0x23 command and user-selected mode, but the shown command omits the required mode byte and suggests unrelated lan-print verification.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION, explicitly rejects factory reset, requires one approved mode, visual/telemetry confirmation and release to the original LED policy."
+  },
+  "historical_reviews": {
+    "deepseek": "Recognizes the state change but does not provide the request data needed to select a mode and cannot verify a chassis LED override through LAN configuration output.",
+    "gpt_v2": "Correctly separates LED override from reset behavior and adds operator-visible evidence plus release recovery.",
+    "history": "The invalidated earlier-run artifact was located but not used as authority; physical LED reviews show that observable state, identity and timing are required beyond raw completion.",
+    "v3_1": "A hybrid command-plus-visual case stays REQUIRES PACKAGE / USER CONFIRMATION; the physical observation does not make the entire case MANUAL ONLY."
+  },
+  "original_test_intent": "Temporarily override the platform's LED policy to one approved global on or off state, verify the actual chassis indicators, and release control so normal fault and service indications resume.",
+  "original_method": "Resolve the request framing and discard no preserved wording: the review records the factory-reset statement as a source conflict, forbids reset, and requires a complete one-byte mode request plus visible/telemetry verification.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "STATE_CHANGING_LED_OVERRIDE", "HYBRID_MANUAL_OBSERVATION", "SOURCE_CRITERIA_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The platform owner chooses one mode and observation window; a local observer or approved camera verifies the mapped chassis LEDs and confirms no real fault indication is being concealed.",
+  "required_inputs": ["Verified BMC/SUT and chassis identity", "Approved 0x30/0x23 request schema and interface-selector rule", "LED inventory and normal policy/state baseline", "One approved 0x01 or 0x02 test mode", "Visual observation or trusted camera path", "Maximum override duration", "Mode 0x00 release behavior and fallback recovery", "Operator coordination and explicit approval"],
+  "safety_requirements": ["Never factory-reset, BMC-reset or power-cycle for this case", "Do not clear logs", "Do not send a bare or guessed request", "Do not override LEDs that are actively reporting an unhandled fault", "Limit the global override interval", "Record which physical LEDs changed and which did not", "Release control with the approved 0x00 path on every exit", "Verify the original policy resumes", "No automatic retry"],
+  "agent_execution_scope": ["Verify target, vendor schema and LED map", "Capture baseline LED telemetry and visual evidence", "After explicit OK, issue one complete approved 0x30/0x23 mode request", "Capture completion and synchronized physical/telemetry behavior", "Stop on unexpected service or fault indication", "Release control through the approved mode 0x00 request", "Verify policy restoration and archive no-reset/no-log-clear evidence"],
+  "engineer_actions": ["Rule that the embedded factory-reset criterion is not part of LED-control acceptance", "Approve request framing, mode, LED population and observation method", "Approve release and fallback recovery", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its raw 0x30 0x23 command omits the one-byte control mode and therefore cannot request release, all-on or all-off; ipmitool lan print is not LED-state evidence.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, send exactly one raw 0x30 0x23 <approved-mode-byte> request using the contract-defined interface form, observe the mapped LEDs, then send raw 0x30 0x23 0x00 to release control and verify normal policy resumes.",
+    "original_parameters_and_time_preserved": "The three source mode values and 10/5 timing are preserved; Request1, selector placement, target LED population and duration are not guessed."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat the global LED command as a bounded service-indicator override with synchronized command, telemetry and visual evidence, followed by mandatory release and restoration verification.",
+    "difference_from_original_method": "Removes factory reset from acceptance, supplies the missing mode byte and requires actual LED response instead of command completion alone.",
+    "coverage_difference": "A raw completion without physical observation does not validate LEDs; a manual observation without the exact command frame does not validate the OEM control path.",
+    "risks_limitations": "All-on can mimic multiple faults and all-off can conceal a real fault or location indicator, misleading datacenter operators until control is released."
+  },
+  "project_override_considerations": "A WebUI or Redfish LED override is equivalent only with a documented mapping to the same global LED population and release policy; otherwise it is supplemental coverage and the raw 0x30/0x23 path remains untested.",
+  "expected_evidence": ["Approved target, OEM contract, mode, window and operator coordination", "Baseline photos/video or trusted observation plus LED telemetry", "Redacted exact set request/response, completion and timing", "Per-indicator observed result and any conflicting real-fault state", "Exact release request/response and restored normal policy evidence", "Preserved SEL/BMC/OS logs and proof no reset, factory reset or unrelated mutation occurred"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The LED mode note describes only an indicator override, yet its embedded criterion says the BMC will factory reset, while the worksheet Criteria asks only for command success. The command forms also leave Request1 and selector placement unresolved. These cannot form one coherent acceptance contract without a review-layer ruling."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "LED override and release semantics are identifiable, and the incorrect reset statement can be explicitly excluded while preserving it as a conflict. The remaining vendor contract, target mode and observation inputs are resolvable prerequisites."},
+  "review_improvement": "Turns an incomplete state-changing command into a reversible hybrid test, rejects the unrelated reset expectation and makes the visible indicator effect the primary acceptance evidence.",
+  "independent_technical_reasoning": "An LED-control command cannot legitimately require BMC factory reset as its success condition: a reset would add destructive configuration effects unrelated to the named indicator operation. Conversely, a zero completion code cannot prove lamps changed. Correct coverage requires a complete mode byte, observation of the intended physical population, and verified release before operators can trust fault indications again.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1242 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1242 review",
+    "history": "Physical LED reviews, duplicate-code/item search and invalidated-run location search",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
