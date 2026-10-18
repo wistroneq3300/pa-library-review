@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1398,
+  "library_sequence": 1249,
+  "source_key": "Functionality|1250|Wistron-BMC-00540-V003",
+  "case_variant_id": "8a49d1538db83da5",
+  "source_ref": {"sheet": "Functionality", "source_row": 1250, "code": "Wistron-BMC-00540-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "83d21d995abb71fb6b62dd0bba9619f7d57f95ff2e2f98f743a4500d2834032e",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The paired Get SOL Enable case can provide read-back but does not authorize this state change or resolve the copied NTP and CPU-power text.",
+    "next_source_row_verified": "Functionality|1251|Wistron-BMC-00541-V004 / 4db484219b2d06d9 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set SOL Enable",
+    "procedure": "In-band raw 0x30 0x48 appends an Ethernet Interface Select, OOB supplies no data, while the note incorrectly names request byte 1 as NTP Status 0x01/0x00.",
+    "criteria": "Command success plus corrupted text requiring CPU power-capping maximum data.",
+    "script": "Separate private Wistron set-sol-enable IB and OOB paths.",
+    "deepseek": "PARTIAL but shows a bare OOB command while claiming enable/disable 0x01/0x00, and proposes lan-print rather than SOL state and session evidence.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with exact interface/channel/status schema, baseline, one toggle, 0x30/0x49 read-back, authenticated session/security observation and restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "Identifies a state change but omits the status byte and cannot validate remote-console exposure through LAN configuration output.",
+    "gpt_v2": "Correctly treats SOL enablement as access-control impact and rejects unrelated copied acceptance text.",
+    "history": "The invalidated earlier-run record was found but not used as authority; generic serial settings and the following getter are related but not equivalent to a verified setter transition.",
+    "v3_1": "A remote-console exposure change needs explicit approval, session-level evidence and recovery; copied NTP/CPU semantics must not be silently normalized."
+  },
+  "original_test_intent": "Change SOL enable state for one approved BMC interface/channel, verify both the reported bit and actual authenticated console availability, then return to the captured access policy.",
+  "original_method": "Preserve both 0x30/0x48 command forms and all copied text as source evidence; execute only after the Wistron contract defines selector/status ordering and the review layer replaces unrelated criteria with SOL-specific acceptance.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "REMOTE_CONSOLE_ACCESS_CHANGE", "SOURCE_REQUEST_AND_CRITERIA_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_SOL_CHANNEL_SECURITY_ORACLE", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The console/security owner identifies the SOL channel and interface, approves enable or disable, supplies an authorized test identity and alternate console, defines expected session behavior and authorizes restoration.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved 0x30/0x48 and 0x30/0x49 schemas", "Resolution of interface-selector versus status-byte layout", "SOL channel, payload instance, port and privilege mapping", "Current enable state and active-session inventory", "Authorized test credential and encryption/authentication policy", "Expected enabled and disabled session behaviors", "Alternate console/recovery path", "Original-state restore command and explicit approval"],
+  "safety_requirements": ["Do not clear logs", "Do not change user, privilege, cipher, port or authentication policy", "Never guess selector or status placement", "One approved state transition only", "Preserve active session and console-output evidence", "Do not disconnect the only recovery console", "Stop on unauthorized access or channel mismatch", "Restore the original SOL state on every exit", "Verify no orphan session remains", "No automatic retry"],
+  "agent_execution_scope": ["Verify target, interface/channel and OEM contract", "Capture SOL configuration, active sessions and alternate-console baseline", "Present exact request and access effect for OK", "Issue one approved 0x30/0x48 request", "Read back with 0x30/0x49 and test one authorized SOL session", "Verify disabled denial or enabled console behavior without changing privileges", "Restore the original state and close the test session", "Archive state, session and security evidence"],
+  "engineer_actions": ["Resolve request framing and copied NTP label", "Exclude CPU-power criteria and approve SOL-specific acceptance", "Approve authorized identity, observation and recovery", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its bare OOB request lacks both selector and enable/disable byte and therefore cannot request a defined SOL state; ipmitool lan print does not demonstrate SOL channel behavior.",
+    "executable_command_required": true,
+    "command_recommendation": "After contract approval, read baseline with raw 0x30 0x49 [approved-selector-if-required], send one raw 0x30 0x48 <approved-selector/status-layout>, verify read-back and one authorized session outcome, then restore the captured state.",
+    "original_parameters_and_time_preserved": "The source 0x01/0x00 values and 10/5 timing are retained only after correcting their copied NTP label; selector/channel mapping and session window are not inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Bind the OEM bit to a named SOL channel and security policy, verify the transition at both configuration and authenticated-session layers, then restore without changing credentials or privileges.",
+    "difference_from_original_method": "Replaces completion plus copied CPU-power text with SOL-specific read-back, access behavior and recovery evidence.",
+    "coverage_difference": "A correct enable bit does not prove usable or appropriately protected SOL access; one successful session does not prove the disabled state denies new access.",
+    "risks_limitations": "Enabling may expose a remote console unexpectedly, while disabling can remove a recovery path or interrupt an active administrative session."
+  },
+  "project_override_considerations": "Standard ipmitool sol set may substitute only with approved channel and byte/effect equivalence; otherwise it is separate standard-SOL coverage and private 0x30/0x48 remains untested.",
+  "expected_evidence": ["Approved target/interface/channel/schema/state and owner confirmation", "Baseline SOL parameters, sessions and alternate-console availability", "Redacted exact set/read-back requests, completions and timing", "Authorized session establishment or expected denial with access-control evidence", "No privilege/authentication/port change and no unauthorized session", "Restored state plus closed-session verification", "Preserved BMC/SEL/OS/network evidence and no unrelated mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The in-band Procedure uses a byte as Ethernet Interface Select, the note calls request byte 1 NTP Status, OOB supplies no data, and Criteria 2 requires CPU power-cap output. These are incompatible identities and acceptance rules for Set SOL Enable."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The SOL state-change purpose and paired getter are identifiable. Vendor framing, channel/security inputs and corrected acceptance are resolvable prerequisites, so the case is not irreducibly BLOCKED."},
+  "review_improvement": "Restores SOL identity across copied NTP/CPU text, makes the request byte-exact and proves access behavior rather than trusting completion or a configuration bit alone.",
+  "independent_technical_reasoning": "SOL enablement controls a remote console attack and recovery surface. A completion code cannot show which channel changed, and a read-back bit cannot show whether authorized access works or unauthorized access is prevented. The test therefore needs a named channel, controlled identity, session observation and guaranteed alternate-console recovery before mutation.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1250 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1250 review",
+    "history": "Paired SOL getter, serial/security cases and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab set-sol-enable IB/OOB URLs; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
