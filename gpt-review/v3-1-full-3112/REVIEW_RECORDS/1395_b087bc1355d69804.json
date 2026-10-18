@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1395,
+  "library_sequence": 1246,
+  "source_key": "Functionality|1247|Wistron-BMC-00537-V003",
+  "case_variant_id": "b087bc1355d69804",
+  "source_ref": {"sheet": "Functionality", "source_row": 1247, "code": "Wistron-BMC-00537-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "b20a0cb1c1c23bbd7a0dc271c874063b5709fd79dc8853088a0b37ca215851af",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Runtime LAN configuration and MAC display cases cannot prove which EEPROM field 0x30/0x40 programs or whether the command copies an existing address versus carrying address bytes.",
+    "next_source_row_verified": "Functionality|1248|Wistron-BMC-00538-V004 / 19c089ea10267c5e directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Write MAC Address to EEPROM",
+    "procedure": "The in-band raw 0x30 0x40 request appends an eth0/eth1 selector, while the OOB request supplies no selector or MAC bytes; only ipmitool lan print is offered as verification.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron e-wing write-mac-address-to-eeprom path.",
+    "deepseek": "PARTIAL but repeats the no-data OOB command, assumes it writes a MAC, and does not define whether the source or destination address comes from payload, runtime LAN state or factory data.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with exact interface/EEPROM mapping, approved MAC payload/encoding, persistence and network-continuity checks plus original-MAC recovery."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly treats the operation as persistent, but its command omits even the source's interface selector and cannot identify the MAC that would be programmed.",
+    "gpt_v2": "Adds strong identity, uniqueness, persistence and recovery controls; the underlying contract must also resolve whether 0x30/0x40 accepts MAC bytes or copies a pre-existing value.",
+    "history": "The invalidated earlier-run artifact was located but excluded as authority; LAN read-back can corroborate active identity but cannot by itself establish EEPROM persistence or field integrity.",
+    "v3_1": "Persistent network identity mutation requires exact target/source semantics and an independent recovery path before any write."
+  },
+  "original_test_intent": "Program the approved permanent MAC identity for one selected BMC Ethernet interface into the correct EEPROM field, validate active and persistent identity without collision, and restore the original bytes when the test plan requires rollback.",
+  "original_method": "Preserve both source request forms and the eth0/eth1 selector definition; issue neither until the Wistron contract resolves request framing, MAC-source semantics, activation behavior and EEPROM mapping.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "PERSISTENT_NETWORK_IDENTITY_WRITE", "SOURCE_REQUEST_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_MAC_ALLOCATION_AND_EEPROM_MAPPING", "NEEDS_INDEPENDENT_RECOVERY", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The network/asset owner identifies the physical interface and EEPROM slot, allocates a globally valid non-conflicting MAC, approves the exact source/payload semantics, activation or reload behavior, and an independent recovery channel with original-image restoration.",
+  "required_inputs": ["Verified BMC/SUT, board and firmware identity", "Approved 0x30/0x40 request/response schema", "Ruling on selector-required versus no-data request", "Definition of whether the command copies current LAN MAC or accepts explicit address bytes", "eth0/eth1 to physical port and EEPROM-field map", "Complete original EEPROM/MAC baseline and hash", "Approved MAC allocation, byte order and validity policy", "Activation/persistence timing and any reload requirement", "Independent recovery connectivity", "Exact original-MAC restore path and explicit owner approval"],
+  "safety_requirements": ["Dedicated non-production target", "Do not clear logs", "Never guess selector, MAC source, EEPROM field or byte order", "Reject multicast, broadcast, locally administered when disallowed, all-zero, all-FF and duplicate MAC values", "One interface and one approved write only", "Preserve all interface identities before mutation", "Do not rely on the affected management session for recovery", "Do not reset or power-cycle unless separately approved", "Verify both active and persistent identity", "Restore the original EEPROM identity on failure or planned rollback", "No automatic retry"],
+  "agent_execution_scope": ["Verify board, interface and EEPROM mapping", "Capture LAN inventory, current MACs and EEPROM baseline through approved tools", "Check the allocated MAC for syntax, policy and network uniqueness", "Display the exact request and resulting programmed value for OK", "Send one approved 0x30/0x40 request", "Observe session/network impact and verify active plus persistent identity", "Restore original bytes through the independent path when required", "Archive raw, LAN, EEPROM and recovery evidence"],
+  "engineer_actions": ["Resolve both request framing and MAC-source semantics", "Approve allocation, target field, activation and persistence oracle", "Approve an independent recovery path and any separate reset/reload", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its bare OOB 0x30/0x40 omits the source's interface selector and supplies no explicit MAC; without proof that the command copies a known current value, the operation's target and written identity are indeterminate.",
+    "executable_command_required": true,
+    "command_recommendation": "After the vendor contract is approved, send exactly one 0x30/0x40 request using the contract-defined selector and MAC-source/payload fields, then verify the selected interface's active and persistent identity through independent LAN and EEPROM evidence.",
+    "original_parameters_and_time_preserved": "The eth0=0x00/eth1=0x01 selector definition, both transport forms and 10/5 timing are preserved pending resolution; no MAC bytes are invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat MAC programming as a controlled identity migration: complete baseline, allocation/duplicate validation, one byte-defined EEPROM write, independent reconnection, persistence proof and exact restoration.",
+    "difference_from_original_method": "Makes the programmed identity explicit and replaces command-success plus lan-print acceptance with EEPROM/active-state integrity and recovery evidence.",
+    "coverage_difference": "A runtime MAC visible in lan print does not prove EEPROM persistence; EEPROM bytes alone do not prove the active interface loaded the intended identity without collision.",
+    "risks_limitations": "A wrong selector or field can corrupt another port's identity, while duplicate or invalid MAC programming can sever BMC management and contaminate inventory or network forwarding state."
+  },
+  "project_override_considerations": "A manufacturing utility may substitute only with documented access to the same EEPROM field and equivalent byte, persistence and restore evidence; a runtime LAN SET is not equivalent.",
+  "expected_evidence": ["Approved board/interface/EEPROM map, request contract, MAC allocation and owner confirmation", "Complete original MAC/EEPROM/LAN inventory and hashes", "Exact redacted request bytes, programmed identity, completion and timing", "Active-interface MAC, switch/neighbor uniqueness and management-session continuity", "Post-activation persistent EEPROM/read-back evidence", "Original-MAC restoration and recovered management identity when required", "Preserved logs and no-other-interface/no-unapproved-mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "For the same 0x30/0x40 operation the in-band Procedure requires an Ethernet Interface Select byte, the OOB Procedure supplies no data, and neither form states the MAC source or payload despite the title claiming an EEPROM MAC write. The vendor contract must resolve these incompatible/incomplete request semantics."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The persistent interface-identity purpose is identifiable. Exact vendor semantics, allocation, target map and recovery are expected package/owner inputs, so execution is gated but the review is not irreducibly BLOCKED."},
+  "review_improvement": "Exposes the selector/no-data conflict and unknown MAC source, then requires allocation integrity, active-versus-persistent verification and recovery independent of the interface being modified.",
+  "independent_technical_reasoning": "A command named Write MAC Address may either carry new address bytes or commit a value already staged elsewhere; the source does not say which. That distinction determines both the payload and evidence. Because changing EEPROM identity may disrupt the same network path used by the agent, success cannot be inferred from pre-disruption completion—independent read-back, collision detection and a recovery channel are essential.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1247 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1247 review",
+    "history": "LAN identity/persistence cases, duplicate-code search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab write-mac-address-to-eeprom URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
