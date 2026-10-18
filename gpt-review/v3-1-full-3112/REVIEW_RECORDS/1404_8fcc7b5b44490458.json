@@ -1,0 +1,71 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1404,
+  "library_sequence": 1255,
+  "source_key": "Functionality|1256|Wistron-BMC-00546-V005",
+  "case_variant_id": "8fcc7b5b44490458",
+  "source_ref": {"sheet": "Functionality", "source_row": 1256, "code": "Wistron-BMC-00546-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "34773efda7789878abd537a78758bc5a28b62fb1bb539bacd959ef9a0c66a071",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The adjacent OOB variant covers a distinct transport; it does not replace this local in-band selector matrix.",
+    "next_source_row_verified": "Functionality|1257|Wistron-BMC-00547-V005 / 46814b151d410eb4 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get DCMI Capability Info (IB)",
+    "procedure": "Run local raw 0x2c 0x01 0xdc with parameter selectors 0x01-0x05 and inspect responses.",
+    "criteria": "Command is sent without error.",
+    "script": "Private Wistron get_dcmi-capability-info repository.",
+    "deepseek": "YES but substitutes remote sshpass plus ipmitool dcmi discover for the source's local raw selector requests and merely returns output for user judgment.",
+    "gpt_v2": "FULLY AUTOMATABLE using the source-defined raw selector requests, selector-specific validation and explicit optional-selector handling."
+  },
+  "historical_reviews": {
+    "deepseek": "Its high-level discovery command can supplement evidence but does not cover each source-defined raw selector and uses insecure credential/host-key handling.",
+    "gpt_v2": "Correctly retains FULLY AUTOMATABLE and strengthens the oracle without requiring operator judgment during execution.",
+    "history": "The invalidated prior-run location was found but excluded as authority; the OOB twin was examined only to preserve transport separation.",
+    "v3_1": "Read-only standard capability enumeration can be automated once parser version and target identity are bound."
+  },
+  "original_test_intent": "Query DCMI capability and platform-attribute groups 0x01 through 0x04, plus optional enhanced power-statistics attributes 0x05 when applicable, through the local in-band BMC interface.",
+  "original_method": "Execute one bounded local `ipmitool raw 0x2c 0x01 0xdc <selector>` request per applicable selector, retaining each raw response and validating it with the corresponding DCMI layout.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_STANDARD_DCMI_QUERY", "IN_BAND_ROUTE", "SELECTOR_LEVEL_ORACLE_DEFINED", "NO_USER_CONFIRMATION_REQUIRED", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "No manual execution is required; the project provides the target identity and expected DCMI/version policy, while the end user owns the final evidence verdict.",
+  "required_inputs": ["Verified DUT and local BMC interface", "Available ipmitool with in-band raw support", "DCMI response decoder/version profile", "Project expectation for mandatory and optional capabilities", "Whether selector 0x05 is advertised or requested"],
+  "safety_requirements": ["Read-only selectors only", "Do not use sshpass or disable host-key checking", "Do not clear logs", "Do not issue DCMI configuration, power, limit or reset commands", "Validate completion, response length and selector identity", "Bound timeout and retries", "No automatic retry"],
+  "agent_execution_scope": ["Verify local target identity and interface", "Query selectors 0x01-0x04 separately", "Query 0x05 only when applicable", "Validate completion and selector-specific lengths/fields", "Distinguish optional unsupported from malformed or transport failure", "Export raw and decoded structured results", "Archive a no-mutation command audit"],
+  "engineer_actions": ["Provide the expected target capability policy", "Review the structured evidence and own PASS, FAIL or BLOCKED"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "`dcmi discover` over SSH does not exercise the source's five raw selector forms and cannot prove selector-level payload coverage; remote password injection and disabled host-key checking are also unacceptable.",
+    "executable_command_required": true,
+    "command_recommendation": "Run local raw 0x2c 0x01 0xdc separately for selectors 0x01-0x04 and applicable 0x05, then validate completion, response length and each selector's decoded fields.",
+    "original_parameters_and_time_preserved": "The group-extension byte 0xdc, selector values 0x01-0x05, in-band route and 10/5 timing are retained."
+  },
+  "modernized_recommendation": {
+    "status": "READY_FOR_PROJECT_EXECUTION",
+    "recommended_method": "Use a local selector-loop runner with a versioned DCMI decoder, raw-response retention and distinct states for supported, optional-unsupported, malformed and transport-failed selectors.",
+    "difference_from_original_method": "Replaces exit-code-only acceptance with selector-specific protocol validation and removes unrelated evidence deletion.",
+    "coverage_difference": "A high-level discovery summary is supplemental and does not prove every raw selector requested by the Master procedure.",
+    "risks_limitations": "Wrong local BMC selection or a mismatched decoder can yield plausible but invalid capability data; optional selector rejection is not automatically a testcase failure."
+  },
+  "project_override_considerations": "A high-level DCMI utility may supplement the report only if raw selector coverage and transport identity remain visible; the OOB twin must be reported separately.",
+  "expected_evidence": ["Verified SUT/BMC/local-interface and tool/parser versions", "Per-selector exact raw request, response, completion and timing", "Selector-specific decoded capabilities and attributes", "Explicit applicability/result for optional 0x05", "Expected-versus-observed capability matrix", "No write/control/reset/log-clear command audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master item, raw command, selector list and read-only intent agree. Its success-only criterion is incomplete but not contradictory; the DeepSeek substitution is an overlay defect, not a Master source conflict."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The standard read-only command and selector set are explicit, and target policy can be supplied as ordinary project input. No permanent execution barrier is identified."},
+  "review_improvement": "Preserves exact in-band selector coverage while turning command success into machine-checkable DCMI response and optionality evidence.",
+  "independent_technical_reasoning": "Each DCMI selector represents a different response structure. Automation must issue and retain each raw request independently, validate its own minimum length and fields, and distinguish an optional unsupported result from a malformed mandatory group. That gives deterministic coverage without introducing state changes or operator-in-the-loop execution.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1256 reopened directly", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1256 review", "history": "Adjacent OOB DCMI variant and invalidated-run location search", "external_sources": ["Source-preserved private Wistron DQMS GitLab URL; repository contents were unavailable and were not assumed."]},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
