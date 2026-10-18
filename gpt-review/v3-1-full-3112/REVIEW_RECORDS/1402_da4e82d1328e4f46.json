@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1402,
+  "library_sequence": 1253,
+  "source_key": "Functionality|1254|Wistron-BMC-00544-V005",
+  "case_variant_id": "da4e82d1328e4f46",
+  "source_ref": {"sheet": "Functionality", "source_row": 1254, "code": "Wistron-BMC-00544-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "917171a9e854a751b6fd9b7e163a226f1997c072c9a940ea7814b94c4f234739",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "BIOS flash/update and firmware-inventory cases cannot substitute for this apparent metadata setter; they must remain separate so reported revision is not mistaken for image contents.",
+    "next_source_row_verified": "Functionality|1255|Wistron-BMC-00545-V004 / f7c391d9efbcd956 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set BIOS Revision",
+    "procedure": "In-band raw 0x30 0x02 appends an Ethernet Interface Select and OOB supplies no data, while the note requires BIOS major, minor and AUX/build bytes 1-3.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron set-bios-revision path.",
+    "deepseek": "PARTIAL but shows a parameterless OOB request while claiming user-specified revision bytes and offers lan-print as verification.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION until setter scope, exact payload, persistence, read-back and recovery are vendor-defined."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly sees a write but its command cannot carry the named tuple and does not distinguish reported metadata from actual BIOS firmware.",
+    "gpt_v2": "Correctly prohibits inferring setter semantics and keeps firmware flashing out of scope.",
+    "history": "The invalidated prior-run record was found but excluded as authority; Get Firmware Info may provide a consumer/read-back only after its separate OEM schema is approved.",
+    "v3_1": "Firmware identity and reported metadata must be kept distinct; a successful metadata write can create a dangerous false inventory state."
+  },
+  "original_test_intent": "Write one approved three-field BIOS revision tuple to the BMC/vendor metadata location, verify every consumer reports that tuple and determine persistence, without altering BIOS image contents.",
+  "original_method": "Retain the 0x30/0x02 source and request-field definition, but issue no write until the vendor contract resolves selector/payload framing, storage scope and the authoritative getter/restoration method.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "PERSISTENT_FIRMWARE_IDENTITY_METADATA_WRITE", "SOURCE_REQUEST_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_EXACT_REVISION_TUPLE_AND_READBACK", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The BIOS/BMC owner confirms that 0x30/0x02 changes metadata rather than firmware, approves the exact major/minor/AUX tuple, encoding, final state and recovery, and accepts the risk of temporary inventory mismatch.",
+  "required_inputs": ["Verified board/BMC/BIOS and firmware identity", "Approved 0x30/0x02 request schema", "Resolution of selector versus three revision bytes", "Major, minor and AUX/build encoding/ranges", "Current reported tuple and actual BIOS image/version evidence", "Named metadata storage and persistence behavior", "Authoritative read-back/consumer matrix", "Original-tuple restore method", "Dedicated maintenance window and explicit approval"],
+  "safety_requirements": ["Do not flash BIOS or change setup variables", "Do not clear logs", "Never guess revision bytes or selector placement", "One approved metadata write only", "Capture actual firmware identity separately", "Do not allow false metadata to drive update automation", "Validate every consumer and persistence boundary", "Restore original tuple on mismatch or planned rollback", "No reset/power action unless separately approved", "No automatic retry"],
+  "agent_execution_scope": ["Verify hardware, actual BIOS image/version and approved metadata contract", "Capture all current reported revision consumers", "Present exact tuple, raw bytes and expected scope for OK", "Issue one approved 0x30/0x02 request", "Read back all three fields through the authoritative getter", "Compare reported metadata with actual firmware and flag intentional mismatch", "Test only approved persistence boundary", "Restore baseline when required and archive evidence"],
+  "engineer_actions": ["Resolve request framing and prove metadata-versus-firmware scope", "Approve tuple, encoding, consumers and persistence", "Prevent automated decisions from trusting temporary false metadata", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its bare OOB request contains none of the three documented revision fields and cannot perform the claimed set; lan print has no BIOS-revision coverage.",
+    "executable_command_required": true,
+    "command_recommendation": "After vendor approval, issue one raw 0x30 0x02 <approved-major> <approved-minor> <approved-aux> request using the documented selector layout, then read back every field and consumer without flashing BIOS.",
+    "original_parameters_and_time_preserved": "The source's three-field order and 10/5 timing are retained; actual bytes, selector ordering, persistence and getter are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat the operation as controlled firmware-identity metadata mutation: capture actual and reported versions, make one byte-defined change, verify consumers/persistence and restore before the mismatch can influence service tooling.",
+    "difference_from_original_method": "Adds payload, scope, semantic read-back and inventory-consistency safeguards while explicitly excluding BIOS flashing.",
+    "coverage_difference": "Changing version metadata does not update, validate or attest BIOS executable content; firmware-update coverage remains entirely separate.",
+    "risks_limitations": "False major/minor/build metadata can cause incorrect upgrade/downgrade, compatibility, warranty or field-service decisions even if the server continues to boot normally."
+  },
+  "project_override_considerations": "A vendor manufacturing tool may substitute only with documented access to the same metadata fields and identical consumer/persistence evidence; a BIOS flash or dmidecode-only check is not equivalent.",
+  "expected_evidence": ["Approved hardware/firmware identity, setter schema, tuple and owner confirmation", "Actual BIOS image/version evidence plus baseline metadata from all named consumers", "Redacted exact request/response, completion, tuple bytes and timing", "Field-by-field read-back and persistence results", "Inventory/update-tool discrepancy guard during the test", "Restored baseline tuple when required", "No flash/setup/reset/power/log mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The note defines three revision request bytes, yet the in-band command supplies only an Ethernet Interface Select and the OOB command supplies no data. These request forms cannot perform the documented three-byte setter without a vendor-defined layout."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The metadata-write intent and named fields are identifiable. Vendor framing, exact tuple, read-back and recovery are explicit prerequisites, so the case remains REQUIRES PACKAGE / USER CONFIRMATION."},
+  "review_improvement": "Prevents a parameterless command from becoming either a false BIOS update claim or corrupted identity, and requires actual-firmware versus reported-metadata separation throughout the lifecycle.",
+  "independent_technical_reasoning": "A revision tuple is a label, not firmware content. If the BMC accepts arbitrary metadata, command success can make inventory appear healthy or upgraded while the executable BIOS is unchanged. Byte-exact input, independent actual-version evidence and consumer-wide read-back are therefore necessary, followed by restoration before external automation acts on the temporary label.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1254 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1254 review",
+    "history": "Firmware information/update and metadata-consumer cases plus invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab set-bios-revision URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
