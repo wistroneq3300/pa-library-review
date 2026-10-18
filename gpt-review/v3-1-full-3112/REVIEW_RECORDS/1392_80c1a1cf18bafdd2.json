@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1392,
+  "library_sequence": 1243,
+  "source_key": "Functionality|1244|Wistron-BMC-00534-V004",
+  "case_variant_id": "80c1a1cf18bafdd2",
+  "source_ref": {"sheet": "Functionality", "source_row": 1244, "code": "Wistron-BMC-00534-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "ce70c385f73844d4455689e07ba973ee6ba7f735594b1a52b6d0b01ddd7238c9",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Host-side i2c-tools tests and other bus reads do not identify this BMC-owned bus, its 8-bit address convention or the target device protocol.",
+    "next_source_row_verified": "Functionality|1245|Wistron-BMC-00535-V003 / 231527ac58f7e89b directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "I2C Master Write-Read",
+    "procedure": "Both in-band and OOB paths use OEM raw 0x30 0x25 with request bytes: BMC bus number, 8-bit I2C address, read count, and optional bytes to write; the source supplies no concrete target or transaction.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron i2c-master-write-read path.",
+    "deepseek": "PARTIAL and requests user-specified bus/address/readcount, but shows no payload, device protocol or expected bytes and suggests unrelated lan-print verification.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION, applies the Wistron BMC-management ownership rule, distinguishes OEM 0x30/0x25 from standard App 0x06/0x52 and requires one allowlisted byte-exact transaction."
+  },
+  "historical_reviews": {
+    "deepseek": "Identifies missing parameters but not the register protocol, write bytes, expected response or recovery that determine whether the transaction is safe.",
+    "gpt_v2": "Correctly requires controller/bus/address identity and forbids assuming the standard IPMI Master Write-Read opcode is equivalent to this OEM command.",
+    "history": "The invalidated earlier-run artifact was located but excluded as authority; prior I2C/I3C decisions require BMC/OOB ownership, target identity and vendor mapping rather than Linux enumeration alone.",
+    "v3_1": "Wistron I2C is platform-management scope by default, so target topology and device protocol are mandatory prerequisites and address scanning is prohibited."
+  },
+  "original_test_intent": "Exercise one known BMC-side I2C slave transaction through the Wistron OEM bridge, verifying completion, returned length/content and post-transaction device and bus health.",
+  "original_method": "Preserve OEM 0x30/0x25 and its four-part request definition; fill no placeholder until the platform owner supplies the exact BMC bus, 8-bit slave address, read count, device/register write prefix and expected response.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "BMC_PLATFORM_MANAGEMENT_BUS", "POTENTIAL_DEVICE_REGISTER_WRITE", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_TARGET_PROTOCOL_AND_EXACT_BYTES", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The platform owner maps the BMC controller/bus and 8-bit address to a named device, approves its register protocol and exact byte vector, confirms that the target is not safety-critical, and supplies recovery for any writable state.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved Wistron OEM 0x30/0x25 schema", "BMC controller and zero-based bus mapping", "8-bit address convention and named slave identity", "Device register/command protocol", "Exact read count and bytes-to-write", "Expected ACK, response length and byte oracle", "Current target state and competing-master assessment", "Read-back/restore or bus-recovery path", "Dedicated maintenance window and explicit approval"],
+  "safety_requirements": ["Treat the path as BMC/platform-management scope", "Do not clear logs", "Never scan or probe addresses", "Never guess bus, address, register or data", "Reject 7-bit/8-bit address ambiguity", "One bounded transaction only", "Keep counts within the approved device contract", "No transaction to unknown, power, clock, reset, thermal or EEPROM targets", "Stop on NACK, timeout, bus busy/lock or malformed response", "Restore any approved writable register", "No automatic retry"],
+  "agent_execution_scope": ["Verify the BMC topology and target-device contract", "Capture bus/device state and BMC/SEL baseline", "Construct and display every request byte for approval", "After explicit OK, send exactly one approved 0x30/0x25 transaction", "Validate completion, ACK semantics, returned count and device-specific content", "Perform only the approved read-back or restoration", "Verify bus and target health and archive raw evidence"],
+  "engineer_actions": ["Approve topology, address convention, protocol and exact vector", "Decide whether the case is read-only, write-only or write-then-read", "Approve recovery independent of repeated guessed transactions", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The displayed command stops before the mandatory bus/address/read-count fields and therefore cannot address any defined slave; lan configuration output cannot verify an I2C device transaction.",
+    "executable_command_required": true,
+    "command_recommendation": "After vendor and owner approval, issue one raw 0x30 0x25 <bus> <8-bit-address> <read-count> [device-specific-write-bytes] request and validate the completion plus exactly the expected returned bytes; use raw 0x06 0x52 only as an explicitly proven alternate, never as an assumed correction.",
+    "original_parameters_and_time_preserved": "The source byte order, 8-bit address wording, read-count behavior and 10/5 timing are retained; all concrete target and data bytes remain unset until approved."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Bind the bridge request to a reviewed topology and slave protocol, allowlist the full byte vector, execute once with a strict timeout, and judge device-specific content plus bus health rather than completion alone.",
+    "difference_from_original_method": "Adds target identity, address-format validation, an expected data oracle and recovery while prohibiting scans and guessed writes.",
+    "coverage_difference": "A host Linux I2C transaction is not evidence for the BMC/OOB path; standard 0x06/0x52 does not cover private 0x30/0x25 unless byte and effect equivalence are approved.",
+    "risks_limitations": "A numerically valid bus/address can still point at a different mux leg or device, and a short write prefix can alter EEPROM, power, clock, reset or thermal-controller state before any read occurs."
+  },
+  "project_override_considerations": "An approved vendor utility or standard IPMI command may substitute only with documented mapping to the same BMC controller, slave and byte-level transaction; the report must disclose any untested OEM opcode coverage.",
+  "expected_evidence": ["Approved BMC topology, 8-bit address mapping, slave protocol and owner authorization", "Exact request-byte breakdown including counts and write/read semantics", "Redacted raw request/response, completion, ACK interpretation and timing", "Expected-versus-actual returned length and device-specific bytes", "Target read-back or restore plus bus-health evidence", "Preserved BMC/SEL/OS logs and no-scan/no-unapproved-mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The source consistently defines a parameterized OEM I2C bridge but leaves its target transaction unspecified. The absence of concrete bytes and a data oracle is incompleteness to be supplied through approved inputs, not an internal contradiction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Bus transaction semantics are clear at the framing level. A vendor contract and project-approved target/protocol/vector can make one operation safe, so the missing information is a package and confirmation gate rather than irreducible BLOCKED."},
+  "review_improvement": "Converts an unrestricted BMC bus placeholder into one topology-bound, byte-allowlisted device transaction with a specific response oracle and bus recovery boundary.",
+  "independent_technical_reasoning": "I2C safety depends on mux topology, address convention and slave protocol together. Read count alone does not make a transaction read-only because preceding data bytes may select or modify a register, and an 8-bit address can be misconverted if treated as 7-bit. Thus every byte and its device-level effect must be approved before the BMC master touches the bus.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1244 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1244 review",
+    "history": "Wistron I2C/I3C ownership decisions, duplicate-code/item search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab i2c-master-write-read URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
