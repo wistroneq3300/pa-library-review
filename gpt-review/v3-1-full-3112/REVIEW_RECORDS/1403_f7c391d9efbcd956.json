@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1403,
+  "library_sequence": 1254,
+  "source_key": "Functionality|1255|Wistron-BMC-00545-V004",
+  "case_variant_id": "f7c391d9efbcd956",
+  "source_ref": {"sheet": "Functionality", "source_row": 1255, "code": "Wistron-BMC-00545-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "5efaab822c0cf9448f51ae2de0374318e4f0ac237eb5aad0a5d87bea2562ca86",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The neighboring BIOS-revision metadata cases do not define this PSU getter, and no duplicate supplies the missing PSU response map.",
+    "next_source_row_verified": "Functionality|1256|Wistron-BMC-00546-V005 / 8fcc7b5b44490458 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get PSU Information",
+    "procedure": "In-band and OOB raw 0x30 0x03 are shown, but the in-band form appends an Ethernet Interface Select while the note describes three BIOS-revision request bytes.",
+    "criteria": "Command succeeds and response bytes 6-8 equal Wistron Vendor ID F2 1B 00.",
+    "script": "No package URL is supplied.",
+    "deepseek": "YES with a bare OOB request and an assertion that the response is PSU information; it provides no OEM byte map or PSU association.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION because the PSU intent is recognizable but the copied BIOS note conflicts with it and the vendor response contract is absent."
+  },
+  "historical_reviews": {
+    "deepseek": "Its read-only posture is useful, but the command alone cannot prove the opcode, offsets, endianness or PSU instance mapping.",
+    "gpt_v2": "Correctly requires a vendor parser and preserves the end-user verdict.",
+    "history": "The invalidated prior-run location was found but excluded as authority; neighboring firmware-information and BIOS-metadata cases are not semantic substitutes.",
+    "v3_1": "A fixed three-byte signature is insufficient to validate complete PSU identity or slot association."
+  },
+  "original_test_intent": "Read vendor-defined information for each applicable PSU and verify the Wistron vendor identity and supported PSU fields without changing power or BMC state.",
+  "original_method": "Preserve the source's 0x30/0x03 in-band and OOB routes and F2 1B 00 criterion, but do not decode or execute as PSU information until the OEM request and response schema resolves the contradictory BIOS note and selector framing.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_OEM_QUERY", "SOURCE_SEMANTIC_CONFLICT", "NEEDS_WISTRON_0X30_0X03_SCHEMA", "NEEDS_PSU_TOPOLOGY_AND_EXPECTED_MATRIX", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The BMC/package owner identifies the exact 0x30/0x03 function, request bytes, PSU selector or association, response length and field offsets, and approves the platform's expected per-PSU inventory matrix.",
+  "required_inputs": ["Verified BMC firmware and PSU topology", "Authoritative Wistron 0x30/0x03 request/response schema", "Resolution of Ethernet selector versus BIOS-revision note", "PSU instance/slot association", "Vendor ID byte order and offsets", "Expected vendor, model, serial, revision and status per fitted PSU", "Secret-safe in-band/OOB route"],
+  "safety_requirements": ["Read-only query only", "Do not guess OEM offsets", "Do not issue PSU control or power commands", "Validate completion and exact response length before parsing", "Preserve logs instead of clearing them", "Redact credentials", "No automatic retry"],
+  "agent_execution_scope": ["Verify the target BMC and fitted PSU map", "Validate the vendor schema and selected route", "Capture one bounded raw response per approved PSU context", "Reject malformed or unsupported responses", "Decode only documented fields", "Compare every decoded identity with the approved matrix", "Archive raw and decoded evidence with a no-mutation audit"],
+  "engineer_actions": ["Resolve the BIOS-note conflict and approve the OEM schema", "Approve PSU topology and expected values", "Own the final PASS, FAIL or BLOCKED verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The bare OOB 0x30/0x03 command may be syntactically runnable, but without a confirmed schema it cannot establish that returned bytes are PSU information or that bytes 6-8 are the intended vendor ID.",
+    "executable_command_required": true,
+    "command_recommendation": "After vendor confirmation, run the documented read-only 0x30/0x03 request once on each approved route/context, validate completion and length, then decode the PSU association and all required fields before checking F2 1B 00.",
+    "original_parameters_and_time_preserved": "The original opcode, route coverage, vendor-ID expectation and 10/5 timing remain preserved; selector and decoder details are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use a versioned OEM decoder tied to BMC firmware and PSU topology, retain the complete raw response, and make acceptance field- and slot-specific rather than relying on one byte pattern.",
+    "difference_from_original_method": "Adds schema validation, topology binding, length checks, semantic decoding and evidence retention without changing the Master source.",
+    "coverage_difference": "Vendor ID alone does not prove PSU model, serial, revision, status, redundancy role or correct slot association.",
+    "risks_limitations": "The copied BIOS request description can make plausible raw bytes appear valid while they are decoded under the wrong command contract."
+  },
+  "project_override_considerations": "A Redfish or vendor CLI inventory read may supplement this case only if it proves the same PSU instances and fields; it cannot silently replace the required raw 0x30/0x03 route coverage.",
+  "expected_evidence": ["Approved firmware/topology and versioned OEM schema", "Redacted exact in-band and OOB request/response with completion and length", "Per-PSU slot association and decoded fields", "F2 1B 00 check at documented offsets and byte order", "Expected-versus-observed inventory matrix", "Session health and no power/control/reset/log mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The item and criterion require PSU information and a vendor ID in response bytes 6-8, while the procedure note defines BIOS major, minor and AUX/build request bytes and the in-band request instead supplies an Ethernet selector. These descriptions cannot share one trustworthy 0x30/0x03 contract without vendor correction."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read-only PSU-information purpose is identifiable. The missing OEM schema, topology and expected values are explicit readiness inputs, so this is REQUIRES PACKAGE / USER CONFIRMATION rather than permanently BLOCKED."},
+  "review_improvement": "Prevents a syntactically successful raw request or an isolated F2 1B 00 pattern from being treated as a valid PSU-information test under a copied BIOS decoder.",
+  "independent_technical_reasoning": "OEM raw bytes have no portable semantics. A correct test must first bind the opcode to firmware, define request selectors and response length, then associate fields with physical PSU instances. Only after those checks can the Wistron ID and remaining inventory be evaluated without accidentally interpreting another OEM function.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1255 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1255 review",
+    "history": "Neighboring OEM firmware/BIOS cases and invalidated-run location search",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
