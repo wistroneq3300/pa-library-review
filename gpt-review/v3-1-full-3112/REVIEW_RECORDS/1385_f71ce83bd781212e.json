@@ -1,0 +1,76 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1385,
+  "library_sequence": 1235,
+  "source_key": "Functionality|1236|Wistron-BMC-00526-V002",
+  "case_variant_id": "f71ce83bd781212e",
+  "source_ref": {"sheet": "Functionality", "source_row": 1236, "code": "Wistron-BMC-00526-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "6fff7159d63cbb1508142ef29fb5b6b8f89bffa49b979eecec591dc3e0d296ed",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The dedicated Get Sensor Type baseline row is already covered by Final Audit sequence 64; it supplies readback but cannot substitute for this setter's mutation and restore lifecycle.",
+    "next_source_row_verified": "Functionality row 1237 is already COMPLETED_FINAL_AUDIT_BASELINE; the next unreviewed manifest case is Functionality|1238|Wistron-BMC-00528-V003 / 27d1d9ea6e648572, directly reopened from XLSX and manifest."
+  },
+  "source_snapshot": {
+    "items": "Set Sensor Type (OOB)",
+    "procedure": "TBD with generic pre-test log clearing.",
+    "criteria": "TBD",
+    "deepseek": "NO because the source has no command or acceptance criteria.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with 0x2F baseline, one approved 0x2E sensor-type/event-reading-type write, behavioral validation and exact restore."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly refuses to invent sensor identity or new type codes from TBD source content.",
+    "gpt_v2": "Correctly recognizes the standard setter but treats type metadata as high-impact monitoring semantics.",
+    "history": "The row 1237 getter is a completed baseline case; reading, threshold, event-enable and status cases depend on type semantics but are not setter coverage.",
+    "v3_1": "A displayed sensor type is not authorization for rewriting it, and a new event/reading type must remain compatible with the sensor's implementation and SDR ecosystem."
+  },
+  "original_test_intent": "Change one verified settable sensor's Sensor Type and Event/Reading Type codes over OOB, demonstrate that the sensor and event interpretation remain coherent, then restore both original codes.",
+  "original_method": "Master remains TBD. Review identifies IPMI v2.0 Table 35-16 raw 0x04/0x2E <sensor number> <sensor type> <event/reading type> with Table 35-17 0x2F baseline/readback.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_TBD_PRESERVED", "STATE_CHANGING_SENSOR_IDENTITY", "NEEDS_SETTABLE_SENSOR_CONFIRMATION", "NEEDS_SUPPORTED_TYPE_PAIR", "NEEDS_BASELINE_RESTORE", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The monitoring owner approves the dedicated target, exact sensor, supported new Sensor Type/Event-Reading Type pair, expected downstream interpretation, maintenance window and restoration.",
+  "required_inputs": ["Verified BMC/channel/sensor and matched SDR", "Proof that the sensor supports Set Sensor Type", "Current raw 0x04/0x2F baseline", "Approved Sensor Type code", "Compatible approved Event/Reading Type code", "Expected reading, status and event decoder behavior", "Exact restore payload and independent recovery owner"],
+  "safety_requirements": ["Dedicated non-production target", "Preserve SDR/SEL/BMC/OS evidence", "Do not copy codes from display text without protocol validation", "Validate standard, OEM and reserved code ranges", "Change one sensor only", "Do not change thresholds, factors or event-enable masks", "Stop on missing sensor, invalid reading or monitoring loss", "Restore and reverify both codes", "No automatic retry"],
+  "agent_execution_scope": ["Verify target, sensor and settable capability", "Capture raw 0x2F, SDR, reading and event baseline", "Validate the proposed type pair and downstream decoder compatibility", "Present the exact three request data bytes for confirmation", "Issue one raw 0x04/0x2E write", "Read back with 0x2F and observe bounded reading/event behavior", "Restore both original codes and reverify", "Archive no-collateral-change evidence"],
+  "engineer_actions": ["Approve the supported type pair and expected semantics", "Own recovery if the sensor disappears or restore fails", "Decide the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek correctly refuses the TBD mutation; a generic sensor display cannot safely choose a new type pair or prove settable support.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, capture raw 0x04 0x2f <sensor>, issue one secret-safe raw 0x04 0x2e <sensor> <sensor-type> <event-reading-type>, verify exact 0x2F readback and bounded reading/event interpretation, then restore the original pair.",
+    "original_parameters_and_time_preserved": "No Master sensor or type value is invented; source TBD and 10/5 timing remain preserved."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat the two type bytes as a coupled schema change: validate support and decoder compatibility, perform one write, verify identity plus actual reading/event semantics, and restore the complete pair.",
+    "difference_from_original_method": "Adds a reversible Review-layer procedure while preserving the Master TBD.",
+    "coverage_difference": "A 0x2F read or sensor-info display cannot satisfy the setter; this case does not rewrite SDR content, factors, thresholds or event enables.",
+    "risks_limitations": "A syntactically accepted but semantically incompatible type pair can cause software to decode valid bytes as the wrong sensor or event class."
+  },
+  "project_override_considerations": "A vendor API is equivalent only if it targets the same settable sensor, exposes both raw type codes, validates compatibility and supports exact restoration.",
+  "expected_evidence": ["Owner approval and dedicated target/sensor/SDR identity", "Settable capability and original 0x2F type pair", "Exact proposed/issued 0x2E bytes and completion", "0x2F readback plus reading/status/event behavior", "Preserved SEL/BMC/OS evidence", "Restored type pair and no-collateral-change audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title consistently identifies Set Sensor Type while Procedure and Criteria are TBD. Missing target, values, semantic oracle and recovery plus generic log clearing are source omissions rather than contradictory requirements; the conditional Review mapping preserves Master TBD."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The standard operation is identifiable. Settable capability, supported type pair, expected behavior and restore data are Project readiness inputs; execution must become BLOCKED if compatibility cannot be proven."},
+  "review_improvement": "Treats Sensor Type and Event/Reading Type as a coupled semantic contract, requires behavioral proof beyond readback and preserves an exact two-field restoration path.",
+  "independent_technical_reasoning": "Changing Sensor Type or Event/Reading Type changes how all downstream software interprets the same sensor number, reading and event bits. A completion code and 0x2F echo can both succeed while monitoring semantics are broken. The test therefore needs a vendor-supported pair, bounded reading/event validation and restoration of both original bytes as one atomic recovery objective.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1236 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1236 review",
+    "history": "Row 1237 completed Final Audit getter plus related sensor reading/event records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, sections 35.15-35.16 and Tables 35-16/35-17 (Set/Get Sensor Type, NetFn 04h, Cmd 2Eh/2Fh): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
