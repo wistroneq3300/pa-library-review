@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1379,
+  "library_sequence": 1229,
+  "source_key": "Functionality|1230|Wistron-BMC-00520-V003",
+  "case_variant_id": "2cc5ec18566cef9a",
+  "source_ref": { "sheet": "Functionality", "source_row": 1230, "code": "Wistron-BMC-00520-V003" },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "7b50f529b5bd96d3b35839bc068c7fefaef936181263509d63b4fd0681a266cf",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The preceding setter needs this query for baseline/readback, but a read cannot satisfy its mutation coverage; hysteresis and event-enable commands remain separate.",
+    "next_source_row_verified": "Functionality|1231|Wistron-BMC-00521-V002 / 85d7acdc332f4af3 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get Sensor Threshold (OOB)",
+    "procedure": "Raw 0x04/0x27 with a sensor number, sensor-number discovery through sdr elist, and comparison of response bytes 3 through 8 with sensor list; generic pre-step clears logs.",
+    "criteria": "Corrupted duplicated text requires command success and threshold values matching sensor list.",
+    "script": "get-sensor-threshold_oob",
+    "deepseek": "PARTIAL; identifies ipmitool but asks for the exact implementation sequence.",
+    "gpt_v2": "FULLY AUTOMATABLE as a read-only sensor-bound query with response-mask, threshold-value and SDR conversion validation."
+  },
+  "historical_reviews": {
+    "deepseek": "Overstates the need for an implementation-specific sequence because the source already identifies the standard read and sensor input.",
+    "gpt_v2": "Correctly separates transport completion from semantic threshold parsing and removes log clearing.",
+    "history": "The invalidated template-era record was inspected only as negative history and was not reused; adjacent setter/hysteresis/event-enable coverage remains distinct.",
+    "v3_1": "The readable mask must govern which of the six returned positions are meaningful; unsupported bytes cannot be compared as thresholds."
+  },
+  "original_test_intent": "Read one verified sensor's supported threshold values over OOB and compare each readable raw value, after SDR conversion, with the independently reported sensor threshold state.",
+  "original_method": "Retain raw Sensor/Event 0x04/0x27 <sensor number>, then parse the Table 35-9 readable-threshold mask followed by LNC, LC, LNR, UNC, UC and UNR byte positions instead of treating bytes 3 through 8 as unconditionally valid.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY", "NEEDS_SENSOR_SDR_MAPPING", "NEEDS_THRESHOLD_MASK_AND_CONVERSION_PARSER", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Project supplies the approved sensor identity, matched SDR and comparison tolerance; ordinary read-only collection needs no interactive write approval.",
+  "required_inputs": [
+    "Verified BMC, channel and sensor number",
+    "Matched SDR record and sensor units/linearization",
+    "IPMI v2.0 Table 35-9 response schema",
+    "Signed/raw-to-engineering conversion implementation",
+    "Independent sensor-list threshold field mapping and tolerance"
+  ],
+  "safety_requirements": [
+    "Read only",
+    "Do not clear SEL, BMC or OS logs",
+    "Never guess the sensor number",
+    "Validate completion and exact response length",
+    "Honor the readable-threshold mask before interpreting values",
+    "Do not set thresholds, hysteresis or event enables",
+    "No automatic retry"
+  ],
+  "agent_execution_scope": [
+    "Verify BMC and bind the sensor number to one SDR",
+    "Issue raw 0x04/0x27 <sensor number> once",
+    "Validate completion, response length and readable mask",
+    "Preserve all six raw byte positions while decoding only readable fields",
+    "Convert readable values with the matched SDR",
+    "Compare named threshold fields with independently captured sensor-list output",
+    "Archive raw, decoded and no-mutation evidence"
+  ],
+  "engineer_actions": ["Approve sensor mapping and comparison tolerance", "Review unsupported or inconsistent threshold data", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek is unnecessarily pessimistic about command availability; the source's raw 0x04/0x27 request is standard and read-only once the sensor is verified.",
+    "executable_command_required": true,
+    "command_recommendation": "Use one secret-safe raw 0x04 0x27 <sensor number> request as defined by IPMI v2.0 Table 35-9; parse the readable-threshold mask and the ordered LNC, LC, LNR, UNC, UC and UNR positions, then compare only supported values after SDR conversion.",
+    "original_parameters_and_time_preserved": "The OOB path, sensor-number input, response-byte comparison and 10/5 timing are preserved; duplicated Criteria text and log clearing are recorded as source defects."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_PROJECT_INPUTS",
+    "recommended_method": "Use a schema-aware read that binds raw positions to named thresholds, gates them through the readable mask, converts them through the same SDR, and reports per-field agreement with an explicit tolerance.",
+    "difference_from_original_method": "Makes the source's byte-range comparison protocol-aware and auditable without modifying the Master.",
+    "coverage_difference": "This proves readable threshold state only; it does not prove Set Sensor Threshold behavior, hysteresis, event enablement or physical event generation.",
+    "risks_limitations": "A high-level sensor list may round values or omit unsupported fields, so byte equality is not a valid cross-interface oracle after unit conversion."
+  },
+  "project_override_considerations": "A high-level API is equivalent only if it identifies the same sensor, exposes the readable mask or unsupported state and reports all supported thresholds with documented conversion/rounding.",
+  "expected_evidence": [
+    "Target/firmware/channel and sensor/SDR identity",
+    "Redacted raw 0x04/0x27 request/response and completion",
+    "Readable-threshold mask and all ordered raw byte positions",
+    "Per-field decoded engineering values and conversion inputs",
+    "Named sensor-list comparison with tolerance",
+    "No-write and no-log-clear audit"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title, raw request and comparison step consistently require a threshold read. The duplicated/corrupted Criteria wording, imprecise unconditional byte comparison and log-clearing boilerplate are quality and completeness defects, not mutually incompatible source requirements."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The command and response schema are defined. Sensor mapping, SDR conversion and comparison tolerance are normal Project readiness inputs; malformed or unsupported data becomes an execution result rather than a reason to invent values."
+  },
+  "review_improvement": "Uses the readable mask and named field order so unsupported positions cannot falsely pass or fail, and compares converted thresholds with explicit rounding tolerance.",
+  "independent_technical_reasoning": "Table 35-9 returns a readable-threshold mask before six fixed threshold byte positions. A byte position can contain data even when its mask bit says the threshold is not readable, and high-level tools may round converted values. PASS therefore requires one verified sensor/SDR, mask-gated decoding and named per-field comparison in engineering units, not raw blanket equality or mere command success.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1230 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1230 review",
+    "history": "Adjacent threshold setter, hysteresis and event-enable records; invalidated run searched but rejected as authority",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, section 35.9 and Table 35-9 (Get Sensor Thresholds, NetFn 04h, Cmd 27h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
