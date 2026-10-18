@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1384,
+  "library_sequence": 1234,
+  "source_key": "Functionality|1235|Wistron-BMC-00525-V003",
+  "case_variant_id": "fdc6a50f557de473",
+  "source_ref": {"sheet": "Functionality", "source_row": 1235, "code": "Wistron-BMC-00525-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "447efc04a7810d2da148e32b5fa90dc78f6a1ba0316d5d61cf7f8ab3aeefa070",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Sensor-list inventory and event-status queries provide context but do not replace this selected sensor's raw 0x2D reading/status response.",
+    "next_source_row_verified": "Functionality|1236|Wistron-BMC-00526-V002 / f71ce83bd781212e directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get Sensor Reading (OOB)",
+    "procedure": "Raw 0x04/0x2D with one sensor number over LANPlus, followed by response inspection; generic pre-step clears logs.",
+    "criteria": "Command should be sent without any error.",
+    "script": "get-sensor-reading_oob",
+    "deepseek": "YES but replaces the selected raw request with sensor get '*' plus a truncated sdr elist fallback.",
+    "gpt_v2": "FULLY AUTOMATABLE as one sensor-bound raw read with SDR conversion and unavailable/status handling."
+  },
+  "historical_reviews": {
+    "deepseek": "Its wildcard command broadens scope, may not address a literal '*' sensor, and does not preserve the exact raw 0x2D coverage.",
+    "gpt_v2": "Correctly restores the source's selected-sensor command and adds semantic parsing.",
+    "history": "Reading factors, SDR identity and event-status records are complementary inputs; setters and re-arm commands remain out of scope.",
+    "v3_1": "The raw reading byte is not an engineering value until the matched SDR conversion and sensor availability flags have been applied."
+  },
+  "original_test_intent": "Read one verified sensor's current raw value and status over OOB, convert it with that sensor's SDR metadata, and report unavailable or event states without modifying the sensor.",
+  "original_method": "Retain IPMI v2.0 Table 35-15 raw Sensor/Event 0x04/0x2D <sensor number>; reject the DeepSeek wildcard substitution and parse the complete response under the matched SDR.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY", "NEEDS_SENSOR_SDR_MAPPING", "NEEDS_READING_AND_STATUS_DECODER", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Project supplies the approved sensor number, matched SDR, conversion model and expected operating range; ordinary read-only collection needs no interactive confirmation.",
+  "required_inputs": ["Verified BMC/session and sensor number", "Matched SDR sensor type, unit, linearization and factors", "Table 35-15 response schema", "Raw-to-engineering conversion implementation", "Expected operating/threshold context and timestamp tolerance"],
+  "safety_requirements": ["Read only", "Do not clear logs", "Do not broaden to wildcard sensor collection", "Validate completion and response length", "Honor scanning-disabled and reading/state-unavailable flags", "Do not borrow factors from another sensor", "Do not re-arm or change thresholds/event policy", "No automatic retry"],
+  "agent_execution_scope": ["Verify BMC and bind the source sensor number to one SDR", "Issue raw 0x04/0x2D <sensor number> once", "Preserve the complete raw response and timestamp", "Validate availability/scanning and decode sensor-specific state bits", "Convert the reading only with the matched SDR", "Compare with the approved operating and threshold context", "Archive no-mutation evidence"],
+  "engineer_actions": ["Approve sensor/SDR mapping and expected range", "Review unavailable, disabled or out-of-range results", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek's sensor get '*' command is not an exact substitute for the source's one-sensor raw 0x2D request and can collect unrelated data; the fallback truncation also weakens identity evidence.",
+    "executable_command_required": true,
+    "command_recommendation": "Use one secret-safe raw 0x04 0x2d <sensor number> request as defined by IPMI v2.0 Table 35-15; decode reading/status availability first, then convert the reading only with the matched SDR factors and units.",
+    "original_parameters_and_time_preserved": "The source's OOB path, single sensor parameter and 10/5 timing are preserved; its log-clearing boilerplate is not executed."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_PROJECT_INPUTS",
+    "recommended_method": "Capture one timestamped raw response, gate conversion on reading availability and scanning state, decode event bits through the SDR and retain both raw and engineering-unit values.",
+    "difference_from_original_method": "Adds a semantic oracle and evidence contract without changing the source command or Master data.",
+    "coverage_difference": "This does not enumerate sensors, validate conversion factors independently, change policy or prove event generation under stimulus.",
+    "risks_limitations": "One snapshot may catch an update transition; unavailable state must be reported rather than hidden by retrying until a number appears."
+  },
+  "project_override_considerations": "A high-level sensor API is equivalent only if it selects the same sensor and exposes the raw reading, availability/scanning state, event bits, SDR identity and conversion inputs.",
+  "expected_evidence": ["Target/firmware/channel and sensor/SDR identity", "Redacted raw 0x2D request/response and timestamp", "Completion, response length, availability/scanning and state bits", "Raw reading plus SDR conversion inputs", "Decoded engineering value and threshold/context comparison", "No-write and no-log-clear audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title and raw procedure consistently request one sensor reading. Generic command-success criteria and log clearing are incomplete acceptance/evidence practices, not contradictory source requirements; the wildcard mismatch belongs to the historical DeepSeek review rather than the Master source."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read command and response model are defined. Sensor identity, SDR conversion and expected context are Project readiness inputs; malformed or unavailable results are preserved execution findings rather than reasons to guess."},
+  "review_improvement": "Restores exact single-sensor raw coverage, makes availability/status an interpretation gate and requires the matched SDR for conversion instead of accepting any numeric-looking output.",
+  "independent_technical_reasoning": "Get Sensor Reading combines a raw value with scanning, availability and event-state information. A raw byte from the wrong sensor or converted with another SDR can look plausible, while an unavailable reading must not be treated as zero or healthy. The source's one-sensor identity and complete raw response are therefore essential; wildcard high-level output is broader but weaker evidence.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1235 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1235 review",
+    "history": "Related SDR, reading-factor and sensor-event-status records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, section 35.14 and Table 35-15 (Get Sensor Reading, NetFn 04h, Cmd 2Dh): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
