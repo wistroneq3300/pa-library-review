@@ -1,1 +1,147 @@
-{"schema_version":"v3-1-full-review-record-1.0","review_sequence":1374,"library_sequence":1224,"source_key":"Functionality|1225|Wistron-BMC-00515-V003","case_variant_id":"bb327cbc4ab7d082","source_ref":{"sheet":"Functionality","source_row":1225,"code":"Wistron-BMC-00515-V003"},"source_integrity":{"exact_xlsx_row_read":true,"original_row_sha256":"7dd7310dbfeea54da0c65a678982b7d836406c446cc49ea4b11004f505fe38f4","source_xlsx_sha256":"e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8","deepseek_same_row_read":true,"tests_json_cross_check":true,"gpt_v2_read":true,"historical_revision_search":true,"duplicate_code_search":true,"duplicate_code_result":"The reservation is a stateful prerequisite for a specific Get Device SDR sequence; a reservation completion code alone is not independent inventory coverage.","next_source_row_verified":"Functionality|1226|Wistron-BMC-00516-V002 / 3cd987f19120e231 directly reopened from XLSX and manifest before checkpoint creation."},"source_snapshot":{"items":"Reserve Device SDR Repository (OOB)","procedure":"Raw Sensor/Event 0x04/0x22 with no request data over LANPlus; generic pre-step clears logs.","criteria":"Command should be sent without any error.","script":"reserve-device-sdr-repository_oob","deepseek":"PARTIAL; declines a single stock command pending exact implementation sequence.","gpt_v2":"REQUIRES owner-confirmed bounded reservation lifecycle tied to approved reads."},"historical_reviews":{"deepseek":"Its caution is appropriate for lifecycle control, though the request and two-byte reservation result are definable.","gpt_v2":"Correctly treats reservation as coordinated state rather than a harmless standalone probe.","history":"The preceding Get Device SDR case uses the token; sensor or repository write commands remain separately controlled.","v3_1":"User confirmation is required for state coordination, but missing lifecycle inputs do not make the review permanently BLOCKED."},"original_test_intent":"Obtain one valid device-SDR reservation ID over OOB for an explicitly approved, finite follow-on Get Device SDR read sequence and handle loss or expiry without mutation.","original_method":"Retain raw 0x04/0x22 with no request data; bind the returned two-byte reservation ID immediately to one reviewed 0x04/0x21 read lifecycle.","automation_classification":"REQUIRES PACKAGE / USER CONFIRMATION","execution_readiness":["REVIEW_COMPLETE","STATEFUL_RESERVATION","NEEDS_DEPENDENT_READ_ALLOWLIST","NEEDS_CONCURRENCY_WINDOW","NEEDS_OWNER_CONFIRMATION","NO_DUT_EXECUTION_PERFORMED"],"execution_status":"NOT EXECUTED","tool_result":"NOT RUN","engineer_verdict":"ENGINEER OWNED; PENDING","manual_activity":"The device-SDR owner approves the exact dependent record-read allowlist, exclusive or coordinated window, maximum reservation lifetime and loss/expiry handling.","required_inputs":["Verified BMC/device-SDR identity","0x04/0x22 response schema","Approved 0x04/0x21 record-read scope","Reservation lifetime/expiry behavior","Competing reader/writer policy","Maximum duration","Escalation path"],"safety_requirements":["Create only one reservation per approved lifecycle","Do not reserve without a ready dependent read","Never treat the token as write authorization","Do not hold it idle","Stop on loss or competing operation","Do not clear logs","Do not retry automatically"],"agent_execution_scope":["Verify target and collect summary baseline","Confirm approved read allowlist and concurrency state","Issue 0x04/0x22 once","Validate completion and two-byte non-invalid reservation ID","Use it only for the approved reads","Record loss/expiry and close the session without mutation"],"engineer_actions":["Authorize the dependent lifecycle and concurrency plan","Resolve ownership conflicts","Own the final DUT verdict"],"command_applicability":{"original_deepseek_command_fit":"DeepSeek is too pessimistic about command availability but correctly avoids executing an uncoordinated stateful request.","executable_command_required":true,"command_recommendation":"After approval, issue secret-safe raw 0x04 0x22 once, validate the returned reservation ID, and pass it only to the allowlisted bounded 0x04/0x21 reads.","original_parameters_and_time_preserved":"The no-data request and source timing are retained; no retry or unrelated command is added."},"modernized_recommendation":{"status":"PROJECT_EXECUTION_READINESS_PENDING","recommended_method":"Treat reservation creation, immediate bounded use, loss detection and natural completion/expiry as one auditable lifecycle.","difference_from_original_method":"Adds required ownership, scope and lifecycle evidence without changing the Master command.","coverage_difference":"Creating a token does not demonstrate that any device-SDR record is correct and does not authorize Add/Delete/Clear operations.","risks_limitations":"Another reader or writer may invalidate the reservation; attempting to conceal that by re-reserving would erase concurrency evidence."},"project_override_considerations":"A vendor library may manage reservations internally only if it exposes the ID/lifecycle, exact dependent reads and reservation-loss evidence; an opaque inventory success is not equivalent.","expected_evidence":["Owner approval and read allowlist","Target/firmware/channel and competing-operation baseline","Raw reservation request/response","Decoded reservation ID and timestamps","Exact dependent reads using that ID","Loss/expiry handling","No-mutation audit"],"source_conflict_analysis":{"is_source_conflict":true,"analysis":"The Master treats a stateful reservation as command-success-only and does not define dependent scope, lifetime, competition or loss handling; it also clears evidence before the test."},"blocked_analysis":{"is_blocked":false,"analysis":"The command and state purpose are known. Owner, allowlist and concurrency values are execution readiness inputs that can be supplied."},"review_improvement":"Prevents a reservation from being created as an orphaned probe or silently reacquired after loss, preserving both coordination safety and concurrency evidence.","independent_technical_reasoning":"A device-SDR reservation has value only inside the exact read transaction that consumes it. It can be invalidated by concurrent repository activity, so PASS cannot be based solely on receiving two bytes. The review must show one approved token, its bounded use, and truthful loss/expiry behavior without broadening into mutation.","source_provenance":{"primary":"XLSX Functionality physical row 1225 reopened directly","deepseek_same_row":"XLSX AI columns and data/tests.json exact row","gpt_v2":"Exact Functionality row 1225 review","history":"Preceding device-SDR summary/read records and neighboring sensor commands","external_sources":[]},"no_automatic_retry":true,"review_outcome":"SOURCE_CONFLICT","second_review_outcome":"CHANGED","regression_result":{"intent_preserved":true,"procedure_preserved":true,"criteria_preserved":true,"coverage_regression":false,"safety_regression":false,"hardware_pass_claimed":false,"status":"PASS_STATIC_REVIEW"},"per_case_quality_gate":{"exact_xlsx_row_read":true,"deepseek_same_row_read":true,"gpt_v2_read":true,"history_searched":true,"reasoning_is_case_specific":true,"source_identity_verified":true,"next_key_verified_from_xlsx":true,"no_hardware_pass_claimed":true,"record_complete":true}}
+{
+    "schema_version": "v3-1-full-review-record-1.0",
+    "review_sequence": 1374,
+    "library_sequence": 1224,
+    "source_key": "Functionality|1225|Wistron-BMC-00515-V003",
+    "case_variant_id": "bb327cbc4ab7d082",
+    "source_ref": {
+        "sheet": "Functionality",
+        "source_row": 1225,
+        "code": "Wistron-BMC-00515-V003"
+    },
+    "source_integrity": {
+        "exact_xlsx_row_read": true,
+        "original_row_sha256": "7dd7310dbfeea54da0c65a678982b7d836406c446cc49ea4b11004f505fe38f4",
+        "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+        "deepseek_same_row_read": true,
+        "tests_json_cross_check": true,
+        "gpt_v2_read": true,
+        "historical_revision_search": true,
+        "duplicate_code_search": true,
+        "duplicate_code_result": "The reservation is a stateful prerequisite for a specific Get Device SDR sequence; a reservation completion code alone is not independent inventory coverage.",
+        "next_source_row_verified": "Functionality|1226|Wistron-BMC-00516-V002 / 3cd987f19120e231 directly reopened from XLSX and manifest before checkpoint creation."
+    },
+    "source_snapshot": {
+        "items": "Reserve Device SDR Repository (OOB)",
+        "procedure": "Raw Sensor/Event 0x04/0x22 with no request data over LANPlus; generic pre-step clears logs.",
+        "criteria": "Command should be sent without any error.",
+        "script": "reserve-device-sdr-repository_oob",
+        "deepseek": "PARTIAL; declines a single stock command pending exact implementation sequence.",
+        "gpt_v2": "REQUIRES owner-confirmed bounded reservation lifecycle tied to approved reads."
+    },
+    "historical_reviews": {
+        "deepseek": "Its caution is appropriate for lifecycle control, though the request and two-byte reservation result are definable.",
+        "gpt_v2": "Correctly treats reservation as coordinated state rather than a harmless standalone probe.",
+        "history": "The preceding Get Device SDR case uses the token; sensor or repository write commands remain separately controlled.",
+        "v3_1": "User confirmation is required for state coordination, but missing lifecycle inputs do not make the review permanently BLOCKED."
+    },
+    "original_test_intent": "Obtain one valid device-SDR reservation ID over OOB for an explicitly approved, finite follow-on Get Device SDR read sequence and handle loss or expiry without mutation.",
+    "original_method": "Retain raw 0x04/0x22 with no request data; bind the returned two-byte reservation ID immediately to one reviewed 0x04/0x21 read lifecycle.",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "execution_readiness": [
+        "REVIEW_COMPLETE",
+        "STATEFUL_RESERVATION",
+        "NEEDS_DEPENDENT_READ_ALLOWLIST",
+        "NEEDS_CONCURRENCY_WINDOW",
+        "NEEDS_OWNER_CONFIRMATION",
+        "NO_DUT_EXECUTION_PERFORMED"
+    ],
+    "execution_status": "NOT EXECUTED",
+    "tool_result": "NOT RUN",
+    "engineer_verdict": "ENGINEER OWNED; PENDING",
+    "manual_activity": "The device-SDR owner approves the exact dependent record-read allowlist, exclusive or coordinated window, maximum reservation lifetime and loss/expiry handling.",
+    "required_inputs": [
+        "Verified BMC/device-SDR identity",
+        "0x04/0x22 response schema",
+        "Approved 0x04/0x21 record-read scope",
+        "Reservation lifetime/expiry behavior",
+        "Competing reader/writer policy",
+        "Maximum duration",
+        "Escalation path"
+    ],
+    "safety_requirements": [
+        "Create only one reservation per approved lifecycle",
+        "Do not reserve without a ready dependent read",
+        "Never treat the token as write authorization",
+        "Do not hold it idle",
+        "Stop on loss or competing operation",
+        "Do not clear logs",
+        "Do not retry automatically"
+    ],
+    "agent_execution_scope": [
+        "Verify target and collect summary baseline",
+        "Confirm approved read allowlist and concurrency state",
+        "Issue 0x04/0x22 once",
+        "Validate completion and two-byte non-invalid reservation ID",
+        "Use it only for the approved reads",
+        "Record loss/expiry and close the session without mutation"
+    ],
+    "engineer_actions": [
+        "Authorize the dependent lifecycle and concurrency plan",
+        "Resolve ownership conflicts",
+        "Own the final DUT verdict"
+    ],
+    "command_applicability": {
+        "original_deepseek_command_fit": "DeepSeek is too pessimistic about command availability but correctly avoids executing an uncoordinated stateful request.",
+        "executable_command_required": true,
+        "command_recommendation": "After approval, issue secret-safe raw 0x04 0x22 once, validate the returned reservation ID, and pass it only to the allowlisted bounded 0x04/0x21 reads.",
+        "original_parameters_and_time_preserved": "The no-data request and source timing are retained; no retry or unrelated command is added."
+    },
+    "modernized_recommendation": {
+        "status": "PROJECT_EXECUTION_READINESS_PENDING",
+        "recommended_method": "Treat reservation creation, immediate bounded use, loss detection and natural completion/expiry as one auditable lifecycle.",
+        "difference_from_original_method": "Adds required ownership, scope and lifecycle evidence without changing the Master command.",
+        "coverage_difference": "Creating a token does not demonstrate that any device-SDR record is correct and does not authorize Add/Delete/Clear operations.",
+        "risks_limitations": "Another reader or writer may invalidate the reservation; attempting to conceal that by re-reserving would erase concurrency evidence."
+    },
+    "project_override_considerations": "A vendor library may manage reservations internally only if it exposes the ID/lifecycle, exact dependent reads and reservation-loss evidence; an opaque inventory success is not equivalent.",
+    "expected_evidence": [
+        "Owner approval and read allowlist",
+        "Target/firmware/channel and competing-operation baseline",
+        "Raw reservation request/response",
+        "Decoded reservation ID and timestamps",
+        "Exact dependent reads using that ID",
+        "Loss/expiry handling",
+        "No-mutation audit"
+    ],
+    "source_conflict_analysis": {
+        "is_source_conflict": false,
+        "analysis": "The source consistently requests Reserve Device SDR Repository through raw 0x04/0x22. Its command-success-only criterion, omitted dependent-read lifecycle, and generic log-clearing pre-step are incomplete safeguards and acceptance criteria, not contradictory requirements; the review adds the missing bounded lifecycle while preserving the source command."
+    },
+    "blocked_analysis": {
+        "is_blocked": false,
+        "analysis": "The command and state purpose are known. Owner, allowlist and concurrency values are execution readiness inputs that can be supplied."
+    },
+    "review_improvement": "Prevents a reservation from being created as an orphaned probe or silently reacquired after loss, preserving both coordination safety and concurrency evidence.",
+    "independent_technical_reasoning": "A device-SDR reservation has value only inside the exact read transaction that consumes it. It can be invalidated by concurrent repository activity, so PASS cannot be based solely on receiving two bytes. The review must show one approved token, its bounded use, and truthful loss/expiry behavior without broadening into mutation.",
+    "source_provenance": {
+        "primary": "XLSX Functionality physical row 1225 reopened directly",
+        "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+        "gpt_v2": "Exact Functionality row 1225 review",
+        "history": "Preceding device-SDR summary/read records and neighboring sensor commands",
+        "external_sources": []
+    },
+    "no_automatic_retry": true,
+    "review_outcome": "IMPROVED",
+    "second_review_outcome": "CHANGED",
+    "regression_result": {
+        "intent_preserved": true,
+        "procedure_preserved": true,
+        "criteria_preserved": true,
+        "coverage_regression": false,
+        "safety_regression": false,
+        "hardware_pass_claimed": false,
+        "status": "PASS_STATIC_REVIEW"
+    },
+    "per_case_quality_gate": {
+        "exact_xlsx_row_read": true,
+        "deepseek_same_row_read": true,
+        "gpt_v2_read": true,
+        "history_searched": true,
+        "reasoning_is_case_specific": true,
+        "source_identity_verified": true,
+        "next_key_verified_from_xlsx": true,
+        "no_hardware_pass_claimed": true,
+        "record_complete": true
+    }
+}
