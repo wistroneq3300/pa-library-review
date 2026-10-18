@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1393,
+  "library_sequence": 1244,
+  "source_key": "Functionality|1245|Wistron-BMC-00535-V003",
+  "case_variant_id": "231527ac58f7e89b",
+  "source_ref": {"sheet": "Functionality", "source_row": 1245, "code": "Wistron-BMC-00535-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "f1b0a9df9c08e87c68392030fe8ec9c79b6d820ee83cc68b6929804c7e60c220",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The adjacent Set CPU Power Capping case supplies state-change context but cannot define this getter's private response bytes, units or cap domain.",
+    "next_source_row_verified": "Functionality|1246|Wistron-BMC-00536-V003 / 4e1604f392d7e2df directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get CPU Power Capping",
+    "procedure": "The source performs an in-band, no-data raw 0x30 0x26 request and supplies no response layout, unit, CPU/socket/domain identity or expected value.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron e-wing cpu-power-capping path.",
+    "deepseek": "YES but substitutes an OOB lanplus request, describes the result only as a maximum value, and lacks the vendor response decoder and policy oracle.",
+    "gpt_v2": "FULLY AUTOMATABLE after vendor request/response, unit and interface validation; read-only with power/thermal context and no log clearing."
+  },
+  "historical_reviews": {
+    "deepseek": "Its OOB request may reach the same BMC command but transport equivalence is unproven, and a numeric raw response cannot be accepted without field and unit definitions.",
+    "gpt_v2": "Defines a sound read-only method but assumes the private OEM contract/parser is available; under the current repository evidence it remains an identifiable package prerequisite.",
+    "history": "The invalidated earlier-run artifact was located but excluded as authority; the paired setter demonstrates that 0x0046 is documented as 150 W there, but that example alone does not prove this getter's entire schema.",
+    "v3_1": "A missing private vendor decoder is REQUIRES PACKAGE / USER CONFIRMATION even when the eventual action is read-only and needs no per-run OK after package approval."
+  },
+  "original_test_intent": "Read the active CPU power-capping policy from the verified BMC, decode its domain, enable/state and watt value, and compare the result with the platform-approved power configuration without changing it.",
+  "original_method": "Retain the source's in-band raw 0x30 0x26 request and do not substitute OOB or assign a unit until the Wistron firmware contract and parser are approved.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_INTENT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_RESPONSE_DECODER_AND_POWER_POLICY", "TRANSPORT_EQUIVALENCE_UNRESOLVED", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The platform owner supplies the firmware-specific 0x30/0x26 response contract, identifies the capped CPU/socket/domain and units, approves in-band versus OOB equivalence, and provides the expected cap policy or range.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved Wistron OEM 0x30/0x26 request and response schema", "In-band/OOB transport-equivalence decision", "CPU/socket/package cap-domain definition", "Value byte order, scale, units and enable/state fields", "Valid range and reserved-value rules", "Expected configured cap or policy range", "Reviewed parser and private-script revision"],
+  "safety_requirements": ["Read only", "Do not clear logs", "Do not issue 0x30/0x27 or any power-cap write", "Do not silently replace the in-band source path", "Validate completion and exact response length", "Preserve raw bytes before decoding", "Reject unknown fields, impossible wattage and reserved states", "Do not run a workload to force a cap event in this case", "No automatic retry"],
+  "agent_execution_scope": ["Verify target and approved OEM contract", "Capture current power/thermal policy context", "Issue exactly one approved 0x30/0x26 request on the selected transport", "Capture the full raw response and timing", "Validate completion, length, domain, state, encoding and unit", "Compare the decoded cap with the approved platform policy", "Archive the raw frame, decoder version and no-mutation evidence"],
+  "engineer_actions": ["Approve the private response layout and transport scope", "Define the capped domain and expected policy", "Review any malformed, unsupported or policy-mismatched result", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Its no-data opcode matches the source command family, but it changes from in-band to OOB and cannot substantiate the claimed maximum-watt value without a firmware-specific response schema.",
+    "executable_command_required": true,
+    "command_recommendation": "After the Wistron contract is approved, issue one secret-safe in-band raw 0x30 0x26 request (or an explicitly equivalent OOB form), then decode only the contract-defined cap domain/state/value/unit and compare it with policy.",
+    "original_parameters_and_time_preserved": "The no-data 0x30/0x26 identity and 10/5 timing are preserved; transport equivalence, response fields and expected watts are not inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Pin the decoder to BMC firmware, retain the full raw frame, identify the exact CPU cap domain and validate value/state/unit against both allowed range and configured policy.",
+    "difference_from_original_method": "Replaces exit-code acceptance with semantic decoding and policy comparison while maintaining a strictly read-only boundary.",
+    "coverage_difference": "This snapshot does not validate setting, enforcement under workload, throttling behavior, persistence or restoration of a cap.",
+    "risks_limitations": "Byte-order or scale errors can turn an invalid frame into plausible watts, and a system-level number may be mistaken for per-socket or per-package policy."
+  },
+  "project_override_considerations": "A Redfish or vendor API is equivalent only if it reports the same cap domain, state and value with a documented mapping; otherwise it is corroborating evidence and the raw source path remains uncovered.",
+  "expected_evidence": ["Approved target/firmware, OEM schema, transport and parser version", "Redacted raw 0x30/0x26 request/response, completion and timestamp", "Response-length and reserved-field validation", "Decoded cap domain, state, numeric value, scale and units", "Expected-policy and power/thermal-context comparison", "No cap write, workload, reset, power or log-clear audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master consistently names an in-band, no-data getter but omits its response semantics. DeepSeek's OOB substitution is a comparison-review mismatch, not an internal Master contradiction; the review preserves it without inflating source-conflict count."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read-only purpose and opcode are identifiable. A vendor decoder and project power-policy inputs can resolve execution readiness, so the case is package/user-confirmation gated rather than irreducibly BLOCKED."},
+  "review_improvement": "Keeps the source transport visible, prevents an untyped raw number from becoming a false watt claim, and separates configuration read-back from the following state-changing setter.",
+  "independent_technical_reasoning": "Power-cap values are meaningful only with domain, state, scale and unit. The paired setter's 0x0046 example suggests one encoding for one value but cannot prove response length or whether the getter returns a maximum, active limit, enable flag or multiple fields. Therefore the private contract must precede decoding, while the actual query remains a single non-mutating action.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1245 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1245 review",
+    "history": "Paired CPU power-cap setter, duplicate-code search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab cpu-power-capping URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
