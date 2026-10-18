@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1399,
+  "library_sequence": 1250,
+  "source_key": "Functionality|1251|Wistron-BMC-00541-V004",
+  "case_variant_id": "4db484219b2d06d9",
+  "source_ref": {"sheet": "Functionality", "source_row": 1251, "code": "Wistron-BMC-00541-V004"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "4916a19a41d1cbdf4a64ac2408af9192332096e4590194042a1a11706a96a644",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The preceding setter and generic ipmitool SOL configuration can corroborate policy, but neither resolves this private 0x30/0x49 selector/response contract.",
+    "next_source_row_verified": "Functionality|1252|Wistron-BMC-00542-V005 / d8ae4a99bba5c9f0 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get SOL Enable",
+    "procedure": "In-band raw 0x30 0x49 appends an Ethernet Interface Select and OOB supplies no data, while the note wrongly describes a request byte as NTP Status 0x01/0x00 rather than a SOL response.",
+    "criteria": "Command success plus the unrelated statement that the BMC will factory reset.",
+    "script": "Private Wistron get-sol-enable path.",
+    "deepseek": "YES with a bare OOB 0x30/0x49 request and no decoder, selector resolution or channel/security policy mapping.",
+    "gpt_v2": "FULLY AUTOMATABLE after verifying the private SOL contract and rejecting NTP/factory-reset semantics; read-only with exact response and policy comparison."
+  },
+  "historical_reviews": {
+    "deepseek": "Selects the empty-request OOB branch and calls the output SOL state without source-backed response fields.",
+    "gpt_v2": "Defines the correct semantic boundary but assumes the vendor parser is already available; the repository does not contain that private specification.",
+    "history": "The invalidated prior-run record was found but excluded as authority; the paired setter shows why channel identity matters but cannot define getter response bytes.",
+    "v3_1": "Read-only intent does not make a private OEM command fully ready when the Master mixes identities and the required decoder is missing."
+  },
+  "original_test_intent": "Read SOL enable status for one named BMC interface/channel and compare it with the approved remote-console security policy without changing access state.",
+  "original_method": "Retain both 0x30/0x49 request forms and copied NTP/factory-reset text as conflict evidence; do not choose framing or decode bytes until the Wistron contract is approved.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_INTENT", "SOURCE_REQUEST_AND_CRITERIA_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_SOL_CHANNEL_SECURITY_POLICY", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The console/security owner supplies the firmware-specific 0x30/0x49 request/response contract, identifies the interface and SOL channel, and approves the expected enable/security policy.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved 0x30/0x49 request and response schema", "Resolution of selector versus no-data request", "SOL channel, interface and payload-instance mapping", "Enable-state field, length and reserved-value rules", "Expected channel privilege/authentication/encryption policy", "Reviewed secret-safe parser revision"],
+  "safety_requirements": ["Read only", "Do not clear logs", "Do not issue 0x30/0x48 or standard SOL SET commands", "Do not factory-reset, reset or power-cycle", "Do not guess selector, channel or response byte", "Validate completion and exact length", "Preserve unknown bytes without interpreting them", "Do not open a SOL session as part of this state-only read", "No automatic retry"],
+  "agent_execution_scope": ["Verify target, interface/channel and approved OEM schema", "Capture relevant SOL policy and active-session context without mutation", "Issue exactly one approved 0x30/0x49 request", "Preserve the complete redacted request/response", "Validate completion, length, state and reserved fields", "Compare the named channel state with approved security policy", "Archive no-NTP/no-reset/no-write evidence"],
+  "engineer_actions": ["Resolve request framing and copied NTP label", "Exclude factory reset from acceptance", "Approve channel identity and expected policy", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The bare OOB opcode may match one source branch, but it silently drops the in-band selector and lacks an approved response layout; therefore it cannot yet prove a SOL state.",
+    "executable_command_required": true,
+    "command_recommendation": "After the contract is approved, issue one raw 0x30 0x49 [approved-interface-selector-if-required] request, validate the target-specific response, decode only the documented SOL state/channel fields and compare with policy.",
+    "original_parameters_and_time_preserved": "The two transport forms and 10/5 timing are retained; copied NTP values are not treated as getter request bytes and response fields are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Pin the private getter to firmware and channel identity, preserve the full frame, validate exact response structure and compare the decoded access bit with the approved SOL security policy.",
+    "difference_from_original_method": "Replaces unrelated reset/NTP acceptance and untyped raw output with a channel-qualified, read-only security-state report.",
+    "coverage_difference": "The getter does not prove the setter transition or end-to-end console usability; those require separate mutation/session coverage.",
+    "risks_limitations": "A valid enable bit for the wrong channel can falsely report the intended recovery console as available or expose an unexpected interface."
+  },
+  "project_override_considerations": "Standard SOL parameter reads are equivalent only with a documented mapping to the same channel and private status field; otherwise they are corroborating evidence and 0x30/0x49 coverage remains open.",
+  "expected_evidence": ["Approved target/firmware/request/response contract and parser version", "Resolved interface and SOL channel identity", "Redacted full request/response, completion and timestamp", "Exact-length, reserved-field and state decode", "Expected-versus-actual channel/security policy comparison", "No SOL write, NTP, factory-reset, power or log mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The in-band Procedure requires an Ethernet Interface Select, OOB sends no request data, the note describes NTP status rather than SOL response semantics, and Criteria 2 expects a factory reset. These cannot define one coherent read-only SOL getter."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The intended SOL status read is identifiable. Vendor framing/decoder and channel policy are explicit prerequisites, so the case is package/user-confirmation gated rather than irreducibly BLOCKED."},
+  "review_improvement": "Prevents an undocumented raw byte from becoming a security-state claim, preserves all source contradictions and scopes the result to one named SOL channel.",
+  "independent_technical_reasoning": "A read-only opcode can still produce misleading evidence if its selector and response layout are unknown. Here the Master gives no SOL response definition and inserts unrelated NTP/reset text, so the private contract must establish both which channel is queried and which byte means enabled before policy comparison is possible.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1251 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1251 review",
+    "history": "Paired SOL setter, channel/security cases and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab get-sol-enable URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
