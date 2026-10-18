@@ -1,0 +1,76 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1382,
+  "library_sequence": 1232,
+  "source_key": "Functionality|1233|Wistron-BMC-00523-V002",
+  "case_variant_id": "5951b93730f9d94b",
+  "source_ref": {"sheet": "Functionality", "source_row": 1233, "code": "Wistron-BMC-00523-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "6bd94fbe98025bf41facaea9c9ba4e98a5790937bd13c165f574c7a3b48ae676",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Get Sensor Event Status can verify the result but does not re-arm a latch; clearing SEL, changing event enables or removing the physical fault are different actions.",
+    "next_source_row_verified": "Functionality|1234|Wistron-BMC-00524-V002 / ca114c7a8c7b1e4f directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Re-arm Sensor Events (OOB)",
+    "procedure": "TBD with generic pre-test log clearing.",
+    "criteria": "TBD",
+    "deepseek": "NO because the source contains no executable procedure or expected result.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION for one sensor/mask-specific 0x04/0x2A action with live-fault guard and 0x2B/0x29 verification."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly declines to invent a state-changing re-arm request.",
+    "gpt_v2": "Correctly treats re-arm as an evidence-sensitive state change rather than log cleanup.",
+    "history": "The adjacent getter is the post-action status oracle; event-enable, SEL retention and actual fault removal remain independent.",
+    "v3_1": "The Table 35-12 all-events control is dangerously broad, so normal coverage must use an explicit selected-event mask unless the owner separately approves all-event re-arm."
+  },
+  "original_test_intent": "Re-arm one approved latched assertion or deassertion event for one verified sensor, force a bounded status refresh, and prove the outcome without erasing the original fault history or masking a still-active condition.",
+  "original_method": "Master remains TBD. Review identifies IPMI v2.0 Table 35-12 raw 0x04/0x2A with sensor number, explicit all-versus-selected control and event-type-correct assertion/deassertion mask bytes.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_TBD_PRESERVED", "STATE_CHANGING_EVENT_LATCH", "NEEDS_LIVE_FAULT_GUARD", "NEEDS_SELECTED_REARM_MASK", "NEEDS_STATUS_ORACLE", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The monitoring owner approves the dedicated target, sensor, exact selected assertion/deassertion bit, current fault disposition, expected latch transition, maintenance window and escalation if the condition remains active.",
+  "required_inputs": ["Verified BMC/channel/sensor and matched SDR", "Sensor re-arm support and manual/auto re-arm semantics", "Current raw 0x04/0x2B event-status and 0x29 enable baseline", "Approved all-versus-selected control", "Threshold-event or discrete-state re-arm masks", "Independent proof that the originating fault is cleared or intentionally active", "Bounded observation and escalation plan"],
+  "safety_requirements": ["Dedicated non-production target", "Preserve existing SEL/BMC/OS evidence", "Do not use broad all-event re-arm by default", "Do not re-arm a live safety fault merely to silence its latch", "Validate reserved bits and event-type mapping", "One approved action only", "Stop on event storm, unavailable status or ambiguous refresh", "No automatic retry"],
+  "agent_execution_scope": ["Verify sensor identity, SDR event type and re-arm capability", "Capture event status, enable state, current reading and preserved logs", "Confirm fault disposition and exact selected bit", "Present the complete variable-length 0x2A payload for approval", "Issue one raw 0x04/0x2A request", "Poll boundedly through reading/state-unavailable and read 0x2B/0x29", "Correlate any regenerated event with the still-active condition", "Archive the original and post-rearm timelines"],
+  "engineer_actions": ["Approve the selected event and live-fault handling", "Own physical fault recovery or escalation", "Decide the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek correctly refuses the TBD action; the standard command is usable only with target-specific event identity, status semantics and explicit owner approval.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, issue one secret-safe raw 0x04 0x2a <sensor> <all-or-selected-control> [assertion-mask-LS assertion-mask-MS deassertion-mask-LS deassertion-mask-MS] request using the Table 35-12 form for the sensor's threshold or discrete event type; verify with raw 0x04 0x2b <sensor> and 0x04 0x29 <sensor>.",
+    "original_parameters_and_time_preserved": "No Master sensor, mask or oracle is invented; source TBD and 10/5 timing remain preserved."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use one selected-event re-arm after preserving history and proving the fault context, then wait only through a bounded sensor-update interval and distinguish latch clearing, event regeneration and persistent physical fault.",
+    "difference_from_original_method": "Adds a narrowly scoped, evidence-preserving Review procedure without changing the Master TBD.",
+    "coverage_difference": "This does not clear SEL, repair the cause, change event enables or prove all sensor events can be re-armed.",
+    "risks_limitations": "A re-arm may immediately regenerate an event when the condition remains active; repeated re-arm can obscure chronology and create noise."
+  },
+  "project_override_considerations": "A vendor API is equivalent only if it targets the same sensor and exact event latch, exposes update-in-progress/status evidence and does not clear event history.",
+  "expected_evidence": ["Owner approval and target/sensor/SDR/event identity", "Pre-action reading, 0x2B status, 0x29 enable state and preserved logs", "Exact 0x2A control and assertion/deassertion mask bytes", "Completion and bounded update-in-progress timeline", "Post-action status plus any regenerated event correlation", "Proof that SEL/history, enables, thresholds and unrelated sensors were unchanged"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title consistently identifies Re-arm Sensor Events while Procedure and Criteria are TBD. Missing target event, payload, live-fault rules and acceptance semantics plus generic log clearing are omissions, not contradictory source requirements; the Review mapping is conditional and preserves Master TBD."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The standard operation is identifiable. Sensor/event identity, fault state, selected mask and expected status are Project readiness inputs; execution becomes BLOCKED if a live condition cannot be distinguished safely."},
+  "review_improvement": "Constrains re-arm to one selected latch, preserves pre-existing evidence and explicitly distinguishes a cleared latch from immediate regeneration caused by a persistent fault.",
+  "independent_technical_reasoning": "Re-arm requests a sensor to refresh event status and may regenerate messages for conditions still present. It is not equivalent to clearing the fault or its historical record. Because the all-events form can affect every latch on the sensor, the safe default is a single capability-checked assertion/deassertion bit with pre/post 0x2B evidence and no repeated suppression.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1233 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1233 review",
+    "history": "Adjacent sensor event-enable and event-status records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, section 35.12 and Table 35-12 (Re-arm Sensor Events, NetFn 04h, Cmd 2Ah): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
