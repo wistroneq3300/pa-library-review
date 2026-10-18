@@ -1,0 +1,79 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1285,
+  "library_sequence": 1132,
+  "source_key": "Functionality|1133|Wistron-BMC-00423-V002",
+  "case_variant_id": "7d4a14ce1e6a2e6c",
+  "source_ref": {"sheet": "Functionality", "source_row": 1133, "code": "Wistron-BMC-00423-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "5ee5141a134f48cbece4977f0779de277563b40cf19f97546caca9ee076fd5b1",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Unique OOB Get Message identity; Send Message is a separate transmit test and Enable Message Channel Receive is only a prerequisite/state operation.",
+    "next_source_row_verified": "Functionality|1134|Wistron-BMC-00424-V002 / d2853d014b8e94e1 directly read from XLSX and manifest."
+  },
+  "source_snapshot": {
+    "sub_function": "BMC",
+    "test_set": "IPMI Messaging Support Commands",
+    "test_name_items": "Get Message (OOB)",
+    "procedure": "Verify recipe; clear logs; During Test is TBD; collect results/photos and inspect logs.",
+    "criteria": "TBD",
+    "script": null,
+    "deepseek_columns": {
+      "ai_can_execute": "NO",
+      "ai_packages_needed": "none (awaiting spec)",
+      "ai_commands": "not runnable because procedure and criteria are TBD; request exact steps and expected end-state",
+      "ai_logs_output": "none until the library is defined",
+      "risk": null
+    }
+  },
+  "historical_reviews": {
+    "deepseek": "Stops at the TBD source and does not assess receive-queue consumption.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION for one standard 0x06/0x33 retrieval with queue ownership, completion 0x80 handling, protocol decode, redaction and no polling/draining.",
+    "round_02": "Recorded NO/TBD with no executable command.",
+    "related_source_cases": "Send Message may provide an approved stimulus, but its transmit behavior and target are separate coverage; Enable Message Channel Receive does not prove queued retrieval.",
+    "v3_1": "Queue owner, channel/protocol, one-message scope, stimulus and Expected are project bindings; retrieving operational traffic without them is prohibited."
+  },
+  "original_test_intent": "Retrieve and decode exactly one intended receive-queue message from the selected BMC over OOB IPMI, distinguish a defined empty-queue outcome, and demonstrate that no unrelated queued traffic or persistent diagnostics were consumed.",
+  "original_method": "The Master is TBD. Standard Get Message 0x06/0x33 is an executable candidate only after an approved test message is correlated with the queue and its owner authorizes one destructive dequeue; the operation must not be treated as a harmless read loop.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_PROCEDURE_AND_CRITERIA_TBD", "QUEUE_ENTRY_CONSUMPTION", "NEEDS_QUEUE_OWNER_AND_CHANNEL", "NEEDS_APPROVED_TEST_MESSAGE", "NEEDS_PROTOCOL_DECODER_AND_REDACTION"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Engineer coordinates the queue consumer, approves a single retrieval or defined empty check, provides the expected channel/protocol message and decides handling of any unexpected privileged payload.",
+  "required_inputs": ["Verified BMC and receive-queue identity", "Protected OOB session", "Queue/channel owner and competing-consumer inventory", "Approved correlation-tagged test message or empty-queue scenario", "Applicable Get Message response schema and protocol parser", "Expected channel, privilege and payload/checksum", "Sensitive-data redaction/retention policy", "Explicit authorization to consume at most one entry"],
+  "safety_requirements": ["Do not clear SEL, logs or message flags", "Do not inspect a shared production queue without owner coordination", "Capture flags and queue context before retrieval", "Execute at most one Get Message request per approval", "Treat completion 0x80 as the defined no-data state rather than automatic retry", "Never loop or drain remaining entries", "Do not automatically reply to an obtained message", "Preserve raw payload securely and redact only copies"],
+  "agent_execution_scope": ["Resolve queue owner, channel and expected protocol", "Verify approved message stimulus/correlation", "Capture pre-retrieval flags and management context", "Show the one-request consumption scope for approval", "Issue one protected 0x06/0x33 request", "Validate completion, returned channel/privilege and variable payload", "Correlate the expected message and record exactly what was consumed", "Perform read-only post-context checks without another dequeue"],
+  "engineer_actions": ["Authorize consumption and coordinate other queue readers", "Approve payload retention and redaction", "Define empty-queue versus expected-message acceptance", "Handle unexpected privileged or operational content", "Own final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "No command is provided because the source is TBD. Standard Get Message is recognizable, but execution would be unsafe and uninformative without an owned queue and expected message.",
+    "executable_command_required": true,
+    "command_recommendation": "After a documented stimulus and explicit one-entry approval, issue one `ipmitool ... raw 0x06 0x33`, decode the returned metadata/payload or approved no-data completion, and stop without polling.",
+    "original_parameters_and_time_preserved": "Master TBD procedure/criteria and 10/5 timing remain unchanged; message count is bounded to one only as a safety gate, not asserted as a Master default."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use a transaction harness that plants or coordinates one correlation-tagged message, snapshots pre-state, performs a single dequeue, validates protocol checksum/length and stores a cryptographically identified redacted evidence copy.",
+    "difference_from_original_method": "Adds a deterministic one-message oracle and queue-consumption controls to an empty source contract.",
+    "coverage_difference": "An empty response tests empty-queue handling only; it does not prove retrieval and decode of an actual message. A Send Message success likewise does not prove this receive queue delivered it.",
+    "risks_limitations": "Concurrent consumers can win the race or cause the retrieved entry to differ from the stimulus. A Get operation permanently advances queue state and the original message cannot be restored by writing it back."
+  },
+  "project_override_considerations": "A vendor queue API is equivalent only when it uses the same receive queue and exposes consumption semantics, channel/privilege and raw payload. Non-destructive peek behavior is different coverage and must be labeled.",
+  "expected_evidence": ["BMC/queue/channel identity, owner coordination and approval", "Pre-state flags/queue context and test-message correlation data", "Single raw 0x06/0x33 request/response and completion handling", "Returned channel, privilege and payload length/protocol/checksum decode", "Secure raw evidence plus redacted report", "Audit proving no second entry, flags, SEL or configuration was consumed or changed", "Owner disposition of empty, unexpected or sensitive content"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "No source procedure or criteria exists to conflict with the title. Queue-consumption semantics and Expected are missing project details."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The command and risk are clear. Execution remains pending queue ownership, deterministic message scope, parser and approval rather than permanently blocked."},
+  "review_improvement": "Recognizes Get Message as a destructive queue read, binds it to one expected entry or explicit empty scenario, and adds completion, privilege, payload-integrity and sensitive-data handling that the TBD source omits.",
+  "independent_technical_reasoning": "A receive queue is stateful shared evidence. Repeated Get requests change the object being tested and can steal operational traffic, so a successful decode is not enough. The case must prove which message was expected, that exactly one request consumed it, and that concurrent consumers or an empty queue did not silently turn the result into false coverage.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1133 directly read", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1133 review", "history": "Round 02 exact section and repository-wide Get/Send Message search", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
