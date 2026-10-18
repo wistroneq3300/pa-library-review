@@ -1,0 +1,76 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1383,
+  "library_sequence": 1233,
+  "source_key": "Functionality|1234|Wistron-BMC-00524-V002",
+  "case_variant_id": "ca114c7a8c7b1e4f",
+  "source_ref": {"sheet": "Functionality", "source_row": 1234, "code": "Wistron-BMC-00524-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3022637f300a86dc23c67049b9f4aeb4f822915676db17ffff1071197ce13746",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Get Sensor Reading may expose overlapping state bits, but this case specifically requires the event-status schema; re-arm and event-enable operations remain separate.",
+    "next_source_row_verified": "Functionality|1235|Wistron-BMC-00525-V003 / fdc6a50f557de473 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get Sensor Event Status (OOB)",
+    "procedure": "TBD with generic pre-test log clearing.",
+    "criteria": "TBD",
+    "deepseek": "NO because specification and acceptance criteria are absent.",
+    "gpt_v2": "FULLY AUTOMATABLE through read-only raw 0x04/0x2B with sensor-type-aware status parsing and evidence preservation."
+  },
+  "historical_reviews": {
+    "deepseek": "Safely refuses the empty source but does not use the standard read implied by the title.",
+    "gpt_v2": "Correctly makes the query read-only and prohibits automatic re-arm or evidence clearing.",
+    "history": "The preceding re-arm case mutates latch state; the following reading case has a different response purpose despite overlapping status information.",
+    "v3_1": "Assertion/deassertion bits must be decoded from the SDR event/reading type, and reading/state-unavailable must suspend interpretation rather than be treated as no fault."
+  },
+  "original_test_intent": "Capture one verified sensor's current assertion and deassertion event-status bitmap over OOB, identify any live or latched condition under its SDR event type, and preserve the state without re-arming or clearing evidence.",
+  "original_method": "Preserve Master TBD; Review maps the title to IPMI v2.0 Table 35-14 raw 0x04/0x2B <sensor number> with status/control and assertion/deassertion fields decoded through the matched SDR.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_TBD_PRESERVED", "READ_ONLY", "NEEDS_SENSOR_SDR_EVENT_MAPPING", "NEEDS_EVENT_STATUS_PARSER", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Project supplies the approved sensor/SDR mapping and expected fault context; ordinary read-only status capture needs no interactive confirmation.",
+  "required_inputs": ["Verified BMC/session and sensor number", "Matched SDR sensor type and event/reading type", "Table 35-14 response schema", "Threshold-event or discrete-state status decoder", "Expected operating/fault context and evidence timestamp"],
+  "safety_requirements": ["Read only", "Preserve SEL/BMC/OS logs", "Never guess event-bit meaning", "Treat reading/state unavailable as indeterminate", "Do not re-arm or change event enables/thresholds", "Do not clear active or historical fault evidence", "No automatic retry"],
+  "agent_execution_scope": ["Bind the sensor number to one SDR and event schema", "Capture timestamp and surrounding read-only monitoring context", "Issue raw 0x04/0x2B <sensor number> once", "Validate completion, scanning/event-message state and reading/state-unavailable", "Decode assertion/deassertion bits only when available", "Correlate active bits with current reading and preserved event history", "Archive raw and decoded no-mutation evidence"],
+  "engineer_actions": ["Approve sensor mapping and expected context", "Investigate live, latched or unsupported status", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek is safe but too restrictive: the standard status read becomes deterministic after sensor/SDR mapping and requires no state mutation.",
+    "executable_command_required": true,
+    "command_recommendation": "Use one secret-safe raw 0x04 0x2b <sensor number> request as defined by IPMI v2.0 Table 35-14; validate the status byte and decode assertion/deassertion event bits according to the matched threshold or discrete SDR only when reading/state is available.",
+    "original_parameters_and_time_preserved": "No Master command or expected state is invented; source TBD and 10/5 timing remain unchanged."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_PROJECT_INPUTS",
+    "recommended_method": "Take one timestamped status snapshot, gate event-bit interpretation on availability and SDR type, and correlate active bits with current reading and existing event history without modifying latch state.",
+    "difference_from_original_method": "Adds a protocol-defined Review read while leaving the source TBD intact.",
+    "coverage_difference": "This does not prove event re-arm, enable-mask writes, threshold configuration or stimulus-driven event generation.",
+    "risks_limitations": "A single snapshot may race sensor scanning; unavailable or transitioning state requires preservation and escalation, not retry-until-clear."
+  },
+  "project_override_considerations": "A higher-level API is equivalent only if it identifies the same sensor, exposes availability plus assertion/deassertion state without consuming or clearing it, and documents event-bit mapping.",
+  "expected_evidence": ["Target/firmware/channel and sensor/SDR/event identity", "Timestamped redacted raw 0x2B request/response", "Completion and status/control byte", "Decoded assertion/deassertion bits with availability gate", "Current reading and preserved SEL/BMC/OS correlation", "No-rearm, no-write and no-log-clear audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title consistently identifies Get Sensor Event Status while Procedure and Criteria are TBD. Missing command, schema and oracle plus generic log clearing are omissions, not contradictory source requirements; the conditional Review mapping preserves Master TBD."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read command and status model are identifiable. Sensor/SDR mapping and expected context are Project inputs; an unavailable or ambiguous live status is an execution finding to escalate without mutation."},
+  "review_improvement": "Makes reading/state-unavailable an explicit interpretation gate, ties every event bit to the sensor's event type and prohibits automatic re-arm that would destroy the snapshot being tested.",
+  "independent_technical_reasoning": "Event-status bits are not self-describing: the same bit positions represent threshold transitions or discrete states according to the SDR. In addition, a sensor update can make the status temporarily unavailable. Valid evidence therefore needs the exact SDR, the availability/control byte and a timestamped raw bitmap; treating zeros during unavailable state as healthy or re-arming before capture would invalidate the result.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1234 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1234 review",
+    "history": "Adjacent Re-arm Sensor Events, event-enable and sensor-reading records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, sections 35.13-35.13.4 and Table 35-14 (Get Sensor Event Status, NetFn 04h, Cmd 2Bh): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
