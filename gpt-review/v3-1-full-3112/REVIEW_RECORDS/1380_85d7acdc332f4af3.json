@@ -1,0 +1,116 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1380,
+  "library_sequence": 1230,
+  "source_key": "Functionality|1231|Wistron-BMC-00521-V002",
+  "case_variant_id": "85d7acdc332f4af3",
+  "source_ref": {"sheet": "Functionality", "source_row": 1231, "code": "Wistron-BMC-00521-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "73be007776ffdf732fb7c550009c65b27f99a58ab90e880f0d188eaeb6892075",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The following getter can establish the baseline and readback but cannot replace this write; PEF, event receiver and SEL logging controls are different policy layers.",
+    "next_source_row_verified": "Functionality|1232|Wistron-BMC-00522-V002 / 397854c8e8dc2702 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set Sensor Event Enable (OOB)",
+    "procedure": "TBD with generic pre-test log clearing.",
+    "criteria": "TBD",
+    "deepseek": "NO because the source supplies no command or acceptance criteria.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION using one approved 0x04/0x28 change, 0x29 readback, bounded event observation and exact restore."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly refuses to invent a state-changing payload from TBD source content.",
+    "gpt_v2": "Correctly restores the identifiable command coverage while requiring sensor-specific capability, approval and rollback.",
+    "history": "Threshold and hysteresis controls were separated from per-sensor event-message/scanning control; the adjacent getter is read-only evidence only.",
+    "v3_1": "The Review-layer mapping must preserve Master TBD and distinguish global event-message, scanning and individual assertion/deassertion changes."
+  },
+  "original_test_intent": "Change one explicitly approved per-sensor event-message or scanning control on a dedicated target, verify the exact resulting mask and bounded event behavior, then restore the complete prior state.",
+  "original_method": "Master remains TBD. Review identifies IPMI v2.0 Table 35-10 raw 0x04/0x28 with sensor number, a control byte and only the assertion/deassertion selection bytes required by the approved change.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_TBD_PRESERVED", "STATE_CHANGING_EVENT_DELIVERY", "NEEDS_SENSOR_EVENT_CONTROL_CAPABILITY", "NEEDS_EXACT_CONTROL_AND_MASK", "NEEDS_BASELINE_RESTORE", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The monitoring owner approves the dedicated target, sensor, exact global/scanning/individual-control intent, selected assertion/deassertion events, bounded stimulus, maintenance window and byte-for-byte restore.",
+  "required_inputs": [
+    "Verified BMC, channel, sensor number and matched SDR",
+    "SDR Sensor Event Message Control Support and event masks",
+    "Current raw 0x04/0x29 baseline",
+    "Approved Table 35-10 control byte",
+    "Approved threshold-event or discrete-state assertion/deassertion selection masks",
+    "Expected event-message and scanning behavior",
+    "Exact restore payload and independent recovery owner"
+  ],
+  "safety_requirements": [
+    "Dedicated non-production target",
+    "Preserve SEL, BMC and OS evidence",
+    "Do not guess sensor capability or reserved bits",
+    "Do not disable scanning unless that distinct effect is explicitly approved",
+    "Do not conflate disabling all event messages with changing individual enables",
+    "Issue one approved write and verify with 0x29",
+    "Stop on event storm, monitoring loss or competing policy writer",
+    "Restore and reverify the full baseline",
+    "No automatic retry"
+  ],
+  "agent_execution_scope": [
+    "Verify sensor identity, SDR event-control capability and supported event bits",
+    "Capture raw 0x04/0x29 baseline plus event/log state",
+    "Decode the proposed control byte into global event-message, scanning and individual-enable effects",
+    "Present the exact variable-length payload and byte diff for confirmation",
+    "Issue one raw 0x04/0x28 request",
+    "Read back with 0x04/0x29 and exercise only the approved bounded event",
+    "Restore the captured baseline and reverify",
+    "Archive event-delivery and no-collateral-change evidence"
+  ],
+  "engineer_actions": ["Approve the exact control scope, event masks, stimulus and maintenance window", "Own recovery if monitoring or restore fails", "Decide the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek correctly refuses the TBD mutation; execution becomes reviewable only after the SDR-supported control mode and exact payload are supplied and approved.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, issue one secret-safe raw 0x04 0x28 <sensor> <control> [assertion-mask-LS assertion-mask-MS deassertion-mask-LS deassertion-mask-MS] request using the 2-to-6-byte Table 35-10 form appropriate to the intended control; verify with raw 0x04 0x29 <sensor> and restore the baseline.",
+    "original_parameters_and_time_preserved": "No Master command, sensor or mask is invented; the source TBD and 10/5 timing remain preserved."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat the control byte and optional mask bytes as one capability-checked transaction, prove the requested event-message/scanning effect without altering adjacent policy layers, and require exact restoration.",
+    "difference_from_original_method": "Adds a conditional, reversible Review procedure while leaving the original TBD untouched.",
+    "coverage_difference": "A 0x29 read alone does not satisfy this functional write, and PEF routing, event receiver, SEL logging, thresholds and hysteresis remain out of scope.",
+    "risks_limitations": "Disabling event messages can suppress alarms while scanning and internal flags continue; disabling scanning changes sensor status tracking itself."
+  },
+  "project_override_considerations": "A vendor API is equivalent only if it exposes the same sensor-scoped global event-message, scanning and individual assertion/deassertion controls with field-level readback and exact restore.",
+  "expected_evidence": [
+    "Owner approval and dedicated target/firmware/channel/sensor/SDR identity",
+    "SDR control capability, supported event bits and raw 0x29 baseline",
+    "Exact proposed and issued variable-length 0x28 payload",
+    "Completion and 0x29 field-level readback",
+    "Bounded event-message/scanning observation with preserved logs",
+    "Restored baseline and no-change evidence for PEF/event receiver/SEL policy"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title consistently names Set Sensor Event Enable while Procedure and Criteria are TBD. Missing control semantics, masks, oracle and recovery, plus generic log clearing, are source omissions rather than contradictory requirements; the conditional Review procedure leaves the Master TBD unchanged."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The standard function is identifiable. Sensor capability, exact intended control, mask, stimulus and restore are Project readiness inputs; execution must stop as BLOCKED if they cannot be verified."
+  },
+  "review_improvement": "Separates global event-message enable, scanning enable and individual event masks, requires the supported variable-length payload, and prevents a successful completion code from hiding monitoring suppression.",
+  "independent_technical_reasoning": "Table 35-10 can change three different things: all event-message generation, sensor scanning, or selected assertion/deassertion enables. Disabling event messages does not stop internal event flags or scanning, while disabling scanning changes whether status is updated. A safe review must therefore name the exact control mode, validate it against the SDR, observe that specific effect and restore every baseline bit.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1231 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1231 review",
+    "history": "Adjacent sensor threshold, hysteresis and event-enable getter records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, section 35.10 and Table 35-10 (Set Sensor Event Enable, NetFn 04h, Cmd 28h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
