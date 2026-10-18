@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1386,
+  "library_sequence": 1237,
+  "source_key": "Functionality|1238|Wistron-BMC-00528-V003",
+  "case_variant_id": "27d1d9ea6e648572",
+  "source_ref": {"sheet": "Functionality", "source_row": 1238, "code": "Wistron-BMC-00528-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "881e17738068e40ca3b37b976de2bbad7f52feb5914c0cef9fea2d0b0bf1bf65",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Get Sensor Reading and Get Sensor Event Status can verify injected effects, but neither sets the synthetic reading/status or restores sensor ownership.",
+    "next_source_row_verified": "Functionality|1239|Wistron-BMC-00529-V003 / f822aedbd8291289 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set Sensor Reading and Event Status (OOB)",
+    "procedure": "Sends incomplete raw 0x04/0x30 requests in-band and OOB with only a sensor number, then checks the response; generic pre-step clears logs.",
+    "criteria": "Command should be sent without any error.",
+    "script": "set-sensor-reading-and-event-status_oob",
+    "deepseek": "PARTIAL but substitutes read-only wildcard sensor output for the required write and flags risk.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION for a vendor/firmware-validated one-sensor stimulus, bounded observation and normal-ownership restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "Its wildcard read does not exercise the title's setter and therefore leaves the core coverage open.",
+    "gpt_v2": "Correctly preserves the synthetic stimulus while adding ownership, readback and recovery controls.",
+    "history": "The preceding type getter is Final Audit baseline; reading/status getters are verification paths, not mutation substitutes.",
+    "v3_1": "The standardized 0x30 request is variable-length and operation-controlled; a sensor number alone is not a valid functional stimulus."
+  },
+  "original_test_intent": "Inject one approved synthetic reading and/or event-status change into one settable sensor over OOB, observe the exact monitoring effect, and restore normal sensor ownership without obscuring real faults.",
+  "original_method": "Retain IPMI v2.0 Table 35-18 raw Sensor/Event 0x04/0x30, but require the complete sensor-specific operation, reading and event-status payload defined for the selected update mode.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "SYNTHETIC_SENSOR_STIMULUS", "NEEDS_SETTABLE_SENSOR_AND_OWNERSHIP_CONTRACT", "NEEDS_COMPLETE_0X30_PAYLOAD", "NEEDS_EVENT_ORACLE", "NEEDS_NORMAL_OWNERSHIP_RESTORE", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The monitoring owner approves the dedicated target, sensor ownership mode, exact reading/event-status operation and bytes, expected alarms, observation window, abort rules and vendor-supported return to normal ownership.",
+  "required_inputs": ["Verified dedicated BMC/channel/sensor and matched SDR", "Proof that the sensor supports system-software updates", "Table 35-18 operation and request schema for this sensor type", "Approved raw reading and assertion/deassertion status values", "Baseline 0x2D/0x2B/0x29 state and real-fault exclusion", "Expected monitoring/SEL effect", "Vendor-supported normal-ownership restore path"],
+  "safety_requirements": ["Dedicated non-production target", "Preserve all existing fault/event evidence", "Never execute the source's sensor-number-only payload", "Do not inject while a real fault is active", "One approved sensor and one bounded stimulus", "Do not change thresholds or event-enable policy", "Stop on event storm, monitoring divergence or persistent synthetic state", "Restore normal ownership and verify", "No automatic retry"],
+  "agent_execution_scope": ["Verify sensor settable capability and ownership semantics", "Capture 0x2D reading, 0x2B status, 0x29 enable state and logs", "Validate the complete proposed 0x30 operation and data bytes", "Present the exact payload for confirmation", "Issue one raw 0x04/0x30 request", "Observe bounded reading/status/event changes", "Use the approved mechanism to return control to normal sensor ownership", "Verify baseline behavior and archive evidence"],
+  "engineer_actions": ["Approve the stimulus, expected events and ownership recovery", "Own real-fault differentiation and escalation", "Decide the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek's sensor get '*' command is read-only and cannot satisfy Set Sensor Reading and Event Status; the title requires an approved, complete 0x30 stimulus lifecycle.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, issue one secret-safe raw 0x04 0x30 <sensor> <approved-operation-and-reading/status-fields> request exactly matching IPMI v2.0 Table 35-18 and the sensor's supported update mode; verify with raw 0x2D/0x2B/0x29 and restore normal ownership through the approved path.",
+    "original_parameters_and_time_preserved": "The in-band/OOB 0x30 family, one-sensor intent and 10/5 timing are preserved; omitted payload bytes are defects, not values to infer."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Model the operation as controlled sensor emulation: validate settable ownership and the exact update mode, inject one bounded state, correlate the resulting event path, then explicitly hand control back and prove live data resumes.",
+    "difference_from_original_method": "Replaces an invalid sensor-number-only request and command-success oracle with a complete reversible stimulus transaction.",
+    "coverage_difference": "Read-only getters cannot substitute for this injection, and one synthetic sensor state does not validate thresholds, PEF policy or physical sensor accuracy.",
+    "risks_limitations": "Synthetic state can suppress or create alarms and may persist or race the physical sensor if ownership semantics are misunderstood."
+  },
+  "project_override_considerations": "A vendor injection API is equivalent only if it targets the same sensor, exposes the applied reading/status bits, defines ownership duration and supports a verified return to normal sensing.",
+  "expected_evidence": ["Owner approval and target/sensor/SDR/ownership identity", "Pre-stimulus 0x2D/0x2B/0x29 state and preserved logs", "Exact complete 0x30 request/response and timing", "Bounded reading/status, SEL and monitoring response", "Normal-ownership restoration and resumed live reading", "No threshold/event-policy or unrelated-sensor mutation"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title and both source commands consistently target 0x30 sensor-state setting. Their missing mandatory payload fields, success-only criterion and log clearing are severe completeness/safety defects, not incompatible source statements; the Review retains the mutation conditionally."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The operation family and purpose are identifiable. Exact mode, sensor capability, payload, oracle and recovery are Project/vendor readiness inputs; execution becomes BLOCKED if normal ownership restoration cannot be proven."},
+  "review_improvement": "Rejects the read-only wildcard substitution and incomplete raw request, makes sensor ownership explicit and requires proof that the synthetic state ends and live monitoring resumes.",
+  "independent_technical_reasoning": "Set Sensor Reading and Event Status is not a harmless value write: it can transfer or emulate sensor state under system-software control and influence both displayed readings and event generation. A sensor-number-only request cannot describe that operation. Valid coverage needs a complete mode-specific payload, separation from real faults, bounded observation and a vendor-supported return to physical/normal ownership.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1238 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1238 review",
+    "history": "Related sensor reading, event-status, event-enable and type records",
+    "external_sources": ["Intel, IPMI v2.0 rev. 1.1 specification update, section 35.17 and Table 35-18 (Set Sensor Reading and Event Status, NetFn 04h, Cmd 30h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
