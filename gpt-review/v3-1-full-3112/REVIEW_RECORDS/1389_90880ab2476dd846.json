@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1389,
+  "library_sequence": 1240,
+  "source_key": "Functionality|1241|Wistron-BMC-00531-V003",
+  "case_variant_id": "90880ab2476dd846",
+  "source_ref": {"sheet": "Functionality", "source_row": 1241, "code": "Wistron-BMC-00531-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "0352d52abe2cad2efb362a2da31f72fa6d902d0a027aff5c60004d4b418c52d6",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Related fan-control cases describe actuator behavior but do not resolve whether this read command takes an interface-selector request byte or an empty request.",
+    "next_source_row_verified": "Functionality|1242|Wistron-BMC-00532-V002 / ec59b9a4c3471a14 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get Fan Speed Control",
+    "procedure": "The in-band form appends <Ethernet Interface Select> to raw 0x30 0x22, the OOB form has no request data, and the note explicitly declares Request N/A before defining mode and PWM response bytes.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron e-wing fan-speed-control path.",
+    "deepseek": "YES with an empty OOB raw 0x30 0x22 request and raw-response collection, but without resolving the in-band selector contradiction or enforcing fan-count and response-length validation.",
+    "gpt_v2": "FULLY AUTOMATABLE if a vendor-approved request form, fan inventory and parser are already verified; it adds tach/thermal correlation and prohibits log clearing."
+  },
+  "historical_reviews": {
+    "deepseek": "Its command selects the empty-request OOB branch without evidence that the same firmware's in-band selector requirement is optional, and command success alone does not validate the variable-length vector.",
+    "gpt_v2": "Provides sound read-only checks but treats the missing contract as a runtime fail-closed condition rather than a package/owner prerequisite for this preserved source conflict.",
+    "history": "The invalidated earlier-run record was found but excluded as authority; the paired Set Fan Speed Control review establishes that mode/PWM meaning must be target-pinned.",
+    "v3_1": "A vendor-contract prerequisite is REQUIRES PACKAGE / USER CONFIRMATION even for a read when the preserved source gives incompatible request layouts."
+  },
+  "original_test_intent": "Read the BMC's current automatic/manual fan-control mode and the complete PWM-duty vector for the installed fan population, then correlate those reported values with live fan and thermal state.",
+  "original_method": "Retain both source request forms and the Request N/A statement; do not choose one silently. After the target firmware contract resolves the request, execute one bounded read and decode exactly the approved response length.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_INTENT", "SOURCE_REQUEST_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_FAN_INVENTORY_AND_PARSER", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The platform owner supplies the firmware-scoped 0x30/0x22 request and response contract, resolves selector versus empty-request behavior, and approves the installed fan order and response-length oracle.",
+  "required_inputs": ["Verified BMC/SUT identity and firmware family", "Approved Wistron OEM 0x30/0x22 request schema", "Decision on Ethernet Interface Select presence and value", "Installed fan count and byte-to-fan mapping", "Mode and PWM field encoding including reserved/unsupported values", "Tachometer and temperature sensor mapping", "Reviewed secret-safe parser revision"],
+  "safety_requirements": ["Read only", "Do not clear logs", "Do not guess or probe selector values", "Do not issue 0x30/0x21 or any fan write", "Validate completion and exact response length", "Reject impossible PWM values and unknown trailing bytes", "Do not infer absent PWM bytes while automatic mode is active", "Preserve raw bytes before decoding", "No automatic retry"],
+  "agent_execution_scope": ["Verify the target and approved OEM contract", "Capture fan inventory, tachometers, temperatures and control-state context", "Construct exactly one approved in-band or OOB 0x30/0x22 request", "Capture the full redacted request and response", "Validate completion, length, mode and every fan index", "Correlate each reported PWM with the named tachometer and thermal context", "Archive unknown fields and a no-mutation audit"],
+  "engineer_actions": ["Resolve the source request contradiction", "Approve fan population, response schema and parser", "Review any mode/PWM versus tach/thermal inconsistency", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The empty OOB request may be correct for one transport, but the source simultaneously requires an in-band selector while saying Request N/A; using the DeepSeek command as universal authority would discard that conflict.",
+    "executable_command_required": true,
+    "command_recommendation": "After the Wistron contract is approved, issue exactly one secret-safe raw 0x30 0x22 [approved-interface-selector-if-required] request, validate its completion and target-specific length, then decode mode plus exactly the installed fan count of PWM bytes.",
+    "original_parameters_and_time_preserved": "The source's 10/5 timing, mode values and 0-100 percent PWM byte range are retained; selector presence, fan count and expected operating values are not inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Pin request framing and response cardinality to the BMC firmware, preserve the raw frame, and compare each decoded fan entry with an independently named tachometer and temperature context.",
+    "difference_from_original_method": "Replaces an exit-code-only check with schema validation and physical plausibility evidence while retaining a read-only boundary.",
+    "coverage_difference": "This snapshot cannot prove that Set Fan Speed Control accepts writes, applies transitions or restores automatic mode.",
+    "risks_limitations": "A variable-length OEM response can be shifted or truncated; a plausible PWM byte associated with the wrong fan can conceal failed cooling or a stale manual-control state."
+  },
+  "project_override_considerations": "A Redfish or vendor inventory may supplement the raw response only when it exposes the same control mode and every per-fan duty value with a documented identity mapping; it does not resolve the original raw-request coverage by itself.",
+  "expected_evidence": ["Approved 0x30/0x22 contract and target/firmware identity", "Resolved request path and selector decision", "Installed fan inventory and byte-index map", "Redacted full raw request/response and completion", "Exact response-length and field/range validation", "Decoded mode and complete per-fan PWM vector", "Named tachometer/temperature correlation and preserved BMC/OS/SEL evidence", "No fan, configuration, power or log mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The in-band Procedure supplies an Ethernet Interface Select byte, the OOB Procedure supplies no request byte, and the note declares Request N/A. These mutually inconsistent framings for 0x30/0x22 require a firmware-specific Wistron ruling before one is executed."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The read-only purpose and response concepts are clear. The vendor contract, fan map and parser are identifiable inputs, so this is a package/user-confirmation gate rather than an irreducible semantic blocker."},
+  "review_improvement": "Prevents silent selection of the empty-request variant, validates variable response cardinality and makes per-fan physical plausibility part of the evidence without allowing a control write.",
+  "independent_technical_reasoning": "Mode determines whether PWM bytes are meaningful, and the response length depends on the actual fan population. Therefore a successful OEM completion with an unverified request or fan count can still yield a shifted or incomplete decode. The correct static-review boundary is read-only but contract-gated: resolve framing first, preserve all bytes, and correlate every decoded entry with the named hardware sensor.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1241 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1241 review",
+    "history": "Paired fan-control review, duplicate-code/item search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab fan-speed-control URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
