@@ -1,0 +1,73 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1287,
+  "library_sequence": 1134,
+  "source_key": "Functionality|1135|Wistron-BMC-00425-V002",
+  "case_variant_id": "0b757a3efb45e350",
+  "source_ref": {"sheet": "Functionality", "source_row": 1135, "code": "Wistron-BMC-00425-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "f9c6e2ed9ea2e49243b2162412681a24499ba0537471c5421a645a65919aa660",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Unique Read Event Message Buffer OOB identity; SEL retrieval and Clear SEL address the persistent repository and are not equivalent to this volatile buffer read.",
+    "next_source_row_verified": "Functionality|1136|Wistron-BMC-00426-V003 / 75051cfd54d8a8b6 directly read from XLSX and manifest."
+  },
+  "source_snapshot": {
+    "sub_function": "BMC",
+    "test_set": "IPMI Messaging Support Commands",
+    "test_name_items": "Read Event Message Buffer (OOB)",
+    "procedure": "Verify recipe; clear logs; During Test is TBD; collect results/photos and inspect logs.",
+    "criteria": "TBD",
+    "script": null,
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none (awaiting spec)", "ai_commands": "not runnable because procedure and criteria are TBD; request exact steps and expected end-state", "ai_logs_output": "none until the library is defined", "risk": null}
+  },
+  "historical_reviews": {
+    "deepseek": "Declines the TBD source and does not identify the buffer-full side effect.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION for one 0x06/0x35 read with buffer ownership, completion 0x80 handling, 16-byte SEL-format decode, full-flag audit and no draining or SEL clearing.",
+    "round_02": "Recorded NO/TBD with no executable step.",
+    "related_source_cases": "Get Message consumes the Receive Message Queue, while SEL commands operate the persistent log; neither proves Event Message Buffer behavior.",
+    "v3_1": "The desired event, buffer owner, empty/dummy-record oracle and one-read permission are project bindings; the Master TBD remains visible."
+  },
+  "original_test_intent": "Read one known event from the selected BMC Event Message Buffer, validate the complete SEL-format event payload and the mandated buffer-full flag transition, while proving the persistent SEL and all unrelated evidence remain untouched.",
+  "original_method": "The Master supplies no method. Standard Read Event Message Buffer 0x06/0x35 with no request data is a candidate only after a controlled event or explicit empty-buffer branch is defined and the owning consumer authorizes the state-changing read.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_PROCEDURE_AND_CRITERIA_TBD", "VOLATILE_EVENT_BUFFER_CONSUMPTION", "NEEDS_BUFFER_OWNER_AND_PRESTATE", "NEEDS_APPROVED_EVENT_STIMULUS_OR_EMPTY_BRANCH", "NEEDS_SEL_FORMAT_DECODER"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Engineer coordinates the Event Message Buffer consumer, approves one event-producing stimulus or empty-buffer check, and judges whether the decoded record and full-flag behavior match the platform contract.",
+  "required_inputs": ["Verified BMC and Event Message Buffer ownership", "Protected OOB session", "Pre-read Message Flags and Global Enables", "Approved deterministic event stimulus or empty-buffer scenario", "Expected 16-byte SEL-format fields", "Completion 0x80 and dummy-record interpretation", "Persistent SEL correlation policy", "Explicit one-read authorization and sensitive-event redaction policy"],
+  "safety_requirements": ["Never clear SEL, dmesg or syslog", "Preserve Message Flags and SEL correlation before reading", "Do not read a shared buffer without owner coordination", "Issue 0x06/0x35 at most once per approval", "Treat the read as consuming volatile evidence and clearing the full indication", "Do not loop on completion 0x80", "Reject malformed or non-16-byte success payloads", "Do not generate a replacement event or reset the BMC automatically"],
+  "agent_execution_scope": ["Verify target, buffer owner and enable state", "Capture raw pre-read Message Flags and persistent SEL context", "Confirm the expected event or empty branch", "Present one-read impact for approval", "Issue one protected 0x06/0x35 request", "Validate completion and decode the complete 16-byte record", "Capture post-read Message Flags and unchanged persistent SEL", "Report any unexpected event without further reads"],
+  "engineer_actions": ["Approve stimulus and consumption of the buffered event", "Confirm parser and dummy-record semantics", "Coordinate other buffer consumers", "Investigate malformed, unexpected or security-sensitive events", "Own final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek supplies no command because the source is TBD. The standard read is identifiable, but running it without a known event and owner would alter the very state needed for later diagnosis.",
+    "executable_command_required": true,
+    "command_recommendation": "After preserving flags/SEL and obtaining one-read approval, issue exactly one `ipmitool ... raw 0x06 0x35`, handle the defined empty completion or require a complete 16-byte event, then stop.",
+    "original_parameters_and_time_preserved": "Master TBD procedure/criteria and 10/5 timing remain unchanged; no event type, record value or retry is invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use an event-aware recorder that binds stimulus time, pre-flags, one read, raw 16-byte payload, decoded SEL fields, post-flags and persistent-SEL correlation in one immutable transaction.",
+    "difference_from_original_method": "Defines a controlled functional oracle and the buffer-full side-effect audit for an otherwise empty Master procedure.",
+    "coverage_difference": "An approved empty-buffer result covers no-data handling only; it does not demonstrate event delivery or SEL-format decoding. Reading SEL records does not substitute for this volatile buffer path.",
+    "risks_limitations": "The buffer may be overwritten or consumed by another management client between stimulus and read. After the command clears/advances volatile state, the original precondition cannot be reconstructed exactly."
+  },
+  "project_override_considerations": "A vendor event-buffer API is equivalent only when it exposes the same volatile entry, full-flag side effect and raw 16-byte record. A persistent SEL viewer or log export is supporting evidence, not replacement coverage.",
+  "expected_evidence": ["BMC/buffer owner, Global Enables and raw pre-read Message Flags", "Approved event stimulus identity/timestamp or explicit empty branch", "Single raw 0x06/0x35 request/response and completion handling", "Exactly 16 raw bytes on success with decoded record ID/type, timestamp/generator, sensor and event data as applicable", "Post-read Message Flags showing the defined full-indication transition", "Persistent SEL/log evidence proving no repository clear", "Consumption audit and owner disposition of unexpected content"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The source body and criteria are absent rather than conflicting. The title names a standard buffer operation whose event and acceptance remain project inputs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The operation, state effect and evidence format can be defined. Execution waits for buffer ownership, stimulus or empty branch, parser and approval; these gaps do not prevent static review."},
+  "review_improvement": "Turns the TBD row into a one-transaction event-buffer contract that explicitly audits the full-flag side effect, distinguishes volatile buffer data from persistent SEL and prevents polling from destroying diagnostic evidence.",
+  "independent_technical_reasoning": "This command is nominally a read but changes the observable buffer condition, so pre-state and post-state are both part of the result. A 16-byte record without a matched stimulus might be stale or owned by another consumer, while an empty completion after another reader raced the test is not proof of correct behavior. Atomic stimulus correlation and a single authorized read are therefore essential.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1135 directly read", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1135 review", "history": "Round 02 exact section and repository-wide event-buffer/SEL search", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
