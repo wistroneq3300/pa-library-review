@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1388,
+  "library_sequence": 1239,
+  "source_key": "Functionality|1240|Wistron-BMC-00530-V003",
+  "case_variant_id": "fc678c742ebcefe6",
+  "source_ref": {"sheet": "Functionality", "source_row": 1240, "code": "Wistron-BMC-00530-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "98017849f0b88b2d2f677daf7a81e1b63d387981e3cd6b845e1835c1f821df1d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The library also contains a cooling-system case with the same item label, but that case cannot define this Wistron OEM 0x30/0x21 payload or its fan-index semantics.",
+    "next_source_row_verified": "Functionality|1241|Wistron-BMC-00531-V003 / 90880ab2476dd846 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set Fan Speed Control",
+    "procedure": "The in-band form appends an <Ethernet Interface Select> after raw 0x30 0x21, the OOB form supplies no data bytes, and the duplicated note instead defines request byte 1 as Fan Control Mode followed by per-fan PWM bytes.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron e-wing fan-speed-control path.",
+    "deepseek": "PARTIAL with ipmitool and a prose instruction to use raw 0x30 0x21 with user-specified mode/PWM, but without an executable payload, thermal guardrails or verified restoration.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with a dedicated target, vendor contract, approved PWM vector, thermal monitoring, read-back and mandatory return to automatic control."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly recognizes a state-changing operation but its bare OOB command cannot set either the documented mode or PWM vector and its suggested lan-print verification does not prove fan-controller state.",
+    "gpt_v2": "Adds the necessary thermal interlocks and recovery boundary; this review additionally treats the selector-versus-mode request byte as a preserved source conflict.",
+    "history": "The invalidated prior-run artifact was located but not used as review authority. Related fan-control records confirm that a similarly named cooling test does not resolve this OEM command schema.",
+    "v3_1": "State-changing OEM fan control must be bound to the target firmware contract and verified through physical tach/thermal response, not command completion alone."
+  },
+  "original_test_intent": "Apply one approved fan-control mode and, when manual mode is selected, a complete per-fan PWM vector; prove the addressed fans respond safely and return the platform to automatic fan control.",
+  "original_method": "Preserve the two source command forms and the note's mode/PWM definition, but issue no write until the Wistron contract resolves the first request byte and defines the complete payload for the verified fan population.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "THERMAL_CONTROL_WRITE", "SOURCE_REQUEST_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_APPROVED_PWM_PROFILE", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The platform thermal owner approves the target, firmware-specific payload, fan ordering, safe minimum PWM, operating load, observation interval, abort thresholds and automatic-mode recovery command.",
+  "required_inputs": ["Verified BMC/SUT identity and firmware family", "Approved Wistron OEM 0x30/0x21 and 0x30/0x22 contracts", "Ruling on whether request byte 1 is a mode or an interface selector", "Complete fan inventory and byte-to-fan mapping", "Current control mode, PWM vector, tachometers and thermal baseline", "Approved nonzero manual PWM vector or approved automatic-mode transition", "Temperature/tach/power abort thresholds and bounded dwell", "Automatic-control restore command and independent recovery path", "Dedicated maintenance window and explicit owner approval"],
+  "safety_requirements": ["Do not clear existing logs", "Dedicated non-production SUT only", "Never guess a selector, fan count or PWM byte", "Never use zero or below-minimum PWM", "Keep hardware thermal protection enabled", "Continuously observe all affected tachometers and critical temperatures", "Abort on tach loss, fan fault, unexpected temperature rise, power excursion or ambiguous response", "Restore automatic control on every exit path", "Verify restoration with 0x30/0x22 and sensor telemetry", "One approved write sequence only", "No automatic retry"],
+  "agent_execution_scope": ["Verify the exact target, firmware and approved OEM schema", "Preserve existing SEL, BMC and OS evidence", "Capture 0x30/0x22 baseline plus fan tach, temperature and power state", "Validate the complete mode/PWM vector against fan inventory and safe limits", "After an explicit OK, send exactly one approved 0x30/0x21 request", "Correlate command completion with each fan's tach response and the thermal timeline", "Restore automatic mode immediately and confirm controller ownership returned", "Archive redacted raw bytes, timing, abort state and recovery evidence"],
+  "engineer_actions": ["Resolve the request-byte contradiction and approve the firmware contract", "Approve fan mapping, PWM envelope, dwell and abort limits", "Provide a recovery path independent of the modified controller state", "Own the final DUT PASS / FAIL / BLOCKED decision"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The bare raw 0x30 0x21 request contains neither a mode nor PWM bytes, so it cannot perform the stated set operation; adding guessed bytes would be unsafe because the source assigns incompatible meanings to the first byte.",
+    "executable_command_required": true,
+    "command_recommendation": "After contract and owner approval, read baseline with raw 0x30 0x22, send one complete raw 0x30 0x21 <approved-mode> <approved-per-fan-PWM-vector> request (including a selector only if the approved contract explicitly requires it), monitor tach/thermal/power, then restore mode 0x00 and verify read-back.",
+    "original_parameters_and_time_preserved": "The source's mode values, per-fan byte intent and 10/5 timing are preserved; absent selector, fan-count, PWM, dwell and limit values are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use a target-pinned, secret-safe OEM runner with complete payload validation, live tach/thermal interlocks and a finally-style automatic-mode restoration verified independently.",
+    "difference_from_original_method": "Changes success from command acceptance to a bounded closed-loop actuator test with verified recovery and rejects log clearing.",
+    "coverage_difference": "A 0x30/0x22 read alone cannot validate the set path, while one fan's tach response cannot prove the full per-fan vector was applied.",
+    "risks_limitations": "A wrong byte order or unsafe PWM can stall or misdrive fans, cause rapid thermal escalation, increase power/acoustic load or leave manual control active after agent disconnect."
+  },
+  "project_override_considerations": "A vendor utility may replace the raw write only when its exact mode/fan/PWM mapping and automatic restore are approved and the report explicitly records that direct raw-command coverage was substituted.",
+  "expected_evidence": ["Approved vendor contract, target/firmware identity and owner authorization", "Baseline control mode, complete PWM vector, fan inventory, tachometers, temperatures, power and workload state", "Redacted exact request bytes, interface path, completion code and timing", "Per-fan tach and thermal/power timeline during the bounded interval", "Abort-controller state and any fan/thermal/SEL/BMC/OS events", "Automatic-mode restore request, 0x30/0x22 read-back and stabilized post-restore telemetry", "No-log-clear and no-unapproved-mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "For the same 0x30/0x21 command, the in-band Procedure labels the next byte as Ethernet Interface Select, the OOB Procedure omits all data, and the duplicated request definition says byte 1 is Fan Control Mode followed by PWM bytes. Those forms cannot define one safe payload without an approved Wistron ruling."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The fan-control purpose, state-changing effect and required recovery are identifiable. The missing firmware contract, exact vector and approvals are explicit readiness prerequisites, so the record remains REQUIRES PACKAGE / USER CONFIRMATION rather than irreducibly BLOCKED."},
+  "review_improvement": "Rejects the nonfunctional bare command, exposes the request-byte collision, adds complete fan-vector validation and makes automatic-mode restoration plus tach/thermal recovery part of acceptance.",
+  "independent_technical_reasoning": "PWM bytes actuate cooling hardware. A zero completion code proves only that the BMC parsed some request; it does not establish which fans were addressed, whether duty values remained safe, whether tachometers followed, or whether the platform algorithm regained control. Because the source's first data byte is simultaneously described as an interface selector and control mode, the reviewer must gate execution on the platform contract rather than testing guessed encodings on live thermal control.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1240 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1240 review",
+    "history": "Duplicate item-label search, related fan-control records and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab fan-speed-control URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
