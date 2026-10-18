@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1401,
+  "library_sequence": 1252,
+  "source_key": "Functionality|1253|Wistron-BMC-00543-V005",
+  "case_variant_id": "98827c65c3f44d61",
+  "source_ref": {"sheet": "Functionality", "source_row": 1253, "code": "Wistron-BMC-00543-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "a0a33340428bbd5cf7a9fec0b5dd1446a8a43f89cff22f71fe605376bfd2a30f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The preceding getter can establish baseline only after its own opcode conflict is resolved; SEL clear or capacity tests cannot authorize a storage-policy write.",
+    "next_source_row_verified": "Functionality|1254|Wistron-BMC-00544-V005 / da4e82d1328e4f46 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set SEL Storage Mode",
+    "procedure": "In-band uses raw 0x30 0x83 plus an interface selector, OOB uses raw 0x30 0x43 with no mode byte, and the source provides no storage-mode enumeration.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron set-sel-storage-mode path.",
+    "deepseek": "PARTIAL but repeats bare OOB 0x30/0x43 as a setter, asks the user for an unstated mode and suggests unrelated lan-print verification.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with vendor setter/getter mapping, exact mode, preserved baseline, documented read-back and approved recovery."
+  },
+  "historical_reviews": {
+    "deepseek": "Recognizes logging impact but provides no value or proof that the chosen opcode is a setter rather than the adjacent getter.",
+    "gpt_v2": "Correctly gates execution on the vendor artifact and removes source log clearing.",
+    "history": "The invalidated earlier-run record was found but not used as authority; related SEL retention tests show why existing records must remain intact for the before/after oracle.",
+    "v3_1": "Persistent logging-policy changes require explicit confirmation and cannot be tested by clearing the very evidence whose retention is being controlled."
+  },
+  "original_test_intent": "Change the BMC's SEL full/capacity retention behavior to one approved storage mode, verify the configured policy and bounded effect, then restore the captured baseline without deleting prior events.",
+  "original_method": "Preserve both conflicting source opcodes and issue neither until the vendor contract identifies the setter, request value and getter; build acceptance around mode read-back and non-destructive retention evidence.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "PERSISTENT_LOGGING_POLICY_CHANGE", "SOURCE_OPCODE_CONFLICT", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_MODE_VALUE_READBACK_AND_RECOVERY", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The reliability/logging owner resolves setter/getter mapping, selects the exact mode, approves the expected overwrite/stop-on-full behavior, bounded event stimulus and restoration plan.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved route mapping for 0x30/0x83 and 0x30/0x43", "Interface-selector and request-byte schema", "Storage-mode enum and reserved values", "Current mode and immutable SEL export/hash", "Approved target mode and retention-policy oracle", "Bounded safe event stimulus or non-mutating configuration-only scope", "Getter/read-back schema", "Original-mode restore and explicit owner approval"],
+  "safety_requirements": ["Do not clear SEL, dmesg or syslog", "Do not guess the setter opcode or mode byte", "One approved mode write only", "Preserve existing SEL externally before mutation", "Do not fill SEL to capacity unless separately authorized", "Use only bounded nonhazardous event stimulus", "Stop if existing records disappear or logging changes beyond scope", "Restore the original mode on every planned rollback", "No reset, power action or automatic retry"],
+  "agent_execution_scope": ["Verify target and approved setter/getter contract", "Export/hash SEL and read the baseline mode", "Present exact request, policy effect and recovery for OK", "Issue one approved storage-mode write", "Read back the configured mode", "Observe only the approved bounded retention behavior", "Restore baseline when required and confirm it", "Archive SEL diff, mode and command audit"],
+  "engineer_actions": ["Resolve 0x83 versus 0x43 and define mode encoding", "Approve retention/overwrite acceptance and safe stimulus", "Approve baseline preservation and recovery", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "A bare 0x30/0x43 request has no mode parameter and may be the paired getter, so it cannot safely perform the named set operation; lan print is not a logging-policy read-back.",
+    "executable_command_required": true,
+    "command_recommendation": "After vendor resolution, export SEL, read baseline with the approved getter, issue one route-correct setter request with the approved mode byte, verify getter read-back and bounded retention behavior, then restore the baseline mode if required.",
+    "original_parameters_and_time_preserved": "Both source opcodes and 10/5 timing are retained as conflict evidence; mode value, selector layout and observation stimulus are not inferred."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat storage mode as a reversible evidence-retention policy change with external SEL backup, byte-exact write, independent getter verification and a bounded non-destructive policy oracle.",
+    "difference_from_original_method": "Adds the missing mode and read-back, prevents evidence clearing and distinguishes configuration success from actual retention behavior.",
+    "coverage_difference": "Mode read-back alone does not prove capacity behavior, while a capacity-fill test is a separate destructive scope requiring explicit authorization.",
+    "risks_limitations": "Wrong mode may silently overwrite older diagnostic records or stop recording new events when full, affecting later incident analysis long after the command completes."
+  },
+  "project_override_considerations": "A WebUI or vendor API may substitute only with documented mapping to the identical retention mode and read-back; Clear SEL and generic LAN output are never equivalent.",
+  "expected_evidence": ["Approved target/firmware/opcode/value mapping and owner confirmation", "Immutable pre-change SEL export/hash and baseline mode", "Redacted exact set request/response, completion and timing", "Documented getter response and decoded target mode", "Bounded retention-policy evidence with no loss of pre-existing events", "Restored mode and post-restore verification when required", "No clear/reset/power/unrelated logging mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "The Master gives in-band opcode 0x83 with a selector but OOB opcode 0x43 with neither selector nor mode, while the adjacent getter also uses 0x43 OOB. Without a vendor ruling, the named setter is not uniquely identified."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The logging-policy mutation and recovery objective are identifiable. Vendor mapping, exact mode and safe oracle are explicit prerequisites, so the case is not irreducibly BLOCKED."},
+  "review_improvement": "Prevents an ambiguous getter-like command from changing evidence policy, supplies a reversible mode lifecycle and preserves the SEL as the primary integrity witness.",
+  "independent_technical_reasoning": "Storage mode governs what happens when event capacity is exhausted, so its harm can be delayed. The same bare OOB opcode appears in the getter and setter rows, making command identity non-negotiable. Correct review therefore requires an externally preserved SEL, a distinct setter value, getter confirmation and tightly bounded behavior evidence without capacity destruction by default.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1253 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1253 review",
+    "history": "Paired SEL storage getter and retention/capacity cases plus invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab set-sel-storage-mode URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
