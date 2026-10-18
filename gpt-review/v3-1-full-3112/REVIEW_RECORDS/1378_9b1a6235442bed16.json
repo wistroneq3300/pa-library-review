@@ -1,0 +1,155 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1378,
+  "library_sequence": 1228,
+  "source_key": "Functionality|1229|Wistron-BMC-00519-V003",
+  "case_variant_id": "9b1a6235442bed16",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 1229,
+    "code": "Wistron-BMC-00519-V003"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "e6799e3852e235205e850091f0c9993acc06c2631477f1698b34d932e54bea45",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Get Sensor Threshold provides baseline and readback, but it cannot replace this functional write; hysteresis and event-enable cases govern different fields.",
+    "next_source_row_verified": "Functionality|1230|Wistron-BMC-00520-V003 / 2cc5ec18566cef9a directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set Sensor Threshold (OOB)",
+    "procedure": "Sends incomplete raw Sensor/Event 0x04/0x26 requests in-band and OOB with no sensor, set-select mask or threshold bytes; generic pre-step clears logs.",
+    "criteria": "Command should be sent without any error.",
+    "script": "set-sensor-threshold_oob",
+    "deepseek": "PARTIAL; identifies ipmitool but requests exact implementation bytes before execution.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with one approved sensor/mask/value write, 0x27 readback, bounded event observation and exact restore."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly declines literal execution of the incomplete write, but does not define the standard payload or recovery lifecycle.",
+    "gpt_v2": "Preserves the state-changing purpose and constrains it to one owner-approved sensor with baseline, event evidence and restoration.",
+    "history": "The preceding hysteresis cases affect different policy bytes; the following Get Sensor Threshold case is the required baseline/readback companion.",
+    "v3_1": "The empty source command is preserved as a defect and must never be executed as though command completion alone proved threshold behavior."
+  },
+  "original_test_intent": "Set an approved subset of threshold fields for one verified sensor over OOB, prove exact readback and bounded monitoring behavior, then restore the complete captured threshold baseline.",
+  "original_method": "Retain Sensor/Event raw 0x04/0x26, but require the complete IPMI v2.0 Table 35-8 payload: sensor number, set-select mask, and all six threshold byte positions in LNC, LC, LNR, UNC, UC and UNR order.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE",
+    "STATE_CHANGING_SENSOR_POLICY",
+    "NEEDS_WRITABLE_THRESHOLD_CONFIRMATION",
+    "NEEDS_COMPLETE_MASK_AND_VALUE_PAYLOAD",
+    "NEEDS_EVENT_ORACLE",
+    "NEEDS_BASELINE_RESTORE",
+    "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The monitoring owner approves the dedicated target, exact sensor, set-select bits and six-byte payload, expected event effect, maintenance window, abort conditions and byte-for-byte restoration.",
+  "required_inputs": [
+    "Verified BMC, channel, sensor number and SDR identity",
+    "Threshold-set support and readable/writable masks",
+    "Current raw 0x04/0x27 threshold baseline",
+    "Approved Table 35-8 set-select mask",
+    "All six ordered threshold bytes, including unchanged baseline positions",
+    "SDR units, scaling, valid ordering and reserved-value rules",
+    "Bounded event stimulus and expected assertion/deassertion result",
+    "Exact restore payload and independent recovery owner"
+  ],
+  "safety_requirements": [
+    "Dedicated non-production target",
+    "Preserve SEL, BMC and OS logs",
+    "Never execute the source's empty 0x26 request",
+    "Set only supported allowlisted threshold bits",
+    "Populate all six payload positions from approved values or captured baseline",
+    "Do not change hysteresis or event-enable masks",
+    "One approved write followed by readback",
+    "Abort on event storm, monitoring loss or concurrent overwrite",
+    "Restore and verify the complete baseline",
+    "No automatic retry"
+  ],
+  "agent_execution_scope": [
+    "Verify target, sensor-to-SDR mapping and threshold support",
+    "Capture raw 0x04/0x27 baseline and event/log state",
+    "Validate the proposed set-select mask and ordered six-byte payload",
+    "Present the exact byte diff for owner confirmation",
+    "Issue one raw 0x04/0x26 request with the approved complete payload",
+    "Read back with raw 0x04/0x27 and observe the bounded event oracle",
+    "Restore the captured baseline and reverify",
+    "Archive preserved evidence and no-collateral-change results"
+  ],
+  "engineer_actions": [
+    "Approve the sensor, mask, values, stimulus and maintenance window",
+    "Own independent recovery if readback or restoration fails",
+    "Decide the final DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek correctly refuses the incomplete source command; a package can execute the standard write only after target-specific threshold semantics and owner approval are supplied.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, issue one secret-safe raw 0x04 0x26 <sensor> <set-select> <LNC> <LC> <LNR> <UNC> <UC> <UNR> request as defined by IPMI v2.0 Table 35-8, using captured baseline bytes in every unselected position; verify with raw 0x04 0x27 <sensor> and restore the baseline.",
+    "original_parameters_and_time_preserved": "The source's in-band/OOB 0x04/0x26 family and 10/5 timing remain recorded; absent request bytes are defects, not values to infer."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use a field-aware transaction that validates the writable mask, ordering, engineering-unit conversion and cross-threshold invariants before one write, then requires exact readback, bounded event evidence and full restore.",
+    "difference_from_original_method": "Replaces unsafe empty requests and success-only acceptance with a complete reversible threshold lifecycle while leaving the Master unchanged.",
+    "coverage_difference": "A read-only 0x27 check cannot satisfy the required functional write, and this case does not cover hysteresis or event-enable configuration.",
+    "risks_limitations": "Incorrect threshold order, scaling or mask bits can suppress legitimate alarms or create an event storm; firmware may clamp or overwrite values."
+  },
+  "project_override_considerations": "A vendor API is equivalent only if it identifies the same sensor and individual threshold fields, exposes raw/effective readback, preserves unselected values and supports exact restore; opaque profile changes are not equivalent.",
+  "expected_evidence": [
+    "Owner approval and dedicated target/firmware/channel/sensor/SDR identity",
+    "Readable/writable masks, baseline and exact proposed byte diff",
+    "Redacted complete 0x04/0x26 request/response and completion",
+    "0x04/0x27 raw readback plus decoded engineering values",
+    "Bounded event/monitoring trace and preserved SEL/BMC/OS logs",
+    "Restored baseline and no-collateral-change audit"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title and both source commands consistently target Set Sensor Threshold. The missing payload, success-only criterion and evidence-clearing boilerplate are severe completeness and safety defects, but no source statements prescribe incompatible outcomes; the Review adds a conditional complete transaction without rewriting the Master."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The standard function and payload schema are identifiable. Target sensor capability, approved values, event oracle and restore data are Project execution-readiness inputs; the run must become BLOCKED if any remains unverifiable at execution time."
+  },
+  "review_improvement": "Prevents an empty or partially populated threshold write, enforces the Table 35-8 field order and mask semantics, and makes readback, monitoring effect and exact recovery mandatory.",
+  "independent_technical_reasoning": "Set Sensor Threshold carries six ordered threshold positions even when only selected mask bits are changed. Omitting or guessing the sensor, set-select mask, any byte position, scaling or cross-threshold ordering can silently alter alarm behavior. A completion code therefore proves only transport acceptance; meaningful coverage requires an approved field-level diff, 0x27 readback, bounded event behavior and full baseline restoration.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1229 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1229 review",
+    "history": "Adjacent sensor hysteresis and threshold getter records plus duplicate-code/history search",
+    "external_sources": [
+      "Intel, IPMI v2.0 rev. 1.1 specification update, section 35.8 and Table 35-8 (Set Sensor Thresholds, NetFn 04h, Cmd 26h): https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf"
+    ]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}
