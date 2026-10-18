@@ -1,0 +1,71 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1405,
+  "library_sequence": 1256,
+  "source_key": "Functionality|1257|Wistron-BMC-00547-V005",
+  "case_variant_id": "46814b151d410eb4",
+  "source_ref": {"sheet": "Functionality", "source_row": 1257, "code": "Wistron-BMC-00547-V005"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3b431fad77415b43a253ffdc29006e0a20fa7297c33d8788b0d6bc9538b2e1c4",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The preceding IB case shares DCMI semantics but cannot prove the remote LANPlus route, identity or session behavior required here.",
+    "next_source_row_verified": "Functionality|1258|Wistron-BMC-00548-V004 / 0260abc2d5f3b91a directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Get DCMI Capability Info (OOB)",
+    "procedure": "Send LANPlus raw 0x2c 0x01 0xdc with selectors 0x01-0x05 from a remote client and inspect the response.",
+    "criteria": "Command is sent without error.",
+    "script": "Private Wistron get_dcmi-capability-info repository shared with the IB case.",
+    "deepseek": "YES but runs only `dcmi discover`, exposes password material through command arguments and does not retain selector-specific raw evidence.",
+    "gpt_v2": "FULLY AUTOMATABLE with the exact OOB raw selector requests, credential protection, response validation and optional-selector handling."
+  },
+  "historical_reviews": {
+    "deepseek": "The high-level discovery summary is insufficient to establish each requested selector and needs secret-safe invocation.",
+    "gpt_v2": "Correctly keeps the read-only case fully automatable and distinguishes the OOB channel from its IB twin.",
+    "history": "The invalidated prior-run location was found but excluded as authority; the newly reviewed IB record was compared only for non-overlapping transport coverage.",
+    "v3_1": "The remote session, target identity and raw selector evidence are first-class acceptance inputs rather than incidental transport details."
+  },
+  "original_test_intent": "Enumerate DCMI capability and platform/manageability attribute selectors through the authenticated out-of-band BMC path and preserve a remote-route capability snapshot.",
+  "original_method": "From a verified remote client, issue one LANPlus raw 0x2c 0x01 0xdc request per selector 0x01-0x04 and applicable optional 0x05, then validate and decode every response.",
+  "automation_classification": "FULLY AUTOMATABLE",
+  "execution_readiness": ["REVIEW_COMPLETE", "READ_ONLY_STANDARD_DCMI_QUERY", "OUT_OF_BAND_ROUTE", "SECRET_SAFE_SESSION_REQUIRED", "SELECTOR_LEVEL_ORACLE_DEFINED", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "No hands-on operation is required; the project supplies the approved BMC endpoint and expected capability policy, and the end user decides the final result from evidence.",
+  "required_inputs": ["Verified BMC IP, SUT identity and firmware", "Secret-safe LANPlus credentials and cipher policy", "Compatible ipmitool and DCMI decoder", "Expected mandatory and optional capability matrix", "Selector 0x05 applicability"],
+  "safety_requirements": ["Read-only LANPlus requests only", "Verify endpoint identity before authentication", "Keep secrets out of durable command logs", "Do not clear logs", "Do not issue DCMI writes, power controls, limits or resets", "Validate response length and selector semantics", "No automatic retry"],
+  "agent_execution_scope": ["Bind the remote BMC endpoint to the intended SUT", "Open a policy-compliant secret-safe LANPlus session", "Run each applicable selector independently", "Capture redacted raw responses and completion", "Decode selector-specific fields", "Separate optional unsupported from session or parser failure", "Close the session and archive command audit"],
+  "engineer_actions": ["Supply endpoint/cipher and expected-capability policy", "Judge the final evidence as PASS, FAIL or BLOCKED"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "`dcmi discover` does not demonstrate the raw request matrix in the Master procedure, and a password passed with `-P` can leak through process or evidence capture unless a protected mechanism is used.",
+    "executable_command_required": true,
+    "command_recommendation": "Using protected credentials, execute LANPlus raw 0x2c 0x01 0xdc once for selectors 0x01-0x04 and applicable 0x05, validating completion, length and decoded fields for every response.",
+    "original_parameters_and_time_preserved": "The OOB route, 0xdc group extension, five listed selectors and 10/5 timing are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_FOR_PROJECT_EXECUTION",
+    "recommended_method": "Use a target-bound LANPlus runner that injects credentials outside logged argv, records per-selector raw data and produces explicit capability, unsupported, malformed and transport-failure states.",
+    "difference_from_original_method": "Adds remote identity, credential, schema and evidence controls while replacing success-only acceptance with deterministic per-selector checks.",
+    "coverage_difference": "The IB twin cannot stand in for remote authentication, routing, cipher negotiation or OOB raw response coverage.",
+    "risks_limitations": "A wrong endpoint, exposed credentials or a collapsed discovery summary can invalidate the test even though the underlying DCMI query is read-only."
+  },
+  "project_override_considerations": "A vendor API or `dcmi discover` report is supplemental unless it retains each source selector's semantics and proves the same verified OOB session; any omitted selector coverage must be disclosed.",
+  "expected_evidence": ["Verified BMC/SUT/firmware endpoint and LANPlus policy", "Redacted session setup and per-selector raw request/response", "Completion, length and selector-specific decoded fields", "Explicit optional 0x05 applicability and result", "Expected capability comparison", "No write/control/reset/log-clear audit and clean session close"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master title, OOB raw command, selector descriptions and read-only intent are mutually consistent. Its weak success criterion and DeepSeek's high-level substitution need improvement but do not create a contradiction within the Master source."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The standard command and intended transport are explicit. Endpoint credentials and expected policy are normal project inputs, not an inherent block."},
+  "review_improvement": "Maintains the OOB-specific selector matrix while adding endpoint binding, secret safety and a protocol-level oracle that the source and DeepSeek overlay lack.",
+  "independent_technical_reasoning": "Remote capability discovery must prove two independent facts: that the authenticated session reaches the intended BMC, and that each requested DCMI selector returns a structurally valid payload. Collapsing them into one discovery summary hides selector omissions and channel failures, so the automation retains raw per-selector evidence and explicit optionality.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1257 reopened directly", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1257 review", "history": "Reviewed IB twin and invalidated-run location search", "external_sources": ["Source-preserved private Wistron DQMS GitLab URL; repository contents were unavailable and were not assumed."]},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
