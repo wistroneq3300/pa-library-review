@@ -1,0 +1,71 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1832,
+  "library_sequence": 1695,
+  "source_key": "Functionality|1696|Wistron-BMC-00968-V002",
+  "case_variant_id": "76fc4b6ecd86c709",
+  "source_ref": {"sheet": "Functionality", "source_row": 1696, "code": "Wistron-BMC-00968-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "a24c91fa07a36152469fd4eeca74642545baaf4dcc82837cfbb738b602351665",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-BMC-00968-V002 also exists at Functionality row 1879 as the distinct TEMP_UBB_BACK identity; that duplicate cannot supply the four CX7 chip sensors or their adapter mapping, and the current row-1696 Source Identity has no prior completed exact-source review.",
+    "next_source_row_verified": "Functionality|1697|Wistron-BMC-00969-V002 / 050dda45047fd4d2 directly reopened before this write."
+  },
+  "source_snapshot": {
+    "items": "TEMP_CX7_1~4_Chip",
+    "procedure": "Check BMC Web Sensor List; source also directs generic pre-test log clearing.",
+    "criteria": "BMC Web information matches the SPEC definition.",
+    "script": "No Script; 3 attended and 3 machine minutes.",
+    "deepseek": "YES; queries a literal TEMP_CX7_1~4_Chip string and a truncated SDR listing, while requesting unrelated TEMP_UBB_BACK evidence.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at MEDIUM risk; enumerate four chip sensors separately, map each to the intended CX7 adapter/port/chip, validate complete Web fields and SPEC, and retain protected reviewer-confirmed UI evidence."
+  },
+  "historical_reviews": {
+    "deepseek": "The proposed sensor-get range is not evidence that four separately named resources were found, the fallback is truncated, and its expected TEMP_UBB_BACK output belongs to a different duplicate row.",
+    "gpt_v2": "Correctly keeps BMC Web as authoritative and requires a four-member identity and SPEC matrix with backend evidence only as corroboration.",
+    "history": "The duplicate code at row 1879 is a separate UBB-back sensor Source Identity; the next row 1697 is a separate CX7 transceiver sensor family.",
+    "v3_1": "Each of the four CX7 chip temperature resources must be bound to its documented adapter/port/chip identity. Neither display order, a wildcard-like label nor transceiver or UBB temperature evidence proves this mapping."
+  },
+  "original_test_intent": "Verify that BMC Web exposes the complete TEMP_CX7_1 through TEMP_CX7_4 chip-temperature set and that every rendered sensor's identity, value, units, health, thresholds and range match the approved chip-specific platform SPEC.",
+  "original_method": "Verify target and CX7 topology, open the protected BMC Web Sensor List, enumerate the four chip resources without relying on a literal range query, capture filters, pagination and refresh context, map every member to its adapter/port/chip, compare complete fields to the approved SPEC, optionally corroborate the same telemetry through a supported backend, and preserve evidence without clearing logs or changing thermal controls.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "BMC_WEB_UI_AND_REVIEWER_REQUIRED", "APPROVED_CX7_CHIP_SPEC_REQUIRED", "FOUR_MEMBER_ENUMERATION_REQUIRED", "ADAPTER_PORT_CHIP_MAP_REQUIRED", "TRANSCEIVER_AND_UBB_SCOPE_EXCLUDED", "COMPLETE_RENDERED_FIELDS_REQUIRED", "FILTER_PAGINATION_REFRESH_CONTEXT_REQUIRED", "UNIT_STATUS_THRESHOLD_FRESHNESS_REQUIRED", "PROTECTED_TLS_AND_AUTH_REQUIRED", "BACKEND_ONLY_SUBSTITUTION_PROHIBITED", "NO_THERMAL_OR_ADAPTER_MUTATION", "NO_GENERIC_LOG_CLEARING", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A platform reviewer confirms the rendered four-member set, exact CX7 adapter/port/chip mapping and per-chip SPEC comparison in the protected Web interface.",
+  "required_inputs": ["Exact BMC/SUT/firmware identity", "BMC-Web Sensor List route/schema", "Approved CX7 chip thermal SPEC revision", "Expected four-sensor naming matrix", "CX7 adapter/port/chip topology", "Per-chip units, thresholds and valid ranges", "Refresh/staleness policy", "Protected browser/TLS/authentication", "Complete UI evidence capture", "Optional approved same-data backend mapping"],
+  "safety_requirements": ["Use read-only Web/API access", "Do not modify CX7 ports, sensors, thresholds, cooling, power or firmware", "Do not clear logs", "Redact credentials and tokens", "Enumerate four explicit sensor members", "Do not treat the tilde expression as a literal working sensor name", "Reject TEMP_CX7_1~4_Trans and TEMP_UBB_BACK substitution", "Record filter, pagination and refresh context", "Reject missing, duplicate, stale or unmapped members", "Preserve UI and raw evidence"],
+  "agent_execution_scope": ["Verify target, Web route and CX7 topology", "Capture filter, pagination and refresh context", "Enumerate each chip-temperature member", "Validate adapter/port/chip identity", "Compare value, units, health, thresholds, timestamp and chip-specific range", "Correlate approved same-data backend evidence", "Archive evidence without assigning verdict"],
+  "engineer_actions": ["Approve the CX7 chip sensor and topology matrix", "Visually confirm all four rendered rows and page context", "Resolve missing, duplicate, stale or ambiguous mappings", "Review any UI/backend or SPEC discrepancy", "Decide PASS, FAIL or BLOCKED"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The literal `sensor get 'TEMP_CX7_1~4_Chip'` does not enumerate four resources, the `head -100` fallback can omit members, and the requested TEMP_UBB_BACK evidence is the wrong Source Identity.",
+    "executable_command_required": false,
+    "command_recommendation": "Use the protected Web UI to enumerate and capture all four explicit CX7 chip sensor names. If approved, query each exact backend resource separately with complete untruncated output and prove it represents the same UI data.",
+    "original_parameters_and_time_preserved": "The BMC-Web/SPEC inspection and 3/3-minute estimate remain; generic log clearing, literal-range assumptions, truncation and unrelated sensor substitution are excluded."
+  },
+  "modernized_recommendation": {
+    "status": "TOPOLOGY-BOUND FOUR-CHIP SENSOR VALIDATION",
+    "recommended_method": "Build an expected adapter/port/chip-to-sensor matrix first, then attach complete rendered identity, reading, units, health, thresholds, timestamp, freshness and SPEC result for each of the four members.",
+    "difference_from_original_method": "Adds deterministic set completeness, topology binding and freshness evidence to the generic Web/SPEC check.",
+    "coverage_difference": "A visually plausible set of temperatures can still be incomplete or mapped to transceivers, the wrong adapter, or a duplicated UI row.",
+    "risks_limitations": "Vendor numbering may not equal UI display order; mapping must come from the approved platform definition rather than inference."
+  },
+  "project_override_considerations": "The Project must define the four expected CX7 chip resources, physical adapter/port/chip mapping and chip-specific limits. The following transceiver case and duplicate UBB-back case remain independent. Any backend-only substitute requires an approved UI-equivalence decision.",
+  "expected_evidence": ["Target/firmware/Web route, CX7 topology and approved chip SPEC", "Protected browser/session details with secrets redacted", "Complete TEMP_CX7_1 through TEMP_CX7_4 chip UI captures with filter/pagination/refresh context", "Per-member adapter/port/chip map, reading, unit, health, thresholds, timestamp and range comparison", "Approved backend correlation with untruncated per-member output", "No-mutation/no-log-clear audit and engineer verdict"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Items, Web procedure and SPEC criterion consistently target the CX7 chip temperature family. The generic clear direction and DeepSeek's unrelated UBB-back expectation are method/reference defects, not competing source coverage."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The four-member topology, SPEC and protected UI are identifiable package inputs. Execution becomes BLOCKED if the chip resources cannot be distinguished from transceiver/other telemetry after the normal package request."},
+  "review_improvement": "Prevents a wildcard-like query, truncated listing, next-row transceiver data or duplicate-row UBB sensor from falsely satisfying the four-chip Web validation.",
+  "independent_technical_reasoning": "A sensor family's completeness and semantic identity cannot be inferred from a label range. CX7 controller-chip junction sensors and transceiver module sensors represent different thermal locations and limits, while UI ordering may not follow physical topology. Acceptance therefore needs four explicit members, authoritative physical mapping, fresh complete Web fields and per-chip SPEC comparison.",
+  "source_provenance": {"primary": "XLSX Functionality row 1696 directly read", "deepseek_same_row": "XLSX AI columns and tests.json row 1696", "gpt_v2": "Exact row-1696 second review", "history": "Manifest, completed records, invalidated runs and final-audit records exact-code/source search; duplicate row 1879 and next row 1697 identities checked", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "RECLASSIFIED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "rollback_bypass_prohibited": true, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
