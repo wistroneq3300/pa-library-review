@@ -1,0 +1,77 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1394,
+  "library_sequence": 1245,
+  "source_key": "Functionality|1246|Wistron-BMC-00536-V003",
+  "case_variant_id": "4e1604f392d7e2df",
+  "source_ref": {"sheet": "Functionality", "source_row": 1246, "code": "Wistron-BMC-00536-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "8efead5375d0ab57424bf31cc65311342c359f7099eba16c3fafd3b3b73121f5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "The preceding getter can provide baseline and read-back, but it cannot authorize this write or establish the private mapping from 0x00 0x46 to the claimed 150 W.",
+    "next_source_row_verified": "Functionality|1247|Wistron-BMC-00537-V003 / b087bc1355d69804 directly reopened from XLSX and manifest before this write."
+  },
+  "source_snapshot": {
+    "items": "Set CPU Power Capping",
+    "procedure": "The source writes in-band raw 0x30 0x27 and gives 0x00 0x46 as a 150 W example, then reads back with raw 0x30 0x26; it does not identify cap domain, encoding, range, duration or restoration.",
+    "criteria": "Commands should be sent without any error.",
+    "script": "Private Wistron e-wing cpu-power-capping path.",
+    "deepseek": "PARTIAL but promotes the example bytes as an OOB command and does not establish why 0x0046 represents 150 W or whether 150 W is safe for this platform.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with vendor domain/unit/range, original-cap baseline, one approved write, bounded power/thermal/throttling observation and restoration."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly flags a state change but treats a source example as a universally executable value and changes transport without an equivalence decision.",
+    "gpt_v2": "Correctly prevents blind use of 0x00 0x46, adds physical effect monitoring and makes restoration mandatory.",
+    "history": "The invalidated earlier-run artifact was located but excluded as authority; the paired getter remains separately reviewed and supplies no write permission.",
+    "v3_1": "A power-control write requires explicit target/value approval, hard aborts and recovery even when the raw bytes appear in the source."
+  },
+  "original_test_intent": "Apply one owner-approved CPU-domain power cap, verify the exact value through the paired getter and observe bounded power, temperature and throttling behavior before restoring the original policy.",
+  "original_method": "Retain in-band 0x30/0x27 plus 0x30/0x26 read-back, but do not execute the sample payload until the private encoding and platform-safe cap range are approved.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "STATE_CHANGING_POWER_POLICY", "NEEDS_WISTRON_OEM_COMMAND_SPEC", "NEEDS_APPROVED_DOMAIN_VALUE_AND_RANGE", "NEEDS_POWER_THERMAL_ABORTS", "NEEDS_EXPLICIT_OWNER_CONFIRMATION", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The power/thermal owner identifies the capped CPU/socket/package domain, approves a value within the platform range, confirms workload conditions and dwell, defines abort thresholds and authorizes restoration to the captured baseline.",
+  "required_inputs": ["Verified BMC/SUT and firmware identity", "Approved 0x30/0x26/0x27 schema", "In-band/OOB transport-equivalence decision", "CPU/socket/package cap domain", "Cap byte order, scale, units and allowed range", "Vendor proof for the 0x00 0x46 to 150 W example if used", "Current cap and full power/thermal/workload baseline", "Approved test cap, dwell and stabilization time", "Power, temperature, throttling and workload abort limits", "Exact baseline restore value and recovery path", "Explicit owner approval"],
+  "safety_requirements": ["Dedicated non-production SUT", "Do not clear logs", "Do not assume the example is safe or universally encoded", "Never set zero, below-minimum or above-platform cap", "One approved write only", "Continuously monitor package/system power and critical temperatures", "Monitor throttling and workload health", "Abort on instability or ambiguous read-back", "Restore the original cap on every exit path", "Verify restoration with 0x30/0x26", "No automatic retry"],
+  "agent_execution_scope": ["Verify target, contract, cap domain and safe range", "Read and archive the original cap plus power/thermal/workload baseline", "Display exact write bytes and decoded value for explicit OK", "Send one approved 0x30/0x27 request", "Verify through 0x30/0x26 and bounded telemetry", "Abort and restore on any unsafe response", "Restore the captured cap and confirm stabilized post-state", "Archive command, telemetry and no-unapproved-mutation evidence"],
+  "engineer_actions": ["Approve encoding, domain, value, duration and workload", "Approve measurable abort thresholds and recovery", "Resolve whether OOB may substitute for the source's in-band path", "Own the final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The example command is syntactically complete, but neither the private 0x0046-to-150 W mapping nor its platform safety is established; switching to OOB also requires an explicit equivalence contract.",
+    "executable_command_required": true,
+    "command_recommendation": "Read the baseline with approved 0x30 0x26, encode one owner-approved cap under the vendor contract, issue raw 0x30 0x27 <exact-cap-bytes> once, verify read-back and bounded telemetry, then restore the original bytes.",
+    "original_parameters_and_time_preserved": "The source's 0x00 0x46 example, read-back step and 10/5 timing are preserved as evidence; none is treated as an approved universal operating value."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Treat the cap change as a reversible control experiment with a captured baseline, byte-to-watt proof, one bounded mutation, live power/thermal/throttling interlocks and verified restoration.",
+    "difference_from_original_method": "Adds domain and encoding validation, rejects command-success-only acceptance, and requires physical effect plus recovery evidence.",
+    "coverage_difference": "Read-back proves configured state but not enforcement; telemetry without exact write/read-back cannot prove the OEM setter changed the intended policy.",
+    "risks_limitations": "An overly low cap can destabilize timing-sensitive workloads and an excessive or misdecoded cap can violate electrical/thermal policy; competing firmware may overwrite the value asynchronously."
+  },
+  "project_override_considerations": "A Redfish or vendor power-control API may substitute only with documented mapping to the same cap domain/value and restoration behavior; otherwise it is separate coverage and raw 0x30/0x27 remains untested.",
+  "expected_evidence": ["Approved target/firmware/schema/domain/value and owner confirmation", "Original cap raw bytes plus decoded value and complete baseline", "Exact set request/response, completion, transport and timing", "0x30/0x26 read-back and byte-to-watt interpretation", "Power/temperature/throttling/workload timeline with abort status", "Restored cap raw/decoded evidence and stable post-state", "Preserved BMC/OS/SEL logs and no-unapproved-mutation audit"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master consistently describes an in-band cap write followed by getter read-back. Its 150 W example is under-specified and cannot be interpreted safely without the vendor encoding, but no Master field directly supplies a contradictory command or acceptance target."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The setter, read-back and reversible control purpose are identifiable. Vendor encoding, platform limits, an approved value and recovery are explicit package/user inputs, so the review is not irreducibly BLOCKED."},
+  "review_improvement": "Prevents a sample payload from becoming an unsafe default and turns a completion-only policy write into a closed-loop, domain-qualified power-control test with mandatory rollback.",
+  "independent_technical_reasoning": "A raw cap is an actuator setting whose meaning depends on private encoding and CPU power domain. The literal two-byte value 0x0046 does not independently establish 150 W, so the label must be proven by the vendor contract rather than arithmetic assumption. Read-back alone is still insufficient: monitored power, temperature, throttling and workload stability are required to show the approved cap behaves safely before restoration.",
+  "source_provenance": {
+    "primary": "XLSX Functionality physical row 1246 reopened directly",
+    "deepseek_same_row": "XLSX AI columns and data/tests.json exact row",
+    "gpt_v2": "Exact Functionality row 1246 review",
+    "history": "Paired CPU power-cap getter, duplicate-code search and invalidated-run location search",
+    "external_sources": ["Source-preserved private Wistron DQMS GitLab cpu-power-capping URL; contents were unavailable in this static review and are not assumed."]
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
