@@ -1,0 +1,73 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 1286,
+  "library_sequence": 1133,
+  "source_key": "Functionality|1134|Wistron-BMC-00424-V002",
+  "case_variant_id": "d2853d014b8e94e1",
+  "source_ref": {"sheet": "Functionality", "source_row": 1134, "code": "Wistron-BMC-00424-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "02222c728096f7d994b81c7820c919243a588473db29e65de98eb49417b3127a",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Unique OOB Send Message row; Get Message and Read Event Message Buffer consume different inbound paths and do not establish transmit coverage.",
+    "next_source_row_verified": "Functionality|1135|Wistron-BMC-00425-V002 / 0b757a3efb45e350 directly read from XLSX and manifest."
+  },
+  "source_snapshot": {
+    "sub_function": "BMC",
+    "test_set": "IPMI Messaging Support Commands",
+    "test_name_items": "Send Message (OOB)",
+    "procedure": "Verify recipe; clear logs; During Test is TBD; collect results/photos and inspect logs.",
+    "criteria": "TBD",
+    "script": null,
+    "deepseek_columns": {"ai_can_execute": "NO", "ai_packages_needed": "none (awaiting spec)", "ai_commands": "not runnable because procedure and criteria are TBD; request exact steps and expected end-state", "ai_logs_output": "none until the library is defined", "risk": null}
+  },
+  "historical_reviews": {
+    "deepseek": "Declines the TBD source without defining a safe destination or encapsulated message.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION for App 0x06/0x34 with verified channel/destination/protocol, exact tracking/security and payload bytes, response correlation and no generic probe or retry.",
+    "round_02": "Recorded NO/TBD and no executable command.",
+    "related_source_cases": "Get Message validates receive-queue retrieval and cannot prove bridged transmit delivery; any payload command remains a separate target-specific operation.",
+    "v3_1": "The outer Send Message command is identifiable, but channel, destination, encapsulated action, security, Expected and recovery are project bindings."
+  },
+  "original_test_intent": "Validate that the selected BMC sends one precisely defined management message through an approved channel to the intended destination and returns/correlates the required response without reaching or modifying any unintended device.",
+  "original_method": "The Master body is empty. Standard Send Message 0x06/0x34 is only an outer transport candidate; its channel/tracking options and complete encapsulated message determine the actual test and blast radius, so no payload may be synthesized from the title.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "MASTER_PROCEDURE_AND_CRITERIA_TBD", "ARBITRARY_BRIDGED_MANAGEMENT_MESSAGE", "NEEDS_CHANNEL_DESTINATION_PROTOCOL", "NEEDS_EXACT_INNER_PAYLOAD", "NEEDS_RESPONSE_AND_RECOVERY_CONTRACT"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Engineer identifies the remote endpoint and route, approves every outer and inner message byte plus the resulting remote action, and owns recovery if the destination or response is not as expected.",
+  "required_inputs": ["Verified source BMC and protected OOB session", "Channel number, medium and routing topology", "Destination address/device identity", "Tracking mode and response path", "Authentication/encryption/security requirements", "Complete encapsulated protocol frame and checksums", "Decoded intended remote operation and privilege", "Expected completion/response and bounded timeout", "Independent recovery for both BMC and destination"],
+  "safety_requirements": ["Do not clear logs, flags or queues", "Reject generic, broadcast, discovery or guessed payloads", "Decode the inner message before approval", "Prove the destination is unique and non-production-impacting", "Require exact byte-level approval", "Send once with a bounded timeout", "Do not retry on NAK, timeout or malformed response", "Do not send an automatic compensating command", "Preserve outer and inner response evidence securely"],
+  "agent_execution_scope": ["Verify BMC, channel route and destination", "Validate outer options and inner frame/checksums", "Explain the remote side effect and response path", "Capture channel/target pre-state", "Present exact request bytes for approval", "Issue one protected Send Message request", "Correlate command completion and tracked/remote response", "Verify only the intended endpoint changed, if a change was approved"],
+  "engineer_actions": ["Approve route, destination and inner operation", "Confirm required privilege and security mode", "Provide Expected and recovery runbook", "Adjudicate transport acceptance versus remote execution", "Own final DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "DeepSeek correctly provides no command for the TBD row. Naming 0x06/0x34 alone would still omit the actual destination and operation and is not executable evidence.",
+    "executable_command_required": true,
+    "command_recommendation": "Only after full frame approval, issue one `ipmitool ... raw 0x06 0x34 <channel-options> <complete-message-data...>` and validate both outer completion and any required inner response; otherwise remain NOT EXECUTED.",
+    "original_parameters_and_time_preserved": "The Master TBD procedure/criteria and 10/5 metadata remain unchanged; no channel, message or response is treated as a default."
+  },
+  "modernized_recommendation": {
+    "status": "PROJECT_EXECUTION_READINESS_PENDING",
+    "recommended_method": "Use a protocol-aware frame builder that displays decoded route, destination, privilege and inner command beside immutable bytes, validates checksums and correlates exactly one response.",
+    "difference_from_original_method": "Provides a guarded candidate framework for an absent Master method while refusing to invent the message that defines the functional test.",
+    "coverage_difference": "Outer command acceptance proves only that the BMC accepted a send request; target delivery and execution require independent correlated evidence.",
+    "risks_limitations": "The inner frame may invoke any supported remote function, including state-changing operations. A channel number alone does not identify a unique destination, and a timeout does not show whether the remote action occurred."
+  },
+  "project_override_considerations": "A vendor bridge tool is equivalent only if the same route, destination, payload, security and response semantics are exposed. Hidden framing or automatic retries create a material coverage and safety difference.",
+  "expected_evidence": ["Verified source BMC, channel topology and unique destination", "Approved decoded outer options and complete inner frame bytes", "Privilege/security policy and pre-state", "Single raw 0x06/0x34 request/response with timestamps", "Outer completion plus correlated inner response or target-side evidence", "Proof no unintended endpoint, queue, flag, log or configuration changed", "Escalation record for timeout, NAK, checksum, route or destination mismatch"],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Master provides no procedure or criteria to conflict with the title. The missing payload and target are readiness gaps, not contradictory requirements."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The transport operation and required safety boundary are clear. Execution is pending a fully specified route, payload, effect, response and recovery; the reviewer does not guess them."},
+  "review_improvement": "Separates outer Send Message transport acceptance from the encapsulated remote operation, requires byte-level route/payload approval and demands target-correlated evidence instead of treating a BMC completion code as end-to-end success.",
+  "independent_technical_reasoning": "Send Message is a container, not a single benign function. Two requests with the same outer command can address different buses and perform entirely different privileged actions. The review therefore cannot classify safety from 0x34 alone; it must decode and approve the route and complete inner frame, then distinguish BMC acceptance from remote delivery and execution.",
+  "source_provenance": {"primary": "XLSX Functionality physical row 1134 directly read", "deepseek_same_row": "XLSX AI columns and data/tests.json exact row", "gpt_v2": "Exact Functionality row 1134 review", "history": "Round 02 exact section and repository-wide Send/Get Message search", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
