@@ -1,0 +1,158 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2533,
+  "library_sequence": 2435,
+  "source_key": "Reliability|145|Wistron-HW Robust-00023-V002",
+  "case_variant_id": "e7b2f7bea4106973",
+  "source_ref": {
+    "sheet": "Reliability",
+    "source_row": 145,
+    "code": "Wistron-HW Robust-00023-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "183544bbd96b5fbe5c2e3cd41b18e5fce9bccac6c8112d967be1f12697849067",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00023-V002 is unique. The literal AST2600/SPI0/CS0/COM4/921600 command is preserved as source coverage but requires board, host and fixture-specific confirmation.",
+    "next_source_row_verified": "Reliability row146 is already a completed Final Audit baseline; the next pending case, Reliability row147 Wistron-HW Robust-00025-V002 / e1305427b0c24287, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "Firmware Reading/Flash",
+    "items": "Debugport flash",
+    "procedure": "Attach the BMC UART, change the jumper and apply AC, run `.\\uart_fw_py.exe --platform ast2600 --spi 0 --cs 0 --comport COM4 --baudrate 921600 --input_image encrypted_rom.ima`, wait for completion, remove AC and restore the jumper.",
+    "criteria": "Firmware is flashed successfully, with generic result/photo and unexpected-log collection.",
+    "deepseek": "PARTIAL; assigns jumper/UART flashing to an operator, proposes `ipmitool mc info` after recovery and warns that the destructive operation can brick the BMC.",
+    "gpt_v2": "RPUC/CHANGED with CRITICAL risk; requires approved encrypted image and utility, exact jumper/SPI/CS/COM/baud mapping, stable power, restoration and recovery before execution."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly identifies the physical/destructive split but does not prove utility provenance, image authenticity, de-energized jumper handling, write verification or the full restored-jumper BMC state.",
+    "gpt_v2": "Correctly keeps the concrete operator path out of BLOCKED and adds critical gates, but the suggested `-P` post-check exposes credentials and firmware revision alone is incomplete acceptance.",
+    "related_cases": "This is an AST2600 debug-ROM recovery/programming path, distinct from normal update service or U-Boot TFTP flashing because the boot strap/jumper and host-side UART programmer select a low-level SPI target.",
+    "v3_1": "Bind the host utility, signed encrypted image, fixture wiring, jumper positions and SPI target to an approved procedure; change straps only de-energized, capture write/verify output and prove normal boot after restoring the production strap."
+  },
+  "original_test_intent": "Demonstrate that the approved encrypted AST2600 BMC ROM can be programmed through the debug UART path with the required boot strap, after which the production jumper state is restored and the BMC returns on the intended firmware with normal management functions.",
+  "original_method": "Identify the exact board/BMC/SPI target and debug/recovery jumper positions; verify the trusted host utility and signed encrypted image; back up required firmware/configuration and prepare external recovery; remove AC and confirm de-energization before changing the strap; connect the mapped UART/COM port, apply stable AC and let a qualified operator run the source command once; require terminal write/verify success; remove AC, restore the production jumper, reapply power and verify firmware, boot mode, services, network/configuration, sensors, inventory and logs.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE",
+    "UNIQUE_SOURCE_IDENTITY_CONFIRMED",
+    "CRITICAL_DESTRUCTIVE_AST2600_DEBUG_PORT_FLASH_REQUIRES_EXPLICIT_APPROVAL",
+    "PHYSICAL_UART_JUMPER_AC_AND_LOCAL_TOOL_OPERATION_OPERATOR_OWNED",
+    "TRUSTED_UART_FW_PY_EXE_SIGNED_ENCRYPTED_IMAGE_AND_BOARD_COMPATIBILITY_REQUIRED",
+    "DEBUG_AND_PRODUCTION_JUMPER_POSITIONS_SPI0_CS0_COM4_921600_WIRING_MUST_BE_VERIFIED",
+    "JUMPER_CHANGES_REQUIRE_DEENERGIZED_BOARD_AND_RESTORATION_EVIDENCE",
+    "STABLE_POWER_BACKUP_RECOVERY_TIMEOUT_AND_NO_AUTOMATIC_RETRY_REQUIRED",
+    "AGENT_CAN_VALIDATE_ARTIFACTS_TRANSCRIPT_AND_SECURE_POST_FLASH_OOB_HEALTH",
+    "NO_GUESSED_STRAP_TARGET_IMAGE_TOOL_SECRET_ON_COMMAND_LINE_OR_DUT_VERDICT",
+    "NEXT_PENDING_RELIABILITY_ROW147_DIRECTLY_VERIFIED_AFTER_BASELINE_ROW146",
+    "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified operator de-energizes the board, changes/restores the approved debug jumper, connects the mapped UART, controls AC and runs the trusted local programmer; the agent may validate artifacts/transcript and collect secure post-flash OOB evidence.",
+  "required_inputs": [
+    "Exact SUT/board revision, AST2600/BMC and SPI0/CS0 flash identity/layout",
+    "Debug and normal jumper reference designator, pin positions, de-energization/AC sequence and photos or fixture record",
+    "Trusted `uart_fw_py.exe` version/hash/source and supported host/runtime/driver requirements",
+    "Approved `encrypted_rom.ima` version, length, signature/hash, encryption/key compatibility and board mapping",
+    "UART wiring/voltage/ground, host COM port mapping and approved 921600 baud setting",
+    "Full backup, golden/external programming recovery, stable-power window, timeout and expected final firmware/bank/configuration/health oracle"
+  ],
+  "safety_requirements": [
+    "Remove AC and verify the board is de-energized before moving either jumper; never change a strap live unless an explicit vendor procedure authorizes it",
+    "Verify board, image signature/hash/compatibility, trusted utility hash/version, SPI target and UART electrical level before programming",
+    "Keep stable AC and UART throughout the write/verify phase; do not interrupt, parallelize or retry automatically after an uncertain result",
+    "Require full backup and an independent external recovery path before the destructive flash",
+    "Capture terminal tool completion and verification, then remove AC and restore the exact production jumper position before normal boot",
+    "Do not expose BMC passwords through command arguments or logs; use the approved secure credential mechanism",
+    "Stop on jumper/target/image/tool/port mismatch, transport/write/verify error, timeout, unexpected current/power event, failed strap restoration, firmware mismatch or loss of BMC access"
+  ],
+  "agent_execution_scope": [
+    "Validate utility/image provenance, hashes, target mapping, fixture record, backup and recovery readiness",
+    "Capture and inspect the operator's AC/jumper/UART/programmer transcript and terminal verification result",
+    "Collect approved secure OOB firmware, bank, service, network/configuration, sensor, inventory and event-log evidence after normal-strap boot",
+    "Do not move jumpers, control AC, run the local programmer, infer SPI/image compatibility, reveal credentials, retry a failed flash or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve board, jumper positions/sequence, UART electrical/COM/baud mapping, SPI0/CS0 identity and normal final strap",
+    "Approve utility version/hash and encrypted image version/length/signature/hash/compatibility",
+    "Approve backup, stable-power, terminal timeout, no-retry and golden/external recovery plan",
+    "Review write/verify, restored-jumper normal boot and full BMC-health evidence and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The operator split and post-flash BMC query are useful, but the literal host command is valid only after COM4, voltage, SPI0/CS0, utility and image are bound to this fixture; `mc info` with `-P` leaks the secret and a revision line is not complete acceptance.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval and de-energized strap setup, run the exact source utility once from the trusted host, preserve all output/exit/verify evidence, restore the normal strap with AC removed, then use secure IPMI/Redfish access for complete firmware and BMC-health validation.",
+    "original_parameters_and_time_preserved": "AST2600, SPI0, CS0, COM4, 921600 baud, encrypted_rom.ima, jumper/AC sequence, wait-for-completion, jumper restoration, Common branch and 15/30-minute estimate are preserved as source parameters subject to verified applicability."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_DEBUG_STRAP_UART_SPI_TOOL_IMAGE_POWER_AND_RECOVERY_APPROVAL",
+    "recommended_method": "Execute one identity-bound AST2600 debug-port programming transaction under operator control, prove terminal write/verify success, restore the production strap de-energized and validate full BMC recovery.",
+    "difference_from_original_method": "Adds tool/image provenance, electrical/fixture identity, de-energized jumper interlock, backup/recovery, no-retry semantics, secure credentials and full normal-strap health evidence.",
+    "coverage_difference": "A utility success line or firmware revision alone cannot prove the correct SPI was programmed, the normal strap was restored, the intended image activated or BMC configuration/services survived.",
+    "risks_limitations": "A wrong strap, voltage, COM mapping, SPI/CS target, incompatible encrypted image or interrupted write can leave the BMC unbootable and may require an external programmer."
+  },
+  "project_override_considerations": "COM4, 921600, SPI0/CS0 and `encrypted_rom.ima` may be correct for the source fixture, but each is a project-specific identity claim that must be confirmed rather than generalized to another bench or board revision.",
+  "expected_evidence": [
+    "SUT/board/BMC/SPI identity, flash layout and pre-flash firmware/bank/configuration/health baseline",
+    "Debug and normal jumper designator/positions plus AC-off/de-energized transition evidence",
+    "Utility filename/version/hash/source and host/driver/UART voltage/COM4/921600 mapping",
+    "Encrypted image filename/version/length/signature/hash/encryption compatibility and approved target",
+    "Continuous programmer transcript with command line excluding secrets, transfer/write/verify progress, exit status and completion timestamp",
+    "AC-off production-jumper restoration followed by normal boot/reachability and firmware/build/active-bank evidence",
+    "Secure IPMI/Redfish/WebUI service, network/configuration, sensor, inventory, SEL/log checks, recovery actions and engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title, jumper/UART programmer procedure and successful-flash criterion consistently describe one debug-port BMC programming operation. Fixture and artifact details are critical project inputs but not contradictory source fields."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The concrete operator procedure can execute once approved tool/image/fixture and recovery prerequisites are supplied; the physical work and missing package do not make the static case intrinsically blocked."
+  },
+  "engineering_decision_pending": {
+    "question": "Resolve Reliability row145 Wistron-HW Robust-00023-V002: approve the exact SUT/board/AST2600 and SPI0/CS0 flash identity/layout; debug and normal jumper designator/positions plus AC-off de-energized sequence; UART voltage/wiring, host and COM4/921600 mapping; trusted `uart_fw_py.exe` version/hash/runtime; signed `encrypted_rom.ima` version/length/hash/encryption/board compatibility; terminal write/verify and timeout criteria; full backup, stable power, no-retry, golden/external recovery and secure post-flash normal-strap firmware/bank/service/configuration/sensor/log oracle."
+  },
+  "review_improvement": "Retains the exact AST2600 debug-port mechanism while binding every destructive target and physical strap transition to an approved fixture and recovery contract, followed by normal-strap functional proof.",
+  "independent_technical_reasoning": "The debug jumper determines an early boot/programming path, so its position and the AC transition are functional inputs, not incidental setup. The host utility's `--spi 0 --cs 0` selects a physical flash and the encrypted image must match both the silicon security state and board layout. A successful UART transfer can still target the wrong chip or leave the board in recovery strap mode. Consequently acceptance requires de-energized strap control, immutable utility/image/target identity, write verification, production-strap restoration and normal BMC service/configuration evidence with an external recovery path retained.",
+  "source_provenance": {
+    "primary": "XLSX Reliability row145 directly reopened and read",
+    "deepseek_same_row": "Exact XLSX AI fields and tests.json code cross-check",
+    "gpt_v2": "Exact Reliability-row145 GPT V2 review",
+    "history": "Git history and active records searched; unique code confirmed; baseline row146 recognized and next pending row147 directly read",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "debug_jumper_ac_ast2600_spi0_cs0_com4_921600_encrypted_image_flash_restore_and_success_coverage_preserved": true,
+    "tool_image_fixture_electrical_deenergized_strap_verify_backup_recovery_secure_oob_and_full_health_contract_added": true,
+    "live_strap_change_wrong_target_untrusted_tool_secret_on_cli_blind_retry_and_automatic_verdict_rejected": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}
