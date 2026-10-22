@@ -1,0 +1,155 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2266,
+  "library_sequence": 2139,
+  "source_key": "Functionality|2140|Wistron-HGX NV PVP HW-00017-V002",
+  "case_variant_id": "4205932c53e0c52a",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2140,
+    "code": "Wistron-HGX NV PVP HW-00017-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "30d9e6e74c6d2d976b7267517ad4bf02c105b874550b12977cb2152eb34d8816",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Manifest contains exactly one Wistron-HGX NV PVP HW-00017-V002 row; row 2140 and variant 4205932c53e0c52a are unique.",
+    "next_source_row_verified": "Functionality|2141|Wistron-HGX NV PVP HW-00018-V002 / 197f6adf13f7a48b directly read from the manifest and XLSX before this write."
+  },
+  "source_snapshot": {
+    "sub_function": "HGX NV PVP HW",
+    "test_set": "Networking",
+    "items": "NT.3_BlueField PCIe Interface Traffic Test",
+    "procedure": "Verify recipe, source asks to clear logs, run NVQual Test #21, collect results/photos, and inspect post logs.",
+    "criteria": "All items should be passed without system hang or reboot.",
+    "bundle": "No bundle; five attended and sixty machine minutes.",
+    "deepseek": "PARTIAL; requires NVQual, ConnectX/BlueField and GPU Direct configuration, and identifies NIC/GPU buffer saturation risk.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/HIGH; exact module, stable GPU/NIC path, GPUDirect stack, traffic profile, thresholds, isolation and complete evidence are required."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly identifies the vendor-tool and configuration dependency, but generic module output does not prove the intended PCIe GPU Direct path, data integrity or stable operation.",
+    "gpt_v2": "Adds licensed Test #21, exact GPU-to-ConnectX/BlueField topology, dedicated-SUT gating, traffic/error telemetry, thermal/power monitoring, preservation of logs and recovery.",
+    "duplicate_variants": "No duplicate code found.",
+    "v3_1": "ED-01/03 require command-purpose fit; ED-07/08 require direct evidence; ED-11/12 prohibit uncontrolled reset/retry; ED-17 protects access; ED-36/38 bind verdict."
+  },
+  "original_test_intent": "Exercise the designated GPU Direct data path between the pinned GPU and BlueField/ConnectX PCIe endpoint with NVQual Test #21 and prove the specified traffic completes with required performance and data integrity, no PCIe/NIC/GPU faults, and no system hang or reboot.",
+  "original_method": "Bind the GPU UUID/serial/BDF, NIC or DPU serial/port/BDF, complete root-port/switch/retimer/NUMA/IOMMU path and traffic peer; pin the licensed Test #21 configuration, transfer direction, memory-registration mode, payload sizes, queue/stream concurrency, duration and thresholds; drain unrelated traffic, preserve baseline evidence, run once under monitoring, retain raw traffic and health artifacts, and stop on first integrity or platform fault without blind retry.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE",
+    "UNIQUE_ROW_VARIANT_BOUND",
+    "ENGINEERING_DECISION_PENDING_FOR_TEST21_GPUDIRECT_PATH_PROFILE_AND_LIMITS",
+    "LICENSED_PINNED_NVQUAL_TEST21_MODULE_REQUIRED",
+    "GPU_AND_BLUEFIELD_CONNECTX_STABLE_IDENTITY_AND_PCIE_TOPOLOGY_REQUIRED",
+    "GPUDIRECT_RDMA_STACK_MEMORY_REGISTRATION_AND_TRAFFIC_PEER_REQUIRED",
+    "PAYLOAD_QUEUE_STREAM_DIRECTION_DURATION_AND_ACCEPTANCE_LIMITS_REQUIRED",
+    "DEDICATED_DRAINED_SUT_AND_TRAFFIC_IMPACT_AUTHORIZATION_REQUIRED",
+    "COMPLETE_UNTRUNCATED_TRAFFIC_DATA_INTEGRITY_LINK_AER_GPU_NIC_AND_PLATFORM_EVIDENCE_REQUIRED",
+    "PRESERVE_BASELINE_LOGS_DO_NOT_CLEAR",
+    "FIRST_FAULT_ABORT_AND_OWNER_RECOVERY_REQUIRED",
+    "NO_UNAPPROVED_RESET_RECONFIGURATION_TRAFFIC_OR_AUTOMATIC_RETRY",
+    "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Owner/FAE supplies the licensed module, stable GPU/NIC/DPU mapping, approved GPUDirect stack and traffic acceptance; an operator drains dependent traffic and owns fault recovery.",
+  "required_inputs": [
+    "Licensed pinned NVQual Test #21 module and compatible GPU, BlueField/ConnectX firmware, drivers, CUDA and DOCA/MOFED stack",
+    "GPU UUID/serial/BDF, NIC or DPU serial/port/BDF, traffic peer and complete PCIe/NUMA/IOMMU topology",
+    "GPUDirect mode and memory-registration path plus direction, payload, queues/streams, concurrency, duration and repetitions",
+    "Throughput, latency, loss, data-integrity, link/AER/NIC/GPU, thermal and power thresholds with aborts and recovery"
+  ],
+  "safety_requirements": [
+    "Dedicated drained SUT and explicit traffic/link-impact authorization",
+    "Trusted authenticated access; preserve logs, counters and topology before testing",
+    "Do not clear evidence, force reset, change firmware or alter IOMMU/driver/network policy outside the approved recipe",
+    "Stop on data mismatch, packet loss above limit, buffer/registration failure, link change, AER/NIC/GPU fault, thermal/power excursion, hang or reboot",
+    "No automatic retry"
+  ],
+  "agent_execution_scope": [
+    "Validate stable identities, complete path, stack/configuration, peer, traffic matrix, baselines, limits and interlocks",
+    "Run only the approved Test #21 profile on the isolated path",
+    "Collect raw throughput, latency, integrity, registration, buffer, PCIe, NIC, GPU and platform evidence",
+    "Do not infer targets or limits, reconfigure/reset after a fault, retry automatically or issue the DUT verdict"
+  ],
+  "engineer_actions": [
+    "Approve Test #21 module, GPU-to-BlueField/ConnectX path, GPUDirect mode and traffic matrix",
+    "Define data-integrity/performance/error/thermal limits, isolation, aborts and recovery",
+    "Review complete evidence and decide PASS, FAIL, or BLOCKED"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It names the correct NVQual GPU Direct family but lacks an executable module configuration, stable endpoint binding, traffic profile and acceptance thresholds; aggregate pass output cannot prove the required path or integrity.",
+    "executable_command_required": true,
+    "command_recommendation": "Run only the pinned NVQual Test #21 configuration against the stable-identity GPU and BlueField/ConnectX path and retain complete raw traffic, integrity, registration, link and health evidence.",
+    "original_parameters_and_time_preserved": "NVQual Test #21, PCIe GPU Direct traffic, all-items/no-hang/no-reboot Criteria, no bundle, and 5/60-minute allocation remain; missing traffic parameters and limits are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "HIGH GPU DIRECT PCIE TRAFFIC QUALIFICATION",
+    "recommended_method": "Bind every transfer result to the exact GPU, NIC/DPU, peer, PCIe/NUMA/IOMMU topology, GPUDirect memory-registration mode and traffic profile, and correlate raw data-integrity/performance results with platform health.",
+    "difference_from_original_method": "Adds stable topology and peer identity, reproducible traffic parameters, quantitative limits, complete telemetry, production isolation, first-fault stop and recovery.",
+    "coverage_difference": "A generic NVQual pass can hide CPU-staged transfers, the wrong GPU/NIC pair, incomplete direction coverage, data corruption, buffer pressure or a recovered link fault.",
+    "risks_limitations": "GPUDirect traffic can saturate GPU/NIC buffers and shared PCIe/fabric resources, disturb dependent traffic and expose driver, registration, IOMMU or link faults."
+  },
+  "project_override_considerations": "An equivalent vendor GPUDirect traffic tool may substitute only if it preserves the approved endpoint/path binding, direction and workload matrix, data-integrity checks, quantitative limits and raw evidence. Ordinary NIC throughput or PCIe bandwidth alone does not replace GPU Direct coverage.",
+  "expected_evidence": [
+    "Exact row/variant/hash, approved Test #21 module/license/configuration and authorization",
+    "GPU UUID/serial/BDF, NIC/DPU serial/port/BDF, traffic peer and complete PCIe/NUMA/IOMMU path",
+    "GPUDirect stack, memory-registration mode, direction, payload, queue/stream, concurrency, duration and acceptance matrix",
+    "Complete raw throughput, latency, loss, data-integrity, registration and buffer results with timestamps",
+    "Pre/during/post link/AER/NIC/GPU/driver/dmesg/journal/BMC/SEL/thermal/power evidence",
+    "Abort/recovery or clean final traffic/link/device state and engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "Items, Test #21 Procedure, Criteria and same-row reviews consistently target BlueField/ConnectX PCIe GPU Direct traffic. Missing module, topology, traffic profile and limits are readiness inputs, not conflicting objectives."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The GPU Direct traffic purpose is clear. Licensed tooling, endpoint mapping, stack configuration and acceptance limits are identifiable prerequisites rather than permanent review blockers."
+  },
+  "engineering_decision_pending": {
+    "question": "Resolve Functionality row 2140 Wistron-HGX NV PVP HW-00017-V002: approve the pinned NVQual Test #21 module, GPU UUID/serial/BDF and BlueField/ConnectX serial/port/BDF with complete PCIe/NUMA/IOMMU path and traffic peer, GPUDirect/memory-registration mode, direction/payload/queue/stream/concurrency/duration/repetition matrix, throughput/latency/loss/data-integrity/error/thermal limits, isolation, aborts, and recovery."
+  },
+  "review_improvement": "Converts a generic vendor-module pass into a reproducible endpoint- and path-bound GPU Direct traffic qualification with integrity, performance, health and isolation evidence.",
+  "independent_technical_reasoning": "A traffic result is meaningful only if data actually traverses the intended direct GPU-to-NIC/DPU path rather than a CPU-staged fallback. Endpoint identity, topology, memory registration and transfer direction therefore must be explicit. Buffer saturation can preserve average throughput while causing loss, retry or corruption, so raw integrity, registration, queue and platform-error evidence is required and the first fault must halt the run before recovery changes state.",
+  "source_provenance": {
+    "primary": "XLSX Functionality row 2140 directly read",
+    "deepseek_same_row": "XLSX AI columns and tests.json row 2140",
+    "gpt_v2": "Exact row-2140 second review",
+    "history": "Unique-code manifest search, direct manifest and XLSX row 2141, ED-01/03/07/08/11/12/17/36/38",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "unique_source_identity_confirmed": true,
+    "nvqual_test21_gpudirect_traffic_all_items_no_hang_reboot_coverage_preserved": true,
+    "stable_endpoints_direct_path_traffic_matrix_integrity_limits_interlocks_and_recovery_added": true,
+    "log_clear_aggregate_pass_cpu_staged_substitution_insecure_access_unapproved_reset_and_retry_rejected": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_manifest": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}
