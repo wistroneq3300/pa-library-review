@@ -1,0 +1,158 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2532,
+  "library_sequence": 2434,
+  "source_key": "Reliability|144|Wistron-HW Robust-00022-V002",
+  "case_variant_id": "b77805846965e1b6",
+  "source_ref": {
+    "sheet": "Reliability",
+    "source_row": 144,
+    "code": "Wistron-HW Robust-00022-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "f18e07035e9a3fc3f7ce9c896a7af22afd53787097e3772abda3e8bda9b68db0",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00022-V002 is unique. Its fixed 0x4000000 SPI-write length and `saveenv` side effect require board/image-specific approval rather than inferred acceptance.",
+    "next_source_row_verified": "Reliability row145 Wistron-HW Robust-00023-V002 / e7b2f7bea4106973, operator jumper plus AST2600 UART debug-port encrypted-ROM flash, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "Firmware Reading/Flash",
+    "items": "Uboot flash",
+    "procedure": "Attach the BMC UART, set the TFTP server, obtain DHCP, TFTP the BMC binary to RAM address 0x83000000, probe SPI flash 0, write 0x4000000 bytes from RAM to flash offset 0, save the U-Boot environment, reset, and check BMC function after reboot.",
+    "criteria": "Firmware is flashed successfully, with generic result/photo and unexpected-log collection.",
+    "deepseek": "PARTIAL; assigns the physical UART/U-Boot flash to an operator and proposes `ipmitool mc info` after reboot, while correctly warning that the destructive action can brick the BMC.",
+    "gpt_v2": "RPUC/CHANGED with CRITICAL risk; requires an approved image, checksum, board compatibility, exact write length, stable power, recovery and explicit approval before the literal UART sequence."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly keeps the physical flash operator-owned and adds an OOB check, but does not bind the image to the SPI layout, verify the loaded byte count or address `saveenv` persistence and command-line credential exposure.",
+    "gpt_v2": "Correctly treats the concrete hybrid path as RPUC rather than BLOCKED and adds approval/recovery gates, but its post-check still passes the password with `-P` and needs fuller identity, configuration and non-target-region evidence.",
+    "related_cases": "Unlike normal BMC update-service cases, this row writes SPI flash from U-Boot at offset zero and can overwrite boot, environment, recovery or board-specific regions if the image/layout contract is wrong.",
+    "v3_1": "Retain the literal source flow only behind exact target/image/layout/byte-count gates; prove the TFTP transfer and SPI device before writing, prevent unintended environment persistence, and verify firmware, services, configuration and recovery state afterward."
+  },
+  "original_test_intent": "Demonstrate that a board-compatible BMC image can be transferred through BMC U-Boot/TFTP, written to the intended SPI flash region, rebooted, and returned to normal out-of-band management operation on the intended firmware.",
+  "original_method": "Identify the exact SUT/BMC/SPI target and active/recovery layout; back up required flash/environment/configuration data; verify the approved image, signature/hash, byte length and RAM load address; attach UART and stable recovery power; let a qualified operator execute the source TFTP, probe and approved bounded write once; avoid persisting temporary network variables unless explicitly required; reset and verify firmware identity, boot mode, management services, network/configuration, sensors, inventory and logs against the baseline.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE",
+    "UNIQUE_SOURCE_IDENTITY_CONFIRMED",
+    "CRITICAL_DESTRUCTIVE_BMC_SPI_FLASH_REQUIRES_EXPLICIT_APPROVAL",
+    "PHYSICAL_UART_AND_UBOOT_INTERACTION_OPERATOR_OWNED",
+    "VENDOR_IMAGE_HASH_BOARD_SPI_LAYOUT_OFFSET_AND_EXACT_BYTE_COUNT_REQUIRED",
+    "TFTP_FILESIZE_RAM_ADDRESS_SPI_JEDEC_CAPACITY_AND_NON_TARGET_REGIONS_MUST_BE_VERIFIED",
+    "SAVEENV_NETWORK_CONFIGURATION_SIDE_EFFECT_REQUIRES_APPROVAL_OR_OMISSION",
+    "STABLE_POWER_FULL_BACKUP_GOLDEN_RECOVERY_AND_EXTERNAL_REFLASH_PATH_REQUIRED",
+    "AGENT_CAN_STAGE_ARTIFACTS_VALIDATE_TRANSCRIPT_AND_PERFORM_SECURE_POST_FLASH_OOB_CHECKS",
+    "NO_GUESSED_LENGTH_IMAGE_LAYOUT_SECRET_ON_COMMAND_LINE_AUTOMATIC_RETRY_OR_DUT_VERDICT",
+    "NEXT_RELIABILITY_ROW145_DIRECTLY_VERIFIED",
+    "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "A qualified operator attaches UART, interrupts BMC boot, confirms the exact SPI device, performs the single approved U-Boot write/reset and retains recovery control; the agent may validate artifacts/transcript and collect secure post-flash OOB evidence.",
+  "required_inputs": [
+    "SUT, board revision, BMC/SoC and SPI bus/chip-select/JEDEC identity with complete flash-region map",
+    "Approved BMC binary filename, target version, exact byte length, hash/signature and board/bootloader compatibility",
+    "Approved RAM load address, flash offset/length and policy for preserving bootloader, environment, recovery, calibration and configuration regions",
+    "TFTP network plan, UART settings, stable power/maintenance window and qualified operator",
+    "Full backup, golden image, dual-bank or external programmer recovery procedure and maximum reboot/recovery timeout",
+    "Secure BMC credential injection and expected post-flash firmware, active bank, network/configuration, service, sensor and log oracle"
+  ],
+  "safety_requirements": [
+    "Verify image identity, signature/hash, transferred `$filesize`, RAM bounds, SPI JEDEC identity/capacity and approved offset/length before any write",
+    "Do not assume the literal 0x4000000 length matches the image or safe target region; never write beyond transferred bytes or approved layout",
+    "Back up all required flash/environment/configuration regions and prove an independent recovery path before starting",
+    "Use stable power and continuous UART; do not interrupt the write, reset early or retry automatically after any uncertain state",
+    "Do not run `saveenv` merely to persist temporary TFTP/DHCP variables; preserve or restore the approved environment and management network",
+    "Do not expose BMC passwords through command arguments or logs; use the approved secure credential mechanism",
+    "Stop on identity/hash/filesize/probe/capacity mismatch, transfer or write error, unexpected region change, rollback/recovery mode, firmware mismatch or loss of management access"
+  ],
+  "agent_execution_scope": [
+    "Validate the approved image metadata, hash/signature, size, target mapping, backup and recovery readiness",
+    "Capture and inspect the operator's UART/TFTP/SPI transcript, byte counts and post-reset timeline",
+    "Collect approved secure OOB firmware, bank, service, network, configuration, sensor, inventory and event-log evidence after recovery",
+    "Do not manipulate UART, execute the SPI write/reset, infer a safe image length/layout, reveal credentials, retry a failed flash or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve the exact image, hash, board compatibility, RAM address, SPI device, offset, byte count and regions that may change",
+    "Decide whether `saveenv` is required and define expected retained/restored U-Boot and BMC network configuration",
+    "Approve backup, stable-power, timeout, golden/external recovery and no-retry policy",
+    "Review full write/verify and post-flash health evidence and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The operator split and post-flash `mc info` are directionally correct, but a version-only check cannot prove the exact SPI target/length, boot-bank activation, configuration preservation or general BMC health; `-P` also exposes the password in process arguments.",
+    "executable_command_required": true,
+    "command_recommendation": "After approval, preserve the source UART sequence but compare the TFTP-reported `$filesize` with the signed image and approved region, identify SPI JEDEC/capacity, write only the approved bytes, verify written content if supported, omit/justify `saveenv`, and use a secure credential mechanism for full post-flash OOB health checks.",
+    "original_parameters_and_time_preserved": "BMC UART, TFTP to 0x83000000, `sf probe 0`, source write offset zero and stated 0x4000000 length as an approval subject, reset, BMC-function check, Common branch and 15/30-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_EXACT_BMC_IMAGE_SPI_LAYOUT_WRITE_LENGTH_SAVEENV_AND_RECOVERY_APPROVAL",
+    "recommended_method": "Run one identity-bound, byte-count-bounded U-Boot SPI transaction under operator control, then prove target firmware activation and complete BMC functional/configuration recovery with preserved evidence.",
+    "difference_from_original_method": "Adds immutable image/target identity, transfer-size and SPI-capacity checks, backup/non-target protection, environment-side-effect control, secure credential handling and a broader post-flash oracle without replacing the source mechanism.",
+    "coverage_difference": "A successful `sf update` or a responding `mc info` alone does not prove that the intended image/region was written, that the correct bank activated, or that network/configuration, sensors, logs and recovery regions remain valid.",
+    "risks_limitations": "A wrong or partial offset-zero write can brick the BMC and remove out-of-band recovery; the source's fixed 64 MiB length may exceed the transferred image or include board-specific protected content."
+  },
+  "project_override_considerations": "Project firmware packages may legitimately define a full 64 MiB image and `saveenv` behavior, but those facts must come from the approved board-specific package/layout; they cannot be inferred from the generic source row.",
+  "expected_evidence": [
+    "SUT/board/BMC identity, SPI bus/chip-select/JEDEC ID/capacity and approved region map",
+    "BMC image filename/version/length/hash/signature/compatibility and TFTP server/path",
+    "Pre-flash firmware, bank, environment/network/configuration, services, sensors, inventory, SEL and required full-flash backups",
+    "Continuous UART transcript showing TFTP address and exact byte count, SPI probe identity, approved write offset/length, result/verification and reset",
+    "Post-flash firmware version/build and active-bank evidence plus boot/recovery-mode status and management reachability timeline",
+    "Secure IPMI/Redfish/WebUI service, network/configuration, sensor, inventory, SEL/log and non-target-region preservation evidence",
+    "Recovery action if needed, final configuration/power state and engineer PASS, FAIL or BLOCKED verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The title, U-Boot/TFTP/SPI procedure and successful-flash criterion describe one coherent BMC firmware operation. The fixed length, generic image token and `saveenv` consequences are underspecified critical project inputs, not contradictory source fields."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The hybrid execution path is identifiable and can proceed once the exact image/layout, operator, power, backup and recovery gates are supplied; their absence is a pending critical engineering gate rather than an intrinsic semantic block."
+  },
+  "engineering_decision_pending": {
+    "question": "Resolve Reliability row144 Wistron-HW Robust-00022-V002: approve the exact SUT/board/BMC and SPI bus/chip-select/JEDEC/capacity/region map; signed BMC image filename/version/hash/byte length and RAM address; whether offset0 length0x4000000 is exactly safe or must use verified `$filesize`; which bootloader/environment/recovery/calibration/configuration regions may change; whether `saveenv` is required and expected network-variable restoration; full backup, stable-power, timeout, golden/external recovery and secure post-flash firmware/bank/service/configuration/sensor/log oracle."
+  },
+  "review_improvement": "Preserves the source's operator U-Boot flash while converting an unbounded fixed-length critical write into an identity-bound, size-verified and recoverable transaction with configuration and full BMC-health proof.",
+  "independent_technical_reasoning": "`tftp` reports an actual transfer byte count, whereas `sf update ... 0x4000000` always consumes 64 MiB from RAM. If the binary is shorter, trailing RAM contents can be written; if the board's SPI map differs, an offset-zero full-span write can overwrite U-Boot, environment, recovery or board data. `sf probe 0` also proves only that some device was selected unless JEDEC identity/capacity are matched. Finally, `saveenv` after setting `serverip` and using DHCP can persist temporary lab networking. Therefore the review must bind every destructive parameter to a signed board package, control environment persistence and retain independent recovery, while a responding BMC remains evidence rather than an automatic PASS.",
+  "source_provenance": {
+    "primary": "XLSX Reliability row144 directly reopened and read",
+    "deepseek_same_row": "Exact XLSX AI fields and recursively located tests.json code cross-check",
+    "gpt_v2": "Exact Reliability-row144 GPT V2 review",
+    "history": "Git history and active records searched; unique code confirmed; row145 directly read as next",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "uboot_uart_tftp_ram_0x83000000_spi0_offset0_declared_length_reset_and_bmc_function_coverage_preserved": true,
+    "image_target_layout_filesize_jedec_backup_saveenv_secure_oob_health_and_recovery_contract_added": true,
+    "guessed_length_unverified_target_secret_on_cli_blind_retry_log_clear_and_automatic_verdict_rejected": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}
