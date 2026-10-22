@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2537,
+  "library_sequence": 2441,
+  "source_key": "Reliability|151|Wistron-HW Robust-00029-V002",
+  "case_variant_id": "8b03057e11f84bd8",
+  "source_ref": {"sheet": "Reliability", "source_row": 151, "code": "Wistron-HW Robust-00029-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "0be80a3b53490408b44b9e9ec95e005bedb96384b0b7ffd8e5c6bf075e25591c",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00029-V002 is unique. The exact target-BDF `lspci -vvv` fields are primary; dmesg and rasdaemon are correlated supporting evidence, not replacements.",
+    "next_source_row_verified": "Reliability row152 Wistron-HW Robust-00465-V003 / cf57e5126db1d635, `ethtool -S <device name>` NIC TX/RX/physical error-counter inspection, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "PCIE",
+    "items": "PCIe NIC AER check",
+    "procedure": "Run `lspci -s <device id> -vvv` for the target PCIe NIC and inspect DevSta, LnkSta, CESta and UESta.",
+    "criteria": "No error is shown in the terminal, with generic result/photo and unexpected-log collection.",
+    "deepseek": "YES but replaces the source BDF-specific capability/status inspection with truncated dmesg and rasdaemon filtering and misidentifies the lspci package dependency.",
+    "gpt_v2": "RPUC/CHANGED; restores the source command and baseline correlation, but retains insecure transport and treats rasdaemon as required even though source coverage is PCI config-space status."
+  },
+  "historical_reviews": {
+    "deepseek": "Kernel/RAS logs are useful corroboration but cannot prove the NIC's DevSta/LnkSta/CESta/UESta fields; tails can hide earlier relevant events and absence of output is not proof when permissions or services fail.",
+    "gpt_v2": "Correctly preserves the literal lspci view and rejects clearing/reset, while leaving exact flag masks, endpoint/upstream topology and cumulative/sticky semantics to engineering.",
+    "related_cases": "Row150 covers Mellanox physical/PCIe link-tool information; row152 covers netdev traffic counters. This row specifically owns PCIe configuration-space device/link/AER status and correlated error reporting.",
+    "v3_1": "Bind the endpoint BDF to the intended NIC and enumerate its upstream bridge/root-port chain; capture complete privileged config-space views and time-bounded logs; interpret each status bit against an approved mask without clearing evidence."
+  },
+  "original_test_intent": "Verify that the intended PCIe NIC and its relevant PCIe path show the expected link state and no disallowed correctable or uncorrectable AER/device-status indications during the defined observation window.",
+  "original_method": "Map NIC serial/PN/netdev to exact domain:bus:device.function and upstream bridge/root port; approve/install pciutils and optional platform RAS tooling; capture complete privileged `lspci -s <BDF> -vvv` for endpoint and relevant path before and after the window; extract DevSta/LnkSta/CESta/UESta and capability availability; preserve timestamped kernel/journal/rasdaemon records; compare sticky bits and new events to explicit masks/severity policy without resets or clears.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE", "UNIQUE_SOURCE_IDENTITY_CONFIRMED", "PCIUTILS_PACKAGE_PRIVILEGE_AND_TARGET_BDF_REQUIRE_APPROVAL", "NIC_BDF_SERIAL_NETDEV_AND_UPSTREAM_PCIE_PATH_MAPPING_REQUIRED", "SOURCE_LSPCI_VVV_DEVSTA_LNKSTA_CESTA_UESTA_RESTORED_AS_PRIMARY", "FULL_UNTRUNCATED_PRIVILEGED_CONFIG_AND_TIMESTAMPED_LOGS_REQUIRED", "EXPECTED_BIT_MASK_LINK_SPEED_WIDTH_AND_SEVERITY_POLICY_REQUIRED", "STICKY_HISTORICAL_BITS_MUST_BE_DISTINGUISHED_FROM_NEW_WINDOW_ERRORS", "READ_ONLY_NO_AER_CLEAR_DEVICE_RESET_ERROR_INJECTION_OR_AUTOMATIC_RETRY", "SECURE_REMOTE_TRANSPORT_NO_PASSWORD_ON_CLI_OR_DISABLED_HOST_KEY", "NO_DUT_VERDICT", "NEXT_RELIABILITY_ROW152_DIRECTLY_VERIFIED", "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The PCIe/platform owner confirms NIC/path identity, privileges and expected status masks; the agent can collect and parse read-only config-space and time-bounded log evidence.",
+  "required_inputs": [
+    "SUT, NIC PN/serial, netdev/driver/firmware and exact endpoint domain:BDF",
+    "Upstream switch/downstream/root-port BDF chain and which functions own AER reporting",
+    "Supported pciutils version, required privilege and optional rasdaemon package/service/database provenance",
+    "Expected DevSta/LnkSta/CESta/UESta flags, negotiated speed/width and allowed CE/UE masks",
+    "Observation-window baseline, sticky-bit/historical-event policy and severity/escalation thresholds",
+    "Pinned reviewed internal Script revision and secure access"
+  ],
+  "safety_requirements": [
+    "Use read-only config/log collection; do not reset NIC/link, clear AER/status, inject errors or change PCI config space",
+    "Verify exact BDF-to-NIC identity and upstream path before interpreting output",
+    "Require complete privileged output and command exit status; missing capabilities or permission failures are not no-error results",
+    "Preserve full timestamped logs and rasdaemon data; do not tail away or clear historical evidence",
+    "Use secure injected credentials and verified host identity",
+    "Escalate new fatal/nonfatal errors, link downgrade/retrain, device disappearance or increasing correctable errors without automatic repair/retry"
+  ],
+  "agent_execution_scope": [
+    "Verify pciutils/tool versions, permissions and endpoint/path identity",
+    "Collect complete source-aligned lspci views plus full timestamped kernel/journal/optional rasdaemon evidence",
+    "Parse named fields and compare before/after bits/events to the approved mask and link oracle",
+    "Do not install without approval, clear/reset/inject, guess BDF or masks, truncate evidence or decide PASS/FAIL"
+  ],
+  "engineer_actions": ["Approve package/privilege and exact NIC/upstream-path mapping", "Define expected link and DevSta/CESta/UESta masks plus historical/sticky policy", "Approve observation window and escalation thresholds", "Review parsed evidence and issue the DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Mismatch as primary coverage: dmesg/rasdaemon do not replace `lspci -s <device id> -vvv`, and truncated filters can hide events. `lspci` comes from pciutils, not coreutils.",
+    "executable_command_required": true,
+    "command_recommendation": "Run complete privileged `lspci -s <verified-domain:BDF> -vvv` at defined checkpoints for the endpoint and relevant path; preserve full timestamped kernel/journal and approved rasdaemon evidence without clearing or tail-only filtering.",
+    "original_parameters_and_time_preserved": "Target-specific lspci `-vvv`, DevSta/LnkSta/CESta/UESta fields, no-error criterion, Common branch, internal Script reference and 15/5-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_PCIE_IDENTITY_STATUS_MASK_PACKAGE_AND_WINDOW_APPROVAL",
+    "recommended_method": "Compare complete endpoint/path PCIe status and time-bounded error records against explicit masks, retaining sticky history and topology identity.",
+    "difference_from_original_method": "Adds upstream ownership, privilege/tool provenance, bit-level oracle, before/after window and full-log correlation without altering the source command.",
+    "coverage_difference": "No grep output or command exit0 does not prove status bits are clear, capabilities were readable, the BDF is correct or the link is at expected speed/width.",
+    "risks_limitations": "PCIe/AER status bits and rasdaemon records can be cumulative; passive inspection cannot prove injection/recovery handling."
+  },
+  "project_override_considerations": "rasdaemon is optional supporting evidence unless the project recipe explicitly requires it; the source command dependency is pciutils. Internal Script output must retain the exact BDF-specific fields.",
+  "expected_evidence": [
+    "SUT/NIC PN/serial/netdev/driver/firmware and endpoint/upstream/root-port BDF topology",
+    "OS/kernel/pciutils and optional rasdaemon versions, privileges/service/database freshness and Script revision",
+    "Complete pre/post `lspci -s <BDF> -vvv` outputs and exits for endpoint/relevant path",
+    "Parsed DevSta/LnkSta/CESta/UESta flags, link speed/width and expected-mask comparison",
+    "Full timestamped dmesg/journal/AER/optional rasdaemon records and before/after attribution",
+    "Escalation record for new errors or downgrade and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The title, BDF-specific command, named status fields and no-error criterion are coherent. Exact masks and historical semantics are missing project oracles, not contradictory source content."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "NIC identity, tools, privilege and bit masks are resolvable prerequisites, so the case remains conditionally executable rather than BLOCKED."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row151 Wistron-HW Robust-00029-V002: provide NIC PN/serial/netdev/driver/firmware, exact endpoint domain:BDF and upstream switch/root-port chain; approve pciutils/privilege, optional rasdaemon provenance and pinned Script revision; define expected DevSta/LnkSta/CESta/UESta flag masks, speed/width, correctable/nonfatal/fatal/unsupported-request policy, observation window, sticky/historical attribution and escalation thresholds."},
+  "review_improvement": "Restores the omitted source config-space check, corrects the package identity and adds endpoint/path mapping, bit-level masks and complete time-window evidence without clearing sticky errors.",
+  "independent_technical_reasoning": "AER evidence is split between endpoint status/capability registers, upstream/root-port reporting and OS logs. Kernel or rasdaemon silence cannot prove the endpoint DevSta/CESta/UESta fields are acceptable, while sticky bits may predate the test window. `lspci -vvv` can also omit detail when unprivileged. Therefore identity, privilege and complete before/after output are necessary, and each named flag must be judged against a project mask rather than a generic string search.",
+  "source_provenance": {"primary": "XLSX Reliability row151 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json code cross-check", "gpt_v2": "Exact Reliability-row151 GPT V2 review", "history": "Adjacent Mellanox and NIC-counter cases separated; unique code confirmed; row152 directly read as next", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true,
+    "target_lspci_vvv_devsta_lnksta_cesta_uesta_and_no_error_coverage_preserved": true,
+    "pcie_path_identity_pciutils_privilege_full_logs_status_masks_and_time_window_attribution_added": true,
+    "log_only_substitution_truncation_wrong_package_insecure_ssh_clear_reset_injection_and_verdict_rejected": true,
+    "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
