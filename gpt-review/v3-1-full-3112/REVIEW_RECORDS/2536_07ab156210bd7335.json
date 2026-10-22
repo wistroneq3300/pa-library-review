@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2536,
+  "library_sequence": 2440,
+  "source_key": "Reliability|150|Wistron-HW Robust-00028-V002",
+  "case_variant_id": "07ab156210bd7335",
+  "source_ref": {"sheet": "Reliability", "source_row": 150, "code": "Wistron-HW Robust-00028-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "7247884c0f7c1774b317b48281e2cad5818c597149a41ee30f41e18824aa39fc",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00028-V002 is unique. The two literal `mlxlink` commands are primary coverage; lspci, mst and ibstat are supporting evidence only.",
+    "next_source_row_verified": "Reliability row151 Wistron-HW Robust-00029-V002 / 8b03057e11f84bd8, exact-BDF `lspci -vvv` NIC AER DevSta/LnkSta/CESta/UESta inspection, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "PCIE",
+    "items": "PCIe NIC info check  (Mellanox)",
+    "procedure": "Run `mlxlink -d <device name> -p 1 -c` for NIC/physical-port link, speed, bandwidth and firmware information, then `mlxlink -d <device name> --port_type PCIE -c` for PCIe-side counters and bandwidth.",
+    "criteria": "Tools install successfully and the terminal shows correct information, with generic result/photo and unexpected-log collection.",
+    "deepseek": "YES with lspci, mst and ibstat, but omits both source `mlxlink` commands and truncates ibstat output.",
+    "gpt_v2": "RPUC/CHANGED; restores both `mlxlink` commands and correctly treats package/device mapping as prerequisites, but repeats an insecure SSH example and leaves exact per-port acceptance values to the project."
+  },
+  "historical_reviews": {
+    "deepseek": "Useful for enumeration and general OFED state, but changes source coverage: none of its commands proves the literal mlxlink physical-port and PCIe counter views, and `head -n 20` can omit ports.",
+    "gpt_v2": "Correctly makes mlxlink primary and supporting tools secondary, while requiring full output and device/port identity.",
+    "related_cases": "Row151 separately checks PCIe capability/status/AER bits using `lspci -vvv`; this row covers Mellanox link-tool physical and PCIe views and must not absorb or replace AER semantics.",
+    "v3_1": "Bind mlxlink device and port to PCI BDF, NIC serial/PN and cable/switch peer; preserve complete command output; compare negotiated state, firmware and counters to a project recipe rather than merely requiring command success."
+  },
+  "original_test_intent": "Confirm that each intended Mellanox NIC/port is enumerated and that mlxlink reports the expected physical-link state, negotiated speed/bandwidth, firmware identity and PCIe-side counters for the project topology.",
+  "original_method": "Record SUT, NIC model/PN/serial, PCI BDF, netdev/RDMA device, mlxlink device name, physical port and peer/cable identity; approve/install a compatible vendor tool stack; capture complete versions and baseline; run both exact source mlxlink views without truncation; correlate their device/port identities to lspci, mst and ibstat; compare link state, Ethernet/InfiniBand protocol, lane count, speed, width/bandwidth, firmware and counter values/deltas with the approved recipe; preserve logs and avoid any link-reset or configuration options.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE", "UNIQUE_SOURCE_IDENTITY_CONFIRMED", "MELLANOX_TOOL_PACKAGE_AND_VERSION_REQUIRE_APPROVAL", "EXACT_MLXLINK_DEVICE_PORT_BDF_SERIAL_AND_PEER_MAPPING_REQUIRED", "BOTH_SOURCE_MLXLINK_COMMANDS_RESTORED_AS_PRIMARY_COVERAGE", "FULL_UNTRUNCATED_PHYSICAL_AND_PCIE_OUTPUT_REQUIRED", "EXPECTED_LINK_PROTOCOL_SPEED_WIDTH_BANDWIDTH_FIRMWARE_AND_COUNTER_ORACLE_REQUIRED", "LSPCI_MST_IBSTAT_ARE_SUPPORTING_NOT_SUBSTITUTE_EVIDENCE", "READ_ONLY_AFTER_PACKAGE_AND_MAPPING_READINESS", "SECURE_REMOTE_TRANSPORT_NO_PASSWORD_ON_CLI_OR_DISABLED_HOST_KEY", "NO_LINK_RESET_FIRMWARE_ACTION_AUTOMATIC_RETRY_OR_DUT_VERDICT", "NEXT_RELIABILITY_ROW151_DIRECTLY_VERIFIED", "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The network/platform owner approves the OFED/MFT tool build, target device/port/peer mapping and expected values; the agent can then collect and normalize the two read-only source views.",
+  "required_inputs": [
+    "SUT and each Mellanox NIC model/PN/serial, PCI BDF, netdev/RDMA name and mlxlink device identifier",
+    "Physical port1 cable/transceiver/switch peer and intended Ethernet or InfiniBand mode",
+    "Supported OFED/MFT/mst/mlxlink/ibstat package versions and pinned reviewed internal Script revision",
+    "Expected firmware, link state, protocol, lane count, speed, PCIe generation/width and effective bandwidth",
+    "Counter names, units, baseline/window and allowed absolute/delta thresholds",
+    "Secure access and escalation policy for down/degraded link, firmware mismatch or increasing counters"
+  ],
+  "safety_requirements": [
+    "Use only verified read-only information/counter forms; do not invoke link toggles, port configuration, reset or firmware operations",
+    "Confirm device and port mapping before running; do not guess `<device name>` or assume port1 maps to the tested connector",
+    "Capture complete output and exit status; do not use `head`/`tail` to conceal devices, ports or counters",
+    "Use secure injected credentials and verified host identity; reject password-in-command and disabled host-key checking",
+    "Stop and preserve evidence on mapping ambiguity, disappearing device, link flap, degraded width/speed or rapidly increasing error counters"
+  ],
+  "agent_execution_scope": [
+    "Verify approved package/tool versions and target identity mapping",
+    "Run both exact read-only mlxlink source commands plus full lspci/mst/ibstat support collection",
+    "Normalize negotiated link/firmware/counter evidence against the supplied recipe",
+    "Do not install packages without approval, mutate link/firmware, guess target or expected values, truncate output or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve tool stack and internal Script revision",
+    "Provide exact NIC/BDF/mlxlink/port/peer topology and expected negotiated values",
+    "Define counter baseline and thresholds",
+    "Review complete evidence and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Partial mismatch: lspci/mst/ibstat help identify the NIC but do not replace either source mlxlink physical-port/PCIe counter command; truncating ibstat can omit relevant ports.",
+    "executable_command_required": true,
+    "command_recommendation": "Run complete `mlxlink -d <verified-device> -p 1 -c` and `mlxlink -d <verified-device> --port_type PCIE -c` with version/exit/timestamp evidence, then correlate full lspci/mst/ibstat output using secure transport.",
+    "original_parameters_and_time_preserved": "Mellanox NIC, physical port1, PCIe port type, `-c` counter/info views, installation criterion, Common branch, internal Script reference and 15/5-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_MELLANOX_PACKAGE_TOPOLOGY_AND_EXPECTED_VALUE_APPROVAL",
+    "recommended_method": "Use the two source mlxlink views as primary evidence, correlated to immutable NIC/port/peer identity and compared with a versioned negotiated-state/counter recipe.",
+    "difference_from_original_method": "Adds identity correlation, tool provenance, complete evidence, exact expectations and counter-delta semantics while retaining both commands.",
+    "coverage_difference": "Enumeration or a command exit0 does not prove the correct port, expected link speed/width/bandwidth, firmware or acceptable counters.",
+    "risks_limitations": "Counters may be cumulative and link state depends on peer/cable configuration; a passive snapshot cannot prove stability without a defined observation window."
+  },
+  "project_override_considerations": "The internal Script URL is a package pointer, not self-validating evidence. Its revision and generated command/device mapping must be reviewed before use.",
+  "expected_evidence": [
+    "SUT/NIC PN/serial/BDF/netdev/RDMA/mlxlink device and physical port/peer/cable map",
+    "OS/kernel/driver/firmware and OFED/MFT/mst/mlxlink/ibstat versions plus approved package/Script revision",
+    "Complete `mlxlink -d ... -p 1 -c` stdout/stderr/exit/timestamp",
+    "Complete `mlxlink -d ... --port_type PCIE -c` stdout/stderr/exit/timestamp",
+    "Full lspci/mst/ibstat correlation and expected-versus-observed link/protocol/speed/width/bandwidth/firmware matrix",
+    "Counter baseline/delta/threshold analysis, relevant driver/kernel logs and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The two commands and criteria consistently request Mellanox physical and PCIe information. The word `correctable` is interpreted conservatively as correct/expected information pending the explicit project oracle, not as contradictory AER coverage."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Supported tools, topology and expected values are identifiable normal prerequisites; absence makes execution pending but not the review intrinsically blocked."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row150 Wistron-HW Robust-00028-V002: provide each Mellanox NIC PN/serial/BDF/netdev/RDMA/mlxlink device and port1 cable/transceiver/peer mapping; approve OFED/MFT/mlxlink/mst/ibstat versions and pinned internal Script revision; define expected Ethernet/InfiniBand mode, physical/PCIe link state, lane count, speed, generation/width, bandwidth, firmware and complete counter names/units/baseline/delta thresholds plus escalation criteria."},
+  "review_improvement": "Restores both omitted mlxlink commands, prevents truncated fallback evidence from substituting for source coverage and adds immutable port/topology plus expected-value/counter-delta comparison.",
+  "independent_technical_reasoning": "MST identifiers, PCI BDFs, RDMA names and physical connectors are different namespaces; without an explicit mapping, a healthy output can belong to the wrong NIC or port. The first source command reports the physical-port view while `--port_type PCIE` changes the observation plane. lspci and ibstat cannot reproduce every mlxlink firmware, lane/bandwidth and counter field. Because counters may be cumulative, acceptance also needs a baseline and interval rather than a generic no-error assertion.",
+  "source_provenance": {"primary": "XLSX Reliability row150 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json code cross-check", "gpt_v2": "Exact Reliability-row150 GPT V2 review", "history": "Internal Script reference and adjacent PCIe coverage distinguished; unique code confirmed; row151 directly read as next", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true,
+    "both_mlxlink_physical_port1_and_pcie_counter_views_tool_install_and_correct_information_coverage_preserved": true,
+    "nic_port_peer_identity_tool_provenance_full_output_expected_negotiation_and_counter_delta_oracle_added": true,
+    "fallback_substitution_truncation_guessed_target_insecure_ssh_mutation_and_automatic_verdict_rejected": true,
+    "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
