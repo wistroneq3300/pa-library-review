@@ -1,0 +1,99 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2539,
+  "library_sequence": 2443,
+  "source_key": "Reliability|153|Wistron-HW Robust-00030-V002",
+  "case_variant_id": "89a9e179f8ab1a94",
+  "source_ref": {"sheet": "Reliability", "source_row": 153, "code": "Wistron-HW Robust-00030-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "7dcaf947c37b5e35b8b99265b6d04ecb4ea607fa01f8b1c37ad45027d0889c78",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00030-V002 is unique. Master conflict retained: item/procedure cover every USB 3.0 port, while Criteria 3 says every USB 2.0 port should match USB 3.0 speed.",
+    "next_source_row_verified": "Reliability row154 Wistron-HW Robust-00465-V003 / 4eeefc2767f9fa49, distinct same-code HMC firmware-readiness 100-cycle Redfish inventory stress, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "USB",
+    "items": "USB - File transmission USB 3.0",
+    "procedure": "Insert a USB key, copy a file to and from it, check transmission speed, and repeat on every USB 3.0 port.",
+    "criteria": "Copy succeeds; speed is reasonable from USB definition; all USB 2.0 ports should match USB 3.0 speed, which contradicts the item/procedure; generic evidence/log checks also apply.",
+    "deepseek": "PARTIAL with dedicated mounted media, but writes only host-to-USB, does not measure speed or copy back, assumes `/mnt/usb`, uses insecure SSH and can overwrite an existing file.",
+    "gpt_v2": "RPUC/CHANGED with HIGH risk; adds dedicated media, port/speed evidence and flags the USB2/USB3 conflict, but its sample still lacks a complete timed bidirectional copy contract."
+  },
+  "historical_reviews": {
+    "deepseek": "Hashing the source and written file checks one direction's integrity only; no timed write including durable sync, read-back copy, per-port identity or negotiated-link proof is captured.",
+    "gpt_v2": "Correctly requires per-port negotiated speed and protects media, while leaving authoritative port population and performance thresholds to engineering.",
+    "related_cases": "This is physical USB storage-port coverage. It is not satisfied by controller enumeration alone, and USB protocol signaling speed must not be equated to storage payload throughput.",
+    "v3_1": "Preserve operator insertion and every-port iteration; bind device serial and mount to each physical port; test both directions with hashes and durable timing; report negotiated USB topology separately from payload rate; quarantine the USB2/USB3 criterion conflict."
+  },
+  "original_test_intent": "Verify safe bidirectional file transfer, data integrity and acceptable measured throughput on every intended external USB 3.0 port using dedicated test media.",
+  "original_method": "Map every physical USB 3.0 port to controller/root-hub path; approve a dedicated empty test drive and unique partition/filesystem/mount; record serial/capacity/free space and negotiated USB generation for each insertion; create one approved incompressible file and source hash; time host-to-USB copy plus durable sync, hash the media file, time USB-to-host read-back to a new file and hash it; collect kernel USB/storage errors; safely sync/unmount before moving the same drive to the next port; never overwrite unapproved paths or infer throughput from signaling rate.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "UNIQUE_SOURCE_IDENTITY_CONFIRMED", "MASTER_USB2_VERSUS_USB3_CRITERION_CONFLICT_PRESERVED", "DEDICATED_OPERATOR_INSERTED_MEDIA_AND_EVERY_PHYSICAL_PORT_MAPPING_REQUIRED", "DEVICE_SERIAL_PARTITION_FILESYSTEM_MOUNT_AND_FREE_SPACE_MUST_BE_VERIFIED", "BIDIRECTIONAL_COPY_DURABLE_SYNC_AND_SOURCE_MEDIA_READBACK_HASHES_REQUIRED", "NEGOTIATED_USB_GENERATION_AND_PAYLOAD_THROUGHPUT_MUST_BE_REPORTED_SEPARATELY", "FILE_SIZE_TIMING_CACHE_POLICY_AND_PER_PORT_THRESHOLDS_REQUIRE_APPROVAL", "HIGH_RISK_WRITE_ONLY_TO_APPROVED_UNIQUE_TEST_PATH", "SECURE_REMOTE_TRANSPORT_NO_PASSWORD_ON_CLI_OR_DISABLED_HOST_KEY", "NO_BLIND_OVERWRITE_CACHE_DROP_AUTOMATIC_RETRY_OR_DUT_VERDICT", "NEXT_RELIABILITY_ROW154_DIRECTLY_VERIFIED", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An operator supplies dedicated disposable media, identifies/inserts it into each physical port and safely removes it; the agent may run approved guarded bidirectional copies and collect timing/hash/topology evidence.",
+  "required_inputs": [
+    "Authoritative USB 3.0 versus USB 2.0 port population and correction/interpretation of Criteria 3",
+    "Physical port labels and controller/root-hub/connector mapping",
+    "Dedicated drive model/serial/capacity/partition/filesystem and approved mount/test directory",
+    "Approved file size/content, free-space margin, write/read timing method, cache policy and timeout",
+    "Expected negotiated USB generation/link speed and separate minimum sustained write/read payload thresholds per port/media",
+    "Safe sync/unmount/removal procedure and kernel error/thermal/media abort criteria"
+  ],
+  "safety_requirements": [
+    "Use only uniquely identified dedicated test media and a newly created approved test directory; refuse an ambiguous device or mount",
+    "Verify capacity/free space and resolved device/mount path before every write; never overwrite operator data or a raw device",
+    "Keep the media inserted through durable sync and hash completion; safely unmount before removal or port change",
+    "Use secure credentials and verified host identity",
+    "Do not clear global caches or alter kernel/storage settings unless separately approved; disclose cache effects in results",
+    "Stop on disconnect, reset, I/O error, hash mismatch, filesystem warning, abnormal temperature or unexpected kernel event; no automatic retry"
+  ],
+  "agent_execution_scope": [
+    "Validate device serial, partition, filesystem, mount, free space and physical-port/topology mapping after operator insertion",
+    "Create the approved source file and perform guarded timed write, sync, media hash, timed read-back and destination hash",
+    "Collect negotiated topology, payload rates and kernel logs per port, then safely unmount on approval",
+    "Do not select media/ports, resolve the Master conflict, overwrite existing data, drop caches, retry failures or decide PASS/FAIL"
+  ],
+  "engineer_actions": ["Resolve USB2/USB3 scope conflict and enumerate required ports", "Approve test media/path/file/timing/cache and performance thresholds", "Approve safe unmount/removal and abort policy", "Review per-port integrity/speed/log evidence and issue the DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Incomplete and unsafe as written: it assumes `/mnt/usb`, overwrites `x`, measures no throughput and performs no USB-to-host copy; password/host-key options are insecure.",
+    "executable_command_required": true,
+    "command_recommendation": "For each verified port/media mount, use unique guarded paths and approved timing tools for host-to-USB copy plus durable sync and USB-to-host read-back; hash source, media and read-back files, record negotiated topology and preserve full exits/logs.",
+    "original_parameters_and_time_preserved": "Operator USB key insertion, copy to/from media, speed check, all-port repetition, successful-copy intent, Common branch and 15/30-minute estimate are preserved; the conflicting USB2 wording remains pending."
+  },
+  "modernized_recommendation": {
+    "status": "SOURCE_CONFLICT_PENDING_USB_PORT_SCOPE_AND_PERFORMANCE_CONTRACT",
+    "recommended_method": "Run identity-bound bidirectional integrity and durable-throughput checkpoints on every approved physical USB 3.0 port, recording topology and payload rates separately.",
+    "difference_from_original_method": "Adds destructive-path guards, serial/port identity, both copy directions, three-way hashes, durable timing, cache disclosure, negotiated topology and per-port thresholds.",
+    "coverage_difference": "A single host-to-media copy/hash cannot prove read-back direction, all ports or speed; negotiated 5/10/20 Gb/s signaling does not equal storage throughput.",
+    "risks_limitations": "Drive/controller/filesystem cache and media quality dominate measured throughput; fixed limits must be project/media-specific."
+  },
+  "project_override_considerations": "Until engineering resolves Criteria 3, do not silently convert USB2 ports into USB3 expectations or omit any ports. Preserve the Master wording and report the conflict.",
+  "expected_evidence": [
+    "Resolved required-port matrix and physical label/controller/root-hub mapping",
+    "Drive model/serial/capacity/partition/filesystem/mount/free-space and dedicated-path approval",
+    "Per-port negotiated USB topology/generation and insertion timestamps",
+    "Source file identity/size/hash, timed host-to-USB plus sync output and media-file hash",
+    "Timed USB-to-host read-back output and read-back hash matched to source",
+    "Per-port write/read payload rates versus approved thresholds, kernel USB/storage logs, safe unmount and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": true, "analysis": "Item and Procedure explicitly target every USB 3.0 port, but Criteria 3 explicitly says every USB 2.0 port should match USB 3.0 speed. USB2 signaling cannot normally meet USB3 signaling speed, so the authoritative port scope/expectation cannot be inferred safely."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The conflict prevents a final DUT verdict but not the static review or guarded evidence collection for identified USB3 ports; it remains RPUC with an engineering decision pending rather than globally BLOCKED."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row153 Wistron-HW Robust-00030-V002: correct or interpret Criteria 3 (`All USB 2.0 port should match USB 3.0 speed`) against the USB3 item/procedure and provide the authoritative physical-port matrix; approve dedicated drive/serial/filesystem/mount/test path, bidirectional file size/content, timing/cache/sync method, negotiated generation oracle, separate sustained write/read thresholds per port/media, safe unmount/removal and I/O/hash/kernel-log abort criteria."},
+  "review_improvement": "Exposes the Master USB2/USB3 contradiction and upgrades a one-way untimed overwrite into guarded per-port bidirectional integrity, durable throughput and topology evidence without resolving the conflict by guesswork.",
+  "independent_technical_reasoning": "The source explicitly says copy to/from, so both directions are coverage requirements. The proposed copy only writes to media and a hash verifies content at rest but not a separately read-back file or read speed. `sync` affects durability and timing, while page and device caches can inflate measurements. Also USB protocol rate is not a storage throughput guarantee. Most importantly, requiring USB2 ports to match USB3 speed contradicts the named USB3 scope and physical bandwidth tiers; engineering must choose the intended population and thresholds before verdict.",
+  "source_provenance": {"primary": "XLSX Reliability row153 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json code cross-check", "gpt_v2": "Exact Reliability-row153 GPT V2 review", "history": "USB source conflict and per-port semantics searched; unique code confirmed; row154 directly read as next", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "SOURCE_CONFLICT",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "usb3_all_port_copy_to_from_speed_and_success_coverage_preserved": true, "master_usb2_usb3_conflict_dedicated_media_bidirectional_hash_durable_timing_topology_and_threshold_contract_added": true, "unverified_mount_overwrite_one_way_copy_no_speed_insecure_ssh_cache_guess_retry_and_verdict_rejected": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW_SOURCE_CONFLICT_ENGINEERING_DECISION_PENDING"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
