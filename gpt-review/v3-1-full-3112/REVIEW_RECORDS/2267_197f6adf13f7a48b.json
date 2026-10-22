@@ -1,0 +1,110 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2267,
+  "library_sequence": 2140,
+  "source_key": "Functionality|2141|Wistron-HGX NV PVP HW-00018-V002",
+  "case_variant_id": "197f6adf13f7a48b",
+  "source_ref": {"sheet": "Functionality", "source_row": 2141, "code": "Wistron-HGX NV PVP HW-00018-V002"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "c70658bc7c2c2ffeeac7db32c5df52e9761486bdecf2d32c9c04711d0ed835e7",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Manifest contains exactly one Wistron-HGX NV PVP HW-00018-V002 row; row 2141 and variant 197f6adf13f7a48b are unique.",
+    "next_source_row_verified": "Functionality|2142|Wistron-HGX NV PVP HW-00019-V002 / 45b61e8fed2ad149 directly read from the manifest and XLSX before this write."
+  },
+  "source_snapshot": {
+    "sub_function": "HGX NV PVP HW",
+    "test_set": "Networking",
+    "items": "NT.4_ConnectX PCIe Eye Margin Test",
+    "procedure": "Verify recipe, source asks to clear logs, run NVQual Test #22, collect results/photos, and inspect post logs.",
+    "criteria": "All items should be passed without system hang or reboot.",
+    "bundle": "No bundle; five attended and fifteen machine minutes.",
+    "deepseek": "PARTIAL; requires the NVQual harness and target NIC and warns that the eye scan exercises the PCIe link.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/HIGH; exact Test #22, target path, per-lane speed context and thresholds, traffic drain and recovery are required."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly identifies the vendor-tool boundary, but its requested module pass output does not establish which physical ConnectX lane was measured or whether a marginal lane was omitted.",
+    "gpt_v2": "Adds target NIC identity, lane/speed limits, raw measurements, link and AER correlation, production isolation and vendor recovery.",
+    "duplicate_variants": "No duplicate code found.",
+    "v3_1": "ED-01/03 require command-purpose fit; ED-07/08 require direct lane evidence; ED-11/12 prohibit uncontrolled retrain/retry; ED-17 protects access; ED-36/38 bind verdict."
+  },
+  "original_test_intent": "Measure PCIe eye margin on every in-scope lane of the designated ConnectX or BlueField endpoint with NVQual Test #22 and demonstrate that the raw horizontal and vertical margins meet the approved link-generation limits without downtraining, new errors, traffic impact, hang or reboot.",
+  "original_method": "Pin the NIC or DPU serial, physical port and BDF plus root-port, switch, retimer and lane mapping; record negotiated generation/width and equalization context; obtain the exact Test #22 scan axes, units, sampling and per-lane thresholds; drain traffic and preserve pre-state; collect every raw lane result with synchronized link/AER/NIC/platform telemetry; stop on the first missing or out-of-limit lane or link disturbance and use the approved vendor recovery path.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE", "UNIQUE_ROW_VARIANT_BOUND", "ENGINEERING_DECISION_PENDING_FOR_TEST22_CONNECTX_EYE_METHOD_PATH_AND_LIMITS", "LICENSED_PINNED_NVQUAL_TEST22_MODULE_REQUIRED", "CONNECTX_BLUEFIELD_SERIAL_PORT_BDF_ROOT_PORT_SWITCH_RETIMER_AND_LANE_MAP_REQUIRED", "GENERATION_WIDTH_EQUALIZATION_SCAN_AXES_UNITS_SAMPLING_AND_PER_LANE_LIMITS_REQUIRED", "DEDICATED_DRAINED_SUT_AND_RETRAIN_TRAFFIC_IMPACT_AUTHORIZATION_REQUIRED", "COMPLETE_RAW_PER_LANE_EYE_LINK_AER_NIC_AND_PLATFORM_EVIDENCE_REQUIRED", "PRESERVE_BASELINE_LOGS_DO_NOT_CLEAR", "FIRST_FAULT_ABORT_AND_VENDOR_RECOVERY_REQUIRED", "NO_UNAPPROVED_RETRAIN_RESET_OR_AUTOMATIC_RETRY", "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "Owner/FAE provides the licensed Test #22 method, physical lane map and generation-specific limits; an operator drains dependent traffic, approves any retrain impact and owns recovery.",
+  "required_inputs": [
+    "Licensed pinned NVQual Test #22 eye-margin module and compatible ConnectX/BlueField firmware and driver",
+    "NIC/DPU serial, port and BDF with root-port/switch/retimer/per-lane topology",
+    "Negotiated generation/width, equalization or preset context, scan axes/units/sampling and per-lane limits",
+    "Traffic drain, allowed retrain behavior, error and platform aborts, and vendor recovery"
+  ],
+  "safety_requirements": [
+    "Use a dedicated drained SUT and obtain explicit approval for any link retrain or traffic interruption",
+    "Preserve the original logs, AER counters and negotiated-link baseline",
+    "Do not alter equalization policy, reset the NIC or force retraining outside the pinned procedure",
+    "Stop on link loss/downtraining, unexpected retrain, AER burst, NIC disappearance, traffic impact, thermal/power issue, hang, reboot or incomplete lane output",
+    "No automatic retry"
+  ],
+  "agent_execution_scope": [
+    "Verify the physical target and complete lane path, scan method, baseline, limits and interlocks",
+    "Run only the approved Test #22 module with its pinned generation and equalization context",
+    "Retain all per-lane raw eye measurements and correlate them with link, AER, NIC and platform state",
+    "Do not infer lane limits, retrain/reset after a fault, repeat an incomplete scan automatically or issue a DUT verdict"
+  ],
+  "engineer_actions": [
+    "Approve Test #22 version and scan semantics, exact ConnectX/BlueField path, lane matrix and limits",
+    "Define allowed link impact, error acceptance, aborts and recovery",
+    "Review the complete lane evidence and decide PASS, FAIL, or BLOCKED"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "It selects the relevant vendor test family, but without the exact sub-test, target and lane/generation thresholds it is not reproducible; a top-level pass cannot prove every required lane was scanned.",
+    "executable_command_required": true,
+    "command_recommendation": "Run the pinned NVQual Test #22 eye scan only on the approved stable-identity NIC/DPU path and preserve complete per-lane raw margins, method metadata, thresholds and correlated link/error state.",
+    "original_parameters_and_time_preserved": "NVQual Test #22, ConnectX PCIe eye margin, all-items/no-hang/no-reboot Criteria, no bundle, and 5/15-minute allocation remain; absent scan parameters and limits are not invented."
+  },
+  "modernized_recommendation": {
+    "status": "HIGH CONNECTX BLUEFIELD PER-LANE PCIE EYE QUALIFICATION",
+    "recommended_method": "Evaluate each raw horizontal and vertical margin in the vendor-defined units against its approved limit while binding the result to physical endpoint, lane, link generation, width and equalization context.",
+    "difference_from_original_method": "Adds stable physical path identity, explicit measurement semantics and per-lane limits, raw artifacts, traffic isolation, link-health correlation and controlled recovery.",
+    "coverage_difference": "An aggregate module result can conceal an untested or marginal lane, wrong port, lower-than-required generation, changed equalization context or a recovered retrain.",
+    "risks_limitations": "Vendor margin scans are link- and tool-version-specific and can retrain or disturb a live NIC path; dependent traffic and first-fault evidence must be protected."
+  },
+  "project_override_considerations": "An equivalent vendor margin facility is acceptable only when its physical-lane mapping, units, sampling and limits are approved and it retains complete raw results. Link-up, BER or throughput evidence alone does not replace eye-margin coverage.",
+  "expected_evidence": [
+    "Exact row/variant/hash, approved Test #22 module/license/configuration and authorization",
+    "NIC/DPU serial, port, BDF and root-port/switch/retimer/per-lane path with generation/width/equalization state",
+    "Approved scan axes, units, sampling and per-lane threshold matrix",
+    "Complete untruncated raw horizontal/vertical margin measurements and threshold comparison for every lane",
+    "Pre/during/post negotiated-link, AER, NIC, driver, dmesg/journal, BMC/SEL, traffic, thermal and power evidence",
+    "Abort/recovery or clean final link/traffic state and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "Items, Test #22 Procedure, Criteria and same-row reviews consistently target ConnectX/BlueField PCIe eye margin. Missing scan details and limits are supplyable prerequisites, not conflicting source intent."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The lane-margin purpose is clear. Licensed tooling, physical mapping, scan semantics and limits can be supplied, so they do not make the static review irreducibly blocked."},
+  "engineering_decision_pending": {"question": "Resolve Functionality row 2141 Wistron-HGX NV PVP HW-00018-V002: approve the pinned NVQual Test #22 eye-margin module, ConnectX/BlueField serial/port/BDF and root-port/switch/retimer/per-lane map, generation/width/equalization context, scan axes/units/sampling and per-lane limits, permitted retrain/traffic impact, aborts, and vendor recovery."},
+  "review_improvement": "Replaces a top-level tool pass with complete physical-lane-bound measurements and makes link disturbance, traffic isolation and recovery explicit.",
+  "independent_technical_reasoning": "Eye margin is not a device-wide Boolean property: each lane can have different analog headroom, and the measured value depends on link generation, equalization state and the vendor scan definition. Consequently, acceptance must use raw per-lane values and a fixed physical path. Any retrain can change equalization and invalidate comparability, so the first disturbance ends the run rather than triggering a retry.",
+  "source_provenance": {"primary": "XLSX Functionality row 2141 directly read", "deepseek_same_row": "XLSX AI columns and tests.json row 2141", "gpt_v2": "Exact row-2141 second review", "history": "Unique-code manifest search, direct manifest and XLSX row 2142, ED-01/03/07/08/11/12/17/36/38", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "IMPROVED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "unique_source_identity_confirmed": true,
+    "nvqual_test22_connectx_eye_margin_all_items_no_hang_reboot_coverage_preserved": true,
+    "physical_path_per_lane_measurement_limits_link_interlocks_and_recovery_added": true,
+    "log_clear_aggregate_pass_wrong_port_lower_speed_unapproved_retrain_reset_and_retry_rejected": true,
+    "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_manifest": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
