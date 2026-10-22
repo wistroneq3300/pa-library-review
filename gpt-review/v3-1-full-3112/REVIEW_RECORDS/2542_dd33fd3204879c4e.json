@@ -1,0 +1,114 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2542,
+  "library_sequence": 2447,
+  "source_key": "Reliability|157|Wistron-System RAS-00114-V008",
+  "case_variant_id": "dd33fd3204879c4e",
+  "source_ref": {"sheet": "Reliability", "source_row": 157, "code": "Wistron-System RAS-00114-V008"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "aaa4de44b8103aac526effb1966c13b4ab1c2bdcb11a9704d0e19be68b5a6fb6",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-System RAS-00114-V008 is unique. Its Intel GNR PatrolConsume injection and extlog_mem_event criterion are not interchangeable with adjacent Demand Scrub coverage.",
+    "next_source_row_verified": "Reliability row158 Wistron-System RAS-00115-V003 / 016c35c310637d21, Demand Scrub CE injection at 0x10000 followed by explicit memory consumption and extlog_mem_event verification, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "System RAS",
+    "test_set": "Intel GNR CPU RAS - Memory Demand and Patrol Scrub",
+    "items": "Patrol Scrub",
+    "procedure": "Configure the extensive Intel reference CScripts/ELog/WHEA/error-injection/firmware-first BIOS matrix; enable Patrol Scrub at end of POST with interval1 and DDR5 ECS, disable PTRR; verify scrubctl/en_patspr and cleared machine-check/retry registers; halt, reset injector lock and inject CE at 0x8000 with `PatrolConsume=True`; inspect MSCOD and retry_rd_err_log; resume and check serial handling.",
+    "criteria": "An ELog record indicated by `extlog_mem_event` is generated.",
+    "deepseek": "PARTIAL; correctly identifies the Intel harness and critical injection risk, but its truncated dmesg/SEL collection omits the source register path and explicit extlog_mem_event evidence and uses insecure SSH.",
+    "gpt_v2": "RPUC/CHANGED with CRITICAL risk; restores target, register, extlog and BIOS-setting cleanup gates and treats the vendor harness as a prerequisite rather than intrinsic BLOCKED."
+  },
+  "historical_reviews": {
+    "deepseek": "Useful only as supplemental post-OS evidence; generic `scrub|corrected` log lines do not prove patrol consumption, the expected MSCOD, retry entry or firmware ELog path.",
+    "gpt_v2": "Correctly preserves the exact source injection and requires complete register/extlog/serial evidence plus recovery and debug-setting restoration.",
+    "related_cases": "Row158 Demand Scrub uses `immConsume=False` followed by `mem(0x10000)` and different MC/retry registers. Row157 must prove background Patrol Scrub consumption through its own mapping and cannot reuse demand evidence.",
+    "v3_1": "Bind socket/IMC/channel/DIMM and the 0x8000 injector address to the vendor harness; preserve preexisting logs before clearing only approved volatile injector/status registers; prove PatrolConsume through scrubctl/en_patspr, expected MSCOD, retry log, serial firmware handling and extlog_mem_event; restore every temporary BIOS/GRUB/DFX setting."
+  },
+  "original_test_intent": "Demonstrate on the intended Intel GNR DIMM that an injected correctable memory error is consumed by Patrol Scrub and produces the expected firmware-first machine-check, retry-read and ELog `extlog_mem_event` evidence without escalating unexpectedly.",
+  "original_method": "Record platform/CPU/BIOS/BMC/OS/DIMM topology and approved Intel harness; preserve baseline logs and BIOS/GRUB settings; apply and verify the exact source BIOS matrix with reboot as required; map the harness address and selected mc2/ch0/DIMM to the intended target; verify patrol scrub, interval, ECS, PTRR and en_patspr; preserve then clear only the approved MC/retry test registers; halt through CScripts, reset the injector lock, issue the literal CE PatrolConsume injection once, inspect the named shadow/MSCOD and retry logs, resume, collect serial/FTrace/ELog/extlog_mem_event/OS/BMC evidence, verify health, and restore all settings through an approved recovery plan.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE", "UNIQUE_SOURCE_IDENTITY_CONFIRMED", "CRITICAL_INTEL_MEMORY_FAULT_INJECTION_REQUIRES_FAE_HARNESS_AND_EXPLICIT_APPROVAL", "EXACT_GNR_CPU_BIOS_HARNESS_SOCKET_IMC_CHANNEL_DIMM_AND_ADDRESS_MAPPING_REQUIRED", "FULL_SOURCE_BIOS_PATROL_ELOG_WHEA_FIRMWARE_FIRST_AND_ERROR_INJECTION_MATRIX_REQUIRED", "PREEXISTING_LOGS_PRESERVED_BEFORE_APPROVED_VOLATILE_REGISTER_CLEAR", "PATROLCONSUME_TRUE_EXPECTED_MSCOD_RETRY_LOG_SERIAL_AND_EXTLOG_MEM_EVENT_REQUIRED", "HALT_GO_REBOOT_CRASH_AND_RECOVERY_PATH_REQUIRE_OPERATOR_CONTROL", "ALL_TEMPORARY_BIOS_GRUB_DFX_UNLOCK_SETTINGS_MUST_BE_RESTORED", "NO_GUESSED_ADDRESS_DIMM_INJECTOR_LOG_CLEAR_AUTOMATIC_RETRY_OR_DUT_VERDICT", "NEXT_RELIABILITY_ROW158_DIRECTLY_VERIFIED", "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "An Intel-qualified owner/FAE applies BIOS/DFX settings, validates the address-to-DIMM mapping and drives halt/injection/go/recovery; the agent may capture and correlate approved register, serial, ELog, OS and BMC evidence.",
+  "required_inputs": [
+    "Intel GNR SUT/CPU stepping, BIOS/BMC/OS versions and exact socket/IMC/channel/DIMM PN/serial/slot topology",
+    "Approved CScripts/error-injection package version/hash/license and supported command semantics",
+    "Project BIOS paths/values corresponding to every source reference knob plus required reboots and restoration baseline",
+    "Meaning and safe target mapping of address 0x8000, `PatrolConsume=True`, mc2/ch0 and en_patspr",
+    "Expected scrubctl fields, correctable MSCOD, retry_rd_err_log fields and extlog_mem_event/FTrace/serial/SEL correlation",
+    "Dedicated maintenance window, workload isolation, halt/go timeout, crash/OOB/BIOS recovery and cleanup plan"
+  ],
+  "safety_requirements": [
+    "Use only a dedicated non-production SUT with stable power, serial/OOB recovery and no active workloads",
+    "Preserve dmesg/journal/SEL/ELog and BIOS/GRUB baselines; do not perform the generic source log clear",
+    "Clear only specifically approved volatile MC/retry test registers after baseline capture and verify they correspond to the selected target",
+    "Do not infer that 0x8000 maps to a safe DIMM/location; require harness/FAE mapping before the single injection",
+    "Stop on wrong socket/channel/DIMM, unexpected severity, fatal/uncorrectable event, hang, crash, missing patrol consumption or firmware mismatch",
+    "Do not automatically retry injection or reboot; preserve failure evidence and use the approved recovery path",
+    "Restore Lock Chipset/MSR/DFX/BIOS/GRUB/error-injection settings and verify final security/RAS state"
+  ],
+  "agent_execution_scope": [
+    "Validate immutable platform/harness/target/settings identity and capture baselines",
+    "Observe the qualified operator's exact single source injection and collect complete register/serial/extlog/OS/BMC evidence",
+    "Verify restoration evidence against the recorded baseline",
+    "Do not change BIOS/GRUB, choose the address/DIMM, clear general logs, drive an unapproved injector, retry or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve platform-specific BIOS matrix, harness and target/address mapping",
+    "Approve volatile-register baseline/clear semantics and expected MSCOD/retry/extlog fields",
+    "Approve halt/injection/go, recovery and no-retry boundaries",
+    "Review evidence/restoration and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Supplemental mismatch: truncated dmesg and SEL may show a corrected event but cannot prove `PatrolConsume=True`, exact MC shadow/MSCOD, retry log or the required `extlog_mem_event`; insecure host SSH is not the injector transport.",
+    "executable_command_required": true,
+    "command_recommendation": "Retain the literal CScripts `halt(); resetInjectorLockCheck(); injectMemError(0x8000, errType=\"ce\", PatrolConsume=True)` and `go()` only in the approved vendor harness, with the named pre/post register reads and explicit serial/FTrace ELog `extlog_mem_event` collection.",
+    "original_parameters_and_time_preserved": "All BIOS categories, Patrol Scrub End-of-Post/interval1, DDR5 ECS, PTRR disable, exact address/type/PatrolConsume, mc2/ch0 register paths, go/serial, extlog criterion, Common branch and 30/30-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_GNR_HARNESS_BIOS_TARGET_EXPECTATION_AND_RECOVERY_APPROVAL",
+    "recommended_method": "Execute one topology-bound patrol-consumed CE under qualified CScripts control and correlate the exact scrub, MCA/retry, firmware ELog and platform logs before restoring security settings.",
+    "difference_from_original_method": "Adds immutable target mapping, preexisting-log preservation, explicit result decoders, severity stops and audited restoration while retaining the source sequence.",
+    "coverage_difference": "A generic corrected dmesg/SEL line cannot distinguish Patrol Scrub from Demand Scrub or prove the expected firmware-first register/ELog path.",
+    "risks_limitations": "Low-level debug unlock and memory injection can hang/crash the system or affect the wrong DIMM when address/topology mapping is wrong."
+  },
+  "project_override_considerations": "Intel reference BIOS paths may differ, but each functional knob and final restoration must be explicitly mapped; absent menus cannot be silently skipped. `ras=cec_disable` requires a separately approved persistent GRUB/reboot change when used.",
+  "expected_evidence": [
+    "Platform/CPU stepping/BIOS/BMC/OS and socket/IMC/channel/DIMM target identity",
+    "Harness version/hash, address-to-DIMM proof and complete before/after BIOS/GRUB setting matrix",
+    "Baseline scrubctl/en_patspr, MC shadow/retry registers and preserved serial/FTrace/ELog/OS/SEL logs",
+    "Exact halt/reset-lock/inject transcript with one `0x8000` CE `PatrolConsume=True` result",
+    "Expected correctable MSCOD and retry entry plus serial firmware handling and timestamped `extlog_mem_event`",
+    "No unexpected fatal/escalated events, post-go OS/BMC/memory health, restoration transcript and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Patrol Scrub setup, PatrolConsume injection, register checks and extlog criterion describe one coherent firmware-first CE path. Reference-path mapping and expected decoders are project inputs, not contradictions."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The target operation and evidence chain are detailed. Missing Intel harness, project BIOS mapping and operator approval are RPUC prerequisites rather than an irreducible blocker."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row157 Wistron-System RAS-00114-V008: approve GNR CPU stepping/BIOS/BMC/OS, CScripts harness version/hash/license, project mapping and restoration for every listed BIOS/GRUB knob, socket/IMC/channel/DIMM plus address0x8000/mc2.ch0/en_patspr mapping, safe MC/retry baseline-clear semantics, expected scrubctl, correctable MSCOD/retry/extlog_mem_event fields and timestamp correlation, and halt/go/crash/OOB recovery with no automatic reinjection."},
+  "review_improvement": "Preserves the exact patrol-consumed injector and source register paths, rejects generic truncated logs as acceptance, protects historical evidence and requires topology, decoder, recovery and security-setting restoration.",
+  "independent_technical_reasoning": "Patrol Scrub is a background consumer; the essential distinction from Demand Scrub is that the harness injects a latent CE with PatrolConsume and the scrub engine later detects it. A corrected OS log alone does not identify that consumer. The selected mc2/ch0 paths and address 0x8000 are platform/harness coordinates that must map to the intended DIMM. Firmware-first handling also means the decisive evidence spans MCA shadow, retry log, serial firmware response and extlog_mem_event. Unlocking DFX and disabling locks changes platform security and must be reversed even if the injection succeeds.",
+  "source_provenance": {"primary": "XLSX Reliability row157 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json same-row cross-check", "gpt_v2": "Exact Reliability-row157 GPT V2 review", "history": "Patrol versus adjacent Demand Scrub semantics distinguished; unique code confirmed; row158 directly read as next", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true,
+    "full_bios_patrol_scrub_patrolconsume_ce_mc_shadow_retry_go_serial_and_extlog_event_coverage_preserved": true,
+    "topology_harness_decoder_log_preservation_recovery_and_settings_restoration_contract_added": true,
+    "generic_log_substitution_truncation_insecure_ssh_guessed_address_log_clear_blind_retry_and_verdict_rejected": true,
+    "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
