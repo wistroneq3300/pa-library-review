@@ -1,0 +1,99 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2538,
+  "library_sequence": 2442,
+  "source_key": "Reliability|152|Wistron-HW Robust-00465-V003",
+  "case_variant_id": "cf57e5126db1d635",
+  "source_ref": {"sheet": "Reliability", "source_row": 152, "code": "Wistron-HW Robust-00465-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "fc02778d49f8e75ada847fe51d7932f48c918925590351283e9af8c3d502e2dc",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00465-V003 is intentionally duplicated: Reliability row152/cf57e5126db1d635 is NIC TX/RX counters, while row154/4eeefc2767f9fa49 is HMC firmware-readiness stress. Variant identity prevents cross-use or deduplication.",
+    "next_source_row_verified": "Reliability row153 Wistron-HW Robust-00030-V002 / 89a9e179f8ab1a94, operator-inserted USB 3.0 per-port bidirectional file copy, speed and integrity check, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "PCIE",
+    "items": "NIC TX/RX check under OS",
+    "procedure": "Run `ethtool -S <device name>` to inspect TX, RX and physical error counts.",
+    "criteria": "No error is shown in the terminal, with generic result/photo and unexpected-log collection.",
+    "deepseek": "PARTIAL; adds ip statistics and ping to a peer but assumes eth0, truncates ethtool output and uses insecure SSH, so it can miss device-specific physical counters and changes the source snapshot scope.",
+    "gpt_v2": "RPUC/CHANGED; restores the exact interface-specific ethtool read and baseline/delta semantics, while treating peer traffic as optional/project-governed."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly recognizes the need for interface identity and a peer for active traffic, but neither a generic ping nor head-limited output proves all source TX/RX/physical counters for the intended NIC.",
+    "gpt_v2": "Correctly rejects eth0/default peer assumptions and cumulative-counter misattribution, but exact counter names and whether the row requires active stimulus remain pending.",
+    "related_cases": "Same-code row154 is a different HMC stress variant and must remain separate. Row151 owns PCIe AER/config-space status; this row owns netdev/driver statistics.",
+    "v3_1": "Map the named interface to NIC serial/BDF/port and peer, capture complete ethtool statistics at two timestamps, define driver-specific error/drop/physical counters and deltas, and add traffic only when explicitly required by the approved coverage contract."
+  },
+  "original_test_intent": "Verify that the intended OS NIC interface exposes expected TX/RX activity and does not accumulate disallowed driver or physical-layer error counters during the defined observation or traffic window.",
+  "original_method": "Identify the exact interface, NIC PN/serial/BDF/port, driver/firmware, link and peer; approve/install ethtool/iproute2; capture complete `ethtool -S <interface>` plus `ip -s link` at baseline; observe the approved window or generate bounded isolated traffic only if engineering retains active TX/RX coverage; capture the same full counters afterward; normalize driver-specific TX/RX/error/drop/CRC/physical fields and deltas, correlate kernel/driver logs and preserve all output without reset or truncation.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": ["REVIEW_COMPLETE", "SHARED_CODE_VARIANT_IDENTITY_CONFIRMED", "ETHTOOL_PACKAGE_INTERFACE_AND_COUNTER_SCHEMA_REQUIRE_APPROVAL", "NIC_INTERFACE_BDF_SERIAL_PORT_LINK_AND_PEER_MAPPING_REQUIRED", "COMPLETE_SOURCE_ETHTOOL_S_OUTPUT_IS_PRIMARY", "BASELINE_POST_WINDOW_DRIVER_SPECIFIC_COUNTER_DELTAS_REQUIRED", "ACTIVE_TRAFFIC_OR_READ_ONLY_SNAPSHOT_SCOPE_REQUIRES_ENGINEERING_DECISION", "APPROVED_PEER_AND_ISOLATED_WINDOW_REQUIRED_IF_TRAFFIC_IS_USED", "NO_ETH0_ASSUMPTION_OUTPUT_TRUNCATION_COUNTER_RESET_LINK_CHANGE_OR_FIRMWARE_ACTION", "SECURE_REMOTE_TRANSPORT_NO_PASSWORD_ON_CLI_OR_DISABLED_HOST_KEY", "NO_AUTOMATIC_RETRY_OR_DUT_VERDICT", "NEXT_RELIABILITY_ROW153_DIRECTLY_VERIFIED", "NO_DUT_EXECUTION_PERFORMED"],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The network owner maps the interface/peer, approves packages and decides whether active traffic is mandatory; the agent can collect complete counters and run only the approved bounded traffic profile.",
+  "required_inputs": [
+    "SUT and NIC PN/serial/BDF/netdev/physical port, driver/firmware and link/peer mapping",
+    "Supported ethtool/iproute2 versions and pinned reviewed internal Script revision",
+    "Driver-specific counter dictionary identifying TX/RX, drop, CRC, FCS, symbol, alignment and physical errors",
+    "Baseline/window and allowed absolute/delta thresholds including treatment of cumulative historical counts",
+    "Decision whether source coverage is read-only counter health or requires active TX/RX traffic",
+    "If active: isolated peer/interface, address/protocol/frame-size/rate/duration/direction and network-impact limits"
+  ],
+  "safety_requirements": [
+    "Do not assume eth0; prove netdev-to-NIC/port/peer identity before collection or traffic",
+    "Capture full ethtool statistics and exit status; do not head/tail away counters",
+    "Do not clear counters, reset/reconfigure the NIC, change link settings or restart the driver to obtain a clean result",
+    "Use secure credentials and verified host identity",
+    "Generate traffic only on the approved isolated path and stop on loss, link flap, congestion impact or rising severe errors",
+    "Preserve preexisting counters and report absolute values plus deltas; no automatic repair or retry"
+  ],
+  "agent_execution_scope": [
+    "Verify interface/NIC identity and approved tool versions",
+    "Collect complete baseline/post `ethtool -S` and `ip -s link` with timestamps and logs",
+    "If explicitly approved, run the bounded peer traffic profile and calculate packet/error deltas",
+    "Do not invent interface/peer/counter mapping or traffic requirements, truncate/reset counters, change link state or decide PASS/FAIL"
+  ],
+  "engineer_actions": ["Approve interface/port/peer and tool/Script versions", "Define relevant counters and thresholds", "Decide read-only versus active traffic scope and approve any profile", "Review deltas/logs and issue the DUT verdict"],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Partial: ip statistics can supplement source coverage and traffic can establish deltas, but `eth0`, arbitrary ping and first-40-line ethtool output are not source-equivalent or topology-safe.",
+    "executable_command_required": true,
+    "command_recommendation": "Run complete `ethtool -S <verified-interface>` and `ip -s link show dev <verified-interface>` before/after the approved window; add only the engineer-approved isolated traffic profile and preserve every counter.",
+    "original_parameters_and_time_preserved": "Exact ethtool statistics mechanism, TX/RX/physical error focus, no-error criterion, Common branch, internal Script reference and 15/5-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_INTERFACE_COUNTER_SCHEMA_WINDOW_AND_TRAFFIC_SCOPE_APPROVAL",
+    "recommended_method": "Use identity-bound complete driver statistics and before/after deltas, with optional bounded traffic only under an approved profile.",
+    "difference_from_original_method": "Adds immutable topology, counter dictionary, cumulative-delta interpretation, secure full evidence and an explicit decision boundary for active stimulus.",
+    "coverage_difference": "A ping reply or selected first counters does not prove bidirectional volume, physical-layer health or absence of errors across the full driver schema.",
+    "risks_limitations": "Counter names and reset behavior are driver/firmware-specific; passive snapshots cannot prove traffic-path performance, while active traffic can affect shared networks."
+  },
+  "project_override_considerations": "Do not import the HMC stress intent from same-code row154. The Script URL must resolve to a pinned reviewed revision that keeps row152's NIC-counter variant identity.",
+  "expected_evidence": [
+    "SUT/NIC PN/serial/BDF/netdev/port/peer, driver/firmware/link identity",
+    "ethtool/iproute2 versions and approved internal Script revision",
+    "Complete timestamped baseline and post-window `ethtool -S` plus `ip -s link` outputs/exits",
+    "Counter dictionary and absolute/delta matrix for TX/RX/drop/CRC/FCS/symbol/alignment/physical fields",
+    "Approved active traffic parameters/results if required, including per-direction packet/byte/loss evidence",
+    "Relevant kernel/driver logs, anomalies/escalation and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The row's title, ethtool statistics command and no-error criterion coherently cover NIC TX/RX/error counters. The duplicated code is safely separated by source row and variant ID; traffic stimulus and exact counter oracle are pending scope inputs."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "Interface, tools, counters and optional peer are resolvable prerequisites; missing active-traffic inputs do not prevent the static counter review or make the variant intrinsically blocked."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row152 variant cf57e5126db1d635 (not same-code row154): provide NIC PN/serial/BDF/netdev/physical-port/driver/firmware/peer mapping, ethtool/iproute2 and pinned Script revisions, complete driver counter dictionary and absolute/delta thresholds; decide whether acceptance is read-only counter health or includes active TX/RX, and if active define isolated peer, direction, protocol, frame size, rate, duration, loss and abort limits."},
+  "review_improvement": "Preserves the full ethtool source view, separates the duplicate-code variant and replaces eth0/truncated/ping assumptions with identity-bound complete counters and an explicit traffic-scope decision.",
+  "independent_technical_reasoning": "`ethtool -S` is driver-defined: a relevant CRC or physical error may appear far beyond the first 40 lines, and raw values may be cumulative since driver load. `ip -s link` aggregates a different layer and ping adds only small bidirectional IP traffic. Thus neither substitutes for complete device statistics. A valid result needs the exact interface/port identity, full before/after counter schema and a decision whether the source intends passive health or a traffic stimulus; same-code HMC row154 cannot supply any of those semantics.",
+  "source_provenance": {"primary": "XLSX Reliability row152 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json same-row cross-check", "gpt_v2": "Exact Reliability-row152 GPT V2 review", "history": "Same-code row154 variant distinguished; adjacent PCIe cases separated; row153 directly read as next", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {"intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "shared_code_variant_identity_confirmed": true, "ethtool_tx_rx_physical_error_and_no_error_coverage_preserved": true, "interface_topology_full_counters_delta_schema_and_traffic_scope_contract_added": true, "same_code_conflation_eth0_peer_guess_truncation_insecure_ssh_counter_reset_and_verdict_rejected": true, "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false, "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"},
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
