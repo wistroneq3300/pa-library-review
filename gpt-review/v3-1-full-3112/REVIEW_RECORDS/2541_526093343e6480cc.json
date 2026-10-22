@@ -1,0 +1,114 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2541,
+  "library_sequence": 2445,
+  "source_key": "Reliability|155|Wistron-HW Robust-00466-V003",
+  "case_variant_id": "526093343e6480cc",
+  "source_ref": {"sheet": "Reliability", "source_row": 155, "code": "Wistron-HW Robust-00466-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "3749db46f7b7ed8fc457e1314ab19239d0a32da67ccfbb593f6c12674f53659d",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00466-V003 is shared by Reliability row131/4b4b2cf161c4b4f6 (FPGA1-to-HMC I2C-2) and row155/526093343e6480cc (full-SEL stress). This review preserves the row155 variant and does not reuse row131 semantics.",
+    "next_source_row_verified": "Reliability row156 is an already completed Final Audit baseline; the next pending case, Reliability row157 Wistron-System RAS-00114-V008 / dd33fd3204879c4e, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "Stress Test",
+    "items": "Stress Test - Full SEL Volume",
+    "procedure": "Append the specified raw synthetic SEL record until full, verify fullness with `ipmitool sel info`, then perform MC Reset and confirm IPMI `mc info` and Redfish version/function still work.",
+    "criteria": "The SEL-generation command works and BMC commands continue to work after SEL becomes full, with generic evidence/log checks.",
+    "deepseek": "PARTIAL but executes only one append and `mc info`; it does not fill the SEL, define the full condition, perform the source MC Reset, verify Redfish or preserve/restore SEL evidence.",
+    "gpt_v2": "RPUC/CHANGED with CRITICAL risk; requires an approved repeat/stop/reset/cleanup contract, complete fullness evidence and post-reset IPMI/Redfish checks."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly warns about observability loss, but a single raw Add SEL Entry cannot demonstrate full-volume behavior and its host SSH wrapper is not an approved BMC transport.",
+    "gpt_v2": "Correctly restores the missing fill loop, MC reset, Redfish check and cleanup gate while refusing to invent counts or reset commands.",
+    "related_cases": "Same-code row131 is an unrelated I2C connectivity variant. Full-SEL stress intentionally consumes the logging resource and must preserve real preexisting events before synthetic filling.",
+    "v3_1": "Bind the raw event bytes to a vendor-approved synthetic record, compute a bounded capacity-aware append plan, detect full/overflow without overrunning indefinitely, verify management before and after an approved reset, export evidence, and restore logging capacity only after review."
+  },
+  "original_test_intent": "Prove that the BMC handles a deliberately full System Event Log predictably, retains usable IPMI and Redfish management through the defined MC reset, and can be returned to a healthy logging state without losing required evidence.",
+  "original_method": "Identify the BMC, SEL capacity/reservation/overflow behavior and meaning of the literal raw record; export existing SEL and capture baseline management health; obtain approval for one bounded fill operation and define count/full/timeout/abort; append the approved synthetic event while recording every response and periodic `sel info`; stop exactly at the approved full condition; capture full/overflow and record behavior; issue the separately approved MC reset; measure disconnect/reconnect and verify `mc info`, Redfish version/health and logging behavior; preserve all evidence, then run the approved SEL cleanup/restoration and verify capacity only after adjudication."
+  ,"automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE", "SHARED_CODE_VARIANT_IDENTITY_CONFIRMED", "CRITICAL_STATE_CHANGING_SEL_CAPACITY_STRESS_REQUIRES_EXPLICIT_APPROVAL", "RAW_ADD_SEL_ENTRY_BYTES_REQUIRE_VENDOR_MEANING_AND_BMC_COMPATIBILITY", "BASELINE_REAL_SEL_EXPORT_AND_CAPACITY_BEFORE_SYNTHETIC_FILL_REQUIRED", "BOUNDED_REPEAT_FULL_OVERFLOW_TIMEOUT_AND_ABORT_CONTRACT_REQUIRED", "SOURCE_MC_RESET_AND_POST_RESET_IPMI_REDFISH_CHECKS_REQUIRED", "SEL_CLEANUP_RESTORATION_IS_SEPARATELY_APPROVED_AFTER_EVIDENCE_PRESERVATION", "SECURE_IPMI_REDFISH_TRANSPORT_AND_INJECTED_CREDENTIALS_REQUIRED", "NO_GUESSED_LOOP_CLEAR_RESET_AUTOMATIC_RETRY_OR_DUT_VERDICT", "NEXT_PENDING_RELIABILITY_ROW157_DIRECTLY_VERIFIED_AFTER_BASELINE_ROW156", "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The BMC owner approves the raw record, capacity-aware repeat/stop rule, maintenance window, MC reset and cleanup; the agent may execute only that bounded plan and collect management evidence.",
+  "required_inputs": [
+    "SUT/BMC model, firmware and SEL implementation/capacity/overflow policy",
+    "Vendor-approved decoding and expected result of raw NetFn0x0a Cmd0x44 payload",
+    "Baseline SEL export location, protected real-event policy and synthetic-record identifier",
+    "Initial/free entry count, maximum append count, polling interval, full-state oracle, timeout and abort thresholds",
+    "Approved MC reset command/type, reconnect timeout and independent recovery path",
+    "Secure IPMI/Redfish endpoints plus post-full/post-reset health and approved cleanup/restoration procedure"
+  ],
+  "safety_requirements": [
+    "Use only a dedicated non-production SUT and export/preserve all real SEL records before filling",
+    "Validate the exact raw record against the BMC specification; do not loop unexplained bytes",
+    "Bound the append count from verified capacity and stop on full, overflow, unexpected record, latency/error threshold or BMC instability",
+    "Do not clear SEL before full-state and post-reset evidence are reviewed; cleanup is not permission to hide failures",
+    "Require explicit approval for the management-disrupting MC reset and monitor reconnect through an independent path",
+    "Use injected credentials and verified target identity; do not expose passwords or disable identity checks",
+    "Never automatically retry a failed append/reset, power-cycle the SUT or improvise recovery"
+  ],
+  "agent_execution_scope": [
+    "Validate target, raw record semantics, capacity, baseline export and bounded plan",
+    "After approval, append and poll exactly as specified while preserving every response/fullness checkpoint",
+    "After separate reset approval, capture reconnect, IPMI, Redfish, SEL and general BMC health",
+    "Do not guess counts/commands, clear evidence, reset without approval, retry automatically or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve raw event meaning, initial capacity and bounded fill/full oracle",
+    "Approve maintenance window, MC reset type, timeout and recovery",
+    "Approve evidence preservation and later cleanup/restoration",
+    "Review full/post-reset management evidence and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Incomplete: one raw append plus `sel info` and `mc info` neither fills SEL nor covers MC Reset and Redfish. The raw payload and target transport also remain unverified.",
+    "executable_command_required": true,
+    "command_recommendation": "Retain the exact source raw append only after vendor decoding; execute a capacity-bounded approved loop with periodic `ipmitool sel info`, then the approved MC reset, `mc info`, Redfish version/health, SEL export and separately approved cleanup.",
+    "original_parameters_and_time_preserved": "Literal raw payload, fill-to-full intent, `sel info`, MC Reset, IPMI `mc info`, Redfish version/function, Common branch, internal Script reference and 15/30-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_SEL_RAW_RECORD_CAPACITY_RESET_AND_CLEANUP_APPROVAL",
+    "recommended_method": "Perform one capacity-aware synthetic SEL fill with full evidence, then an approved reset/reconnect and management-health checkpoint before restoring SEL capacity.",
+    "difference_from_original_method": "Adds raw-record provenance, real-log preservation, bounded capacity math, full/overflow semantics, reset timing, secure Redfish and controlled cleanup.",
+    "coverage_difference": "One successful append cannot prove full-log behavior; `mc info` alone cannot prove Redfish or logging recovery, and clearing immediately would destroy the stress evidence.",
+    "risks_limitations": "A full SEL can suppress real hardware events and degrade diagnostics; reset behavior and overflow policy are firmware-specific."
+  },
+  "project_override_considerations": "The pinned internal Script must match row155 rather than same-code row131, preserve the exact approved raw record and expose bounded repeat/full/reset/cleanup parameters for review.",
+  "expected_evidence": [
+    "BMC identity/firmware, SEL implementation/capacity/initial usage and exported baseline real records",
+    "Decoded raw event, approved synthetic marker and exact command/transport metadata",
+    "Every append result plus periodic record-count/free-space/full/overflow status and timestamps",
+    "Terminal full-state behavior including rejection/acceptance of the boundary append and preserved SEL export",
+    "Approved MC reset command, disconnect/reconnect timeline and post-reset `mc info` plus Redfish version/health",
+    "Post-reset SEL/logging behavior, cleanup/restoration transcript, final capacity/health and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The stress title, append/full procedure and post-full management criteria describe one coherent capacity-boundary test. Repeat, reset and cleanup details are critical project inputs rather than contradictory source fields."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The intended SEL-capacity operation and recovery checkpoints are identifiable; vendor decoding and owner-approved parameters are expected RPUC gates, not an irreducible semantic blocker."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row155 variant 526093343e6480cc (not same-code row131): approve the BMC/firmware SEL capacity and overflow policy, decode the exact NetFn0x0a Cmd0x44 raw payload and synthetic marker, define initial/free-count-based maximum appends, polling/full/overflow/timeout/abort criteria, baseline real-SEL export, secure IPMI transport, exact MC reset type/command/reconnect timeout/recovery, Redfish version/health oracle and separately approved post-evidence SEL cleanup/restoration."},
+  "review_improvement": "Converts an ineffective one-entry sample into the source-required bounded full-volume test, preserves real diagnostics and restores omitted reset/Redfish/recovery coverage without guessing destructive commands.",
+  "independent_technical_reasoning": "SEL capacity is finite and may use wrap, reject-new-entry or overflow-flag behavior. One append cannot reach or characterize that boundary, while an unbounded loop can erase or suppress real fault evidence. The literal raw payload must be known to be a harmless synthetic record so the resulting log is auditable. Because MC reset interrupts the very management plane being tested, reset type and reconnect evidence are distinct from SEL fullness. Cleanup must occur only after evidence capture and cannot be treated as an automatic recovery retry.",
+  "source_provenance": {"primary": "XLSX Reliability row155 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json same-row cross-check", "gpt_v2": "Exact Reliability-row155 GPT V2 review", "history": "Same-code row131 variant and active record inspected; baseline row156 recognized and row157 directly read as next pending", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true, "shared_code_variant_identity_confirmed": true,
+    "raw_sel_generation_fill_sel_info_mc_reset_ipmi_redfish_and_post_full_function_coverage_preserved": true,
+    "capacity_bound_real_log_export_raw_decode_full_boundary_reset_timing_and_cleanup_contract_added": true,
+    "single_append_same_code_conflation_unbounded_loop_insecure_transport_premature_clear_blind_reset_retry_and_verdict_rejected": true,
+    "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
