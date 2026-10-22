@@ -1,0 +1,156 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2535,
+  "library_sequence": 2438,
+  "source_key": "Reliability|148|Wistron-HW Robust-00465-V002",
+  "case_variant_id": "86b45f60a13c8df2",
+  "source_ref": {
+    "sheet": "Reliability",
+    "source_row": 148,
+    "code": "Wistron-HW Robust-00465-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "bc77ef83f50b0793b32a1830a03e5ba57eb5e659cd7958d1cf01c76f9213d2c6",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Exact code Wistron-HW Robust-00465-V002 is unique. Same-family V003 rows have different source identities and test intents and are not reused. The host-SSH wrapper is rejected because the source starts from host standby and points to BMC UART/controller context.",
+    "next_source_row_verified": "Reliability row149 is already a completed Final Audit baseline; the next pending case, Reliability row150 Wistron-HW Robust-00028-V002 / 07ab156210bd7335, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "Power Control",
+    "items": "Power On  (GPIO)",
+    "procedure": "Attach BMC UART; confirm the system is in standby; run `/usr/bin/powerctrl.sh power_on`; verify power status is on and the system works normally.",
+    "criteria": "Command succeeds and the system powers on, with generic result/photo and unexpected-log collection.",
+    "deepseek": "PARTIAL; recognizes standby and GPIO risk but proposes host SSH to run `power_on`, `power_status` and `uptime`, which cannot originate from a host OS that is actually in standby/off.",
+    "gpt_v2": "RPUC/CHANGED with HIGH risk; adds standby/approval/recovery checks but retains the infeasible host-SSH wrapper instead of resolving the BMC/controller execution domain."
+  },
+  "historical_reviews": {
+    "deepseek": "Correctly requires a reachable GPIO controller and post-boot evidence, but exposes credentials, disables host identity checking and conflates controller-side power-on with host-side uptime in one SSH session.",
+    "gpt_v2": "Correctly prevents invocation against an already-on SUT and requires OOB observation, yet does not correct the transport contradiction introduced by its host-SSH command.",
+    "related_cases": "Rows146-148 form distinct immediate-off, state-read and standby-to-on GPIO coverage. This row must preserve the power-on transition and cannot be satisfied by only querying status or normal OS reboot.",
+    "v3_1": "Execute `power_on` only from the approved always-on BMC/service-controller domain, independently observe standby-to-on rails and boot stages, then establish a separate secure host session for OS health."
+  },
+  "original_test_intent": "Verify that the platform GPIO power controller can transition a host from the defined standby state to on and that the host completes a normal boot with expected system health.",
+  "original_method": "Identify the exact always-on controller, script version and `power_on` semantics; confirm AC present, standby rails stable and host actually off without active workloads; obtain approval for one transition; from secure BMC/UART/controller access invoke the literal source command once; independently timestamp rail/chassis power and boot-stage changes; after OS network readiness, open a separate verified host session to collect uptime and complete health/log checks; stop without automatic retry on any ambiguous state or boot failure.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE",
+    "UNIQUE_SOURCE_IDENTITY_CONFIRMED",
+    "GPIO_POWER_ON_REQUIRES_VERIFIED_STANDBY_AND_EXPLICIT_APPROVAL",
+    "POWERCTRL_SCRIPT_MUST_RUN_ON_AN_ALWAYS_ON_BMC_OR_SERVICE_CONTROLLER_DOMAIN",
+    "HOST_SSH_CANNOT_BE_THE_ORIGINATING_TRANSPORT_WHILE_HOST_IS_IN_STANDBY",
+    "SCRIPT_IDENTITY_POWER_ON_SEMANTICS_GPIO_TARGET_AND_STATE_ORACLE_REQUIRED",
+    "INDEPENDENT_RAIL_CHASSIS_UART_BOOT_AND_SEPARATE_POST_BOOT_OS_EVIDENCE_REQUIRED",
+    "SECURE_AUTHENTICATION_AND_HOST_KEY_VERIFICATION_REQUIRED",
+    "ONE_BOUNDED_TRANSITION_NO_AUTOMATIC_RETRY_OR_DUT_VERDICT",
+    "SEPARATE_RECOVERY_PATH_REQUIRED_ON_BOOT_FAILURE",
+    "NEXT_PENDING_RELIABILITY_ROW150_DIRECTLY_VERIFIED_AFTER_BASELINE_ROW149",
+    "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The owner confirms standby, maintenance window and recovery; an operator maintains BMC/UART/OOB observation and authorizes the single transition. The agent may invoke the approved controller-side command and later collect host health only after confirmation.",
+  "required_inputs": [
+    "SUT/BMC identity and authoritative always-on location, version/hash/owner of `/usr/bin/powerctrl.sh`",
+    "Exact `power_on` GPIO/rail target, pulse/level behavior, idempotence and expected command response",
+    "Authoritative standby definition including AC, standby rails, host/chassis state and no-active-workload evidence",
+    "Secure BMC/controller access and independent UART/rail/chassis power observer",
+    "Power-on, rail-good, POST and OS-network/service timeout sequence with abort criteria",
+    "Owner-approved recovery path and post-boot firmware/device/filesystem/service/log health oracle"
+  ],
+  "safety_requirements": [
+    "Do not invoke `power_on` until target identity and stable standby/off state are independently confirmed",
+    "Run the transition from the documented always-on controller, not through an impossible host-OS SSH session",
+    "Use secure injected credentials and verified controller/host identity; reject `sshpass -p` and disabled host-key checking",
+    "Capture one command and independent rail/chassis/UART transition timeline with bounded timeouts",
+    "Stop if already on, standby is inconsistent, power rails sequence incorrectly, POST stalls, devices disappear or critical logs appear",
+    "Do not issue another power-on, power-cycle or reset automatically; use the separately approved recovery path"
+  ],
+  "agent_execution_scope": [
+    "Validate controller script identity/semantics and securely collect pre-state evidence",
+    "After approval, issue one exact controller-side `power_on` and capture stdout/stderr/exit/timestamps",
+    "Correlate independent power/boot evidence and, only after host readiness, collect secure OS uptime and health",
+    "Do not guess script domain/GPIO semantics, expose credentials, invoke against an on/unknown host, retry automatically or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve script execution domain, version/hash and exact GPIO/rail power-on behavior",
+    "Approve standby definition, maintenance window, observer, timing and single-transition/no-retry policy",
+    "Define boot/normal-operation and recovery oracles",
+    "Review transition plus post-boot evidence and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The source `power_on` and later status/uptime evidence are relevant, but a single host-SSH command cannot begin while the host is in standby and cannot survive its own power-on/boot transition. The insecure password and host-key options are also unacceptable.",
+    "executable_command_required": true,
+    "command_recommendation": "From secure always-on BMC/controller access, run only `/usr/bin/powerctrl.sh power_on` once after standby approval; observe status/rails/UART independently, then create a new secure host session after network readiness for uptime and health checks.",
+    "original_parameters_and_time_preserved": "BMC UART context, standby precondition, exact `power_on` path, power-status-on and normal-operation checks, Common branch and 15/15-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_CONTROLLER_SCRIPT_STANDBY_GPIO_TIMING_AND_RECOVERY_APPROVAL",
+    "recommended_method": "Perform one controller-side standby-to-on GPIO transition with independent rail/UART timing, then verify OS health through a separate post-boot session.",
+    "difference_from_original_method": "Adds execution-domain proof, exact standby/GPIO semantics, secure access, independent transition timing, staged controller-versus-host sessions and explicit recovery/no-retry boundaries.",
+    "coverage_difference": "A script exit, immediate five-second delay or later uptime alone does not prove a correct GPIO transition, rail sequence, POST path or absence of degraded devices.",
+    "risks_limitations": "Issuing power-on in an already-on or indeterminate state can trigger vendor-specific pulse/reset behavior or mask a failed rail/boot sequence."
+  },
+  "project_override_considerations": "The project must provide the always-on controller transport. A host SSH wrapper may be used only for post-boot health, never as an implicit substitute for the controller-side source command.",
+  "expected_evidence": [
+    "SUT/BMC/controller identity, script path/version/hash/owner and exact GPIO/power-on semantics",
+    "Pre-action AC/standby-rail/chassis-off state, idle/no-workload proof and approval timestamp",
+    "Secure controller session and exact `power_on` stdout/stderr/exit/timestamp",
+    "Independent rail/chassis/BMC/UART transition timeline through POST and OS readiness with timeouts",
+    "Separate secure host session showing boot ID/uptime, expected devices/services/filesystems and power status",
+    "BMC SEL plus OS boot/kernel/service logs, recovery actions if any and engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The source consistently describes one standby-to-on GPIO transition followed by normal operation. The exact script domain and standby oracle are underspecified project inputs; the infeasible SSH wrapper belongs to historical reviews, not the Master source."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "The controller-side source method is identifiable and executable once script location, standby definition, approval and recovery are supplied, so the case remains RPUC rather than BLOCKED."
+  },
+  "engineering_decision_pending": {
+    "question": "Resolve Reliability row148 Wistron-HW Robust-00465-V002: identify the always-on BMC/service-controller domain, secure transport and version/hash/owner of `/usr/bin/powerctrl.sh`; define exact `power_on` GPIO/rail target and pulse/idempotence response, authoritative AC/standby/chassis-off oracle, independent rail/UART/POST/OS timeline and timeouts; approve one transition, no-retry/recovery policy and separate post-boot host uptime/device/service/filesystem/log acceptance."
+  },
+  "review_improvement": "Preserves the literal GPIO power-on coverage while correcting the impossible host-SSH transport and separating controller transition evidence from the later host-OS health session.",
+  "independent_technical_reasoning": "A host in standby cannot accept an OS SSH command, so the source's preceding BMC-UART step must be treated as evidence that `powerctrl.sh` belongs to an always-on management domain unless engineering says otherwise. Power-on success also has phases: GPIO assertion, rail-good, POST and OS readiness. Combining `power_on; sleep 5; power_status; uptime` in one host session skips the domain transition and substitutes a fixed delay for staged oracles. The valid contract uses a secure controller session for the single action and independent observation, followed by a new host session only after boot.",
+  "source_provenance": {
+    "primary": "XLSX Reliability row148 directly reopened and read",
+    "deepseek_same_row": "Exact XLSX AI fields and tests.json code cross-check",
+    "gpt_v2": "Exact Reliability-row148 GPT V2 review",
+    "history": "Related GPIO rows and exact-code family searched; baseline row149 recognized and next pending row150 directly read",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "bmc_uart_standby_powerctrl_power_on_status_on_and_normal_system_operation_coverage_preserved": true,
+    "controller_domain_gpio_semantics_standby_rail_uart_staged_boot_secure_sessions_and_recovery_added": true,
+    "host_ssh_origin_password_on_cli_disabled_host_key_fixed_sleep_blind_retry_and_verdict_rejected": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}

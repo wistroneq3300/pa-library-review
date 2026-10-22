@@ -3,15 +3,15 @@
   "branch": "codex/testcase-review-v3-1-full-3112",
   "logic_version": "V3.1 Final Audit + ED-32 + ED-33..52",
   "target_count": 3112,
-  "completed_count": 2534,
-  "new_full_review_records_count": 2334,
-  "remaining_count": 578,
+  "completed_count": 2535,
+  "new_full_review_records_count": 2335,
+  "remaining_count": 577,
   "completed_baseline_reference": "gpt-review/v3-1-final-audit/AUDIT_RECORDS/",
-  "next_unreviewed_source_key": "Reliability|148|Wistron-HW Robust-00465-V002",
-  "next_unreviewed_case_variant_id": "86b45f60a13c8df2",
+  "next_unreviewed_source_key": "Reliability|150|Wistron-HW Robust-00028-V002",
+  "next_unreviewed_case_variant_id": "07ab156210bd7335",
   "classification_statistics": {
     "MANUAL ONLY": 463,
-    "REQUIRES PACKAGE / USER CONFIRMATION": 1405,
+    "REQUIRES PACKAGE / USER CONFIRMATION": 1406,
     "FULLY AUTOMATABLE": 475,
     "BLOCKED": 191
   },
@@ -19,6 +19,10 @@
   "blocked_count": 191,
   "source_conflict_count": 722,
   "engineering_decisions_pending": [
+    {
+      "source_key": "Reliability|148|Wistron-HW Robust-00465-V002",
+      "question": "Resolve Reliability row148 Wistron-HW Robust-00465-V002: identify the always-on BMC/service-controller domain, secure transport and version/hash/owner of `/usr/bin/powerctrl.sh`; define exact `power_on` GPIO/rail target and pulse/idempotence response, authoritative AC/standby/chassis-off oracle, independent rail/UART/POST/OS timeline and timeouts; approve one transition, no-retry/recovery policy and separate post-boot host uptime/device/service/filesystem/log acceptance."
+    },
     {
       "source_key": "Reliability|147|Wistron-HW Robust-00025-V002",
       "question": "Resolve Reliability row147 Wistron-HW Robust-00025-V002: identify whether `/usr/bin/powerctrl.sh power_status` runs on BMC, host or another controller and provide its version/hash/owner plus a secure surviving off-state access path; define the named GPIO/rail, polarity, exact `Host Run Power Status : Good / ON` and low tokens, timeout/debounce and independent physical-state oracle; approve the non-invented power-off mechanism, idle/data-safety window, one-transition/no-retry rule and separate power-on/recovery health contract."
