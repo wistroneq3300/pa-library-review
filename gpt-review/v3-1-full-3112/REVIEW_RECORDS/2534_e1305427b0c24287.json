@@ -1,0 +1,157 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2534,
+  "library_sequence": 2437,
+  "source_key": "Reliability|147|Wistron-HW Robust-00025-V002",
+  "case_variant_id": "e1305427b0c24287",
+  "source_ref": {
+    "sheet": "Reliability",
+    "source_row": 147,
+    "code": "Wistron-HW Robust-00025-V002"
+  },
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "5e756368c50583f8b8fbf900b6e428209289300bed5333d3e2db4bcddb7f2161",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-HW Robust-00025-V002 is unique. The source's BMC-UART context is retained and the DeepSeek/GPT V2 host-SSH assumption is not accepted until the script execution domain is identified.",
+    "next_source_row_verified": "Reliability row148 Wistron-HW Robust-00465-V002 / 86b45f60a13c8df2, standby-to-power-on GPIO control using `/usr/bin/powerctrl.sh power_on`, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "HW Robust",
+    "test_set": "Power Control",
+    "items": "Power status  (GPIO)",
+    "procedure": "Attach BMC UART; with the host idle/on, run `/usr/bin/powerctrl.sh power_status` and expect `Host Run Power Status : Good / ON`; power the system off, run the same status command again and expect low.",
+    "criteria": "Command succeeds and response data is correct, with generic result/photo and unexpected-log collection.",
+    "deepseek": "PARTIAL; proposes host SSH to run the script in ON and off states and recognizes that the second half powers the system off, but does not resolve how a host-side OS command remains reachable after host-off.",
+    "gpt_v2": "RPUC/CHANGED with CRITICAL risk; preserves the status read and requires an owner-supplied off mechanism/OOB observation rather than inventing one, while still framing the first query through host SSH."
+  },
+  "historical_reviews": {
+    "deepseek": "Preserves both state checks but assumes the script is on the host and uses `sshpass` plus disabled host-key checking, which exposes credentials and is incompatible with an OS-off second query unless a surviving BMC execution path exists.",
+    "gpt_v2": "Correctly refuses to invent the omitted power-off command and separates recovery, but the exact command execution domain, GPIO signal semantics and off-state access remain engineering inputs.",
+    "related_cases": "The completed row146 baseline already requires proof of script location/semantics and independent power telemetry for immediate shutdown; this row is readback coverage and must not substitute a transition command for the two-state GPIO oracle.",
+    "v3_1": "Run the literal read-only status command from its approved surviving execution domain, prove both logical output and independent physical state, and keep the destructive off transition and later recovery separately authorized."
+  },
+  "original_test_intent": "Verify that the platform GPIO power-status interface distinguishes a running host from an off host, reporting the documented `Good / ON` indication when powered and the documented low indication after an approved power-off.",
+  "original_method": "Identify whether `powerctrl.sh` runs on the BMC, host or service controller and map its `power_status` output to a named GPIO/rail/chassis state; establish secure console access and independent BMC/rail telemetry; capture the ON-state command output while the OS is idle; obtain approval and use the documented external power-off mechanism once; from the surviving approved domain capture the same command in the off state; compare both outputs with independent state evidence; separately restore and verify host health.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE",
+    "UNIQUE_SOURCE_IDENTITY_CONFIRMED",
+    "POWER_STATUS_READS_AUTOMATABLE_AFTER_SCRIPT_DOMAIN_AND_OUTPUT_CONTRACT_APPROVAL",
+    "HOST_POWER_OFF_TRANSITION_REQUIRES_EXPLICIT_APPROVAL_AND_INDEPENDENT_OOB_CONTROL",
+    "SCRIPT_EXECUTION_DOMAIN_AND_SURVIVING_OFF_STATE_ACCESS_MUST_BE_DEFINED",
+    "GOOD_ON_AND_LOW_OUTPUTS_REQUIRE_EXACT_TOKEN_GPIO_POLARITY_AND_PHYSICAL_STATE_MAPPING",
+    "SOURCE_DOES_NOT_AUTHORIZE_AN_INVENTED_POWER_OFF_COMMAND",
+    "SECURE_AUTHENTICATION_HOST_KEY_VERIFICATION_AND_NO_PASSWORD_ON_CLI_REQUIRED",
+    "SEPARATE_POWER_ON_RECOVERY_AND_HEALTH_APPROVAL_REQUIRED",
+    "NO_AUTOMATIC_POWER_CYCLE_RETRY_OR_DUT_VERDICT",
+    "NEXT_RELIABILITY_ROW148_DIRECTLY_VERIFIED",
+    "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The owner approves the maintenance window and exact power-off/recovery mechanism; an operator maintains the BMC/UART/OOB path and independently observes rails/chassis state while the agent may collect the approved read-only status outputs.",
+  "required_inputs": [
+    "SUT/BMC identity and authoritative location/owner/version/hash of `/usr/bin/powerctrl.sh`",
+    "Meaning of `power_status`, named GPIO/rail/signal, polarity and exact ON/off output grammar",
+    "Secure access path that remains available after host-off and its authentication/host-key policy",
+    "Approved host power-off mechanism, idle/workload/data-safety gate and independent rail/chassis observer",
+    "State-transition timeout/debounce/sample policy and treatment of transient or unknown outputs",
+    "Separately approved power-on/recovery path, boot timeout and post-recovery health oracle"
+  ],
+  "safety_requirements": [
+    "Do not infer or issue a power-off command from the row; use only the owner-approved mechanism after confirming idle/non-production state",
+    "Prove the command runs on a controller that remains powered/reachable for the off-state measurement",
+    "Use secure injected credentials and verified host identity; do not use `sshpass -p` or disable host-key checking",
+    "Correlate the script string with independent BMC/rail/chassis telemetry; command exit alone is insufficient",
+    "Capture one bounded transition with timeout/debounce and stop on inconsistent, unknown or flapping state",
+    "Treat loss of host SSH as expected after power-off, not as evidence of correct GPIO state",
+    "Do not automatically power-cycle or retry; recovery/power-on is a separately approved action"
+  ],
+  "agent_execution_scope": [
+    "Verify script identity/location and securely collect the read-only `power_status` output from the approved controller",
+    "Timestamp and correlate ON/off outputs with independent OOB power/rail evidence",
+    "Collect post-recovery boot and health evidence after the operator's separately approved power-on",
+    "Do not guess the execution domain, invent the off command, expose credentials, initiate unapproved power transitions, retry automatically or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve script execution domain, exact status semantics and expected ON/low output tokens",
+    "Approve the maintenance window, external power-off mechanism, observer and transition timing",
+    "Approve the separate recovery/power-on action and post-boot checks",
+    "Review both command/physical-state correlations and issue the DUT verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "The literal `power_status` call fits the source, but wrapping it in host SSH is unproven and cannot support an OS-off re-query. `sshpass -p` and `StrictHostKeyChecking=no` also weaken credential and target identity controls.",
+    "executable_command_required": true,
+    "command_recommendation": "Execute `/usr/bin/powerctrl.sh power_status` only on its documented BMC/controller domain through secure authenticated access; capture exact stdout/stderr/exit/timestamp before and after one separately approved power-off and correlate each with independent rail/chassis telemetry.",
+    "original_parameters_and_time_preserved": "BMC UART context, OS-idle ON state, exact `power_status` command, expected `Host Run Power Status : Good / ON` then low, Common branch and 15/15-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_SCRIPT_DOMAIN_STATUS_ORACLE_POWER_OFF_AND_RECOVERY_APPROVAL",
+    "recommended_method": "Collect the same read-only GPIO-status command in stable ON and off states from a surviving controller, with independently timestamped rail/chassis evidence and separate transition/recovery approvals.",
+    "difference_from_original_method": "Adds execution-domain identity, secure access, exact signal/token mapping, independent physical correlation, bounded timing and explicit separation of destructive transition and recovery.",
+    "coverage_difference": "SSH loss, a zero exit code or a free-form `low` string cannot alone prove the named GPIO and chassis rails reached the intended state.",
+    "risks_limitations": "If the script actually runs only on the host OS, the off-state command is impossible after shutdown and the project must provide a BMC/controller-side equivalent without silently changing source coverage."
+  },
+  "project_override_considerations": "The project must resolve whether BMC UART denotes the actual command shell. A host-SSH transport is not an approved substitution unless the host remains independently powered and the script's GPIO target is documented.",
+  "expected_evidence": [
+    "SUT/BMC identity, script path/version/hash/owner and execution-domain proof",
+    "Named GPIO/rail signal, polarity, exact stable ON/low strings and timeout/debounce contract",
+    "Secure session identity plus ON-state command stdout/stderr/exit/timestamp and independent running/rail evidence",
+    "Approved power-off action record and observer timeline without an invented source command",
+    "Off-state command stdout/stderr/exit/timestamp from the surviving controller and independent off/rail evidence",
+    "Separately approved power-on/recovery timeline, BMC/OS/service/filesystem/log health and engineer verdict"
+  ],
+  "source_conflict_analysis": {
+    "is_source_conflict": false,
+    "analysis": "The source consistently asks for the same GPIO readback in ON and off states and its BMC-UART setup can support a surviving controller path. The missing execution domain and off mechanism are material project specifications, not an internal contradiction."
+  },
+  "blocked_analysis": {
+    "is_blocked": false,
+    "analysis": "Both state observations are feasible once script domain, off mechanism and recovery are approved. Missing project inputs and the manual transition make this RPUC rather than intrinsically BLOCKED."
+  },
+  "engineering_decision_pending": {
+    "question": "Resolve Reliability row147 Wistron-HW Robust-00025-V002: identify whether `/usr/bin/powerctrl.sh power_status` runs on BMC, host or another controller and provide its version/hash/owner plus a secure surviving off-state access path; define the named GPIO/rail, polarity, exact `Host Run Power Status : Good / ON` and low tokens, timeout/debounce and independent physical-state oracle; approve the non-invented power-off mechanism, idle/data-safety window, one-transition/no-retry rule and separate power-on/recovery health contract."
+  },
+  "review_improvement": "Preserves the exact two-state GPIO readback while removing the unsupported host-SSH assumption and requiring a surviving controller, secure access, precise signal semantics and independent power evidence.",
+  "independent_technical_reasoning": "The second query occurs after host power-off. Therefore a command executed inside the host OS cannot satisfy the source unless some host management domain remains alive; the preceding BMC-UART step instead suggests a BMC-side shell. That distinction determines whether the test is executable and which GPIO is being read. Moreover `Good / ON` and `low` are software interpretations whose polarity must be tied to actual rail/chassis state. The static contract must identify the controller and signal, preserve the same read command in both states, and keep the destructive transition plus recovery outside the read-only agent step.",
+  "source_provenance": {
+    "primary": "XLSX Reliability row147 directly reopened and read",
+    "deepseek_same_row": "Exact XLSX AI fields and tests.json code cross-check",
+    "gpt_v2": "Exact Reliability-row147 GPT V2 review",
+    "history": "Related completed row146 Final Audit/V3.1 execution-domain rule read; unique code confirmed; row148 directly read as next",
+    "external_sources": []
+  },
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true,
+    "procedure_preserved": true,
+    "criteria_preserved": true,
+    "bmc_uart_power_status_on_good_on_power_off_second_status_low_and_response_correctness_coverage_preserved": true,
+    "script_domain_signal_polarity_secure_access_independent_telemetry_timing_and_separate_recovery_added": true,
+    "invented_off_command_host_ssh_assumption_password_on_cli_disabled_host_key_blind_retry_and_verdict_rejected": true,
+    "coverage_regression": false,
+    "safety_regression": false,
+    "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {
+    "exact_xlsx_row_read": true,
+    "deepseek_same_row_read": true,
+    "gpt_v2_read": true,
+    "history_searched": true,
+    "reasoning_is_case_specific": true,
+    "source_identity_verified": true,
+    "next_key_verified_from_xlsx": true,
+    "no_hardware_pass_claimed": true,
+    "record_complete": true
+  }
+}
