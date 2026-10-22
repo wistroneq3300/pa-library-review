@@ -1,0 +1,114 @@
+{
+  "schema_version": "v3-1-full-review-record-1.0",
+  "review_sequence": 2543,
+  "library_sequence": 2448,
+  "source_key": "Reliability|158|Wistron-System RAS-00115-V003",
+  "case_variant_id": "016c35c310637d21",
+  "source_ref": {"sheet": "Reliability", "source_row": 158, "code": "Wistron-System RAS-00115-V003"},
+  "source_integrity": {
+    "exact_xlsx_row_read": true,
+    "original_row_sha256": "972249c9a261904f9333693acf41ba26718ea68fdb22cb01d7d345d952f1f3ee",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8",
+    "deepseek_same_row_read": true,
+    "tests_json_cross_check": true,
+    "gpt_v2_read": true,
+    "historical_revision_search": true,
+    "duplicate_code_search": true,
+    "duplicate_code_result": "Wistron-System RAS-00115-V003 is unique. Its latent CE with `immConsume=False` and explicit `mem(0x10000)` demand read are distinct from row157 background Patrol Scrub consumption.",
+    "next_source_row_verified": "Reliability row159 is an already completed Final Audit baseline; the next pending case, Reliability row160 Wistron-System RAS-00117-V002 / 82aa7841306cc292, was directly read and manifest-verified."
+  },
+  "source_snapshot": {
+    "sub_function": "System RAS",
+    "test_set": "Intel GNR CPU RAS - Memory Demand and Patrol Scrub",
+    "items": "Demand Scrub",
+    "procedure": "Configure the Intel CScripts/ELog/WHEA/error-injection/firmware-first matrix and DDR5 ECS; preserve/clear the selected MC and retry valid state; halt and inject a CE at 0x10000 with `immConsume=False`; consume it explicitly with `mem(0x10000)`; inspect mc0/ch0 machine-check and retry entry; resume and check serial handling.",
+    "criteria": "FTrace contains an ELog record indicated by `extlog_mem_event`.",
+    "deepseek": "PARTIAL; identifies the vendor harness and crash risk but substitutes truncated generic dmesg/SEL evidence, omitting the latent-to-demand transition, exact registers and FTrace extlog criterion.",
+    "gpt_v2": "RPUC/CHANGED with CRITICAL risk; restores `immConsume=False`, explicit memory read, target-specific registers, FTrace evidence, recovery and BIOS-security cleanup."
+  },
+  "historical_reviews": {
+    "deepseek": "Generic scrub/corrected strings cannot prove that the CE remained latent until the demand read or that mc0/ch0 retry entry1 and firmware ELog recorded the expected path.",
+    "gpt_v2": "Correctly retains the exact injector/read sequence and requires qualified platform mapping and complete FTrace/register evidence.",
+    "related_cases": "Row157 is background Patrol Scrub and row160 is threshold-driven boot-time PPR. This row ends at the single demand-consumed correctable event and must not inherit their consumers or reboot/PPR criteria.",
+    "v3_1": "Prove a three-stage state transition: clean target registers, latent injected CE with no premature consumption, then the explicit demand read followed by the expected correctable mc0/ch0 shadow, retry log, serial and FTrace `extlog_mem_event`; restore all temporary BIOS/GRUB/DFX settings."
+  },
+  "original_test_intent": "Demonstrate that a correctable memory error planted without immediate consumption is consumed by a demand read on the intended Intel GNR DIMM and reported through the expected firmware-first machine-check, retry-read and FTrace ELog path.",
+  "original_method": "Record immutable platform and DIMM topology, harness version and BIOS/GRUB baseline; apply/verify the exact source enablement matrix and DDR5 ECS; map address0x10000 plus mc0/ch0/retry index1 to the intended DIMM; preserve evidence and establish the approved clean register prestate; halt, reset injector lock and issue one CE with `immConsume=False`; capture proof that injection did not already consume; execute `mem(0x10000)` once; capture the named MC shadow and retry entry, resume, collect serial/FTrace extlog/OS/SEL evidence, verify health and restore settings under the recovery plan.",
+  "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+  "execution_readiness": [
+    "REVIEW_COMPLETE", "UNIQUE_SOURCE_IDENTITY_CONFIRMED", "CRITICAL_DEMAND_CONSUMED_MEMORY_CE_REQUIRES_INTEL_HARNESS_FAE_AND_APPROVAL", "ADDRESS0X10000_SOCKET_IMC_CHANNEL_DIMM_MC0_CH0_RETRY_INDEX_MAPPING_REQUIRED", "IMMCONSUME_FALSE_LATENT_STATE_BEFORE_EXPLICIT_MEM_READ_MUST_BE_PROVEN", "EXACT_MACHINE_CHECK_RETRY_SERIAL_AND_FTRACE_EXTLOG_MEM_EVENT_REQUIRED", "PREEXISTING_EVIDENCE_PRESERVED_BEFORE_APPROVED_TARGET_REGISTER_CLEAR", "HALT_MEM_READ_GO_HANG_CRASH_AND_RECOVERY_REQUIRE_OPERATOR_CONTROL", "ALL_BIOS_GRUB_DFX_SECURITY_CHANGES_MUST_BE_RESTORED", "NO_PATROL_SUBSTITUTION_GUESSED_ADDRESS_GENERAL_LOG_CLEAR_AUTOMATIC_RETRY_OR_DUT_VERDICT", "NEXT_PENDING_RELIABILITY_ROW160_DIRECTLY_VERIFIED_AFTER_BASELINE_ROW159", "NO_DUT_EXECUTION_PERFORMED"
+  ],
+  "execution_status": "NOT EXECUTED",
+  "tool_result": "NOT RUN",
+  "engineer_verdict": "ENGINEER OWNED; PENDING",
+  "manual_activity": "The Intel-qualified owner/FAE validates the BIOS/harness/address mapping and controls halt, injection, demand read, go and recovery; the agent may correlate the approved stage-specific registers and logs.",
+  "required_inputs": [
+    "GNR CPU stepping, BIOS/BMC/OS, DIMM PN/serial/slot and socket/IMC/channel topology",
+    "Intel CScripts/error-injection package version/hash/license and exact `immConsume=False`/`mem()` semantics",
+    "Project mapping/restoration for every source BIOS/DFX/ELog/WHEA/firmware-first/GRUB knob",
+    "Address0x10000 to physical target mapping and mc0.ch0 retry_rd_err_log[1] ownership",
+    "Expected clean prestate, correctable MC shadow/MSCOD, retry entry and FTrace extlog_mem_event fields/timing",
+    "Dedicated window, serial/OOB path, halt/read/go timeouts, wrong-severity/crash recovery and no-retry plan"
+  ],
+  "safety_requirements": [
+    "Use a dedicated workload-free SUT with stable power, serial and independent OOB recovery",
+    "Preserve general dmesg/journal/SEL/FTrace evidence and BIOS/GRUB baseline; do not perform blanket log clearing",
+    "Clear only approved target MC/retry state after capture, and prove the correct target/index",
+    "Do not assume 0x10000 is a safe or intended memory location; require vendor harness mapping",
+    "Verify the error remains latent after injection and stop if it is consumed early or appears on the wrong channel",
+    "Stop on fatal/uncorrectable severity, unexpected MCA, hang, crash or missing response; never automatically reinject or reboot",
+    "After evidence capture restore all lock/DFX/error-injection/GRUB settings and verify memory/OS/BMC health"
+  ],
+  "agent_execution_scope": [
+    "Validate platform, harness, settings, target/index mapping and stage-specific expected evidence",
+    "Observe one approved latent injection and demand read while capturing complete CScripts/serial/FTrace/register outputs",
+    "Compare restoration and final health to baseline",
+    "Do not select address/DIMM, change BIOS/GRUB, clear general logs, substitute Patrol Scrub, retry or decide PASS/FAIL"
+  ],
+  "engineer_actions": [
+    "Approve harness, BIOS mapping and address/register target",
+    "Define the latent pre-read proof and post-read MC/retry/extlog oracle",
+    "Approve halt/read/go, stop and crash recovery boundaries",
+    "Review complete transition/restoration evidence and issue verdict"
+  ],
+  "command_applicability": {
+    "original_deepseek_command_fit": "Supplemental mismatch: truncated dmesg/SEL cannot demonstrate the source's latent `immConsume=False` stage, explicit `mem(0x10000)` consumer, named MC/retry registers or FTrace `extlog_mem_event`.",
+    "executable_command_required": true,
+    "command_recommendation": "Use the exact approved CScripts sequence `halt(); resetInjectorLockCheck(); injectMemError(0x10000, errType=\"ce\", immConsume=False); mem(0x10000)` followed by the named register reads and `go()`, with stage-timestamped serial/FTrace/ELog capture.",
+    "original_parameters_and_time_preserved": "Full BIOS enablement, DDR5 ECS, address0x10000, CE, `immConsume=False`, explicit memory read, mc0/ch0 retry index1, go/serial, FTrace extlog criterion, Common branch and 30/30-minute estimate are preserved."
+  },
+  "modernized_recommendation": {
+    "status": "READY_AFTER_GNR_HARNESS_ADDRESS_REGISTER_EXPECTATION_AND_RECOVERY_APPROVAL",
+    "recommended_method": "Demonstrate the clean-to-latent-to-demand-consumed CE transition with target-specific register and firmware ELog correlation under qualified console control.",
+    "difference_from_original_method": "Adds immutable target mapping, explicit latent-stage proof, baseline preservation, decoded result/timing gates and audited restoration.",
+    "coverage_difference": "A corrected log after injection cannot prove the error waited for the demand read or reached the intended retry register/FTrace path.",
+    "risks_limitations": "The explicit memory read can surface the injected poison unexpectedly if address mapping or injection semantics differ, leading to fatal MCA or crash."
+  },
+  "project_override_considerations": "Reference BIOS paths may be remapped only with an explicit functional equivalence matrix. `ras=cec_disable` is optional source guidance and, if used, requires approved GRUB backup/rebuild/reboot/restoration.",
+  "expected_evidence": [
+    "Platform/CPU/BIOS/BMC/OS and exact DIMM/socket/IMC/channel/address/register mapping",
+    "Harness version/hash and before/after BIOS/GRUB configuration matrix",
+    "Preserved baseline plus clean selected mc_status_shadow and retry index1 evidence",
+    "One exact injection transcript showing CE `immConsume=False` and no premature consumption",
+    "Explicit `mem(0x10000)` result followed by expected correctable MC shadow and retry log",
+    "Serial handling, timestamped FTrace `extlog_mem_event`, OS/SEL correlation, final health/restoration and engineer verdict"
+  ],
+  "source_conflict_analysis": {"is_source_conflict": false, "analysis": "The Demand Scrub title, deferred-consumption injection, explicit read, target registers and FTrace criterion consistently describe one correctable demand-consumption path."},
+  "blocked_analysis": {"is_blocked": false, "analysis": "The source provides a concrete operation and evidence chain; missing harness, target mapping and operator approval are expected RPUC inputs rather than an intrinsic blocker."},
+  "engineering_decision_pending": {"question": "Resolve Reliability row158 Wistron-System RAS-00115-V003: approve GNR CPU/BIOS/BMC/OS and Intel CScripts version/hash/license, project mapping/restoration for all BIOS/GRUB knobs, address0x10000 to socket/IMC/channel/DIMM plus mc0.ch0 retry index1 mapping, exact `immConsume=False` latent-before-read proof, safe target-register baseline/clear semantics, expected correctable MC/retry/FTrace extlog_mem_event fields/timing, and halt/mem/go crash/OOB recovery with no automatic reinjection."},
+  "review_improvement": "Restores the source's defining latent injection and explicit demand read, replaces generic log tails with stage-specific register/FTrace proof and adds topology, recovery and settings-restoration control.",
+  "independent_technical_reasoning": "Demand Scrub coverage depends on causality: the CE is planted without consumption and only the explicit memory access should trigger correction/reporting. If evidence appears before `mem(0x10000)`, the test followed a different path. Conversely, generic corrected logs after the read do not identify mc0/ch0 retry index1 or firmware ELog handling. Exact address-to-DIMM mapping and stage timestamps are therefore decisive, and debug/security changes must be restored independently of whether the CE remained correctable.",
+  "source_provenance": {"primary": "XLSX Reliability row158 directly reopened and read", "deepseek_same_row": "Exact XLSX AI fields and tests.json same-row cross-check", "gpt_v2": "Exact Reliability-row158 GPT V2 review", "history": "Demand behavior distinguished from row157 Patrol and row160 PPR; unique code confirmed; baseline row159 recognized and row160 directly read as next pending", "external_sources": []},
+  "no_automatic_retry": true,
+  "review_outcome": "IMPROVED",
+  "second_review_outcome": "CHANGED",
+  "regression_result": {
+    "intent_preserved": true, "procedure_preserved": true, "criteria_preserved": true,
+    "full_bios_demand_scrub_immconsume_false_mem_read_mc_retry_go_serial_and_ftrace_extlog_coverage_preserved": true,
+    "latent_stage_target_mapping_decoder_log_preservation_recovery_and_restoration_contract_added": true,
+    "patrol_substitution_generic_log_tail_insecure_ssh_guessed_address_blanket_clear_retry_and_verdict_rejected": true,
+    "coverage_regression": false, "safety_regression": false, "hardware_pass_claimed": false,
+    "status": "PASS_STATIC_REVIEW_ENGINEERING_DECISION_PENDING"
+  },
+  "per_case_quality_gate": {"exact_xlsx_row_read": true, "deepseek_same_row_read": true, "gpt_v2_read": true, "history_searched": true, "reasoning_is_case_specific": true, "source_identity_verified": true, "next_key_verified_from_xlsx": true, "no_hardware_pass_claimed": true, "record_complete": true}
+}
