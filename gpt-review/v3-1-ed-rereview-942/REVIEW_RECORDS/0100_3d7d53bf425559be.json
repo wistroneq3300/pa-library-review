@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 100,
+  "source_key": "Functionality|911|Wistron-BMC-00201-V003",
+  "case_variant_id": "3d7d53bf425559be",
+  "source_ref": {"sheet": "Functionality", "source_row": 911, "code": "Wistron-BMC-00201-V003", "original_row_sha256": "b7d16db36dce2b6d864449295036a479e851e78909186a688a83ada3e29a2113", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SOL console - in OS condition and output OS log, keyboard type check", "procedure": "Ubuntu example edits `/etc/default/grub` with misspelled `consol=tty0`, `console=ttyS1,115200n8`, `GRUB_TERMINAL=console`, and GRUB serial `--unit=0`; runs `update-grub`, reboots and operates OS over SOL; generic setup says clear logs.", "criteria": "SOL shows boot/OS logs and the OS screen, and keyboard input responds correctly.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/operations/sol-console-in-os-condition-and-output-os-log-keyboard-type-check", "deepseek": "NO identifies live-terminal interaction but omits the source typo, ttyS1/unit mismatch, bootloader mutation/reboot risk, authentication, safe input and rollback.", "gpt_v2": "MANUAL ONLY correctly requires OS-specific mapping, backup, approval and safe marker. V3.1 reclassifies collection and bounded input as package-capable while retaining human approval for configuration writes, reboot, live-console observation and verdict."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1072_3d7d53bf425559be.json",
+  "old_problem": "The source contains a `consol` typo and simultaneously assumes Linux ttyS1 while GRUB `--unit=0` often denotes the first serial unit; neither is portable. Blindly editing GRUB and rebooting can impair boot/console recovery, and SSH or post-hoc logs cannot prove the BMC SOL transport or live keyboard path.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_HYBRID_OS_SOL_LAYERED_OUTPUT_AND_SAFE_INPUT_CHECK",
+  "disposition_reason": "Discover the actual BMC SOL payload, physical UART, bootloader terminal, kernel console and getty mapping, then use the OS-supported configuration rather than the defective example. If already configured, remain read-only; otherwise require backup/hash/diff/syntax/rendered-config validation, one approved reboot and independent rollback. Capture bootloader-to-runtime SOL stages and an authenticated harmless marker. Project mapping is runtime readiness, not a new engineering decision.",
+  "decision_basis": [
+    "XLSX row 911, same-row DeepSeek, exact GPT V2, selection manifest, adjacent BIOS SOL case, internal Script reference and preserved V3.1 record were directly reviewed.",
+    "The source's purpose is consistent despite unsafe example syntax: OS SOL spans BMC payload/channel, UART, bootloader, kernel console, init/getty and authentication, all of which require aligned parameters.",
+    "ED-03 prohibits guessed OEM/channel parameters, ED-08 requires real interactive/visual SOL evidence, ED-15 requires stage-specific expected markers, ED-17 preserves logs and ED-20 separates OS-stage from BIOS-stage SOL.",
+    "Bootloader writes and reboot remain explicit human-approved actions; this review produced no GRUB edit, reboot or DUT execution."
+  ],
+  "test_case": {
+    "test_name": "Verify layered OS boot/runtime output and safe authenticated input over BMC SOL",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the intended BMC SOL path carries attributable bootloader, kernel, init/getty, login and runtime OS output and transports one approved non-destructive authenticated input correctly using the actual Project UART/bootloader/OS configuration, with safe backup and rollback for any required change.",
+    "required_package": [
+      "BMC/SUT/OS image/kernel/bootloader/BMC firmware identity and current host/console state",
+      "Actual physical UART and Linux device mapping, SOL channel/payload/privilege, baud/data/parity/stop/flow, terminal type/encoding and getty service",
+      "OS- and bootloader-version-specific supported serial-console procedure; explicit correction of source `consol` typo and validation of tty/unit mapping",
+      "Pinned immutable reviewed internal Script revision/checksum or explicit approved decision not to use it",
+      "Pre-change file/rendered-config backups and hashes, approved diff, syntax/regeneration validation and local/out-of-band rollback path",
+      "Maintenance and point-of-action approval for at most one configuration application and one reboot with independent recovery observer",
+      "Approved SOL client/account/role plus constrained OS test account and harmless marker command",
+      "Expected bootloader/kernel/init/getty/login/runtime markers and timing/drop/repeat/garble/reconnect limits"
+    ],
+    "test_command": "HYBRID; DO NOT EDIT OR REBOOT WITHOUT POINT-OF-ACTION APPROVAL. Preserve BMC/SOL/OS journal/boot/audit logs and discover the real UART/SOL/getty map. Never copy `consol=tty0`, ttyS1, unit 0 or 115200n8 from the source blindly. If serial redirection is already valid, leave configuration unchanged. Otherwise back up/hash exact files and rendered boot config, review/pin the Script or do not use it, prepare an OS-supported diff, validate syntax and generated output, confirm independent rollback, then present the write and one reboot for human approval. Capture the timestamped SOL stream across bootloader, kernel, init/getty, login and runtime. At a verified authenticated constrained prompt, execute only the approved harmless marker, recording echo/response/latency/drop/repeat/garble. Stop on first anomaly; close SOL and restore temporary configuration only per the approved plan.",
+    "expected_result": "The correct SUT's SOL stream contains all required bootloader, kernel, init/getty, login and runtime markers in order and within timing limits, and the harmless authenticated marker produces exactly the expected response without dropped/repeated/garbled input. Generated boot configuration is syntactically valid, unrelated entries are unchanged, the host reaches its approved final state, SOL closes cleanly and any temporary change is restored or retained exactly as approved. SSH/post-hoc logs alone do not pass.",
+    "pass_fail_basis": "PASS requires authoritative UART/SOL/OS mapping, approved configuration state, full timestamped layered SOL evidence, verified authenticated safe-input response, post-state/rollback evidence and engineer confirmation. Source examples, host SSH, passive log files, boot output without runtime input or a marker without transport-stage evidence cannot pass. Wrong target/device, missing stage marker, boot failure, unexpected config diff, unauthenticated/ambiguous prompt, dropped/repeated/garbled input or failed rollback is FAIL and stops the run. Missing mapping, Script review, change/reboot approval or recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear BMC, SOL, OS journal, boot or audit logs; preserve pre-change and first-failure evidence.",
+      "Do not copy the misspelled `consol`, ttyS1/unit0/115200 example without Project/OS validation; determine the actual end-to-end serial map.",
+      "Back up/hashes and validate source plus rendered boot configuration and independent rollback before any approved write/reboot.",
+      "Require point-of-action approval for configuration and one reboot; no blind second attempt on missing output or boot failure.",
+      "Do not expose credentials, type into an ambiguous prompt or run destructive/root commands; use only the constrained authenticated marker and stop on any anomaly."
+    ],
+    "expected_evidence": [
+      "BMC/SUT/OS/kernel/bootloader identities, host state, actual UART/SOL/getty parameters and pinned Script/procedure decision",
+      "Pre-change file and rendered-config backup/hash, approved diff, syntax/regeneration results, reboot approval and independent recovery readiness",
+      "Timestamped SOL capture spanning bootloader, kernel, init/getty, authenticated login and runtime with required OS log markers",
+      "Safe marker command with verified prompt identity, sent/received text, latency and drop/repeat/garble/reconnect results",
+      "Post-test configuration diff/restoration and host/BMC state with preserved BMC/SOL/OS logs",
+      "Explicit client/WebUI and BIOS-SOL coverage differences, one-reboot/no-retry proof and engineer-owned verdict"
+    ],
+    "recovery": "On wrong target/device, boot failure, lost/garbled SOL, unexpected prompt or input anomaly, stop and do not reboot again. Preserve the transcript and logs, use the independent local/out-of-band path to restore the exact backed-up configuration and regenerate/verify the bootloader as defined by the Project recovery SOP. Do not guess another tty/UART value or execute a destructive console command."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Title, Procedure and Criteria consistently target OS-stage SOL output and input. The typo and tty/unit assumptions are unsafe source defects corrected only in the Review layer after discovery, not competing test purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The layered OS SOL objective, mutation gates and rollback are complete. Platform/OS discovery can supply the exact mapping and supported configuration before execution."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Actual UART/SOL/bootloader/kernel/getty map, OS-supported configuration, pinned Script decision, approved backups/diff/rollback, one-reboot window, expected stage markers/limits and safe account/marker.", "execution_status": "NOT STARTED; HYBRID; NO GRUB WRITE, REBOOT OR DUT ACTION EXECUTED"},
+  "external_authorities": [{"title": "Master-referenced internal OS SOL Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/operations/sol-console-in-os-condition-and-output-os-log-keyboard-type-check", "application": "Use only after immutable pinning and safety review against the selected OS/UART mapping; the reference does not authorize blind execution."}],
+  "project_authority": "Selected OS/kernel/bootloader serial-console documentation, BMC vendor SOL specification, Project console policy, reviewed Script revision and recovery SOP define exact commands and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-08", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "all_OS_SOL_layers_required": true, "source_typo_or_tty_example_executed": false, "SSH_or_posthoc_log_substitution_allowed": false, "configuration_write_or_reboot_authorized_by_review": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|912|Wistron-BMC-00202-V003", "next_pending_case_variant_id": "edd365d3bb786465"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
