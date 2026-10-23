@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 38,
+  "source_key": "Functionality|848|Wistron-BMC-00138-V002",
+  "case_variant_id": "535ea15699a8f181",
+  "source_ref": {"sheet": "Functionality", "source_row": 848, "code": "Wistron-BMC-00138-V002", "original_row_sha256": "181c9ed639dee718aa165ed0dd077dcb64a8d74ce0bf075a908b76f143a4d506", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Refresh", "procedure": "Enter BMC Web, click the `Refresh` icon and verify that it refreshes.", "criteria": "The icon function should be workable.", "deepseek": "PARTIAL replaces the in-application icon with browser F5, which exercises a different document, cache and session path.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds identity, safe-page, DOM/network, freshness and session controls, but permits either the UI control or browser reload."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1010_535ea15699a8f181.json",
+  "old_problem": "The historical record established objective refresh/freshness evidence but retained Pending for the exact page/widget, in-app selector, expected request, server-side freshness marker and session/cache contract.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_IN_APPLICATION_REFRESH_CONTROL_TEST",
+  "disposition_reason": "The source explicitly identifies the BMC application's Refresh icon, so F5/Ctrl-R cannot replace it. A Project-selected safe read-only page, control selector, expected read request, freshness/revalidation marker and session/cache behavior are normal runtime bindings. ED-08 requires real WebUI evidence, ED-20 preserves the icon-specific purpose, ED-35 records browser reload as non-equivalent, and ED-36 allows missing page/build values as prerequisites.",
+  "decision_basis": [
+    "XLSX row 848, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "The required evidence chain is in-app control event to intended read request/revalidation to completed rendered state; a spinner or unchanged screenshot alone cannot prove it.",
+    "A stable value may still be freshly retrieved, so PASS must rely on request/timestamp/ETag/sequence or other authoritative freshness metadata rather than arbitrary value change.",
+    "Pages with unsaved forms or pending configuration, firmware, credential, power or reset operations are excluded because refresh may repeat, cancel or obscure state."
+  ],
+  "test_case": {
+    "test_name": "Verify the BMC Web in-application Refresh control refetches and renders current data safely",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the BMC application's own Refresh icon is visible/enabled on an approved read-only page, triggers its version-defined read/revalidation path exactly once, completes the expected loading-to-ready DOM transition with current or freshly validated data, preserves the correct BMC/account/route/session behavior and causes no form, operation or duplicate mutation.",
+    "required_package": [
+      "Immutable BMC identity, trusted Web URL/certificate, firmware/UI build and supported browser/version",
+      "Approved safe read-only page/widget, account/role, route and stable accessible/DOM selector for the in-app Refresh control",
+      "Authoritative data source and deterministic freshness evidence such as response timestamp, ETag, request ID, sequence/count, last-updated field or controlled external change",
+      "Expected read-only request/resource, loading/spinner lifecycle, DOM region, empty/error/stale state and completion timeout",
+      "Session/cookie/refresh-token behavior, route persistence, proxy/cache/service-worker contract and same-value revalidation expectation",
+      "Inventory proving no unsaved field, pending form/job, firmware/power/reset/credential/configuration action; protected session and evidence-redaction rules"
+    ],
+    "test_command": "Bind the browser to the exact BMC/UI build and approved read-only account/page, identify the application's Refresh control by stable semantic attributes and prove it is not browser reload. Confirm there is no unsaved or pending mutable operation. Record route, non-secret session identity, DOM baseline, authoritative data/freshness metadata and proxy/cache/service-worker context while arming network/console capture. Activate the in-app icon exactly once; correlate the event to the expected read/revalidation request, wait for the approved loading-to-ready condition, and record response ID/timestamp/ETag/sequence plus final DOM. Verify the same endpoint/account/route and documented session behavior, no mutating/duplicate request, no stale-cache result and no unexpected error/redirect. Do not use F5/Ctrl-R, clear cache/logs or retry automatically.",
+    "expected_result": "The visible enabled in-app Refresh control issues exactly the approved read/revalidation activity and reaches the ready state within the approved timeout. Returned metadata proves fresh retrieval or revalidation even when values are unchanged; the rendered data is usable and belongs to the same BMC/account/route. Session behavior matches policy and no form submission, configuration change, operation repeat, duplicate request, wrong-endpoint redirect or error occurs.",
+    "pass_fail_basis": "PASS requires one UI-control activation correlated to the expected read request/revalidation, authoritative freshness metadata, completed DOM state, correct endpoint/account/route/session and no mutation/duplicate/error, followed by engineer review. F5/Ctrl-R, icon animation, spinner completion, HTTP 200, changed text without identity or an unchanged screenshot cannot pass alone. Missing request, stale cache, stuck loading, logout/redirect contrary to policy, duplicate/mutating request, discarded unapproved state or wrong endpoint is FAIL. Missing page/selector/freshness/session contract is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Use the application's Refresh icon; browser F5, Ctrl-R, reload and away/back navigation test a different mechanism.",
+      "Select a read-only page with no unsaved form or pending power, firmware, reset, credential, configuration or long-running job; stop if refresh could repeat/cancel/obscure it.",
+      "Validate endpoint/certificate/build and protect credentials, cookies and tokens; post-refresh data must remain bound to the same BMC/account.",
+      "Correlate the click to a read-only request and server-side freshness/revalidation marker; do not accept animation or HTTP status alone.",
+      "Do not demand value change from a stable source; distinguish stable-but-fresh from stale by metadata.",
+      "Do not clear BMC/system/browser logs, cache or service-worker storage unless separately approved, because that changes the path and removes evidence.",
+      "No automatic retry; stop and preserve first-click network/DOM/session evidence on duplicate request, mutation, logout, redirect, wrong endpoint or stuck loading."
+    ],
+    "expected_evidence": [
+      "BMC endpoint/certificate/device identity, firmware/UI build, browser/version, redacted account/role and approved page/widget route",
+      "Pre-click screenshot/DOM with in-app Refresh selector and visible/enabled state plus proof no unsaved/pending operation exists",
+      "Baseline rendered data, authoritative freshness metadata and proxy/cache/service-worker context",
+      "Single click event mapped to expected read request/response with request ID, timestamp/ETag/sequence and loading-to-ready transition",
+      "Final DOM/screenshot with same BMC/account/route/session and stable-fresh versus stale determination",
+      "Network/console evidence of no duplicate/mutating request or error, first-attempt artifact and engineer verdict"
+    ],
+    "recovery": "If refresh loses access, discards state, duplicates/mutates a request or reaches the wrong endpoint, stop without another click, preserve first-attempt route/session/network/DOM evidence and close the isolated session. Use only the documented re-login/OOB path to restore access; do not resubmit an operation or reconstruct unapproved data automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require the BMC application's Refresh icon; page and freshness bindings are underspecified but not contradictory."},
+  "blocked": {"before": false, "after": false, "reason": "The in-app operation and expected refresh behavior are identifiable; safe page, selector, request, freshness and session markers are supplyable inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI build, safe read-only page/widget, in-app selector, expected request, freshness/readiness markers, cache/service-worker/session contract and no-pending-state inventory.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "The version-matched Project/vendor BMC UI control and page-data contract define the in-app refresh request, readiness, freshness and session behavior; generic browser reload is not authoritative for this case.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "in_application_control_required": true, "browser_reload_substitution_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|849|Wistron-BMC-00139-V002", "next_pending_case_variant_id": "57df9b403d675892"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
