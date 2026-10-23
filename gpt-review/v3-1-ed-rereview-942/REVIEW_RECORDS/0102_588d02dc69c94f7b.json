@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 102,
+  "source_key": "Functionality|913|Wistron-BMC-00203-V003",
+  "case_variant_id": "588d02dc69c94f7b",
+  "source_ref": {"sheet": "Functionality", "source_row": 913, "code": "Wistron-BMC-00203-V003", "original_row_sha256": "74ed48fbf50b5d98367be3c176b506dcf23c4a8234c5596ee56ff62b6e795a68", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Next Boot Option - Under Booted", "procedure": "While booted, exercise none, PXE, disk, diagnostic, CD/DVD, BIOS and floppy/removable; compare IPMI boot parameter 5 with WebUI, select one-time boot, reboot and verify next boot; generic setup says clear logs.", "criteria": "IPMI boot setting succeeds and one-time boot reaches the selected destination after reboot.", "script": null, "deepseek": "PARTIAL chains `bootdev none` with force BIOS, covers only a subset, never reboots, exposes BMC/DUT credentials, disables SSH host-key checking and treats kernel boot_id as destination proof.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires an isolated supported-option matrix, full IPMI/WebUI readback, per-option reboot approval, console/device proof and post-consumption clearing."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1074_588d02dc69c94f7b.json",
+  "old_problem": "Command success proves only a write, not the actual firmware destination or one-time consumption. `none` may clear an override rather than select a boot target, legacy diag/CD/floppy paths may not exist, and chaining options or relying on boot_id can both lose coverage and strand the host on an unsafe/unbootable destination.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SEVEN_OPTION_BOOTED_STATE_ONE_TIME_BOOT_MATRIX",
+  "disposition_reason": "Preserve every listed option as an independent row and require Project applicability, exact IPMI/WebUI mapping and a known trusted destination marker. For each applicable row: baseline, one write, complete decoded readback, one approved reboot, destination proof, one-time consumption/clear and unchanged persistent order before the next row. Unsupported N/A is allowed only with platform SPEC. Execution parameters do not keep the review Pending.",
+  "decision_basis": [
+    "XLSX row 913, same-row DeepSeek, exact GPT V2, selection manifest, following power-off variant and preserved V3.1 record were directly reviewed.",
+    "The seven source labels are coverage identities even when a legacy option is unsupported; ED-13 permits N/A only from authoritative platform support data and ED-20 prevents sampling only BIOS/PXE.",
+    "A one-time override has three independent layers—requested flags, actual next destination, and post-boot consumption/reversion—so parameter readback or boot_id alone is insufficient.",
+    "ED-15 requires option-specific outcomes, ED-17 preserves boot evidence and ED-18 requires the approved reboot/ready sequence without blind retries."
+  ],
+  "test_case": {
+    "test_name": "Verify all listed one-time boot options set while the SUT is booted",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "While the verified SUT is already booted, independently verify none, PXE, disk, diagnostic, CD/DVD, BIOS and floppy/removable one-time overrides according to platform applicability: IPMI and WebUI agree, the next approved reboot reaches the intended trusted destination, the override is consumed/cleared and persistent boot order remains unchanged.",
+    "required_package": [
+      "BMC/SUT/BIOS/OS identity, verified booted state and full persistent boot-order plus current override baseline",
+      "Authoritative applicability matrix for all seven labels and exact IPMI boot-option/WebUI mapping including `none` clear/no-change semantics",
+      "Known trusted PXE service, default disk, diagnostic partition, optical/removable media and BIOS path with unique destination markers",
+      "Complete boot-parameter-5 decoder including valid, persistent/one-time and selector flags for this firmware",
+      "Per-option reboot window, console/physical recovery, boot timeout and consumption/second-normal-boot criteria",
+      "Protected BMC/host credentials with verified host keys and preserved SEL/BMC/firmware/boot-console evidence plan"
+    ],
+    "test_command": "STATE-CHANGING; DO NOT EXECUTE WITHOUT PER-OPTION APPROVAL. Preserve logs and create seven explicit rows. For each row, confirm support and safe trusted destination or document authoritative N/A; record booted state, persistent order and full override baseline. Set exactly one one-time option using the validated interface, decode all parameter-5 flags and compare the BMC WebUI label/scope. After point-of-action approval, reboot once and use firmware/console plus destination-specific markers—not boot_id alone—to prove the path. Re-read flags, verify consumption/clear and unchanged persistent order, and complete required normal-boot recovery before proceeding. Never chain options, use untrusted PXE/media or automatically advance/retry.",
+    "expected_result": "Every listed option has an approved applicable or SPEC-backed unsupported outcome. Each applicable option has matching decoded IPMI/WebUI one-time state, reaches its unique intended trusted destination on exactly the next reboot, then clears/consumes as specified and leaves persistent order plus later normal boot unchanged. `none` exhibits the documented clear/no-change behavior rather than being treated as a boot device.",
+    "pass_fail_basis": "PASS requires seven explicit outcomes and, for each applicable row, correct set/readback/UI scope, destination-specific console evidence, one-time consumption/reversion and persistent-order preservation with engineer approval. Sampling BIOS/PXE, command exit status, UI label or kernel boot_id alone cannot pass. Mismatch, wrong/untrusted destination, failed boot, persistent leakage, changed persistent order or recovery failure is FAIL and stops subsequent rows. Missing mapping, destination, approval or recovery is NOT READY, not Pending or PASS; N/A requires authoritative unsupported evidence.",
+    "safety_gate": [
+      "Do not clear logs; preserve initial settings, persistent order, audit/SEL and first-failure console evidence.",
+      "Verify target, booted state and exact option before each isolated write; never chain `none` with another selector or auto-advance.",
+      "Do not expose passwords, use sshpass, disable host verification or boot untrusted PXE/removable media.",
+      "Obtain approval for every override and reboot, execute one reboot, and stop on wrong destination, failed boot or console loss without retry.",
+      "Never alter persistent boot order; restore/clear only the approved one-time state and verify reversion before the next row."
+    ],
+    "expected_evidence": [
+      "Target/firmware/booted-state identity, persistent order and complete initial decoded IPMI/WebUI override baseline",
+      "Seven-row applicability and option-to-trusted-destination matrix with SPEC-backed unsupported outcomes and recovery approval",
+      "Per-applicable-option write/audit, full parameter-5 decode, WebUI match and one-time/persistent flag state",
+      "Firmware/console and unique destination proof for the next boot with timing and any first-failure/recovery evidence",
+      "Post-boot consumption/clear and required second normal-boot/reversion proof with unchanged persistent order",
+      "Preserved logs, no insecure credentials/no-retry proof and engineer-owned per-option verdict"
+    ],
+    "recovery": "On wrong destination, failed boot, console loss or persistent flag leakage, stop all later options and preserve first-failure evidence. Use the pre-arranged local/console route to clear only the approved one-time override and restore the verified baseline without changing persistent order, then confirm normal boot. Do not repeat the reboot or select another option until engineering closes the failure."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Title, Procedure and Criteria consistently test one-time boot overrides from a booted host. Option support and `none` semantics are platform bindings, not competing purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The seven-row state machine, evidence and recovery are complete. Project support/mapping and trusted destinations can make each row executable."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Seven-option applicability, IPMI/WebUI map and parameter decoder, trusted destination markers, boot/recovery timeouts, per-option approvals and console recovery.", "execution_status": "NOT STARTED; STATE-CHANGING; PER-OPTION ONE-TIME OVERRIDE/REBOOT APPROVAL REQUIRED; NO DUT ACTION EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "Platform IPMI boot mapping, BMC WebUI guide, BIOS/UEFI boot policy, trusted boot infrastructure and Project recovery plan define applicability and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "all_seven_option_outcomes_required": true, "unsupported_NA_requires_SPEC": true, "boot_id_as_destination_proof_allowed": false, "persistent_boot_order_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|914|Wistron-BMC-00204-V003", "next_pending_case_variant_id": "0670bf5f45a10127"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

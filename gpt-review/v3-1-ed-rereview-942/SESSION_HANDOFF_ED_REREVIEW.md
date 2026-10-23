@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **101 / 942**
-- Last reviewed: `Functionality|912|Wistron-BMC-00202-V003` / `edd365d3bb786465`
-- Next source-verified pending identity: `Functionality|913|Wistron-BMC-00203-V003` / `588d02dc69c94f7b`
-- Latest disposition: Factory Reset BMC is removed from Pending as a CRITICAL one-shot WebUI test gated by vendor scope/defaults, secure export and independent bootstrap/recovery. The source cold-reset plus generic Redfish sequence is prohibited; no reset was executed.
+- Completed: **102 / 942**
+- Last reviewed: `Functionality|913|Wistron-BMC-00203-V003` / `588d02dc69c94f7b`
+- Next source-verified pending identity: `Functionality|914|Wistron-BMC-00204-V003` / `0670bf5f45a10127`
+- Latest disposition: Next Boot Option under booted state is removed from Pending as seven isolated none/PXE/disk/diag/CD/BIOS/floppy outcomes with applicability, actual destination and post-consumption proof. Sampling, boot_id-only proof, persistent-order changes and retry are prohibited; no override/reboot was executed.
 - Protected sources: unchanged.
 - DUT execution: none.
