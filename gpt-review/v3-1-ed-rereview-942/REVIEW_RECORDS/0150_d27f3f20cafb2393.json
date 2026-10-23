@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 150,
+  "source_key": "Functionality|963|Wistron-BMC-00253-V002",
+  "case_variant_id": "d27f3f20cafb2393",
+  "source_ref": {"sheet": "Functionality", "source_row": 963, "code": "Wistron-BMC-00253-V002", "original_row_sha256": "034f1909ea825755d8716eb1c6d2b902d32164a8276df0d128fecf394990652a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_SYS", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES reads Manufacturer, Model, SerialNumber and Status from an assumed FRU_SYS URI with insecure curl; it omits complete IPMI/UI parity and mixes static FRU identity with dynamic operational Status.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly separates static identity and live Status with protected mapping/no-power controls, but leaves finite system/status parameters as a human decision gate."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1122_d27f3f20cafb2393.json",
+  "old_problem": "Static FRU data and Redfish Status have different time semantics and authorities. A plausible system resource or one Healthy sample cannot replace complete FRU comparison, prove persistent health, or establish the intended system chassis. The prior review recognized this but did not turn member mapping, build reference and status policy into execution prerequisites.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_SYSTEM_FRU_PARITY_WITH_SEPARATE_LIVE_STATUS_CHECKPOINT",
+  "disposition_reason": "Uniquely bind the Project system/chassis FRU, validate its complete persistent identity against IPMI, actual WebUI, mapped API and the approved build record, and evaluate target-advertised Status fields only in a separate timestamped live checkpoint under an approved freshness/health policy. No health generalization or power action is allowed.",
+  "decision_basis": [
+    "XLSX row 963, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 964 were directly reviewed; next pending was verified as Functionality row 964 / variant ff1b456c9f6bd2ef.",
+    "The Master procedure requires system FRU data plus actual WebUI and `ipmitool fru print`. DeepSeek's added Status property is useful supplementary evidence but cannot reduce or replace that static inventory scope.",
+    "Redfish Status describes current resource state/health under schema and vendor semantics, while IPMI FRU fields are persistent identity/manufacturing data. They require distinct expected values, clocks and verdict rows.",
+    "A current acceptable Status is limited to the observed resource/time and does not prove all system functions, sensor thresholds, long-term stability or absence of unrelated faults.",
+    "ED-02, ED-08, ED-14, ED-15, ED-17, ED-18, ED-19, ED-21 and ED-30 preserve evidence, thresholds and no-power scope; ED-33 through ED-38 allow parameterized read-only execution without guessed members or partial coverage."
+  ],
+  "test_case": {
+    "test_name": "Validate system FRU identity and separately timestamped Redfish/WebUI Status",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the Project-defined system/chassis FRU maps uniquely to FRU_SYS and all applicable persistent inventory fields match complete IPMI, actual WebUI, mapped API and the authoritative build record, while separately confirming only the approved contemporaneous Status semantics and freshness without treating health as identity or general system-function proof.",
+    "required_package": [
+      "Immutable SUT/BMC/system/chassis identity and approved mapping of FRU_SYS to the physical system, exact IPMI FRU device and UI/API resource",
+      "Complete enumerated IPMI FRU map with approved device ID/interface/channel/bridge/address and service-root-discovered Chassis/Assembly or OEM relationship",
+      "System FRU area/field layout and authoritative build/manufacturing record with expected manufacturer, model/product, part, serial, asset and custom fields",
+      "Actual WebUI Inventory and LEDs system row/detail mapping and the corresponding rendered Status presentation if provided",
+      "Approved live Status policy defining supported fields, acceptable State/Health values, unknown/absent behavior, collection simultaneity, cache/freshness tolerance and authority",
+      "Trusted TLS/protected read credentials, normalization/redaction rules and audit controls proving no log-clear, FRU write, reset, reboot or power action"
+    ],
+    "test_command": "READ ONLY. Verify the immutable target, enumerate the full IPMI FRU and API inventory collections and bind FRU_SYS to the approved physical system/chassis rather than assuming a friendly URI or default FRU. Run only `ipmitool ... fru print <SYS-FRU-ID>` and retain complete output, exit status and decode/checksum diagnostics. Follow actual service links to the mapped system Chassis/Assembly or approved OEM inventory object, and capture the actual rendered BMC WebUI Hardware status > Inventory and LEDs system row/detail. First decode and compare all persistent FRU fields to the build authority and across IPMI/UI/API. Then, in a separately timestamped row, record only the supported Status members and corresponding WebUI state, source timestamp/cache age and approved expected state/health; do not merge them into FRU fields or generalize beyond the observed resource/time. Repeat read fingerprints only; do not clear logs, write FRU, reset, reboot or power-cycle.",
+    "expected_result": "Exactly one Project system/chassis maps to the selected SYS IPMI FRU and approved UI/API object. All applicable persistent areas decode without reported structure/checksum errors and required identity/manufacturing fields exactly match the build authority after traceable normalization. Separately, supported live Status fields are fresh, schema-valid and meet the approved expected policy or have a specifically allowed absent/unknown representation, and reconcile with the contemporaneous WebUI. No identity/status conflation, stale evidence, broader health claim or state mutation occurs.",
+    "pass_fail_basis": "PASS has two independent mandatory checkpoints: (1) unique system mapping plus full `ipmitool fru print`, actual rendered WebUI and exact complete persistent-field parity; and (2) fresh supported Status evidence meeting the approved State/Health policy. A four-property API response, Healthy alone or correct FRU alone cannot satisfy both. Wrong/duplicate member, parser/checksum error, identity mismatch, stale/unknown Status outside policy, UI/API status disagreement or any power/reset/write change is FAIL. Missing map/build/status policy is NOT READY, not Pending; without an approved Status threshold no PASS is issued for that checkpoint.",
+    "safety_gate": [
+      "Use protected certificate-verified reads and approved IPMI routing; reject process-visible secrets and insecure-TLS acceptance evidence.",
+      "Bind the physical system/chassis before selecting records; do not assume `/Chassis/FRU_SYS`, a default FRU ID or a similar system object.",
+      "Keep persistent FRU identity and dynamic Status in separate data models, timestamps and verdict rows; neither may substitute for the other.",
+      "Do not interpret a single acceptable Status as proof of full system health, sensor correctness, duration stability or unrelated test coverage.",
+      "Allow only FRU enumeration/print and inventory/status GETs; prohibit log clearing, FRU writes, reset, reboot, firmware and all power actions.",
+      "Stop on ambiguous mapping, stale/unknown Status, clock/freshness failure, decode/checksum error or authority conflict and do not automatically retry with a power/reset action."
+    ],
+    "expected_evidence": [
+      "Immutable target and approved system/chassis-to-IPMI/UI/API mapping plus complete enumerated inventory sets",
+      "Timestamped full `ipmitool fru print <SYS-FRU-ID>` with routing, exit/decode/checksum status and protected hash",
+      "Complete mapped API inventory artifact and actual rendered WebUI system row/detail with schema/firmware/trust metadata",
+      "Persistent FRU raw/normalized/reference matrix for every applicable field",
+      "Separate Status matrix with supported properties, API/UI values, timestamps/cache age, approved expected policy and scoped outcome",
+      "Pre/post power/management fingerprints, preserved SEL/audit logs, no-write/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On ambiguous system identity, stale/unknown Status, decode/checksum error or source disagreement, stop and preserve/redact evidence, then obtain the authoritative map/build/status policy. Do not clear logs, write FRU, reset, reboot, power-cycle or automatically retry to refresh health."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master consistently requests readable/correct system FRU inventory. DeepSeek's Status addition is a separate live checkpoint, not a conflicting Master intent."},
+  "blocked": {"before": false, "after": false, "reason": "Both persistent identity and the optional/source-added live status semantics are definable. Mapping, build values and status/freshness policy are bounded Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "System/chassis IPMI/API/UI mapping; complete FRU layout/build values; supported Status fields and expected State/Health/freshness policy; normalization, trust, redaction and no-power audit.", "execution_status": "NOT STARTED; READ-ONLY FRU_SYS AND LIVE-STATUS REVIEW ONLY; NO IPMI, REDFISH, WEBUI, POWER OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines persistent FRU storage areas/fields used by the system identity checkpoint."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete system FRU print/decode/checksum evidence and the no-write boundary."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis/Assembly identity and Status semantics; live state/health remains separate from persistent FRU content and subject to freshness."}
+  ],
+  "project_authority": "The Project package maps the exact system resource/device, supplies the persistent build identity and defines supported Status expectations/freshness. Those finite inputs make both read-only checkpoints automatable without authorizing a health generalization or power action.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-08", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "static_fru_and_live_status_separated": true, "healthy_not_generalized_to_full_system_function": true, "status_requires_approved_freshness_and_expectation": true, "source_webui_and_ipmitool_both_preserved": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "fru_or_power_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|964|Wistron-BMC-00254-V002", "next_pending_case_variant_id": "ff1b456c9f6bd2ef"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_static_live_status_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
