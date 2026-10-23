@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **7 / 942**
-- Last reviewed: `Functionality|742|Wistron-BMC-00032-V003` / `68fd6d032bb4491c`
-- Next source-verified pending identity: `Functionality|744|Wistron-BMC-00034-V002` / `04f21a1cea2f7789`
-- Latest disposition: the RoT row is explicitly scoped to active firmware-version readback, because the source asks only for version before/after. It does not claim attestation, authenticity or trust-chain coverage; those require separate approved tests.
+- Completed: **8 / 942**
+- Last reviewed: `Functionality|744|Wistron-BMC-00034-V002` / `04f21a1cea2f7789`
+- Next source-verified pending identity: `Functionality|745|Wistron-BMC-00035-V002` / `e9c883ad5d8a12a1`
+- Latest disposition: CIFS virtual-media coverage stops after Remote Console connection, exact ISO presentation as virtual CD-ROM, installer/launcher visibility, and clean eject. No OS installation or disk write is authorized or credited.
 - Protected sources: unchanged.
 - DUT execution: none.
 
