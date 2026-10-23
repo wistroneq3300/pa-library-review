@@ -490,3 +490,26 @@ This section governs future *review-layer* reasoning; it is not an execution per
 - Correct copied model/mode content only where case-specific authority establishes the intended workload. For the approved MLPerf case, use RetinaNet Offline Inference v5.0 as the review-layer target, not unrelated BERT/training text; still require versioned harness, datasets and acceptance criteria (ED-10).
 
 Before applying these principles to the 942-item pending queue, independently reconcile original XLSX, historical ED approvals, locked Final Audit and safety constraints. Review every Source Key independently, preserve the original source, and report per-case changes plus Validator and independent QA. No batch or keyword-based auto-resolution, merge or DUT execution is authorized.
+
+## User-approved engineering decision application (2026-10-24, ED-11 through ED-30)
+
+Authoritative decision record: `gpt-review/v3-1-full-3112/ENGINEERING_DECISIONS_USER_APPROVED_ED11_ED30_20261024.md`.
+This section extends ED-01 through ED-10 and the existing safety contract. It does **not** authorize DUT execution, modification of the original Master, automatic resolution of pending decisions, or merge.
+
+- BIOS configuration: select only platform-approved, reversible parameter changes, one at a time. Never implement literal `all/random` as a mutation. Restore to the explicitly intended Factory versus Project Recipe baseline; do not equate them by assumption (ED-11, ED-24).
+- Purpose-versus-procedure mismatches: correct only source-key-approved copy errors in review overlays after direct comparison; the approved CPU Frequency case is not a Core Count case (ED-12).
+- Standard BMC command drafts may be documented as NOT STARTED with unresolved OEM/firmware parameters, authorization and readback; never invent write payload or treat a draft as validated on DUT (ED-13).
+- Firmware upgrade and downgrade are distinct requested coverage. Confirm independent vendor support, signed artifact/hardware mapping, image compatibility, activation and recovery before each operation; never force unsupported downgrade (ED-14).
+- PCIe Gen6 speed transition requires verified end-to-end capability and profile. Assign N/A only for independently documented non-applicability, not due to a platform defect or missing prerequisites (ED-15).
+- Preserve original 12-hour qualification duration; a separately marked short smoke/preflight run is non-equivalent and cannot satisfy original qualification coverage (ED-16).
+- Thermal/voltage Margin fixtures and physical card reseating are operator-controlled; agent may collect evidence, run safety/readiness checks and approved automated portions, with manual steps explicitly tracked and human evidence retained (ED-17, ED-25).
+- Numeric metrics without authorized thresholds may generate planned tests or non-disruptive read-only data collection, never an invented PASS limit; any active stress must still pass an explicit execution approval gate (ED-18, ED-30).
+- SEL destructive actions require pre-action export/hash and exact targeted delete semantics plus separate approval, never broad clear; preserve audit evidence (ED-19).
+- Required WebUI workflows must be witnessed via actual GUI/visual evidence; API may supplement but cannot substitute for prescribed visual observations. Correlate independently observed BMC/Power/KVM state, guarding against stale screens (ED-20, ED-23).
+- Similar H.265/HEVC and GPU stress/log cases retain distinct source-key/variant identity and are evaluated independently even when names or content overlap; do not merge coverage or falsely double count shared evidence. Where human-approved cases remain separately executable, still check applicability, safety and independent intent (ED-21, ED-26).
+- Actual RAID rebuild tests require controlled human hardware preparation where physical intervention is necessary; agent monitors genuine rebuild status and logs, physical LED evidence remains human-verified (ED-22).
+- UFM IB fabric evaluation distinguishes traffic, health, alert lifecycle and recovery with evidence for each objective (ED-27).
+- RAS fault injection is prohibited until vendor-specific fault semantics, isolated test target, explicit human authorization, safe abort/evidence and OOB recovery are proven (ED-28).
+- A power-cycle completion oracle requires the observable OFF -> ON -> OS Ready transitions, not merely successful command submission or one ping (ED-29).
+
+For every affected pending source row, re-check the original XLSX and existing engineering rules before deciding a case-specific disposition. The goal is to reduce unjustified pending flags but never conceal genuine missing authority, acceptance criteria, OEM specifications, unsupported hardware or safety blockers. Keep REVIEW COMPLETE and QA ACCEPTED as distinct states. No keyword/batch automatic reclassification, inference of row identity, execution, merge or protected-source edits.
