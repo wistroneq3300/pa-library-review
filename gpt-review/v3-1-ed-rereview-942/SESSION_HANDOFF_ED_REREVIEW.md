@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **122 / 942**
-- Last reviewed: `Functionality|933|Wistron-BMC-00223-V002` / `934f305104068125`
-- Next source-verified pending identity: `Functionality|934|Wistron-BMC-00224-V002` / `bf9e2cca700c8ffa`
-- Latest disposition: Update LDAP certificate is removed from Pending after pinned tool documentation resolved `authority ldap` as an LDAP root-CA certificate-only PEM operation. Private-key input is prohibited; active fingerprint, LDAPS identity/auth/role/local-fallback and rollback evidence are mandatory. No certificate was changed.
+- Completed: **123 / 942**
+- Last reviewed: `Functionality|934|Wistron-BMC-00224-V002` / `bf9e2cca700c8ffa`
+- Next source-verified pending identity: `Functionality|935|Wistron-BMC-00225-V003` / `eaf5d18c97193323`
+- Latest disposition: Replace LDAP certificate is removed from Pending after pinned source proved certificate-only Root-CA input, a Redfish ReplaceCertificate branch and a distinct non-atomic legacy DELETE/PUT branch. Exact target object, isolation, live trust/auth and mode-specific rollback are mandatory. No certificate was changed.
 - Protected sources: unchanged.
 - DUT execution: none.
