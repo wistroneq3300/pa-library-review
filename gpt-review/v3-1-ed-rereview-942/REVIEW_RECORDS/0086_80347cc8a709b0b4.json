@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 86,
+  "source_key": "Functionality|897|Wistron-BMC-00187-V003",
+  "case_variant_id": "80347cc8a709b0b4",
+  "source_ref": {"sheet": "Functionality", "source_row": 897, "code": "Wistron-BMC-00187-V003", "original_row_sha256": "cd97f6b46985bce4d8f841b6112522d6f7cafb716847ab3d5f91dab58a73ab2d", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "PWR_MB_CPU0_, PWR_MB_CPU1_", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES submits the comma-separated text as one literal IPMI sensor and truncates inventory. It cannot prove either CPU family, enumerate suffix members or establish socket, electrical-boundary, quantity and averaging-window semantics.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly separates CPU0 and CPU1 but treats each trailing-underscore label as one exact record. Related source wildcards show these are presumptive family prefixes whose full members must be supplied by the Project."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1058_80347cc8a709b0b4.json",
+  "old_problem": "The source supplies two incomplete trailing-underscore labels, not a proven list of exact SDR names. A two-command rewrite could still omit rail/package members and compare non-equivalent board input, VR input/output, CPU package power, voltage, current or energy as if they shared units and limits.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_CPU0_CPU1_POWER_PREFIX_FAMILY_MATRIX",
+  "disposition_reason": "Treat both preserved labels as family prefixes, obtain their authoritative member inventory, and validate every member separately with socket, rail or aggregate electrical boundary, quantity, units, telemetry controller, scaling and averaging window. The passive test records current CPU policy/load instead of changing it. Missing platform member maps or acceptance rules make execution NOT READY rather than leaving the review decision Pending.",
+  "decision_basis": [
+    "XLSX row 897, same-row DeepSeek, exact GPT V2, selection manifest, related prefix/wildcard cases and the preserved V3.1 record were directly reviewed.",
+    "Terminal underscores and related `PWR_MB_CPU0_*`/`PWR_MB_CPU1_*` filters are evidence of prefix semantics; the complete member set still varies by board/BMC and cannot be invented.",
+    "Power readings are only comparable when socket, electrical boundary, quantity, scaling and averaging interval match; host package-energy values are not automatic substitutes for BMC/VR telemetry.",
+    "ED-03 prohibits guessed PMBus/OEM parameters, ED-15 requires member-specific approved criteria, ED-17 preserves logs and ED-20 preserves both prefix families and every enumerated member."
+  ],
+  "test_case": {
+    "test_name": "Verify all Project-defined PWR_MB_CPU0_* and PWR_MB_CPU1_* members",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every approved motherboard CPU power-telemetry member under both preserved prefixes is separately present or has a documented absent-socket outcome, maps to the correct physical CPU socket and electrical boundary, and shows correct quantity, units, value, health, supported thresholds and freshness in Dashboard and Server Health under the recorded unchanged operating condition.",
+    "required_package": [
+      "Motherboard, CPU/VR, BIOS, BMC/SDR and microcode identity plus exact CPU0/CPU1 population and socket/package serial map",
+      "Authoritative complete exact member lists and suffix definitions for `PWR_MB_CPU0_*` and `PWR_MB_CPU1_*`",
+      "Per-member socket, rail/package/board boundary, power/voltage/current/energy quantity, units and aggregate-versus-rail semantics",
+      "Per-member VR or power-monitor controller, bus/mux/address/page/register, scaling, averaging window, update interval and stable SDR/API/UI identity",
+      "Approved member-specific tolerance, threshold capability/values/hysteresis, health, stale/no-reading and absent/disabled-socket rules",
+      "Recorded CPU workload/processes, C-state/frequency, power profile/caps, VR state and synchronized system input power context",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, kernel, machine-check, VR or power logs and do not start CPU stress or change governor, C-state, frequency, power cap, firmware, thresholds or VR settings. Obtain the two authoritative member lists first. Enumerate the complete BMC sensor repository, match exact approved members for CPU0 and CPU1, and query each separately; never pass `PWR_MB_CPU0_, PWR_MB_CPU1_` as one name or assume only two records. Review the Script before use. Capture each member's identity, socket, electrical boundary, quantity, units, value, capability/threshold fields, health, averaging/update window and timestamp plus matching Dashboard and Server Health rows. Record the unchanged CPU policy/load state and compare only with that member's approved rule. Stop without retry on unknown suffix, missing/extra/swapped/stale or divergent data.",
+    "expected_result": "Both prefix families are completely enumerated and every approved member has an explicit outcome. Applicable OOB and both UI records agree on exact member, physical socket, electrical boundary, quantity, units, value, health, supported threshold fields and freshness; each value satisfies its member-specific rule for the captured operating state. An absent socket follows its documented family-absence behavior, and unrelated host/package or board-input telemetry is not substituted.",
+    "pass_fail_basis": "PASS requires the approved complete CPU0 and CPU1 member inventories, separate evidence for every member and engineer-confirmed boundary-correct comparisons in OOB and both UI locations. Two assumed records, a comma query, truncated list, label-only match, unitless value or cross-boundary power comparison cannot pass. Missing/extra/unknown suffix, wrong socket/boundary/unit/scaling, stale data, out-of-rule value or required UI/status/threshold mismatch is FAIL. Missing member map, controller semantics, operating context or approved rules is NOT READY, not Pending or PASS. Load response, power-cap behavior, VR protection and energy accounting are outside this static display case.",
+    "safety_gate": [
+      "Preserve SEL, machine-check, kernel, VR and power history; do not perform the generic clear-log step.",
+      "Treat the two labels as prefixes and enumerate every approved member; do not invent suffixes or pass the comma-separated text as one sensor.",
+      "Do not equate board input, VR input/output, CPU package power, voltage, current or energy across different boundaries or averaging windows.",
+      "Do not start stress or change CPU policy, C-state, frequency, cap, firmware, thresholds or VR settings; record the existing condition.",
+      "Do not guess OEM/PMBus parameters, truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Motherboard/CPU/VR/BIOS/BMC identity and CPU0/CPU1 physical socket, package and population map",
+      "Approved exhaustive exact member lists with each suffix, socket, rail/package/board boundary, quantity, units and stable SDR/UI IDs",
+      "Controller/bus/mux/address/page/register, scaling and averaging/update definitions plus complete separate raw values, supported threshold fields, state and timestamps",
+      "Corresponding Dashboard and Server Health visual rows and synchronized CPU processes/load, C-state/frequency, power profile/caps, VR state and system input power",
+      "Missing/extra/unknown-suffix/absent-socket/swapped/stale/divergent disposition and pinned Script/client audit",
+      "No-clear/no-stress-or-policy-or-firmware-or-threshold change/no-retry proof, final CPU/VR/BMC health and family/member engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On unknown family members, socket/boundary ambiguity, stale/divergent readings or health change, stop and preserve first-pass data and the exact operating state. Obtain the motherboard/VR/BMC references and use approved read-only diagnostics; do not generate load or change power policy to force a reading. Any separately approved stress or VR action requires its own authorization and recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The two labels are incomplete prefixes, but Items, UI Procedure and Criteria consistently target motherboard CPU0/CPU1 power telemetry. Enumeration resolves readiness without changing the source purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The passive family-level objective and safe method are defined. Board/BMC/VR documentation can provide the platform member list, electrical semantics and acceptance before execution."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Complete CPU0/CPU1 prefix member lists, socket/rail/boundary/quantity map, VR or monitor source and scaling, stable SDR/UI IDs, member-specific state/threshold/freshness/absent rules, passive CPU/power context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO CPU LOAD, POWER-POLICY, VR, FIRMWARE OR THRESHOLD CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define prefix members, socket boundaries, PMBus semantics or acceptance."}],
+  "project_authority": "Motherboard power tree/socket map, VR/power-monitor specification, BMC SDR definitions, CPU power-policy recipe and WebUI schema define family membership and boundary-correct criteria.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "both_prefix_families_and_all_members_required": true, "labels_treated_as_two_exact_records": false, "cross_boundary_substitution_allowed": false, "cpu_load_or_policy_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|898|Wistron-BMC-00188-V003", "next_pending_case_variant_id": "c04e5e5efb2edeea"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
