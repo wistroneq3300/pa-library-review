@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 34,
+  "source_key": "Functionality|844|Wistron-BMC-00134-V003",
+  "case_variant_id": "bbedbcedd6c3822c",
+  "source_ref": {"sheet": "Functionality", "source_row": 844, "code": "Wistron-BMC-00134-V003", "original_row_sha256": "511a775446e438746c7bc1256b25765990a825c04f68a93c809c95ae70234b81", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Login with MAC", "procedure": "Wrong-user login, correct admin logins across privileges, then logout; no MAC value, discovery/resolution method, URL syntax or MAC-specific step is present.", "criteria": "Reject wrong user, accept correct admins of different privileges, and return to login after logout; no MAC-specific expected result is present.", "deepseek": "PARTIAL invents a hostname/MAC-based URL and calls the risk none, although the source never defines that mechanism.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION constructs a guarded hypothetical MAC discovery/resolution flow, but still chooses one unsupported meaning for the title."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1006_bbedbcedd6c3822c.json",
+  "old_problem": "The title's distinguishing MAC operation is absent from the body. Multiple non-equivalent meanings remain possible, so neither DeepSeek nor GPT V2 can safely recover a unique method or PASS criterion.",
+  "new_disposition": "RETAINED_BLOCKED_CORE_MAC_LOGIN_SEMANTICS_UNDEFINED",
+  "disposition_reason": "This is not a missing runtime MAC address. A link-layer MAC alone is not a Web authority, and the source does not specify whether it means a MAC-derived hostname, DNS/mDNS/vendor discovery, hosts override, local link-layer selection, certificate/device binding, access-control identity or an erroneous title. The generic login/logout body cannot prove the only title-specific coverage. ED-03 forbids guessing OEM behavior, ED-15 forbids a PASS without an authoritative expected result, ED-20 preserves the distinct identity and ED-34 permits blocking when core operation semantics are absent.",
+  "decision_basis": [
+    "XLSX row 844, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "The immediately following Domain Name row uses the same generic body, so its FQDN semantics cannot be silently copied backward as the meaning of MAC.",
+    "No general networking standard creates a unique Web URL or authentication path from a raw MAC address; any platform service would be Project/vendor-specific.",
+    "Parameterized execution is unsafe because the unresolved value is the operation and acceptance semantic itself, not merely target data."
+  ],
+  "test_case": {
+    "test_name": "Define and then verify the Project-supported `Login with MAC` mechanism",
+    "automation_classification": "BLOCKED",
+    "purpose": "Preserve the intended MAC-specific BMC login identity while preventing ordinary IP/FQDN login or an invented discovery convention from being reported as its validation. After an authoritative scope decision, prove the unique MAC mechanism, endpoint identity, bounded authentication matrix and logout session invalidation separately.",
+    "required_package": [
+      "Signed Project/vendor definition of what `MAC` means in this test and whether the title is valid",
+      "If supported: exact BMC interface/MAC, canonical format, network/VLAN/domain scope, discovery/resolution/access protocol, server/configuration, browser authority/URL syntax and cache behavior",
+      "Unique positive and required negative acceptance evidence proving use of the chosen MAC mechanism rather than cached IP/FQDN fallback",
+      "If title is erroneous: approved Project Override preserving the original title, rationale, replacement scope and explicitly unverified MAC coverage",
+      "After semantic resolution: immutable BMC/certificate/firmware identity, protected disposable account/privilege matrix, attempt budget, session policy, audit evidence and recovery"
+    ],
+    "test_command": "DO NOT EXECUTE while the block remains. An authorized engineer must first select and document the single supported meaning of `Login with MAC`, its platform mechanism and unique PASS/FAIL signal, or approve an erroneous-title override. Only after that decision: bind the exact interface MAC and controlled network mechanism to the intended BMC certificate/firmware identity; prove the complete non-cached/non-fallback discovery or access chain; then execute one bounded invalid-login case, each approved admin-role case and logout with prior-session rejection. Preserve security evidence and remove only approved temporary resolution configuration. Do not derive a URL from the MAC, browse ambiguous results, clear logs or submit credentials before identity binding.",
+    "expected_result": "Before resolution, no DUT result is valid. After resolution, the approved MAC-specific mechanism produces its unique documented result and reaches exactly the intended BMC without cached IP/FQDN substitution or ambiguity; the bounded authentication matrix rejects the invalid account, accepts each approved admin role with correct identity/authorization, and logout invalidates the prior session. If the title is officially declared erroneous, the generic login result is recorded only under the approved override and original MAC coverage remains explicitly unverified.",
+    "pass_fail_basis": "PASS is prohibited until an authoritative meaning, mechanism and unique MAC-specific acceptance criterion exist. Once supplied, PASS requires end-to-end proof of that exact mechanism, MAC-to-endpoint/certificate/firmware identity correlation, no stale/cache/proxy/fallback ambiguity, all three source authentication/logout branches and an engineer verdict. A resolved page, ordinary IP/FQDN login, generic browser success or hypothetical vendor discovery cannot pass. Ambiguity, wrong target, fallback, missing MAC checkpoint, incomplete login matrix or surviving logged-out session is FAIL; absence of the semantic decision remains BLOCKED.",
+    "safety_gate": [
+      "Do not convert a raw MAC to a hostname, IP or URL by convention or guesswork; no such rule is supplied.",
+      "Do not follow DeepSeek/GPT V2's hypothetical resolution path until the Project/vendor identifies the exact supported mechanism.",
+      "Do not run the generic body and call the title covered; ordinary authentication omits the MAC-specific purpose.",
+      "Never authenticate to a discovered/resolved endpoint until interface MAC, certificate, firmware/serial and Project ownership are independently correlated.",
+      "After resolution, use protected disposable accounts, bound invalid attempts and real old-session rejection; no automatic discovery or login retry.",
+      "Preserve BMC/security/system logs and first ambiguity/failure evidence; never clear them to prepare this test."
+    ],
+    "expected_evidence": [
+      "Signed engineer scope decision defining `Login with MAC`, the selected Project/vendor mechanism and unique acceptance criteria",
+      "Exact target interface/MAC, network scope and version-matched platform documentation/configuration for that mechanism",
+      "Complete discovery/resolution/access chain proving no cached IP/FQDN fallback, proxy substitution or multiple/stale result",
+      "Endpoint certificate, BMC firmware/serial and interface-MAC correlation",
+      "After scope resolution: bounded invalid login, each approved admin identity/authorization, logout plus prior-session rejection and audit/lockout evidence",
+      "Explicit uncovered title/body coverage, cleanup/recovery and engineer verdict"
+    ],
+    "recovery": "Before the decision, recovery is avoidance: do not browse or authenticate. If later resolution reaches an ambiguous or wrong endpoint, stop, close the session, preserve evidence, revoke any exposed disposable credential through the approved OOB path, remove approved temporary resolution entries and verify the intended BMC independently. Do not retry discovery/authentication automatically."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "The title uniquely requires `Login with MAC`, but Procedure and Criteria are generic login/logout and define no role, method or expected result for MAC."},
+  "blocked": {"before": true, "after": true, "reason": "The missing element is the core operation and authoritative PASS criterion. Choosing one of several non-equivalent MAC mechanisms would invent coverage and could expose credentials to the wrong device."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Not merely configuration: requires an authoritative engineering decision defining MAC semantics, supported mechanism, unique acceptance or an explicit erroneous-title override.", "execution_status": "BLOCKED; NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "Only approved Project/vendor documentation can define a MAC-based BMC Web access mechanism for this platform. General DNS/mDNS/discovery behavior cannot select the intended interpretation.",
+  "unblock_condition": "Engineer supplies a signed title/body reconciliation defining `MAC`, the exact supported platform mechanism and unique PASS/FAIL evidence, or approves an erroneous-title override that records original MAC coverage as unverified.",
+  "responsible_owner": "BMC firmware/network architecture owner with SIT testcase owner and security approval for endpoint/account handling.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-20", "ED-31", "ED-34", "ED-35", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "generic_login_substitution_allowed": false, "mac_derived_url_inference_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|845|Wistron-BMC-00135-V003", "next_pending_case_variant_id": "6a533ef4617ac657"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
