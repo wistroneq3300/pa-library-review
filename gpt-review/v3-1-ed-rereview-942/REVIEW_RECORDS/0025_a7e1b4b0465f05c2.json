@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 25,
+  "source_key": "Functionality|835|Wistron-BMC-00125-V003",
+  "case_variant_id": "a7e1b4b0465f05c2",
+  "source_ref": {"sheet": "Functionality", "source_row": 835, "code": "Wistron-BMC-00125-V003", "original_row_sha256": "20a1747f814be9229b5bfdbc36a2425ded8ec023ccb90140818eee095d3837f3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SOL session by ipmiutil", "procedure": "Send `ipmiutil sol -U <BMC_user>-P <BMC_password>-N <BMC_IP>-V 4 -a -F lan2`.", "criteria": "The SOL session establishes successfully and output contains human-readable characters.", "deepseek": "PARTIAL but unsafe: concatenates ipmiutil/ipmitool, deactivates through a different client without ownership, exposes passwords and pipes an interactive session to head.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; requires target/channel mapping, protected credentials, bounded capture and clean termination."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0997_a7e1b4b0465f05c2.json",
+  "old_problem": "The historical review correctly preserved ipmiutil-specific coverage and rejected unsafe execution, but kept an otherwise well-defined client/session test on the decision queue because package version, exact endpoint, session owner and expected text had not been supplied.",
+  "new_disposition": "RESOLVED_AS_VERSION_PINNED_IPMIUTIL_SOL_CLIENT_TEST",
+  "disposition_reason": "The upstream ipmiutil User Guide supplies the authoritative option meanings and a safe password-prompt alternative: `-N` binds the remote node, `-F lan2` selects the IPMI 2.0 driver, `-V 4` requests Administrator privilege, `-a` opens the SOL session, and `-Y` prompts rather than exposing the password as a command argument. The source command can therefore be corrected without changing the specified client or purpose. Installed version/build, target identity, allowed privilege/cipher, console mapping, session ownership, expected banner/encoding and time bounds are execution inputs. A bounded PTY transcript plus clean lifecycle evidence provides an auditable oracle; no new engineer decision is needed.",
+  "decision_basis": [
+    "XLSX row 835, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "The upstream ipmiutil 3.1.8 User Guide identifies `ipmiutil sol`/ISOL as its SOL console application and documents the source's remote-node, LAN2-driver and privilege options.",
+    "The same guide documents `-Y` as a password prompt and `-E` as an environment alternative to plaintext `-P`; the review selects `-Y` for attended protected entry while preserving the original `-P` token as history.",
+    "IPMI 2.0 defines SOL as an interactive payload and serial route, so session establishment, exact target stream, owner safety and clean termination are separate required facts.",
+    "ED-20 preserves this ipmiutil variant independently of other SOL tests, ED-35 retains the named tool rather than substituting ipmitool, ED-36 makes version/endpoint values prerequisites, and ED-38 forbids secret exposure and automatic retry."
+  ],
+  "test_case": {
+    "test_name": "Establish and cleanly close a protected ipmiutil SOL session with readable target output",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the Project-pinned ipmiutil build can establish one IPMI 2.0 SOL session to the exact intended BMC/host console, receive correctly encoded target-specific human-readable output and close without preempting another owner or leaving a stale payload.",
+    "required_package": [
+      "Pinned ipmiutil package/version/build provenance and its installed `ipmiutil sol -?` output matched to the reviewed upstream option semantics",
+      "Immutable BMC/host identity, firmware, management address/MAC and mapping of LAN2/SOL payload/channel to the intended host console",
+      "Dedicated test account, minimum Project-approved privilege and cipher; explicit approval if source `-V 4` Administrator is required",
+      "Protected attended password prompt through `-Y` or an equally reviewed secret broker; no literal `-P` value in process list, history or logs",
+      "Pre-session payload state and owner, takeover prohibition/approval, activation and maximum session timeouts, documented ipmiutil escape/close behavior",
+      "Expected target-specific banner/prompt/boot text, character encoding/line discipline, evidence interval/redaction and alternate KVM/OOB recovery"
+    ],
+    "test_command": "Preflight and record the installed ipmiutil version/help, exact BMC/host identity, LAN2/SOL payload mapping, current payload/session owner, allowed privilege/cipher, expected text and KVM/OOB health. Preserve logs. After approval, run one bounded PTY session using the version-validated safe form `ipmiutil sol -U \"$BMC_USER\" -N \"$BMC_IP\" -V 4 -a -F lan2 -Y` only when Administrator privilege is explicitly required; otherwise use the approved minimum supported `-V` while recording the source-to-actual difference. Enter the password through the protected prompt, capture timestamped raw bytes without arbitrary input, identify the approved target banner/prompt, exit by the documented ipmiutil escape and verify client exit plus final payload state. Do not invoke ipmitool, preemptively deactivate a session, pipe to `head`, retry automatically or clear logs.",
+    "expected_result": "The pinned ipmiutil client authenticates to the bound BMC using the approved IPMI 2.0 driver/privilege/cipher, activates exactly one authorized SOL payload, and receives the expected target-specific banner/prompt or other approved text as correctly decoded human-readable characters within the defined interval. No other session is displaced, no credentials or unapproved console content are exposed, the documented escape closes the client and payload according to policy, and BMC/host/KVM/OOB health remains normal.",
+    "pass_fail_basis": "PASS requires ipmiutil-specific version/command metadata, exact BMC/host binding, pre/post owner/payload state, a timestamped raw/redacted transcript containing the approved target-specific readable token(s), successful bounded termination and healthy final state. ipmitool output, a generic success string, config-only status or an unterminated stream cannot pass. Wrong target/channel, privilege/cipher policy violation, authentication error, unreadable or unexpected stream, missing expected token, owner preemption, timeout, secret leakage, stale payload or management impact is FAIL. Missing package, mapping, expected text, ownership, timeout/escape or approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Validate the installed option meanings and insert required argument separators; do not copy the source placeholders literally.",
+      "Use protected `-Y` prompt or a reviewed broker; never provide a literal `-P` secret or expose `IPMI_PASSWORD` in captured environment/process evidence.",
+      "Confirm exact BMC/host identity and SOL owner before activation; never deactivate or seize an unknown active session.",
+      "Use a PTY with hard activation/session timeouts and documented escape; do not use a pipe whose reader can exit while the payload stays active.",
+      "Send no arbitrary input, credentials, break, reboot or power command; capture only the approved evidence window.",
+      "Do not clear logs or automatically retry. Stop on wrong target, ownership conflict, unreadable/secret-bearing output, timeout or failed clean close."
+    ],
+    "expected_evidence": [
+      "ipmiutil package/version/build hash and captured help proving the actual `sol`, `-N`, `-F lan2`, `-V`, `-a` and `-Y` meanings",
+      "BMC/host identity and LAN2/SOL payload/channel/console mapping with pre-session owner/state",
+      "Approved privilege/cipher and protected-prompt attestation, plus redacted exact command metadata and source-to-actual difference",
+      "One timestamped bounded raw/redacted ipmiutil transcript containing approved target-specific readable output and encoding assessment",
+      "Documented escape, client exit code, final payload/session state, absence of unauthorized input and no automatic retry",
+      "Preserved BMC/host log delta, KVM/OOB/host health and engineer-owned verdict"
+    ],
+    "recovery": "On wrong target, active-owner conflict, authentication/cipher failure, unreadable or sensitive output, timeout or failed exit, stop without retry or console input. Use the documented ipmiutil escape; deactivate only the owned test payload if that separate action is approved. Preserve the transcript, rotate any exposed credential, use the independent KVM/OOB path to verify host/BMC health, and escalate a stale session to its owner rather than forcing another client's deactivate."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, source command and Criteria consistently specify an ipmiutil SOL session; missing separators and runtime bindings are correctable execution details."},
+  "blocked": {"before": false, "after": false, "reason": "Upstream documentation resolves the option semantics and secure prompt; target, owner and expected text are Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Pinned ipmiutil build, BMC/SOL mapping, minimum privilege/cipher, account/secret broker, owner policy, expected text/encoding, timeouts and recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "ipmiutil User Guide 3.1.8", "url": "https://github.com/arcress0/ipmiutil/blob/master/doc/UserGuide", "use": "Authoritative client synopsis, SOL purpose, LAN2 driver, privilege, cipher and protected password-prompt option semantics."},
+    {"title": "Intel Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "use": "Defines SOL payload/session and serial-routing boundary."}
+  ],
+  "traceability": {"applicable_decisions": ["ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "ipmiutil_specific_coverage_preserved": true, "plaintext_source_password_option_executed": false, "session_takeover_authorized_by_review": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|836|Wistron-BMC-00126-V004", "next_pending_case_variant_id": "2b0c8075417c3767"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
