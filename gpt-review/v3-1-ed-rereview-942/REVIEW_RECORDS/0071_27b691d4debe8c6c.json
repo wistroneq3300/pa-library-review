@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 71,
+  "source_key": "Functionality|881|Wistron-BMC-00171-V003",
+  "case_variant_id": "27b691d4debe8c6c",
+  "source_ref": {"sheet": "Functionality", "source_row": 881, "code": "Wistron-BMC-00171-V003", "original_row_sha256": "4e299b73b391144411fdb2893be683cd387c3691407d691e42ae8d87bb50d483", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP CEMBB", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES may read the literal record but truncates fallback inventory and does not define CEMBB, identify its assembly/revision/probe zone, distinguish it from slot/card sensors or capture CEM population, cooling state and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires platform CEMBB meaning/location, complete fields, UI mapping and approved reference/airflow context."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1043_27b691d4debe8c6c.json",
+  "old_problem": "A plausible named reading could be accepted after guessing CEMBB meant a backplane or baseboard, without proving the exact assembly revision and probe zone or distinguishing it from CEM-slot and card telemetry. The acceptance mode and CEM population/cooling state were also undefined.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_CEMBB_ASSEMBLY_TEMPERATURE_CHECK",
+  "disposition_reason": "Keep CEMBB unexpanded until the Project defines it, then bind the stable record and both UI rows to the exact assembly/revision and probe zone. Record CEM/riser/card population and passive cooling state, and apply either an approved static range/status criterion or a non-intrusive calibrated-reference criterion. These are Project execution inputs rather than unresolved review logic.",
+  "decision_basis": [
+    "XLSX row 881, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "CEMBB is a vendor platform label; backboard, backplane and baseboard expansions cannot be selected without the Project assembly map.",
+    "A dedicated assembly thermal zone is not interchangeable with a CEM slot or add-in-card internal sensor, and static range/status is not calibrated accuracy.",
+    "ED-15 requires an approved acceptance criterion, ED-17 rejects log clearing, and ED-20 preserves CEMBB as its own coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP CEMBB against the Project-defined assembly, probe zone and passive thermal criterion",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After the Project defines CEMBB, verify its temperature record maps to the exact intended assembly/revision and probe zone and is human readable in Dashboard and Server Health with correct value, units, health, implemented thresholds/hysteresis and freshness under the documented CEM population and passive cooling state.",
+    "required_package": [
+      "Authoritative Project definition of CEMBB and exact chassis/board/CEM assembly PN/revision plus BMC/BIOS identity",
+      "Assembly drawing locating the CEMBB sensing point and thermal zone relative to CEM slots, cards, risers and airflow",
+      "Stable SDR/API name/number/type/entity/instance and corresponding Dashboard and Server Health rows",
+      "Approved static-range/status or calibrated-accuracy criterion with units/scaling, thresholds/hysteresis, freshness and tolerance",
+      "CEM slot/riser/card population, card power/load, fan mode/speeds, panels/ducts, airflow and timestamps",
+      "If accuracy is required, approved non-intrusive calibrated reference placement, calibration validity, combined uncertainty and update lag",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, remove/reseat CEM cards or risers, open/remove panels or ducts, reset/load cards, change fans/airflow or write thresholds. Confirm the authoritative CEMBB expansion, exact assembly/revision and probe zone and select the approved static or calibrated criterion. Resolve one stable TEMP CEMBB identity from the complete repository; review the Script before use. Capture its complete value, units, capability/threshold/hysteresis, health and timestamp plus unchanged Dashboard and Server Health rows. Record CEM population, card state and passive cooling state. Apply approved limits or, only with a non-intrusive setup, a time-aligned reference and combined uncertainty. Stop without retry on missing, duplicate, stale or divergent identity.",
+    "expected_result": "One stable record and both UI rows map to the Project-defined CEMBB assembly/revision and probe zone. Complete OOB/UI value, units, threshold capability/values, health and freshness agree with specification and satisfy the selected static criterion or approved non-intrusive reference tolerance under the recorded passive state. CEM-slot/card/generic chassis telemetry does not substitute and hardware/airflow remains unchanged.",
+    "pass_fail_basis": "PASS requires authoritative CEMBB meaning, assembly/probe identity, complete OOB and both-UI agreement, the named acceptance mode and engineer verdict for all applicable fields. A guessed acronym, readable/plausible value, slot/card sensor, truncated output or command success alone cannot pass. Wrong/duplicate/stale identity, out-of-limit value or required field/threshold/status/UI mismatch is FAIL. Missing definition/map/spec/criterion/reviewed method is NOT READY, not Pending or PASS; static range does not claim calibrated accuracy or per-slot coverage.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; CEM/PCIe, fan and thermal history is relevant evidence.",
+      "Do not expand CEMBB from the label or substitute CEM-slot, card-internal or generic chassis telemetry.",
+      "Do not service/reset/load cards or risers, open panels/ducts, change fans/airflow/environment or write thresholds.",
+      "Any accuracy reference must be non-intrusive and must not alter airflow; intrusive setup requires a separate approved plan.",
+      "Keep static range/status and calibrated accuracy distinct and preserve identity, capability, units, status and timestamps.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Project-approved CEMBB definition; chassis/board/CEMBB assembly PN/revision, BMC/BIOS and CEM slot/riser/card population identity",
+      "Authoritative probe-zone/airflow map and complete stable raw identity, value, units, threshold capabilities/values, health and timestamp",
+      "Separate unchanged Dashboard and Server Health evidence mapped to the same assembly record",
+      "Card/riser load/power, fan policy/speeds, panels/ducts and airflow state with timestamps",
+      "Approved static comparison or non-intrusive calibrated reference with placement, uncertainty and update-lag calculation",
+      "Pinned Script or alternate-method audit, no-clear/no-write/no-service-or-airflow-change/no-retry proof, final PCIe/cooling/BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On acronym, assembly, probe or identity ambiguity, stale/divergent values, unexpected health change or reference airflow disturbance, stop and preserve the first complete evidence and CEM/cooling state. Remove only an authorized non-intrusive reference fixture and use approved read-only diagnostics; any separately authorized hardware/configuration change is restored by the platform owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The vendor acronym is underdefined, but Items, UI Procedure and Criteria consistently request passive validation of one named temperature record. Project definition resolves identity without changing purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The passive named target is identifiable. CEMBB expansion, assembly/probe map, cooling state and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "CEMBB definition, assembly/revision/probe map, stable sensor/UI identity, selected static or accuracy criterion, values/thresholds/status/freshness, CEM/cooling state, optional safe reference and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define CEMBB or its physical assembly/probe."}],
+  "project_authority": "CEMBB terminology and assembly/sensor-placement drawing, CEM topology, SDR thermal limits, airflow spec, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "acronym_expansion_inferred": false, "slot_or_card_sensor_substitution_allowed": false, "static_range_claims_accuracy": false, "hardware_or_airflow_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|882|Wistron-BMC-00172-V003", "next_pending_case_variant_id": "22576dda077fc198"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

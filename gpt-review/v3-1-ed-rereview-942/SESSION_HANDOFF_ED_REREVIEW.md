@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **70 / 942**
-- Last reviewed: `Functionality|880|Wistron-BMC-00170-V003` / `a5af9073ffa06067`
-- Next source-verified pending identity: `Functionality|881|Wistron-BMC-00171-V003` / `27b691d4debe8c6c`
-- Latest disposition: TEMP CEMSlot 1~2 is removed from Pending as a two-row physical CEM-slot/root-port/BDF/FRU/population/source matrix with separate complete OOB/UI/spec evidence. Literal range, enumeration-only, one-slot or unmapped card-telemetry substitution, PCIe service/load/reset, clear and unreviewed Script execution are prohibited.
+- Completed: **71 / 942**
+- Last reviewed: `Functionality|881|Wistron-BMC-00171-V003` / `27b691d4debe8c6c`
+- Next source-verified pending identity: `Functionality|882|Wistron-BMC-00172-V003` / `22576dda077fc198`
+- Latest disposition: TEMP CEMBB is removed from Pending as a Project-defined assembly/revision/probe-zone check with an explicit static or non-intrusive calibrated criterion. Acronym guessing, slot/card substitution, hardware/airflow change, clear and unreviewed Script execution are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.
