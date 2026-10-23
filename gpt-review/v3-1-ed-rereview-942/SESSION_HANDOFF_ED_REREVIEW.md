@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **76 / 942**
-- Last reviewed: `Functionality|887|Wistron-BMC-00177-V003` / `7d5b1ca0c246695b`
-- Next source-verified pending identity: `Functionality|888|Wistron-BMC-00178-V003` / `ead4951c667183d6`
-- Latest disposition: TEMP_GB_PCB1~4 is removed from Pending as a four-row GPU-baseboard schematic-zone/probe/BMC-field matrix. Literal range, GPU/NVSwitch/aggregate substitution, load/airflow/threshold stimulus, clear and unreviewed Script execution are prohibited; dynamic threshold coverage remains separate.
+- Completed: **77 / 942**
+- Last reviewed: `Functionality|888|Wistron-BMC-00178-V003` / `ead4951c667183d6`
+- Next source-verified pending identity: `Functionality|889|Wistron-BMC-00179-V003` / `f0a41dfe62dad5b0`
+- Latest disposition: TEMP_GB_INLET1~2 is removed from Pending as a two-row physical intake-path/measurement-plane/BMC-field matrix with location-specific passive cooling criteria. Literal range, ambient/other-inlet/PCB/GPU substitution, cooling manipulation, clear and unreviewed Script execution are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.

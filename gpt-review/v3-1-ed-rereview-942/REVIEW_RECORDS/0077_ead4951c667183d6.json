@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 77,
+  "source_key": "Functionality|888|Wistron-BMC-00178-V003",
+  "case_variant_id": "ead4951c667183d6",
+  "source_ref": {"sheet": "Functionality", "source_row": 888, "code": "Wistron-BMC-00178-V003", "original_row_sha256": "2b05dca1983b8ed14f899afb62e42ef124b23caf71f668adc8cd75dbfb71164e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_GB_INLET1~2", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats INLET1~2 as one literal sensor and truncates fallback inventory; it omits two physical intake paths and measurement planes, rack-ambient/recirculation context, BMC source fields and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires separate inlet records, physical mapping and recorded airflow/reference conditions."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1049_ead4951c667183d6.json",
+  "old_problem": "One range operand or two plausible values could be accepted without mapping INLET1 and INLET2 to distinct GPU-baseboard intake paths and measurement planes. An unrelated rack ambient, downstream local inlet, other board sensor or one average could be substituted despite recirculation and spatial gradients.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_ROW_GPU_BASEBOARD_INLET_MATRIX",
+  "disposition_reason": "Confirm GB/INLET terminology and bind two stable records and UI rows to their exact physical intake paths, measurement planes and BMC fields. Record the existing rack ambient, power/load, fan, baffle/cable and airflow state and compare each with its location-specific limit or approved co-located reference/gradient without changing cooling.",
+  "decision_basis": [
+    "XLSX row 888, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, related source cases and historical record were directly reviewed.",
+    "Tilde shorthand is not proven query syntax and one result cannot satisfy two independently located intake sensors.",
+    "Inlet temperature is meaningful only at a defined plane; rack ambient and downstream baseboard inlet can differ through recirculation, upstream heat and baffle/cable geometry.",
+    "ED-15 requires location-specific tolerances, ED-17 preserves fan/thermal logs, ED-20 preserves both inlets and ED-14 keeps dynamic threshold/fan-response coverage separate."
+  ],
+  "test_case": {
+    "test_name": "Verify GPU-baseboard INLET1 and INLET2 independently by intake path, measurement plane and passive cooling context",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After confirming GB/INLET terminology, verify two inlet-air records are separately human readable in Dashboard and Server Health, map to the correct GPU-baseboard intake paths, measurement planes and BMC fields, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications under the recorded passive rack/system cooling state.",
+    "required_package": [
+      "Chassis and GPU-baseboard PN/revision, BMC/BIOS build and authoritative GB/INLET terminology",
+      "Physical INLET1/INLET2 locations, intake paths, measurement planes and sensor placement/part map",
+      "Definition of rack ambient versus chassis or local baseboard inlet plus allowed recirculation/gradient",
+      "Per-inlet sensor device, BMC controller/bus/mux/address and exact temperature field",
+      "Separate stable SDR/API and Dashboard/Server Health identities for both inlets",
+      "Per-location units/scaling, approved limit/reference delta, threshold capability/values/hysteresis, health, polling/freshness and unavailable rules",
+      "Rack ambient/reference method and timestamps plus power/load, fan speeds, airflow direction, baffle/cable and cooling state",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/GPU/fan/thermal logs, block vents, move baffles/cables/rack doors, change fan policy/speed, add workload, alter thresholds or service hardware. Confirm the two physical intake paths and measurement planes and build a two-row location/BMC-source matrix. Enumerate the complete sensor repository and resolve INLET1 and INLET2 separately; do not use `TEMP_GB_INLET1~2` as one record unless explicitly documented. Review the Script before use. Capture each independent query status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Record synchronized cooling context and use only approved non-obstructive reference placement and per-location gradient/tolerance. Stop without retry on missing, duplicate, swapped, stale or divergent identities.",
+    "expected_result": "Two distinct records and UI rows map to the documented physical intake paths, measurement planes and BMC fields. Each complete OOB/UI record independently matches its location-specific value/unit/threshold/status/freshness specification and approved reference/gradient under the recorded passive cooling state. Rack ambient, another inlet, PCB/GPU die or an average never substitutes and cooling remains unchanged.",
+    "pass_fail_basis": "PASS requires two physical-plane/source identities, separate complete OOB/two-UI/spec agreement and an engineer verdict for both inlets using approved per-location limits. One literal range query, one sensor, equality between inlets, generic ambient, label-only match or truncated output cannot pass. Missing/swapped/duplicate/stale identity, out-of-limit value or required threshold/status/UI mismatch is FAIL. Missing location/gradient/spec/reviewed method is NOT READY, not Pending or PASS; static readings do not validate fan response or threshold events.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, GPU, fan or thermal logs; existing cooling history is relevant evidence.",
+      "Do not interpret the range as one record or use one inlet as coverage for the other.",
+      "Do not equate rack ambient with a downstream/local inlet or substitute PCB/GPU die/average telemetry.",
+      "Do not block vents, move baffles/cables/doors, change fans/load/thresholds or service hardware.",
+      "Any reference probe must be non-obstructive, location-approved and time-aligned; it must not disturb intake flow.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS, terminology and two-row intake path, measurement-plane, sensor-placement and BMC-source map",
+      "Two separate complete raw identities, values, units, threshold capabilities/values, health and synchronized timestamps plus separate Dashboard and Server Health rows",
+      "Project per-location limits and rack ambient/reference method with recirculation/gradient rule",
+      "Recorded power/load, fan speeds, airflow direction, baffle/cable/rack-door and cooling configuration plus tolerance/update-lag evaluation",
+      "Missing/duplicate/swapped/stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-load/no-fan-or-airflow-change/no-retry proof, final cooling/BMC health and two-inlet engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On intake mapping, BMC-source or reference ambiguity, stale/divergent values, unexpected health change or probe airflow disturbance, stop and preserve both sensors' first evidence plus cooling state. Remove only an authorized non-obstructive reference fixture and use approved read-only diagnostics; any independently authorized cooling change requires its own restoration plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The range is unsuitable as one command and locations are Project-defined, but Items, UI Procedure and Criteria consistently request passive display/spec validation of two inlet temperatures."},
+  "blocked": {"before": false, "after": false, "reason": "The two-inlet passive purpose is clear. Physical planes, BMC source, cooling context and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "GB/INLET terminology, two intake-path/measurement-plane/BMC-source maps, separate sensor/UI identities, per-location thresholds/status/freshness/gradient, passive cooling state, safe reference and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO COOLING CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define intake planes, recirculation or per-location limits."}],
+  "project_authority": "Chassis/GPU-baseboard mechanical airflow diagram, sensor placement/BMC definition, thermal design limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-14", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "two_inlet_rows_required": true, "literal_range_query_allowed_without_documentation": false, "ambient_or_other_sensor_substitution_allowed": false, "dynamic_threshold_or_fan_coverage_claimed": false, "cooling_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|889|Wistron-BMC-00179-V003", "next_pending_case_variant_id": "f0a41dfe62dad5b0"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
