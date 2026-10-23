@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **163 / 942**
-- Last reviewed: `Functionality|976|Wistron-BMC-00266-V004` / `6ace03d7519c889e`
-- Next source-verified pending identity: `Functionality|977|Wistron-BMC-00267-V003` / `22873225f4ae3c0b`
-- Latest disposition: Manually FAN speed control remains Engineering Decision Pending with Source Conflict. Master and DeepSeek use incompatible OEM byte families; 100%-then-raise-5%, log semantics and guaranteed auto restore are unresolved. Full active response coverage and a gated safety contract are preserved, but no raw command may run until platform-owner approval and proven recovery. No DUT action ran.
+- Completed: **164 / 942**
+- Last reviewed: `Functionality|977|Wistron-BMC-00267-V003` / `22873225f4ae3c0b`
+- Next source-verified pending identity: `Functionality|978|Wistron-BMC-00268-V003` / `abbc6c7135373d90`
+- Latest disposition: FAN speed Auto mode remains Engineering Decision Pending with Source Conflict. Master and DeepSeek use incompatible OEM restore commands, and dynamic automatic control conflicts with a mandatory fixed 20% result. The transition, independent mode readback and incident path require platform-owner proof; no command ran.
 - Protected sources: unchanged.
 - DUT execution: none.
