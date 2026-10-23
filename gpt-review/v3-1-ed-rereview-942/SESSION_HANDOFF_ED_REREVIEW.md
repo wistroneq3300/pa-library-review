@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **121 / 942**
-- Last reviewed: `Functionality|932|Wistron-BMC-00222-V002` / `d8a593ed7fa776e9`
-- Next source-verified pending identity: `Functionality|933|Wistron-BMC-00223-V002` / `934f305104068125`
-- Latest disposition: List privilege mapping is removed from Pending as FULLY AUTOMATABLE read-only collection with complete raw/paginated inventory, normalized group-role matrix, distinct empty/403/authorization/service outcomes and strict no-write/no-log-clear boundaries. No command was run.
+- Completed: **122 / 942**
+- Last reviewed: `Functionality|933|Wistron-BMC-00223-V002` / `934f305104068125`
+- Next source-verified pending identity: `Functionality|934|Wistron-BMC-00224-V002` / `bf9e2cca700c8ffa`
+- Latest disposition: Update LDAP certificate is removed from Pending after pinned tool documentation resolved `authority ldap` as an LDAP root-CA certificate-only PEM operation. Private-key input is prohibited; active fingerprint, LDAPS identity/auth/role/local-fallback and rollback evidence are mandatory. No certificate was changed.
 - Protected sources: unchanged.
 - DUT execution: none.
