@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 109,
+  "source_key": "Functionality|920|Wistron-BMC-00210-V003",
+  "case_variant_id": "00ff8790865cc0bd",
+  "source_ref": {"sheet": "Functionality", "source_row": 920, "code": "Wistron-BMC-00210-V003", "original_row_sha256": "c9bc510cc7a8e3057cb5158f91192cf43e1a301d4ab252589b9091162b575497", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Time Zone", "procedure": "Change different Time zone; generic setup says clear logs.", "criteria": "Copied text says date/time changes after setting Daylight saving time.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/naomi/viking/bmc/ipmi-raw/49-50.set-get_sel-time-utc-offset.git", "deepseek": "PARTIAL follows the Time Zone title through WebUI and time readback but silently ignores the copied DST criterion, does not define zones/UTC invariance or distinguish regional timezone metadata from the standard SEL UTC offset.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires explicit source/target zones, UTC normalization, DST/NTP behavior, event boundaries and restoration, but the historical V3.1 record retained the copied criterion as an open conflict."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1081_00ff8790865cc0bd.json",
+  "old_problem": "Items/Procedure and the referenced UTC-offset Script identify timezone work, while Criteria copies the preceding DST case. Timezone selection, a fixed SEL UTC offset and DST rules are related but non-equivalent; silently treating any visible shift as all three would both lose the row's identity and duplicate the separate DST case.",
+  "new_disposition": "RESOLVED_WITH_REVIEW_LAYER_TIMEZONE_CRITERION_AND_SEPARATE_SEL_UTC_OFFSET_CORROBORATION",
+  "disposition_reason": "Reconcile the copied criterion using convergent case-specific evidence: the item and procedure say Time Zone, the Script explicitly names SEL time UTC offset, and row 919 independently owns DST. The Review-layer acceptance therefore verifies an approved source→target timezone/local-offset change while preserving UTC and event ordering; it records DST interaction but does not claim DST coverage. The standard SEL UTC-offset readback is a separate corroborating surface, not proof of a regional IANA zone. Master text and Script history remain unchanged and visible.",
+  "decision_basis": [
+    "XLSX row 920, same-row DeepSeek, exact GPT V2, selection manifest, separate preceding DST case, Script URL and preserved V3.1 record were directly reviewed.",
+    "Three independent fields—Items, Procedure and Script name—converge on timezone/UTC-offset intent, while the criterion exactly repeats the distinct preceding DST topic; Review-layer correction resolves rather than conceals the source defect.",
+    "IPMI v2.0 defines SEL Time UTC Offset as signed minutes from UTC to SEL Time and distinguishes it from absolute SEL Time; a fixed offset does not by itself prove a regional zone or DST rule.",
+    "Local representation should change according to the selected zone/offset while the underlying UTC instant and event ordering remain within tolerance unless authoritative vendor semantics explicitly say otherwise."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC timezone selection with UTC invariance and separate SEL UTC-offset evidence",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify an approved BMC source-to-target timezone change through the supported control changes the visible local time and timezone metadata by the documented offset while preserving the correct UTC instant, NTP policy and event chronology; independently record the standard SEL UTC-offset behavior and avoid claiming the separate DST test.",
+    "required_package": [
+      "Exact BMC asset/firmware/WebUI identity and vendor documentation for supported named zones or fixed-offset model and affected clock/log surfaces",
+      "Approved source and target IANA zone identifiers or fixed offsets, exact expected offset difference, current DST state and numeric tolerance",
+      "Trusted UTC reference plus current WebUI/API/SEL/local/UTC values, timezone metadata and NTP/synchronization policy",
+      "Pinned reviewed revision of the source Script with target, raw-command number, signed-minute encoding, byte order, get/set symmetry and rollback verified before any use",
+      "Authorized WebUI operator, visual evidence and preserved audit/SEL event-boundary collection",
+      "Time-sensitive impact approval and exact original timezone/offset/DST/NTP restoration plan"
+    ],
+    "test_command": "STATE-CHANGING; DO NOT EXECUTE WITHOUT APPROVAL. Preserve logs and record the verified target's WebUI timezone identifier/offset, DST/NTP state, trusted UTC reference, supported API/SEL offset and event boundary. Pin and inspect the referenced Script; never guess raw fields. Choose one approved target zone or offset and calculate the expected local-time difference. Obtain approval, save it once through the source control path, and capture visual WebUI plus audit evidence. Re-read metadata and normalized clocks immediately and after settling: verify the local representation changes by the expected offset while UTC remains within tolerance. If the reviewed Script/standard SEL UTC-offset path is in scope, record its signed-minute value separately and do not equate it with a regional zone. Restore the exact original policy; do not clear logs, modify DST as a substitute or retry automatically.",
+    "expected_result": "The target timezone/offset is visibly saved and read back, local display changes by the calculated source→target difference, the normalized UTC instant and event ordering remain within approved tolerance, and NTP/DST interaction matches documented policy. The SEL UTC offset, when supported/in scope, equals the expected signed-minute value for that surface. Original policy is restored, and the outcome explicitly states that timezone PASS does not pass the separate DST case.",
+    "pass_fail_basis": "PASS requires exact source/target metadata, calculated versus observed local offset, stable UTC reference within tolerance, visual/audit proof, documented NTP/DST interaction, event chronology and restoration. A displayed time shift, copied DST criterion or raw offset alone cannot pass. Wrong zone/encoding/offset, unexpected UTC mutation, event disorder, NTP overwrite or failed restoration is FAIL. Missing zones, tolerance, Script review, approval or recovery is NOT READY. DST transition/rule coverage is explicitly excluded from this verdict.",
+    "safety_gate": [
+      "Do not clear SEL/audit logs; preserve local and UTC boundary evidence before and after the change.",
+      "Do not choose arbitrary zones, equate IANA zones with fixed offsets, or use a DST toggle to satisfy timezone coverage.",
+      "Review and pin the internal Script before use; validate signed-minute units, byte order, exact target and rollback rather than guessing OEM/raw parameters.",
+      "Do not change absolute time, host timezone or NTP/DST policy outside the approved scope; obtain point-of-action approval before the one save/write.",
+      "Stop on unexpected UTC mutation, wrong offset, synchronization overwrite or chronology mismatch; do not automatically write again."
+    ],
+    "expected_evidence": [
+      "Source-conflict reconciliation, target/version identity, approved source/target zone or offset, expected difference, tolerance and DST/NTP policy",
+      "Pinned reviewed Script revision and standard/vendor semantics showing exact target, signed-minute encoding, byte order and rollback",
+      "Visual WebUI before/entered/save/after timezone evidence and BMC audit event",
+      "Trusted reference and normalized WebUI/API/SEL/local/UTC values before, immediately after and settled with expected-versus-observed calculation",
+      "First post-change event ordering, separate SEL UTC-offset evidence and explicit timezone-versus-DST coverage statement",
+      "Original-policy restoration, preserved logs, no-retry proof and engineer verdict"
+    ],
+    "recovery": "On wrong zone/offset, unexpected UTC shift, NTP overwrite or audit-order problem, stop and preserve UI/raw/audit/SEL evidence. Restore the exact original timezone/offset/DST/NTP policy through the verified path only after fresh authorization, then re-read normalized local and UTC values. Do not clear logs or repeat trial writes."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Review layer corrects the isolated copied DST criterion to timezone-specific acceptance because Items, Procedure and referenced UTC-offset Script agree and the adjacent source row separately preserves DST coverage. The original contradictory text remains immutable and traceable; no DST result is claimed here."},
+  "blocked": {"before": false, "after": false, "reason": "The authoritative timezone intent, standard offset semantics, PASS evidence and recovery are resolved. Exact zones, tolerance, vendor clock mapping and Script revision are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Supported timezone model; source/target zones or offsets; tolerance and DST/NTP behavior; reviewed Script revision; impact approval and restoration plan.", "execution_status": "NOT STARTED; TIME/AUDIT STATE-CHANGING; APPROVAL AND SCRIPT REVIEW REQUIRED; NO TIMEZONE/OFFSET WRITE EXECUTED"},
+  "external_authorities": [
+    {"title": "Intel Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/ipmi-v2-rev1-1-spec-errata-6-markup.pdf", "application": "Sections 31.11a/31.11b define the SEL Time UTC Offset as signed minutes from UTC to SEL Time and its separate get/set commands."}
+  ],
+  "project_authority": "BMC vendor timezone clock model, approved regional/fixed-offset policy, reviewed internal Script, NTP/DST policy, tolerance and recovery SOP bind execution results.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "master_conflict_preserved_as_history": true, "review_layer_criterion_corrected_to_timezone": true, "dst_coverage_claimed": false, "raw_parameters_guessed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|921|Wistron-BMC-00211-V002", "next_pending_case_variant_id": "ccd457c5de7ee341"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
