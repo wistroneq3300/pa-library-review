@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 121,
+  "source_key": "Functionality|932|Wistron-BMC-00222-V002",
+  "case_variant_id": "d8a593ed7fa776e9",
+  "source_ref": {"sheet": "Functionality", "source_row": 932, "code": "Wistron-BMC-00222-V002", "original_row_sha256": "80d9aae845ad620e374e036f5caf4d35138a0ca9f02eedcd0bb9757bde6c8798", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "List privilege mapping", "procedure": "Run `openbmctool.py ... ldap privilege-mapper list`; notes describe DNS/CA/LDAP/mapping setup order, missing-mapping 403, insufficient-privilege behavior and use of LDAP or local tool credentials.", "criteria": "Command should be sent successfully.", "script": null, "deepseek": "PARTIAL incorrectly says the list changes authentication configuration, asks for unnecessary group/privilege input, embeds BMC credentials in a URL-like value and reduces evidence to HTTP status without complete mappings, pagination, schema or empty/403/error interpretation.", "gpt_v2": "FULLY AUTOMATABLE with MEDIUM read-only risk correctly requires a pinned supported list, protected connection, complete untruncated raw and normalized group/role/state evidence, distinct empty/unauthorized/service-error outcomes and a strict no-write boundary."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1093_d8a593ed7fa776e9.json",
+  "old_problem": "The original list command is read-only, but DeepSeek misclassified it as a write and the source Criteria accepts command submission alone. Without complete collection and schema-aware interpretation, an empty list, missing mapping, insufficient caller privilege, pagination loss and service/transport failure can be confused. These are solvable read-only semantics, not an engineering decision.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_COMPLETE_READ_ONLY_PRIVILEGE_MAPPING_INVENTORY",
+  "disposition_reason": "Use the pinned documented list operation only, preserve its raw complete response, normalize every mapping with schema/version provenance, distinguish empty, missing-mapping 403, caller authorization and service/transport errors, optionally correlate a supported independent read endpoint, and prove no state change. Runtime target/account/schema/redaction inputs do not require user confirmation for the read itself and do not keep the review pending.",
+  "decision_basis": [
+    "XLSX row 932, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, adjacent Delete-Mapping/Update-Certificate rows and preserved V3.1 record were directly reviewed; row 933 and its manifest identity were independently verified.",
+    "Pinned openbmctool documentation defines `ldap privilege-mapper list` separately from create and delete. Listing has no intended authentication-state transition, so DeepSeek's write warning is incorrect.",
+    "The tool documentation itself distinguishes a missing group mapping 403 from insufficient BMC privilege. Therefore response semantics and complete mapping content, not HTTP success alone, are required evidence.",
+    "ED-03/ED-13 and ED-33 through ED-38 support a documented standard/tool read contract with target-specific schema as readiness input while preserving source tool coverage and separating static review from DUT verdict."
+  ],
+  "test_case": {
+    "test_name": "Collect and normalize the complete read-only OpenBMC LDAP privilege-mapping inventory",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify that the supported pinned openbmctool list operation returns a complete, untruncated and correctly interpreted snapshot of every LDAP group-to-BMC privilege mapping, including explicit empty state and error distinctions, without creating, deleting, enabling or otherwise changing LDAP, mappings, certificates, accounts or sessions.",
+    "required_package": [
+      "Target BMC/firmware identity and supported privilege-mapper list schema plus pinned reviewed openbmctool/openbmc-tools commit",
+      "Verified target endpoint and protected least-privilege BMC account authorized only for the required read",
+      "Documented group identifier, privilege/role, state, collection and pagination fields for this firmware/tool version",
+      "Interpretation table for empty collection, missing-mapping 403, insufficient caller privilege, malformed response, service error and transport failure",
+      "Redaction policy for directory/account/session metadata and a complete raw plus normalized evidence location",
+      "Optional independent supported read-only API/WebUI inventory for correlation; no write prerequisite"
+    ],
+    "test_command": "READ ONLY. Verify target identity, protected transport, pinned tool/schema and least-privilege read account; preserve existing audit logs rather than clearing them. Capture a read-only pre-state fingerprint using the supported inventory surface. Run exactly `openbmctool ... ldap privilege-mapper list` with protected BMC authentication, follow all documented collection/pagination behavior and retain the complete raw redacted response, status and timestamp. Normalize every entry into canonical group identity, BMC privilege/role, state/source and raw-evidence pointer without inventing missing fields. Classify an empty list, missing-mapping 403, insufficient caller privilege, service error and transport failure separately. If available, correlate with an independent supported read-only endpoint. Repeat only the same read for a no-change fingerprint when safe. Never call create/delete, enable LDAP, upload certificates, alter users/mappings or clear logs.",
+    "expected_result": "The operation completes as a read with a complete raw response and one normalized row per mapping, preserving exact group identifiers and privilege values. Pagination/collection completeness is proven. A legitimate empty set is represented explicitly, while missing-mapping 403, insufficient caller privilege and service/transport errors are not mislabeled as an empty or successful inventory. Optional independent readback agrees or produces a documented discrepancy. Pre/post read-only state fingerprints show no authentication configuration change and no secrets are exposed.",
+    "pass_fail_basis": "PASS requires verified target/tool/schema, complete untruncated raw evidence, successful normalization of every returned mapping, explicit empty/error/403 interpretation, protected data handling and no-change proof. Command dispatch or HTTP 200 alone cannot pass. Incomplete pagination, unknown role/group encoding, inconsistent duplicate entries, inability to distinguish empty from unauthorized/error, secret leakage or any write event is FAIL and stops. Missing target/schema/read credential is NOT READY. No user confirmation is needed for a genuinely read-only supported collection.",
+    "safety_gate": [
+      "Use only the documented list operation and a least-privilege read account over protected transport; verify the target before collection.",
+      "Do not create/delete mappings, enable/disable LDAP, upload/delete certificates, change accounts/sessions or run a write as a workaround for missing data.",
+      "Do not clear BMC/host/security logs; preserve audit context and redact secrets and unnecessary directory attributes while retaining identity needed for traceability.",
+      "Stop on unexpected write prompts, incomplete output, unknown schema/role encoding, wrong target, unredactable data or inability to separate empty/authorization/service/transport outcomes.",
+      "Do not automatically retry a service/authorization failure in a way that could trigger account lockout; preserve the first response for analysis."
+    ],
+    "expected_evidence": [
+      "Target BMC/firmware/endpoint, pinned tool commit/hash/schema, protected read identity and timestamp",
+      "Complete raw redacted privilege-mapper list response with status, collection/pagination proof and content hash",
+      "Normalized mapping matrix linking every canonical group to exact privilege/role/state and raw evidence",
+      "Explicit classification of empty list, missing-mapping 403, insufficient caller privilege and service/transport failures",
+      "Optional independent read-only correlation plus pre/post no-change/audit proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On wrong target, unexpected prompt/write, schema ambiguity, incomplete output or sensitive-data exposure, stop collection, preserve the first raw response securely, revoke the session if appropriate and escalate for schema/redaction review. Do not invoke create/delete/update to repair or populate the list."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently describe a read-only list. The surrounding setup/error notes add interpretation context and do not require a write; DeepSeek's claim that list changes configuration is a review error, not a Master conflict."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only operation and acceptance semantics are fully defined. Target schema, credentials and redaction policy are ordinary runtime prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Target BMC/firmware and pinned list schema/tool; protected read account; role/group/pagination fields; error interpretation and redaction policy.", "execution_status": "NOT STARTED; READ-ONLY REVIEW CONTRACT COMPLETE; NO PRIVILEGE MAPPING LIST COMMAND EXECUTED"},
+  "external_authorities": [
+    {"title": "OpenBMC openbmctool documentation at pinned commit 2cec864", "url": "https://gerrit.openbmc.org/plugins/gitiles/openbmc/openbmc-tools/%2B/2cec86428a1cc906aafa759ce730c0bd0bca3fb4/openbmctool/", "application": "Documents separate privilege-mapper list/create/delete commands, missing-mapping and insufficient-privilege behavior, and protected BMC password options."},
+    {"title": "OpenBMC user-management architecture", "url": "https://github.com/openbmc/docs/blob/master/architecture/user-management.md", "application": "Provides group-to-role and interface/channel context for interpreting the returned mapping inventory without converting the read case into an authorization write test."}
+  ],
+  "project_authority": "Target firmware/tool schema and Project data-handling policy bind the exact collection fields, role vocabulary, pagination, redaction and optional independent read endpoint.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_openbmctool_list_coverage_preserved": true, "read_only_operation": true, "user_confirmation_required": false, "write_substitution_allowed": false, "command_status_only_pass_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|933|Wistron-BMC-00223-V002", "next_pending_case_variant_id": "934f305104068125"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_rows_read": true, "authoritative_tool_and_architecture_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
