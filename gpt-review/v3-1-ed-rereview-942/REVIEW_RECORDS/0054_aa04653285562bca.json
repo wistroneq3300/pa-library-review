@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 54,
+  "source_key": "Functionality|864|Wistron-BMC-00154-V002",
+  "case_variant_id": "aa04653285562bca",
+  "source_ref": {"sheet": "Functionality", "source_row": 864, "code": "Wistron-BMC-00154-V002", "original_row_sha256": "f82dab80c1f7d2ed13b0499b6c76d1a9ed3759332cd0d6e385b4d293e0e21f52", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "POST logs", "procedure": "Generic setup says clear logs; display/check POST code logs; use `Export all`; then use `Clear All Logs`.", "criteria": "All information/messages match status; POST logs export and clear successfully.", "deepseek": "YES assumes a PostLog URI and returns only `.Entries`, dropping collection metadata and possible pagination; it omits WebUI, Export all, boot-session semantics and clear while disabling TLS validation and claiming no risk.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION separates display/export/clear, preserves boot diagnostics and prohibits an unapproved reboot stimulus."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1026_aa04653285562bca.json",
+  "old_problem": "The source clears the POST history needed for page/export verification and provides no authorized reboot/session stimulus to recreate it. A raw collection read neither proves a complete boot session nor interprets ordered board-specific codes, and export/clear behavior was absent.",
+  "new_disposition": "RESOLVED_WITH_SESSION_AWARE_POST_SEQUENCE_EXPORT_AND_ONE_AUTHORIZED_CLEAR",
+  "disposition_reason": "A safe review-layer case is definable using an existing retained known-good boot session: discover the service, preserve collection metadata and all pages, bind one session and compare its ordered codes to the board/BIOS dictionary and observed boot outcome, validate Export all, then perform one separately approved lab-only clear after diagnostic retention. Any new reboot/reset/power stimulus remains outside this case unless independently approved.",
+  "decision_basis": [
+    "XLSX row 864, same-row DeepSeek, exact GPT V2, selection manifest and historical record were directly reviewed.",
+    "POST correctness is an ordered, session-scoped trace tied to board/BIOS version and terminal boot outcome; an unordered Entries array is insufficient.",
+    "Collection completeness, selected-session completeness, WebUI decoding, Export all fidelity and clear behavior are distinct checkpoints.",
+    "ED-06 separates cycle types, ED-17 protects diagnostic evidence, ED-20 preserves coverage and ED-38 prohibits unapproved stimulus/retry and requires exact destructive authorization."
+  ],
+  "test_case": {
+    "test_name": "Verify ordered POST-log boot session, complete Export all artifact, and one approved scoped clear",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the BMC POST Logs page presents the complete ordered code history for an identified representative boot session with correct version-matched decoded status and terminal outcome; prove `Export all` preserves the required collection/session range in a readable artifact; then, after evidence retention and fresh approval, clear only the authorized POST-log service once and verify the documented isolated post-state.",
+    "required_package": [
+      "Exact board/BMC/BIOS identity, certificate, firmware/WebUI build, account role and discovered POST LogService/resource IDs",
+      "Board/BIOS-version POST-code dictionary including phases, repeated/contextual codes, severity/status, terminal success/failure codes and observed boot-outcome mapping",
+      "Known-good retained boot/session identity, start/end and reset/power-cause boundary, ordered expectations and evidence the dataset is representative",
+      "Collection pagination/sequence/retention/wrap rules and UI mapping for record ID, session, code, decoded message/status and timestamp",
+      "Export all filename/MIME/encoding/schema, all-session versus selected-session scope, parser, checksum, redaction and controlled custody contract",
+      "Dedicated lab target, retention owner, clearable classes, exact clear/post-state and marker/sequence behavior, excluded services, OOB recovery and separate approval for any future boot stimulus"
+    ],
+    "test_command": "Do not pre-clear or generate a reboot/reset/power cycle. Discover the supported POST service through trusted protected access and capture collection metadata plus every page. Bind one retained known-good boot session by approved start/end and reset/power context; validate the ordered canonical code progression, repeats, phases and terminal code against the exact board/BIOS dictionary and observed outcome. Reconcile record/session/code/status/order/time fields with the WebUI. Invoke `Export all` once; quarantine, parse and checksum it, proving its documented collection/session range, order, count and code completeness. Present the exact target/service, retained artifact, clear classes, excluded logs and expected marker/sequence reset, then obtain fresh explicit approval. Invoke the supported clear once and verify old-session disposition plus other-service preservation. Never assume `/Managers/bmc/LogServices/PostLog`, discard metadata with `.Entries`, use insecure credentials/TLS, create an implicit reboot or retry clear.",
+    "expected_result": "The complete selected boot session is correctly bounded and its ordered POST sequence, phases, repeated codes, decoded statuses and terminal outcome match the authoritative dictionary and actual boot result in both reference data and WebUI. Export all is readable, complete for its declared scope and retained. One separately approved clear reaches the vendor-defined POST-service marker/count/sequence state without affecting excluded logs. No blanket pre-clear, unapproved boot stimulus or repeated mutation occurs.",
+    "pass_fail_basis": "PASS requires exact platform/session identity, complete collection and session evidence, authoritative ordered-code/outcome match, WebUI reconciliation, verified Export all scope, retained artifact, immediate approval, one isolated clear and engineer verdict. A list of codes, one page, one decoded message, HTTP success, UI toast or file existence alone cannot pass. Missing/out-of-order/unexplained codes, wrong session/outcome, incomplete export, wrong/multiple clear or cross-service deletion is FAIL. Missing dictionary/session/export/retention/clear inputs or approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never perform generic pre-clear; it destroys the diagnostic sequence and the source supplies no authorized fixture to recreate it.",
+      "Do not reboot, reset or power-cycle merely to populate POST logs. Any stimulus requires its own workload check, exact cycle definition, approval, console monitoring and recovery.",
+      "Validate ordered session progression, not isolated strings or an unordered code set; use the exact board/BIOS dictionary and observed outcome.",
+      "Do not assume the URI, `.Entries` or one response is complete; preserve collection metadata and follow all pagination/continuations.",
+      "Use trusted TLS and protected credentials and preserve HTTP/parse failures separately; do not expose reusable secrets.",
+      "Clear only after complete verified external export and fresh retention approval, invoke once and never retry; stop on ambiguous scope, active boot diagnosis, partial session/export or unrelated deletion."
+    ],
+    "expected_evidence": [
+      "Board/BMC/BIOS identity, firmware/WebUI, certificate, role and discovered POST service/schema",
+      "Known session start/end, reset/power cause and outcome plus complete ordered raw codes, record IDs/sequences/timestamps and version-matched dictionary mapping",
+      "WebUI evidence reconciled by field/order/session with explicit unknown and repeated-code treatment",
+      "Export all trusted origin, filename/MIME/size, checksum, parser result, declared session range and record/count/order/code completeness",
+      "Written retention authority, fresh clear approval, one action/response, old-session disposition, expected marker/sequence reset and unrelated-service proof",
+      "Protected audit, no-pre-clear/no-unapproved-reboot/no-retry proof, recovery/limitations and engineer verdict"
+    ],
+    "recovery": "The complete retained Export all artifact preserves diagnostics but may not restore live controller state. On wrong scope, unexpected deletion, unknown response or access/health change, stop and preserve all evidence, then invoke the approved vendor/OOB incident path. Do not create a reboot to reconstruct logs, do not repeat clear and never fabricate a POST history."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-17 excludes the contradictory blanket pre-clear while preserving its history. An existing representative session supplies viewer/export evidence; the final clear remains a separately authorized checkpoint and no reboot is invented."},
+  "blocked": {"before": false, "after": false, "reason": "Viewer, Export all and clear functions and safe order are identifiable. Platform dictionary, retained session, export and clear contracts are Project/vendor readiness inputs rather than unresolved review logic."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Board/BMC/BIOS and POST service identity, versioned code dictionary, known boot-session boundaries/outcome, collection and export scope/parser, retention/clear semantics, lab approval, excluded-service observers and recovery.", "execution_status": "NOT STARTED; NO BOOT STIMULUS OR DESTRUCTIVE CLEAR AUTHORIZED"},
+  "external_authorities": [],
+  "project_authority": "Platform POST-code dictionary and boot-flow specification, vendor PostLog/WebUI Export all and clear contract, and Project diagnostic retention/recovery policy define session meaning and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "unapproved_boot_stimulus_allowed": false, "export_before_clear_required": true, "clear_requires_fresh_explicit_approval": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|865|Wistron-BMC-00155-V002", "next_pending_case_variant_id": "58071ca34b60e364"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
