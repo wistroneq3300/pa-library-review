@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 75,
+  "source_key": "Functionality|886|Wistron-BMC-00176-V003",
+  "case_variant_id": "ef5cf8a2364e8615",
+  "source_ref": {"sheet": "Functionality", "source_row": 886, "code": "Wistron-BMC-00176-V003", "original_row_sha256": "2c25378401477dd7991bdf3d0e572fc11abae55fc0ac4c82274d78a8e700d1cb", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_STBY_HSC", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES may read the named record but truncates fallback inventory and does not define HSC, identify the standby component/rail/management field, record current AC/host state or apply state-specific availability and thresholds.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly recognizes standby-state dependence but unsupportedly expands HSC as high-speed connector."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1047_ef5cf8a2364e8615.json",
+  "old_problem": "HSC was not authoritatively defined and GPT V2 changed it into a high-speed connector. Given the adjacent GB_HSC family it more plausibly denotes a hot-swap controller, but no evidence bound the record to a standby component, rail/domain, management address/field or current G3/S5/S0 context, so valid unavailable behavior or a wrong-state reading could be misjudged.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_STATE_AWARE_STANDBY_HSC_TEMPERATURE_CHECK",
+  "disposition_reason": "Keep HSC as a Project-confirmed component definition, presumptively a hot-swap controller rather than a connector. Bind the stable record to its board component, standby rail/domain and BMC management field, record the existing AC/host/standby-load state without transitioning power, and apply the matching state-specific availability/value/threshold/status/freshness matrix.",
+  "decision_basis": [
+    "XLSX row 886, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "HSC commonly means hot-swap controller in server power systems and the adjacent GB_HSC family supports that hypothesis, but Project confirmation is mandatory; GPT V2 high-speed-connector semantics are withdrawn.",
+    "A standby device may remain powered in selected host-off states, so availability and limits must be evaluated against the documented current AC/host power state rather than a universal expectation.",
+    "ED-06 keeps power-state classes distinct, ED-15 requires a state-specific criterion, ED-17 preserves logs and ED-18 forbids treating an incomplete or implicit power transition as evidence."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_STBY_HSC against the Project-defined standby component, rail and current power-state matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After the Project defines HSC, verify TEMP_STBY_HSC maps to the exact standby-domain component and BMC temperature field and is human readable in Dashboard and Server Health with correct value, units, health, implemented thresholds/hysteresis and freshness for the documented current AC/host power and standby-load state.",
+    "required_package": [
+      "Authoritative HSC definition and exact chassis/board/BMC/BIOS plus standby controller PN/revision and physical location",
+      "Standby rail/domain, source/load path and relationship to AC presence and G3/S5/S0 or Project-specific host states",
+      "BMC controller/bus/mux/address management path and exact die/internal/external temperature field",
+      "Stable SDR/API name/number/type/entity/instance and corresponding Dashboard and Server Health rows",
+      "State-specific availability/unavailable/zero rules, units/scaling, approved value/range, threshold capability/values/hysteresis, health and freshness",
+      "Recorded AC presence, host/chassis state, standby current/load, fan mode/speeds, airflow and timestamps",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, change AC or host power state, cycle the chassis, switch rails, alter standby load, inject overcurrent/thermal faults, change controller limits/fans/airflow or write thresholds. Confirm the HSC component, rail/domain and BMC management field and record the existing AC/host state. Resolve one stable TEMP_STBY_HSC identity from the complete repository; review the Script before use. Capture complete value, units, capability/threshold/hysteresis, health and timestamp plus unchanged Dashboard and Server Health rows. Record standby current/load and cooling context, then compare only with the approved matrix row matching the current state. Stop without retry on ambiguous component/rail, missing, duplicate, stale or divergent identity.",
+    "expected_result": "One stable record and both UI rows map to the Project-defined standby HSC component, rail/domain and documented BMC temperature field. Its availability, value, units, implemented thresholds, health and freshness match the approved current-state matrix under the recorded standby load and cooling context. No power state or controller setting is changed, and connector semantics are not imported without authority.",
+    "pass_fail_basis": "PASS requires authoritative HSC/component/rail/source identity, current-state proof and complete OOB/two-UI agreement with the matching state-specific matrix plus engineer verdict. A guessed acronym, readable number, wrong-state comparison, truncated output or command success alone cannot pass. Wrong/duplicate/stale identity, value/availability/threshold/status/UI mismatch against the applicable state row is FAIL. Missing definition/state matrix/source-field/reviewed method is NOT READY, not Pending or PASS; observing one state does not validate cycling, inrush, fault response or other states.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; standby, power-domain, HSC and thermal history is essential context.",
+      "Do not expand HSC as high-speed connector or hot-swap controller solely from the acronym; use the Project definition.",
+      "Do not change AC/host state, cycle power, switch rails, alter standby load, inject faults or change controller/fan/threshold settings.",
+      "Do not infer the BMC source from host power state; bind controller/bus/mux/address and exact temperature field.",
+      "Apply only the current-state matrix; absence or different values may be valid in G3/S5/S0 when specified.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Project-approved HSC definition; chassis/board/BMC/BIOS and standby controller PN/revision/location plus rail/domain/load-path identity",
+      "BMC controller/bus/mux/address and exact temperature-field source",
+      "Current AC presence and host/chassis state, standby current/load and fan/airflow context with timestamps",
+      "Complete stable raw identity, value, units, threshold capabilities/values, health and timestamp",
+      "Separate Dashboard and Server Health evidence and comparison to the matching state-specific availability/value/threshold/status/freshness matrix",
+      "Pinned Script or alternate-method audit, no-clear/no-power-change/no-load-or-fault/no-write/no-retry proof, final power/BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On HSC, rail, state or management-field ambiguity, stale/divergent data or unexpected power/BMC health change, stop and preserve the first complete evidence and power-state context. Use approved read-only power/BMC diagnostics; do not transition or cycle power to force evidence. Any independently authorized power action requires ED-06/ED-18-compliant recovery and owner execution outside this row."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "HSC is underdefined but Items, UI Procedure and Criteria consistently request passive validation of one standby temperature record. GPT V2's connector expansion is a review error, not a source conflict."},
+  "blocked": {"before": false, "after": false, "reason": "The passive state-aware target is identifiable. Component/rail/source semantics and the power-state matrix are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "HSC component definition, standby rail/domain/location and BMC source field, stable sensor/UI identity, G3/S5/S0 availability/value/threshold/status/freshness matrix, current standby/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO POWER TRANSITION; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define HSC, the standby rail or state-specific acceptance."}],
+  "project_authority": "Standby power schematic and HSC component map, BMC management-bus definition, controller thermal limits, power-state behavior, WebUI schema and Project specification define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "high_speed_connector_semantics_adopted": false, "hot_swap_controller_semantics_require_project_confirmation": true, "state_specific_matrix_required": true, "power_transition_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|887|Wistron-BMC-00177-V003", "next_pending_case_variant_id": "7d5b1ca0c246695b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
