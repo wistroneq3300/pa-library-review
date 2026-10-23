@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 108,
+  "source_key": "Functionality|919|Wistron-BMC-00209-V003",
+  "case_variant_id": "2e0599774104785c",
+  "source_ref": {"sheet": "Functionality", "source_row": 919, "code": "Wistron-BMC-00209-V003", "original_row_sha256": "30c1d4032385abce6abbcdafbbdb4abbd9817f8d83deb621d2d826f07794d1d8", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Daylight saving time", "procedure": "Change different Daylight saving time settings; generic setup says clear logs.", "criteria": "The displayed date/time changes after setting daylight saving time.", "script": null, "deepseek": "PARTIAL proposes a WebUI enable/disable/offset change and time readback, but treats DST as a generic clock shift and omits zone/rule/transition, expected UTC behavior, repeated/skipped local time, affected clock surfaces, NTP interaction and restoration.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires a documented timezone/DST matrix, normalized WebUI/API/SEL reads, NTP handling, preserved event boundaries and policy restoration."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1080_2e0599774104785c.json",
+  "old_problem": "`Different DST` and `time will change` do not identify whether the source asks only to apply supported DST configurations or to prove actual transition-boundary behavior. An arbitrary toggle can shift audit presentation without showing the documented rule, may corrupt chronology, and cannot reveal whether UTC, local display, SEL timestamps or NTP-owned clocks changed.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_DST_CONFIGURATION_STATE_MATRIX_WITH_EXPLICIT_TRANSITION_COVERAGE_BOUNDARY",
+  "disposition_reason": "Preserve the source's setting-change objective as an explicit matrix of Project-supported DST states for one authoritative timezone: at minimum approved disabled and enabled/rule states, each with exact offset, visual WebUI save/readback, normalized clock observations and restoration. This validates configuration application only. A real spring-forward/fall-back boundary is credited solely when separately declared and executed with authoritative transition instants and skipped/repeated-local-time acceptance; it is never inferred from a toggle. Missing timezone/rule values are safe runtime parameters rather than an open engineering decision.",
+  "decision_basis": [
+    "XLSX row 919, same-row DeepSeek, exact GPT V2, selection manifest, adjacent absolute-time/timezone cases and preserved V3.1 record were directly reviewed.",
+    "DST is a zone rule applied to local representation, not a generic instruction to change the underlying UTC instant; the Project must bind the actual rule and affected clock surfaces.",
+    "The source requires a real setting change, so WebUI visual evidence, audit confirmation and before/after normalized time are retained; passive observation or IPMI-only evidence cannot substitute.",
+    "Configuration-state coverage and real transition-boundary coverage have different prerequisites and expected results; recording that boundary prevents a false full-DST claim."
+  ],
+  "test_case": {
+    "test_name": "Verify supported BMC daylight-saving configuration states and declared transition scope",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify each approved BMC WebUI DST configuration state for the selected timezone visibly saves the exact enabled/disabled rule and offset, produces the documented local-time presentation while preserving the expected UTC/event relationship, follows NTP policy and restores the original configuration; explicitly distinguish this from any separate real transition-boundary qualification.",
+    "required_package": [
+      "Exact BMC asset/firmware/WebUI identity and vendor-documented DST controls, affected clock surfaces and NTP interaction",
+      "Authoritative timezone, DST rule/version, enabled/disabled states, offset and Project-approved expected local/UTC mapping",
+      "Numeric time tolerance, observation interval and declared scope: configuration-state only or separately specified spring/fall transition boundaries",
+      "For transition scope only, exact transition instants plus expected skipped/repeated local times and event-order acceptance",
+      "Authorized WebUI operator, trusted reference and supported vendor API/IPMI/SEL comparison methods",
+      "Time-sensitive impact approval, preserved audit/SEL evidence and original timezone/DST/NTP restoration plan"
+    ],
+    "test_command": "STATE-CHANGING MANUAL WEBUI TEST; DO NOT EXECUTE WITHOUT PER-STATE APPROVAL. Preserve logs and capture the verified WebUI timezone/DST/NTP baseline plus normalized supported clock surfaces. Build explicit rows for every approved DST state, including disabled and enabled/rule/offset states actually supported. For one row, capture before UI, obtain approval, save exactly that DST configuration once, capture entered rule/offset, confirmation and audit event, then re-open and compare local display, UTC-normalized reference, documented API/IPMI/SEL surfaces and NTP behavior within tolerance. Restore baseline before another row. Do not alter absolute time to fake a DST transition. Credit spring/fall transition coverage only through a separately approved boundary procedure with exact instants and skipped/repeated-time checks. Never clear logs or retry automatically.",
+    "expected_result": "Each supported approved state is visibly saved and read back with the exact rule/offset; local time changes by the documented amount relative to the stable reference or behaves exactly as the vendor clock model specifies, while UTC/event chronology and NTP behavior satisfy the approved policy. The original configuration is restored. Results state CONFIGURATION-STATE COVERAGE unless separately evidenced transition-boundary rows pass; no boundary behavior is inferred from toggling.",
+    "pass_fail_basis": "PASS for a configuration row requires exact WebUI before/save/after evidence, correct rule/offset, normalized observed-versus-expected local/UTC result, audit boundary, NTP policy and successful restoration. A generic visible clock change, save toast or one IPMI read cannot pass. Wrong/unsupported rule, incorrect offset, unexpected UTC/SEL mutation, chronology problem, NTP overwrite or restoration failure is FAIL and stops. Missing zone/rule/tolerance/approval/recovery is NOT READY. Transition PASS additionally requires the specified spring/fall instants and skipped/repeated-local-time evidence.",
+    "safety_gate": [
+      "Do not clear or rewrite SEL/audit logs; preserve the event boundary through each configuration change and restoration.",
+      "Verify exact target, timezone, rule and UI state; do not use arbitrary `different` settings or substitute an IPMI-only action for WebUI coverage.",
+      "Do not change absolute time, host time, timezone or NTP unless explicitly part of the approved row; never fake transition coverage.",
+      "Assess certificate, token, schedule, power-action and audit-consumer impacts and obtain approval before each save.",
+      "Stop on ambiguous clock effects, invalid/rejected rule, unexpected sync override or chronology damage; do not save again or advance automatically."
+    ],
+    "expected_evidence": [
+      "Target/firmware identity, authoritative timezone/rule/version/state matrix, tolerance/NTP policy, declared coverage level and impact approval",
+      "Per-state visual before/entered/save/after WebUI captures with exact enabled/rule/offset values and BMC audit record",
+      "Trusted reference plus normalized WebUI and documented vendor API/IPMI/SEL values before, immediately after and settled",
+      "Expected-versus-observed local/UTC/offset result, NTP behavior and first post-change event chronology",
+      "For separately declared transition scope, exact boundary timestamps and skipped/repeated local-time plus event-order evidence",
+      "Baseline restoration, preserved logs, no-retry proof and engineer verdict with explicit coverage label"
+    ],
+    "recovery": "On wrong rule/offset, unexpected clock mutation, sync overwrite or chronology impact, stop and preserve UI/audit/SEL evidence. Restore the original DST/timezone/NTP policy through the verified WebUI only after fresh authorization, then re-read all documented surfaces. Do not alter absolute time, clear logs or repeat the failed state as an automatic retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently test DST-setting impact. The open-ended wording is resolved into supported configuration rows while explicitly limiting unproven transition coverage; no competing source target remains."},
+  "blocked": {"before": false, "after": false, "reason": "The configuration matrix, coverage boundary, evidence and recovery are defined. Exact zone/rule/offset/tolerance are Project execution parameters."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Vendor DST controls/clock model; authoritative timezone/rule/offset/state matrix; tolerance/NTP policy; optional transition instants; impact approvals and restoration.", "execution_status": "NOT STARTED; TIME/AUDIT STATE-CHANGING MANUAL WEBUI TEST; PER-STATE APPROVAL REQUIRED; NO DST SETTING CHANGED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor time/DST documentation, authoritative Project timezone rule data, time-sync policy, event-chronology acceptance and recovery SOP define runtime results.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "webui_visual_evidence_required": true, "configuration_and_transition_coverage_kept_distinct": true, "arbitrary_dst_setting_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|920|Wistron-BMC-00210-V003", "next_pending_case_variant_id": "00ff8790865cc0bd"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
