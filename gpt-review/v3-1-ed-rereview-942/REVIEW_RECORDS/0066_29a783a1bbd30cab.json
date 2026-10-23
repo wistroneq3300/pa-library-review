@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 66,
+  "source_key": "Functionality|876|Wistron-BMC-00166-V003",
+  "case_variant_id": "29a783a1bbd30cab",
+  "source_ref": {"sheet": "Functionality", "source_row": 876, "code": "Wistron-BMC-00166-V003", "original_row_sha256": "46ae973dbad40b177adfb96246712a9c58d010f02618560255b02e8bc494d131", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_MB_OUTLET", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES reads the named sensor but uses exposed credentials, assumes cipher 17 and truncates fallback inventory; it cannot prove physical motherboard-outlet identity, complete fields, UI correlation, reference conditions or specification compliance.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires outlet location, airflow/reference context, complete SDR/UI fields and no fan, threshold or log mutation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1038_29a783a1bbd30cab.json",
+  "old_problem": "A plausible temperature or successful literal query could be accepted without proving that the record represents the motherboard outlet sensing point. The prior command also omitted a co-located reference, operating/airflow state, complete non-truncated sensor metadata, both UI mappings and an authoritative tolerance, so room ambient or a different exhaust point could create a false PASS.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MOTHERBOARD_OUTLET_SENSOR_CHECK",
+  "disposition_reason": "The passive outlet-sensor purpose, UI paths and read-only method are clear. Bind the exact physical outlet point to one stable sensor and both UI rows, capture complete value/threshold/status/freshness data and compare it with a co-located calibrated reference under recorded passive load, fan and airflow conditions. The platform-specific location and acceptance values are Project inputs rather than a reason to retain an Engineering Decision Pending state.",
+  "decision_basis": [
+    "XLSX row 876, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "Motherboard outlet air, room ambient, board inlet, chassis exhaust and PSU exhaust are distinct measurands; a label or plausible value cannot establish physical identity.",
+    "A passive read-only comparison can be fully specified with a stable sensor/UI map, co-located calibrated reference, recorded airflow/load state and Project-approved tolerance without authorizing a thermal stimulus.",
+    "ED-15 prohibits PASS without an approved tolerance, ED-17 rejects pre-clear, and ED-20 preserves this outlet point as its own coverage rather than substituting another temperature sensor."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_MB_OUTLET against the physical motherboard outlet point and platform thermal specification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify TEMP_MB_OUTLET is the correct physical motherboard outlet-air sensor and that Dashboard and Server Health independently show its human-readable Celsius value, units, health, implemented thresholds/hysteresis and freshness in agreement with the platform specification and a co-located reference at the recorded passive operating state.",
+    "required_package": [
+      "Exact chassis/board/BMC/BIOS configuration and board sensor-placement/airflow drawing identifying the TEMP_MB_OUTLET sensing point",
+      "Stable SDR/API name, number, type, entity/instance and corresponding Dashboard and Server Health rows",
+      "Celsius scaling/rounding, approved value or reference delta, combined uncertainty, threshold capability/values/hysteresis, health and unavailable rules",
+      "Calibrated reference instrument, valid calibration, approved probe position at the motherboard outlet plane, sample window and BMC update-lag rule",
+      "Recorded power/load state, inlet condition, fan policy/speeds, panel/duct configuration, airflow direction and timestamp alignment",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, change fan policy, add load or heat, obstruct airflow, move panels/ducts or write thresholds. Confirm the physical motherboard outlet point from the board/airflow definition and place the calibrated reference at the approved co-located outlet position without disturbing flow. Resolve one stable TEMP_MB_OUTLET identity from the complete sensor repository; review the Script before use. Capture its complete value, units, capability/threshold/hysteresis, health and timestamp plus unchanged Dashboard and Server Health rows. Record fan/load/power/inlet/airflow state, align reference and BMC samples within the approved lag window and compare them using the approved combined tolerance. Stop without retry on missing, duplicate, stale or divergent identity.",
+    "expected_result": "One stable sensor and both UI rows map to the documented motherboard outlet sensing point. Complete OOB/UI values, units, threshold capability/values, health and freshness agree with the specification, and the time-aligned reading agrees with the co-located reference within the approved combined tolerance under the recorded passive airflow/load state. No inlet, room-ambient, chassis-exhaust or PSU-exhaust reading substitutes and no state is mutated.",
+    "pass_fail_basis": "PASS requires physical outlet mapping, complete OOB and both-UI agreement, an approved reference position/timing/uncertainty model and engineer verdict that every applicable field and outlet delta meet specification. A readable/plausible value, label-only match, room ambient, another exhaust point, truncated output or command success alone cannot pass. Wrong/duplicate identity, stale data, out-of-tolerance value, required field/threshold/status mismatch or UI divergence is FAIL. Missing location/spec/reference/tolerance/reviewed method is NOT READY, not Pending or PASS; dynamic thermal response is not covered.",
+    "safety_gate": [
+      "Do not clear SEL or system logs; thermal and fan history is relevant evidence.",
+      "Do not infer outlet placement from the label or substitute room ambient, inlet, chassis-exhaust, PSU-exhaust or CPU-package telemetry.",
+      "Do not alter fan/load/airflow/environment or thresholds and do not inject a thermal event.",
+      "Position the reference without obstructing the outlet; include calibration, spatial gradient, timing, sensor lag and combined uncertainty in the approved tolerance.",
+      "Honor threshold capability masks and preserve identity, units, status and timestamps; unsupported thresholds require specification proof.",
+      "Do not truncate inventory, expose credentials or run an unreviewed Script; preserve first evidence and do not retry automatically."
+    ],
+    "expected_evidence": [
+      "Chassis/board/BMC/BIOS identity, cooling configuration and diagram/photo locating the precise outlet sensor and reference positions",
+      "Complete stable raw identity, value, units, threshold capabilities/values/hysteresis, health and timestamp",
+      "Separate unchanged Dashboard and Server Health evidence mapped to the same sensor",
+      "Calibrated co-located reference samples plus fan/load/power/inlet/airflow state and timestamp alignment",
+      "Project value/threshold/status/freshness specification and combined uncertainty/update-lag calculation",
+      "Missing/duplicate/stale/divergent disposition, pinned Script or alternate-method audit, no-clear/no-write/no-stimulus/no-retry proof and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On mapping ambiguity, stale or divergent data, unexpected health change or reference-placement disturbance, stop and preserve the first complete evidence and airflow state. Remove only the non-invasive reference fixture if authorized, then use approved BMC/board diagnostics; restore any independently authorized configuration change through the platform owner rather than this case."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Dashboard/Server Health Procedure and readability/specification Criteria consistently describe one passive motherboard-outlet sensor check. Missing placement and acceptance inputs do not create a source-purpose conflict."},
+  "blocked": {"before": false, "after": false, "reason": "The target and passive verification method are clear. Physical location, reference placement and acceptance limits are supplyable Project configuration inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Outlet sensing-point/airflow map, stable sensor/UI identity, values/thresholds/status/freshness, co-located reference placement/calibration, combined tolerance/update lag, passive fan/load/inlet state and protected reviewed collection method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define the physical outlet point or acceptance tolerance."}],
+  "project_authority": "Board sensor-placement/airflow drawing, outlet SDR definition, platform thermal limits, WebUI schema, reference-instrument plan and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "room_ambient_substitution_allowed": false, "inlet_or_other_exhaust_substitution_allowed": false, "thermal_stimulus_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|877|Wistron-BMC-00167-V003", "next_pending_case_variant_id": "d597a5cdf1929637"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

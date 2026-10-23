@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **65 / 942**
-- Last reviewed: `Functionality|875|Wistron-BMC-00165-V004` / `b6466d4f2c7d010d`
-- Next source-verified pending identity: `Functionality|876|Wistron-BMC-00166-V003` / `29a783a1bbd30cab`
-- Latest disposition: TEMP_MB_CPU0_IN and TEMP_MB_CPU1_IN are removed from Pending as two independent motherboard inlet sensors bound to physical socket-airflow paths and separate complete OOB/UI/spec evidence. One comma operand, package-temperature or one-inlet substitution, stress, clear and unreviewed Script execution are prohibited.
+- Completed: **66 / 942**
+- Last reviewed: `Functionality|876|Wistron-BMC-00166-V003` / `29a783a1bbd30cab`
+- Next source-verified pending identity: `Functionality|877|Wistron-BMC-00167-V003` / `d597a5cdf1929637`
+- Latest disposition: TEMP_MB_OUTLET is removed from Pending as a parameterized passive outlet-sensor check bound to the exact physical motherboard outlet point, complete OOB/two-UI fields and a co-located calibrated reference under recorded airflow/load state. Room ambient, inlet, chassis/PSU exhaust substitution, stimulus, clear and unreviewed Script execution are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.
