@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 111,
+  "source_key": "Functionality|922|Wistron-BMC-00212-V002",
+  "case_variant_id": "f9a5857a35eed406",
+  "source_ref": {"sheet": "Functionality", "source_row": 922, "code": "Wistron-BMC-00212-V002", "original_row_sha256": "7bf406ebeae5af36b48b53814fb5b38c9e0bad27a57ae80de43f9275196a4016", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "User management", "procedure": "Use the WebGUI User Management page to view the current server user-slot list; generic setup says clear logs.", "criteria": "A new user can be added and existing users can be modified or deleted.", "script": null, "deepseek": "PARTIAL performs an insecure, non-paginated Redfish/IPMI inventory only; it neither preserves the required WebGUI coverage nor exercises add, modify and delete, and it has no protected-account, role, credential, recovery or cleanup controls.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL risk correctly requires complete redacted inventories, role mapping, protected-account exclusion, a dedicated temporary account, independent recovery and per-operation audit/cleanup."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1083_f9a5857a35eed406.json",
+  "old_problem": "The Procedure is read-only WebGUI inventory while Criteria requires an account lifecycle. Treating listing as PASS would drop add/modify/delete coverage; applying those writes to unspecified existing accounts could remove the only administrator, expose secrets or invalidate recovery sessions. Redfish and IPMI slots/roles also cannot be mapped by identifier alone.",
+  "new_disposition": "RESOLVED_WITH_REVIEW_LAYER_TEMPORARY_ACCOUNT_CREATE_MODIFY_DELETE_LIFECYCLE",
+  "disposition_reason": "Preserve the WebGUI inventory and expand the Review-layer procedure to the three explicit Criteria checkpoints using one Project-approved disposable local account: create, modify one specified property/role, then delete that same account. Each operation is separately approved, visually evidenced, corroborated through supported interfaces and tested against an authoritative least-privilege matrix, while every pre-existing/current/recovery account is protected. This reconciles the procedure/criteria gap without changing Master or inventing production-account mutations.",
+  "decision_basis": [
+    "XLSX row 922, same-row DeepSeek, exact GPT V2, selection manifest, adjacent session/policy cases and preserved V3.1 record were directly reviewed.",
+    "The source Criteria explicitly names add, modify and delete, so a read-only inventory cannot pass; using the newly created disposable account satisfies all three without selecting an arbitrary pre-existing user.",
+    "The DMTF Redfish specification defines local accounts as ManagerAccount resources that administrators can create, manage and delete, with role/privilege enforcement and possible session invalidation after property changes.",
+    "Because the source Procedure names WebGUI, actual before/action/result visual evidence is required; Redfish/IPMI may corroborate state but cannot substitute for UI coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC WebGUI user-slot inventory and disposable account create/modify/delete lifecycle",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the BMC WebGUI shows the complete current user-slot state and, through one dedicated disposable local account, correctly performs create, approved modify and delete operations with documented role/privilege, authentication/session and audit behavior while preserving every protected account and recovery path.",
+    "required_package": [
+      "Exact BMC/firmware/WebGUI/Redfish/IPMI identity, complete account-slot limit and interface-to-slot/account mapping",
+      "Authoritative local-account role/privilege matrix, allowed AccountTypes, password policy and selected modification field with expected behavior",
+      "Explicit protected-account list covering current administrator, sole recovery, service/factory/directory and all pre-existing users",
+      "Unique temporary username, credential delivered through a secret-safe channel, approved least-privilege initial and modified states and free slot",
+      "Independent administrator/recovery session plus expected login, privilege-denial and session-invalidation checks",
+      "Per-operation approval, WebGUI visual capture, complete redacted audit/inventory collection and cleanup/reconciliation plan"
+    ],
+    "test_command": "CRITICAL SECURITY-SENSITIVE LIFECYCLE; DO NOT EXECUTE WITHOUT EACH APPROVAL. Preserve logs and visually capture the complete WebGUI user-slot list; collect complete paginated Redfish and supported IPMI inventories with secrets redacted and identify every protected account/slot. Confirm a free slot, independent recovery and unique disposable identity. After create approval, use the verified WebGUI to create only that temporary account with the Project-approved least-privilege role and secret-safe password; verify its slot, role, allowed login and safe privilege boundary. After separate modify approval, change only the preselected property/role on that same account, then verify state, authorization/session behavior and audit result. Terminate its test sessions if required. After separate delete approval, delete only that disposable account and prove login fails, inventories return to baseline and recovery access remains. Never bulk-write, touch pre-existing users, expose secrets, use `-k` or retry automatically.",
+    "expected_result": "WebGUI, Redfish and supported IPMI views reconcile to the complete redacted baseline with documented namespace differences. The unique disposable account is created in the expected slot/role, authenticates and enforces the approved privilege boundary; the one approved modification takes effect with documented session behavior; deletion removes only that account and denies later authentication. Audit events match every action, protected accounts/access remain unchanged and the final inventory equals baseline.",
+    "pass_fail_basis": "PASS requires distinct create, modify and delete evidence for the disposable account, real WebGUI visual proof, correct role/privilege and authentication/session behavior, complete pre/final inventory reconciliation, audit records and protected-access preservation. Listing alone, account appearance, API-only changes or a successful HTTP response cannot pass. Wrong slot/role/privilege, exposed secret, unintended session/account effect, failed delete/login denial, audit mismatch or baseline drift is FAIL and stops. Missing role matrix, safe account, free slot, approval or recovery is NOT READY.",
+    "safety_gate": [
+      "Do not clear security/audit logs or store passwords, tokens, directory metadata or recovery secrets in review artifacts.",
+      "Identify and exclude all existing/current/recovery/service/factory/directory accounts; mutate only the uniquely named disposable local account.",
+      "Keep an independently verified administrator/recovery session and check exact target, account URI/slot and action before every create/modify/delete.",
+      "Obtain separate point-of-action approval for all three writes; do not bulk-operate, reuse production passwords or guess role mappings.",
+      "Stop on privilege escalation, access loss, wrong-account mutation, unexpected session invalidation or cleanup mismatch; do not retry automatically."
+    ],
+    "expected_evidence": [
+      "Target/version identity, account/role/password policy, slot limits, protected-account list, independent recovery and complete redacted initial inventories",
+      "Visual WebGUI user-list baseline and per-operation before/confirmation/result captures",
+      "Create approval/audit and temporary account slot, RoleId/privilege, successful allowed login and safe denied-operation evidence",
+      "Modify approval/audit, exact old/new property, role/privilege and documented session behavior",
+      "Delete approval/audit, removed account, rejected subsequent login and complete final WebGUI/Redfish/IPMI inventory equal to baseline",
+      "Protected account/recovery confirmation, no secret exposure/no retry proof and engineer verdict"
+    ],
+    "recovery": "If any existing account, role, session or recovery access is affected, stop all later lifecycle operations, preserve security/audit evidence and use the independent protected administrator path to restore only the approved baseline. If the disposable account remains, quarantine/disable or remove it only through the pre-approved recovery procedure after exact identity verification and fresh authorization; never bulk-delete or reset credentials blindly."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Review layer explicitly adds the Criteria-required create/modify/delete lifecycle to the Procedure's WebGUI inventory, using only a newly created disposable account. Master's original read/write mismatch remains historically preserved, but no acceptance checkpoint is omitted or assigned to an unsafe existing account."},
+  "blocked": {"before": false, "after": false, "reason": "The safe account lifecycle, PASS evidence and recovery are defined. Exact roles, slot, test identity and property are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Account/slot/role mapping, password and session policy, protected accounts, temporary identity and modification field, independent recovery and per-write approvals.", "execution_status": "NOT STARTED; CRITICAL SECURITY-SENSITIVE ACCOUNT WRITES; THREE SEPARATE APPROVALS REQUIRED; NO ACCOUNT CREATED/MODIFIED/DELETED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Specification DSP0266", "url": "https://www.dmtf.org/sites/default/files/standards/documents/DSP0266_1.22.0.pdf", "application": "Defines local ManagerAccount resources for administrator create/manage/delete, role/privilege enforcement, atomic account activity and possible session closure after changes."},
+    {"title": "DMTF Redfish Resource and Schema Guide DSP2046", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "application": "Defines ManagerAccount state such as UserName, RoleId, Enabled, Locked, AccountTypes and password-change behavior."}
+  ],
+  "project_authority": "BMC user-slot mapping, role/password/session policy, protected-account inventory, WebGUI behavior and account recovery SOP bind the disposable lifecycle values.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "master_conflict_preserved_as_history": true, "webgui_visual_evidence_required": true, "create_modify_delete_all_required": true, "preexisting_accounts_mutable": false, "bulk_operation_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|923|Wistron-BMC-00213-V002", "next_pending_case_variant_id": "84d8bc0ad97d000f"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
