@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 89,
+  "source_key": "Functionality|900|Wistron-BMC-00190-V003",
+  "case_variant_id": "090021d31f0d8d4f",
+  "source_ref": {"sheet": "Functionality", "source_row": 900, "code": "Wistron-BMC-00190-V003", "original_row_sha256": "0d94e48306228c55b611d532497fbadb5af846efc32f3f1c1932d0de268ad5a3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "PWR_GB_HSC1~PWR_GB_HSC10", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES submits HSC1~HSC10 as one literal record and truncates discovery. It neither expands ten channels nor defines HSC, controller-to-power-tree topology, measured quantity, scaling or applicable limits.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires ten separate records and HSC/topology semantics. The preserved V3.1 review additionally requires upstream-feed/downstream-domain causality and keeps this passive display row separate from load/trip behavior and PWR_STBY_HSC."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1061_090021d31f0d8d4f.json",
+  "old_problem": "Ten similarly named HSC records cannot be judged by count or adjacency: numbering may not follow the schematic, identical controllers may protect different rails, and input power/current-derived power is not automatically equivalent to downstream GPU/module telemetry. The source also does not authorize load, trip or hot-swap stimulus.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TEN_HSC_POWER_DOMAIN_MATRIX",
+  "disposition_reason": "Create ten independent controller/domain rows keyed by approved designator, physical location, upstream feed and downstream protected load. Define HSC and each controller's quantity/register/scaling from Project power-tree evidence, then compare complete passive OOB and UI data with controller/domain/state-specific rules. Missing schematic/runtime bindings is execution NOT READY, not a remaining engineering decision.",
+  "decision_basis": [
+    "XLSX row 900, same-row DeepSeek, exact GPT V2, selection manifest, related dynamic HSC case, following standby-HSC case and preserved V3.1 record were directly reviewed.",
+    "HSC may plausibly mean hot-swap controller, but its abbreviation, controller identity and power-tree association are OEM/Project facts and are not expanded from the label alone.",
+    "The related dynamic case supports power-domain context but does not authorize connector load changes, trip tests or recovery actions here; PWR_STBY_HSC is a separate source identity.",
+    "ED-03 forbids guessed OEM registers, ED-15 requires per-domain approved criteria, ED-17 preserves fault evidence and ED-20 preserves all ten domains separately."
+  ],
+  "test_case": {
+    "test_name": "Verify PWR_GB_HSC1 through PWR_GB_HSC10 as ten mapped power-controller domains",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify all ten Project-defined GB HSC power records are separately present or have approved population/state outcomes and correctly display controller/domain identity, measured quantity, units, value, health, supported thresholds and freshness in Dashboard and Server Health for the unchanged current feed/load state.",
+    "required_package": [
+      "Chassis/GPU-baseboard/BMC identity and authoritative HSC abbreviation/function",
+      "Ten-row controller PN/revision/serial or schematic designator, physical location, upstream feed and downstream module/connector/rail/population map",
+      "Per-controller management bus/mux/address/channel/register, measured electrical boundary and quantity/units",
+      "Scaling, calibration tolerance, averaging/sample window, polling/update rate and stable SDR/API/UI identities",
+      "Per-domain normal range, tolerance/limit, threshold capability/values/hysteresis, status, stale/zero/unavailable and powered-off rules",
+      "Recorded PSU feeds/redundancy, HSC enable/fault state, GPU/module population and current host/load/cooling context",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, controller-fault, kernel, power or thermal logs and do not vary connector load, stress GPU/modules, trip/reset a controller, disconnect feeds, power-cycle, change thresholds or flash firmware. Confirm HSC and the ten-row power-tree/controller map first. Enumerate the complete sensor repository and query PWR_GB_HSC1 through PWR_GB_HSC10 as exact separate records; never use the tilde string as one sensor or infer topology from numbering. Review the Script before use. Capture each controller/domain identity, upstream/downstream boundary, quantity/units, value, supported thresholds, health and synchronized timestamp plus matching Dashboard and Server Health rows and unchanged feed/load state. Apply its own approved state rule and stop without retry on missing, duplicate, swapped, stale or divergent evidence.",
+    "expected_result": "Ten explicit, mutually distinct domain outcomes match the approved controller and power-tree map. Every applicable raw record and both UI views agree on controller/domain, electrical boundary, quantity, units, value, supported thresholds, health and freshness and satisfy the controller/domain/current-state rule. Unfitted/off/standby/zero/unavailable behavior is accepted only when specified; PWR_STBY_HSC, aggregate power or downstream GPU telemetry does not substitute.",
+    "pass_fail_basis": "PASS requires the approved HSC definition and ten-row controller/feed/load map plus complete independent OOB/two-UI evidence accepted against per-controller boundary/state rules. A literal range, first-100-line fallback, count, numbering assumption, aggregate or PWR_STBY_HSC evidence, or cross-boundary numeric similarity cannot pass. Missing/swapped/duplicate/stale identity, wrong boundary/unit/scaling, out-of-rule value or required UI/status/threshold mismatch is FAIL. Missing power tree, controller/register semantics or acceptance is NOT READY, not Pending or PASS. Inrush, overload/trip/retry and hot-swap recovery are outside this passive row.",
+    "safety_gate": [
+      "Preserve SEL, controller-fault, kernel, power and thermal history; do not execute the source's generic clear-log step.",
+      "Do not assume HSC expansion or controller-to-domain mapping from numbering; require schematic and fitted hardware identity.",
+      "Keep all ten domains and PWR_STBY_HSC distinct; do not compare controller input and downstream device power without approved boundary/window accounting.",
+      "Do not add load, trip/reset a controller, disconnect a feed, power-cycle/reseat hardware, change thresholds or flash firmware.",
+      "Do not guess OEM registers, truncate output, expose credentials, assume a cipher or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard/BMC identity and approved HSC definition",
+      "Ten-row controller designator/location/PN/revision/serial/upstream-feed/downstream-domain/fitted-population map",
+      "Per-controller bus/mux/address/channel/register, quantity/boundary, units, scaling/calibration/window and stable SDR/UI mapping",
+      "Complete separate raw values, supported thresholds, health and synchronized timestamps plus matching Dashboard and Server Health visual evidence",
+      "Recorded PSU/feed/redundancy, HSC enable/fault, GPU/module population, host/load/cooling context and state-specific comparisons",
+      "Unfitted/off/standby/zero/unavailable/stale/faulted/divergent disposition, Script/client audit, no-mutation/no-retry proof, final power/BMC health and ten-domain engineer verdict"
+    ],
+    "recovery": "The method is read-only. On unknown HSC semantics, topology or telemetry boundary, or on a fault/stale/divergent result, stop and preserve first-pass evidence and feed/load/controller state. Obtain the Project schematic and controller reference and continue only with approved passive diagnostics; never trip or reset a controller to make the row pass. Any separately authorized load or protection test requires isolation, authorization and its own recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "HSC and the power tree are undefined, but Items, Sensor Page navigation and Criteria consistently request passive presentation of ten power channels. Dynamic HSC and standby-HSC rows are separate coverage, not conflicting requirements."},
+  "blocked": {"before": false, "after": false, "reason": "The ten-channel passive objective and safety boundary are clear. Project schematic/controller data can provide topology and acceptance at runtime."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "HSC definition, ten controller/location/feed/downstream-domain mappings, controller registers/quantity/scaling/window, stable IDs, per-domain state/limit/threshold/status/freshness rules, passive feed/load context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO LOAD, TRIP, RESET, FEED, POWER, THRESHOLD OR FIRMWARE CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Pin and review before use; it cannot define HSC, the Project power tree, controller registers or acceptance."}],
+  "project_authority": "Project schematic/power tree, HSC controller datasheet/register map, fitted population, BMC SDR repository and WebUI schema define all ten domains and their passive acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "ten_HSC_domain_outcomes_required": true, "HSC_expansion_or_topology_guessed": false, "standby_HSC_substitution_allowed": false, "dynamic_load_or_trip_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|901|Wistron-BMC-00191-V003", "next_pending_case_variant_id": "b71877c678ef1f6e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
