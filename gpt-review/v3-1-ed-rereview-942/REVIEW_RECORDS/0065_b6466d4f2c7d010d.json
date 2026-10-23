@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 65,
+  "source_key": "Functionality|875|Wistron-BMC-00165-V004",
+  "case_variant_id": "b6466d4f2c7d010d",
+  "source_ref": {"sheet": "Functionality", "source_row": 875, "code": "Wistron-BMC-00165-V004", "original_row_sha256": "a68891275853c44ffb69aab262e5aec71c9510daecbf98ce4130bdad3a6dfc98", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_MB_CPU0_IN, TEMP_MB_CPU1_IN", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES passes both comma-separated labels as one quoted sensor name and truncates fallback output; it omits separate identities, physical inlet/socket/airflow mapping, UI/spec/freshness and safe Script review.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires separate queries, board/socket mapping and independent UI/spec evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1037_b6466d4f2c7d010d.json",
+  "old_problem": "The two source names were converted into one likely invalid command operand. No evidence separated CPU0_IN from CPU1_IN or mapped either motherboard inlet sensing point to physical socket/airflow, and CPU package readings, similarity, partial SDR output or one row could be falsely accepted for both.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_ROW_MOTHERBOARD_CPU_INLET_SENSOR_MATRIX",
+  "disposition_reason": "The source unambiguously names two read-only sensors. Resolve and query them independently, bind each stable record and UI row to its physical motherboard inlet and CPU airflow path, record passive fan/load/ambient state and compare each applicable value/threshold/status/freshness field with its own specification. Exact topology and values are Project inputs; one inlet or CPU package telemetry never substitutes for the other.",
+  "decision_basis": [
+    "XLSX row 875, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "A quoted comma-separated operand is not evidence for two ipmitool sensor records; each identity needs its own command status and evidence.",
+    "Motherboard inlet air and CPU die/package temperature are different measurands, and similar temperatures do not prove correct location/identity.",
+    "ED-13 governs absent-path N/A, ED-15 requires per-inlet criteria, ED-17 rejects clearing and ED-20 preserves both named sensors independently."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_MB_CPU0_IN and TEMP_MB_CPU1_IN independently against board airflow mapping and specification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the two distinct motherboard CPU-inlet temperature sensors are each human readable in Dashboard and Server Health and independently have the correct physical inlet/socket-airflow identity, Celsius reading, units, health, implemented thresholds/hysteresis and freshness for the platform specification at the recorded passive operating state.",
+    "required_package": [
+      "Exact chassis/board/BMC/BIOS/CPU population and airflow topology with physical CPU0_IN/CPU1_IN locations and socket association",
+      "Separate stable SDR/API name/number/type/entity/instance and Dashboard/Server Health row for each inlet",
+      "Per-inlet Celsius scaling/rounding, tolerance, threshold capability/values/hysteresis, health and unavailable rules",
+      "Recorded reference ambient location, fan mode/speeds, CPU load/power state, timestamp alignment and update lag/delta",
+      "Validated protected OOB/API/browser clients",
+      "Pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, add CPU/thermal load, obstruct airflow, change fans or write thresholds. Establish a two-row physical inlet/socket/airflow expectation matrix. Enumerate the complete sensor repository and resolve `TEMP_MB_CPU0_IN` and `TEMP_MB_CPU1_IN` separately; never pass the comma-separated pair as one sensor name. Review the Script before use. Capture for each inlet its separate command status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus its matching Dashboard and Server Health rows. Compare each independently with its specification and approved time-aligned ambient/reference under the recorded passive fan/load state. Stop without retry on missing, duplicate, swapped, stale or divergent identities.",
+    "expected_result": "Two distinct stable sensors and UI rows map to the correct CPU0 and CPU1 motherboard inlet airflow paths. Each complete OOB/UI record independently matches its per-inlet value/unit/threshold/status/freshness specification within approved tolerance and operating context. An absent unpopulated path is N/A only with configuration proof. CPU package or other-inlet data never substitutes, and no state is mutated.",
+    "pass_fail_basis": "PASS requires the CPU population/airflow map and separate complete OOB/two-UI/spec agreement for both applicable inlet sensors with engineer verdict. One comma operand, one inlet, CPU package telemetry, similar values, truncated output or label-only matching cannot pass. Missing/swapped/duplicate identity, unjustified N/A, stale/out-of-tolerance value or required threshold/status mismatch is FAIL. Missing topology/spec/reviewed method is NOT READY, not Pending or PASS; dynamic response is not covered.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; thermal/fan/CPU history is relevant context.",
+      "Do not query the comma-separated pair as one name; preserve two independent results and statuses.",
+      "Do not confuse inlet air with CPU die/package telemetry or infer identity from value similarity.",
+      "Do not add stress, alter airflow/fans or write thresholds.",
+      "Use threshold capability masks; N/A requires population/capability/spec proof and missing required fields fail.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/board/BMC/BIOS, CPU population and physical CPU0_IN/CPU1_IN sensing-point/airflow/socket map",
+      "Two separate complete raw identities, values, units, threshold capabilities/values, health and timestamps",
+      "Separate Dashboard and Server Health evidence for each inlet",
+      "Per-inlet spec plus ambient, fan mode/speed, CPU load/power and tolerance/update-lag comparison",
+      "Missing/absent/duplicate/swapped/stale disposition and pinned Script/alternate-method audit",
+      "No-clear/no-write/no-stress/no-retry proof, final health and per-inlet engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On mapping ambiguity, stale/mismatched values or unexpected health change, stop and preserve both sensors' first evidence; use approved BMC/board topology diagnostics without load or settings changes. Isolate any mutating Script and restore only through the authorized owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items clearly name two sensors and Procedure/Criteria align on passive UI/spec validation. The command interpretation was defective, not the source purpose."},
+  "blocked": {"before": false, "after": false, "reason": "Two-sensor passive validation is clear. Board/airflow mapping and acceptance data are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "CPU population and board airflow/sensing-point map, separate sensor/UI identities, per-inlet values/thresholds/status/tolerance/freshness, passive fan/load/ambient state, protected client and reviewed Script/manual method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define physical inlet ownership."}],
+  "project_authority": "Board sensor-placement/airflow diagram, CPU-inlet SDR definition, platform thermal limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "comma_pair_as_one_query_allowed": false, "two_inlet_non_substitution": true, "package_temperature_substitution_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|876|Wistron-BMC-00166-V003", "next_pending_case_variant_id": "29a783a1bbd30cab"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
