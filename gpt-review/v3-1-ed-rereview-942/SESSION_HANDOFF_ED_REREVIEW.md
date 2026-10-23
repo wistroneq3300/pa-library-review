@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **63 / 942**
-- Last reviewed: `Functionality|873|Wistron-BMC-00163-V004` / `ccd4f9f5b6472dac`
-- Next source-verified pending identity: `Functionality|874|Wistron-BMC-00164-V003` / `045d1d7594ddf477`
-- Latest disposition: TEMP_CPU0~1 is removed from Pending as a population-aware per-socket matrix joining physical/BIOS/BMC/OS identities to separate complete CPU sensor/UI/spec evidence. Literal tilde queries, one/average-for-both evidence, unjustified absent-socket N/A, stress, clear and unreviewed Script execution are prohibited.
+- Completed: **64 / 942**
+- Last reviewed: `Functionality|874|Wistron-BMC-00164-V003` / `045d1d7594ddf477`
+- Next source-verified pending identity: `Functionality|875|Wistron-BMC-00165-V004` / `b6466d4f2c7d010d`
+- Latest disposition: TEMP_DIMM_ZONE1~4 is removed from Pending as four independent topology/aggregation-aware zone checks across complete OOB, Dashboard, Server Health and per-zone spec. Literal range, one/component-for-all substitution, unjustified empty-zone N/A, stress, clear and unreviewed Script execution are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.
