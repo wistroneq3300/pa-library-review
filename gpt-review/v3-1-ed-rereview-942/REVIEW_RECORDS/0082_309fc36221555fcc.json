@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 82,
+  "source_key": "Functionality|893|Wistron-BMC-00183-V003",
+  "case_variant_id": "309fc36221555fcc",
+  "source_ref": {"sheet": "Functionality", "source_row": 893, "code": "Wistron-BMC-00183-V003", "original_row_sha256": "6d195ec8806bd74742ceb0715278a0e6226c4434e93f91d7eff8a9e4e72ef8a2", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_CRPS1~2", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats CRPS1~2 as one literal sensor and truncates fallback inventory; it omits two bay/serial/feed/PMBus-field identities, active/standby/load-share semantics and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires vendor PMBus documentation, separate records, PSU-slot mapping and no PSU manipulation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1054_309fc36221555fcc.json",
+  "old_problem": "One literal range query could be presented as both CRPS modules without binding each reading to physical bay, serial, AC feed, PMBus page/object and inlet/internal/outlet field. Generic PSU1-6 telemetry, one module or an unmatched PMBus temperature could substitute, and active/standby/absent/load-share differences were not defined.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_ROW_CRPS_PMBUS_TEMPERATURE_MATRIX",
+  "disposition_reason": "Confirm CRPS terminology and keep this family distinct from PSU1-6. Resolve CRPS1 and CRPS2 independently and bind each to bay, immutable module identity, feed, current redundancy/load-share state and the exact vendor-defined PMBus page/object/temperature field. Compare complete OOB/two-UI evidence with state- and field-specific limits without manipulating the power subsystem.",
+  "decision_basis": [
+    "XLSX row 893, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, adjacent/related source cases and historical record were directly reviewed.",
+    "Tilde shorthand is not proven IPMI syntax and one response cannot satisfy two physical CRPS modules.",
+    "PMBus temperature objects are module- and firmware-specific and can represent inlet, internal or outlet points; page/field semantics and current load-sharing state are essential.",
+    "ED-03 forbids guessed OEM parameters, ED-13 governs absent/standby N/A, ED-15 requires state/field-specific limits, ED-17 preserves power logs and ED-20 keeps CRPS1/2 distinct from PSU1-6."
+  ],
+  "test_case": {
+    "test_name": "Verify CRPS1 and CRPS2 temperatures independently by bay, serial, feed and vendor PMBus field",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After confirming CRPS terminology, verify two CRPS temperature records are separately human readable in Dashboard and Server Health, map to the correct physical modules and exact PMBus temperature fields, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications for their current presence, active/standby, load-share and redundancy states.",
+    "required_package": [
+      "Chassis/power-subsystem PN/revision, BMC/PSU firmware and authoritative CRPS definition distinct from PSU1-6",
+      "CRPS1/2 bay, AC feed, PN/serial/HW/FW, rated capacity and presence/active/standby/load-share state",
+      "Vendor PMBus Application Note or approved firmware specification with controller/bus/mux/address/page/command and exact inlet/internal/outlet field semantics",
+      "Separate stable SDR/API and Dashboard/Server Health identities for both modules",
+      "Per-field units/scaling, approved range/delta, threshold capability/values/hysteresis, health, polling/freshness and unavailable rules",
+      "State-specific acceptance for present, active, standby, absent, degraded redundancy and unequal load sharing",
+      "Recorded input/output power, per-module current/load, fan speeds, ambient and airflow",
+      "Validated protected read-only BMC/PMBus/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL/kernel/PSU black-box/PMBus evidence, hot-remove/reseat a PSU, disconnect AC, change load sharing/redundancy/load/fans/thresholds or issue PMBus writes. Build a two-row bay/serial/feed/state/PMBus-field expectation matrix from the vendor specification. Enumerate the complete BMC repository and resolve CRPS1 and CRPS2 separately; do not use `TEMP_CRPS1~2` as one record unless explicitly documented. Review the Script before use. Capture each independent query status, stable identity, exact field, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Record passive load-share/power/cooling state and compare with the matching state/field limits. Stop without retry on missing, swapped, stale or divergent rows.",
+    "expected_result": "Two distinct records and UI rows map to the correct CRPS bays, serials, feeds and vendor-defined PMBus temperature fields. Each independently matches its field- and current-state-specific value/unit/threshold/status/freshness specification. Generic PSU1-6 telemetry, another PMBus field, one module or aggregate power health never substitutes and the power subsystem remains unchanged.",
+    "pass_fail_basis": "PASS requires both module identities, vendor PMBus field semantics, current state and separate complete OOB/two-UI/spec agreement with engineer verdict. One literal range query, one PSU, generic PSU numbering, label-only match, truncated output or unmatched PMBus temperature cannot pass. Missing/swapped/stale identity, unjustified N/A, out-of-limit value or required threshold/status/UI mismatch is FAIL. Missing vendor field map/state matrix/reviewed method is NOT READY, not Pending or PASS; hot-swap, AC redundancy, load sharing, efficiency and threshold events are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, PSU black-box or PMBus evidence; prior power and thermal events are relevant.",
+      "Do not interpret the range as one record or substitute adjacent PSU1-6 telemetry.",
+      "Do not guess OEM PMBus controller/bus/mux/address/page/command or temperature-field semantics.",
+      "Do not hot-swap/reseat PSUs, disconnect AC, change load/redundancy/load-share/fans/thresholds or write PMBus.",
+      "Apply presence/active/standby/degraded state and capability rules; absence or a different standby value is valid only when documented.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/power-subsystem PN/revision, BMC and both CRPS bay/feed/PN/serial/HW/FW/capacity/presence/state identities",
+      "Vendor PMBus reference plus controller/bus/mux/address/page/command and exact temperature-field map for CRPS1 and CRPS2",
+      "Two separate complete raw identities, values, units, threshold capabilities/values, health and timestamps plus separate Dashboard and Server Health rows",
+      "Recorded input/output power, per-module load-share/active-standby state, fan/ambient/airflow and state-specific tolerance comparison",
+      "Absent/degraded/missing/swapped/stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-hot-swap/no-feed-or-load-change/no-PMBus-write/no-retry proof, final PSU/BMC health and two-module engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On CRPS, bay, state or PMBus-field ambiguity, stale/divergent values or unexpected PSU/BMC health change, stop and preserve both modules' first evidence plus inventory/feed/load-share state. Obtain the vendor reference and use approved read-only diagnostics; do not remove a PSU or change AC/load to force evidence. Any independently authorized power action requires its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The literal range and vendor PMBus mapping are execution inputs, but Items, UI Procedure and Criteria consistently request passive display/spec validation of two CRPS temperatures."},
+  "blocked": {"before": false, "after": false, "reason": "The two-module passive purpose is clear. Vendor PMBus documentation and Project power mapping can supply exact fields and acceptance."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "CRPS definition, two bay/serial/feed/state and vendor PMBus field maps, separate sensor/UI identities, state/field-specific thresholds/status/freshness/N/A rules, passive power/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO POWER SUBSYSTEM CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define CRPS bay/feed or vendor PMBus fields."}],
+  "project_authority": "Power-subsystem wiring/bay map, PSU inventory, vendor PMBus Application Note or firmware spec, BMC SDR definition, WebUI schema and Project power recipe define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "two_crps_rows_required": true, "literal_range_query_allowed_without_documentation": false, "psu1_6_substitution_allowed": false, "oem_pmbus_parameter_guessing_allowed": false, "power_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|894|Wistron-BMC-00184-V003", "next_pending_case_variant_id": "39e95ef82e1e80f2"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
