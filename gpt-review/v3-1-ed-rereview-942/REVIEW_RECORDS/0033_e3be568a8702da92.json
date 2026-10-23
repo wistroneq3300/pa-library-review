@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 33,
+  "source_key": "Functionality|843|Wistron-BMC-00133-V003",
+  "case_variant_id": "e3be568a8702da92",
+  "source_ref": {"sheet": "Functionality", "source_row": 843, "code": "Wistron-BMC-00133-V003", "original_row_sha256": "11c2056291a4e93cbe92520f696c2d69aab991e2ef60c4d2559fd411001ed7b2", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Change Password", "procedure": "Change the BMC login password from the profile settings page reached through the upper-right user icon.", "criteria": "Change the user login password from the profile settings page correctly.", "deepseek": "PARTIAL proposes browser or Redfish AccountService PATCH, but an administrative PATCH is not equivalent to the enrolled user's self-service profile control.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; distinguishes the existing-account profile change from first-login enrollment and requires protected secrets, trusted endpoint, session/audit evidence and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1005_e3be568a8702da92.json",
+  "old_problem": "The historical record correctly defined the self-service UI state transition but retained Pending because account ownership, password policy, protected current/new secrets, session behavior, final rotation and recovery were not supplied.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ENROLLED_USER_PROFILE_PASSWORD_CHANGE_TEST",
+  "disposition_reason": "The interface and intent are explicit: an already-enrolled user changes its own login password through the WebUI profile control. Exact build, owned account, field validation, password/session policy, secret custody, attempt budget and recovery are Project execution inputs. A direct administrator-side AccountService update can support setup/recovery only; it cannot prove profile navigation, current-password validation, UI feedback or self-service session behavior.",
+  "decision_basis": [
+    "XLSX row 843, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "This is an enrolled-user self-service profile test, independently distinct from the preceding one-time first-login forced-change case.",
+    "Project/vendor profile, password, session and recovery specifications are the authority for field requirements and transition behavior; secrets and policy values are not guessed.",
+    "ED-08 preserves actual WebUI evidence, ED-15 requires approved acceptance behavior, ED-20 preserves this case's identity, ED-35 rejects API-only substitution, and ED-38 controls credential mutation and recovery."
+  ],
+  "test_case": {
+    "test_name": "Verify enrolled user self-service password change through BMC Web profile",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove an approved already-enrolled BMC user can navigate from the upper-right user icon to its profile password control, satisfy current/new/confirmation validation, change only its own login secret once, observe the specified UI/session transition, and re-authenticate as the same identity/privilege while old credential and sessions follow Project policy.",
+    "required_package": [
+      "Immutable BMC identity, trusted management URL/certificate, firmware/WebUI/authentication-provider build and supported browser",
+      "Owned non-production enrolled account, exact privilege, current active-session inventory and confirmation it is not shared or the sole recovery account",
+      "Version-matched profile-page route/control plus current/new/confirmation fields, validation messages and re-authentication behavior",
+      "Password length/complexity/history/expiration/reuse policy and protected current/new secret handles with custodian/final rotation owner",
+      "Approved old-credential behavior, current/other-session invalidation or continuation, identity/privilege probes and audit-event mapping",
+      "Attempt budget below lockout/rate limits, MFA/CAPTCHA/SSO/CSRF behavior, alternate administrator/console/OOB recovery and final restore/rotate/retire state"
+    ],
+    "test_command": "Verify endpoint/build and the authenticated disposable account identity/ownership/privilege, record active-session and audit baselines, and approve password policy, attempt limit, recovery and final credential state. In an isolated supported browser, authenticate through protected input, navigate using the upper-right user icon to the actual profile password control, and capture redacted evidence of that route. Submit the current, generated new and confirmation secrets once through protected fields. Record non-secret validation/success and the specified session transition; then within the attempt budget verify old credential and pre-existing sessions behave exactly as approved and the new credential authenticates the same identity/privilege. Preserve audit events, reconcile/revoke sessions and rotate, restore or retire the account as approved. Do not use an API-only shortcut, clear logs, expose secrets or retry automatically.",
+    "expected_result": "The owned enrolled account reaches the correct self-service profile control, required fields and password-policy validation behave as specified, and the single approved change affects only that account. WebUI feedback and session transition match the versioned policy; the old credential and all relevant sessions are accepted or rejected exactly as specified, and the new credential authenticates the same intended identity/privilege. Audit events and final account/session state are complete, no secret is disclosed and independent recovery remains available.",
+    "pass_fail_basis": "PASS requires identity/account binding, real profile navigation from the user icon, required current/new/confirmation validation, one approved self-service change, exact UI/session/audit transition, bounded old-credential/session verification, protected new-password re-login as the same identity/role and verified final rotation/cleanup. An AccountService PATCH, success toast, HTTP status, changed account attribute or first-login workflow cannot substitute. Wrong account, missing current-password gate, unexpected validation, failed/unknown new secret, incorrect privilege, policy-inconsistent session survival, lockout, leaked secret or failed cleanup is FAIL. Missing Project inputs or approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Use only an owned disposable/lab account; never alter a shared, production-critical or sole recovery account without exceptional approval and independent recovery.",
+      "Validate endpoint certificate/build and authenticated account alias/privilege before opening or submitting the profile form.",
+      "Keep current/new/confirmation passwords, cookies, CSRF tokens and recovery credentials out of URLs, commands, screenshots, browser/network traces and records.",
+      "Do not submit until active-session impact, password history, attempt budget, secret custodian, recovery and final credential state are approved; submit once with no automatic retry.",
+      "Do not promise rollback to the old password because password history may prohibit reuse; use the approved rotation or retirement plan.",
+      "Administrative Redfish/AccountService may be used only for separately approved inspection/setup/recovery and cannot satisfy the profile-page checkpoint.",
+      "Never clear audit/BMC/system logs; stop on endpoint/account mismatch, unexpected privilege/session effects, policy rejection, access loss or uncertain recovery."
+    ],
+    "expected_evidence": [
+      "BMC endpoint/certificate, firmware/WebUI/auth build, supported browser and owned account alias/privilege/active-session baseline",
+      "Password-policy, protected secret-custody, attempt-budget, final-rotation and independent-recovery approvals",
+      "Redacted navigation evidence from the upper-right user icon to the profile password control and required field/validation states",
+      "Single redacted submission result, exact UI feedback/session transition and corresponding timestamped audit/security events",
+      "Bounded old-credential/session behavior and protected new-password re-login proving the same identity/privilege",
+      "All test sessions reconciled, final account rotation/restore/retirement, recovery-path health and authorized engineer verdict"
+    ],
+    "recovery": "If the change targets the wrong account, access is lost, validation is unexpected or session behavior is unsafe, stop immediately and preserve first-failure UI/audit evidence. The authorized owner uses the verified alternate administrator/console/OOB path to revoke sessions and rotate, restore or retire only the disposable account according to password-history policy, then verifies BMC reachability and audit continuity. Do not guess credentials, resubmit or clear logs."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently specify an existing user's BMC Web profile password change. The word `correctly` needs versioned Project acceptance detail but is not a competing requirement."},
+  "blocked": {"before": false, "after": false, "reason": "The self-service UI operation is clear; owned account, build, password/session policies, protected secrets, recovery and final state are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI build, owned enrolled account, exact profile validation, password/session/lockout policy, protected secrets, attempt budget, recovery and final rotation state.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "The version-matched Project/vendor profile password-change, account, session, audit and recovery specifications define correct behavior. Any API-only override must record that profile-UI coverage remains unverified.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "first_login_case_substitution_allowed": false, "api_only_substitution_allowed": false, "credential_mutation_requires_explicit_approval": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|844|Wistron-BMC-00134-V003", "next_pending_case_variant_id": "bbedbcedd6c3822c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
