@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 76,
+  "source_key": "Functionality|887|Wistron-BMC-00177-V003",
+  "case_variant_id": "7d5b1ca0c246695b",
+  "source_ref": {"sheet": "Functionality", "source_row": 887, "code": "Wistron-BMC-00177-V003", "original_row_sha256": "82630e6cd5666f434bef6ec054454c7e8f57bfae05c91ea5e23864fff2adc75b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_GB_PCB1~4", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats PCB1~4 as one literal sensor and truncates fallback inventory; it omits GB/PCB semantics, four schematic zones/probes, BMC source fields, passive cooling context and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires four separate reads but its GPU/board mapping language could incorrectly imply GPU-device sensors rather than board-local PCB zones."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1048_7d5b1ca0c246695b.json",
+  "old_problem": "One literal range response could be accepted as four zones without confirming that GB is the GPU baseboard or mapping PCB1-4 to exact schematic locations, sensor parts and BMC fields. GPU die, NVSwitch or aggregate board telemetry could then falsely replace four board-local thermistor/monitor channels.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FOUR_ROW_GPU_BASEBOARD_PCB_ZONE_MATRIX",
+  "disposition_reason": "Confirm GB/PCB terminology and expand the source into four independent physical PCB-zone/probe rows. Bind each to the exact baseboard revision, schematic location, monitored component or zone, sensor part/measurement point and BMC controller/bus/mux/address field, then compare complete OOB/two-UI evidence with per-zone limits under the recorded passive state.",
+  "decision_basis": [
+    "XLSX row 887, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, related source cases and historical record were directly reviewed.",
+    "Tilde shorthand is not proven query syntax and one response cannot satisfy four independent board zones.",
+    "A PCB-labeled temperature commonly represents a board-local thermistor/monitor channel; its placement and airflow matter, and GPU/NVSwitch die temperature is not equivalent without explicit authority.",
+    "ED-15 requires per-zone limits, ED-17 preserves thermal/GPU logs, ED-20 preserves all four identities and ED-14 prevents this passive row from replacing the separate dynamic threshold case."
+  ],
+  "test_case": {
+    "test_name": "Verify GPU-baseboard PCB1 through PCB4 temperatures independently by schematic zone, probe and BMC source",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After confirming GB/PCB terminology, verify four temperature records are separately human readable in Dashboard and Server Health, map to the correct physical PCB zones or probes on the exact baseboard revision and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications under the recorded passive power, load and cooling state.",
+    "required_package": [
+      "Project confirmation of GB/PCB terminology and exact chassis/GPU-baseboard PN/revision plus BMC/BIOS build",
+      "Per-index PCB1-4 schematic/layout location, named zone or monitored component, sensor part/type and measurement point",
+      "Per-zone BMC controller/bus/mux/address path and exact temperature field",
+      "Separate stable SDR/API and Dashboard/Server Health identities for PCB1 through PCB4",
+      "Per-zone units/scaling, approved range/delta, threshold capability/values/hysteresis, health and freshness rules",
+      "Recorded system power, GPU/baseboard workload, fan mode/speeds, inlet/ambient and chassis airflow",
+      "Any approved non-intrusive reference position and uncertainty without opening the chassis or disturbing airflow",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/GPU/thermal logs, start GPU/thermal load, open or service the baseboard, place an unapproved probe, alter airflow/fans/thresholds or flash firmware. Confirm GB/PCB meanings and build a four-row schematic-zone/probe/BMC-source expectation matrix. Enumerate the complete sensor repository and resolve PCB1 through PCB4 separately; do not use `TEMP_GB_PCB1~4` as one record unless explicitly documented. Review the Script before use. Capture per zone its independent query status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Compare with per-zone specifications under the recorded passive state; use a reference only with approved non-intrusive placement. Stop without retry on missing, duplicate, swapped, stale or divergent rows.",
+    "expected_result": "Four independently dispositioned records and UI rows map to the correct baseboard schematic zones/probes and documented BMC fields. Each matches its per-zone value/unit/threshold/status/freshness specification under the recorded passive state. GPU die, NVSwitch or aggregate board telemetry never substitutes, airflow/hardware remains unchanged and no dynamic threshold behavior is claimed.",
+    "pass_fail_basis": "PASS requires authoritative GB/PCB semantics and separate complete OOB/two-UI/spec agreement for every PCB1-4 row with schematic/probe/source proof and engineer verdict. One literal range query, one zone, GPU/NVSwitch telemetry, aggregate value, label-only match or truncated output cannot pass. Missing/swapped/duplicate/stale identity, out-of-limit value or required threshold/status mismatch is FAIL. Missing zone/source/spec/reviewed method is NOT READY, not Pending or PASS; static values do not validate workload response or threshold assertion/deassertion.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, GPU or thermal logs; existing events and trends are relevant evidence.",
+      "Do not interpret the range as one record or accept fewer than four independently dispositioned zone rows.",
+      "Do not map PCB indices to GPU slots, NVSwitches or OS enumeration without schematic evidence.",
+      "Do not replace a board-local field with host GPU telemetry without exact zone/source equivalence.",
+      "Do not add load, open/service hardware, disturb airflow, alter fans/thresholds or place an unapproved reference probe.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS, confirmed GB/PCB terminology and four-row schematic location, named zone/component and measurement-point matrix",
+      "Per-zone BMC controller/bus/mux/address and exact temperature-field source",
+      "Four separate complete raw identities, values, units, threshold capabilities/values, health and timestamps plus separate Dashboard and Server Health rows",
+      "Per-zone specification and recorded system power, GPU/baseboard load, fan speeds, inlet/ambient and airflow with tolerance/update-lag and any approved non-intrusive reference",
+      "Missing/duplicate/swapped/stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-load/no-airflow-change/no-service/no-retry proof, final GPU/baseboard/BMC health and four-zone engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On terminology, zone, probe or management-field ambiguity, stale/divergent values, unexpected health change or reference airflow disturbance, stop and preserve all first-pass evidence plus cooling state. Remove only an authorized non-intrusive reference fixture and use approved read-only BMC/board diagnostics; any independently authorized load or hardware action requires its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The range and zone mapping need Project inputs, but Items, UI Procedure and Criteria consistently request passive display/spec validation of four temperature records."},
+  "blocked": {"before": false, "after": false, "reason": "The four-zone passive purpose is identifiable. GB/PCB semantics, schematic/source map and per-zone acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "GB/PCB definition, baseboard revision and four-zone schematic/probe/BMC-source map, separate sensor/UI identities, per-zone thresholds/status/freshness, passive power/load/cooling state, optional safe reference and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO LOAD OR AIRFLOW CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define PCB zones, probe placement or BMC source fields."}],
+  "project_authority": "GPU-baseboard schematic/layout and PCB-zone map, sensor-device and BMC-bus definitions, thermal limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-14", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "four_pcb_rows_required": true, "literal_range_query_allowed_without_documentation": false, "gpu_or_nvs_substitution_allowed": false, "dynamic_threshold_coverage_claimed": false, "load_or_airflow_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|888|Wistron-BMC-00178-V003", "next_pending_case_variant_id": "ead4951c667183d6"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
