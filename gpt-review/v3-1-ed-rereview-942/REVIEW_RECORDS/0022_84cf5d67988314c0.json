@@ -1,0 +1,62 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 22,
+  "source_key": "Functionality|832|Wistron-BMC-00122-V004",
+  "case_variant_id": "84cf5d67988314c0",
+  "source_ref": {"sheet": "Functionality", "source_row": 832, "code": "Wistron-BMC-00122-V004", "original_row_sha256": "2eb3973b87dbd4aeca71f20e494de892095b14072f9e3f20ccb3074c68f2e334", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Remote Syslog", "procedure": "Read /redfish/v1/Systems/1/LogServices/PlatformLog and Entries, compare DateTime/offset, ServiceEnabled and all required event fields with the BMC Web Event Log, with info/warning/error coverage.", "criteria": "Redfish and WebGUI critical content and OK/Warning/Critical entries match.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/bmc-logs/remote-syslog", "deepseek": "UNSUITABLE YES; samples different Managers/bmc services with insecure TLS and no WebUI or remote-receiver evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; improves local parity controls but does not resolve the Remote Syslog title/Script or prove delivery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0994_84cf5d67988314c0.json",
+  "old_problem": "Items and Script identify remote syslog forwarding, while Procedure and Criteria specify only local Redfish-to-WebUI parity. The historical review correctly refused to let either interpretation silently replace the other, but treated the conflict as requiring a new engineer choice.",
+  "new_disposition": "RESOLVED_BY_TWO_INDEPENDENT_LOGGING_CHECKPOINTS",
+  "disposition_reason": "No original coverage needs to be discarded or selected. Checkpoint A preserves every written Redfish/WebUI field, time, status and severity comparison. Checkpoint B preserves the Remote Syslog Items/Script identity and requires actual collector-side delivery. Standard Redfish discovery and IETF syslog semantics establish the technical boundaries; target resource links, OEM forwarding control, supported transport and event mappings are Project Configuration. Both outcomes remain separate so local parity cannot masquerade as network delivery and receiver receipt cannot substitute for the required UI/API comparison.",
+  "decision_basis": [
+    "XLSX row 832, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "DMTF Redfish is a hypermedia service: the client discovers the target's advertised resources and follows collection paging instead of substituting a guessed Systems or Managers path.",
+    "RFC 5424 defines a syslog message as an event-notification protocol with transport-independent fields including priority/severity, timestamp, hostname, application name, message ID, structured data and message.",
+    "RFC 5425 distinguishes an originator/transport sender from a remote collector/transport receiver and defines TLS transport security; therefore local BMC views alone cannot prove remote receipt.",
+    "ED-02 preserves the exact Source Key/Variant, ED-03 forbids guessing OEM parameters, ED-08 requires real WebUI evidence, ED-15 forbids a PASS without approved mappings/tolerances, and ED-20 requires separate identity and coverage even when related checks share events."
+  ],
+  "test_case": {
+    "test_name": "Verify local BMC log parity and remote syslog delivery as separate checkpoints",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "A: prove the source-specified PlatformLog and BMC Web Event Log represent the same approved informational, warning and critical/error events and metadata. B: independently prove the BMC forwards those uniquely identified events to the approved remote syslog collector using the project-supported transport and message mapping.",
+    "required_package": [
+      "Target BMC identity/firmware, trusted Redfish credentials and CA, advertised LogService/Entries links, complete pagination behavior and WebUI field authority",
+      "Approved severity vocabulary and per-field normalization for DateTime/offset, Severity, Source, Message, Created, CommonEventID, Serviceable and TotalSequenceNumber, including tolerances",
+      "Existing uniquely identifiable events or project-approved non-destructive stimuli for info, warning and error/critical without clearing any log",
+      "Isolated remote syslog collector, destination, port, supported UDP/TCP/TLS selection, certificate/authentication policy, facility/filter and delivery/loss/order/duplicate deadline",
+      "Documented OEM forwarding UI/API and reviewed pinned internal Script revision/hash; no OEM endpoint or payload may be inferred",
+      "Saved forwarding configuration, alternate management access, stop conditions and restore/collector-cleanup plan"
+    ],
+    "test_command": "Preserve baseline Redfish, WebUI and collector records. Through the trusted Redfish service root, follow advertised System/Manager LogServices links and every Entries page; test the source /Systems/1/LogServices/PlatformLog identity only when the service advertises or the approved platform map binds it, never replace it silently with Journal/Dump/FaultLog. An operator exposes all required WebUI Event Log columns and captures the same time window. Configure the isolated remote collector only through the approved OEM UI/API or reviewed Script. Select existing qualifying entries or invoke each approved safe stimulus once. Correlate Checkpoint A across raw Redfish and visual WebUI evidence for every required field/severity, then correlate Checkpoint B across the BMC event and collector raw message/session for sender, priority/severity, timestamp, hostname/source, message ID/structured data/message and delivery timing. Restore forwarding/UI settings and retain before/after evidence; do not clear logs or retry stimuli automatically.",
+    "expected_result": "Checkpoint A: ServiceEnabled, BMC time/offset and every specified event field match under the approved mapping for one info, one warning and one error/critical event across complete Redfish and WebUI data. Checkpoint B: the exact BMC events arrive at the intended collector within the approved deadline over the authorized transport with the approved facility/severity and message-field mapping, without unexpected target, loss, duplicate or reorder outside policy. The BMC and collector remain healthy and temporary configuration is restored.",
+    "pass_fail_basis": "Record separate A and B verdicts. A passes only with raw complete Redfish data plus actual WebUI visual evidence and all required mapped fields/severities; a different unapproved LogService or five-entry sample fails coverage. B passes only with BMC-side identity plus independent collector receipt/session evidence; local logs cannot pass it. The overall source case passes only when both checkpoints pass. A mismatch, missing page/event, wrong target, insecure or unauthorized transport, delivery outside approved limits, uncontrolled duplicate/retry, log deletion or failed restore is FAIL. Missing resource binding, OEM method, safe event, mapping or threshold is NOT READY, not PASS and not a renewed engineering-decision conflict.",
+    "safety_gate": [
+      "Do not clear SEL, Redfish, WebUI, OS or collector logs; preserve evidence before configuration changes.",
+      "Validate BMC and collector identity/TLS and protect credentials; non-TLS syslog is permitted only when explicitly supported and approved on an isolated management network.",
+      "Do not guess OEM remote-syslog URI, property, payload or CLI; stop if no approved implementation document or reviewed Script is available.",
+      "Use pre-existing qualifying events when possible; do not inject faults or generate warning/error events without a documented reversible stimulus and approval.",
+      "No automatic stimulus or forwarding retry; stop on wrong collector, certificate failure, event storm, log loss, management degradation or unexpected recipient.",
+      "Read every page and preserve raw records before normalization; empty, truncated or sampled output is not evidence of equality."
+    ],
+    "expected_evidence": [
+      "BMC/firmware identity, trusted Redfish service-root discovery, actual LogService binding and complete raw paginated entries",
+      "Timestamped WebUI captures with all requested columns and per-event A comparison for all three severity groups",
+      "Approved stimulus provenance or identity of pre-existing events, plus severity/time/field normalization and thresholds",
+      "Redacted OEM forwarding configuration and pinned reviewed Script/document revision",
+      "Collector identity, transport/TLS/session or packet/server evidence, raw messages and per-event B comparison including delivery/loss/order/duplicate timing",
+      "Separate A/B verdicts, baseline/post logs, configuration restore diff and final BMC/collector health"
+    ],
+    "recovery": "On wrong collector, authentication/certificate error, event storm, log loss or management impact, stop without retry, preserve BMC and collector evidence, disable only the temporary forwarding destination through the approved method, restore the saved configuration and verify Redfish/WebUI/management health. Rotate exposed credentials and isolate the collector if data was misdirected; do not delete evidence."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Both source meanings are retained as independently accepted checkpoints rather than choosing or conflating them."},
+  "blocked": {"before": true, "after": false, "reason": "The purpose split, standard evidence boundaries and verdict ownership are now explicit; resource, OEM transport and stimulus values are execution-readiness inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Advertised Redfish resources, WebUI mapping/tolerances, safe events, OEM forwarding method/Script, collector transport/security and delivery criteria.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF DSP0266 Redfish Specification 1.22.0", "url": "https://www.dmtf.org/sites/default/files/standards/documents/DSP0266_1.22.0.html", "use": "Service-root discovery, hypermedia resource links, collection pagination, trusted remote access and protocol semantics."},
+    {"title": "RFC 5424 — The Syslog Protocol", "url": "https://www.rfc-editor.org/rfc/rfc5424.html", "use": "Syslog architecture, priority/severity and message-field semantics."},
+    {"title": "RFC 5425 — TLS Transport Mapping for Syslog", "url": "https://www.rfc-editor.org/rfc/rfc5425.html", "use": "Originator/collector transport boundary and TLS authentication/security requirements."}
+  ],
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "local_and_remote_verdicts_separate": true, "oem_parameters_guessed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|833|Wistron-BMC-00123-V003", "next_pending_case_variant_id": "3c8e500e813a6f82"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
