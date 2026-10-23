@@ -1,0 +1,67 @@
+{
+  "schema_version": "v3-1-ed-rereview-scope-reconciliation-1.0",
+  "status": "ACTIVE_CORRECTION; CHECKPOINT_PUSH_WITHHELD",
+  "reason": "The first 200 review-event records were checked against the immutable 942-case queue at the required checkpoint. Event 14 was the first queue-order divergence. Only formal queue members are authoritative for the requested re-review metrics; all other records remain append-only historical review evidence and are excluded from the 942-case count.",
+  "formal_queue": {
+    "source": "gpt-review/v3-1-full-3112/PROGRESS.json engineering_decisions_pending identities ordered by gpt-review/v3-1-full-3112/SELECTION_MANIFEST.json Master order",
+    "count": 942,
+    "sha256_algorithm": "SHA-256 of Source Key<TAB>Variant ID joined by LF without a trailing LF",
+    "sha256": "8f3820c5c7f3bb4e126c32cc6b3385fb1a34f1fff5ae406c4a1eb14e9e9b0afc"
+  },
+  "checkpoint_audit": {
+    "review_event_records_examined": 200,
+    "formal_queue_records_adopted": 49,
+    "out_of_scope_records_retained_as_history": 151,
+    "covered_formal_queue_sequences": "1-13,15,22-56",
+    "first_order_divergence": {
+      "review_event_sequence": 14,
+      "recorded_source_key": "Functionality|765|Wistron-BMC-00055-V003",
+      "recorded_case_variant_id": "6005b7c0e0c6aea7",
+      "expected_source_key": "Functionality|764|Wistron-BMC-00054-V003",
+      "expected_case_variant_id": "8fbac8dbe0aa1e64"
+    },
+    "first_missing_formal_queue_identity": {
+      "formal_queue_sequence": 14,
+      "source_key": "Functionality|764|Wistron-BMC-00054-V003",
+      "case_variant_id": "8fbac8dbe0aa1e64",
+      "source_row": 764,
+      "code": "Wistron-BMC-00054-V003",
+      "original_row_sha256": "017604a23afafc8d474189c6b99d1a486b5c5dc71378b5d0ce3f52a1ba74366a"
+    }
+  },
+  "identity_digests": {
+    "adopted_algorithm": "formal queue sequence<TAB>Source Key<TAB>Variant ID<TAB>filename, ordered by formal queue sequence, LF joined without trailing LF",
+    "adopted_sha256": "56c30637553344c5a2548306aa8dfb6f2572c9bb023a0b667e46f15da8543dc4",
+    "out_of_scope_algorithm": "filename<TAB>Source Key<TAB>Variant ID, ordered by filename, LF joined without trailing LF",
+    "out_of_scope_sha256": "8c04cb5a9506671f38bc3b3b6ced047104abdcb4f3cec130868921e84ef6e284"
+  },
+  "legacy_schema_exception": {
+    "field": "project_authority",
+    "record_count": 19,
+    "filename_sha256_algorithm": "filenames ordered lexically and LF joined without trailing LF",
+    "filename_sha256": "170f6e2e66aa613dec6e1fa62b7544c048e507beed2b1eda32ffee071344f244",
+    "treatment": "The original records remain unchanged as history. Their Project inputs and ownership boundaries remain present in required_package, safety_gate, pending and decision_basis. Every later authoritative record must include project_authority."
+  },
+  "corrected_effective_state": {
+    "reviewed_formal_queue_count": 49,
+    "remaining_formal_queue_count": 893,
+    "resolved": 42,
+    "retained_engineering_decision_pending": 7,
+    "retained_project_spec_required": 45,
+    "engineering_decision_pending": 900,
+    "source_conflict": 885,
+    "blocked": 184,
+    "fully_automatable": 497,
+    "requires_package_user_confirmation": 1891,
+    "manual_only": 540
+  },
+  "rules_after_reconciliation": [
+    "Review-event sequence remains append-only and never resets; the next event is 201.",
+    "Formal queue completion is counted by unique formal queue identity, not by event filename or physical source adjacency.",
+    "Before each new case, the exact first missing formal queue identity is read from the reconstructed immutable queue and then verified against XLSX and manifest.",
+    "Out-of-scope records never change the requested 942-case metrics and are not deleted or rewritten.",
+    "No checkpoint push occurs until 200 unique formal queue identities have passed the overlay validator."
+  ],
+  "protected_sources_modified": false,
+  "dut_tests_executed": false
+}
