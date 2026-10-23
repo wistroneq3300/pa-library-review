@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 145,
+  "source_key": "Functionality|958|Wistron-BMC-00248-V002",
+  "case_variant_id": "180fbe0090361716",
+  "source_ref": {"sheet": "Functionality", "source_row": 958, "code": "Wistron-BMC-00248-V002", "original_row_sha256": "39d67682a8f0099df2c028bb0c427e962833f62831ddd0b13196068b4e0bab72", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_HIB", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes a /redfish/v1/Chassis/FRU_HIB resource, disables certificate verification and selects three properties; it omits exact HIB role/instance mapping and the required WebUI/IPMI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores vendor HIB mapping and complete protected comparison but leaves Project-specific role and FRU reference as an engineering-decision gate instead of readiness inputs."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1117_180fbe0090361716.json",
+  "old_problem": "HIB is a vendor/project component label rather than a standard Redfish resource type, so a syntactically valid friendly URI does not establish which physical board or role is under test. The previous review correctly rejected the shortcut but retained Pending even though the missing role, instance, device map and reference can be parameterized safely.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_VENDOR_MAPPED_HIB_FRU_PARITY",
+  "disposition_reason": "Require the Project/vendor package to define HIB's hardware role and exact physical instance, bind that board to its IPMI FRU device and actual UI/API inventory objects, then perform complete field-level parity with its authoritative build record. Standard FRU/Redfish semantics guide decoding only and do not guess the OEM HIB mapping.",
+  "decision_basis": [
+    "XLSX row 958, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 959 were directly reviewed; next pending was verified as Functionality row 959 / variant 65e81d048b9d8ec7.",
+    "Neither IPMI FRU nor DMTF Redfish assigns a universal meaning to HIB. The acronym/role and physical membership must come from the target's approved hardware map, satisfying the rule that OEM behavior is not guessed.",
+    "The adjacent FP and MB cases are independent negative identities. Shared manufacturer/product values or board proximity cannot establish HIB and may not be cross-credited.",
+    "Once the vendor mapping and expected record exist, the source method is entirely read-only and deterministic: complete `ipmitool fru print`, actual rendered WebUI and mapped API inventory can be compared without a point-of-action confirmation.",
+    "ED-02, ED-03, ED-08, ED-17, ED-19, ED-21 and ED-30 preserve identity/evidence and forbid invented OEM parameters; ED-33 through ED-38 allow bounded parameterization without losing full interface coverage."
+  ],
+  "test_case": {
+    "test_name": "Validate the Project-defined HIB board through exact OEM mapping and complete FRU parity",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the precise physical board and role designated HIB by the Project is uniquely represented by FRU_HIB, all applicable FRU data decode correctly, and complete IPMI, actual WebUI, mapped standard/OEM API and authoritative build-record fields agree without assuming the acronym, endpoint or device numbering.",
+    "required_package": [
+      "Approved vendor/Project definition of HIB, its hardware role, physical location/instance and durable topology/service identifier",
+      "Immutable SUT/BMC/chassis identity and physical map separating HIB from FP, MB and any similarly named or adjacent interconnect boards",
+      "Complete enumerated IPMI FRU map and approved HIB device ID/interface/channel/bridge/address",
+      "Service-discovered standard Chassis/Assembly link or explicitly approved OEM HIB inventory resource plus actual WebUI Inventory and LEDs HIB row/detail mapping",
+      "HIB-specific applicable FRU area/standard/custom-field layout and authoritative BOM/manufacturing reference with normalization/freshness rules",
+      "Trusted TLS, protected read credentials, serial/topology redaction and protected raw/visual evidence storage"
+    ],
+    "test_command": "READ ONLY. Validate the target and approved Project definition/physical instance of HIB. Enumerate all IPMI FRU devices and actual API inventory resources, then bind the HIB board through the approved durable topology rather than interpreting the acronym, choosing a default device or constructing `/Chassis/FRU_HIB`. Execute only `ipmitool ... fru print <HIB-FRU-ID>` and retain complete output, return code and decoder/checksum diagnostics. Follow service or approved OEM links to the mapped inventory object, and open/capture the actual rendered BMC WebUI Hardware status > Inventory and LEDs HIB row/detail. Explicitly reject FP, MB and other board identities. Decode every applicable standard/custom FRU field, preserve raw values, normalize only under approved rules and compare to the HIB build authority and across IPMI/UI/API. Repeat read fingerprints only; do not write/edit FRU, clear logs, refresh inventory, reset, reboot or power-cycle.",
+    "expected_result": "The Project-defined physical HIB instance and role map uniquely to one expected IPMI FRU and approved UI/API object, excluding FP, MB and other boards. Every applicable area decodes without reported structure/checksum errors; all required standard/custom fields are present or have an approved absent representation and exactly match the HIB manufacturing/BOM record after traceable normalization. Complete IPMI, actual WebUI and mapped API evidence reconcile and no state changes.",
+    "pass_fail_basis": "PASS requires an authoritative HIB role/instance definition, unique physical/device/member binding, complete `ipmitool fru print`, actual rendered WebUI evidence and exact complete-field parity. A friendly HIB name, guessed OEM URI, generic three-field match or evidence from FP/MB cannot pass. Undefined or ambiguous HIB role, wrong/duplicate board, parser/checksum error, missing required field, unauthorized blank or unexplained source/reference mismatch is FAIL once inputs exist. Missing vendor mapping/reference is NOT READY; N/A requires authoritative platform evidence.",
+    "safety_gate": [
+      "Do not infer what HIB means or invent an OEM resource/command. Use only the approved Project/vendor board definition and management map.",
+      "Use protected certificate-verified reads and approved IPMI routing; do not expose credentials or accept insecure-TLS evidence.",
+      "Allow only FRU enumeration and mapped `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes, log clear, reset, reboot and power actions.",
+      "Keep HIB independent from FP, MB and adjacent boards; common fields or physical proximity are not identity evidence.",
+      "Retain complete raw IPMI/API records and actual rendered WebUI artifacts before approved normalization/redaction.",
+      "Stop on undefined role, ambiguous instance, duplicate mapping, stale data, decode/checksum error or authority conflict and do not automatically probe another board."
+    ],
+    "expected_evidence": [
+      "Approved definition of HIB role/instance and immutable physical topology distinguishing HIB from FP/MB/other boards",
+      "Complete enumerated IPMI/API inventory and exact HIB physical/device/member/UI binding",
+      "Timestamped full `ipmitool fru print <HIB-FRU-ID>` with routing, exit/decode/checksum status and protected hash",
+      "Complete mapped standard/OEM API artifact and actual rendered WebUI HIB row/detail with firmware/schema/trust metadata",
+      "HIB-specific area/field comparison matrix with raw, normalized, expected and per-interface values and negative identity controls",
+      "Pre/post fingerprints, preserved SEL/audit logs, no-write/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. If HIB role/instance or mapping is ambiguous, or decoding/data disagree, stop, preserve/redact evidence and obtain the authoritative vendor definition/reference. Do not guess an OEM command, trial adjacent FRUs, rewrite data, clear logs, reset, reboot, power-cycle or automatically retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master Items, Procedure and Criteria consistently request HIB FRU correctness and IPMI comparison. A vendor-specific mapping prerequisite and an incomplete DeepSeek command do not create a source contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "The requested HIB inventory parity is clear even though HIB's vendor role must be supplied. That definition and mapping are finite Project readiness inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Approved HIB role/physical instance; IPMI/API/UI bindings; applicable FRU standard/custom fields; HIB build reference; normalization, freshness, trust and redaction.", "execution_status": "NOT STARTED; READ-ONLY FRU_HIB INVENTORY REVIEW ONLY; NO IPMI, REDFISH, OEM, WEBUI OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines standard FRU storage and decoding after the Project maps the vendor-specific HIB board."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete mapped FRU reads, area decoding and checksum checks; it does not define HIB topology."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines standard Chassis/Assembly inventory semantics; any HIB name or OEM resource mapping remains Project/vendor authority."}
+  ],
+  "project_authority": "Only the approved Project/vendor hardware definition may assign the HIB role and map its physical board to IPMI/UI/API objects and expected fields. Supplying those parameters makes the inventory comparison deterministic without authorizing guessed OEM behavior.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "vendor_hib_semantics_not_guessed": true, "hib_identity_separate_from_fp_mb": true, "source_webui_and_ipmitool_both_preserved": true, "complete_fru_fields_required": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "oem_or_fru_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|959|Wistron-BMC-00249-V002", "next_pending_case_variant_id": "65e81d048b9d8ec7"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_hib_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
