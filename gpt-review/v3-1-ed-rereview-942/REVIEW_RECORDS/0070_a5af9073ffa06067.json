@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 70,
+  "source_key": "Functionality|880|Wistron-BMC-00170-V003",
+  "case_variant_id": "a5af9073ffa06067",
+  "source_ref": {"sheet": "Functionality", "source_row": 880, "code": "Wistron-BMC-00170-V003", "original_row_sha256": "2825ac09198c62637b27b0d06a1c32048f8627d45997e107d32b7f3def7ead71", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP CEMSlot 1~2", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES passes the human range label as one literal sensor name and truncates fallback inventory; it omits two identities, CEM slot/root-port/BDF/FRU topology, board-versus-card sensor source, population rules and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires separate slot records, exact physical/device mapping, empty-slot behavior and complete UI/spec correlation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1042_a5af9073ffa06067.json",
+  "old_problem": "The source range was treated as one likely invalid sensor operand. No evidence independently mapped slot 1 and slot 2 through chassis/riser/root-port to the installed FRU/BDF or distinguished a board-local slot-air probe from card-internal telemetry, allowing swapped enumeration, empty-slot ambiguity or one card reading to masquerade as both sensors.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_ROW_CEM_SLOT_TEMPERATURE_MATRIX",
+  "disposition_reason": "Resolve two vendor-supported records independently and bind each to the physical CEM slot, riser/root port, installed-or-empty state, FRU/BDF and documented sensor source. Compare each complete OOB/two-UI record with its population-aware per-slot thermal specification under the existing card/load/airflow state. Topology and values are Project parameters; no PCIe service, reset or load is required.",
+  "decision_basis": [
+    "XLSX row 880, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "The spaced tilde expression is source range notation, not proven IPMI syntax; two independently evidenced records are required.",
+    "Chassis slot labels, BMC indices and OS BDF enumeration can differ, and board-local slot air is not equivalent to card-internal telemetry.",
+    "ED-13 controls empty-slot N/A, ED-15 requires per-slot acceptance, ED-17 preserves logs, and ED-20 preserves both slots independently."
+  ],
+  "test_case": {
+    "test_name": "Verify CEM slot 1 and slot 2 temperature sensors independently by physical topology and sensing source",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the two CEM-slot temperature records are individually human readable in Dashboard and Server Health, correctly mapped to physical CEM/PCIe slots 1 and 2 and their board-local or card telemetry sources, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications at the recorded passive card and airflow state.",
+    "required_package": [
+      "Exact chassis/board/riser/BMC/BIOS configuration and physical CEM slot 1/2 to root-port and PCIe BDF map",
+      "Per-slot installed/empty state plus add-in-card FRU, PN, serial, firmware/driver, power and link inventory",
+      "Per-slot physical sensing point and source path plus separate stable SDR/API and Dashboard/Server Health identities",
+      "Per-slot units/scaling, approved range or reference delta, threshold capability/values/hysteresis, health, freshness and empty-slot rules",
+      "Recorded card workload/link/power, system load, fan mode/speeds, airflow, timestamps and approved tolerance/update-lag rules",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, remove/reseat a card, reset a PCIe device, change driver/link/power state, generate traffic or accelerator load, alter fan/airflow or write thresholds. Build a two-row chassis/riser/root-port/BDF/FRU/population/source matrix. Enumerate the complete sensor repository and resolve CEM slot 1 and slot 2 separately; do not use `TEMP CEMSlot 1~2` as one literal record unless explicitly documented. Review the Script before use. Capture each independent command status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus its matching Dashboard and Server Health rows. Compare each with its per-slot specification under the recorded passive state. Stop without retry on missing, duplicate, swapped, stale or divergent identity.",
+    "expected_result": "Two distinct applicable records and UI rows map to the correct physical CEM slots, root ports, installed-or-empty state, FRUs/BDFs and documented sensing sources. Each independently matches its thermal value/unit/threshold/status/freshness specification under the recorded passive state. Empty-slot behavior follows the approved rule; one slot or generic/card telemetry never substitutes for both and no device state is mutated.",
+    "pass_fail_basis": "PASS requires physical/logical topology, population/source proof and separate complete OOB/two-UI/spec agreement for both applicable slots with an engineer verdict. One literal range query, OS enumeration alone, one slot, label-only matching, truncated output or unmapped card telemetry cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-tolerance value or required threshold/status mismatch is FAIL. Missing topology/spec/reviewed method is NOT READY, not Pending or PASS; PCIe functionality, load response, hot-plug and reset are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; PCIe, card, thermal and BMC history is relevant identity and health context.",
+      "Do not interpret the range as one sensor; preserve two independent results and statuses.",
+      "Do not infer physical slot from BDF/enumeration order or equate board-local slot air with card-internal telemetry.",
+      "Do not remove/reseat/reset a card, change driver/link/power/load/fan/airflow or write thresholds.",
+      "Use population and threshold capability rules; an empty slot may retain a board-local sensor and N/A needs specification proof.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/board/riser/BMC/BIOS identity, physical slot-to-root-port/BDF map and installed/empty card PN/serial/FRU/firmware inventory",
+      "Two separate complete raw identities, sensing-source paths, values, units, threshold capabilities/values, health and timestamps",
+      "Separate Dashboard and Server Health evidence for each slot",
+      "Per-slot specification plus passive card link/workload/power, system load, fan and airflow state and tolerance/update-lag comparison",
+      "Empty/missing/duplicate/swapped/stale and card-versus-board-source disposition with pinned Script or alternate-method audit",
+      "No-clear/no-write/no-service/no-reset/no-load/no-retry proof, final PCIe/BMC health and per-slot engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On topology, source or identity ambiguity, stale/divergent values or unexpected PCIe/BMC health change, stop and preserve both slots' first evidence plus inventory/link state. Use approved read-only PCIe/BMC diagnostics; do not reset or reseat hardware to force evidence. Any independently authorized change is restored only by the platform owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, UI Procedure and Criteria consistently request passive temperature validation for CEM slots 1 and 2. Literal range syntax and missing topology are readiness issues, not source-purpose conflict."},
+  "blocked": {"before": false, "after": false, "reason": "The two passive slot targets are clear. Topology, population, sensing source and acceptance data are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "CEM slot/riser/root-port/BDF/FRU/population map, board-versus-card source, separate sensor/UI identities, per-slot values/thresholds/status/freshness/N/A rules, passive operating state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define CEM physical topology, card population or sensing source."}],
+  "project_authority": "Chassis/riser/CEM slot topology, card inventory and thermal limits, board sensor map, SDR definition, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "literal_range_query_allowed_without_documentation": false, "two_slot_non_substitution": true, "card_telemetry_substitution_allowed_without_mapping": false, "pcie_service_or_load_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|881|Wistron-BMC-00171-V003", "next_pending_case_variant_id": "27b691d4debe8c6c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
