@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 72,
+  "source_key": "Functionality|882|Wistron-BMC-00172-V003",
+  "case_variant_id": "22576dda077fc198",
+  "source_ref": {"sheet": "Functionality", "source_row": 882, "code": "Wistron-BMC-00172-V003", "original_row_sha256": "e51d9303501ede5dbe6eb96acd2d6b198786a2374c1b8175817507678a1baed5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_NVME_1~16", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES sends the 1~16 shorthand as one literal sensor and truncates fallback inventory; it omits sixteen bay/drive identities, empty-state rules, BMC management paths/temperature fields, UI mapping and safe storage boundaries.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires a complete 16-slot matrix, separate records, device mapping, empty-slot semantics and no drive/I/O changes."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1044_22576dda077fc198.json",
+  "old_problem": "One literal range query and partial inventory could be presented as sixteen sensors without joining physical bays to immutable drive identities or defining populated, empty, disabled and unavailable behavior. BMC NVMe-MI/vendor temperature fields were also not distinguished from unstable host `nvmeX` numbering or potentially different SMART fields.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SIXTEEN_BAY_NVME_TEMPERATURE_MATRIX",
+  "disposition_reason": "Expand the source range into sixteen independently identified, population-aware rows. Bind every occupied bay through backplane port and PCIe BDF/controller to drive FRU/serial, document the BMC NVMe-MI/SMBus/vendor source and exact temperature field, and compare each complete OOB/two-UI record with its drive/platform specification. Missing runtime topology and values are Project parameters; no I/O or drive mutation is needed.",
+  "decision_basis": [
+    "XLSX row 882, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "Tilde shorthand is not proven IPMI wildcard syntax and one response cannot satisfy sixteen independent physical bay identities.",
+    "Host `nvmeX` enumeration is not a stable bay key, and NVMe SMART may expose a different composite/component field than the BMC management path.",
+    "ED-13 governs per-bay N/A, ED-15 requires per-drive acceptance, ED-17 preserves logs, ED-20 preserves all sixteen identities, and ED-04 safety principles prohibit unneeded storage writes."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_NVME 1 through 16 as a complete population-aware physical-bay temperature matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every expected NVMe temperature sensor for chassis bays 1 through 16 is separately human readable in Dashboard and Server Health, maps to the correct occupied drive or approved empty/disabled state and BMC management field, and independently meets applicable value, units, health, threshold/hysteresis and freshness specifications under recorded passive power, workload and airflow state.",
+    "required_package": [
+      "Exact chassis/backplane/BMC/BIOS bay 1-16 map to backplane port, PCIe root port/BDF, NVMe controller/namespace and drive PN/serial/FRU/firmware",
+      "Per-bay populated, empty, disabled and unavailable expectations, including record behavior when no drive is fitted",
+      "Per-drive BMC NVMe-MI/SMBus/vendor controller/bus/mux/address path and exact composite or component temperature-field definition",
+      "Separate stable SDR/API and Dashboard/Server Health identities for every expected bay",
+      "Per-drive model units/scaling, approved range/delta, threshold capability/values/hysteresis, health, freshness and update-lag rules",
+      "Recorded drive power/workload, system load, fan/airflow state and approved host-telemetry field equivalence if used",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/storage logs, remove/reseat or power-cycle a drive, reset a controller, generate I/O/thermal stress, change thresholds, format/write data or touch namespaces. Build a sixteen-row physical bay/backplane-port/BDF/controller/drive-identity/population/BMC-field expectation matrix. Enumerate the complete BMC repository and resolve each expected bay sensor separately; never use `TEMP_NVME_1~16` as one record unless explicitly documented. Review the Script before use. Capture per bay the independent query status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Correlate optional read-only host telemetry only after exact drive and field equivalence is approved. Stop without retry on missing, duplicate, swapped, stale or divergent rows.",
+    "expected_result": "All sixteen matrix rows have an approved populated/empty/disabled/unavailable outcome. Every applicable BMC record and both UI rows map to the correct physical bay, immutable drive identity and documented management temperature field and independently match value/unit/threshold/status/freshness specifications under the recorded passive state. One drive, partial output, host enumeration or unmatched SMART value never substitutes, and storage state is unchanged.",
+    "pass_fail_basis": "PASS requires all 16 rows, topology/population/BMC-field proof, complete per-applicable-bay OOB/two-UI/spec agreement and engineer verdict. A literal range query, partial list, `nvmeX` number, one drive, label-only match, truncated output or unmatched host composite temperature cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-limit value or required threshold/status mismatch is FAIL. Missing topology/source-field/spec/reviewed method is NOT READY, not Pending or PASS; I/O, hot-swap, reset, throttling and media health are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel or storage logs; PCIe, NVMe, media and thermal history is relevant evidence.",
+      "Do not interpret the range as one record or accept fewer than sixteen explicitly dispositioned bay rows.",
+      "Do not map by host `nvmeX`; join physical bay/backplane port to serial/FRU and BDF/controller.",
+      "Do not assume BMC NVMe-MI/SMBus and host SMART fields are equivalent; prove controller/bus/mux/address and exact field.",
+      "Do not perform I/O, hot-swap, reset, power-cycle, format/write, namespace, fan/airflow or threshold changes.",
+      "Apply population/capability rules, redact serials in user-facing evidence, protect credentials, do not truncate output or run an unreviewed Script, and do not retry automatically."
+    ],
+    "expected_evidence": [
+      "Chassis/backplane/BMC/BIOS identity and 16-row bay-to-port/BDF/controller/namespace/drive PN-serial-FRU-firmware population matrix",
+      "Per-drive BMC NVMe-MI/SMBus/vendor controller-bus-mux-address and exact temperature-field map",
+      "Complete per-bay raw identities, values, units, threshold capabilities/values, health and timestamps",
+      "Separate redacted Dashboard and Server Health evidence for every expected row with explicit empty/disabled/unavailable behavior",
+      "Per-drive specification plus passive workload/power/fan/airflow state, tolerance/update-lag and any approved equivalent host-field comparison",
+      "Missing/duplicate/swapped/stale/divergent disposition, pinned Script or alternate-method audit, no-clear/no-I/O/no-hot-swap/no-write/no-retry proof, final storage/BMC health and 16-row engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On bay, drive, management-path or field ambiguity, stale/divergent values or unexpected storage/BMC health change, stop and preserve all first-pass evidence plus topology/population state. Use approved read-only BMC/NVMe inventory diagnostics; do not reset, reseat, power-cycle or write a drive to force evidence. Any independently authorized storage action requires its own recovery plan and owner execution."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The range is unsafe as a literal command but clearly denotes NVMe sensors 1 through 16; Items, UI Procedure and Criteria align on passive display/spec validation."},
+  "blocked": {"before": false, "after": false, "reason": "The sixteen-bay passive purpose is clear. Topology, population, management-field semantics and per-drive acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "16-bay backplane/BDF/controller/drive map, populated/empty rules, BMC management path and exact temperature field, per-bay sensor/UI identities, drive-model thresholds/status/freshness, passive state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO I/O; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define physical bay identity, BMC management field or drive-model acceptance."}],
+  "project_authority": "Chassis/backplane bay topology, BMC NVMe-MI/SMBus sensor map, drive thermal specifications, SDR definitions, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-04", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "sixteen_bay_rows_required": true, "literal_range_query_allowed_without_documentation": false, "host_enumeration_as_bay_identity_allowed": false, "host_field_substitution_allowed_without_equivalence": false, "storage_io_or_mutation_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|883|Wistron-BMC-00173-V004", "next_pending_case_variant_id": "62b21a8c12cecafd"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
