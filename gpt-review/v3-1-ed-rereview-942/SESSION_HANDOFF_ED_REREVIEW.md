@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **175 / 942**
-- Last reviewed: `Functionality|989|Wistron-BMC-00279-V002` / `c81071b0cf544979`
-- Next source-verified pending identity: `Functionality|990|Wistron-BMC-00280-V002` / `ab1c225357588fd2`
-- Latest disposition: Set CPU cap is removed from Pending/BLOCKED/source conflict as a parameterized REQUIRES CONFIRMATION maximum-boundary endurance case. It preserves Maximum Available, actual WebUI/license operation, full 30 hours, Average-versus-Cap/allowed-Maximum semantics, watchdogs and original-state restoration; lower cap is only a reported override. No action ran.
+- Completed: **176 / 942**
+- Last reviewed: `Functionality|990|Wistron-BMC-00280-V002` / `ab1c225357588fd2`
+- Next source-verified pending identity: `Functionality|991|Wistron-BMC-00281-V002` / `17354a1946ed0023`
+- Latest disposition: Get max CPU cap remains ENGINEERING DECISION PENDING and BLOCKED. Its read-only title conflicts with license/cap-write/Apply/30-hour-stress body; standards prove these are distinct operations but cannot choose or delete either scope. A Master erratum or versioned Project scope split is required. No action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
