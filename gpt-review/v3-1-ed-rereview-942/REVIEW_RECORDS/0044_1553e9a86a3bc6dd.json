@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 44,
+  "source_key": "Functionality|854|Wistron-BMC-00144-V002",
+  "case_variant_id": "1553e9a86a3bc6dd",
+  "source_ref": {"sheet": "Functionality", "source_row": 854, "code": "Wistron-BMC-00144-V002", "original_row_sha256": "32dd6a52be0dbd781f3ca8921fba9f186608d63068a929d51124ca26c010de85", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Firmware information", "procedure": "Open BMC Web Overview, check Firmware information, then select `View more` and check details.", "criteria": "All information should match the SPEC definition.", "deepseek": "YES reads the FirmwareInventory collection envelope but may not retrieve member component/version/state data, bypasses both UI views and uses insecure credential/TLS handling.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds component identity, version/state semantics, freshness, UI/API mapping and exclusion of update controls."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1016_1553e9a86a3bc6dd.json",
+  "old_problem": "The historical record defined the correct member-level inventory comparison but retained Pending for the Project component-instance/version/state matrix, UI completeness contract, vendor/OEM mapping and lifecycle-state semantics.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_COMPLETE_FIRMWARE_COMPONENT_INVENTORY_MATRIX",
+  "disposition_reason": "The source clearly requires all firmware information in Overview and View more to match SPEC. The exact component instances, active/inactive/backup/staged expectations, version normalization and vendor mappings are Project inputs. The Review layer can require collection-member traversal, instance binding, set completeness and a hard read-only boundary. ED-07 keeps any update/flash separate and independently authorized, ED-12 separates upgrade/downgrade, ED-15 requires a signed matrix, ED-20 preserves all components, and ED-35 rejects collection-only/API-only substitution.",
+  "decision_basis": [
+    "XLSX row 854, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Firmware identity is component type + physical/logical instance + lifecycle state + version, not a version string alone.",
+    "FirmwareInventory is a collection entry point; all required member and approved OEM resources must be traversed and bound to UI entries.",
+    "Inventory observation authorizes no image upload, update, activation, reset, reboot, rollback or refresh operation."
+  ],
+  "test_case": {
+    "test_name": "Verify complete Overview and View-more firmware inventory against the signed component/version/state SPEC",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove every Project-required firmware-bearing component instance appears in the BMC Overview summary and/or `View more` detail as specified, with the correct version and active/inactive/backup/staged/pending state, and reconciles to discovered FirmwareInventory/vendor sources without invoking any firmware operation.",
+    "required_package": [
+      "Exact BMC/controller/platform identity, trusted certificate, firmware/WebUI build and UpdateService schema versions",
+      "Signed component matrix with type, instance, slot/role/bank, required/optional membership, expected version, lifecycle state and approved normalization",
+      "Expected Overview summary fields, `View more` selector/route, role visibility and loading-complete/completeness behavior",
+      "Vendor Redfish FirmwareInventory/OEM map including collection/member traversal, component identifiers, related item/device links and state meanings",
+      "Freshness/ETag rule and treatment of duplicate, absent, unexpected, non-updateable, rollback, staged or pending-activation entries",
+      "Protected browser/API authentication, sensitive version/asset redaction, hard update-control exclusion and accidental-action OOB recovery"
+    ],
+    "test_command": "Bind the exact BMC/platform/build, verify no active update task, and capture Overview Firmware information before activating the exact `View more` control once. Wait for its approved detail-ready state and enumerate every visible component, instance, version, state and detail marker without touching update controls. Through trusted read-only access, GET the FirmwareInventory collection, enumerate Members and GET every mapped required member plus approved OEM details; correlate related items/identifiers to actual component/slot/bank. Join UI summary, UI detail, member/OEM source and signed SPEC by the approved component-instance key, apply only signed version normalization, and report exact/missing/extra/duplicate/stale/inactive/backup/staged/pending/state mismatches. Do not upload, update, activate, reset, reboot, roll back, refresh inventory, clear logs or retry automatically.",
+    "expected_result": "The BMC/platform identity is correct, no update task is created, and every required component instance is accounted exactly once according to the membership rules. Overview and View more render the required version/state information, all traversed member/OEM sources map to the correct instance, and normalized versions plus lifecycle states match the signed SPEC. Unexpected entries follow the approved rule, inventory is fresh and no firmware/update/configuration state changes.",
+    "pass_fail_basis": "PASS requires 100% accounting of the signed component-instance matrix, both required UI views, all mapped collection members/OEM details, exact instance and lifecycle-state binding, approved normalization, freshness and engineer verdict. A collection envelope, raw version list, one UI view, identical string without component binding or active-version match that ignores backup/staged entries cannot pass. Missing/extra/duplicate/wrong instance, version/state mismatch, stale inventory, unapproved omission or any update action is FAIL. Missing matrix/mapping/state rules is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Keep the case read-only: never upload/select an image, invoke SimpleUpdate/MultipartPush/StartUpdate, activate, reset, reboot, roll back or change firmware policy.",
+      "Treat FirmwareInventory as a collection and traverse every required member; do not infer version/state from member links alone.",
+      "Bind component and instance before comparing a version; active, inactive, backup, staged and pending images are not interchangeable.",
+      "Use trusted TLS and protected authentication; no `-k`, visible reusable credential or unredacted sensitive inventory dump.",
+      "Do not clear BMC/system/update/audit logs or trigger inventory refresh merely to make data current.",
+      "Navigate/read once. Stop on update-control invocation, task creation, unexpected timestamp/state change, identity disagreement or ambiguous mapping; no automatic retry or rollback."
+    ],
+    "expected_evidence": [
+      "BMC/platform identity, certificate, firmware/WebUI build and UpdateService/FirmwareInventory schema metadata",
+      "Signed component-instance/version/state matrix with normalization and required/optional membership rules",
+      "Redacted Overview and View-more DOM/screenshots/routes showing full displayed inventory and ready state",
+      "FirmwareInventory collection plus every required member/OEM detail with component ID, instance/slot/role, version, status, updateability, related item and freshness metadata",
+      "Per-component UI/API/SPEC comparison covering exact, missing, extra, duplicate, inactive, backup, staged, pending and stale entries",
+      "Proof no update task, image upload, activation, reset or configuration change occurred; preserved audit evidence and authorized engineer verdict"
+    ],
+    "recovery": "No mutation is intended. If an update control or task is invoked or inventory state changes, stop immediately, record the exact request/task/time and preserve all update/audit evidence. The authorized firmware owner uses the pre-approved OOB/platform procedure to assess BMC health; do not cancel, roll back, reset or reflash unless a separate plan explicitly authorizes it."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require read-only firmware information in Overview and View more to match SPEC; the missing component matrix is a prerequisite, not a contradictory purpose."},
+  "blocked": {"before": false, "after": false, "reason": "Inventory comparison semantics are clear; component/version/state matrix, UI/API/OEM mapping and freshness rules are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Platform/UI identity, signed complete component-instance/version/state matrix, summary/detail contract, FirmwareInventory/OEM mapping, lifecycle/freshness/normalization and redaction rules.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "UpdateService and SoftwareInventory/FirmwareInventory data-model semantics."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned UpdateService and SoftwareInventory schema lookup."}
+  ],
+  "project_authority": "The signed Project firmware bill of materials/version-state matrix and vendor UI-to-FirmwareInventory/OEM map define completeness, instance identity, normalization and lifecycle acceptance.",
+  "traceability": {"applicable_decisions": ["ED-07", "ED-12", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "overview_and_view_more_required": true, "firmware_inventory_member_traversal_required": true, "firmware_operation_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|855|Wistron-BMC-00145-V002", "next_pending_case_variant_id": "cf8fb5c2304eb3e8"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
