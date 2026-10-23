@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **124 / 942**
-- Last reviewed: `Functionality|935|Wistron-BMC-00225-V003` / `eaf5d18c97193323`
-- Next source-verified pending identity: `Functionality|936|Wistron-BMC-00226-V003` / `162dfb214c9c0a6f`
-- Latest disposition: View user account - WebUI is removed from Pending using an explicit configured-versus-proven-factory baseline, complete trusted Redfish corroboration and mandatory human visual evidence for every page/filter. API-only evidence and account writes are prohibited. No UI/API action ran.
+- Completed: **125 / 942**
+- Last reviewed: `Functionality|936|Wistron-BMC-00226-V003` / `162dfb214c9c0a6f`
+- Next source-verified pending identity: `Functionality|937|Wistron-BMC-00227-V003` / `52f1afc008c63942`
+- Latest disposition: Add user account - WebUI is removed from Pending as five independent validation rows: four visual rejection/non-creation proofs and one disposable least-privilege create/login/cleanup proof. API cannot replace UI, and protected accounts remain untouched. No account action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
