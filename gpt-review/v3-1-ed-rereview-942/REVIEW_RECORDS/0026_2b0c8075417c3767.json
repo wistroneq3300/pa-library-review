@@ -1,0 +1,62 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 26,
+  "source_key": "Functionality|836|Wistron-BMC-00126-V004",
+  "case_variant_id": "2b0c8075417c3767",
+  "source_ref": {"sheet": "Functionality", "source_row": 836, "code": "Wistron-BMC-00126-V004", "original_row_sha256": "73caf79346dcfa7411af139c20dafa851b7aa81f0411b612bf0c53f5f404f59a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SOL session by ipmitool (Check Volatile Bit Rate rate)", "procedure": "Run `ipmitool -I lanplus -U <User> -P <Password> -H <IP address> sol info` and check Volatile Bit Rate is 115200.", "criteria": "`Volatile Bit Rate (kbps): 115.2` and human-readable output.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/remote-control/sol-session-by-ipmitool-check-volatile-bit-rate-rate", "deepseek": "PARTIAL; adds live activation but exposes credentials, hard-codes cipher 17 and pipes an interactive session to head.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; adds endpoint/channel/ttyS0 identity, protected authentication, bounded session handling and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0998_2b0c8075417c3767.json",
+  "old_problem": "The prior record correctly identified two separate acceptance checkpoints and a guarded workflow, but kept them on the decision queue even though 115200 bps equals 115.2 kbps and all remaining target/client/session values are Project readiness data.",
+  "new_disposition": "RESOLVED_AS_TWO_CHECKPOINT_IPMITOOL_RATE_AND_LIVE_SOL_TEST",
+  "disposition_reason": "IPMI 2.0 defines the SOL configuration parameters and ipmitool exposes them through `sol info`; the source's 115200 bps and Criteria's 115.2 kbps are the same exact rate after unit conversion. The Criteria also explicitly require readable characters, so the test retains a second live-session checkpoint rather than pretending parameter readback proves transport. The upstream client documents lanplus/cipher/password/escape behavior and warns against command-line passwords. Installed client version, exact BMC/channel mapping, approved cipher, owner, expected output and time bounds are Project Configuration. These inputs do not make the engineering semantics pending.",
+  "decision_basis": [
+    "XLSX row 836, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Intel IPMI v2.0 section 15 defines SOL configuration and payload semantics, including volatile and non-volatile bit-rate parameters; the raw labels must be preserved.",
+    "The upstream ipmitool manual defines IPMI 2.0 `lanplus`, cipher selection, SOL escape behavior and protected password methods, and explicitly says command-line `-P` is not recommended.",
+    "115.2 kilobits per second using the displayed decimal-kbps unit is exactly 115200 bits per second; it must not be confused with the separate non-volatile field.",
+    "ED-15 fixes the approved numeric oracle, ED-20 preserves this rate-check variant independently, ED-35 retains ipmitool and both checkpoints, and ED-38 prohibits credential exposure, session preemption and automatic retry."
+  ],
+  "test_case": {
+    "test_name": "Verify 115.2-kbps volatile SOL configuration and readable live output with ipmitool",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Using the pinned Project-supported ipmitool against the exact intended BMC SOL channel, independently prove (A) the configured `Volatile Bit Rate (kbps)` is 115.2 and (B) one authorized bounded SOL payload yields target-specific human-readable console characters and terminates cleanly.",
+    "required_package": [
+      "Pinned ipmitool package/version/build and captured help for supported lanplus, cipher, password, SOL info/channel, activation and escape behavior",
+      "BMC/host identity, firmware, management endpoint and authoritative LAN interface/SOL channel/payload-to-host-console mapping",
+      "Project-confirmed oracle `Volatile Bit Rate (kbps): 115.2` equivalent to 115200 bps and explicit separation from `Non-Volatile Bit Rate`",
+      "Dedicated account, minimum approved privilege, BMC-supported authenticated/encrypted cipher and protected password prompt/file/broker with ephemeral cleanup",
+      "Pre-session active state/owner, takeover policy, activation and overall timeout, escape/close/deactivate rules and KVM/OOB recovery",
+      "Expected target-specific banner/prompt/text, encoding, minimum observation interval, redaction and pinned reviewed internal Script revision if used"
+    ],
+    "test_command": "Preflight ipmitool version/help, BMC/host identity, SOL channel/payload mapping, supported cipher and current session owner. Preserve logs. With protected password input (`-a`, a permission-restricted ephemeral `-f`, or approved broker; never literal `-P`), execute the reviewed equivalent of `ipmitool -I lanplus -C \"$IPMI_CIPHER\" -U \"$BMC_USER\" -H \"$BMC_IP\" -a sol info \"$SOL_CHANNEL\"` when that installed syntax supports the explicit channel. Retain the complete raw output and parse only the exact `Volatile Bit Rate (kbps)` label as 115.2, preserving the non-volatile value separately. After explicit owner approval, start exactly one bounded PTY `sol activate` session with the same bound endpoint/cipher, capture the approved target text without arbitrary input, exit by the documented escape and verify client/payload cleanup. Do not change rate settings, clear logs, pipe to `head` or retry automatically.",
+    "expected_result": "Checkpoint A returns complete SOL configuration for the bound intended channel and the exact volatile field equals 115.2 kbps (115200 bps), independently of the preserved non-volatile field. Checkpoint B establishes one authorized IPMI 2.0 SOL payload to the same target, captures the approved banner/prompt or other target-specific text as correctly decoded readable characters within the defined window, displaces no owner, leaks no credential, closes cleanly and leaves BMC/host/KVM/OOB health normal.",
+    "pass_fail_basis": "Record A and B separately; overall PASS requires both. A passes only from complete raw `sol info` tied to the intended endpoint/channel with the exact volatile label/value; a non-volatile value or another channel cannot substitute. B passes only from a timestamped raw/redacted ipmitool transcript containing approved target-specific readable tokens plus owner, close and final-state evidence. Rate mismatch, wrong target/channel, missing field, unsafe cipher/auth, unreadable or unexpected stream, owner preemption, timeout, secret leakage, stale payload or management impact is FAIL. Missing package/mapping/cipher/owner/output/time/recovery data is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Bind exact BMC/host and SOL channel before accepting any rate or live output; preserve raw channel/field labels.",
+      "Never place the BMC password in `-P`, history, process evidence or transcript; use an approved prompt, protected file or broker and clean it up.",
+      "Choose a cipher supported by the installed ipmitool and target policy; do not hard-code 17 solely because a different version defaults to it.",
+      "Do not alter volatile/non-volatile rate values under this read-and-observe case, clear logs, or preempt/deactivate an owned session.",
+      "Bound the interactive PTY, send no arbitrary input/break/power command, and use documented escape/cleanup rather than `head`.",
+      "No automatic retry; stop on wrong endpoint, rate mismatch, owner conflict, unreadable/secret-bearing output, timeout or cleanup failure."
+    ],
+    "expected_evidence": [
+      "ipmitool package/version/build/help, BMC/host identity and LAN interface/SOL channel/payload/console map",
+      "Approved cipher/privilege, secret-handling attestation and redacted exact info/activate command metadata",
+      "Complete raw `sol info` with exact `Volatile Bit Rate (kbps): 115.2`, explicit 115200-bps normalization and separately retained non-volatile field",
+      "Pre-session owner/state and one bounded raw/redacted ipmitool transcript containing approved target-specific readable output with encoding notes",
+      "Escape/close result, client exit status, final payload/session state, no unauthorized input and no automatic retry",
+      "Preserved log delta, BMC/host/KVM/OOB health and pinned Script review if the Script was used"
+    ],
+    "recovery": "On wrong endpoint/channel, rate mismatch, authentication/cipher error, owner conflict, unreadable or sensitive output, timeout or failed exit, stop without changing rate or retrying. Use the documented escape, deactivate only the owned test payload if separately authorized, preserve full info/transcript/failure evidence, revoke any exposed secret and use KVM/OOB to confirm BMC/host health. Escalate an unowned stale payload instead of forcing it closed."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "115200 bps and 115.2 kbps are equivalent; the rate and readable-stream clauses are coherent independent checkpoints."},
+  "blocked": {"before": false, "after": false, "reason": "Standard SOL fields and client lifecycle define the test; endpoint/channel/owner/output bindings are execution prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Pinned ipmitool, endpoint/channel map, cipher/privilege/secret method, owner policy, expected text/encoding, timeouts, recovery and Script hash if used.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "Intel Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "use": "Defines SOL configuration parameters, bit-rate semantics and payload lifecycle."},
+    {"title": "ipmitool upstream manual", "url": "https://github.com/ipmitool/ipmitool/blob/master/doc/ipmitool.1.in", "use": "Defines lanplus, cipher, password, privilege and SOL escape/client behavior and warns against command-line passwords."},
+    {"title": "ipmitool SOL implementation README", "url": "https://github.com/ipmitool/ipmitool/blob/master/src/plugins/lanplus/README.sol", "use": "Documents RMCP+ activation, asynchronous stream processing, escape and deactivate flow."}
+  ],
+  "traceability": {"applicable_decisions": ["ED-15", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "rate_and_live_stream_verdicts_separate": true, "sol_settings_modified": false, "plaintext_password_executed": false, "session_takeover_authorized_by_review": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|837|Wistron-BMC-00127-V004", "next_pending_case_variant_id": "fe77cf6bf08ded24"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
