@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **174 / 942**
-- Last reviewed: `Functionality|987|Wistron-BMC-00277-V003` / `102ae704a6589c21`
-- Next source-verified pending identity: `Functionality|989|Wistron-BMC-00279-V002` / `c81071b0cf544979`
-- Latest disposition: CPU current power is removed from Pending as a parameterized REQUIRES CONFIRMATION read. PASS needs an approved CPU-specific IPMI SDR↔WebUI map, normalized synchronized values and tolerance plus actual rendered WebUI evidence; generic grep, aggregate sensors or guessed Redfish URIs cannot pass. Row 988 was skipped only after its baseline-completed manifest status was verified. No action ran.
+- Completed: **175 / 942**
+- Last reviewed: `Functionality|989|Wistron-BMC-00279-V002` / `c81071b0cf544979`
+- Next source-verified pending identity: `Functionality|990|Wistron-BMC-00280-V002` / `ab1c225357588fd2`
+- Latest disposition: Set CPU cap is removed from Pending/BLOCKED/source conflict as a parameterized REQUIRES CONFIRMATION maximum-boundary endurance case. It preserves Maximum Available, actual WebUI/license operation, full 30 hours, Average-versus-Cap/allowed-Maximum semantics, watchdogs and original-state restoration; lower cap is only a reported override. No action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
