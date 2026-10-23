@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 40,
+  "source_key": "Functionality|850|Wistron-BMC-00140-V002",
+  "case_variant_id": "d806e215425cf3e3",
+  "source_ref": {"sheet": "Functionality", "source_row": 850, "code": "Wistron-BMC-00140-V002", "original_row_sha256": "dc2a283b5b27901d58d4d24e54488ee232a6027c01787b456df5a3cd534d3fe3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Menu Bar (column)", "procedure": "Check logo design, then check all options are correct and can be pressed.", "criteria": "Logo is clear with no spelling error and matches the customer's requirement; no menu-option acceptance is written.", "deepseek": "PARTIAL covers column-menu enumeration/clickability but omits the logo branch and assumes every click is read-only.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds role, viewport, route and destructive-option controls while retaining separate logo review."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1012_d806e215425cf3e3.json",
+  "old_problem": "The Master has a recoverable coverage conflict: Items plus Procedure identify a column-menu option test, while Criteria cover only logo branding. The historical record left the missing option matrix and incomplete Criteria on the decision queue.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_CHECKPOINT_COLUMN_MENU_AND_LOGO_TEST",
+  "disposition_reason": "Unlike row 849, this Procedure explicitly says all options must be correct and pressable, so the column-menu operation is recoverable without choosing between unrelated interpretations. The Review layer preserves two independent checkpoints: complete role/locale/viewport menu behavior and customer logo branding. Missing option/route/action matrix and logo asset are Project prerequisites. Direct state-changing controls are not silently omitted: they remain NOT READY until an individually approved safe method exists and cannot contribute PASS through presence alone.",
+  "decision_basis": [
+    "XLSX row 850, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Items plus the second Procedure sentence establish column-menu coverage; the first Procedure sentence plus Criteria establish separate logo coverage.",
+    "ED-08 requires visual UI evidence, ED-15 requires an approved per-option oracle, ED-20 preserves every option and logo branch, ED-33 preserves the original incomplete Criteria, and ED-35 forbids reducing `all option` to DOM presence.",
+    "The Review-layer split reconciles the source conflict without altering the Master or letting one checkpoint satisfy the other."
+  ],
+  "test_case": {
+    "test_name": "Verify the complete column-menu matrix and customer logo as independent checkpoints",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "For every approved role, locale, viewport and feature state, prove the column menu contains every required option in the correct label/order/visibility/enabled state and that each option's approved interaction yields its expected non-mutating route, expansion, dialog or permission result; separately prove the rendered logo is clear, correctly spelled/worded and matches the signed customer branding reference.",
+    "required_package": [
+      "Exact BMC endpoint/certificate/controller, firmware and WebUI asset/build identity",
+      "Complete column-menu matrix by role, locale, viewport, feature/license state with labels, order, visibility and enabled/disabled expectations",
+      "Per-option stable selector, control type, expected interaction, route/page/dialog/permission identity, return path and timeout",
+      "Classification of every option as safe navigation/UI-only interaction or direct state-changing action; separately approved procedure, recovery and authorization for any direct action",
+      "Signed customer logo asset/version/style guide with wording, placement, dimensions, clarity/rendering tolerances and visual approver",
+      "Supported browser, protected disposable accounts, redaction policy, audit preservation and unexpected-action OOB recovery"
+    ],
+    "test_command": "Bind the isolated browser to the exact BMC/build and freeze the role × locale × viewport × feature matrix. For each matrix cell, capture the full column-menu DOM/screenshot and compare labels, order, visibility and enabled state. Account for every option. Activate each preclassified safe navigation or UI-only control exactly once and verify its approved route/page/dialog/permission result and return path. For any option that directly changes power, firmware, network, credentials, logs or configuration, do not activate until its own explicit safety authorization, recovery and evidence plan is attached; mark the case NOT READY rather than treating presence as PASS. Independently compare the rendered logo with the signed asset/style reference and obtain human visual acceptance. Preserve logs, do not retry automatically and never let menu evidence satisfy logo criteria or vice versa.",
+    "expected_result": "Every cell in the approved matrix accounts for every column-menu option with exact label/order/visibility/enabled state. Every safely activated option produces its approved route, expansion, dialog or authorization outcome once, with no unexpected mutation; any direct-action option has complete separately approved evidence before the overall case can pass. The logo independently matches the approved asset, wording, placement and rendering tolerances with no spelling or clarity defect. All branches have separate evidence and no option is silently skipped.",
+    "pass_fail_basis": "PASS requires 100% accounted menu-matrix cells, per-option interaction evidence for every in-scope control under its approved safety plan, explicit treatment of direct-action options, complete logo comparison and authorized visual/engineering verdicts. DOM presence, clickability, route success, one role/viewport, logo evidence or an excluded action list alone cannot pass the combined source. Missing/wrong/duplicate/order/visibility/permission/route behavior, unapproved state change, logo mismatch or any untested retained option is FAIL; missing matrix/action approval/logo reference is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Interpret `can press` as one approved interaction with a defined expected result, not blanket authorization for every function reachable from the menu.",
+      "Classify every control before interaction. Power, reset, firmware, network, credential, log-clear and configuration actions require their own exact approval/recovery; do not infer authorization from this row.",
+      "Do not reduce all-option coverage to a screenshot or DOM inventory; every retained safe interaction needs gesture-to-result evidence, and direct actions remain NOT READY until safely authorized.",
+      "Keep logo/customer-branding acceptance independent from menu behavior and require the signed asset plus human visual review.",
+      "Use trusted TLS and protected accounts; redact credentials, cookies, serials and customer data while preserving route/audit evidence.",
+      "Never clear BMC/system/audit logs; activate an approved control at most once and stop without retry on mutation, wrong endpoint, loop, timeout or ambiguous result."
+    ],
+    "expected_evidence": [
+      "BMC/controller/certificate, firmware/WebUI build, browser, role, locale, viewport and enabled-feature context",
+      "Approved column-menu matrix and per-cell DOM/screenshots showing labels, order, visibility and enabled state",
+      "For every option: selector/label/control class, single gesture, request or route/dialog transition, destination identity, authorization result, timing and return path",
+      "For every direct-action option: separate approval/procedure/recovery/evidence or explicit NOT READY preventing overall PASS",
+      "Signed customer-logo reference plus rendered screenshots and human annotations for clarity, spelling, placement and match",
+      "Coverage ledger with zero silent omissions, proof no unintended mutation, preserved audit records, cleanup and engineer verdict"
+    ],
+    "recovery": "If an option unexpectedly changes state, stop all menu interaction, preserve the exact control/request/time and use the pre-approved OOB/feature-specific recovery owned by the responsible engineer; do not click again or improvise reversal. Reconcile BMC state and sessions before any separately approved retest. Visual/logo inspection requires no recovery beyond closing the isolated session."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Review-layer reconciliation preserves the Procedure's two explicit branches as independent checkpoints and adds the missing per-option oracle while retaining the original logo-only Master Criteria unchanged for history."},
+  "blocked": {"before": false, "after": false, "reason": "The core menu interaction and logo branches are identifiable. Exact matrix, action classifications and logo reference are supplyable readiness inputs; unsafe direct controls gate execution but not review semantics."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "UI build, full role/locale/viewport/feature menu matrix, per-option expected interaction and action classification, separate authorization/recovery for direct actions, logo asset/tolerances and approvers.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "Project/customer navigation specification, BMC role/permission and feature documentation, per-feature safety procedures, and the signed branding asset/style guide supply the expected results.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "all_options_accounted_required": true, "direct_action_blanket_authorization": false, "logo_and_menu_evidence_separate": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|851|Wistron-BMC-00141-V002", "next_pending_case_variant_id": "701c49f03248adb8"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
