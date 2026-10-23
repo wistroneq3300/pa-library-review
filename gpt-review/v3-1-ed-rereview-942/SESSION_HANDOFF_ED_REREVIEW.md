@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **89 / 942**
-- Last reviewed: `Functionality|900|Wistron-BMC-00190-V003` / `090021d31f0d8d4f`
-- Next source-verified pending identity: `Functionality|901|Wistron-BMC-00191-V003` / `b71877c678ef1f6e`
-- Latest disposition: PWR_GB_HSC1~10 is removed from Pending as ten controller/feed/downstream-domain rows. HSC and topology must come from Project power-tree evidence; standby or aggregate channels cannot substitute, and load/trip/reset/feed/power/threshold/log changes are prohibited.
+- Completed: **90 / 942**
+- Last reviewed: `Functionality|901|Wistron-BMC-00191-V003` / `b71877c678ef1f6e`
+- Next source-verified pending identity: `Functionality|902|Wistron-BMC-00192-V003` / `f08a204556a32718`
+- Latest disposition: PWR_STBY_HSC is removed from Pending as one exact state-conditioned standby rail/controller check. It requires the current AC/PSU/host/BMC/HSC tuple and matching Project rule; numbered HSCs or other states cannot substitute, and no power transition or load is authorized.
 - Protected sources: unchanged.
 - DUT execution: none.

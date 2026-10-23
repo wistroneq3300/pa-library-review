@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 90,
+  "source_key": "Functionality|901|Wistron-BMC-00191-V003",
+  "case_variant_id": "b71877c678ef1f6e",
+  "source_ref": {"sheet": "Functionality", "source_row": 901, "code": "Wistron-BMC-00191-V003", "original_row_sha256": "8044edd86041ea9e47d489f163f00bd4770ba1a332b0541f16482cf5a6bf0156", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "PWR_STBY_HSC", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES can attempt an exact named read but does not establish the standby rail/controller boundary, AC/DC/host/BMC state, units/scaling, state-conditioned zero/unavailable rules or full UI parity; its fallback is truncated and credential-unsafe.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires standby-domain and current-state definitions and forbids changing power. V3.1 further distinguishes this point from HSC1-10 and binds acceptance to the always-on consumer boundary and exact state-matrix row."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1062_b71877c678ef1f6e.json",
+  "old_problem": "A readable exact-name value is not enough: standby power can remain active with host DC off, or legitimately be zero/unavailable in another architecture/state. Without the controller/rail/consumer boundary and recorded AC, PSU, host, BMC and HSC enable state, one universal expected value could create a false PASS or prompt an unsafe power transition.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_STATE_CONDITIONED_STANDBY_HSC_POWER_CHECK",
+  "disposition_reason": "Bind PWR_STBY_HSC to its Project standby controller, rail and always-on consumer boundary and evaluate it only for the current recorded power-state matrix row. Use complete protected read-only OOB and both UI views; do not force standby or import GPU load from the separate dynamic case. Missing topology or state rules makes execution NOT READY, not engineering-review Pending.",
+  "decision_basis": [
+    "XLSX row 901, same-row DeepSeek, exact GPT V2, selection manifest, preceding HSC1-10 and separate dynamic history, and the preserved V3.1 record were directly reviewed.",
+    "Unlike range cases, the exact sensor name is a valid read candidate after inventory confirmation, but it cannot itself prove the measured boundary or applicable state-specific expectation.",
+    "Standby power is architecture- and state-dependent and may sustain BMC/recovery logic; changing AC/DC/host state solely for this row could remove the management path.",
+    "ED-06 and ED-18 keep power states/transitions distinct, ED-15 forbids PASS without the matching state criterion, ED-17 preserves logs and ED-20 separates STBY_HSC from HSC1-10."
+  ],
+  "test_case": {
+    "test_name": "Verify PWR_STBY_HSC for the recorded AC/DC/host/BMC state without changing power",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the single PWR_STBY_HSC record maps to the approved standby controller/rail and always-on consumer domain and correctly shows its quantity, units, value, health, supported thresholds and freshness in Dashboard and Server Health for the explicitly recorded current platform power state.",
+    "required_package": [
+      "Chassis/baseboard/PSU/BMC/BIOS identity and authoritative STBY_HSC definition distinct from HSC1-10",
+      "Standby power-tree boundary, upstream source, HSC controller designator/PN/revision and always-on downstream consumer map",
+      "Current AC presence, PSU/feed/redundancy, host/DC state such as S0/S5/G3, BMC state and HSC enable/fault state",
+      "Controller bus/address/channel/register, measured quantity/units, scaling, calibration, averaging/sample window and update interval",
+      "Stable SDR/API/Dashboard/Server Health identity plus the approved state-matrix range, tolerance, threshold capability/values/hysteresis, health, zero/unavailable/stale rules",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, BMC, power or host logs and do not change AC/DC/host power, PSU feeds, standby/main rails, HSC enablement, board/GPU load, fan control, thresholds or firmware. Record the complete present-state tuple and select the matching approved acceptance row; if the required state differs, stop rather than transition. Confirm the exact SDR/API identity, review the Script, then read PWR_STBY_HSC through protected read-only access with full metadata and capture the same Dashboard and Server Health point. Correlate controller/rail, quantity/units, value, supported thresholds, health, sample window and timestamps with the state-specific rule. Stop without retry on stale, lost or divergent telemetry.",
+    "expected_result": "The exact OOB record and both UI views map to the same approved standby controller/rail/consumer domain and agree on quantity, units, value, health, supported thresholds and freshness. The result satisfies the Project rule for the recorded AC/PSU/host/BMC/HSC state, including documented zero or unavailable behavior where applicable; HSC1-10 or a different state does not substitute.",
+    "pass_fail_basis": "PASS requires authoritative standby topology, an exact recorded state tuple, the corresponding approved criterion and complete correlated OOB/two-UI evidence with engineer acceptance. A readable value, generic limit, truncated fallback, copied numbered-HSC result or data from another power state cannot pass. Wrong controller/rail/unit/scaling, out-of-state-rule value, stale data or required UI/status/threshold mismatch is FAIL. Missing topology/state-matrix/acceptance or reviewed access is NOT READY, not Pending or PASS. One passive state does not cover transitions, inrush, trip/recovery or GPU-load coupling.",
+    "safety_gate": [
+      "Preserve SEL, BMC, power and host history; do not perform the generic clear-log step.",
+      "Record the present power state and do not force S0/S5/G3, AC/DC or PSU-feed changes to obtain a reading.",
+      "Do not infer STBY_HSC is HSC1-10 or identify consumers from the label; require the Project power tree.",
+      "Do not import GPU/module load, alter HSC enablement, standby/main rails, fans, thresholds or firmware.",
+      "Use secret-safe supported transport and full output; do not expose credentials, assume cipher 17, run an unreviewed Script or automatically retry."
+    ],
+    "expected_evidence": [
+      "Chassis/baseboard/PSU/BMC identity and approved STBY_HSC controller/rail/upstream/always-on-consumer map",
+      "Recorded AC presence, PSU/feed redundancy, host/DC, BMC and HSC enable/fault state with exact acceptance-matrix row",
+      "Controller channel/register, quantity/units, scaling/calibration/window and stable SDR/API/UI identity",
+      "Full raw value, supported thresholds, health and synchronized timestamp plus matching Dashboard and Server Health visual fields",
+      "State-specific comparison including zero/unavailable/stale interpretation and explicit untested-state/transition coverage",
+      "Protected Script/client provenance, no-clear/no-load-or-power-transition-or-write/no-retry proof, final management health and engineer verdict"
+    ],
+    "recovery": "No state change is authorized. If the current state lacks an approved rule, the sensor is stale/lost, or BMC/power health changes, stop and preserve all logs and the exact state tuple; do not power-cycle or alter feeds to recover evidence. Use only approved read-only diagnosis. Any later power transition requires separate authorization, OFF/ON/OS-ready criteria where applicable and its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "This passive row consistently requests PWR_STBY_HSC display/spec validation and does not contain the GPU-stress mismatch found in another source case. Missing rail and state details are readiness inputs."},
+  "blocked": {"before": false, "after": false, "reason": "The single passive state-conditioned objective is clear. Project power-tree and state-matrix inputs can make it executable without a power transition."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "STBY_HSC controller/rail/consumer boundary, present power-state tuple, controller/scaling/window, stable IDs, per-state range/threshold/status/zero/unavailable/stale rules and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO AC/DC/HOST/FEED/LOAD/HSC/FAN/THRESHOLD/FIRMWARE CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Pin and review before use; it cannot define standby topology, current power state or state-specific acceptance."}],
+  "project_authority": "Platform always-on/standby power tree, HSC controller reference, power-state specification, BMC SDR repository and WebUI schema define identity and state-conditioned acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-06", "ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "exact_standby_state_required": true, "HSC1_10_substitution_allowed": false, "power_transition_authorized": false, "dynamic_load_imported": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|902|Wistron-BMC-00192-V003", "next_pending_case_variant_id": "f08a204556a32718"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
