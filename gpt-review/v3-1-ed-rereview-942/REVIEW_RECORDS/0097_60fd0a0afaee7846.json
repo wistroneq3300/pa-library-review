@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 97,
+  "source_key": "Functionality|908|Wistron-BMC-00198-V002",
+  "case_variant_id": "60fd0a0afaee7846",
+  "source_ref": {"sheet": "Functionality", "source_row": 908, "code": "Wistron-BMC-00198-V002", "original_row_sha256": "4ef17a64a8e17228590ffa68ce15059b777a98a8fd0d4023bb17515c24da9820", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "KVM - Multiple user", "procedure": "Login to WebUI KVM and open multiple KVM pages; generic setup/teardown says clear logs and collect photos.", "criteria": "The number of KVM sessions must match design; example: if design allows three, three open and a fourth does not.", "script": null, "deepseek": "NO correctly identifies the multiple interactive GUI-client boundary but does not distinguish browser tabs from independent backend sessions or define account/scope, input arbitration, limit-plus-one response, existing-session impact or cleanup.", "gpt_v2": "MANUAL ONLY correctly adds an L and L+1 concurrency matrix and admission outcomes. V3.1 additionally requires unique session IDs, account/role/source dimensions, video continuity, first over-limit evidence and capacity-release proof."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1069_60fd0a0afaee7846.json",
+  "old_problem": "Opening several tabs may reuse one authentication or backend KVM session and cannot prove multiple-user capacity. The example count of three is not a universal limit, while the source omits whether the limit is global/per-target/per-account, the L+1 policy, shared/exclusive input behavior, impact on established streams and release after close.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_KVM_L_PLUS_ONE_CONCURRENCY_MATRIX",
+  "disposition_reason": "Parameterize the authoritative concurrent KVM limit as L and bind its scope and session policy from the Project/vendor design. Human operators create distinct authorized backend sessions 1..L and attempt L+1, with visual stream/arbitration evidence, server session/audit IDs and orderly release. The exact L/account matrix is execution configuration rather than an unresolved engineering decision.",
+  "decision_basis": [
+    "XLSX row 908, same-row DeepSeek, exact GPT V2, selection manifest, adjacent keyboard/mouse case and the preserved V3.1 record were directly reviewed.",
+    "The title, Procedure and Criteria consistently describe design-limited KVM concurrency; the example three/not-four illustrates L/L+1 but does not set L.",
+    "Server-side session IDs and distinct authorized client/account context are necessary because tabs or shared cookies can represent one backend session.",
+    "ED-08 requires true visual KVM evidence, ED-15 prohibits PASS without the approved design limit/policy, ED-17 preserves audit logs and ED-20 keeps concurrent capacity separate from single-session input fidelity."
+  ],
+  "test_case": {
+    "test_name": "Manually verify KVM concurrent-session limit L, L+1 policy and capacity release",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Verify the BMC remote-KVM server admits distinct authorized sessions through the Project-approved limit L for the same verified target, preserves existing streams and the specified view/input ownership policy, handles one additional session exactly as designed and releases capacity after orderly or defined abnormal closure.",
+    "required_package": [
+      "BMC/SUT identity, BMC/KVM firmware, supported client/browser/plugin/OS/network-path versions and safe visual test surface",
+      "Authoritative L and whether it is global, per BMC, per SUT, per account, per role, per source IP or another scope",
+      "Distinct authorized account/role/client/source-IP matrix and requirement for unique authenticated backend session IDs",
+      "Expected outcomes for sessions 1..L and L+1: admit, reject, queue, view-only, takeover, preempt or other defined state",
+      "Shared/exclusive input ownership, safe marker, prohibited actions, video independence, latency and established-session impact limits",
+      "Idle/session timeout, logout and approved abnormal-close behavior plus maximum capacity-release time",
+      "Timestamped visual recording, KVM session table, BMC audit and per-client console/network evidence plan"
+    ],
+    "test_command": "MANUAL ONLY. Preserve audit/session/browser/host logs. Verify every client points to the same approved BMC/SUT but uses the Project-required distinct account/client/session context; multiple tabs sharing a token do not count. Open sessions sequentially from 1 through L, recording backend session ID, identity, admission, video continuity and the specified input ownership using only a nominated operator and safe marker. Attempt exactly one L+1 session and preserve the first reject/queue/view-only/takeover/preemption result and its effect on every existing session; do not repeatedly retry. Close sessions in the approved order, including the defined abnormal-close checkpoint if in scope, and prove locks/capacity/audit state recover within the limit without rebooting BMC or DUT.",
+    "expected_result": "Sessions 1..L are distinct backend sessions and are admitted with the designed view/input policy, correct target video and acceptable impact on earlier sessions. Session L+1 receives exactly the specified over-limit outcome without unapproved access, console corruption or loss of established sessions. Closing clients releases capacity and leaves no orphaned session/lock within the approved time. The example value three is used only if Project SPEC sets L=3.",
+    "pass_fail_basis": "PASS requires authoritative L/scope/policy, unique server-side evidence for 1..L and L+1, visual continuity/arbitration checks for every admitted session, first-attempt over-limit behavior and verified cleanup/capacity release with engineer/operator sign-off. Tabs, shared tokens, login count, screenshots without session IDs or testing only L cannot pass. Wrong target, unauthorized admission, incorrect reject/queue/takeover, unaccepted impact/preemption, uncontrolled input, orphaned session or release timeout is FAIL. Missing L, scope, client/account matrix or policy is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Preserve BMC audit, KVM session, browser/client and host logs; do not clear concurrency evidence.",
+      "Use only authorized accounts and prove distinct backend sessions; do not share credentials or bypass RBAC/session security.",
+      "Verify all clients target the same approved SUT and nominate one safe input owner; prohibit simultaneous uncontrolled input, power/reset, BIOS/firmware, destructive shell and credential actions.",
+      "Attempt L+1 once and preserve the first response; do not reconnect repeatedly or disrupt accepted sessions to force a result.",
+      "Close every session and verify release without rebooting BMC/DUT; stop on wrong target, unexpected takeover/preemption, lost console or unintended input."
+    ],
+    "expected_evidence": [
+      "BMC/SUT/KVM/client versions and authoritative L/scope/policy with account-role-source-client matrix",
+      "For sessions 1..L and L+1: unique backend session ID, account/role/source, timestamps, admission state and redacted KVM visual evidence",
+      "Existing-session video continuity, latency/disconnect and safe view/input ownership/arbitration evidence at every admission and L+1 attempt",
+      "BMC KVM session table/audit logs plus client console/network records proving first over-limit behavior without retry",
+      "Ordered logout/close and approved abnormal-close checkpoint with capacity/lock/audit release proof",
+      "No credential/policy/power/log mutation, explicit untested combinations, unchanged SUT and manual engineer/operator verdict"
+    ],
+    "recovery": "If a session targets the wrong SUT, gains unexpected input control or preempts/corrupts an existing session, stop all input and close the offending client according to the approved session runbook. Preserve first-failure evidence, verify SUT state independently and have the BMC owner release any orphaned session without reboot/power action unless separately authorized. Do not automatically reconnect or repeat L+1."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Title, Procedure and Criteria consistently target design-specific concurrent KVM capacity. The exact limit and scope are Project parameters, not contradictory semantics."},
+  "blocked": {"before": false, "after": false, "reason": "The L/L+1 manual method, evidence and safety boundaries are complete. Project capacity/session policy and authorized clients can make execution ready."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Authoritative L and scope, client/account/role/source matrix, admission and L+1 policy, view/input arbitration, video/latency impact limits, timeout/close/release behavior and evidence ownership.", "execution_status": "NOT STARTED; MULTIPLE AUTHORIZED MANUAL GUI CLIENTS REQUIRED; NO UNCONTROLLED INPUT, CREDENTIAL SHARING, POWER/RESET OR RETRY"},
+  "external_authorities": [],
+  "project_authority": "Project BMC/KVM capacity and security specification, vendor remote-console/session manual, RBAC policy and audit/session schema define L, scope, arbitration and release acceptance.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "sessions_1_through_L_and_L_plus_1_required": true, "example_three_hardcoded": false, "browser_tabs_count_as_sessions_without_server_ID": false, "multiple_user_replaced_by_single_session_input_test": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|909|Wistron-BMC-00199-V002", "next_pending_case_variant_id": "d424a90645140de8"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
