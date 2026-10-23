@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 146,
+  "source_key": "Functionality|959|Wistron-BMC-00249-V002",
+  "case_variant_id": "65e81d048b9d8ec7",
+  "source_ref": {"sheet": "Functionality", "source_row": 959, "code": "Wistron-BMC-00249-V002", "original_row_sha256": "552517a9d8e3a54ba86f9b4f147873ff27346d10f3ca964a5de4f07f54f74294", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_MB", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes /redfish/v1/Chassis/FRU_MB and reads Manufacturer, ProductName and PartNumber through insecure curl; it omits full IPMI/UI parity and does not define what PartNumber names.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly distinguishes mainboard identity and PartNumber semantics but retains a decision gate for finite mapping/BOM inputs in a read-only case."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1118_65e81d048b9d8ec7.json",
+  "old_problem": "A PartNumber string is ambiguous unless its namespace is known: assembly PN, PCB bare-board PN, finished-board PN, system SKU and revision are not interchangeable. The proposed query also does not establish that the object is the installed system mainboard. The historical review identified both issues but left them Pending rather than parameterizing the target and BOM schema.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_MAINBOARD_FRU_WITH_TYPED_PART_NUMBER_PARITY",
+  "disposition_reason": "Uniquely bind the installed system mainboard to its IPMI/UI/API inventory objects, decode complete Board/Product and other applicable FRU areas, keep assembly PN, PCB PN, product/model, hardware revision, serial and system identifiers as distinct typed fields, and compare each to the matching Project BOM authority. The required mappings and identifier namespaces are explicit runtime prerequisites.",
+  "decision_basis": [
+    "XLSX row 959, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 960 were directly reviewed; next pending was verified as Functionality row 960 / variant e7e1c61fc06f37da.",
+    "The preceding HIB and following MID are separate board identities. Similar manufacturer/product/part strings cannot establish system-mainboard identity or be borrowed across cases.",
+    "IPMI FRU Board and Product areas expose separate product/part/version/serial/custom fields. Correctness therefore requires a typed field-to-BOM mapping rather than comparing one undifferentiated PartNumber value.",
+    "DMTF Assembly likewise distinguishes PartNumber, SparePartNumber, Model, ProductionDate and SerialNumber where supported. Standard names guide meaning but the Project BOM remains authoritative for the platform's assembly/PCB namespaces.",
+    "ED-02, ED-08, ED-17, ED-19, ED-21 and ED-30 preserve independent identity, visual evidence and logs; ED-33 through ED-38 permit safe parameterization and reject guessed mappings or three-field coverage."
+  ],
+  "test_case": {
+    "test_name": "Validate system-mainboard FRU with typed assembly/PCB part-number semantics",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the actual installed system mainboard maps uniquely to FRU_MB, every applicable FRU area decodes correctly, and each typed manufacturing identifier—including assembly PN, PCB PN, model/product, hardware revision and serial—is compared with the matching Project BOM field and reconciled across complete IPMI, actual WebUI and mapped API evidence without conflation.",
+    "required_package": [
+      "Immutable SUT/BMC/system/chassis identity and approved physical board map distinguishing MB from HIB, MID and other assemblies",
+      "Complete enumerated IPMI FRU map and approved mainboard device ID/interface/channel/bridge/address with durable physical association",
+      "Service-discovered Chassis/Assembly or approved OEM mainboard inventory mapping and actual WebUI Inventory and LEDs mainboard row/detail",
+      "Mainboard FRU layout covering Board/Product/Chassis/MultiRecord/custom fields and an explicit source-label-to-semantic-field mapping",
+      "Authoritative BOM/build record with separately named assembly PN, PCB/bare-board PN, finished-board PN if applicable, model/SKU, hardware revision, serial and allowed custom values",
+      "Approved encoding, case, separator, padding, blank, truncation and freshness rules plus trusted/protected access and redaction"
+    ],
+    "test_command": "READ ONLY. Verify the immutable target and approved physical mainboard map, enumerate all IPMI FRU devices and actual API inventory members, then select MB through its durable system-board relationship rather than a friendly name/default ID. Execute only `ipmitool ... fru print <MB-FRU-ID>` and retain complete output, exit status and decode/checksum diagnostics. Follow service or approved OEM links to the mapped mainboard object and capture the actual rendered BMC WebUI Hardware status > Inventory and LEDs MB row/detail. Decode all applicable Board/Product/Chassis/MultiRecord/custom fields. Map each raw source label to its approved semantic namespace—assembly PN, PCB PN, finished-board PN, model, revision, serial, SKU—without copying values between namespaces; normalize only under approved rules and compare each with the matching Project BOM field and across supported interfaces. Repeat read fingerprints only; do not write/edit FRU, clear logs, refresh inventory, reset, reboot or power-cycle.",
+    "expected_result": "Exactly one installed system mainboard maps to the selected MB IPMI FRU and approved UI/API representation, excluding HIB, MID and other boards. Every applicable area decodes without reported structural/checksum errors. Each required typed identifier is present or has its approved absent representation and exactly matches its corresponding BOM field after traceable normalization; assembly PN, PCB PN, model/revision/serial/SKU remain distinct. Complete IPMI, actual WebUI and mapped API evidence reconcile and no state changes.",
+    "pass_fail_basis": "PASS requires unique installed-mainboard binding, full `ipmitool fru print`, actual rendered WebUI evidence, complete applicable-area decoding and exact typed-field-to-BOM parity. A friendly MB URI, Manufacturer/ProductName/PartNumber triple, or textual equality between different PN namespaces cannot pass. Wrong/ambiguous board, parser/checksum error, missing required field, assembly/PCB PN conflation, unauthorized blank or unexplained source/BOM mismatch is FAIL. Missing board map or PN schema is NOT READY, not Pending; N/A requires authoritative SPEC evidence.",
+    "safety_gate": [
+      "Use protected certificate-verified read sessions and approved IPMI routing; reject process-visible secrets and insecure-TLS evidence.",
+      "Bind the physical system mainboard independently of HIB/MID and enumerate before selecting; do not assume FRU ID 0, a friendly URI or common manufacturer/product data.",
+      "Keep assembly PN, PCB/bare-board PN, finished-board PN, model/SKU, revision and serial as distinct typed fields; never compare across namespaces without explicit Project mapping.",
+      "Allow only FRU enumeration and `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes, log clear, reset, reboot and power actions.",
+      "Preserve complete raw IPMI/API records and actual rendered WebUI artifacts before normalization/redaction, retaining protected originals and hashes.",
+      "Stop on board ambiguity, identifier-namespace ambiguity, stale data, decode/checksum failure or authority conflict and do not retry against another board automatically."
+    ],
+    "expected_evidence": [
+      "Immutable target/physical board map proving the installed MB and excluding HIB/MID, with complete enumerated IPMI/API inventory",
+      "Timestamped full `ipmitool fru print <MB-FRU-ID>` with routing, exit code, decoder/checksum status and protected artifact hash",
+      "Discovered mainboard API relationship and complete record with schema/firmware/trust metadata plus actual rendered WebUI MB row/detail",
+      "Approved label-to-namespace map and Project BOM defining assembly PN, PCB PN, model/SKU, revision, serial and custom fields separately",
+      "Area-aware raw/normalized comparison matrix with per-field semantic namespace, authority and outcome",
+      "Pre/post fingerprints, preserved SEL/audit logs, no-write/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On mainboard identity or PN-namespace ambiguity, decode/checksum failure or data disagreement, stop, preserve/redact evidence and obtain the authoritative board/BOM schema. Do not guess a namespace, trial adjacent FRUs, write inventory, clear logs, reset, reboot, power-cycle or automatically retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master fields consistently require mainboard FRU correctness and IPMI parity. PartNumber namespace is a needed Project definition, not an internal source contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "The mainboard comparison and identifier risks are clear. Physical mapping and typed BOM fields are finite Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Physical MB versus HIB/MID map; MB IPMI/API/UI identities; applicable FRU fields; typed assembly/PCB/model/revision/serial BOM schema and expected values; normalization, freshness, trust and redaction.", "execution_status": "NOT STARTED; READ-ONLY FRU_MB INVENTORY REVIEW ONLY; NO IPMI, REDFISH, WEBUI OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines distinct Board/Product part, version, serial and custom fields used by the typed mainboard comparison."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete FRU decoding/checksum evidence; Project mapping assigns decoded labels to the correct BOM namespace."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Assembly properties such as PartNumber, SparePartNumber, Model, ProductionDate and SerialNumber when supported; BOM semantics remain Project-specific."}
+  ],
+  "project_authority": "The Project hardware/BOM package uniquely identifies the installed system mainboard and defines the semantic namespace and expected value for every part/model/revision/serial field. These parameters make the read-only comparison deterministic without per-run approval.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-08", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "mainboard_identity_separate_from_hib_mid": true, "assembly_and_pcb_part_numbers_not_conflated": true, "source_webui_and_ipmitool_both_preserved": true, "complete_fru_fields_required": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "fru_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|960|Wistron-BMC-00250-V002", "next_pending_case_variant_id": "e7e1c61fc06f37da"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_mainboard_part_number_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
