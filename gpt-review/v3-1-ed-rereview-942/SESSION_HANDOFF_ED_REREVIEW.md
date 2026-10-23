@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **27 / 942**
-- Last reviewed: `Functionality|837|Wistron-BMC-00127-V004` / `fe77cf6bf08ded24`
-- Next source-verified pending identity: `Functionality|838|Wistron-BMC-00128-V005` / `170cd88928d895b9`
-- Latest disposition: The general ipmitool live-SOL case is removed from Pending with separate proof of client/payload establishment and recognizable target console content. It preserves its own ipmitool compatibility identity, uses protected password prompting, checks the current session owner, runs one bounded PTY and verifies documented escape/cleanup without `head` or automatic retry.
+- Completed: **28 / 942**
+- Last reviewed: `Functionality|838|Wistron-BMC-00128-V005` / `170cd88928d895b9`
+- Next source-verified pending identity: `Functionality|839|Wistron-BMC-00129-V003` / `177ea34faf055ad9`
+- Latest disposition: The mixed NTP/post-flash row is removed from Pending by retaining three separately gated checkpoints: NTP configure/converge, bounded isolated-server time-change tracking, and post-BMC-flash preservation of BMC LAN plus both named UBB-IP and Virtual-NIC reachability. Flash is mandatory coverage but remains dependent on a separate signed vendor/project package and explicit authorization; no flash was executed or invented.
 - Protected sources: unchanged.
 - DUT execution: none.
