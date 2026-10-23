@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 69,
+  "source_key": "Functionality|879|Wistron-BMC-00169-V003",
+  "case_variant_id": "c56e91372d7ecd10",
+  "source_ref": {"sheet": "Functionality", "source_row": 879, "code": "Wistron-BMC-00169-V003", "original_row_sha256": "4db79b0eb5e53333cbf8e9f4b5c604adcfbaf345a74975e6ece83ae4e7d36bf8", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_MIDPLANE", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES may read the literal label but truncates fallback inventory and cannot prove the specific midplane assembly/probe, airflow/population state, complete fields, UI mapping or acceptance mode.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires physical midplane location, reference/airflow context and complete OOB/UI/spec comparison."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1041_c56e91372d7ecd10.json",
+  "old_problem": "A successful named query and plausible value could be accepted without identifying the actual midplane assembly and probe, recording the populated airflow state, or distinguishing a passive specification-range/status check from calibrated accuracy. An intrusive probe or opened chassis could also change the quantity being measured.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MIDPLANE_TEMPERATURE_CHECK",
+  "disposition_reason": "Bind the stable record and both UI rows to the exact midplane assembly revision and probe location, record component population and passive cooling state, and apply a Project-approved static range/status criterion or an explicitly approved non-intrusive calibrated reference criterion. Exact limits and safe reference setup are runtime Project inputs, not an unresolved engineering method.",
+  "decision_basis": [
+    "XLSX row 879, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "A midplane is a specific interconnect/power assembly, not the geometric chassis midpoint; neighboring, backplane, inlet and outlet sensors are not equivalent.",
+    "Static range/status and calibrated accuracy are different acceptance modes; the Project must name one and define its limits, reference placement and uncertainty where applicable.",
+    "ED-15 prohibits PASS without an approved criterion, ED-17 rejects log clearing, and ED-20 preserves the dedicated midplane coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_MIDPLANE against the exact midplane assembly, cooling state and approved acceptance mode",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify TEMP_MIDPLANE maps to the intended midplane assembly/probe and is human readable in Dashboard and Server Health with correct Celsius value, units, health, implemented thresholds/hysteresis and freshness for the platform specification under documented component population and passive cooling state.",
+    "required_package": [
+      "Exact chassis/board/BMC/BIOS and midplane assembly/revision with authoritative sensor-placement and airflow map",
+      "Stable SDR/API name/number/type/entity/instance and corresponding Dashboard and Server Health rows",
+      "Approved acceptance mode: static value/range/status or calibrated accuracy, with units/scaling, thresholds/hysteresis, freshness and tolerance",
+      "Installed component population, power/load state, fan policy/speeds, panels/ducts, airflow configuration and timestamps",
+      "If accuracy is required, approved non-intrusive calibrated reference, probe placement, calibration validity, combined uncertainty and update-lag rule",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, open/remove chassis panels or ducts, change fans, add load/heat, obstruct airflow or write thresholds. Confirm the exact midplane assembly/revision and physical sensing point and select the approved static-range or calibrated-accuracy criterion. Resolve one stable TEMP_MIDPLANE identity from the complete repository; review the Script before use. Capture its complete value, units, capability/threshold/hysteresis, health and timestamp plus unchanged Dashboard and Server Health rows. Record component population and passive load/fan/panel/airflow state. Apply the approved limits or, only with a non-intrusive approved setup, a time-aligned reference and combined uncertainty. Stop without retry on missing, duplicate, stale or divergent identity.",
+    "expected_result": "One stable sensor and both UI rows map to the documented midplane assembly/probe. Complete OOB/UI value, units, threshold capability/values, health and freshness agree with specification and satisfy the selected static criterion or approved non-intrusive reference tolerance under the recorded cooling state. No geometric midpoint, backplane, inlet or outlet reading substitutes and chassis airflow remains unchanged.",
+    "pass_fail_basis": "PASS requires assembly/probe identity, complete OOB and both-UI agreement, the named acceptance mode and engineer verdict that every applicable field meets its approved limits. A readable/plausible value, label-only match, neighboring sensor, room reading, truncated output or command success alone cannot pass. Wrong/duplicate/stale identity, out-of-limit value or required field/threshold/status/UI mismatch is FAIL. Missing assembly/cooling/spec/criterion/reviewed method is NOT READY, not Pending or PASS; a static range check does not claim calibrated accuracy or dynamic thermal coverage.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; cooling, fan, board and thermal history is relevant evidence.",
+      "Do not infer midplane identity from label or chassis geometry and do not substitute backplane, inlet, outlet or ambient telemetry.",
+      "Do not open covers, remove ducts or route a probe in a way that changes impedance/airflow; intrusive accuracy setup requires a separate approved plan.",
+      "Do not change fan/load/airflow/environment or thresholds and do not inject a thermal event.",
+      "Keep static range/status and calibrated accuracy criteria distinct; reference correlation needs defined placement, timing and uncertainty.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/board/BMC/BIOS and midplane assembly/revision identity plus authoritative drawing/photo of the sensing point",
+      "Complete stable raw identity, value, units, threshold capabilities/values/hysteresis, health and timestamp",
+      "Separate unchanged Dashboard and Server Health evidence mapped to the same record",
+      "Component population, power/load, fan policy/speeds, panel/duct and airflow state with timestamps",
+      "Approved static range/status comparison or non-intrusive calibrated reference samples with placement, uncertainty and update-lag calculation",
+      "Pinned Script or alternate-method audit, no-clear/no-write/no-chassis-or-airflow-change/no-retry proof, final cooling/BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On assembly/identity ambiguity, stale or divergent data, unexpected health change or evidence that reference placement altered airflow, stop and preserve the first complete evidence and cooling state. Remove only an authorized non-intrusive reference fixture, then use approved read-only BMC/board diagnostics; any independently authorized chassis change is restored by the platform owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, UI Procedure and readability/specification Criteria consistently describe a passive midplane sensor check. Assembly, cooling context and criterion are Project inputs, not conflicting purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The named passive target is clear. Assembly location, cooling state and acceptance mode are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Midplane assembly/revision/probe map, stable sensor/UI identity, selected static or accuracy criterion, values/thresholds/status/freshness, component/cooling state, optional non-intrusive reference and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define the midplane assembly, airflow or acceptance mode."}],
+  "project_authority": "Midplane assembly/sensor-placement and airflow drawings, SDR thermal limits, WebUI schema, reference plan and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "neighbor_sensor_substitution_allowed": false, "static_range_claims_accuracy": false, "intrusive_reference_setup_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|880|Wistron-BMC-00170-V003", "next_pending_case_variant_id": "a5af9073ffa06067"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

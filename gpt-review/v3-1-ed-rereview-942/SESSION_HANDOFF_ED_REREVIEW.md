@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **68 / 942**
-- Last reviewed: `Functionality|878|Wistron-BMC-00168-V003` / `65ecf341527892a4`
-- Next source-verified pending identity: `Functionality|879|Wistron-BMC-00169-V003` / `c56e91372d7ecd10`
-- Latest disposition: TEMP_OCP_1~2 is removed from Pending as a two-position, population-aware passive temperature matrix after Project confirmation of OCP semantics. Literal range queries, invented over-current rail coverage, one-position/generic-NIC substitution, stress/reset/service, clear and unreviewed Script execution are prohibited.
+- Completed: **69 / 942**
+- Last reviewed: `Functionality|879|Wistron-BMC-00169-V003` / `c56e91372d7ecd10`
+- Next source-verified pending identity: `Functionality|880|Wistron-BMC-00170-V003` / `a5af9073ffa06067`
+- Latest disposition: TEMP_MIDPLANE is removed from Pending as an assembly-bound passive sensor check with an explicit static-range or non-intrusive calibrated-accuracy criterion. Geometric/neighbor substitution, intrusive airflow-changing probes, stimulus, clear and unreviewed Script execution are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.
