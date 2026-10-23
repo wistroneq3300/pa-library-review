@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **181 / 942**
-- Last reviewed: `Functionality|995|Wistron-BMC-00285-V004` / `7f821fe8f0c3434d`
-- Next source-verified pending identity: `Functionality|996|Wistron-BMC-00286-V004` / `377142dea3d79d70`
-- Latest disposition: BMC Get Self Test Result (IB) is removed from Pending as a parameterized FULLY AUTOMATABLE read-only case. Raw 0x06/0x04 is standard and directly runnable; PASS requires exact `55 00`, `56 00` is not automatic PASS/N/A, every 57 bit is retained, and high-level ipmitool exit status cannot replace the raw payload. No action ran.
+- Completed: **182 / 942**
+- Last reviewed: `Functionality|996|Wistron-BMC-00286-V004` / `377142dea3d79d70`
+- Next source-verified pending identity: `Functionality|997|Wistron-BMC-00287-V004` / `60db580bf4d4ce5a`
+- Latest disposition: Manufacturing Test On (IB) remains ENGINEERING DECISION PENDING/BLOCKED. IPMI requires device-specific request data and defines a completion-only response, while the Master has no payload and requires the preceding self-test's `55 00`; exact OEM mode/exit semantics and physical recovery are also absent. No command or recovery action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
