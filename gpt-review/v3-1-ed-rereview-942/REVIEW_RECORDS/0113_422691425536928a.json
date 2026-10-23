@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 113,
+  "source_key": "Functionality|924|Wistron-BMC-00214-V002",
+  "case_variant_id": "422691425536928a",
+  "source_ref": {"sheet": "Functionality", "source_row": 924, "code": "Wistron-BMC-00214-V002", "original_row_sha256": "65bd2c7a5f09e0b3e94c4b3a2661a2f3fb0f0707373ca56159bc63d4bd87c07a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "View CERTIFICATE MANAGEMENT", "procedure": "Navigate BMC WebUI Settings → SSL Settings → View Certificate Management; generic setup says clear logs.", "criteria": "The result is human readable.", "script": null, "deepseek": "YES reads a fixed Redfish certificate path with `curl -k` and only the leaf subject/issuer/dates from an IP-address SNI handshake. It omits required WebUI visual evidence, resource discovery, full fields/chain, fingerprint, SAN/hostname and explicit trust verification.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly retains the read-only UI/API/TLS correlation and requires full certificate inventory, active slot, endpoint identity, validity, chain/trust and human interpretation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1085_422691425536928a.json",
+  "old_problem": "A readable JSON fragment or leaf certificate does not prove the actual WebUI page is usable, which stored certificate is active, whether the BMC serves the same fingerprint, or whether the DNS/IP identity, validity and chain meet policy. `curl -k` suppresses the very trust failure this security case must report, and a fixed manager identifier may query the wrong resource.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_WEBUI_API_TLS_CERTIFICATE_INVENTORY_CORRELATION",
+  "disposition_reason": "Preserve the source's actual WebUI navigation and human-readable acceptance, then make it objectively reviewable by correlating every displayed slot/role with a discovered Redfish Certificate resource and a hostname-verified TLS handshake. Project hostname, expected roles, CA roots and validity policy are execution bindings. The case is read-only and requires no certificate generation, upload, rotation, deletion or private-key access.",
+  "decision_basis": [
+    "XLSX row 924, same-row DeepSeek, exact GPT V2, selection manifest, following generate-certificate case and preserved V3.1 record were directly reviewed.",
+    "DMTF Certificate resources provide subject, issuer, validity, key usage, serial and fingerprint fields and locate HTTPS certificates under the discovered Manager NetworkProtocol hierarchy.",
+    "OpenSSL documents that `-showcerts` shows the certificates sent but does not itself verify a chain; hostname/IP and CA verification with failure propagation are separate required evidence.",
+    "Because the source explicitly navigates the WebUI, API/TLS automation can corroborate but cannot replace visual readability, complete field display and active-certificate correlation."
+  ],
+  "test_case": {
+    "test_name": "View and correlate BMC certificate-management UI, Redfish inventory and served TLS chain",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the BMC Certificate Management WebUI renders the complete approved certificate inventory in unambiguous human-readable form and that every stored role/slot—especially the active HTTPS certificate—correlates by fingerprint and metadata with discovered Redfish resources and the certificate chain actually served for the approved management endpoint.",
+    "required_package": [
+      "Exact BMC/firmware/WebUI/Redfish schema identity and service-root-discovered Manager, NetworkProtocol and CertificateCollection resources",
+      "Approved BMC DNS hostname/IP mapping, SNI/verification name, expected certificate roles/slots and active HTTPS endpoint",
+      "Trusted CA/reference bundle or documented approved self-signed policy, current reference time and validity/renewal threshold",
+      "Required subject/SAN, issuer/chain, serial, fingerprint algorithm/value, key/signature usage and active/inactive-state acceptance",
+      "Authorized read-only WebUI/API account, TLS/OpenSSL tooling and complete collection traversal",
+      "Visual capture and redaction policy that never collects private keys or exposes credentials/infrastructure details unnecessarily"
+    ],
+    "test_command": "READ-ONLY; DO NOT MUTATE CERTIFICATES. Preserve logs and discover the target Manager/NetworkProtocol/CertificateCollection from Redfish links rather than guessing `bmc`. Traverse the complete collection and capture every resource/role with subject, issuer, SAN when available, serial, fingerprint/hash, validity, key usage, signature and active relationship. Perform a TLS handshake to the approved DNS name with correct SNI, trusted CA/reference, hostname or IP verification, error-return enforcement and capture of the full served list; record that the sent list is not automatically a verified chain. Navigate the exact source WebUI page and capture every displayed certificate, label and field in human-readable form. Correlate UI↔API↔served leaf/chain by fingerprint and role. Report trust exceptions explicitly; never use `-k` as proof, access private keys or rotate/delete anything.",
+    "expected_result": "The WebUI opens through the documented path and presents every required certificate/slot with labeled, complete, non-garbled values an engineer can interpret. The complete Redfish inventory matches those roles and fingerprints. The active HTTPS record matches the served leaf exactly; hostname/SAN, validity, key usage, issuer/chain and trust result satisfy the approved policy, or any expected self-signed exception is explicitly authorized and evidenced. No certificate state changes.",
+    "pass_fail_basis": "PASS requires real WebUI visual readability, complete inventory, role/active-state mapping, fingerprint equality and an explicit verified hostname/validity/chain/trust result against Project policy. A readable page, HTTP 200, `curl -k`, one leaf, or `-showcerts` alone cannot pass. Missing/garbled fields, incomplete collection, UI/API/TLS mismatch, wrong SAN, expired/not-yet-valid cert, unapproved trust failure or ambiguous active slot is FAIL or NOT READY according to authoritative expectation. No mutation is permitted.",
+    "safety_gate": [
+      "Read only; do not generate, upload, rekey, rotate, activate, delete or download any private key in this case.",
+      "Verify exact BMC hostname/IP and discovered resource links; do not assume manager ID, certificate index or IP-as-SNI.",
+      "Use protected credentials and trusted TLS verification; `-k` may diagnose reachability but cannot contribute PASS evidence.",
+      "Redact secrets and sensitive infrastructure metadata while retaining fingerprints, roles and policy-relevant identity evidence.",
+      "Stop on endpoint/resource mismatch, incomplete inventory or trust ambiguity and escalate without changing certificate state."
+    ],
+    "expected_evidence": [
+      "Target/firmware/schema and endpoint hostname/IP/SNI identity, discovered resource links, role/slot expectations and trust/validity policy",
+      "Complete redacted Redfish certificate collection with subject/issuer/SAN/serial/fingerprint/validity/key-use/signature/role fields",
+      "WebUI navigation plus full-page/expanded-detail visual captures showing readable labels and values for every required certificate",
+      "TLS sent certificate list plus separate hostname/IP, CA, time and chain verification output with explicit trust result",
+      "Fingerprint-based UI/API/TLS active-leaf and stored-role correlation matrix with any authorized exceptions",
+      "Proof of read-only operation, no private-key collection, preserved audit state and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On wrong endpoint, missing certificate, trust failure or identity mismatch, stop relying on that path, preserve evidence and have the owner/vendor validate DNS, CA and slot mapping. Do not generate, activate, upload, delete or rotate a certificate as recovery within this case."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, WebUI procedure and readability criterion consistently request certificate viewing. Objective fields and correlation make `human readable` auditable without changing scope."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only method and PASS evidence are complete. Endpoint identity, trust roots, roles and validity policy are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Endpoint hostname/SNI, discovered resource mapping, certificate role/active-slot expectations, CA/self-signed policy, validity/SAN/key-use acceptance and redaction rules.", "execution_status": "NOT STARTED; READ-ONLY CERTIFICATE INSPECTION; NO CERTIFICATE OR PRIVATE-KEY MUTATION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide DSP2046", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.pdf", "application": "Defines Certificate resources, HTTPS CertificateCollection locations and subject, issuer, validity, key usage, serial and fingerprint fields."},
+    {"title": "OpenSSL s_client documentation", "url": "https://docs.openssl.org/3.4/man1/openssl-s_client/", "application": "Defines SNI/name verification, verification controls and that `-showcerts` displays the server-sent list rather than a verified chain."}
+  ],
+  "project_authority": "BMC vendor certificate/UI mapping, DNS/PKI trust policy, expected slot roles, identity/validity thresholds and evidence-redaction rules define execution acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "webui_visual_evidence_required": true, "api_or_tls_substitution_allowed": false, "curl_insecure_as_pass_allowed": false, "private_key_collection_allowed": false, "certificate_mutation_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|925|Wistron-BMC-00215-V002", "next_pending_case_variant_id": "c6011334a7b8b7ff"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
