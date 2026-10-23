@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 80,
+  "source_key": "Functionality|891|Wistron-BMC-00181-V003",
+  "case_variant_id": "746a8aa500701e1d",
+  "source_ref": {"sheet": "Functionality", "source_row": 891, "code": "Wistron-BMC-00181-V003", "original_row_sha256": "7b5af729cc8b0eff0064859b8a9f89281210df6a7d7ce7e400e7552919dec3d7", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_GB_PEX_SW", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES may read the label but truncates fallback inventory and cannot prove the exact switch silicon/board reference, PCIe topology, BMC source, die-versus-board field or complete UI/spec agreement.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION identifies a platform-specific PCIe switch sensor and requires topology mapping and complete UI/spec evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1052_746a8aa500701e1d.json",
+  "old_problem": "A named temperature could be accepted without identifying which PCIe switch instance it represents or whether the measurement is on-die/package or a nearby board sensor. Generic link status, GPU temperature, another switch, one BDF or truncated inventory could falsely satisfy the row, and PCIe exercise could be introduced without authority.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_GPU_BASEBOARD_PCIE_SWITCH_TEMPERATURE_CHECK",
+  "disposition_reason": "Bind the stable PEX_SW record and both UI rows to the exact switch silicon, part/firmware/reference designator, stable BDF and full upstream/downstream topology plus BMC controller/bus/mux/address field. Compare complete evidence with measurement-specific switch limits under the existing passive link/load/cooling state; topology and limits are Project parameters.",
+  "decision_basis": [
+    "XLSX row 891, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, related source cases and historical record were directly reviewed.",
+    "PEX_SW strongly suggests a PCIe switch but does not identify the instance or prove that the value is the switch die rather than a board-local sensor.",
+    "PCIe enumeration/link state can corroborate topology but cannot replace the BMC sensor field or thermal acceptance.",
+    "ED-15 requires measurement-specific limits, ED-17 preserves AER/XID/thermal logs and ED-14 keeps dynamic threshold and PCIe functional behavior separate."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_GB_PEX_SW against the exact PCIe switch instance, topology and BMC measurement field",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify TEMP_GB_PEX_SW is the intended GPU-baseboard PCIe switch record, maps to the exact switch instance and BMC die/package/board field, and is human readable in Dashboard and Server Health with correct value, units, health, implemented thresholds/hysteresis and freshness under the recorded passive link/load/cooling state.",
+    "required_package": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS and authoritative PEX_SW terminology",
+      "Switch vendor/device/part/revision/serial/firmware, board reference designator and physical location",
+      "Stable BDF and complete upstream/downstream topology to root port, switch ports and GPU/NVSwitch endpoints",
+      "BMC controller/bus/mux/address and exact die, package or nearby-board temperature field",
+      "Stable SDR/API and Dashboard/Server Health identities",
+      "Field-specific units/scaling, approved range/delta, threshold capability/values/hysteresis, health, polling/freshness and unavailable rules",
+      "Recorded host/GPU power/load, link speed/width/state, fan speeds and baseboard airflow",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/AER/GPU XID/PCIe/thermal logs, generate traffic, retrain/reset/reconfigure links, change ASPM/speed/power, service hardware, alter fans/airflow/thresholds or flash switch firmware. Confirm the exact switch and BMC measurement point from schematic/topology. Resolve one stable TEMP_GB_PEX_SW identity from the complete repository; review the Script before use. Capture complete identity, value, units, capability/threshold/hysteresis, health and timestamp plus unchanged Dashboard and Server Health rows. Record passive switch/link/load/cooling state and compare only with the approved field-specific specification. Stop without retry on identity, source, stale or UI/OOB/topology divergence.",
+    "expected_result": "One stable record and both UI rows map to the documented physical PCIe switch, topology and exact BMC die/package/board field. Complete OOB/UI value, units, thresholds, health and freshness match switch/field-specific limits under the recorded passive state. GPU temperature, generic link status, another switch or neighboring board sensor never substitutes and PCIe state remains unchanged.",
+    "pass_fail_basis": "PASS requires exact switch/topology/source identity, complete OOB and both-UI agreement, field-specific specification and engineer verdict. Label existence, one BDF, link health, GPU temperature, plausible value, truncated output or command success alone cannot pass. Wrong/stale identity, out-of-limit value or required threshold/status/UI mismatch is FAIL. Missing switch/source/spec/reviewed method is NOT READY, not Pending or PASS; PCIe integrity, traffic, retraining, firmware and dynamic threshold behavior are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel/AER, GPU XID, PCIe or thermal logs; switch-health context must be preserved.",
+      "Do not accept the label alone; prove exact switch instance, board reference and die/package/board measurement point.",
+      "Do not infer complete topology from one BDF or replace the BMC field with link/enumeration evidence.",
+      "Do not generate traffic, retrain/reset/reconfigure links, alter ASPM/speed/power, service hardware, cooling or thresholds, or flash firmware.",
+      "Vendor telemetry may corroborate only after exact switch and field equivalence is approved.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS and exact switch vendor/device/part/revision/serial/firmware/reference-designator identity",
+      "Stable BDF and complete upstream/downstream topology plus BMC controller/bus/mux/address and exact temperature-field source",
+      "Complete stable raw identity, value, units, threshold capabilities/values, health and timestamp plus separate Dashboard and Server Health rows",
+      "Switch/field-specific specification and recorded host/GPU power/load, link speed/width/state, fan/baseboard airflow with any approved equivalent telemetry",
+      "Stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-traffic/no-retrain-or-reset/no-service/no-retry proof, final PCIe/GPU/BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On switch, topology or measurement-field ambiguity, stale/divergent data or unexpected PCIe/GPU/BMC health change, stop and preserve the first complete evidence plus link/topology state. Use approved read-only BMC/PCIe diagnostics; do not retrain, reset or service the switch to force evidence. Any independently authorized PCIe action requires its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "PEX_SW details are Project-defined, but Items, UI Procedure and Criteria consistently request passive display/spec validation of one switch-associated temperature."},
+  "blocked": {"before": false, "after": false, "reason": "The passive PCIe-switch purpose is clear. Exact silicon/topology/source field and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Switch silicon/part/reference/topology/BDF and BMC-source field, stable sensor/UI identity, field-specific thresholds/status/freshness, passive link/load/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO PCIE EXERCISE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot identify the switch instance, topology or measurement field."}],
+  "project_authority": "GPU-baseboard schematic/layout, PCIe topology, switch thermal/telemetry specification, BMC management-bus/SDR definition, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-14", "ED-15", "ED-17", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "switch_instance_and_field_required": true, "link_or_gpu_substitution_allowed": false, "pcie_functional_or_dynamic_threshold_coverage_claimed": false, "pcie_exercise_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|892|Wistron-BMC-00182-V003", "next_pending_case_variant_id": "47b81e140f858b0e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
