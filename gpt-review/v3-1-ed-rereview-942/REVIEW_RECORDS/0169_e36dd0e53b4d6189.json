@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 169,
+  "source_key": "Functionality|982|Wistron-BMC-00272-V003",
+  "case_variant_id": "e36dd0e53b4d6189",
+  "source_ref": {"sheet": "Functionality", "source_row": 982, "code": "Wistron-BMC-00272-V003", "original_row_sha256": "ee23f3fea7398203098646aecefddd5c7a64de8bd95fc105f38b470ef07c48d5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Power Status", "procedure": "Check power status via IPMI command: ipmitool -I lanplus -H <BMC IP> -U <BMC username> -P <BMC password> chassis power status", "criteria": "Power status should be displayed correctly.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/miramar/bmc/function/bmc_power-control.git", "deepseek": "YES proposes the broader `chassis status`, forces cipher 17, exposes the password in process arguments and returns raw output for user judgment.", "gpt_v2": "FULLY AUTOMATABLE after resolving the canonical command, BMC/SUT identity, allowed enum, freshness, secret-safe credential handling and deterministic acceptance."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1141_e36dd0e53b4d6189.json",
+  "old_problem": "The prior record correctly rejected success-by-exit-code and the broader DeepSeek command, but retained Engineering Decision Pending for command/schema, state correctness and runtime binding. The IPMI specification and pinned ipmitool implementation now provide the authoritative command and parser semantics; the exact target, expected pre-state and approved access profile are finite Project inputs.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULLY_AUTOMATABLE_CANONICAL_IPMI_CHASSIS_POWER_STATUS_READ",
+  "disposition_reason": "Retain the Master's narrow `chassis power status` coverage. A pinned ipmitool implementation sends standard Get Chassis Status (Chassis NetFn, command 0x01), reads Current Power State bit 0 and renders exactly `Chassis Power is on|off`. Correctness is established by immutable BMC-to-SUT binding, fresh command completion, exact enum parsing and agreement with the owner-declared current pre-state or an approved contemporaneous read-only reference; no power mutation or log clear is involved.",
+  "decision_basis": [
+    "XLSX row 982, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 983 were directly reviewed; next pending was verified as Functionality row 983 / variant 0ec7148b04e4c61a.",
+    "IPMI v2.0 section 28.2 defines Get Chassis Status and Current Power State bit 0 as 1=system power on and 0=system power off; this is standard behavior, not an OEM guess.",
+    "Pinned ipmitool source sends command 0x01, masks response byte 0 with bit 0 and prints `Chassis Power is on` or `Chassis Power is off`. The broader `chassis status` decodes additional fields and is not substituted for the Master's exact interface coverage.",
+    "A syntactically valid on/off token alone cannot prove it belongs to the intended SUT or matches the intended checkpoint. The Project must bind BMC/SUT identity and supply a declared pre-state or approved contemporaneous correlation rule; mismatch is FAIL, not an invitation to retry or reinterpret.",
+    "ED-03, ED-15, ED-17, ED-19, ED-21 and ED-30 preserve standard-versus-OEM boundaries, objective PASS/FAIL, evidence, case identity and per-case analysis; ED-33, ED-34, ED-36 and ED-38 permit parameterized read-only automation with protected credentials, readiness checks and no mutation/retry."
+  ],
+  "test_case": {
+    "test_name": "Read and validate the canonical IPMI chassis power status for the bound SUT",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify that the exact BMC associated with the selected SUT returns a fresh, standard, machine-parseable chassis power state through the Master's canonical IPMI command without changing power or logs.",
+    "required_package": [
+      "Immutable Project mapping of SUT asset/serial to BMC address/identity and the owner-declared expected current state (`on` or `off`) or an approved contemporaneous read-only correlation source",
+      "Pinned reviewed ipmitool build and parser matching the recorded implementation semantics, plus the reviewed revision of the source Script if used",
+      "Approved LANplus channel/cipher/privilege profile discovered for this BMC; cipher 17 must not be assumed solely from DeepSeek guidance",
+      "Secret-safe BMC credential provider that does not expose a password in command arguments, logs or retained evidence",
+      "Bounded timeout/freshness window, clock source, exact accepted output grammar and redaction/evidence destination"
+    ],
+    "test_command": "READ-ONLY AUTOMATION ONLY; DO NOT RUN DURING REVIEW. Resolve and record the exact SUT/BMC mapping and expected checkpoint state. Through the approved secret provider invoke the pinned equivalent of `ipmitool -I lanplus -H <BOUND_BMC> -U <BOUND_USER> chassis power status` once with the Project-approved channel/cipher and timeout; do not place the password in `-P` arguments. Require successful transport and completion, capture redacted raw output and timestamp, and parse exactly one pinned-version token equivalent to `Chassis Power is on` or `Chassis Power is off`. Compare it with the owner-declared current pre-state or approved contemporaneous read-only reference. Emit a structured result with target identity, state and freshness. Do not clear logs, issue any power-control command or retry automatically.",
+    "expected_result": "The bound BMC request completes within the approved freshness window and yields exactly one accepted state, `on` or `off`, matching the declared state/reference for the same SUT and checkpoint. Credentials are absent from process/evidence output, no write command occurs and retained evidence identifies the tool/parser versions and target.",
+    "pass_fail_basis": "PASS requires exact target association, successful standard command completion, one fresh accepted on/off token, agreement with the approved expected state/reference and a no-write/no-clear audit. Nonzero completion, timeout, authentication/target mismatch, zero/multiple/unknown tokens, stale output, state disagreement, broader-command substitution, secret exposure or any mutation is FAIL. If target mapping, expected checkpoint or parser/access profile is absent, report NOT READY; do not keep the engineering semantics Pending and do not infer PASS from exit code alone.",
+    "safety_gate": [
+      "Allow only the pinned read-only `chassis power status` operation; deny `on`, `off`, `cycle`, `reset`, `soft`, policy writes, log clear and arbitrary command composition.",
+      "Verify BMC certificate/host identity or approved management-network association and SUT asset mapping before the read.",
+      "Keep secrets out of command arguments, stdout/stderr and evidence; use only the approved credential transport.",
+      "Use one bounded attempt. On timeout, ambiguous output or disagreement, preserve evidence and stop without automatic retry or power action.",
+      "Do not infer AC presence, PSU health, POST/OS readiness, application/workload health or transition capability from this one BMC state bit."
+    ],
+    "expected_evidence": [
+      "SUT asset/serial and BMC endpoint/identity binding, approved channel/cipher profile and expected checkpoint/reference",
+      "Pinned ipmitool/parser/Script versions, invocation timestamp, timeout and redacted completion metadata",
+      "Redacted raw canonical output and exactly one parsed on/off state with freshness result",
+      "Expected-state or approved contemporaneous correlation result for the same SUT",
+      "No-write/no-clear/no-retry audit and automated PASS/FAIL/NOT READY result"
+    ],
+    "recovery": "No DUT state should change. On query failure or mismatch, terminate the session, retain redacted diagnostics and leave power/logs untouched. If credential material escaped, revoke/rotate it using the Project incident procedure. Correct only the mapping, access profile or parser under owner control before a separately initiated rerun; never use a power action as recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master unambiguously requires `chassis power status`. DeepSeek's broader `chassis status` is rejected review guidance, not a competing formal requirement."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI and the pinned ipmitool implementation define the read and on/off decoding. Exact target, credential transport, access profile, expected checkpoint and freshness are bounded Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact SUT/BMC mapping; approved channel/cipher/privilege; secret provider; pinned tool/parser/Script; expected current state or correlation source; timeout/freshness and evidence path.", "execution_status": "NOT STARTED; REVIEW-LAYER READ-ONLY TEST CASE ONLY; NO IPMI, BMC, LOG OR DUT COMMAND EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 28.2 defines Get Chassis Status and Current Power State bit 0 as the system power on/off indication."},
+    {"title": "ipmitool pinned ipmi_chassis.c", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_chassis.c", "application": "The pinned implementation sends Chassis command 0x01, tests response byte 0 bit 0 and prints `Chassis Power is on|off`; it also distinguishes the broader chassis-status renderer."},
+    {"title": "ipmitool command manual", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/doc/ipmitool.1.in", "application": "Documents `chassis status` as broad status and `chassis power status` as the narrow power subcommand, supporting exact Master-command preservation."}
+  ],
+  "project_authority": "The Project owner supplies the immutable BMC/SUT map, expected checkpoint or approved correlation, supported cipher/privilege, secret transport, pinned parser and freshness policy. These are runtime bindings and do not require a new engineering decision about standard power-state semantics.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "canonical_master_command_preserved": true, "broader_deepseek_command_rejected": true, "standard_ipmi_bit_and_pinned_decoder_used": true, "target_and_freshness_validation_required": true, "secret_in_cli_arguments_forbidden": true, "power_and_log_mutations_forbidden": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|983|Wistron-BMC-00273-V003", "next_pending_case_variant_id": "0ec7148b04e4c61a"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_spec_researched": true, "pinned_ipmitool_source_researched": true, "case_specific_read_only_status_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
