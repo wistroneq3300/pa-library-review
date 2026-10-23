@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 36,
+  "source_key": "Functionality|846|Wistron-BMC-00136-V003",
+  "case_variant_id": "6474d121616695b0",
+  "source_ref": {"sheet": "Functionality", "source_row": 846, "code": "Wistron-BMC-00136-V003", "original_row_sha256": "3bd398e1d0690fe98125690ca83610e8989fa2a95c89b5ee8c5fca89eafc491e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Health", "procedure": "Enter BMC Web, click `Health`, and verify it accesses `Event logs`.", "criteria": "The icon link should be workable.", "deepseek": "YES substitutes a curl GET of `/redfish/v1/Chassis/system`, which reads chassis health data but never exercises the UI link or Event logs destination.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores browser navigation and identity binding, but adds UI/API data correlation beyond the source's narrow link criterion."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1008_6474d121616695b0.json",
+  "old_problem": "The historical record correctly rejected the API substitution and defined deterministic WebUI evidence, but kept Pending for build-specific selector, route, account and browser inputs.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_HEALTH_TO_EVENT_LOGS_UI_NAVIGATION_TEST",
+  "disposition_reason": "The source explicitly supplies control, action, destination and acceptance: activate the Health icon and reach a usable Event logs view. Build-specific accessible selector, route/DOM landmark, supported browser and read-only role are execution parameters. ED-08 requires real visual evidence, ED-17 prohibits clearing the event evidence, ED-20 preserves this narrow navigation coverage, and ED-35 rejects the Redfish chassis query as a substitute. Optional API reads may support identity or diagnosis but are not required acceptance unless Project SPEC adds them.",
+  "decision_basis": [
+    "XLSX row 846, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "The label-to-destination relationship may be unusual, but it is explicit and therefore not a source conflict.",
+    "A workable UI link requires the correct control, one activation, expected route/view identity and completed render without error; neither icon presence nor HTTP 200 alone is enough.",
+    "Expanding the required verdict to chassis health-field or event-content correctness would add coverage not present in this source row."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC Web Health icon navigates to a usable Event logs view",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the authenticated BMC Web `Health` control is visible and enabled for the approved role, activates exactly once, reaches the version-approved `Event logs` route/view, completes rendering without permission, navigation or application errors, and does not clear, acknowledge, delete or otherwise alter event records.",
+    "required_package": [
+      "Immutable BMC identity, trusted Web URL/certificate, firmware and UI build/version",
+      "Supported browser/version, viewport, proxy/cache policy, isolated profile and page-load/single-page-app idle rule",
+      "Approved read-only account/role with protected credentials/session and visibility expectation for the Health control",
+      "Authoritative accessible name/role/stable selector/location for Health and expected Event logs URL/SPA route, title, heading or DOM landmark",
+      "Allowed redirect/new-tab behavior, timeout, expected empty/loading/error states and permission behavior",
+      "Screenshot/DOM/console/network redaction rules and explicit prohibition on clear/acknowledge/delete controls"
+    ],
+    "test_command": "Bind the browser session to the exact BMC certificate/device and UI build, authenticate with the approved read-only role through protected input, record the initial route and locate Health by stable accessible/DOM attributes without activating adjacent controls. Capture its label, enabled/visible state and target metadata. Activate the exact Health control once, wait using the approved navigation and SPA-idle condition, and capture the redirect/route chain, final URL/route, page title/heading/landmark and rendered visual state. Check for blank, access-denied, stuck loading, console exception or failed navigation request and verify no clear/acknowledge/delete action or log count/sequence mutation occurred. Preserve the first attempt; do not use `/redfish/v1/Chassis/system` as acceptance or retry automatically.",
+    "expected_result": "The approved role sees an enabled Health icon/link; a single activation reaches exactly the approved Event logs route/view and it finishes rendering with its expected title/heading/landmark, including an approved empty state where applicable. No permission denial, wrong route, blank/stuck/error state or relevant console/network failure occurs, and event records remain unchanged. Optional read-only API evidence may bind identity or diagnose failure but does not replace the UI result.",
+    "pass_fail_basis": "PASS requires real browser evidence of the correct Health control, single activation, complete route transition, rendered Event logs identity, no blocking error and no log mutation, followed by engineer acceptance of the visual result. Chassis JSON, icon presence, click handler existence, URL change, HTTP 200 or an unrelated event API cannot pass alone. Missing/disabled control, wrong destination, incomplete render, permission error, relevant console/network failure, unintended mutation or automatic-retry-only success is FAIL. Missing build/selector/route/account/browser package is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not replace the browser action with `/redfish/v1/Chassis/system`; it tests a different interface and purpose.",
+      "Validate BMC certificate/build/account before login and keep credentials, cookies, tokens and sensitive event details out of artifacts.",
+      "Activate only the verified Health navigation control once; avoid nearby clear, acknowledge, delete, export-with-side-effects or power controls.",
+      "Do not clear dmesg, syslog, SEL or BMC event logs before or after this test; preserve baseline and first-failure evidence.",
+      "Do not accept clickability, URL change or HTTP status without the correct rendered Event logs view and error checks.",
+      "Do not make API/UI health-data parity mandatory unless an approved Project extension explicitly adds that separate coverage.",
+      "No automatic retry after a failed click/navigation; capture screenshot, DOM, console and network state from the first attempt."
+    ],
+    "expected_evidence": [
+      "BMC endpoint/certificate/device identity, firmware/UI build, browser/version and redacted account role",
+      "Pre-click route and Health control screenshot/DOM with accessible name, role/selector, visible/enabled state and target metadata",
+      "Single activation timestamp, redirect/navigation chain and final URL/SPA route",
+      "Rendered Event logs title/heading/landmark, approved empty/content state and screenshot showing loading completion",
+      "Redacted DOM plus relevant browser console/network results and absence of permission/application errors",
+      "Before/after event count/sequence or audit evidence proving no clear/acknowledge/delete mutation, plus engineer verdict"
+    ],
+    "recovery": "No state change is intended. If the control invokes an unexpected mutation, wrong route or wrong endpoint, stop without retry, preserve browser/audit evidence, close the test session and use the approved OOB/read-only path to verify event logs remain intact. Revoke the session if endpoint identity was wrong; do not restore by clearing or modifying logs."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Health, click action, Event logs destination and workable-link criterion form one explicit UI navigation requirement despite the unusual label/destination pairing."},
+  "blocked": {"before": false, "after": false, "reason": "Control, action and destination are explicit; build-specific selector/route, browser and role are supplyable execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI build, supported browser, read-only role, stable Health selector, Event logs route/DOM landmark, timeout/SPA-idle rule and evidence redaction.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "The version-matched Project/vendor BMC Web navigation map and role-access specification define the Health control and Event logs destination; Redfish is optional diagnostic context only.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-17", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "real_webui_evidence_required": true, "api_only_substitution_allowed": false, "event_log_data_correctness_added_as_mandatory": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|847|Wistron-BMC-00137-V002", "next_pending_case_variant_id": "7c585d8afd245108"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
