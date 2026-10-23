@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 58,
+  "source_key": "Functionality|868|Wistron-BMC-00158-V002",
+  "case_variant_id": "f6fefd723dd88d8b",
+  "source_ref": {"sheet": "Functionality", "source_row": 868, "code": "Wistron-BMC-00158-V002", "original_row_sha256": "297de01435340278533ae75235f211013d5ca1122dd9d918e27d9a9325c25db0", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Description for Post Code", "procedure": "Generic setup says clear logs; remove all DIMMs, power on after BMC is ready, and check POST/SEL event 0xE310 with `No DIMM is populated`.", "criteria": "POST code matches the event.", "deepseek": "YES only reads an assumed PostLog collection; it cannot create or prove the all-DIMM-absent stimulus, code meaning, physical/power safety or exact recovery and incorrectly claims no risk.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores no-DIMM stimulus, ESD/maintenance gates, bounded boot, causal event correlation and DIMM reinstall."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1030_f6fefd723dd88d8b.json",
+  "old_problem": "A stale/read-only POST record was proposed as the test while the actual case requires removing every DIMM and powering an intentionally unbootable configuration. Module/slot identity, complete power isolation, platform-specific 0xE310 semantics, attempt boundary, no-POST timeout and exact hardware restoration were missing.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SINGLE_NO_DIMM_BOOT_WITH_SERIALIZED_TOPOLOGY_RECOVERY",
+  "disposition_reason": "The stimulus, expected code/description and acceptance are explicit. The review layer can safely parameterize exact platform authorization, code schema, DIMM map, service procedure and timeout while assigning all physical/power actions to qualified humans. One approved negative boot with complete bounded POST/SEL evidence is followed by exact serialized reinstall and full training/inventory/boot recovery; no AI or automation performs the DUT action.",
+  "decision_basis": [
+    "XLSX row 868, same-row DeepSeek, exact GPT V2, selection manifest and historical record were directly reviewed.",
+    "Causality requires the verified all-sockets-empty state, one identified boot attempt and its new canonical 0xE310 event, not historical code presence.",
+    "The approved physical-hardware rule assigns DIMM handling to qualified people; the cycle rule requires an exact power transition and recovery rather than an ambiguous command.",
+    "ED-09 preserves manual hardware handling, ED-17 preserves logs, ED-18 requires full power-state evidence, ED-20 preserves all-DIMM and recovery coverage, and ED-38 forbids retry."
+  ],
+  "test_case": {
+    "test_name": "Verify one all-DIMM-absent boot produces platform event 0xE310 and restore the exact memory topology",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove that one explicitly approved boot attempt with every DIMM physically absent produces the platform-defined POST/SEL `0xE310` record with the authoritative `No DIMM is populated` meaning, then restore every serialized module to its original slot and prove normal memory training, inventory, POST and OS operation.",
+    "required_package": [
+      "Exact chassis/board/BMC/BIOS identities and vendor confirmation that one no-memory power-on is an approved diagnostic stimulus",
+      "Complete DIMM serial/part/capacity/rank/speed-to-socket/channel map, orientation/latch photos and original population rules",
+      "Service manual for orderly shutdown, AC/DC isolation, discharge interval, ESD, chassis access, removal/insertion order and air-baffle/torque requirements",
+      "Dedicated maintenance window, no workloads/users, stable power, BMC/SOL/serial/OOB access, approved maximum no-POST wait and emergency power-off owner",
+      "Firmware-matched authority for 0xE310 source/encoding/message/severity/sensor/generator/direction plus attempt-time correlation and allowed companion events",
+      "Post-restore training limit, slot/channel/capacity inventory, latch inspection, normal POST/boot/OS and fault-log acceptance"
+    ],
+    "test_command": "Automation performs read-only identity, workload, power, memory inventory and complete POST/SEL baseline collection only. A qualified ESD-trained operator records serial-to-slot topology, follows the vendor shutdown/AC-DC isolation/discharge procedure, removes every DIMM and verifies/photos all empty sockets. After a fresh exact-target approval and BMC readiness, the authorized operator performs one power-on. Observe power/SOL/serial, mark the attempt boundary, enforce the no-memory timeout and collect every new raw/decoded POST/SEL record. Correlate the version-matched 0xE310 record and exact no-DIMM meaning to that attempt; do not retry. The operator then powers off through the approved path, reinstalls each serialized DIMM in its original slot/orientation and restores chassis parts. Verify latches, full capacity/channel inventory, bounded memory training, normal POST/OS/BMC health and new fault logs. Never clear logs or let automation remove hardware or power-cycle the DUT.",
+    "expected_result": "The verified empty-memory configuration receives exactly one approved power-on and reaches the documented no-memory stop state within the allowed interval. Complete new POST/SEL evidence contains the authoritative 0xE310 event with no-DIMM description, correct source/severity/time and causal attempt boundary plus only allowed companion events. After approved power-off and reinstall, every module returns to its recorded socket, full memory capacity/channels train correctly and the platform completes normal POST/OS boot without new unexplained faults.",
+    "pass_fail_basis": "PASS requires platform authorization, immutable DIMM map, power/ESD/operator evidence, one bounded boot, complete causal raw/decoded 0xE310 match, exact reinstall and successful inventory/training/normal boot recovery with engineer verdict. A historical entry, generic PostLog GET, code string without authoritative decode, or boot without physical empty-state proof cannot pass. Missing/wrong code or description, unexpected event sequence/power state, module mix-up, capacity/channel loss, training fault or failed recovery is FAIL/recovery-required. Missing platform/code/service inputs is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never remove/insert DIMMs with host power present or before the vendor discharge interval; independently verify AC/DC state and follow ESD controls.",
+      "Never guess sockets or mix modules; record serial-to-slot/orientation before removal and stop on unlabeled hardware, latch/socket damage or uncertain population rules.",
+      "Do not clear SEL/POST/system logs; use stable sequence/time boundaries to retain prior memory-fault evidence and identify the one attempt.",
+      "Do not infer 0xE310 semantics from its number or a generic field; require the exact board/BIOS/BMC specification and decoder revision.",
+      "Power on once only after fresh approval and BMC readiness; enforce the stop-state timeout and never retry automatically on absent/unknown behavior.",
+      "After capture, perform approved power-off and exact reinstall; stop/escalate on missing capacity, ECC/training error, boot loop, persistent fault or hardware damage."
+    ],
+    "expected_evidence": [
+      "SUT/board/BIOS/BMC identity, maintenance authority, prior workload/power state and complete DIMM serial/part/capacity/channel/socket map/photos",
+      "AC/DC isolation/discharge/ESD checklist, qualified operator record and verified all-sockets-empty state",
+      "BMC-ready time, fresh boot approval, single power/SOL/serial timeline and bounded no-memory stop-state/timeout",
+      "Complete pre/post-boundary POST/SEL metadata and raw records with authoritative 0xE310 decode, no-DIMM meaning, generator/severity/time and causality",
+      "Approved power-off, serialized reinstall/latch/socket/chassis restoration evidence",
+      "Post-restore capacity/channel inventory, training duration, normal POST/OS/BMC health, fault-log review, no-retry proof and engineer verdict"
+    ],
+    "recovery": "On unexpected power, event or stop-state behavior, do not boot again. Preserve all evidence and have the authorized operator use the approved power-off path, reinstall the recorded modules exactly and verify latches/topology. Use BMC/OOB and the vendor recovery runbook for training/boot faults; escalate any hardware damage, capacity loss or persistent ECC event."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require a no-DIMM boot and 0xE310 event-description match. Generic pre-clear is an unsafe setup defect, not a purpose contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "Stimulus, expected code and comparison are explicit. Exact topology, service authorization, code definition, timeout and recovery are supplyable Project/vendor execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Platform/no-memory authorization, board/BMC/BIOS and 0xE310 definition, DIMM serial-slot map, power/discharge/ESD procedure, operator/window, timeout/OOB and post-restore acceptance.", "execution_status": "NOT STARTED; PHYSICAL HARDWARE AND POWER ACTIONS NOT AUTHORIZED"},
+  "external_authorities": [],
+  "project_authority": "Platform service manual, memory population specification, BIOS/BMC POST/SEL code definition and Project maintenance/recovery plan define safe stimulus, 0xE310 meaning and restoration acceptance.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-09", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "physical_hardware_actions_manual": true, "blanket_preclear_allowed": false, "single_boot_only": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|869|Wistron-BMC-00159-V003", "next_pending_case_variant_id": "061f2c3a2a35d92c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
