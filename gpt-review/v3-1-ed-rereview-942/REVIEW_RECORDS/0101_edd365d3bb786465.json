@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 101,
+  "source_key": "Functionality|912|Wistron-BMC-00202-V003",
+  "case_variant_id": "edd365d3bb786465",
+  "source_ref": {"sheet": "Functionality", "source_row": 912, "code": "Wistron-BMC-00202-V003", "original_row_sha256": "5420ee5e6183fa013d31626bfcc119307af07b3fb663dc16a73e0eb714f6c3b1", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Factory Reset BMC", "procedure": "Select Operations > Factory Reset and reset BMC and server settings; generic setup says clear logs.", "criteria": "Factory reset without error; BMC returns to default settings including server settings, accounts/passwords, policies, LDAP, network addresses and time.", "script": null, "deepseek": "PARTIAL proposes a preliminary cold reset, five-second wait and unverified generic Redfish `FactoryReset` with `curl -k` and exposed credentials; it cannot prove supported action, destructive scope, defaults or recovery.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly rejects that sequence and requires vendor scope/defaults, secure baseline, one approved action, independent bootstrap/recovery and complete comparison before reconfiguration."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1073_edd365d3bb786465.json",
+  "old_problem": "Factory reset is not a generic Manager.Reset type and may erase the very accounts, IP/VLAN, certificates, directory, time and audit paths needed to observe recovery. The source does not define version-specific BMC/server scope, preserved exceptions or defaults, while the proposed cold-reset-plus-Redfish sequence can strand access and destroy valid default-state evidence.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_CRITICAL_ONE_SHOT_WEBUI_FACTORY_RESET_AND_DEFAULT_MATRIX",
+  "disposition_reason": "Retain the destructive Operations > Factory Reset coverage, but gate it on a firmware-specific vendor action/scope/default matrix, secure pre-reset export, independent physical/discovery/bootstrap access and one point-of-action approval. Compare every default before any reconfiguration and stop without retry on scope/recovery failure. These Project/vendor bindings make execution NOT READY when absent; the Review decision itself is complete.",
+  "decision_basis": [
+    "XLSX row 912, same-row DeepSeek, exact GPT V2, selection manifest, ordinary reboot and other operations history, and preserved V3.1 record were directly reviewed.",
+    "A cold BMC reboot is not a factory reset, and a generic Redfish ResetType cannot be assumed supported or equivalent to the source WebUI action.",
+    "The source explicitly lists destructive configuration domains, so evidence and recovery must be established before their loss and post-reset defaults must be captured before restoration.",
+    "ED-03 prohibits guessed OEM/API parameters, ED-17 preserves logs before deletion/loss, ED-20 preserves WebUI factory-reset coverage and ED-30/V3.1 one-shot controls prohibit automatic retry."
+  ],
+  "test_case": {
+    "test_name": "Verify one approved WebUI BMC factory reset against a complete authoritative default matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify one vendor-supported BMC WebUI factory-reset action restores every in-scope BMC and server setting to its authoritative firmware/Project default, removes the intended custom access/configuration only, preserves documented exceptions, leaves host behavior within the approved scope and permits secure controlled recovery before reconfiguration.",
+    "required_package": [
+      "BMC/SUT asset, MAC/serial, firmware/build/active bank, host power/OS state and current network/access identity",
+      "Vendor documentation for exact Operations > Factory Reset control, BMC/server scope, preserved exceptions and expected reset/host-power behavior",
+      "Authoritative default matrix for accounts/roles/password bootstrap, policies, LDAP/RADIUS, network/VLAN, time/NTP, certificates, alerting, thresholds, boot/server settings and every additional scoped field",
+      "Secure redacted configuration export/hash and preserved pre-reset audit/SEL evidence with secret/volatile handling",
+      "Factory DHCP/default-IP/discovery and approved initial-account or zero-touch provisioning procedure",
+      "Independent physical/console recovery owner, vendor escalation, staged recovery deadlines and non-return procedure",
+      "Maintenance/destructive approval, no-conflicting-operation proof and separately authorized post-verdict reconfiguration plan"
+    ],
+    "test_command": "CRITICAL DESTRUCTIVE; DO NOT EXECUTE WITHOUT POINT-OF-ACTION APPROVAL. Preserve logs and securely export/hash all scoped settings before loss. Independently verify target asset, exact vendor WebUI factory-reset control/scope/default matrix, bootstrap/recovery access and absence of firmware/config/KVM/SOL/virtual-media/power/critical-host work. A human invokes the supported WebUI action once—no preliminary cold reset, generic Redfish guess or fallback retry. From the independent path, timestamp disconnect, network/discovery, service, bootstrap/authentication and full-sensor recovery. Before restoring anything, compare every scoped setting with the authoritative default/preserved-exception matrix and confirm host/server impact. Preserve verdict evidence; reconfigure only after separate owner authorization.",
+    "expected_result": "One approved action produces the documented factory-reset audit and recovery sequence. Every scoped BMC/server field equals its version-specific default, every documented exception remains as specified, prior accounts/passwords/policies/directory/network/time/certificate/threshold/boot customizations are removed exactly as intended, identity/firmware and host state follow the approved scope, secure bootstrap succeeds and complete management/sensor health returns within deadlines. Default-state evidence exists before reconfiguration.",
+    "pass_fail_basis": "PASS requires exact vendor action/scope evidence, secure baseline, single-action proof, independent recovery/bootstrap, complete default/exemption comparison, expected host impact and engineer verdict before reconfiguration. Ping, HTTP status, `mc info`, a cold reset or partial settings check cannot pass. Unsupported action, wrong scope, missed deadline, insecure/unavailable bootstrap, unexpected retained/lost field, identity/host impact mismatch or incomplete sensors is FAIL and stops the run. Missing defaults, secure export, recovery or destructive approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Treat the action as CRITICAL and destructive; independently verify asset/MAC/serial/firmware/host state immediately before approval.",
+      "Do not clear logs; export configuration, audit/SEL and recovery artifacts because reset may erase them.",
+      "Do not run the source cold-reset plus generic `FactoryReset`, use `curl -k`, expose credentials or guess an OEM/Redfish action/value.",
+      "Confirm physical/discovery/bootstrap recovery and ownership before losing accounts, addresses, certificates and directory authentication.",
+      "Execute one WebUI factory reset only; no preliminary reset, power cycle, guessed fallback or automatic retry. Record defaults before any restore."
+    ],
+    "expected_evidence": [
+      "Approval/change record, target asset/MAC/serial/firmware/host state, vendor action/scope reference and no-conflicting-operation checklist",
+      "Secure redacted configuration export/hash and complete pre-reset matrix for all scoped settings plus preserved audit/SEL",
+      "WebUI action screenshots/audit, single-action proof and staged disconnect/network/discovery/service/bootstrap/auth/sensor recovery timeline",
+      "Post-reset identity/firmware/host state and complete default/preserved-exception comparison with volatile/secret distinctions",
+      "Physical/discovery/bootstrap recovery proof, no retry/insecure credential use and evidence captured before reconfiguration",
+      "Final BMC/SUT health, approved reconfiguration boundary and engineer-owned verdict"
+    ],
+    "recovery": "If target, scope, bootstrap or recovery is wrong, do not repeat the reset or power-cycle. Use the pre-arranged physical/console/default-discovery path, preserve audit/SEL and first-failure evidence and escalate to the BMC owner/vendor. Restore configuration only from the approved secure export after identity and access are verified and the default-state verdict evidence is complete; every restoration is a separate authorized action."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Title, Procedure and Criteria consistently require BMC plus in-scope server factory defaults. Exact action, scope and default values are critical Project/vendor readiness inputs rather than contradictory purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The destructive objective, evidence, one-shot safety and recovery are fully defined. Execution waits for vendor scope/defaults, secure baseline and independent recovery."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact WebUI action/scope, authoritative default/exemption matrix, secure export, bootstrap/discovery, staged recovery deadlines, independent physical recovery, destructive approval and post-verdict reconfiguration plan.", "execution_status": "NOT STARTED; CRITICAL DESTRUCTIVE; ONE APPROVED WEBUI ACTION ONLY; NO FACTORY RESET EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor factory-reset/default specification, Project provisioning/security baseline, server-setting scope and physical recovery SOP define action, defaults and recovery.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "source_WebUI_factory_reset_preserved": true, "cold_reset_or_generic_Redfish_equivalence_assumed": false, "defaults_captured_before_restore_required": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|913|Wistron-BMC-00203-V003", "next_pending_case_variant_id": "588d02dc69c94f7b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
