@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 110,
+  "source_key": "Functionality|921|Wistron-BMC-00211-V002",
+  "case_variant_id": "ccd457c5de7ee341",
+  "source_ref": {"sheet": "Functionality", "source_row": 921, "code": "Wistron-BMC-00211-V002", "original_row_sha256": "b81d846d9211a60a01a7ad30937300d2567032f92ca53e12d97d5a5086b7932f", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Sessions", "procedure": "Check that session IP is shown correctly and that a session can be disconnected; generic setup says clear logs.", "criteria": "IP is shown correctly and disconnect works.", "script": null, "deepseek": "PARTIAL reads a fixed Redfish Sessions URI and truncated IPMI session output with `curl -k`, exposes credentials, does not paginate or reliably request ClientOriginIPAddress, and leaves the disconnect entirely untested.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires complete Redfish/IPMI inventories, redaction, protocol correlation, independent recovery and one explicitly approved non-critical session disconnect."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1082_ccd457c5de7ee341.json",
+  "old_problem": "Truncated collection output cannot establish a complete session list, and Redfish and IPMI session identifiers/namespaces cannot be joined by assumption. The source also requires a real disconnect, which is a security-sensitive mutation that can terminate the reviewer or sole recovery session; a vanished UI row alone would not prove only the intended session ended.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_COMPLETE_SESSION_INVENTORY_AND_SINGLE_TEST_SESSION_TERMINATION",
+  "disposition_reason": "Use DMTF-defined Redfish Session resources to create/identify one disposable session from a known client address, enumerate the full collection, validate the recorded client origin where the schema supports it, then terminate only that approved Session resource from a separate protected administrator session and prove token invalidation plus unaffected recovery access. IPMI inventory remains a separate namespace/correlation source. Firmware-specific fields and pagination are execution bindings, not an unresolved decision.",
+  "decision_basis": [
+    "XLSX row 921, same-row DeepSeek, exact GPT V2, selection manifest, adjacent account-management case and preserved V3.1 record were directly reviewed.",
+    "DMTF Redfish Session schema defines `ClientOriginIPAddress` as the client address that created a session, so a controlled disposable session supplies an authoritative expected IP rather than guessing existing origins.",
+    "The Redfish specification terminates a login session by DELETE on that individual Session resource and permits a sufficiently privileged administrator to terminate another user's session from a different session.",
+    "Inventory, IP correctness and disconnect are distinct checkpoints; complete pagination, token redaction and independent post-state are required to prevent false PASS or management lockout."
+  ],
+  "test_case": {
+    "test_name": "Verify complete BMC session inventory, client IP accuracy and isolated session disconnect",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the BMC reports a complete active-session inventory with correct user/client-origin metadata for a controlled test session, keeps Redfish and IPMI namespaces distinct, and can terminate exactly that approved non-critical session without exposing tokens or affecting protected management access.",
+    "required_package": [
+      "Exact BMC/firmware/Redfish schema identity, discovered SessionService/Sessions links, supported pagination and Session property set",
+      "Two separate protected administrator/recovery and disposable test sessions with known users and expected client source addresses",
+      "Vendor-supported Redfish Session DELETE or explicit WebUI disconnect mapping plus required privileges and audit semantics",
+      "Supported IPMI session inventory semantics and a documented correlation policy that does not equate Redfish/IPMI IDs",
+      "TLS trust, token/credential redaction, privacy-approved evidence retention and BMC audit collection",
+      "Point-of-action disconnect approval and independent access-recovery plan"
+    ],
+    "test_command": "SECURITY-SENSITIVE DISCONNECT; DO NOT EXECUTE WITHOUT APPROVAL. Preserve logs and discover SessionService/Sessions from the service root. From a predeclared client address, create one disposable Redfish login session and retain its Session resource URI separately from its secret token. Through an independent protected administrator session, follow all collection pages/next links and fetch each authorized Session resource, redacting tokens/secrets while retaining ID, user, ClientOriginIPAddress, creation/activity/state fields supported by this schema. Collect the complete supported IPMI inventory separately and explain, not force, correlations. Verify the disposable row's known IP/user. Identify and protect the current/recovery sessions, obtain point-of-action approval, DELETE only the disposable Session URI through the supported method, then prove its token no longer authenticates, it disappears from the complete inventory, the audit event names it, and protected access remains. Never use `-k`, `head`, bulk deletion or automatic retry.",
+    "expected_result": "The complete paginated inventory contains the controlled session exactly once with the documented user and correct normalized client-origin IP where supported, and all cross-protocol differences are explained without ID conflation. After one approved individual disconnect, only that Session resource disappears, its token is rejected, a matching audit event exists and the independent administrator/recovery session plus other protected sessions remain functional.",
+    "pass_fail_basis": "PASS requires complete collection traversal, expected known session/user/IP evidence, redaction, explicit protocol-namespace treatment, individual disconnect audit, invalidated disposable token and unaffected protected access. A partial Members list, `head`, an absent row alone or IP inferred from a management endpoint cannot pass. Wrong/missing IP when schema promises it, incomplete pagination, wrong-session termination, still-valid token, lost protected access or audit mismatch is FAIL. Missing schema field, safe test session, privilege, approval or recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear BMC/audit logs or include passwords, X-Auth-Tokens, cookies or unredacted sensitive session metadata in artifacts.",
+      "Verify the exact BMC, disposable Session resource URI and independent protected recovery session immediately before DELETE.",
+      "Never bulk-delete, terminate system/service/current/recovery sessions, use an unvalidated vendor action or assume Redfish and IPMI IDs match.",
+      "Use trusted TLS and complete pagination; stop if the inventory is incomplete or session identity/IP is ambiguous.",
+      "Obtain point-of-action approval for one termination and stop on wrong-session effects or access loss without another delete/retry."
+    ],
+    "expected_evidence": [
+      "Target/firmware/schema identity, discovered SessionService links, TLS method, field/pagination support and redaction policy",
+      "Controlled disposable-session creation with known user/source IP, Session URI and protected-token handling plus independent recovery identity",
+      "Complete before inventory from all pages/resources and separate IPMI inventory with an explicit correlation/difference matrix",
+      "Exact expected-versus-reported ClientOriginIPAddress/user result and any authoritative unsupported-field evidence",
+      "Approved individual DELETE/WebUI action, BMC audit entry, rejected disposable token and complete after inventory proving only it ended",
+      "Protected access verification, preserved logs, no bulk/no retry proof and engineer verdict"
+    ],
+    "recovery": "If the wrong session is terminated or administrator access is affected, stop every disconnect, preserve session/audit evidence and use the pre-verified independent recovery channel to restore access through the approved BMC account/session procedure. Do not bulk-delete, reset BMC or repeat DELETE automatically; any additional state change requires fresh authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require correct session IP display and disconnect behavior. Protocol/schema details refine the method without changing the purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The controlled expected session, standard termination method, evidence and recovery are defined. Field support, accounts and client IPs are execution configuration."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Firmware schema/pagination, controlled users/client IPs, protected recovery session, supported disconnect mapping, privacy/redaction policy and approval.", "execution_status": "NOT STARTED; SECURITY-SENSITIVE SESSION TERMINATION; POINT-OF-ACTION APPROVAL REQUIRED; NO SESSION DISCONNECTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide DSP2046", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "application": "Defines the Session resource and `ClientOriginIPAddress` as the IP address of the client that created the session."},
+    {"title": "DMTF Redfish Specification DSP0266", "url": "https://www.dmtf.org/sites/default/files/standards/documents/DSP0266_1.20.2.pdf", "application": "Defines individual Session resource termination by DELETE and administrator termination of another session from a separate privileged session."}
+  ],
+  "project_authority": "BMC schema/firmware, account/privacy policy, supported IPMI mapping, protected recovery channel and access-control SOP bind execution values.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "full_inventory_required": true, "client_ip_verified_with_controlled_session": true, "redfish_ipmi_ids_equated": false, "bulk_disconnect_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|922|Wistron-BMC-00212-V002", "next_pending_case_variant_id": "f9a5857a35eed406"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
