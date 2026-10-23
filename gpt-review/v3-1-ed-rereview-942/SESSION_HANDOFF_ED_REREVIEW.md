@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **199 / 942**
-- Last reviewed: `Functionality|1013|Wistron-BMC-00303-V004` / `8e5308027020bdd4`
-- Next source-verified pending identity: `Functionality|1014|Wistron-BMC-00304-V004` / `e228cb226ddba862`
-- Latest disposition: Get System Info Parameters(IB) is removed from Pending/Source Conflict as FULLY AUTOMATABLE. The source's four data bytes are standard, not overlong; the case now independently reads selectors 0-4 over IB/OOB, validates revision 11h and every declared 16-byte set-selector block, and compares decoded values to lifecycle-aware references without writes, log clear or retry. No action ran.
+- Completed: **200 / 942**
+- Last reviewed: `Functionality|1014|Wistron-BMC-00304-V004` / `e228cb226ddba862`
+- Next source-verified pending identity: `Functionality|1015|Wistron-BMC-00305-V002` / `5653b172749853db`
+- Latest disposition: Get Channel Authentication Capabilities(IB) is removed from Pending as FULLY AUTOMATABLE. It preserves IB/OOB raw 0x38, privileges 1-5 and high-level correlation, separates legacy bit7=0 from extended bit7=1 semantics, validates every response field/reserved bit, and audits ipmitool's built-in fallback without configuration, log clear or harness retry. No action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
