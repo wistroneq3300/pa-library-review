@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 37,
+  "source_key": "Functionality|847|Wistron-BMC-00137-V002",
+  "case_variant_id": "7c585d8afd245108",
+  "source_ref": {"sheet": "Functionality", "source_row": 847, "code": "Wistron-BMC-00137-V002", "original_row_sha256": "011a3d5cad055ff8da0814fbf276bc47a5fc732231df57d26d3410a5920a891f", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Power", "procedure": "Enter BMC Web, click `Power`, and verify it accesses `Server power operations`.", "criteria": "The icon link should be workable.", "deepseek": "YES substitutes a GET of `/redfish/v1/Systems/system`; this reads PowerState but neither exercises the UI link nor isolates nearby destructive power controls.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores the browser path, strict navigation-only boundary, BMC/host identity and proof that power state did not change."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1009_7c585d8afd245108.json",
+  "old_problem": "The historical record established a safe navigation-only test but retained Pending for the exact build, selector, destination markers, account, destructive-control map and no-submit interlock.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_NAVIGATION_ONLY_POWER_UI_TEST",
+  "disposition_reason": "The source requires only that the Power icon navigate to Server power operations; it does not authorize any power action. Build-specific selectors, route markers, read-only role and control map are supplyable prerequisites. ED-08 requires real WebUI evidence, ED-18 preserves any actual OFF/ON coverage for separate authorized tests, ED-20 retains this narrow case, ED-35 rejects a Systems GET as link acceptance, and ED-38 requires confirmation and recovery because the destination is a host-wide destructive surface.",
+  "decision_basis": [
+    "XLSX row 847, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "A stable semantic link activation and rendered destination prove the source; no power selection, submission, confirmation or Redfish Reset action is in scope.",
+    "A read-only PowerState snapshot is useful only to prove identity/no side effect and cannot substitute for UI navigation.",
+    "The risk comes from control proximity and selector error, so a verified navigation element, hard no-submit boundary and first-attempt evidence are mandatory."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC Web Power icon navigation without invoking any server power operation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the authenticated BMC Web `Power` navigation control is present and reaches the approved `Server power operations` view exactly once, while every power/reset/cycle/NMI/graceful control remains unselected and unsubmitted and host power, reachability and event state remain unchanged.",
+    "required_package": [
+      "Immutable BMC and host identity, trusted Web URL/certificate, firmware/UI build and corresponding host inventory",
+      "Supported browser/version and approved least-privilege/read-only account with protected credentials/session",
+      "Stable Power navigation accessible name/role/selector/location and approved Server power operations URL/SPA route/title/heading/DOM landmark",
+      "Inventory of every power/reset/cycle/NMI/graceful control, default selection, form boundaries, confirmation dialogs and action endpoints",
+      "Current host power/reachability/workload observer, BMC/host power-event baseline and optional vendor-approved read-only PowerState resource",
+      "Hard no-submit interlock, exact selector verification, timeout/SPA-idle rule, evidence redaction, abort rule and independent OOB recovery"
+    ],
+    "test_command": "Bind the browser to the exact BMC/host/build/account, capture host power/reachability and event baselines, and inspect the DOM without activation to distinguish the Power navigation link from every power-operation element and form. Verify the semantic selector, element type and target; do not use approximate coordinates. After explicit approval, activate only that navigation element once, capture route/redirect/network transition and wait for the approved rendered Server power operations landmark. Assert that no operation option is selected, no confirmation dialog or action request/form submission occurs, and host power/reachability/event state remains unchanged; an approved read-only PowerState check may support this assertion. Close the session without focusing, selecting or submitting operations. Do not clear logs or retry a failed/misdirected click.",
+    "expected_result": "One activation of the verified Power navigation link reaches the expected Server power operations route/view and completes rendering without error. Every power action remains in its initial unselected/unsubmitted state, no action endpoint or confirmation is invoked, and host power, reachability and relevant BMC/host events show no transition. Optional read-only PowerState evidence agrees with the unchanged baseline but is not the primary link result.",
+    "pass_fail_basis": "PASS requires BMC/host identity binding, pre-click semantic separation of navigation from destructive controls, one real browser activation, correct rendered destination, no action selection/dialog/request and independently observed no-change state, with engineer review. A Systems JSON GET, icon presence, page URL, HTTP 200 or a rendered page without no-action proof cannot pass alone. Any wrong/multiple click, selected operation, confirmation/action request, power/reachability/event transition, wrong route or rendering failure is FAIL and triggers abort. Missing selector/control map/interlock/account/recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "This test is navigation-only: never select, keyboard-activate, submit, confirm or invoke power on/off/reset/cycle/NMI/graceful operations or a Redfish Reset action.",
+      "Use a verified semantic selector and element target; approximate screen coordinates or tab-key traversal near action controls are prohibited.",
+      "Confirm BMC/host identity, current state, observer and OOB recovery before the click because a wrong element has host-wide blast radius.",
+      "Do not use `/redfish/v1/Systems/system` as proof the link works; approved read-only state is supplemental only.",
+      "Protect credentials/cookies and validate TLS; no `-k`, visible basic-auth command or full unredacted Systems response.",
+      "Never clear power/event/system logs; preserve them to detect unintended actions.",
+      "Do not retry. If any dialog opens, selection changes, action endpoint is requested or power/reachability changes, stop and do not attempt an unapproved recovery action."
+    ],
+    "expected_evidence": [
+      "BMC/host identity, certificate, firmware/UI build, browser/version and redacted account/role",
+      "Pre-click DOM showing the semantic Power navigation selector/target separately from every destructive control and default selection",
+      "Single activation timestamp, route/redirect/network chain and rendered Server power operations title/heading/landmark",
+      "Proof no action form/URI, confirmation, keyboard activation or changed selection occurred",
+      "Before/after host power, reachability and BMC/host event evidence; optional trusted read-only PowerState snapshot",
+      "Redacted screenshot/DOM/console evidence, abort/recovery status and authorized engineer verdict"
+    ],
+    "recovery": "If an operation is selected/invoked or host state changes, stop all UI activity, record the exact element/request/time and preserve BMC/host logs. The authorized owner uses the pre-approved OOB and workload-aware recovery procedure to assess or restore service; the reviewer must not issue another power action. Reconcile sessions and state before any separately approved retest."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Power icon, Server power operations destination and workable-link criterion coherently define navigation; the hazardous page does not imply execution of an operation."},
+  "blocked": {"before": false, "after": false, "reason": "The navigation/no-action boundary is explicit; build/account/selector/control map/interlock and recovery are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI build, read-only role, exact navigation selector/destination, destructive-control map, state observer, no-submit interlock, abort and OOB recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "Version-matched Project/vendor BMC Web navigation and power-control authorization specifications define the selector, destination and control boundaries. Actual power operations remain separate explicitly authorized tests.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-08", "ED-18", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "navigation_only": true, "power_operation_authorized": false, "api_only_substitution_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|848|Wistron-BMC-00138-V002", "next_pending_case_variant_id": "535ea15699a8f181"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
