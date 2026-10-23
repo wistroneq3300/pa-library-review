@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 42,
+  "source_key": "Functionality|852|Wistron-BMC-00142-V002",
+  "case_variant_id": "59bf5f48a8891b8e",
+  "source_ref": {"sheet": "Functionality", "source_row": 852, "code": "Wistron-BMC-00142-V002", "original_row_sha256": "949ffec27a33777f746e626e006067ed9dcc1a222f925b60dd6418507bca3a36", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SOL console", "procedure": "In BMC Web, click `SOL console` and verify access to the Serial over LAN console.", "criteria": "The icon link should be workable.", "deepseek": "PARTIAL expands the link check into sending/reading serial data and keystroke echo, adding host-console impact not authorized by the source.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds channel/mapping/session/recovery controls but likewise broadens the row into an interactive echo/readback test."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1014_59bf5f48a8891b8e.json",
+  "old_problem": "The historical record restored the source-faithful link boundary but retained Pending for build-specific route/readiness, role, auto-connect behavior, SOL session ownership and cleanup.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SOL_WEB_LINK_AND_PASSIVE_INITIALIZATION_TEST",
+  "disposition_reason": "The source asks only whether the WebUI icon reaches the SOL console. Route/page identity and terminal-component initialization can be tested without injecting serial input. If the vendor UI auto-connects, passive output and clean disconnect are bounded consequences, not permission for echo or host interaction. Build, role, auto-connect/session-slot behavior and cleanup are execution inputs. ED-08 requires real browser evidence, ED-20 preserves link-only coverage, ED-35 prevents broader interactive testing from replacing it, and ED-38 gates session acquisition and recovery.",
+  "decision_basis": [
+    "XLSX row 852, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Web link/navigation coverage checks gesture, authorization, route and terminal initialization; full SOL transport coverage additionally needs channel mapping, serial parameters, safe stimulus and host recovery and belongs in a separate approved case.",
+    "A click may automatically consume a scarce SOL session slot, so ownership and clean termination remain required even though no input is sent.",
+    "The Review-layer case explicitly records transmit/receive/echo/host-input as outside this row rather than falsely claiming it."
+  ],
+  "test_case": {
+    "test_name": "Verify the BMC Web SOL console link and passive terminal initialization without serial input",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the approved role's `SOL console` WebUI control routes once to the intended Serial over LAN page and initializes the documented terminal ready/error state; if selection automatically connects, passively correlate and then cleanly release the intended session without sending any keystroke, command, break or credential.",
+    "required_package": [
+      "Exact BMC endpoint/certificate/controller, firmware and WebUI build",
+      "Approved account role and expected visibility/authorization for the SOL console link",
+      "Stable SOL link selector, expected route/page heading, terminal component identity and documented ready/error state",
+      "Vendor definition of click-only versus automatic session allocation/connection behavior",
+      "Current SOL session/owner/slot status, approved session window/timeout and supported disconnect/close sequence",
+      "Alternate KVM/OOB recovery, protected browser credentials/session and console-output redaction rules"
+    ],
+    "test_command": "Bind the isolated browser to the exact BMC/build/role, record current route and read active SOL session/owner/slot state through the approved non-mutating path. Confirm from versioned documentation whether clicking auto-connects and obtain approval if it consumes a slot. Locate the exact SOL console link by semantic attributes and click once. Capture the gesture, route/page heading, terminal component load and documented ready/error state. If auto-connected, observe only enough passive output to correlate the intended session, redact sensitive data, record start/end state and disconnect using the supported control. Verify no orphan session remains and alternate access is healthy. Send no key, command, newline, break, boot input or login data; do not clear logs or retry automatically.",
+    "expected_result": "The correct SOL link is visible/authorized, one activation reaches the approved Serial over LAN route/page and the terminal component reaches its documented ready state without navigation/application error. If auto-connect is expected, it binds the intended session, exposes only passively observed output and closes cleanly with the slot released. No input/configuration is sent, no existing owner is preempted and BMC/host/OOB access remains healthy.",
+    "pass_fail_basis": "PASS requires identity-bound browser evidence of the exact link, one gesture, correct route/page/component-ready result, approved auto-connect behavior, passive-only session correlation where applicable and clean slot release, with engineer verdict. A generic terminal window, route alone without component state, echoed key, interactive prompt or ipmitool session cannot substitute. Wrong route/channel/session, permission error, component failure, owner preemption, orphaned slot, unexpected input or failed disconnect is FAIL. Missing role/route/auto-connect/ownership/cleanup inputs is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not send serial keystrokes, commands, newlines, break sequences, boot-menu input or login credentials; they are outside this source row.",
+      "Before clicking, determine whether the link auto-connects and consumes/preempts a SOL slot; verify ownership and obtain explicit approval when it does.",
+      "Bind endpoint, BMC identity, role and route; never accept another system's console or a generic terminal as evidence.",
+      "If passive output appears, minimize and redact transcript content, secrets and privileged boot data.",
+      "Do not clear BMC/SEL/host/console logs; preserve session/audit events.",
+      "Click once only. On popup block, error, timeout, wrong session or unexpected allocation, stop and cleanly terminate if safe; no automatic retry."
+    ],
+    "expected_evidence": [
+      "BMC/controller/certificate, firmware/WebUI build and authenticated role identity",
+      "Pre-click active SOL session/owner/slot state and versioned click-only/auto-connect behavior",
+      "Redacted DOM/screenshot of exact SOL link plus single-click route/page heading and terminal ready/error state",
+      "If auto-connected: target/session correlation, minimal passive output, start/end audit and supported clean disconnect",
+      "Proof no keystroke/command/configuration was sent, no slot remains allocated and BMC/host/alternate OOB access is healthy",
+      "Explicit exclusion of transmit/receive/echo/host-input coverage and authorized engineer verdict"
+    ],
+    "recovery": "On wrong console, owner conflict or unexpected session allocation, send no input, stop capture and terminate only through the supported disconnect path if safe. Use the approved KVM/OOB route to verify host state and restore console ownership, preserve session/audit evidence and escalate any lost access. Do not retry or inject input to identify the console."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently define a WebUI SOL icon/link access check; interactive echo was prior-review scope expansion, not Master conflict."},
+  "blocked": {"before": false, "after": false, "reason": "The control and navigation outcome are clear; UI route/readiness, role, auto-connect and session ownership/cleanup are supplyable inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI build, account role, SOL selector/route/component state, click-only versus auto-connect behavior, slot ownership, timeout/disconnect, redaction and alternate recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "Version-matched vendor BMC WebUI SOL navigation/session documentation and Project console-ownership policy define readiness, auto-connect and clean disconnect; interactive SOL function is separate coverage.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "serial_input_authorized": false, "auto_connect_requires_approval": true, "interactive_sol_coverage_claimed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|853|Wistron-BMC-00143-V002", "next_pending_case_variant_id": "d10261bc07ba5621"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
