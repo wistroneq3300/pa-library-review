@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 3,
+  "source_key": "Functionality|734|Wistron-BMC-00024-V005",
+  "case_variant_id": "70c507409dd88963",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 734,
+    "code": "Wistron-BMC-00024-V005",
+    "original_row_sha256": "b458d6fe3a423c905d7ad08770eb2c96fe123dce2c0584908ea07f0333b229b5",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Upgrade / Downgrade DCSCM-CPLD firmware by Redfish when system is off",
+    "procedure": "After baseline checks, a copied lead sentence calls the target FPGA; the remaining steps PATCH Immediate behavior, POST a binary image to a generic update URI and wait for completion.",
+    "criteria": "The firmware update succeeds after one BMC reset and the target version appears in FirmwareInventory.",
+    "script": ".../upgrade-and-downgrade-dcscm-cpld-firmware-by-redfish-when-system-is-off",
+    "deepseek": "PARTIAL; requires a DCSCM-CPLD image and interprets the off-state flow and evidence as DCSCM-CPLD.",
+    "gpt_v2": "BLOCKED until a secure DCSCM update contract, version pair, reset behavior and recovery are supplied."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0902_70c507409dd88963.json",
+  "old_problem": "The row's DCSCM-CPLD Items and Script conflict with one FPGA label inside the Procedure. Because the example upload has no explicit selector, the previous review treated the destination and recovery domain as irreducible.",
+  "new_disposition": "RESOLVED_BY_SOURCE_RECONCILIATION_AND_PARAMETERIZATION",
+  "disposition_reason": "The DCSCM-CPLD identity is independently repeated in the Items, the exact linked Script name, the same-row required package, the DeepSeek command description and its evidence contract. That row-local convergence is sufficient to identify the intended component without applying a global title-wins rule. The FPGA noun remains preserved as a copied source defect. No generic URI, image or reset is made executable; those remain fail-closed project bindings.",
+  "decision_basis": [
+    "Functionality row 734, its AI columns, tests.json record, GPT V2 record and active historical review were read for this exact Source Key and Variant ID.",
+    "DCSCM-CPLD appears consistently in four independent row fields: Items, Script slug, required image and expected inventory interpretation.",
+    "The conflicting FPGA word is not accompanied by an FPGA-specific image, Script, inventory member or criterion, which supports treating it as the isolated copy error in this review overlay.",
+    "ED-14 preserves upgrade and downgrade as separate tests and forbids an unsupported downgrade from being forced.",
+    "The Redfish standard requires service-advertised update capabilities and target semantics; a fixed OEM URI and binary body cannot be assumed portable or correctly routed."
+  ],
+  "test_case": {
+    "test_name": "Upgrade and downgrade DCSCM-CPLD firmware through Redfish with host power off",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Qualify DCSCM-CPLD upgrade and downgrade independently while the host is off but BMC standby management remains available, proving that the intended DCSCM inventory member receives the authorized image, activates after the defined single BMC reset and leaves both management and host boot healthy.",
+    "required_package": [
+      "DCSCM assembly/FRU/revision plus the exact CPLD inventory identifier and current active version",
+      "Owner-approved upgrade and downgrade images, hashes/signatures, release notes and supported transition matrix",
+      "BMC firmware-specific Redfish update discovery, DCSCM target parameter and task/job completion model",
+      "Definition of host-off, retained standby rails, the single permitted BMC reset and subsequent host start",
+      "Independent console/programming recovery that remains usable if the DCSCM management path fails"
+    ],
+    "test_command": "Preflight with authenticated, CA-verified GETs of ServiceRoot, UpdateService and DCSCM FirmwareInventory. For each separately approved direction, submit the verified image only to the BMC-advertised DCSCM-CPLD target/action or multipart push contract, monitor the returned task to a terminal state, perform exactly the approved one BMC reset, then repeat DCSCM inventory and platform-health reads. The literal `root:0penBmc`, `curl -k` and assumed `/UpdateService/update` example are not approved commands.",
+    "expected_result": "Upgrade and downgrade each have an independent record. The task reports a documented success, the same DCSCM-CPLD inventory object changes to the approved active version after exactly one BMC reset, standby/BMC management recovers, the host powers on and boots as prescribed, and no unexpected CPLD, BMC, SEL, POST or OS fault appears.",
+    "pass_fail_basis": "PASS per direction requires vendor-supported transition, exact DCSCM target proof, complete task success, one-reset activation, active-version readback and clean management/host health. FAIL includes wrong target/version, ambiguous activation, additional reset, task error, lost recovery access or unexpected health/log result. Documented lack of downgrade support can justify N/A for the downgrade branch only; absence of an image or test setup cannot.",
+    "safety_gate": [
+      "Authorize the exact DCSCM-CPLD inventory member, direction, image digest, discovered action and reset before each write",
+      "Prove the recovery console/programmer does not depend solely on the DCSCM component being updated",
+      "Keep standby power stable and host state fixed; never substitute an AC cycle for the named BMC reset",
+      "Use protected secrets and verified TLS and redact authentication from artifacts",
+      "Stop on target ambiguity, failed validation/task, management loss or health alarm; preserve failure and do not retry automatically"
+    ],
+    "expected_evidence": [
+      "DCSCM FRU/CPLD identity, inventory URI and signed image/version manifest",
+      "Read-only UpdateService capability and component-target discovery",
+      "Separate upgrade and downgrade request/task timelines with redacted payload metadata",
+      "Exactly one BMC-reset activation ledger per supported direction",
+      "Same-object active version before/after plus BMC/standby and host POST/OS health",
+      "Recovery readiness and any stop/abort evidence"
+    ],
+    "recovery": "On uncertain programming or activation, freeze further writes and resets, retain the task and inventory state, maintain the vendor-required safe rail state, and hand control to the DCSCM owner for the approved alternate programmer or golden-image recovery. A second Redfish upload is not an automatic recovery."
+  },
+  "source_conflict": {
+    "before": true,
+    "after": false,
+    "preserved_original_conflict": "The protected Procedure continues to contain `FPGA`; the correction exists only in this versioned overlay.",
+    "resolution": "This Source Key uses DCSCM-CPLD because its Items, linked Script, package and evidence are all component-specific to DCSCM."
+  },
+  "blocked": {
+    "before": true,
+    "after": false,
+    "reason": "The destination class is now established and a deterministic parameterized plan is possible. OEM image/URI/version/recovery data remain mandatory readiness inputs rather than a reason to keep the static review BLOCKED."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "DCSCM FRU/CPLD mapping, per-direction images, advertised Redfish target, reset/activation behavior and independent recovery.",
+    "execution_status": "NOT STARTED"
+  },
+  "external_authorities": [
+    {
+      "title": "DMTF Redfish Data Model Specification DSP0268 2025.2",
+      "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.2.pdf",
+      "use": "Supports resource-targeted firmware updates and requires target discovery rather than device-name inference."
+    },
+    {
+      "title": "DMTF Redfish Resource and Schema Guide DSP2046 2025.2",
+      "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+      "use": "Defines UpdateService and FirmwareInventory while noting vendor-specific push message formats."
+    }
+  ],
+  "traceability": {
+    "applicable_decisions": ["ED-14", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "original_coverage_preserved": true,
+    "upgrade_and_downgrade_separate": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|739|Wistron-BMC-00029-V003",
+    "next_pending_case_variant_id": "9546a068b1a2b88e"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_record_read": true,
+    "case_specific_reasoning": true,
+    "no_template_or_bulk_decision": true,
+    "protected_sources_unchanged": true
+  }
+}
+
