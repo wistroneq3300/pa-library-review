@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 84,
+  "source_key": "Functionality|895|Wistron-BMC-00185-V003",
+  "case_variant_id": "d6ab5472a6fee245",
+  "source_ref": {"sheet": "Functionality", "source_row": 895, "code": "Wistron-BMC-00185-V003", "original_row_sha256": "285569b056ddc6290c6a343a3fb7c6f104e7234da72e296e8742d09bb4fc7db4", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SPD_FAN1_R~SPD_FAN16_R", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES passes the entire FAN1_R~FAN16_R expression as one literal sensor name and truncates fallback SDR output, so it cannot prove sixteen distinct records, suffix meaning, physical fan/rotor mapping, tach scaling, thresholds or UI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly demands separate records, authoritative R semantics, physical fan/controller mapping, full untruncated evidence and no cooling mutation, but leaves those Project inputs as a review Pending condition."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1056_d6ab5472a6fee245.json",
+  "old_problem": "The tilde range is not proven IPMI sensor syntax, `_R` is undefined by the source, and a single or truncated response could be mistaken for sixteen physical speed channels. Static RPM has no valid PASS basis without fan/rotor/controller identity, tach scaling, current fan-control state and approved state-specific limits.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SIXTEEN_R_LABELED_FAN_SPEED_CHANNEL_MATRIX",
+  "disposition_reason": "The review-layer method is complete without inventing whether R means rear, redundant, reported or another platform term: retain every exact R-labeled identity, require the Project dictionary and fan/controller map at runtime, enumerate and read all sixteen records independently, correlate each with both UI locations and judge only against approved state-specific RPM/threshold/freshness rules. Missing Project bindings make execution NOT READY rather than keeping the engineering review Pending.",
+  "decision_basis": [
+    "XLSX row 895, its same-row DeepSeek fields, exact GPT V2 record, selection manifest, paired row 896 `_F`, related history and preserved V3.1 record were directly reviewed.",
+    "The paired `_F` family makes a front/rear rotor interpretation plausible but not authoritative; neither suffix may be expanded without the platform fan drawing or controller definition.",
+    "Standard IPMI SDR inventory can support read-only discovery, but the literal range and OEM/controller parameters are not portable and may not be guessed.",
+    "ED-03 prohibits guessed OEM parameters, ED-15 prohibits PASS without approved limits, ED-17 preserves logs and ED-20 requires all sixteen R identities to remain distinct from all sixteen F identities."
+  ],
+  "test_case": {
+    "test_name": "Verify SPD_FAN1_R through SPD_FAN16_R as sixteen independently mapped speed channels",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every defined SPD_FAN1_R through SPD_FAN16_R record is separately human readable in Dashboard and Server Health, maps to its authoritative physical fan/rotor or controller channel, and reports the correct speed, units, health, supported thresholds and freshness for the unchanged current cooling-control state.",
+    "required_package": [
+      "Chassis, fan-board/controller and BMC build plus the authoritative definitions of SPD_FAN, suffix `_R` and the separate `_F` family",
+      "Sixteen-row mapping from exact source token to physical fan module, rotor or other Project-defined channel, thermal zone, airflow direction, fan PN/serial and controller/tach input",
+      "Controller/bus/channel identity, tach pulses-per-revolution and scaling plus stable SDR/API and Dashboard/Server Health names",
+      "Approved RPM units/rounding/tolerance, threshold capability/values/hysteresis, health, polling/freshness and stale/no-reading rules for each supported control state",
+      "Current fan mode, PWM duty/target RPM, thermal zone, power/load, inlet/ambient, altitude and airflow context",
+      "Rules for empty/unfitted channels, stopped or missing rotor, front/R mismatch, duplicate/swapped identity and degraded cooling",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, BMC, kernel or thermal logs and do not change fan policy/PWM, remove or reseat fans, obstruct airflow, start load, alter thresholds or write the controller. First bind each exact SPD_FAN1_R through SPD_FAN16_R token to the approved Project suffix/channel map; never infer R from its letter. Enumerate the complete SDR/API repository and resolve all sixteen exact records separately; do not submit the tilde expression as one sensor unless that syntax is explicitly documented. Review the Script before use. Capture each record's immutable identity, physical mapping, RPM/value, units, status, supported threshold fields and timestamp with the matching Dashboard and Server Health row and simultaneous fan mode/PWM target/load/ambient context. Compare only with the approved state-specific rule. Stop without retry on missing, duplicate, swapped, stale or divergent evidence.",
+    "expected_result": "All sixteen R-labeled source identities have explicit, authoritative and mutually distinct outcomes. Every applicable record and both UI views agree on the mapped physical/controller channel, speed, units, health, supported thresholds and freshness, and each speed satisfies the approved rule for its recorded cooling-control state. `_F`, aggregate fan data, a count, one sample or an assumed rear-rotor meaning never substitutes.",
+    "pass_fail_basis": "PASS requires sixteen explicit outcomes, an approved `_R` dictionary and fan/controller/tach map, complete independent OOB/two-UI evidence and engineer acceptance against per-state speed, threshold, status and freshness rules. A literal range result, truncated inventory, aggregate value, generic RPM limit, label-only match or `_F` evidence cannot pass. Missing/swapped/duplicate/stale identity, wrong scaling/unit, out-of-rule speed or required threshold/status/UI mismatch is FAIL. Missing Project semantics, mapping, state rules or reviewed access is NOT READY, not Engineering Decision Pending or PASS; fan-fault stimulus and control response remain outside this passive display case.",
+    "safety_gate": [
+      "Preserve SEL, BMC, kernel and thermal evidence; do not perform the source's generic clear-log step.",
+      "Enumerate sixteen exact records; do not treat the tilde expression, a count, aggregate fan object or the separate `_F` family as coverage.",
+      "Do not infer `_R` semantics or OEM controller parameters and do not apply one RPM rule across different fan modes, models or environments.",
+      "Do not change PWM/fan policy, remove/reseat/stop a fan, block airflow, add thermal load, alter thresholds or write the controller.",
+      "Do not truncate output, expose credentials or execute an unpinned/unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/fan-board/controller/BMC identity and approved SPD_FAN/`_R`/`_F` definitions",
+      "Sixteen-row exact-token to physical module/rotor-or-channel/zone/PN/serial/controller-tach mapping with pulses-per-revolution/scaling",
+      "Complete separate SDR/API readings for all sixteen R-labeled channels with RPM/value, units, thresholds, state and synchronized timestamps plus matching Dashboard and Server Health visual evidence",
+      "Simultaneous fan mode, PWM duty/target, load, inlet/ambient, altitude and airflow with the applied state-specific rule",
+      "Explicit empty/missing/stopped/duplicate/swapped/stale/front-R mismatch disposition and reviewed Script/tool audit",
+      "No-clear/no-fan-or-airflow-or-load-or-threshold change/no-retry proof, final BMC/cooling health and per-channel engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On unknown suffix/channel semantics, mapping ambiguity, stale/divergent telemetry or unexpected cooling/BMC health change, stop and preserve first-pass evidence and the unchanged fan-control/environment state. Obtain the authoritative fan/controller definition and use approved read-only diagnostics; do not manipulate fans, airflow, load or controls to force a result. Any separately authorized fan or power action requires its own safety and recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, both UI paths and Criteria consistently request passive speed-sensor display/spec validation. The undefined suffix and range syntax are Project execution bindings, not contradictory source purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The passive sixteen-channel purpose and a safe parameterized method are clear. Project fan/controller documentation can supply suffix, topology, scaling and acceptance bindings without changing the review decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Authoritative `_R`/`_F` semantics, sixteen physical fan/rotor-or-channel/controller mappings, tach scaling, stable sensor/UI IDs, per-state speed/threshold/status/freshness rules, cooling context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO FAN, AIRFLOW, LOAD OR CONTROL CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define Project suffix semantics, physical topology, tach scaling or acceptance."}],
+  "project_authority": "Platform fan drawing, fan/controller/SDR definition, thermal-control policy, Dashboard/Server Health schema and Project recipe define suffix meaning, topology, state-specific speed acceptance and unsupported/absent behavior.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "sixteen_R_labeled_outcomes_required": true, "R_interpreted_as_rear_without_project_definition": false, "literal_range_query_allowed_without_documentation": false, "F_family_substitution_allowed": false, "cooling_mutation_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|896|Wistron-BMC-00186-V003", "next_pending_case_variant_id": "2f85faaf14985c9f"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
