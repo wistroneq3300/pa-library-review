@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 39,
+  "source_key": "Functionality|849|Wistron-BMC-00139-V002",
+  "case_variant_id": "57df9b403d675892",
+  "source_ref": {"sheet": "Functionality", "source_row": 849, "code": "Wistron-BMC-00139-V002", "original_row_sha256": "b16aabd2caba76c940d34e794a18ebd8dceae8cd68470d49131d0cc6876fba12", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Menu Bar (row)", "procedure": "Check logo design and check that unspecified information is correct.", "criteria": "Logo is clear with no spelling error and matches the customer's requirement.", "deepseek": "PARTIAL follows the Items label and invents menu enumeration/clickability, which does not test the written logo/info Procedure or logo-only Criteria.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION combines menu navigation, logo, information and role visibility, but that combined matrix does not resolve which conflicting source purpose is authoritative."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1011_57df9b403d675892.json",
+  "old_problem": "Items, Procedure and Criteria identify different UI objects and acceptance evidence. The source never states whether logo/info are content within the row menu or whether menu inventory/navigation is intended at all.",
+  "new_disposition": "RETAINED_BLOCKED_ROW_MENU_VERSUS_LOGO_INFORMATION_SCOPE_CONFLICT",
+  "disposition_reason": "The missing element is not merely a customer logo asset or route list; it is the authoritative test purpose. Selecting row-menu enumeration/navigation, logo/customer branding, named information correctness or an unapproved union would change coverage. ED-08 requires real visual evidence, ED-15 forbids PASS without per-object expected results, ED-20 preserves this row's identity, ED-33 preserves the conflicting Master text and ED-34 permits BLOCKED for unresolved core semantics.",
+  "decision_basis": [
+    "XLSX row 849, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Menu layout/presence, menu route behavior, logo visual branding and information correctness are independent UI checkpoints with different authorities and evidence.",
+    "The immediately following Menu Bar (column) row has a related but different Procedure, so it cannot be used to infer this row's missing relationship.",
+    "Blind menu activation is unsafe because an unknown inventory may expose power, reset, firmware, configuration or logout actions."
+  ],
+  "test_case": {
+    "test_name": "Resolve and then verify row-menu, logo and information checkpoints without cross-substitution",
+    "automation_classification": "BLOCKED",
+    "purpose": "Preserve the original row-menu Items identity, logo/information Procedure and logo-only Criteria until an authorized engineer defines which checkpoints are intended. After resolution, verify each selected UI object against its own authoritative expected result and never let menu evidence stand for branding or branding stand for menu navigation.",
+    "required_package": [
+      "Signed scope decision selecting row-menu layout/navigation, logo/customer branding, named information fields or explicitly separate retained checkpoints",
+      "For menu scope: exact row/horizontal location, approved item labels/order, role/locale/viewport matrix, route per item, enabled/disabled behavior and safe-action exclusions",
+      "For logo scope: approved customer asset/version, wording, placement, dimensions, clarity/rendering rules and authorized visual approver",
+      "For information scope: named fields, authoritative read-only source, freshness, units/format and tolerances",
+      "Immutable BMC identity, firmware/WebUI build, endpoint/certificate, protected role account, evidence redaction and unexpected-action recovery"
+    ],
+    "test_command": "DO NOT EXECUTE while the block remains. The BMC UI/test owner must first reconcile Items, Procedure and Criteria and produce separately named checkpoints with their own oracles. After approval, bind the exact build/role/locale/viewport; capture real DOM/screenshots for the row menu and logo as selected; compare only named information fields with their authoritative timestamped source; and activate only an allowlisted read-only navigation item once per approved checkpoint. Keep menu presence/order, safe route navigation, logo clarity/customer match and information correctness as separate results. Do not click an undefined menu set, clear logs, infer missing scope or retry automatically.",
+    "expected_result": "Before scope resolution, no DUT verdict is valid. After resolution, each retained checkpoint independently matches its approved oracle: row menu layout/inventory where selected, safe navigation route per item where selected, logo clarity/spelling/customer asset where selected, and named information fields with correct source/freshness where selected. Omitted original branches remain explicitly unverified under the approved override, and no state-changing action occurs.",
+    "pass_fail_basis": "PASS is prohibited until the source-scope decision and per-checkpoint expected results exist. Once supplied, every retained checkpoint requires its own complete evidence and engineer verdict. A menu list or successful route cannot prove logo/customer match; a clear logo cannot prove menu inventory/order/routes; unspecified visible text cannot prove `info is correct`. Any missing retained branch, cross-substituted evidence, unapproved route/action, wrong branding or incorrect/stale named field is FAIL; absent semantic reconciliation remains BLOCKED.",
+    "safety_gate": [
+      "Do not infer menu, logo and information are one test merely because they may share a header; their controls and oracles differ.",
+      "Do not run a clickability sweep before an approved safe menu inventory and explicit exclusion of power/reset/update/configuration/logout actions.",
+      "Never use navigation success as branding evidence or logo evidence as menu coverage.",
+      "Use an identity-bound isolated browser, protected session and fixed role/locale/viewport; redact credentials, cookies, serials and customer-sensitive content.",
+      "Preserve BMC/security/system logs and first-failure route evidence; do not clear or automatically retry.",
+      "Stop if scope, menu/route oracle, branding reference, information source or safe-click boundary remains undefined."
+    ],
+    "expected_evidence": [
+      "Signed engineer decision aligning Items, Procedure and Criteria while preserving the original Master text",
+      "BMC firmware/WebUI build, endpoint/certificate identity, account role, locale, viewport and protected-session evidence",
+      "If menu retained: approved row-menu inventory/order plus DOM/screenshot and per-allowlisted-item route/navigation results",
+      "If logo retained: approved customer asset/style reference plus rendered visual evidence and human annotations for clarity, spelling, placement and match",
+      "If information retained: named displayed fields with authoritative source, timestamp/freshness, units/format and comparison",
+      "Coverage ledger for every retained/omitted branch, proof no state-changing action occurred and engineer verdict"
+    ],
+    "recovery": "Before resolution, recovery is avoidance. If later an allowlisted navigation unexpectedly invokes a mutation, stop immediately, preserve the exact route/request/audit evidence, close the session and have the authorized owner verify BMC state through the approved OOB path. Do not repeat the action or clear logs."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Items specifies row menu, Procedure specifies logo plus unnamed information, and Criteria judge only logo clarity/spelling/customer match; no text connects these into one determinate operation and acceptance model."},
+  "blocked": {"before": true, "after": true, "reason": "The authoritative purpose and coverage split are unresolved. Selecting or merging a branch would invent semantics, and safe menu actions cannot be defined until scope is chosen."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Requires a core engineering scope decision, not just runtime configuration: choose and define row-menu, logo and information checkpoints with per-checkpoint authorities and safety boundaries.", "execution_status": "BLOCKED; NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "The Project/customer WebUI navigation specification, approved branding asset/style guide and named information-source documentation become authoritative only after the testcase owner resolves which branches belong to this source row.",
+  "unblock_condition": "Signed testcase-owner decision reconciling Items/Procedure/Criteria, preserving original text, enumerating every retained or omitted branch, and supplying per-checkpoint expected results plus safe-action exclusions.",
+  "responsible_owner": "BMC WebUI product owner, SIT testcase owner and customer branding owner; security/OOB owner for any menu navigation.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "menu_logo_info_cross_substitution_allowed": false, "undefined_menu_click_sweep_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|850|Wistron-BMC-00140-V002", "next_pending_case_variant_id": "d806e215425cf3e3"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
