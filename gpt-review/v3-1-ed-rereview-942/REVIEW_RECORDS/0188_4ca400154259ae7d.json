@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 188,
+  "source_key": "Functionality|1002|Wistron-BMC-00292-V003",
+  "case_variant_id": "4ca400154259ae7d",
+  "source_ref": {"sheet": "Functionality", "source_row": 1002, "code": "Wistron-BMC-00292-V003", "original_row_sha256": "2a6168a361a83d6d6028eb0843e6c286e662cde6953a05b9d1d329bfaf2f099e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Get Watchdog Timer (IB)", "procedure": "Send in-band `ipmitool raw 0x06 0x25` on localhost and decode source-listed response Byte 2 Timer Use, Byte 3 Timer Actions, Byte 4 pre-timeout seconds and Byte 5 expiration flags.", "criteria": "Command should be sent without error.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/naomi/viking/bmc/ipmi-raw/29-30-31.reset-set_get_watchdog-timer.git", "deepseek": "YES preserves raw 0x06/0x25 but uses unsafe sshpass/host-key bypass, displays high-level output and defers field judgment to a user.", "gpt_v2": "FULLY AUTOMATABLE correctly extends parsing to the complete standard response, countdown and policy comparison without writes."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1160_4ca400154259ae7d.json",
+  "old_problem": "The historical record retained Pending for target/schema, complete parsing and expected Project policy. IPMI section 27.7 fully defines the eight response payload bytes and units; pinned ipmitool confirms the field masks and little-endian countdown conversion. Target and expected policy are finite readiness inputs.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULLY_AUTOMATABLE_COMPLETE_WATCHDOG_STATE_AND_POLICY_READ",
+  "disposition_reason": "Run raw 0x06/0x25 once on the verified localhost in-band path, require successful completion and exactly eight payload bytes, preserve every source-listed field, additionally decode the normative initial and present countdown words, and compare the complete state to the versioned Project watchdog policy. Surface running/imminent or disruptive-action states as structured non-PASS/alerts, but never Set, Reset, Stop, clear flags or change host power from this read case.",
+  "decision_basis": [
+    "XLSX row 1002, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 1003 were directly reviewed; next pending was verified as Functionality row 1003 / variant 7339534cafad160e.",
+    "IPMI v2.0 section 27.7 defines eight response payload bytes after completion: Timer Use, Timer Actions, pre-timeout interval, expiration flags, two-byte initial countdown and two-byte present countdown.",
+    "The standard defines running/logging/use, pre-timeout interrupt, timeout action and flag masks, requires reserved values to be rejected, and stores countdowns little-endian at 100 ms per count. The source's Bytes 2-5 remain intact while the omitted countdown fields are necessary supplemental safety evidence.",
+    "Pinned ipmitool maps standard uses/interrupts/actions and converts both countdown words from little-endian to seconds. High-level output can corroborate but raw completion, length, reserved-bit and field evidence remain mandatory.",
+    "ED-03, ED-15 through ED-19, ED-22, ED-24 and ED-28 preserve exact raw coverage and evidence; ED-33, ED-34, ED-36 and ED-38 allow fully automated read-only policy comparison and prohibit any corrective write or retry."
+  ],
+  "test_case": {
+    "test_name": "Read and validate the complete in-band IPMI watchdog state",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Provide a complete, deterministic snapshot of the intended BMC's watchdog configuration, expiration history and live countdown, compare it to the approved policy and expose imminent/disruptive states without changing watchdog, logs or host state.",
+    "required_package": [
+      "Immutable DUT/BMC/local-IPMI-device mapping, approved in-band interface/privilege and pinned ipmitool/parser/Script",
+      "Versioned strict parser requiring completion 00 and exactly eight payload bytes, with reserved-bit/value validation and standard use/interrupt/action/flag masks",
+      "Little-endian initial/present countdown decoder using 100 ms units and timestamp/collection-latency metadata",
+      "Approved watchdog policy for expected running/logging/use, action, pre-timeout, allowed expiration flags, initial countdown and warning/critical present-count thresholds",
+      "Protected local or verified secret-safe access, redaction-aware evidence store and alert routing that cannot invoke control commands"
+    ],
+    "test_command": "READ-ONLY AUTOMATION ONLY; DO NOT RUN DURING REVIEW. Bind the exact DUT/BMC/local IPMI device, preserve logs and invoke the pinned equivalent of `ipmitool raw 0x06 0x25` exactly once with a bounded timeout. Capture tool/transport status and IPMI completion separately; require completion 00 and exactly eight payload bytes. Decode Timer Use including running/logging and use, Timer Actions including pre-timeout interrupt and timeout action, pre-timeout seconds, every expiration flag, little-endian initial countdown and present countdown in 100 ms units; reject all reserved bits/encodings. Compare every field to the approved Project policy and calculate present-count safety status using timestamp/latency. Return structured PASS/non-PASS and urgent alert evidence as applicable. Do not clear logs/flags, use high-level text as sole evidence, call Set 0x24 or Reset 0x22, stop the timer, power/reset the host or retry automatically.",
+    "expected_result": "The single verified query completes successfully and returns exactly eight well-formed payload bytes. Every field decodes unambiguously, reserved bits are zero, countdown units/order are correct, and the complete watchdog state matches the approved Project policy without an unapproved imminent action or expiration flag. No mutation occurs.",
+    "pass_fail_basis": "PASS requires exact target, one raw 0x06/0x25 request, completion 00, exact eight-byte payload, valid standard decode and match of every Project-required field including initial/present countdown and permitted flags. Command success, only the four source-listed bytes, high-level text alone, reserved/unknown values, policy mismatch, disallowed expiration history or an armed/imminent unapproved disruptive action cannot pass. Missing policy is NOT READY rather than Engineering Decision Pending.",
+    "safety_gate": [
+      "Allow only read-only App NetFn 0x06 command 0x25 on the verified local IPMI device; deny Set, Reset, Stop, host power/reset and arbitrary raw commands.",
+      "Interpret `(IB)` from localhost as in-band, not InfiniBand, and verify DUT-to-BMC mapping before collection.",
+      "Preserve watchdog/SEL/host logs and expiration flags; do not perform the generic source log clear or clear flags to improve the result.",
+      "Use protected local/verified access; prohibit sshpass, plaintext credentials and host-key bypass.",
+      "If a countdown is imminent or an action is unsafe, emit an urgent alert and stop; do not issue a compensating write or automatic retry from this case.",
+      "Fail closed on timeout, nonzero completion, wrong length, reserved bits/values, parse ambiguity or stale policy."
+    ],
+    "expected_evidence": [
+      "DUT asset/serial, intended BMC/local interface and pinned firmware/tool/parser/Script/policy versions",
+      "Timestamp, collection latency, tool/transport status, IPMI completion and exact ordered eight-byte payload",
+      "Full decoded running/logging/use, interrupt/action, pre-timeout and expiration flags with reserved-bit checks",
+      "Initial/present countdown raw words, endian/unit conversion and warning/critical time calculation",
+      "Field-by-field policy comparison, alert status, no-write/no-clear/no-retry audit and automated result with engineer verdict ownership"
+    ],
+    "recovery": "No mutation is expected. On malformed, mismatched or imminent output, preserve the exact snapshot, raise the Project-defined alert and close the session. Any Set/Reset/Stop or host recovery belongs to a separately approved incident procedure; this case never changes the timer or repeats the query automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master raw command and listed first four fields align with IPMI. Adding the normative countdown fields completes safety evidence without replacing or contradicting source coverage."},
+  "blocked": {"before": false, "after": false, "reason": "The standard and pinned implementation define the full deterministic read. Target, policy and alert thresholds are finite Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DUT/BMC/local-IPMI mapping; pinned tool/parser/Script; complete expected watchdog policy; allowed flags; present-count warning/critical thresholds; alert routing and evidence policy.", "execution_status": "NOT STARTED; REVIEW-LAYER READ-ONLY CASE ONLY; NO WATCHDOG, IPMI, LOG, ALERT-REMEDIATION, RESET, POWER, HOST OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 27.7 and Table 27-4 define the complete eight-byte payload, masks, flags, little-endian initial/present countdown and 100 ms units."},
+    {"title": "ipmitool pinned ipmi_mc.c", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_mc.c", "application": "Implements standard use/interrupt/action decoding and converts both little-endian countdown words to seconds, useful as corroboration for the strict raw parser."}
+  ],
+  "project_authority": "The Project owner supplies the expected watchdog policy, allowed expiration history and alert thresholds. It may separately authorize remediation after an alert but cannot embed Set/Reset/Stop or flag clearing into this read-only case.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-22", "ED-24", "ED-28", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ib_interpreted_from_source_as_in_band_not_infiniband": true, "raw_0x06_0x25_preserved": true, "all_eight_payload_bytes_decoded": true, "source_bytes_2_through_5_preserved": true, "initial_and_present_countdown_added_as_normative_evidence": true, "high_level_output_is_corroboration_only": true, "flags_and_logs_preserved": true, "corrective_write_prohibited": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|1003|Wistron-BMC-00293-V002", "next_pending_case_variant_id": "7339534cafad160e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_watchdog_get_schema_researched": true, "pinned_ipmitool_field_and_countdown_decoder_researched": true, "case_specific_complete_state_and_imminent_alert_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
