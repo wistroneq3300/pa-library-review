@@ -1,0 +1,62 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 180,
+  "source_key": "Functionality|994|Wistron-BMC-00284-V004",
+  "case_variant_id": "b804dc50fc09ee4a",
+  "source_ref": {"sheet": "Functionality", "source_row": 994, "code": "Wistron-BMC-00284-V004", "original_row_sha256": "96b67763ed36fc97c6944f1542e0b6d82bb90b5087dd416eb07241f647b81817", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "BMC Warm Reset (IB)", "procedure": "Send in-band `ipmitool raw 0x06 0x03` on localhost.", "criteria": "Command has no error; BMC is alive and functional after reset; BMC MAC/IP do not change; system power is unaffected.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/ipm-device-global-commands/bmc-warm-reset_ib", "deepseek": "PARTIAL sends the correct raw bytes through sshpass/host-key bypass, waits a fixed 30 seconds and checks only `mc info`.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires one approved warm reset, independent staged service readiness, before/after identity/network/host-state evidence and no fallback reset."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1152_b804dc50fc09ee4a.json",
+  "old_problem": "The historical record retained Pending for vendor warm-reset readiness, service timeline, independent recovery and Project invariants. IPMI defines App NetFn 0x06 command 0x03 as Warm Reset intended to clean internal device and communication-interface state, distinct from Cold Reset. Exact service order/timers and expected preserved settings are normal firmware-bound inputs.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_REQUIRES_CONFIRMATION_IN_BAND_BMC_WARM_RESET_WITH_STAGED_INTERFACE_RECOVERY",
+  "disposition_reason": "Issue raw 0x06/0x03 exactly once after approval and independently prove the warm-reset-specific communication-interface restart and staged recovery of required IPMI/Redfish/WebUI/SOL services. Verify MAC/IP and approved persistent configuration plus host power/boot continuity. Do not infer a cold-reset initialization, use the preceding case's evidence, promote DeepSeek's 30-second sleep to an SLA, or fall back to cold reset/host power.",
+  "decision_basis": [
+    "XLSX row 994, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 995 were directly reviewed; next pending was verified as Functionality row 995 / variant 7f821fe8f0c3434d.",
+    "IPMI v2.0 section 20.3 states that Warm Reset cleans internal device state and communication interfaces. It is a separate command from section 20.2 Cold Reset and does not authorize assuming the cold-reset power-up-default sequence.",
+    "Because communication interfaces are the function being reset, a single returning `mc info` response can precede other management services. Project-defined staged readiness and a stabilization window are required to prove BMC functionality.",
+    "The source requires stable MAC/IP and unaffected system power. Independent before/during/after observers must compare network/config and prove no host power or boot transition while the BMC interfaces restart.",
+    "ED-06, ED-15 through ED-19, ED-24, ED-26 through ED-28 and ED-30 preserve exact warm-reset identity, service-level evidence, recovery and no retry; ED-33 through ED-38 permit Project parameterization with explicit confirmation."
+  ],
+  "test_case": {
+    "test_name": "Verify one in-band IPMI BMC warm reset and staged communication-service recovery",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the exact BMC accepts one standard in-band Warm Reset, cleans/restarts its management communication interfaces, returns all required services with unchanged MAC/IP and persistent configuration, and does not alter the SUT host power or boot instance.",
+    "required_package": [
+      "Immutable DUT/BMC/local-IPMI/management-endpoint identity, firmware-documented warm-reset support and pinned ipmitool/parser/reviewed Script revision",
+      "Baseline Get Device ID, MAC, IPv4/IPv6/VLAN/channel, certificate/endpoint, approved persistent settings, IPMI/Redfish/WebUI/SOL service and health evidence with preserved SEL/audit logs",
+      "Independent management-network plus host/console observers capable of recording interface outage/order of return without using the resetting localhost IPMI session",
+      "Owner-defined service-by-service readiness and stabilization sequence/timeouts for this firmware; DeepSeek's 30 seconds is historical only",
+      "Initial/final host power rule and, if On, continuous boot ID/uptime/service evidence; if Off, continuous Off evidence",
+      "Protected local execution, maintenance window, drained management sessions, explicit one-reset approval and a warm-reset-specific recovery runbook"
+    ],
+    "test_command": "AUTHORIZED HYBRID PROCEDURE ONLY; DO NOT EXECUTE DURING REVIEW. Verify the DUT/BMC/local-IPMI mapping and independent observers; preserve logs and capture BMC identity, network/persistent configuration, each required management service/health and host power/boot baseline. Drain active management operations. After explicit approval send exactly one protected local `ipmitool raw 0x06 0x03` and capture completion. Independently record the warm communication-interface outage/reset witness, then poll each approved service to readiness in its observed order until bounded timeouts and continue through stabilization. Recompare exact MAC/IP/VLAN/channel/certificate and persistent settings. Concurrently prove the host never changed power; if On, boot ID/uptime and services remain continuous, and if Off it remains Off. Preserve expected/unexpected logs. Stop on failure; never send cold reset, host power or a second warm reset automatically.",
+    "expected_result": "The single Warm Reset is accepted; the intended BMC communication interfaces show a reset/restart and every required management service returns and remains stable within its approved firmware-specific bounds. BMC identity, MAC/IP and persistent settings are unchanged, and the host retains its original power state and boot instance. Only expected warm-reset events occur and no service or alarm remains degraded.",
+    "pass_fail_basis": "PASS requires exact target, approval, one raw 0x06/0x03 request, accepted completion, independent warm-interface restart witness, complete staged service readiness/stabilization, unchanged MAC/IP/configuration and unchanged host power/boot. Fixed 30-second sleep, ping, first `mc info`, cold-reset evidence or command acknowledgement alone cannot pass. Timeout, partial service return, identity/config drift, host transition or unexpected alarm is FAIL; missing timers/mappings is NOT READY rather than Pending.",
+    "safety_gate": [
+      "Require explicit confirmation immediately before the warm reset after rechecking exact target, management-session drain, independent observers and recovery access.",
+      "Use protected local/verified access; prohibit sshpass, plaintext credentials and host-key bypass.",
+      "Preserve logs and per-service baseline; do not clear evidence or assume all interfaces are ready when the first one responds.",
+      "Deny cold reset, host reset/power, AC/DC cycle and arbitrary raw commands; another reset is not automatic recovery.",
+      "Stop on unsupported/ambiguous completion, missing warm-reset witness, any service timeout, network/config drift, host power/boot change or alarm. Do not retry automatically.",
+      "Any recovery mutation requires separate incident authorization and cannot count as this warm-reset result."
+    ],
+    "expected_evidence": [
+      "Approval, exact DUT/BMC/local-IPMI/observer identities and pinned firmware/tool/parser/Script versions",
+      "Pre-reset network/persistent config, per-service/health, preserved logs and host power/boot baseline",
+      "Redacted raw request/completion plus timestamped communication-interface outage and staged IPMI/Redfish/WebUI/SOL return",
+      "Post-stabilization service health and exact MAC/IP/configuration comparison",
+      "Host power/boot/service continuity or continuous-Off proof, expected-event/no-retry audit and engineer verdict distinct from Cold Reset"
+    ],
+    "recovery": "On incomplete warm-service recovery or invariant drift, stop without cold/warm reset or host power fallback, retain all evidence and keep the host in its current safe state. Use the approved independent management/console incident procedure under new authorization; verify every required interface and host invariant before closure and escalate any persistent failure."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Warm Reset command and network/host invariants are coherent. DeepSeek's fixed sleep and shallow post-check do not create an authoritative conflict."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI defines Warm Reset's internal/interface cleanup. Firmware-specific service order, timeouts, baselines and recovery are finite Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact target/local-IPMI map; warm-reset support; per-interface readiness/stabilization SLA; MAC/IP/persistent config and host invariant; expected events; independent observer and recovery runbook.", "execution_status": "NOT STARTED; REVIEW-LAYER HYBRID CASE ONLY; NO IPMI, RESET, LOG, NETWORK, POWER, HOST OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 20.3 defines Warm Reset as internal-state and communication-interface cleanup and distinguishes it from section 20.2 Cold Reset."},
+    {"title": "ipmitool pinned ipmi_mc.c", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_mc.c", "application": "Implements distinct warm/cold management-controller reset selection and completion handling."},
+    {"title": "OpenBMC official ipmitool command guide", "url": "https://github.com/openbmc/docs/blob/master/IPMITOOL-cheatsheet.md", "application": "Lists warm and cold BMC reset as separate operations; a high-level command remains supplemental to the required raw in-band coverage."}
+  ],
+  "project_authority": "The Project owner binds the warm-reset-capable firmware, required service set, readiness/stabilization timeouts, persistent configuration and host invariant, and supplies an independent recovery path. These inputs do not change the standard 0x06/0x03 operation.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-24", "ED-26", "ED-27", "ED-28", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-37", "ED-38"], "user_ed_01_30_reviewed": true, "ib_interpreted_as_in_band": true, "raw_0x06_0x03_warm_reset_preserved": true, "warm_interface_cleanup_not_cold_initialization": true, "warm_and_cold_evidence_independent": true, "staged_service_readiness_required": true, "mac_ip_persistent_config_and_host_invariants_required": true, "fixed_30_second_sleep_rejected_as_sla": true, "logs_preserved": true, "explicit_confirmation_required": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|995|Wistron-BMC-00285-V004", "next_pending_case_variant_id": "7f821fe8f0c3434d"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_warm_reset_semantics_researched": true, "pinned_ipmitool_reset_mapping_researched": true, "case_specific_staged_interface_recovery_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
