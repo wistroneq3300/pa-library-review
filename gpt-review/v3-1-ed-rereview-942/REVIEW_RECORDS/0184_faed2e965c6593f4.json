@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 184,
+  "source_key": "Functionality|998|Wistron-BMC-00288-V004",
+  "case_variant_id": "faed2e965c6593f4",
+  "source_ref": {"sheet": "Functionality", "source_row": 998, "code": "Wistron-BMC-00288-V004", "original_row_sha256": "d999787106d010901a2253b117a3aa2f9535617ec7428028c19a2e42c1e518fa", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Get ACPI Power State (IB)", "procedure": "When the system is powered on, send in-band `ipmitool raw 0x06 0x07` on localhost.", "criteria": "Command is sent without error; reported state agrees with system power status. Source mapping: response Byte 2 `00` means system power on and `05` means system power off.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/naomi/viking/bmc/ipmi-raw/3-4.set-get_acpi-power_state", "deepseek": "YES uses the correct raw request through unsafe sshpass/host-key bypass, but its evidence text incorrectly labels raw 0x06 0x04 and leaves judgment unparsed.", "gpt_v2": "FULLY AUTOMATABLE correctly requires raw 0x06/0x07, response grammar and independent state comparison, but calls the standard mapping platform-specific instead of decoding the full normative state table."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1156_faed2e965c6593f4.json",
+  "old_problem": "The historical record retained Pending for target, response schema and an independent power-state source. IPMI section 20.7 fully defines the two-byte payload and warns that the controller's recorded value is independent from, and may not match, actual system power. Those execution bindings are finite prerequisites, not unresolved semantics.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULLY_AUTOMATABLE_IN_BAND_ACPI_REPORTED_STATE_READ_AND_INDEPENDENT_COMPARISON",
+  "disposition_reason": "Run the exact read-only 0x06/0x07 once under the source's host-powered-on condition, require completion plus exactly two payload bytes, decode both system and device enumerations from the standard and independently compare the recorded system value to contemporaneous actual state. Under this source condition `00`/S0 is the expected PASS value; `05` is preserved as the S5 decode but is a mismatch while the host is independently On, not proof that chassis power is Off. Never substitute raw 0x06/0x04 or issue Set/power actions to manufacture a result.",
+  "decision_basis": [
+    "XLSX row 998, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 999 were directly reviewed; next pending was verified as Functionality row 999 / variant 4bbb9618d214e206.",
+    "IPMI v2.0 section 20.7 says Get ACPI returns the present power-state information previously set into the controller; it is an independent setting that may not match actual system power.",
+    "Table 20-8 defines completion plus two data bytes: system state and device state. It normatively maps 00 to S0/G0, 05 to S5/G2 and additional standard states, requires reserved bits/codes to be zero, and defines 2A as unknown/not initialized or lost tracking.",
+    "The source explicitly constrains execution to system powered On, so an exact contemporaneous comparison expects recorded S0/00. Its 05 mapping remains preserved for decoding and fault evidence but cannot be accepted against an independently On host.",
+    "ED-03, ED-15 through ED-19, ED-22, ED-24 and ED-28 preserve the exact read, full payload and evidence; ED-33, ED-34, ED-36 and ED-38 allow protected read-only automation with Project target/observer bindings and no state-changing fallback."
+  ],
+  "test_case": {
+    "test_name": "Decode the BMC-recorded ACPI system/device state and compare with actual host state",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the intended BMC's in-band Get ACPI response is well formed and, while the source's host-On precondition is true, reports S0 for the system plus a valid device state consistent with the approved device-state reference, without changing any power or management state.",
+    "required_package": [
+      "Immutable DUT/BMC/local-IPMI-device mapping, approved in-band interface/privilege and pinned ipmitool/parser/Script versions",
+      "Versioned parser separating tool/transport and IPMI completion from exactly two payload bytes and implementing every standard system/device enumeration plus reserved-bit validation",
+      "Contemporaneous independent actual host power/ACPI observer proving the source's On condition, and Project mapping for the applicable device/D-state reference",
+      "Freshness/timestamp policy and protected local or verified secret-safe access with a bounded timeout",
+      "Evidence store preserving raw bytes, decoded recorded state, independent actual state and no-write/no-clear/no-retry audit"
+    ],
+    "test_command": "READ-ONLY AUTOMATION ONLY; DO NOT RUN DURING REVIEW. Bind the exact DUT/BMC/local IPMI device and independently prove the host is currently On in the source-supported condition. Preserve logs, then execute the pinned equivalent of `ipmitool raw 0x06 0x07` exactly once with a bounded timeout. Capture tool/transport status and IPMI completion separately from stdout; require completion 00 and exactly two payload bytes. Require response bit 7/reserved fields to be zero, decode the full standard system and device enumerations, and compare the first payload byte to actual state within the freshness window. For this run PASS requires system `00`/S0 and a valid Project-expected device value; retain `05` as S5 diagnostic meaning but fail it against the On observer. Store raw/structured evidence. Do not run 0x06/0x04, Set ACPI, chassis power, reset, log clear or automatic retry.",
+    "expected_result": "The verified in-band request completes successfully and returns exactly two valid payload bytes. The system byte is `00`/S0 under the independently proven host-On condition, the device byte is a valid expected D-state, all reserved bits are zero, and recorded and actual state evidence is fresh and consistent. No state or log mutation occurs.",
+    "pass_fail_basis": "PASS requires exact target, contemporaneous host-On proof, one raw 0x06/0x07 request, successful completion, exact two-byte payload, valid reserved bits/enumerations, recorded S0/00 and the approved device-state match. Exit success alone, raw 0x06/0x04, a one-byte parser, `05` while host is On, 2A unknown, any unsupported/reserved code, stale/missing actual-state evidence or command substitution cannot pass. Missing mapping/observer is NOT READY rather than Engineering Decision Pending.",
+    "safety_gate": [
+      "Allow only read-only App NetFn 0x06 command 0x07 on the verified local IPMI device; deny Set ACPI, reset, power and arbitrary raw commands.",
+      "Interpret `(IB)` from the localhost source as in-band, not InfiniBand, and verify the host-to-BMC association before invocation.",
+      "Do not infer actual chassis power from the BMC-recorded ACPI byte alone; require a fresh independent observer and retain discrepancies.",
+      "Use protected local/verified access; prohibit sshpass, plaintext credentials and host-key bypass. Preserve logs rather than performing the generic source log clear.",
+      "Fail closed on timeout, nonzero completion, wrong length, nonzero reserved bits, unknown/unsupported state or actual-versus-recorded mismatch; do not retry or change state automatically."
+    ],
+    "expected_evidence": [
+      "DUT asset/serial, intended BMC/local interface and pinned tool/parser/Script versions",
+      "Timestamped independent host-On/ACPI observation and approved expected device-state source",
+      "Tool/transport status, IPMI completion, exact two-byte raw payload and length/reserved-bit validation",
+      "Full decoded system/device enumerations and freshness-aligned recorded-versus-actual comparison",
+      "No-write/no-clear/no-substitution/no-retry audit and automated result with engineer verdict ownership"
+    ],
+    "recovery": "No mutation is expected. On invalid or mismatched output, preserve raw response and the independent state evidence, close the session and investigate only target mapping, prior ACPI notification flow, firmware tracking or parser under owner control. Do not send Set ACPI, power, reset or log-clear commands as recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master raw command, host-On condition and 00/05 shorthand are compatible with the standard S0/S5 mapping. DeepSeek's 0x04 evidence label is a review defect, not a competing source requirement."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI defines the complete response grammar. Exact target, actual-state observer, expected device state and freshness are ordinary Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DUT/BMC/local-IPMI binding; pinned tool/parser/Script; independent host-On/ACPI observer; expected device-state mapping; timeout/freshness and evidence policy.", "execution_status": "NOT STARTED; REVIEW-LAYER READ-ONLY CASE ONLY; NO IPMI, SSH, ACPI, LOG, POWER, HOST OR DUT COMMAND EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 20.7 and Table 20-8 define the independent recorded-state semantics, two-byte response, standard S/D enumerations, reserved-zero requirement and unknown-state meaning."}
+  ],
+  "project_authority": "The Project owner binds the local interface and contemporaneous actual-state source and supplies the applicable expected device D-state. It cannot treat the recorded byte alone as chassis-power truth or relax the source's On-condition S0 requirement without an approved test change.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-22", "ED-24", "ED-28", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ib_interpreted_from_source_as_in_band_not_infiniband": true, "raw_0x06_0x07_preserved": true, "raw_0x06_0x04_substitution_rejected": true, "both_payload_bytes_decoded": true, "recorded_state_not_chassis_power_truth": true, "source_00_and_05_mapping_preserved": true, "host_on_requires_s0_00": true, "logs_preserved": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|999|Wistron-BMC-00289-V004", "next_pending_case_variant_id": "4bbb9618d214e206"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_get_acpi_schema_researched": true, "recorded_versus_actual_state_semantics_corrected": true, "case_specific_host_on_and_two_byte_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
