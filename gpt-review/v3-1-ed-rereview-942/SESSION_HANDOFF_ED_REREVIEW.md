@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **62 / 942**
-- Last reviewed: `Functionality|872|Wistron-BMC-00162-V004` / `1cdb4bb72758f161`
-- Next source-verified pending identity: `Functionality|873|Wistron-BMC-00163-V004` / `ccd4f9f5b6472dac`
-- Latest disposition: TEMP_DCSCM is removed from Pending with exact DCSCM FRU/instance/topology and sensing-point ownership, complete capability-aware OOB/WebUI evidence and the versioned component-local thermal matrix. Ambient substitution, invented thresholds, active stimulus, clear, truncation and unreviewed Script execution are prohibited.
+- Completed: **63 / 942**
+- Last reviewed: `Functionality|873|Wistron-BMC-00163-V004` / `ccd4f9f5b6472dac`
+- Next source-verified pending identity: `Functionality|874|Wistron-BMC-00164-V003` / `045d1d7594ddf477`
+- Latest disposition: TEMP_CPU0~1 is removed from Pending as a population-aware per-socket matrix joining physical/BIOS/BMC/OS identities to separate complete CPU sensor/UI/spec evidence. Literal tilde queries, one/average-for-both evidence, unjustified absent-socket N/A, stress, clear and unreviewed Script execution are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.

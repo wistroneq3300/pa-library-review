@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 63,
+  "source_key": "Functionality|873|Wistron-BMC-00163-V004",
+  "case_variant_id": "ccd4f9f5b6472dac",
+  "source_ref": {"sheet": "Functionality", "source_row": 873, "code": "Wistron-BMC-00163-V004", "original_row_sha256": "7afab791b2389eddbe28087b7af7ff7feb43a6321535da9fc44b6eb559aec8a7", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_CPU0~1", "procedure": "Generic setup says clear logs; open Hardware Status > Sensors and compare each sensor reading/setting with BMC sensor spec.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES sends `TEMP_CPU0~1` as one literal name and truncates fallback output; it proves neither CPU population/socket mapping nor separate CPU0/CPU1 UI/spec fields.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires per-CPU topology, complete read-only records and separate evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1035_ccd4f9f5b6472dac.json",
+  "old_problem": "Range notation was treated as a literal sensor operand and one response could be misreported as two-socket coverage. Actual socket population, BMC/BIOS/OS numbering, stable per-CPU sensors, threshold capability, load/freshness and separate WebUI rows were absent.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_POPULATION_AWARE_PER_SOCKET_CPU_SENSOR_MATRIX",
+  "disposition_reason": "The source intent is read-only per-sensor validation. Enumerate actual CPU population, map each populated physical socket through BIOS/BMC and OS/APIC identities to its own SDR/API and WebUI row, and evaluate every expected CPU independently. An unpopulated socket is N/A only with configuration proof; one/combined/average evidence never covers another socket. Exact topology/spec values are runtime prerequisites.",
+  "decision_basis": [
+    "XLSX row 873, same-row DeepSeek, exact GPT V2, Script reference, selection manifest and historical record were directly reviewed.",
+    "`CPU0~1` is range notation, not a guaranteed IPMI wildcard or literal record name.",
+    "CPU numbering can differ across physical sockets, BIOS/BMC and OS/APIC, so topology join is required before field comparison.",
+    "ED-13 requires proof for unpopulated-socket N/A; ED-15 requires per-socket criteria; ED-17 rejects clearing; ED-20 forbids one socket substituting for another."
+  ],
+  "test_case": {
+    "test_name": "Verify each populated CPU0/CPU1 temperature sensor independently against topology and specification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every populated CPU sensor represented by `TEMP_CPU0~1` is individually readable in Hardware Status > Sensors and has the correct physical socket/package identity, Celsius reading, units, health, implemented thresholds/hysteresis and freshness for the platform specification at the recorded passive load state.",
+    "required_package": [
+      "Exact board/BIOS/BMC, fitted CPU model/stepping and physical socket-to-BMC/BIOS/OS/APIC package map",
+      "Stable SDR/API number/name/type/entity/instance and WebUI row for each expected populated CPU",
+      "Per-socket Celsius scaling/rounding, tolerance, threshold capability/values/hysteresis and health/unavailable rules",
+      "Recorded host power/load/frequency state, BMC time, optional host package telemetry, update lag and approved delta",
+      "Validated protected OOB/API/browser clients",
+      "Pinned reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, add CPU stress, change power/fan policy or write thresholds. Inventory fitted sockets and build the physical/BIOS/BMC/OS numbering map. Enumerate the complete sensor repository; resolve separate stable CPU records for every populated socket instead of querying `TEMP_CPU0~1` literally. Review the Script before use. For each expected CPU independently capture full identity, value, units, capability/threshold/hysteresis, status and timestamp plus its matching WebUI row and recorded passive load state. Compare with the per-socket Project matrix and optional time-aligned host telemetry using approved scaling/lag/tolerance. Mark an absent socket N/A only from the approved population map; stop on swaps, duplicates, stale data or disagreement without retry.",
+    "expected_result": "Every populated physical CPU socket has exactly one correctly mapped BMC sensor and WebUI row. Each independent record is readable, complete and agrees with its per-socket specification and approved freshness/tolerance; absent unpopulated sockets are explicitly proven N/A. No combined/average or other socket substitutes, and no logs/settings/load state are mutated.",
+    "pass_fail_basis": "PASS requires the population/numbering map and separate complete OOB/UI/spec agreement for every populated socket with engineer verdict. A literal tilde query, one CPU, combined metric, average, truncated list or index assumption cannot pass. Missing/swapped/duplicate sensor, unjustified N/A, stale/out-of-tolerance value, required-threshold/status mismatch or mutation is FAIL. Missing topology/spec/reviewed method is NOT READY, not Pending or PASS; dynamic thermal behavior is not covered.",
+    "safety_gate": [
+      "Do not clear diagnostic logs.",
+      "Do not query range notation literally or treat one/combined/average response as both CPUs.",
+      "Do not assume BMC index equals physical socket; bind entity metadata and platform topology.",
+      "Do not stress CPUs, alter fan/power settings or write thresholds.",
+      "Do not invent unsupported thresholds; N/A requires capability/population/spec proof.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Board/BIOS/BMC, CPU models and physical socket-to-BMC/OS/package numbering matrix",
+      "Complete expected sensor inventory and separate per-CPU raw identity/value/unit/capability/threshold/status/timestamp records",
+      "Separate Hardware Status > Sensors evidence for every populated CPU",
+      "Per-socket Project matrix, passive load/power state and approved tolerance/update-lag comparison",
+      "Explicit absent/missing/duplicate/swapped disposition and pinned Script/alternate-method evidence",
+      "No-clear/no-write/no-stress/no-retry proof, health and engineer per-socket verdict"
+    ],
+    "recovery": "No mutation is expected. On mapping ambiguity, stale/mismatched values or unexpected health change, stop and preserve each socket's first evidence; use approved BMC/OS topology diagnostics without load injection or settings changes. Isolate any mutating Script and restore only through the authorized owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The tilde is ambiguous as a command operand but the row consistently defines per-sensor read/spec validation; topology resolves execution identity."},
+  "blocked": {"before": false, "after": false, "reason": "Per-CPU read-only validation is clear. Population, mapping and specifications are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "CPU population/topology/numbering, separate sensor/UI identities, per-socket values/threshold capability/status/tolerance/freshness, protected client and pinned reviewed Script/manual method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "May be used only after immutable pinning and safety review; it cannot define CPU topology."}],
+  "project_authority": "Platform CPU topology/sensor map, CPU/BMC thermal limits, SDR/WebUI definitions and Project configuration define per-socket identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "literal_tilde_query_allowed": false, "per_socket_non_substitution": true, "unpopulated_na_requires_spec": true, "stress_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|874|Wistron-BMC-00164-V003", "next_pending_case_variant_id": "045d1d7594ddf477"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
