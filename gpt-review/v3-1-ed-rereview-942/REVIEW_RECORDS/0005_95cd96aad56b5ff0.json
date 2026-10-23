@@ -1,0 +1,32 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 5,
+  "source_key": "Functionality|740|Wistron-BMC-00030-V003",
+  "case_variant_id": "95cd96aad56b5ff0",
+  "source_ref": {"sheet": "Functionality", "source_row": 740, "code": "Wistron-BMC-00030-V003", "original_row_sha256": "9c3d8f771c397370c71a14a623478907dff5fd0f926ae671e1daa88ed99c8960", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Check DCSCM-CPLD version", "procedure": "The Master instead checks BMC/BIOS and sends raw BMC command 0x30 0x20.", "criteria": "Command success and correct versions before and after flashing.", "deepseek": "Lists BMC information and Redfish FirmwareInventory names, then looks for DCSCM-CPLD.", "gpt_v2": "Uses read-only inventory discovery with an owner-defined DCSCM member and expected version."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0908_95cd96aad56b5ff0.json",
+  "old_problem": "The source names DCSCM-CPLD but operates on BMC/BIOS data; DeepSeek further returns only inventory names, not a DCSCM firmware-version value.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_TEST",
+  "disposition_reason": "The named measurable objective is a DCSCM-CPLD version comparison. It can be expressed safely with read-only inventory discovery and a project-supplied exact component/property mapping. The copied BMC/BIOS/raw path is preserved but cannot satisfy DCSCM coverage unless the OEM specification explicitly decodes it as that component.",
+  "decision_basis": ["Exact XLSX row 740, DeepSeek, GPT V2 and historical record were read and identity/hash checked.", "The before/after criterion supplies a stable comparison shape even though expected values are project-specific.", "A missing inventory member/expected version is a readiness input under ED-36 and user rule C, not a reason to invent a PASS value or keep the review decision open.", "DMTF FirmwareInventory supports read-only discovery, while its member naming and DCSCM exposure remain implementation-specific."],
+  "test_case": {
+    "test_name": "Check DCSCM-CPLD active firmware version before and after the governed flash",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Identify the exact DCSCM-CPLD firmware inventory member, read its canonical active-version property without changing state, and compare it with approved pre-flash and post-flash versions.",
+    "required_package": ["DCSCM FRU/CPLD identity and stable inventory member mapping", "BMC firmware-supported read-only inventory resource or OEM decoder", "Approved source and target version matrix plus flash/activation reference", "Secure BMC access, certificate policy and JSON/IPMI tooling"],
+    "test_command": "With protected credentials and verified TLS, discover ServiceRoot -> UpdateService -> FirmwareInventory, retain the full collection and member documents, select the owner-mapped DCSCM-CPLD member, and extract its canonical active-version property. Use `ipmitool raw 0x30 0x20` only if an approved firmware-scoped decoder proves it returns this same DCSCM component.",
+    "expected_result": "The selected member maps uniquely to the intended DCSCM-CPLD, returns a valid active version, equals the approved before value before flashing and the approved target after activation, and the BMC/host/SEL health evidence contains no unexpected regression.",
+    "pass_fail_basis": "PASS requires exact member identity and version equality for both checkpoints. FAIL is wrong, unchanged or malformed active version after the referenced successful flash, or new health faults. HTTP success, a Name match or BMC version alone is not PASS. Missing mapping/Expected blocks execution but remains a Project prerequisite.",
+    "safety_gate": ["GET/read-only access only", "No UpdateService POST/PATCH, reset, flash or undocumented raw request", "Do not use `curl -k` or expose credentials", "Preserve full JSON and stop on duplicate/missing DCSCM candidates without guessing"],
+    "expected_evidence": ["DCSCM physical/logical identity and inventory URI", "Complete discovery, collection and member JSON with schema/tool timestamps", "Canonical version value before and after plus approved Expected source", "Separate flash/activation audit reference and BMC/SEL/host health"],
+    "recovery": "No mutation is performed. If discovery or values disagree, retain all responses and escalate the mapping/version discrepancy; do not reset or flash from this testcase."
+  },
+  "source_conflict": {"before": true, "after": false, "preserved_original_conflict": "BMC/BIOS and raw-command text remains immutable history.", "resolution": "Review-layer coverage is bound to the row's DCSCM-CPLD identity; other version outputs are corroboration only."},
+  "blocked": {"before": true, "after": false, "reason": "Read-only parameterization defines purpose, method, evidence and safety; exact member and Expected are runtime bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DCSCM member/property mapping and approved before/after versions.", "execution_status": "NOT STARTED"},
+  "external_authorities": [{"title": "DMTF Redfish Resource and Schema Guide DSP2046 2025.2", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "use": "Defines UpdateService FirmwareInventory discovery; it does not standardize this OEM's DCSCM member name."}],
+  "traceability": {"applicable_decisions": ["ED-03", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|741|Wistron-BMC-00031-V003", "next_pending_case_variant_id": "afbfe40eb5e1438c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
+
