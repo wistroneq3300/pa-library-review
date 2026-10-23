@@ -1,0 +1,107 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 1,
+  "source_key": "Functionality|708|Wistron-BIOS-00376-V002",
+  "case_variant_id": "7b183c46699511a7",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 708,
+    "code": "Wistron-BIOS-00376-V002",
+    "original_row_sha256": "a154344fa22aa02bac7dc9b70e5bf851cbed330b2a2a1c07f9308d5efc6bf281",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "SMM TSEG Range should cover the entire SMM region",
+    "procedure": "Flash a BIOS-RD debug BIOS, open BMC SOL, use AMI RU at I/O space register 0xB2, and verify that SmiHandler4 is absent; then collect results/photos and inspect post-test logs.",
+    "criteria": "SmiHandler4 must be skipped and the response must be human readable.",
+    "deepseek": "NO; requires a debug BIOS, AMI RU and BMC SOL and proposes recording the handler list.",
+    "gpt_v2": "BLOCKED; title asks for TSEG range coverage while the procedure and criterion observe SmiHandler4, with no defined equivalence."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0877_7b183c46699511a7.json",
+  "old_problem": "The title requires a range-containment property for all SMM TSEG memory, but the only source procedure and oracle are an undocumented I/O 0xB2 action and absence of SmiHandler4 in a debug SOL trace. The source does not define how that trace proves the titled property.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING",
+  "disposition_reason": "This is not a missing runtime parameter that can be safely parameterized. The authoritative test property, platform register model, debug instrumentation semantics and recovery contract remain absent. ED-51 explicitly preserves this decision rather than choosing either interpretation. User decisions ED-01 through ED-30 add safety and evidence rules but do not supply the missing case-specific semantic mapping.",
+  "decision_basis": [
+    "Exact Functionality row 708 was reopened from the protected XLSX and matched Source Key, Variant ID and row hash.",
+    "The same-row DeepSeek and GPT V2 records were read; DeepSeek identifies the operator boundary but does not resolve the semantic conflict.",
+    "ED-51 requires the owner to choose TSEG range validation versus SmiHandler4 debug-trace validation and prohibits an unapproved debug BIOS or register operation.",
+    "Intel public register documentation describes TSEG as a platform address range with TSEG memory-base and related memory-map registers; it does not establish that absence of a private SmiHandler4 label proves complete TSEG coverage.",
+    "No approved OEM/RD specification defining I/O 0xB2, SmiHandler4, the SMI stimulus or a safe rollback path exists in the repository."
+  ],
+  "test_case": {
+    "test_name": "SMM TSEG Range should cover the entire SMM region",
+    "automation_classification": "BLOCKED",
+    "purpose": "After the owner selects the authoritative branch, either validate complete SMM TSEG address-range coverage from platform-defined base/limit/allocation evidence, or validate the separately defined SmiHandler4 debug behavior. The two branches are not interchangeable.",
+    "required_package": [
+      "BIOS/RD decision selecting the authoritative property",
+      "Exact platform/CPU/chipset TSEG register map, units, locks and expected range, if range coverage is selected",
+      "Approved debug BIOS and rollback image hashes, AMI RU version, I/O 0xB2 semantics, SMI stimulus and SOL decoder, if handler behavior is selected",
+      "Independent OOB recovery procedure and maintenance authorization"
+    ],
+    "test_command": "NOT STARTED — no authoritative executable command exists. Do not flash the debug BIOS or issue AMI RU/I/O 0xB2 operations until BIOS/RD supplies the selected contract.",
+    "expected_result": "Unavailable as one unified oracle. A TSEG branch must prove the complete documented protected address interval and lock/state requirements; a handler branch must prove the approved stimulus omits SmiHandler4 while retaining the explicitly expected handlers. Owner approval must state which result governs.",
+    "pass_fail_basis": "No PASS threshold is currently authorized. PASS requires the selected branch's exact expected register/range or handler-sequence oracle and complete raw evidence; FAIL is any deviation from that approved oracle. Until then execution remains BLOCKED, not PASS or N/A.",
+    "safety_gate": [
+      "No debug BIOS flash, undocumented register access or SMI trigger before exact image-to-hardware compatibility and explicit approval",
+      "Stable power, verified OOB console, rollback image and recovery owner must be ready",
+      "Use read-only access where the approved contract permits; never infer or write an undocumented register",
+      "Stop on identity mismatch, lost console/control, boot failure or unexpected security/platform behavior; never automatically retry"
+    ],
+    "expected_evidence": [
+      "Owner/RD scope decision and authoritative specification",
+      "Platform, BIOS/BMC, debug image, AMI RU and decoder versions",
+      "If TSEG: raw base/limit/size/lock values and reproducible range calculation against the complete SMM allocation",
+      "If handler: defined SMI stimulus and full timestamped SOL trace with required and prohibited handlers",
+      "Pre/post boot, BMC, security and log health plus recovery evidence"
+    ],
+    "recovery": "No recovery action is authorized under the current ambiguous testcase. A future handler/debug-BIOS run requires the BIOS-RD-approved rollback image and OOB recovery steps; preserve first-failure evidence and do not retry automatically."
+  },
+  "source_conflict": {
+    "before": true,
+    "after": true,
+    "reason": "The title's TSEG range property and the procedure/criterion's SmiHandler4 behavior remain materially different and no controlling source connects them."
+  },
+  "blocked": {
+    "before": true,
+    "after": true,
+    "reason": "Core semantics, authoritative expected result and safe firmware/register recovery are unresolved."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "owner": "BIOS RD / Master testcase owner",
+    "missing_evidence": "A source-key-specific decision selecting the property, its authoritative register or handler contract, expected result and recovery package.",
+    "release_condition": "Publish the approved corrected review-layer contract and re-review this exact Source Key; do not edit the protected Master in this task."
+  },
+  "external_authorities": [
+    {
+      "title": "Intel 13th Generation Core Processors — TSEG Memory Base register",
+      "url": "https://edc.intel.com/content/www/us/en/design/publications/13th-generation-core-processors-datasheet-volume-2-of-2/tseg-memory-base-tsegmb-0-0-0-pci-offset-b8/",
+      "use": "Confirms that TSEG is an address-range/register property; platform applicability must still be established."
+    },
+    {
+      "title": "Intel 4 Series Chipset Family Datasheet — TSEG",
+      "url": "https://www.intel.com/content/dam/www/public/us/en/documents/datasheets/4-chipset-family-datasheet.pdf",
+      "use": "Provides public TSEG range semantics only; it does not define the private SmiHandler4 instrumentation."
+    }
+  ],
+  "traceability": {
+    "applicable_decisions": ["ED-33", "ED-35", "ED-36", "ED-38", "ED-51"],
+    "user_ed_01_30_reviewed": true,
+    "original_coverage_preserved": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|732|Wistron-BMC-00022-V005",
+    "next_pending_case_variant_id": "f385874b9dbb1d2b"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_record_read": true,
+    "case_specific_reasoning": true,
+    "no_template_or_bulk_decision": true,
+    "protected_sources_unchanged": true
+  }
+}
+
