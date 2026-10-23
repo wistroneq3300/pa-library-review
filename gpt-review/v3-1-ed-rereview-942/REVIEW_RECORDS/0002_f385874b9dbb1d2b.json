@@ -1,0 +1,112 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 2,
+  "source_key": "Functionality|732|Wistron-BMC-00022-V005",
+  "case_variant_id": "f385874b9dbb1d2b",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 732,
+    "code": "Wistron-BMC-00022-V005",
+    "original_row_sha256": "e04d845fa5547ada25cf0ad53f81b13c56f8267a94901efaba249e821fd005f8",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Upgrade / Downgrade HIB-CPLD firmware by Redfish when system is off",
+    "procedure": "The procedure contains one copied sentence saying FPGA, then uses a generic Redfish UpdateService Immediate PATCH, binary image POST and task wait.",
+    "criteria": "Firmware flashes successfully after one BMC reset and FirmwareInventory reports the expected version.",
+    "script": ".../upgrade-and-downgrade-hib-cpld-firmware-by-redfish-when-system-is-off",
+    "deepseek": "PARTIAL; explicitly requires a HIB-CPLD image and treats the host-off Redfish workflow as HIB-CPLD.",
+    "gpt_v2": "BLOCKED pending exact target, versions, secure Redfish action, reset semantics and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0900_f385874b9dbb1d2b.json",
+  "old_problem": "Items and the exact private Script identity name HIB-CPLD, while one Procedure sentence says FPGA. The generic source POST has no visible component selector, so the previous review withheld all execution as a destructive-target conflict.",
+  "new_disposition": "RESOLVED_BY_SOURCE_RECONCILIATION_AND_PARAMETERIZATION",
+  "disposition_reason": "For this exact row, three independent same-row facts—Items, Script identity and DeepSeek's required image/target—agree on HIB-CPLD, while only the copied Procedure noun says FPGA. The review layer can therefore retain HIB-CPLD as the row's intended component without editing the Master. The generic source URI is not approved for execution: exact image, target inventory URI, advertised push/action contract, versions, one-reset activation and recovery are parameterized Project inputs.",
+  "decision_basis": [
+    "Exact Functionality row 732 and the same-row DeepSeek/GPT V2 material were reopened and matched the protected row hash.",
+    "The source Items and private Script slug independently identify HIB-CPLD; the DeepSeek package and evidence also bind a HIB-CPLD image and inventory result.",
+    "The Procedure's single FPGA noun conflicts with those HIB-CPLD-specific fields and is preserved as source history rather than executed.",
+    "ED-14 requires upgrade and downgrade to remain separate branches with independent vendor support, images, activation and recovery.",
+    "DMTF Redfish UpdateService defines service-advertised update URIs and component targets; it does not make the source's fixed `/update` path or target mapping universal."
+  ],
+  "test_case": {
+    "test_name": "Upgrade and downgrade HIB-CPLD firmware by Redfish with the host off",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Validate two separately authorized HIB-CPLD firmware transitions—upgrade and downgrade—through the target BMC's advertised Redfish update mechanism while the host is off, with one approved BMC reset per transition, active-version verification and platform-health recovery evidence.",
+    "required_package": [
+      "Exact HIB-CPLD board/FRU/device inventory identity and current/upgrade/downgrade version matrix",
+      "Signed or hash-verified HIB-CPLD images and release notes proving that each direction is supported",
+      "Target BMC's advertised UpdateService action or push URI, component target selector, payload format, task and activation semantics",
+      "Secure Redfish credentials and trusted TLS policy; stable standby power and independent OOB recovery",
+      "Approved one-BMC-reset definition, host-off state and post-reset boot/health criteria"
+    ],
+    "test_command": "Read-only preflight: GET the target service root, UpdateService and FirmwareInventory using protected credentials and verified TLS. State-changing phase: use only the BMC-advertised, owner-approved HIB-CPLD component target and image payload; do not execute the literal credentialed `curl -k .../UpdateService/update` example. Run upgrade and downgrade as separate approved operations, each with its own task monitoring and one approved BMC reset.",
+    "expected_result": "For each independently supported direction, the advertised update task reaches its documented terminal-success state, exactly the approved HIB-CPLD inventory member changes from the recorded source version to the approved target version after one BMC reset, the host returns cleanly from the prescribed off-state workflow, and no unexpected BMC/SEL/POST/OS or HIB-CPLD health error is introduced.",
+    "pass_fail_basis": "PASS only when the selected direction is vendor-supported and all task, exact-component, active-version, one-reset and platform-health oracles match. FAIL on task failure, wrong or unchanged active version, wrong target, extra/unexpected reset, lost management/boot or disallowed log delta. N/A is allowed only when authoritative platform/vendor documentation proves that the specific direction is unsupported; missing images or configuration alone are not N/A.",
+    "safety_gate": [
+      "Explicit approval for the exact HIB-CPLD device, image, direction and state-changing command",
+      "Prove host-off still leaves required BMC standby power and management connectivity; do not infer AC removal",
+      "Never expose the source's embedded root password or disable TLS verification in the approved execution",
+      "Maintain stable power/OOB visibility and stop on target, signature, task, health or connectivity mismatch",
+      "Do not retry, reverse direction or add resets after a failed or ambiguous flash"
+    ],
+    "expected_evidence": [
+      "Immutable image manifest and HIB-CPLD device/version compatibility matrix for each direction",
+      "Service-advertised UpdateService URI/action, component target selector and pre-update FirmwareInventory",
+      "Redacted request response plus complete task/job progression and timestamps",
+      "Approved one-BMC-reset and host-off/on timeline",
+      "Post-reset active HIB-CPLD version tied to the same inventory member",
+      "BMC, HIB-CPLD, POST/OS and SEL/log health plus abort/recovery evidence when applicable"
+    ],
+    "recovery": "Preserve the first failure and task state, keep the platform in the vendor-specified safe power state, and invoke the approved HIB-CPLD recovery or alternate programming path under owner control. Do not issue a blind second flash, downgrade, reset or power cycle."
+  },
+  "source_conflict": {
+    "before": true,
+    "after": false,
+    "preserved_original_conflict": "The Master Procedure still says FPGA; this re-review does not edit or erase it.",
+    "resolution": "HIB-CPLD is selected only for this Source Key because Items, Script identity and same-row package/evidence agree on that component."
+  },
+  "blocked": {
+    "before": true,
+    "after": false,
+    "reason": "Purpose and component identity are now sufficiently defined for a safe parameterized review contract; missing images, versions, OEM target URI and recovery are runtime readiness gates, not an irreducible static-review block."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Exact HIB-CPLD identity, images/version directions, advertised Redfish target, one-reset activation and recovery must be supplied before execution.",
+    "execution_status": "NOT STARTED"
+  },
+  "external_authorities": [
+    {
+      "title": "DMTF Redfish Data Model Specification DSP0268 2025.2",
+      "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.2.pdf",
+      "use": "Update targets bind an image to identified inventory/device resources; target semantics must be discovered and cannot be guessed."
+    },
+    {
+      "title": "DMTF Redfish Resource and Schema Guide DSP2046 2025.2",
+      "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf",
+      "use": "UpdateService exposes FirmwareInventory and service-advertised push/update capabilities; HTTP-push message format can be vendor-specific."
+    }
+  ],
+  "traceability": {
+    "applicable_decisions": ["ED-14", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "original_coverage_preserved": true,
+    "upgrade_and_downgrade_separate": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|734|Wistron-BMC-00024-V005",
+    "next_pending_case_variant_id": "70c507409dd88963"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_record_read": true,
+    "case_specific_reasoning": true,
+    "no_template_or_bulk_decision": true,
+    "protected_sources_unchanged": true
+  }
+}
+
