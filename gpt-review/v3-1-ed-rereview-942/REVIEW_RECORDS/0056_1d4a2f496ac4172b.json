@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 56,
+  "source_key": "Functionality|866|Wistron-BMC-00156-V003",
+  "case_variant_id": "1d4a2f496ac4172b",
+  "source_ref": {"sheet": "Functionality", "source_row": 866, "code": "Wistron-BMC-00156-V003", "original_row_sha256": "84e82a21500eb28b44737336b39b0817eede81da703637aaf1f8ab66c4742a65", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Remote Syslog", "procedure": "Read local Redfish Systems/1 PlatformLog service/time/status, expose all BMC WebGUI Event Log columns, ensure info/warning/error records, and compare seven local fields.", "criteria": "Redfish and WebGUI critical content and OK/Warning/Critical entries match.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/bmc-logs/remote-syslog", "deepseek": "YES reads assumed BMC/host config and a last-40 host grep with disabled SSH host-key checking; it proves neither the source's local field parity nor receiver-side remote delivery.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION noticed local-versus-remote scope ambiguity but allowed execution after owner clarification; V3.1 historical review correctly changed it to BLOCKED."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1028_1d4a2f496ac4172b.json",
+  "old_problem": "Items and Script identify Remote Syslog forwarding, while every Procedure and Criteria checkpoint is local BMC Redfish PlatformLog-to-WebGUI parity and names no collector, transport or remote-delivery criterion. DeepSeek introduces a third incomplete host-grep method. The authoritative core target is unresolved.",
+  "new_disposition": "RETAINED_BLOCKED_REMOTE_SYSLOG_VERSUS_LOCAL_PLATFORMLOG_WEBGUI_SCOPE_CONFLICT",
+  "disposition_reason": "This is not a missing collector IP that can be parameterized. Local API/UI representation and remote forwarding are distinct functions, failure modes and evidence endpoints. Choosing either, or silently treating both as one, would invent or omit coverage; configuration presence cannot prove delivery. No ED-01 through ED-30 selects the authoritative branch, so ED-15/20/34 require Pending and BLOCKED until the testcase owner approves a split or scope override.",
+  "decision_basis": [
+    "XLSX row 866, same-row DeepSeek, exact GPT V2, referenced Script URL, related distinct row precedent, selection manifest and complete historical record were directly reviewed.",
+    "The source's seven local fields can be validated only between complete Redfish entries and WebGUI; remote delivery additionally requires independent receiver-side records and transport acceptance.",
+    "A host/BMC configuration grep and recent log tail prove neither branch and use insecure identity/credential practices.",
+    "The unresolved item is the function earning this Source Identity's verdict, not a runtime address or package version."
+  ],
+  "test_case": {
+    "test_name": "Resolve and then independently verify local PlatformLog/WebGUI parity and/or Remote Syslog delivery",
+    "automation_classification": "BLOCKED",
+    "purpose": "Preserve the original Remote Syslog identity, internal Script reference and complete local PlatformLog/WebGUI body until engineering defines whether this row contains local parity, remote forwarding or two separately accepted checkpoints. After resolution, prove each retained checkpoint at its own evidence endpoint without cross-substitution.",
+    "required_package": [
+      "Signed testcase-owner decision selecting local parity, remote forwarding or an explicit two-checkpoint split, with coverage ledger for any omitted branch",
+      "For local parity: discovered supported LogService URI, WebUI authority, pagination, DateTime/offset meaning and normalization for Severity, Source, Message, Created, CommonEventID, Serviceable and TotalSequenceNumber",
+      "Approved uniquely identifiable existing records or safe stimuli for info/warning/error and their OK/Warning/Critical mapping, expected fields and concurrency boundary",
+      "For remote delivery: collector identity/address, UDP/TCP/TLS transport/port, certificate/authentication, facility/severity filters, message format, source/time mapping and loss/order/duplicate/latency criteria",
+      "Pinned immutable readable `remote-syslog` Script revision/checksum/dependencies and step-by-step review of writes, clears, stimuli, target validation, retries and rollback",
+      "Protected BMC/collector access, trusted identities, maintenance approval, configuration snapshot/rollback, receiver cleanup and recovery"
+    ],
+    "test_command": "DO NOT EXECUTE while blocked. Engineering must first approve one scope or two separately verdictable checkpoints. After resolution, never pre-clear: bind exact BMC and collector identities, review the pinned Script, capture complete baselines and use only approved uniquely identified severity records/stimuli. For local parity, discover and paginate the supported service and correlate all seven named fields plus time/severity with WebGUI. For remote forwarding, independently capture receiver-side raw records for the same event identities and judge transport, latency, order, duplicates and loss. Keep local and remote results separate, restore approved temporary configuration and do not use `StrictHostKeyChecking=no`, `curl -k`, passwords in arguments, grep/tail-only evidence or automatic event retry.",
+    "expected_result": "Before scope resolution no DUT verdict is valid. After resolution, every retained local checkpoint has complete record-level Redfish/WebGUI field agreement for approved severity cases, and every retained remote checkpoint has independently authenticated receiver-side delivery of the same uniquely identified events within the approved transport criteria. Configuration is restored and all logs remain preserved. Any omitted original branch is explicitly recorded as unverified under the signed override.",
+    "pass_fail_basis": "PASS is prohibited until an authoritative scope/split and per-branch acceptance exist. Local PASS requires all named fields, time and severity mappings over complete bounded entries; remote PASS requires receiver-side records, not configuration or local presence, with approved delivery semantics. One branch cannot pass the other. Missing, altered, duplicated, late or misrouted records are FAIL according to the branch contract. Continued scope ambiguity, inaccessible unreviewed Script or unsafe stimulus remains BLOCKED.",
+    "safety_gate": [
+      "Do not infer remote delivery from local Redfish/WebGUI data, config text or host grep; remote evidence must terminate at the approved collector.",
+      "Do not clear BMC, host or receiver logs. Preserve stable IDs/counts/timestamps and first-failure evidence.",
+      "Do not use disabled host-key/TLS checks, command-line passwords or broad unscoped configuration reads; pin identities and use least privilege.",
+      "Do not assume `/Systems/1/LogServices/PlatformLog`; discover supported links and obtain approval for OEM mappings.",
+      "Do not create warning/error events unless each stimulus is bounded, reversible, non-incident-producing and separately approved with recovery.",
+      "Do not run the Script until its immutable revision is reviewed, and never use tail/grep as completeness proof or automatically retry stimuli."
+    ],
+    "expected_evidence": [
+      "Signed scope/split decision, exact BMC/firmware identity and pinned reviewed Script revision/checksum or approved alternate method",
+      "Local branch: trusted resource discovery, service/date/offset state, complete paginated entries and WebUI all-column evidence for each severity",
+      "Canonical mapping of all seven fields, time/severity normalization and concurrent-event boundaries",
+      "Remote branch: forwarding configuration, collector/transport/TLS identity and receiver raw records for the same event IDs with delivery metrics",
+      "Safe-stimulus authority/timestamps, preserved no-clear baselines, protected command audit and no automatic retry",
+      "Restored configuration/cleanup, final BMC/collector health, per-branch limitations and engineer verdicts"
+    ],
+    "recovery": "Before the decision, recovery is avoidance. After approval, if logging/collector state changes unexpectedly, stop stimuli, preserve BMC/host/collector evidence and restore only the recorded baseline through the approved vendor/OOB path. Escalate missing or duplicated critical events; do not clear or replay them."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Items/Script say Remote Syslog, but Procedure/Criteria exclusively compare two local BMC representations and contain no receiver, forwarding operation or delivery criterion; severity vocabularies also need an approved mapping."},
+  "blocked": {"before": true, "after": true, "reason": "Local parity and remote forwarding have different core functions and terminal evidence. Selecting or unioning them without owner approval would misstate coverage, so safe execution cannot begin."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Requires a core engineering scope/split decision, not merely parameters, followed by local mapping and/or receiver transport criteria plus pinned Script review.", "execution_status": "BLOCKED; NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "Platform LogService/Web Event Log mapping, remote-syslog forwarding specification and Project monitoring policy become applicable only after the testcase owner resolves which branch or split belongs to this row.",
+  "unblock_condition": "Signed testcase-owner decision selecting local PlatformLog/WebGUI parity, Remote Syslog forwarding or two independently verdictable checkpoints; it must preserve original identity/body, enumerate retained/omitted coverage and supply branch-specific PASS/FAIL criteria.",
+  "responsible_owner": "BMC logging architecture owner and SIT testcase owner, with security/monitoring owner for collector transport and event stimuli.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "local_presence_as_remote_delivery_allowed": false, "configuration_as_delivery_proof_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|867|Wistron-BMC-00157-V002", "next_pending_case_variant_id": "e48a104c85e08687"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
