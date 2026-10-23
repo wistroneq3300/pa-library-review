@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 62,
+  "source_key": "Functionality|872|Wistron-BMC-00162-V004",
+  "case_variant_id": "1cdb4bb72758f161",
+  "source_ref": {"sheet": "Functionality", "source_row": 872, "code": "Wistron-BMC-00162-V004", "original_row_sha256": "339f6fc7803172dc1dd7f11153103ddbe14d53b85343c3d3ab25899e57b6acf3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_DCSCM", "procedure": "Generic setup says clear logs; open Hardware Status > Sensors and compare each sensor reading/setting with BMC sensor spec.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES assumes a literal unique sensor and truncates fallback output; it omits DCSCM FRU/instance/topology, sensing point, capability/units/scaling, WebUI/spec/freshness and safe Script review.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION treats DCSCM identity/specification as prerequisites and keeps the test read-only."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1034_1cdb4bb72758f161.json",
+  "old_problem": "The proposed command did not establish which DCSCM FRU/instance or physical sensing point owned the value. Component-local temperature was not separated from ambient, threshold capability/N/A rules and operating condition were absent, and incomplete output plus an unreviewed shared Script could not prove WebUI/spec agreement.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FRU_BOUND_CAPABILITY_AWARE_DCSCM_TEMPERATURE_CHECK",
+  "disposition_reason": "The read-only intent is clear. Join the exact DCSCM FRU/serial/instance and topology to one stable sensor and WebUI row, record load/airflow, collect the complete capability-aware record and compare all applicable fields with the versioned component-local specification. Unsupported thresholds are N/A only when the authoritative capability/spec proves it. Exact component/spec/tool values are runtime prerequisites.",
+  "decision_basis": [
+    "XLSX row 872, same-row DeepSeek, exact GPT V2, Script reference, selection manifest and historical record were directly reviewed.",
+    "DCSCM is component-scoped; correct evidence must bind FRU/instance and sensing point, not a similar label or room-ambient reference.",
+    "Threshold completeness means all implemented/required capability fields, not fabricated values in unsupported slots.",
+    "ED-13 governs N/A proof, ED-15 requires the versioned expected matrix, ED-17 rejects unrelated clearing and ED-35 preserves read-only coverage without inventing heat stimulus."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_DCSCM for the exact FRU/instance against complete WebUI/OOB and component specification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the temperature sensor owned by the intended DCSCM FRU/board instance is human readable in Hardware Status > Sensors and that its stable identity, component-local Celsius reading, units/scaling, health, implemented thresholds/hysteresis and freshness match the versioned DCSCM/platform specification under the recorded load/airflow condition.",
+    "required_package": [
+      "Exact DCSCM product/FRU/serial/instance, chassis slot/topology, component firmware and BMC/WebUI/SDR revisions",
+      "Stable sensor number/name/type/entity/instance/resource and physical sensing-point mapping to DCSCM inventory and one UI row",
+      "Expected component-local range, Celsius scaling/rounding, sensor accuracy/tolerance, update period and approved operating load/airflow condition",
+      "Implemented threshold capability mask, lower/upper values, hysteresis, health/status and unavailable/not-readable/N/A semantics",
+      "Authoritative DCSCM sensor/thermal specification and any required approved on-board/physical reference method",
+      "Validated protected OOB/API/browser client plus pinned reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, force temperature, alter airflow/fans, acknowledge alarms or write thresholds. Bind the exact DCSCM FRU/serial/instance and physical sensing point to one stable SDR/API object and Hardware Status > Sensors row; stop on aliases, multiple modules or entity mismatch. Review the pinned Script before use. Record component/BMC firmware, chassis load/airflow and BMC time; capture the full object with identity, Celsius reading/scaling, capability mask, all applicable threshold/hysteresis fields, status and timestamp without truncation, then capture the same UI row/refresh time. Compare only applicable fields against the versioned DCSCM specification and approved condition/tolerance, treating N/A separately from missing required data. Reread only for the defined freshness check, never as automatic failure retry.",
+    "expected_result": "One unique sensor is proven to belong to the intended DCSCM FRU/instance and sensing point. Complete OOB and WebUI fields agree within approved scaling/rounding/freshness rules and the reading, health plus every implemented/required threshold match the component specification for the recorded operating condition. Unsupported fields are N/A only with capability/spec proof. No log, alarm, airflow, temperature or threshold mutation occurs.",
+    "pass_fail_basis": "PASS requires exact FRU/topology/sensor/UI ownership, complete nontruncated capability-aware OOB and UI evidence, versioned component matrix, recorded load/airflow, approved tolerance and field-level agreement with engineer verdict. A label match, room ambient, plausible Celsius value, truncated list or invented threshold cannot pass. Wrong instance, identity ambiguity, stale data, unjustified N/A, missing required threshold, out-of-range/status mismatch or mutation is FAIL. Missing FRU mapping/spec/method is NOT READY, not Pending or PASS; active thermal behavior is not claimed.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; history may explain DCSCM thermal state.",
+      "Do not infer DCSCM instance or sensing point from the label; require FRU/topology/entity mapping and stop on ambiguity.",
+      "Do not compare board-local temperature directly with room ambient unless the specification explicitly defines equivalence.",
+      "Do not invent unsupported thresholds; N/A requires capability and specification proof, while missing required fields fail.",
+      "Do not heat/cool the module, obstruct airflow, change thresholds or acknowledge alarms; active behavior requires a separate approved test.",
+      "Do not truncate output, expose passwords, assume cipher 17 or run an unreviewed Script; stop without retry on identity/freshness disagreement."
+    ],
+    "expected_evidence": [
+      "BMC/chassis and exact DCSCM FRU/serial/instance/topology/component-firmware identity",
+      "Stable sensor-to-DCSCM/UI map and complete raw identity/capability/reading/units/threshold/hysteresis/status/timestamp",
+      "Hardware Status > Sensors DOM/screenshot tied to the same component and refresh time",
+      "Versioned component expected matrix, recorded load/airflow and approved tolerance calculation with N/A justification",
+      "Pinned Script revision/checksum/content review or signed alternate method and protected command audit",
+      "No-clear/no-write/no-stimulus/no-retry proof, BMC/component health, discrepancies and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On FRU/sensor ambiguity, stale/mismatched data or unexpected alarm/state change, stop and preserve first evidence; use the approved vendor/OOB diagnostic path without forcing temperature or acknowledging/clearing alarms. If tooling mutates state, isolate it and have the authorized owner restore the baseline."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Sensor Page procedure and Criteria consistently define read-only DCSCM temperature/spec validation. Component mapping and expected limits are readiness inputs."},
+  "blocked": {"before": false, "after": false, "reason": "Target class and read-only comparison are clear. DCSCM instance, sensor map, spec and reviewed method can be supplied without a new engineering decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DCSCM FRU/instance/topology/firmware, stable sensor/UI/sensing-point map, component range/scaling/threshold capability/status/tolerance/freshness, operating load/airflow and pinned reviewed Script or manual method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "May be used only after immutable pinning and safety review; it does not establish FRU ownership or thermal limits."}],
+  "project_authority": "DCSCM/platform sensor map and thermal specification, SDR definition, WebUI schema and Project topology define ownership, capabilities and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "threshold_na_requires_spec": true, "ambient_substitution_allowed": false, "active_thermal_stimulus_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|873|Wistron-BMC-00163-V004", "next_pending_case_variant_id": "ccd4f9f5b6472dac"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
