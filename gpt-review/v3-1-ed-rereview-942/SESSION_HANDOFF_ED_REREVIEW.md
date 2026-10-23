@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **161 / 942**
-- Last reviewed: `Functionality|974|Wistron-BMC-00264-V003` / `95653e0d7a4ec39c`
-- Next source-verified pending identity: `Functionality|975|Wistron-BMC-00265-V003` / `ff42274ee1631686`
-- Latest disposition: FRU_FAN is removed from Pending and reclassified FULLY AUTOMATABLE. Fan FRU cardinality and tray/module/assembly/rotor scope are mapped before full namespace-correct IPMI/Redfish/actual-WebUI parity; static FRU does not prove live speed/health, and no FRU write, fan/LED, reset or power action is allowed. No query ran.
+- Completed: **162 / 942**
+- Last reviewed: `Functionality|975|Wistron-BMC-00265-V003` / `ff42274ee1631686`
+- Next source-verified pending identity: `Functionality|976|Wistron-BMC-00266-V004` / `6ace03d7519c889e`
+- Latest disposition: FRU_PSU is removed from Pending and reclassified FULLY AUTOMATABLE. Every PSU slot/feed maps to complete namespace-correct static FRU and a separate fresh live status checkpoint across IPMI/Redfish/actual WebUI; inventory does not prove failover, and no FRU write, unplug/load/power-policy, LED, reset or power action is allowed. No query ran.
 - Protected sources: unchanged.
 - DUT execution: none.
