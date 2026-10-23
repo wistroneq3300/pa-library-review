@@ -1,0 +1,62 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 35,
+  "source_key": "Functionality|845|Wistron-BMC-00135-V003",
+  "case_variant_id": "6a533ef4617ac657",
+  "source_ref": {"sheet": "Functionality", "source_row": 845, "code": "Wistron-BMC-00135-V003", "original_row_sha256": "c865aee438b16768028834c475bfd512eb516b182131da2116e23d05de8c02a6", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Login with Domain Name", "procedure": "Wrong-user login, correct admin logins across privileges, then logout.", "criteria": "Reject wrong user, accept correct admins of different privileges, and return to login after logout.", "deepseek": "PARTIAL identifies FQDN/DNS and browser dependencies but omits authoritative answers, TLS/BMC binding, attempt limits and old-session invalidation.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; adds controlled DNS, certificate SAN/identity correlation, protected accounts, bounded failures and session invalidation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1007_6a533ef4617ac657.json",
+  "old_problem": "The historical record had complete safe semantics but retained Pending for the exact Project FQDN, resolver/view, answer set, certificate/BMC identity, account matrix and session policy.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FQDN_BOUND_BMC_LOGIN_TEST",
+  "disposition_reason": "Unlike the preceding undefined MAC title, `Domain Name` has standard DNS-to-Web semantics. The approved FQDN, DNS view, A/AAAA/CNAME set, TLS identity, BMC mapping, accounts and lockout/session policies are Project parameters that can be required at runtime. DNS resolution, FQDN-preserving HTTPS identity, authentication/authorization and logout invalidation remain separate mandatory checkpoints; raw-IP access and disabled hostname validation are not substitutes.",
+  "decision_basis": [
+    "XLSX row 845, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "RFC 1034 defines domain-name resource lookup, trusted resolver configuration and caching behavior; the Project supplies the actual zone/view and expected resource records.",
+    "RFC 9525 requires the TLS client to compare the expected service identity with the certificate-presented identity and identifies a source domain as the expected FQDN; therefore a familiar page or raw-IP request is insufficient.",
+    "ED-15 requires approved DNS/TLS/account expectations, ED-20 preserves this domain-name-specific case, ED-35 records any route substitution as different coverage, and ED-36 permits missing FQDN/account values as prerequisites."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC login and logout through the approved FQDN with DNS/TLS identity binding",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the canonical Project BMC FQDN resolves through the approved DNS view to every required endpoint, TLS authenticates that FQDN and the intended BMC, the browser preserves the FQDN authority, one bounded invalid account is rejected, each approved administrator role authenticates with its expected authorization, and logout invalidates the prior session.",
+    "required_package": [
+      "Canonical BMC FQDN and authoritative zone/record revision plus approved recursive resolver or split-horizon view",
+      "Expected A/AAAA and CNAME chain, TTL, DNSSEC/Project integrity expectation, IP-family requirements and alternate/negative-view behavior",
+      "Exact BMC management IP/MAC/serial/firmware plus TLS certificate SAN/issuer/fingerprint/chain mapped to the FQDN",
+      "Supported browser/version, trusted CA, proxy/no-proxy, secure-DNS, resolver/browser cache and redirect expectations preserving FQDN Host/SNI/authority",
+      "Disposable invalid credential and every approved administrator account/privilege, MFA/CAPTCHA/SSO behavior and attempt budget below lockout/rate/alarm limits",
+      "Protected credentials/session redaction, expected logout/token invalidation, audit events, alternate OOB recovery and cleanup"
+    ],
+    "test_command": "Query the canonical FQDN through the approved resolver/view and record timestamped A/AAAA/CNAME/TTL and resolver metadata. Compare the complete answer set with the Project network map; for every required address, validate the certificate chain and dNSName identity and correlate the endpoint to the intended BMC firmware/serial before credentials. In an isolated supported browser with approved proxy/cache/secure-DNS settings, navigate using the FQDN and prove Host/SNI/address-bar authority is not replaced by raw IP or an unrelated redirect. After approval, submit exactly one bounded invalid credential, then authenticate each named admin role and record identity plus minimal allowed/denied probes. Log out and prove the prior cookie/token cannot access protected content. Reconcile sessions/accounts and preserve DNS/TLS/browser/security evidence; do not ignore certificate errors, clear logs or retry automatically.",
+    "expected_result": "The approved DNS view returns exactly the expected name/address chain and every required endpoint correlates to the intended BMC. Trusted TLS presents a valid certificate identity for the FQDN, and the browser uses that FQDN throughout. The invalid account creates no authenticated session or lockout; each approved admin authenticates as the correct identity with the approved privilege boundary. Logout returns to login and rejects prior-session reuse. Security/audit records and cleanup match policy with no exposed secret.",
+    "pass_fail_basis": "PASS requires the complete approved DNS answer/TTL chain, all required address-to-BMC mappings, valid FQDN certificate identity/chain, preserved FQDN authority, bounded invalid rejection, every admin-role identity/authorization checkpoint, prior-session rejection after logout and engineer-approved evidence. Raw-IP login, `-k`, ignored browser warning, hosts override without an approved coverage record, one silently selected address, page load, DNS-only success or redirect-only logout cannot pass. Unexpected/stale answer, wrong BMC, SAN/chain mismatch, proxy/fallback substitution, unauthorized login, wrong role, lockout or surviving session is FAIL. Missing Project bindings is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not authenticate until the approved DNS view, complete answer set, TLS certificate identity and independent BMC identity agree.",
+      "Never use `-k`, ignore certificate warnings, disable hostname validation or substitute raw IP; those remove the case's distinguishing coverage.",
+      "Control resolver/browser caches, proxy and secure-DNS settings; record any approved split-horizon or temporary mapping as explicit different coverage.",
+      "Test every required A/AAAA endpoint or record it untested; do not silently select one response from a multi-address set.",
+      "Use protected disposable accounts and one bounded invalid attempt below lockout/alarm thresholds; no automatic retry or broad administration.",
+      "Redact credentials, cookies, tokens, customer names and privileged content while retaining DNS/TLS/identity/session evidence.",
+      "Never clear DNS, BMC, security or system logs; stop on unexpected answers, certificate mismatch, wrong target, lockout warning or cleanup failure."
+    ],
+    "expected_evidence": [
+      "Canonical FQDN, zone/record revision, resolver identity/view and timestamped A/AAAA/CNAME/TTL answer chain",
+      "Expected-versus-observed address set with independent BMC MAC/serial/firmware correlation and certificate SAN/issuer/fingerprint/chain",
+      "Browser/version, CA trust, proxy/no-proxy, secure-DNS/cache state and proof HTTPS authority/Host/SNI remains the FQDN across redirects",
+      "Bounded invalid-login rejection and no-lockout evidence",
+      "Redacted identity/privilege and minimal allowed/denied evidence for each approved admin account",
+      "Logout return plus failed prior-session reuse, security/audit events, cleanup/recovery and authorized engineer verdict"
+    ],
+    "recovery": "On an unexpected DNS answer, certificate mismatch, wrong endpoint or proxy/cache ambiguity, stop before authentication, preserve evidence and use the alternate OOB path to verify the intended BMC. If a disposable credential may have reached the wrong endpoint, revoke/rotate it immediately through the approved path. Remove only approved test-local resolver overrides, reconcile sessions/accounts and do not retry until DNS/TLS identity is corrected."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The title supplies the conventional FQDN access route and the body supplies the downstream login/logout matrix; Project DNS/TLS details parameterize rather than contradict it."},
+  "blocked": {"before": false, "after": false, "reason": "FQDN resolution, HTTPS identity and authentication/session semantics are clear; exact DNS, certificate, BMC and account values are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Canonical FQDN, DNS zone/view/answers, BMC and certificate map, browser network controls, account/privilege matrix, attempt limits, session policy, audit and recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "RFC 1034 — Domain Names: Concepts and Facilities", "url": "https://www.rfc-editor.org/rfc/rfc1034.html", "application": "DNS resource lookup, resolver selection and cache/refresh model."},
+    {"title": "RFC 9525 — Service Identity in TLS", "url": "https://www.rfc-editor.org/rfc/rfc9525.html", "application": "FQDN reference identity and certificate-presented service identity verification."}
+  ],
+  "project_authority": "Project DNS/IP allocation, BMC inventory, CA/certificate deployment and Web account/session specifications supply the authoritative expected values and required address coverage.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "raw_ip_substitution_allowed": false, "tls_hostname_validation_required": true, "all_required_dns_answers_accounted": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|846|Wistron-BMC-00136-V003", "next_pending_case_variant_id": "6474d121616695b0"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
