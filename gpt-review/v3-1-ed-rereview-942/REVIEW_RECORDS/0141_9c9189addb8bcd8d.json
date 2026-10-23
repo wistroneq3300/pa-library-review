@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 141,
+  "source_key": "Functionality|954|Wistron-BMC-00244-V003",
+  "case_variant_id": "9c9189addb8bcd8d",
+  "source_ref": {"sheet": "Functionality", "source_row": 954, "code": "Wistron-BMC-00244-V003", "original_row_sha256": "35245e930489aaaa66bcfdf5c1568b1e5a3070506ede047b6c96109f556dc2f5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_CEMR", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES queries an assumed /redfish/v1/Chassis/FRU_CEMR URI with insecure curl and projects three fields, omitting the right-slot proof and mandatory WebUI/IPMI comparison.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires right-module mapping and complete protected parity but retains an unnecessary human confirmation gate for read-only Project parameters."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1113_9c9189addb8bcd8d.json",
+  "old_problem": "A mirrored CEML record can share manufacturer/product/part data with CEMR, so a plausible three-field response does not establish the right module. The historical record captured this risk but left ordinary right-slot, IPMI target and expected-content bindings as Engineering Decision Pending.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_RIGHT_CEM_SLOT_BOUND_FRU_PARITY",
+  "disposition_reason": "Require a durable physical right-slot association before selecting the CEMR IPMI device and UI/API member, explicitly reject CEML/CEMBB identities, decode every applicable standard and vendor field, and reconcile complete raw/normalized evidence against the right-module manufacturing record. These are safe deterministic reads once the Project package is supplied.",
+  "decision_basis": [
+    "XLSX row 954, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 955 were directly reviewed; next pending was verified as Functionality row 955 / variant c4eff07c76e253c5.",
+    "CEMR's distinguishing requirement is physical right-side identity. Shared product/manufacturer/part fields cannot distinguish it from CEML, and IPMI device numbering or a resource suffix is not a standard side relationship.",
+    "IPMI FRU standard areas and DMTF Assembly fields support complete decoding and identity comparison; the Project/vendor topology remains authoritative for the right-slot binding.",
+    "Both source-required evidence planes remain mandatory: rendered BMC WebUI detail and complete `ipmitool fru print`; Redfish/OEM inventory is supplementary mapping/correlation evidence.",
+    "ED-02, ED-08, ED-17, ED-19, ED-21 and ED-30 preserve distinct coverage and evidence, while ED-33 through ED-38 support parameterized read-only execution without guessed OEM behavior or cross-crediting the left module."
+  ],
+  "test_case": {
+    "test_name": "Validate right CEM module FRU with physical-side-bound cross-interface parity",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Prove that the selected management records belong to the Project-defined physical right CEM module and verify its complete applicable FRU contents against the authoritative right-module record and actual WebUI, independently of the left module and CEM baseboard, without changing FRU/BMC/DUT state.",
+    "required_package": [
+      "Immutable SUT/BMC/chassis identity and approved CEM topology with durable physical associations for right, left and baseboard modules",
+      "Complete enumerated IPMI FRU map and approved CEMR device ID/interface/channel/bridge/address; device order must not encode side implicitly",
+      "Mapped Redfish Chassis/Assembly or approved OEM CEMR member relationships and the actual WebUI Inventory and LEDs right-module row/detail",
+      "CEMR-specific FRU area and required-field layout including Board/Product, applicable Chassis/MultiRecord and vendor custom fields or side/location extensions",
+      "Authoritative right-module BOM/manufacturing/asset data with serial or stable unique identifier, expected values and approved encoding/blank/padding/freshness rules",
+      "Certificate trust, protected read-only credential handling, protected evidence storage and redaction/tokenization policy"
+    ],
+    "test_command": "READ ONLY. Confirm the immutable chassis and approved CEM topology; enumerate every IPMI FRU through the approved protected interface/channel/bridge and preserve the full map. Select the CEMR device only from the durable physical right-slot association and a unique module identity, never from ID order or common product fields. Execute only `ipmitool ... fru print <CEMR-FRU-ID>` and retain complete output, return code and parser/checksum diagnostics. Follow actual Redfish links to the mapped Chassis/Assembly or approved OEM record, and capture the fully rendered WebUI Hardware status > Inventory and LEDs CEMR row/detail. Use CEML/CEMBB identities solely to demonstrate non-selection. Decode all applicable standard/custom FRU fields, preserve raw representations, apply only approved normalization and compare field by field with the right-module authority and across IPMI/UI/API. Repeat read fingerprints only; never perform FRU writes/edits, raw storage writes, inventory refresh, log clearing, reset, reboot or power operations.",
+    "expected_result": "The physical right CEM module maps uniquely to the selected CEMR IPMI FRU device and approved UI/API member and cannot resolve to CEML or CEMBB. All applicable areas decode without reported structure/checksum errors; every required standard/custom field is present or has its approved absent representation and exactly agrees with the authoritative right-module data after traceable normalization. WebUI, IPMI and mapped Redfish/OEM evidence reconcile, with no unexpected duplicate/extra/stale record and no state mutation.",
+    "pass_fail_basis": "PASS requires right-slot physical proof, unique mapped device/member, complete `ipmitool fru print`, actual WebUI visual detail, successful complete-field decoding and exact reference parity. A CEMR label, first/next FRU ID, mirrored product tuple or three-field API match is insufficient. Left/baseboard selection, ambiguous/duplicate mapping, missing required area/field, parser/checksum failure, unauthorized blank or unexplained UI/IPMI/API/reference mismatch is FAIL. Missing topology/layout/reference is NOT READY rather than Pending; N/A requires authoritative SPEC evidence.",
+    "safety_gate": [
+      "Use protected read-only IPMI and certificate-verified API/UI sessions; reject process-visible secrets and insecure-TLS acceptance evidence.",
+      "Bind the right physical slot through approved topology and durable relationships before reading the target record; never infer side from naming, enumeration order or common manufacturing values.",
+      "Limit IPMI to enumeration and `fru print`. Prohibit write/edit/upgEkey, raw storage writes, log clearing, BMC reset, reboot and power actions.",
+      "Keep CEML and CEMBB as negative identity controls only; their observations or expected values may not satisfy this independent case.",
+      "Preserve raw full records and actual rendered WebUI evidence before applying approved normalization or redaction; keep stable audit tokens and protected originals.",
+      "Stop on cross-side ambiguity, duplicate identity, stale cache, decode/checksum error or authority conflict and do not automatically try another device."
+    ],
+    "expected_evidence": [
+      "Immutable target plus physical CEM topology identifying the right module and negative left/baseboard tokens",
+      "Complete enumerated IPMI FRU map and timestamped `fru print <CEMR-FRU-ID>` evidence with channel/bridge, exit code, decode/checksum status and protected hash",
+      "Discovered Redfish/OEM link chain and complete CEMR artifact with schema/firmware/certificate metadata",
+      "Actual rendered WebUI Inventory and LEDs CEMR row/detail visual evidence showing the right-module identity and required fields",
+      "CEMR area-aware raw/normalized/reference matrix for every required standard/custom field and explicit CEML/CEMBB exclusion",
+      "Pre/post fingerprints, uncleared SEL/audit evidence, no-write/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On ambiguous right-slot binding, duplicate identifiers, decode/checksum failure or source disagreement, stop and preserve/redact all evidence; obtain the authoritative topology/layout/reference. Do not trial the left/baseboard FRU, rewrite inventory, clear logs, reset BMC, reboot or power-cycle, and do not automatically retry against a different module."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master consistently identifies the right CEM FRU and requires WebUI/IPMI correctness. DeepSeek's partial path is an implementation gap, not a source contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "Right-module identity and parity semantics are clear. The topology, management map, field layout and expected record are bounded Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Physical CEM right/left/baseboard topology; CEMR IPMI device/channel/bridge; mapped API/UI identities; FRU area/custom-field layout; right-module manufacturing values; normalization, freshness and redaction.", "execution_status": "NOT STARTED; READ-ONLY FRU_CEMR REVIEW ONLY; NO IPMI, REDFISH, WEBUI OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines standard FRU area/field encoding; it does not assign right-side Project topology."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete print decoding, string formats and checksum checks and the read-versus-write boundary."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis/Assembly inventory fields and relationships used when the target maps CEMR through standard Redfish."}
+  ],
+  "project_authority": "The vendor/Project topology binds the physical right CEM to exact IPMI, WebUI and API identities and defines its applicable FRU layout and expected values. Once provided, the read-only workflow is fully deterministic and needs no per-run confirmation.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-08", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "right_left_baseboard_identity_separated": true, "ceml_and_cembb_are_negative_controls_only": true, "source_webui_and_ipmitool_both_preserved": true, "guessed_side_device_or_uri_rejected": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "fru_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|955|Wistron-BMC-00245-V003", "next_pending_case_variant_id": "c4eff07c76e253c5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_right_module_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
