@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 114,
+  "source_key": "Functionality|925|Wistron-BMC-00215-V002",
+  "case_variant_id": "c6011334a7b8b7ff",
+  "source_ref": {"sheet": "Functionality", "source_row": 925, "code": "Wistron-BMC-00215-V002", "original_row_sha256": "e44e119058a934b3bc7b9b29d58296d063ff8712753ff7f4d2bc13a67874ee94", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Generate CERTIFICATE MANAGEMENT", "procedure": "Use BMC WebUI Settings → SSL Settings → Generate Certificate Management; the SSL certificate key changes; view that the certificate matches modified settings; generic setup says clear logs.", "criteria": "Result is human readable and BMC Web login succeeds.", "script": null, "deepseek": "PARTIAL conflates Generate with upload, requests user-supplied certificate material, guesses a Redfish path, uses insecure verification and only lists metadata; it does not prove BMC-side key generation, selected parameters, mode, activation or trusted WebUI recovery.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL risk correctly requires owner parameters, secure key handling, pre/post identity baseline, bounded reconnect, served-chain validation, WebUI login and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1086_c6011334a7b8b7ff.json",
+  "old_problem": "The source requires BMC-side certificate/key generation, but the earlier command substitutes upload/listing and never establishes whether this firmware creates an immediately active self-signed certificate or only an internal key plus CSR. Metadata appearance does not prove a new protected private key, active served identity or successful trusted login, and an irreversible key replacement can strand management access.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_BMC_SIDE_KEY_AND_CERTIFICATE_OR_CSR_GENERATION_WITH_MODE_SPECIFIC_ACCEPTANCE",
+  "disposition_reason": "Keep this row strictly on the WebUI Generate function and keep supplied-certificate Upload in row 926. Before execution, vendor documentation binds the exact mode: active self-signed generation or protected key-pair plus CSR. Both require one approved generation, new public-key/SPKI evidence, exact requested fields, private-key non-exportability, visual output and audit. Only active-generation mode may claim a changed served certificate; CSR-only mode must prove the active identity remains unchanged and cannot borrow upload coverage. The Project supplies parameters and recoverable access without reopening the engineering classification.",
+  "decision_basis": [
+    "XLSX row 925, same-row DeepSeek, exact GPT V2, selection manifest, adjacent View/Upload rows and preserved V3.1 record were directly reviewed.",
+    "The source explicitly says Generate and key change, so upload is a non-equivalent adjacent testcase and cannot satisfy this row.",
+    "DMTF certificate actions distinguish key-pair/CSR generation and rekey behavior from certificate replacement; firmware mode and activation must be discovered and recorded before the one action.",
+    "A changed public key can be proven through CSR/certificate SPKI or fingerprint while the private key remains non-exportable. Recovery must exist before generation because metadata backup alone cannot restore a lost private key."
+  ],
+  "test_case": {
+    "test_name": "Generate a BMC-managed HTTPS key and certificate or CSR with mode-specific verification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the target BMC WebUI Generate function performs its documented BMC-side key-generation mode exactly once with approved cryptographic and identity parameters, produces human-readable certificate/CSR evidence tied to a new protected key, maintains or restores trusted management access and never substitutes the separate upload workflow.",
+    "required_package": [
+      "Exact BMC/firmware/WebUI/certificate-service identity and vendor-documented Generate mode: active self-signed certificate or key-pair plus CSR",
+      "Approved subject/common name, SAN set, organization fields, key algorithm/size or curve, signature algorithm, validity and target slot/role",
+      "Pre-change active certificate/chain/fingerprint/SPKI, complete slot state and documented activation/restart/reconnect behavior",
+      "Independent console/recovery management path plus an approved restorable known-good certificate/key package or vendor recovery method; metadata alone is insufficient",
+      "Project PKI/trust decision for generated self-signed identity or CSR signing flow, hostname and CA/reference bundle",
+      "Point-of-action approval, WebUI visual/audit capture, bounded reconnect and secret/private-key non-export handling"
+    ],
+    "test_command": "CRITICAL HTTPS IDENTITY/KEY CHANGE; DO NOT EXECUTE WITHOUT APPROVAL. Preserve logs and record the verified WebUI Generate capability, documented mode, target slot, current active chain/fingerprint/SPKI, recovery access and restorable identity. Validate all requested subject/SAN/crypto/validity fields and display them for approval. Invoke the exact WebUI Generate action once while capturing before/form/confirmation/audit evidence. If active self-signed mode, monitor bounded HTTPS/BMC reconnect, then verify a new active served SPKI/fingerprint, exact fields, hostname/validity/key-use and the explicitly approved trust outcome; log in through the approved path. If CSR-only mode, securely collect the public CSR, validate its subject/SAN/signature/public-key SPKI, prove the private key remains BMC-protected and prove the active served certificate/login remain unchanged; do not claim activation. Never upload material, export private keys, use `-k` as PASS, repeat generation or auto-retry.",
+    "expected_result": "One new BMC-protected key pair is generated and the human-readable certificate or CSR exactly matches all approved fields and cryptographic policy. In active self-signed mode, the intended slot serves the new matching public identity after bounded reconnect and approved WebUI/API login succeeds under the documented trust policy. In CSR-only mode, the CSR verifies against the new SPKI while the previously active TLS identity and login remain intact until the separate signed-upload workflow. No other slot, key or certificate changes.",
+    "pass_fail_basis": "PASS requires documented mode, one audited WebUI Generate action, new public-key/SPKI evidence, exact field/crypto match, private-key non-exportability and mode-specific active/unmodified TLS plus WebUI-login proof. Certificate-list appearance, HTTP success, upload or `curl -k` cannot pass. Wrong fields/key, unexpected slot activation, hostname/trust failure, lost management access, missing CSR signature, private-key exposure or recovery failure is FAIL and stops. Missing mode, parameters, restorable identity, approval or recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear audit logs, upload a certificate, export/collect private keys, delete the old identity or reuse production key material.",
+      "Verify exact target, Generate mode, slot and parameter form from vendor documentation; do not guess Redfish/OEM actions.",
+      "Prove independent recovery and a restorable known-good identity before generation; certificate metadata alone is not rollback.",
+      "Obtain point-of-action approval for exactly one generation and monitor the documented reconnect bound without disabling trust verification.",
+      "Stop on unexpected activation, identity/trust mismatch or access loss; do not click Generate again or rotate/delete another slot automatically."
+    ],
+    "expected_evidence": [
+      "Target/version identity, vendor-documented generation mode/slot/activation behavior, approved fields/crypto/trust and recovery authorization",
+      "Complete pre-change WebUI/API/served certificate roles, chain, fingerprint/SPKI and verified independent recovery/restorable identity",
+      "Visual Generate form/confirmation/result plus BMC audit event and one-action timestamp",
+      "Parsed generated certificate or CSR with subject/SAN/validity/key/signature and new public-key/SPKI proof without private-key material",
+      "Mode-specific served-certificate/reconnect and approved WebUI/API login evidence, or CSR-only proof that active TLS stayed unchanged",
+      "Unchanged unrelated slots, preserved logs, no upload/no retry/no private-key exposure and engineer verdict"
+    ],
+    "recovery": "On wrong identity, unexpected activation, trust failure or management loss, stop further certificate actions and preserve audit/TLS evidence. Use the independent recovery channel and the pre-approved vendor procedure to restore the known-good certificate/key identity or documented prior slot only after fresh authorization, then revalidate served fingerprint, hostname trust and login. Never regenerate, delete or upload another certificate blindly."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require BMC-side generation, changed key, readable settings and successful login. Firmware generation mode is an explicit parameter, not a competing purpose, and Upload remains a separate row."},
+  "blocked": {"before": false, "after": false, "reason": "Mode-specific Generate semantics, evidence and recovery are fully defined. Vendor mode, parameters, slot and trust package are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Vendor Generate mode and slot semantics; identity/crypto/validity fields; PKI trust; active/reconnect behavior; restorable known-good identity; approval and recovery.", "execution_status": "NOT STARTED; CRITICAL BMC HTTPS KEY/CERTIFICATE STATE CHANGE; POINT-OF-ACTION APPROVAL REQUIRED; NO KEY OR CERTIFICATE GENERATED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide DSP2046", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.pdf", "application": "Distinguishes Certificate resources and certificate-service key-pair/CSR or rekey actions and defines certificate identity/cryptographic fields."},
+    {"title": "OpenSSL s_client documentation", "url": "https://docs.openssl.org/3.4/man1/openssl-s_client/", "application": "Provides hostname/SNI and certificate-chain verification controls for post-generation served-identity validation."}
+  ],
+  "project_authority": "BMC vendor Generate behavior, Project PKI/crypto policy, target identity/slot, reconnect timing, known-good recovery package and certificate rollback SOP bind execution.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "generate_and_upload_kept_distinct": true, "webui_visual_evidence_required": true, "private_key_export_allowed": false, "metadata_only_rollback_accepted": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|926|Wistron-BMC-00216-V002", "next_pending_case_variant_id": "cb813ffe054a3a2f"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
