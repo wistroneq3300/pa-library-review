@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 92,
+  "source_key": "Functionality|903|Wistron-BMC-00193-V003",
+  "case_variant_id": "95217fc951169f98",
+  "source_ref": {"sheet": "Functionality", "source_row": 903, "code": "Wistron-BMC-00193-V003", "original_row_sha256": "779f0be79a6ece8f9e7912f342d100ea5ea884f6ffddbd96ca773ab35125f3e1", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "PWR_PSU1~6", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES sends PSU1~6 as one literal sensor and truncates inventory; it cannot prove six slot outcomes, fitted FRUs, feed/page identity, electrical boundary, mixed-model rules or sharing state.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires separate per-slot collection and model-specific references. V3.1 additionally binds every fitted row to serial/feed/PMBus page, explicitly dispositions unfitted slots, and keeps PWR_CRPS1~2 separate."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1064_95217fc951169f98.json",
+  "old_problem": "A range response or installed count could omit later slots or misattribute a reading when numeric slot, PMBus page and physical bay differ. Mixed-rated or hot-spare PSUs can validly show unequal power, and input/output/load-derived telemetry cannot be combined or compared to CRPS aggregates without boundary and time-window alignment.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SIX_SLOT_PSU_POWER_AND_POPULATION_MATRIX",
+  "disposition_reason": "Build six explicit fitted/unfitted slot outcomes. For each fitted module, bind immutable FRU serial/model/rating, physical bay, AC feed/PDU phase, role and exact PMBus page/command/electrical boundary; then collect complete passive OOB and both UI records under unchanged load/sharing state. Required Project inventory and vendor limits are execution inputs, not unresolved review decisions.",
+  "decision_basis": [
+    "XLSX row 903, same-row DeepSeek, exact GPT V2, selection manifest, preceding CRPS row, related dynamic six-PSU context and preserved V3.1 record were directly reviewed.",
+    "Six source identities require six explicit population outcomes; an unfitted slot is acceptable only under the approved chassis population and BMC absence semantics.",
+    "Per-PSU power depends on model/rating, AC input and active/standby/hot-spare/share state, and only boundary/window-aligned values may be summed or compared.",
+    "ED-03 prohibits guessed PMBus parameters, ED-13 governs absent/standby N/A, ED-15 requires per-model/state rules, ED-17 preserves power evidence and ED-20 separates all slots and CRPS records."
+  ],
+  "test_case": {
+    "test_name": "Verify PWR_PSU1 through PWR_PSU6 as a complete six-slot fitted/unfitted power matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify all six defined PSU slots have an approved fitted/unfitted/unavailable outcome and every fitted module's power telemetry is separately mapped to the correct FRU, bay, feed, role, PMBus field and electrical boundary and correctly shown with quantity, units, value, health, supported thresholds and freshness in both UI locations.",
+    "required_package": [
+      "Chassis/power-backplane/BMC identity and authoritative six-slot PSU-to-CRPS architecture",
+      "Per-slot fitted state, FRU PN/serial/model/firmware/rating, physical bay, AC feed/PDU phase and active/standby/hot-spare/redundancy role",
+      "Per-record AC-input/DC-output/load-derived or other electrical boundary, quantity/units and conversion/accounting definition",
+      "Per-model PMBus bus/address/page/command/format/scaling/calibration/accuracy/averaging window and stable SDR/API/UI identity",
+      "Approved mixed-model/population and current-sharing rules plus per-model/input-voltage/load-dependent range, threshold/hysteresis, health, stale/zero/unavailable semantics",
+      "Recorded host/GPU/system load, input voltage, feed health, share/redundancy mode and cooling context",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Preserve SEL, PSU, AC-feed, BMC and host logs. Do not remove/reseat modules, switch feeds, disable redundancy/hot-spare, change load/share/policy/thresholds or firmware. Build the approved six-row population/FRU/feed/role/PMBus matrix. Enumerate complete inventory and resolve PWR_PSU1 through PWR_PSU6 separately; do not send the tilde range, assume slot equals PMBus order or substitute PWR_CRPS1~2. Review the Script before use. Capture each row's defined absence or immutable module identity, boundary, quantity/units, value, supported thresholds, health, window and timestamp plus matching Dashboard and Server Health evidence and unchanged load/sharing context. Apply its model/state rule and stop without retry on missing, swapped, stale or divergent evidence.",
+    "expected_result": "All six slots have an approved explicit outcome. Every fitted OOB/PMBus record and both UI views agree on bay, FRU serial/model/rating, feed, role, page/command, electrical boundary, quantity, units, value, supported thresholds, health and freshness and satisfy the applicable model/state rule. Unfitted or standby behavior is accepted only when documented; CRPS or aggregate data never substitutes.",
+    "pass_fail_basis": "PASS requires six population outcomes and complete independent evidence for every fitted slot with engineer-confirmed model/boundary/state comparisons. A literal range, count, truncated inventory, assumed slot/page order, CRPS aggregate, generic watt limit or cross-boundary sum cannot pass. Missing/swapped/stale FRU/page identity, unjustified absent/N/A, wrong unit/scaling/boundary, out-of-rule value or required UI/status/threshold mismatch is FAIL. Missing population, vendor PMBus maps, current state or acceptance is NOT READY, not Pending or PASS. Removal, feed failover, sharing transients and efficiency are outside this passive case.",
+    "safety_gate": [
+      "Preserve SEL, PSU, AC-feed, BMC and host power history; do not perform the generic clear-log step.",
+      "Disposition all six bays and bind fitted rows to FRU serial/feed/role/page; do not infer PMBus order or replace them with CRPS records.",
+      "Do not equate or sum input, output and derived power without approved efficiency, boundary and aligned-window rules.",
+      "Do not remove/reseat PSUs, switch feeds, change load/redundancy/hot-spare/share/policy/thresholds, reset controllers or flash firmware.",
+      "Do not guess OEM PMBus parameters, truncate output, expose credentials, assume a cipher or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/power-backplane/BMC identity and six-slot population plus PSU-to-CRPS architecture",
+      "Per-slot FRU PN/serial/model/firmware/rating, AC feed/PDU phase, role and stable PMBus/SDR/UI identity",
+      "Complete separate boundary/quantity/units/value/page-command/scaling-window/supported-threshold/health/timestamp evidence with both UI rows",
+      "Recorded input voltage/feed health, share/redundancy/hot-spare mode, host/GPU/system load and cooling plus per-model/state comparison",
+      "Unfitted/standby/fault/zero/unavailable/stale/divergent disposition and pinned Script/client audit",
+      "No-clear/no-service-or-feed-or-load-or-policy change/no-retry proof, final PSU/BMC health and six-slot engineer verdict"
+    ],
+    "recovery": "No PSU or power mutation is expected. On population/FRU/feed/page ambiguity, stale/divergent telemetry or health change, stop and preserve first-pass evidence and current sharing/load state. Obtain the correct inventory, power-tree and vendor PMBus references and continue only read-only; do not service a supply or alter load to force alignment. Any later failover or hot-swap test requires separate authorization and recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, passive UI Procedure and Criteria consistently target six PSU power records. The related dynamic test and two CRPS points are separate coverage, while inventory/model gaps are execution readiness inputs."},
+  "blocked": {"before": false, "after": false, "reason": "The six-slot passive objective and population-aware method are clear. Project inventory and vendor PMBus specifications can supply the remaining bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Six-slot fitted/FRU/model/rating/feed/role/page map, PSU-to-CRPS architecture, per-model electrical boundaries/scaling/windows, stable IDs, population/state/range/threshold/status/freshness rules, passive load/sharing context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO PSU, FEED, LOAD, REDUNDANCY, POLICY, THRESHOLD OR FIRMWARE CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define physical population, per-model PMBus fields, electrical boundaries or acceptance."}],
+  "project_authority": "Project power tree/slot/feed map, PSU FRU inventory, vendor PMBus specifications, mixed-model/redundancy policy, BMC SDR repository and WebUI schema define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "six_slot_outcomes_required": true, "CRPS_substitution_allowed": false, "oem_pmbus_guessing_allowed": false, "PSU_or_load_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|904|Wistron-BMC-00194-V004", "next_pending_case_variant_id": "fcc4729918b0d0c0"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
