@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 144,
+  "source_key": "Functionality|957|Wistron-BMC-00247-V002",
+  "case_variant_id": "e73b42cb20a13be1",
+  "source_ref": {"sheet": "Functionality", "source_row": 957, "code": "Wistron-BMC-00247-V002", "original_row_sha256": "2ee580cdbea52ca02986c31cb87c5ee6e63569fac77f7eb9ab884b667ecb2118", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_FP", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES reads Manufacturer, ProductName and SerialNumber from an assumed FRU_FP URI using insecure curl; it does not prove the installed front-panel assembly or perform complete WebUI/IPMI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores physical FP mapping, complete field evidence and no-write controls but does not remove the decision gate after expressing finite Project inputs."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1116_e73b42cb20a13be1.json",
+  "old_problem": "The friendly FP resource name and three generic identity fields could describe another front-area assembly, including one of FE_1~4, without proving the installed front-panel FRU. The previous review correctly demanded exact mapping but kept a read-only inventory case pending for missing runtime bindings.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_FRONT_PANEL_FRU_IDENTITY_AND_COMPLETE_PARITY",
+  "disposition_reason": "Bind the Project-defined front-panel assembly independently from the four FE modules and HIB, enumerate its exact IPMI FRU device and linked UI/API representation, decode every applicable inventory field and compare it to the front-panel manufacturing record. This case validates FP inventory only; functional button or LED actuation is neither inferred nor substituted.",
+  "decision_basis": [
+    "XLSX row 957, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 958 were directly reviewed; next pending was verified as Functionality row 958 / variant 180fbe0090361716.",
+    "The preceding FE_1~4 and following HIB source records establish distinct inventory identities. Name proximity and shared front-of-system location do not permit their evidence to satisfy FRU_FP.",
+    "The Procedure is an inventory/readability comparison through WebUI and IPMI. It does not command front-panel LED or button actuation, so those potentially physical/manual behaviors must not be invented as acceptance criteria.",
+    "IPMI FRU areas and DMTF Chassis/Assembly support full inventory decoding; only the Project hardware topology can bind those records to the specific installed front-panel assembly.",
+    "ED-02, ED-08, ED-17, ED-19, ED-21 and ED-30 preserve exact identity, visual evidence and logs; ED-33 through ED-38 allow safe parameterization while rejecting guessed endpoints and partial field substitution."
+  ],
+  "test_case": {
+    "test_name": "Validate installed front-panel FRU inventory independently from FE and HIB assemblies",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the exact installed front-panel assembly is the FRU_FP object, its complete applicable FRU content decodes correctly, and every required identity/manufacturing field agrees with the authoritative front-panel record, complete `ipmitool fru print`, mapped API inventory and actual WebUI detail, without expanding this inventory case into LED/button operation or changing state.",
+    "required_package": [
+      "Immutable SUT/BMC/chassis identity and approved physical assembly map distinguishing front panel from FE_1~4, HIB and other front-area boards",
+      "Complete enumerated IPMI FRU map and approved FP device ID/interface/channel/bridge/address with durable physical association",
+      "Service-discovered Redfish Chassis/Assembly or approved OEM FP mapping and actual WebUI Inventory and LEDs front-panel row/detail labels",
+      "Front-panel FRU area/field layout with applicable Board/Product/Chassis/MultiRecord/custom fields and explicit non-applicable areas",
+      "Authoritative FP manufacturing/BOM/asset record and encoding, blank, padding, truncation and freshness rules",
+      "Trusted TLS, protected read-only credentials, sensitive-identifier redaction and protected raw/visual artifact storage"
+    ],
+    "test_command": "READ ONLY. Verify the immutable target and physical assembly map, enumerate all IPMI FRU devices and actual API inventory resources, and select FP only through its approved durable physical relationship; reject FE_1~4 and HIB identities. Execute only `ipmitool ... fru print <FP-FRU-ID>` and retain full output, exit status and decode/checksum diagnostics. Follow service links to the mapped Chassis/Assembly or approved OEM object rather than assuming `/Chassis/FRU_FP`. Open the actual rendered BMC WebUI Hardware status > Inventory and LEDs FP row/detail and capture all applicable fields. Decode the complete FRU areas, preserve raw values, apply only approved normalization and compare every required field with the FP manufacturing authority and supported UI/API representation. Repeat read fingerprints only. Do not operate buttons or LEDs, write/edit FRU, clear logs, refresh inventory, reset, reboot or power-cycle.",
+    "expected_result": "Exactly one installed physical front-panel assembly maps to the selected IPMI FRU and approved UI/API representation, and no FE or HIB object is substituted. All applicable FRU areas decode without reported structure/checksum errors; required fields are present or carry an authorized absent representation and exactly match the FP manufacturing record after traceable normalization. Complete IPMI, rendered WebUI and mapped API evidence reconcile, no functional LED/button claim is made, and no state change occurs.",
+    "pass_fail_basis": "PASS requires unique front-panel physical mapping, full `ipmitool fru print`, actual rendered WebUI evidence, complete applicable-area decoding and field-level agreement with the FP authority. An FP-like URI, three generic fields, front-location similarity, FE evidence or a functional LED observation cannot replace inventory proof. Wrong/ambiguous/duplicate assembly, parser/checksum error, missing required field, unauthorized blank or unexplained UI/IPMI/API/reference mismatch is FAIL. Missing map/layout/reference is NOT READY; unsupported/N/A requires authoritative platform evidence.",
+    "safety_gate": [
+      "Use protected certificate-verified read sessions and approved IPMI routing; do not expose secrets or accept insecure-TLS evidence.",
+      "Prove FP physical identity independently of FE_1~4 and HIB before data comparison; do not select by friendly name, ordering or common product fields.",
+      "Allow only FRU enumeration and `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes, log clearing, BMC reset, reboot and power actions.",
+      "Do not actuate or infer front-panel LEDs/buttons in this inventory case; physical/control behavior belongs to separately identified coverage.",
+      "Retain complete raw records and actual rendered WebUI artifacts before normalization/redaction, with protected originals and stable audit tokens.",
+      "Stop on ambiguous mapping, duplicate inventory, stale data, decode/checksum failure or authority conflict and do not retry by guessing another front-area FRU."
+    ],
+    "expected_evidence": [
+      "Immutable target and physical assembly map distinguishing FP from FE_1~4 and HIB, plus complete enumerated IPMI/API inventory sets",
+      "Timestamped complete `ipmitool fru print <FP-FRU-ID>` with routing, exit code, decode/checksum status and protected artifact hash",
+      "Discovered Redfish/OEM link chain and complete FP artifact with schema/firmware and certificate-validation metadata",
+      "Actual rendered WebUI Inventory and LEDs FP row/detail visual evidence with all required fields",
+      "Area-aware FP field matrix showing raw, normalized, expected and per-source values and explicit FE/HIB exclusion",
+      "Pre/post fingerprints, preserved SEL/audit logs, no-write/no-control/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On FP/FE/HIB identity ambiguity, decode/checksum failure or data disagreement, stop and preserve/redact evidence, then obtain the authoritative assembly map or reference. Do not actuate controls, trial another FRU, rewrite inventory, clear logs, reset BMC, reboot, power-cycle or automatically retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require front-panel FRU inventory and WebUI/IPMI correctness. The DeepSeek command is incomplete, not contradictory."},
+  "blocked": {"before": false, "after": false, "reason": "The FP inventory scope and read-only acceptance model are clear. Physical mapping, field layout and expected record are bounded Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Physical FP versus FE/HIB map; FP IPMI/API/UI identities; applicable FRU layout; manufacturing/BOM values; normalization, freshness, trust and redaction rules.", "execution_status": "NOT STARTED; READ-ONLY FRU_FP INVENTORY REVIEW ONLY; NO IPMI, REDFISH, WEBUI, LED, BUTTON OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines the standard inventory areas and field encoding checked for the front-panel FRU; it does not define FP/FE/HIB topology."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete print/decode/checksum evidence and the read-only versus mutation boundary."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis/Assembly inventory properties and relationships when used for FP; vendor/Project mapping remains authoritative."}
+  ],
+  "project_authority": "The Project/vendor assembly package uniquely maps the front panel, defines its FRU layout and expected values and distinguishes it from FE/HIB assets. Those finite inputs make this strictly read-only inventory case fully automatable.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-08", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "fp_identity_separate_from_fe_and_hib": true, "inventory_scope_not_expanded_to_led_or_button_actuation": true, "source_webui_and_ipmitool_both_preserved": true, "complete_fru_fields_required": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "fru_or_control_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|958|Wistron-BMC-00248-V002", "next_pending_case_variant_id": "180fbe0090361716"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_front_panel_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
