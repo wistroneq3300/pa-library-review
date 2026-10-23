@@ -1,0 +1,62 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 27,
+  "source_key": "Functionality|837|Wistron-BMC-00127-V004",
+  "case_variant_id": "fe77cf6bf08ded24",
+  "source_ref": {"sheet": "Functionality", "source_row": 837, "code": "Wistron-BMC-00127-V004", "original_row_sha256": "cb2890bbbb1177507cdbc2a857724570d189dc9e490608be170a9315e14f6cb5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SOL session by ipmitool", "procedure": "Run `ipmitool -I lanplus -U <User> -P <Password> -H <IP address> sol activate`.", "criteria": "The SOL session establishes successfully and output contains human-readable characters.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/remote-control/sol-session-by-ipmitool", "deepseek": "PARTIAL but duplicates the client token, hard-codes cipher 17, exposes the password and uses head without lifecycle proof.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; adds target/channel/ttyS0 identity, protected secrets, bounded observation and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0999_fe77cf6bf08ded24.json",
+  "old_problem": "The prior review had a sound two-part oracle and safe lifecycle but left the case on the decision queue for normal external-package, target, owner and expected-output bindings.",
+  "new_disposition": "RESOLVED_AS_BOUNDED_IPMITOOL_LIVE_SOL_SESSION_TEST",
+  "disposition_reason": "IPMI 2.0 and upstream ipmitool documentation fully define the client/payload lifecycle. The two source criteria are complementary: a client establishment indication bound to the correct payload proves session creation, while recognizable host-specific text proves that the mapped console is actually readable. Installed client, endpoint/channel map, cipher/privilege, session owner, expected tokens, time bounds and recovery are Project Configuration. The upstream client can prompt for a password instead of using source `-P`, and a PTY with documented escape provides deterministic evidence without changing the named tool or coverage.",
+  "decision_basis": [
+    "XLSX row 837, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Intel IPMI v2.0 defines SOL as an RMCP+ payload and the routing/session boundary; target payload identity is separate from printable console content.",
+    "The upstream ipmitool manual defines `lanplus`, password prompting, cipher/privilege and SOL escape controls and warns that command-line passwords are not recommended.",
+    "The upstream SOL implementation documents activation, asynchronous data handling and deactivation on clean exit.",
+    "ED-20 preserves this exact Source Key/Variant and ipmitool coverage; ED-35 prevents replacing it with ipmiutil; ED-36 makes mapping/owner/text inputs readiness data; ED-38 forbids secret exposure, forced takeover and automatic retry."
+  ],
+  "test_case": {
+    "test_name": "Establish one bounded ipmitool SOL session and verify target-specific readable console output",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the pinned ipmitool establishes an authorized IPMI 2.0 SOL payload to the exact intended BMC-mapped host console, receives correct target-specific readable characters and exits without displacing another owner or leaving a stale session.",
+    "required_package": [
+      "Pinned ipmitool version/build and captured help for lanplus, cipher, password, SOL activation and escape behavior",
+      "BMC/host/firmware identity, management endpoint and authoritative LAN interface/SOL channel/payload-to-host-console mapping",
+      "Dedicated account, minimum approved privilege, target-supported authenticated/encrypted cipher and protected password prompt/file/broker",
+      "Pre-session enabled/active/owner state and explicit no-takeover or approved-takeover policy",
+      "Approved client establishment token, host-specific banner/prompt/text, encoding/line discipline and observation timeout",
+      "Documented escape/close/deactivate rules, transcript redaction, KVM/OOB recovery and pinned internal Script revision if used"
+    ],
+    "test_command": "Record ipmitool version/help, BMC/host identity, SOL channel/payload mapping, supported cipher, current owner/state, expected output and KVM/OOB health; preserve logs. After explicit approval, open exactly one bounded PTY with the reviewed safe equivalent of `ipmitool -I lanplus -C \"$IPMI_CIPHER\" -U \"$BMC_USER\" -H \"$BMC_IP\" -a sol activate`, using password prompt or another approved protected method rather than source `-P`. Capture the client establishment response and timestamped raw/redacted console bytes, match the approved target-specific token(s), send no arbitrary input, then exit using the documented escape. Verify process exit, payload/owner final state and BMC/host/KVM/OOB health. Do not run the inaccessible Script until pinned and reviewed, clear logs, use `head`, force deactivate another owner or retry automatically.",
+    "expected_result": "The pinned client authenticates with the approved cipher/privilege to the bound BMC, activates exactly one authorized SOL payload and emits its documented operational response. The same session receives the approved host-specific banner/prompt/text as correctly decoded human-readable characters within the time bound. No other console owner is displaced, no secret is exposed, the escape cleanly ends the client/payload as policy requires, and final management/host health is normal.",
+    "pass_fail_basis": "Record establishment and readability separately; overall PASS requires both plus clean termination. Establishment requires the supported client response and correct endpoint/channel/owner metadata. Readability requires raw target-specific text under the approved encoding; `SOL Session operational`, printable noise or output from another host is insufficient. Wrong endpoint/channel, auth/cipher error, missing expected token, unreadable/secret-bearing output, owner preemption, timeout, stale payload or management impact is FAIL. Missing package/map/owner/token/time/cleanup/recovery data is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Verify exact BMC/host/channel/payload and current owner before activation; do not seize or deactivate an unknown active session.",
+      "Never use literal `-P`; prompt or use a permission-restricted reviewed secret source and redact authentication metadata.",
+      "Use only a target-supported approved cipher/privilege and a trusted management network; do not hard-code cipher 17 without validation.",
+      "Bound PTY duration/output, send no arbitrary input/break/power command, and use documented escape rather than piping to `head`.",
+      "Preserve baseline logs and console bytes, including corrupt bytes; do not clear or normalize away failure evidence.",
+      "No automatic retry. Stop on wrong target, owner conflict, unexpected/sensitive output, timeout or failed cleanup."
+    ],
+    "expected_evidence": [
+      "ipmitool build/help, BMC/host identity, SOL interface/channel/payload/console map and pre-session owner/state",
+      "Approved cipher/privilege and secret-handling attestation with redacted exact command/session audit",
+      "Timestamped client establishment indication tied to the intended endpoint and payload",
+      "Bounded raw/redacted transcript containing approved host-specific readable output and encoding assessment",
+      "Documented escape, client exit and final payload/owner state with no unauthorized input or automatic retry",
+      "BMC/host/KVM/OOB health, preserved log delta and pinned Script review if used"
+    ],
+    "recovery": "On wrong endpoint, owner conflict, auth/cipher error, unexpected or sensitive output, timeout or failed close, stop without retry or console input. Use the documented escape; deactivate only the owned test payload if separately authorized. Preserve the transcript, revoke exposed secrets, verify host/BMC via KVM/OOB and escalate any unowned stale session rather than forcing it closed."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, command and Criteria consistently require ipmitool activation, establishment and readable console output."},
+  "blocked": {"before": false, "after": false, "reason": "Standard and client documentation define the lifecycle; endpoint, owner and output tokens are Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Pinned client, endpoint/channel map, cipher/privilege/secret method, session owner, establishment/output tokens, timeouts, cleanup, recovery and Script hash if used.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "Intel Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "use": "Defines SOL payload, routing and session semantics."},
+    {"title": "ipmitool upstream manual", "url": "https://github.com/ipmitool/ipmitool/blob/master/doc/ipmitool.1.in", "use": "Defines lanplus, cipher, password prompt/file, privilege and SOL escape behavior and security guidance."},
+    {"title": "ipmitool SOL implementation README", "url": "https://github.com/ipmitool/ipmitool/blob/master/src/plugins/lanplus/README.sol", "use": "Documents activation, asynchronous stream and clean deactivation lifecycle."}
+  ],
+  "traceability": {"applicable_decisions": ["ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "establishment_and_readability_verdicts_separate": true, "plaintext_password_executed": false, "session_takeover_authorized_by_review": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|838|Wistron-BMC-00128-V005", "next_pending_case_variant_id": "170cd88928d895b9"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

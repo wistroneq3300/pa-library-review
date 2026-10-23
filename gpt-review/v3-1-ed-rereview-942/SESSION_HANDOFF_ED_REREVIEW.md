@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **26 / 942**
-- Last reviewed: `Functionality|836|Wistron-BMC-00126-V004` / `2b0c8075417c3767`
-- Next source-verified pending identity: `Functionality|837|Wistron-BMC-00127-V004` / `fe77cf6bf08ded24`
-- Latest disposition: The ipmitool volatile-rate case is removed from Pending as two non-substitutable checkpoints: full `sol info` must show the bound channel's `Volatile Bit Rate (kbps): 115.2`, and one separately authorized bounded live session must show target-specific readable output and close cleanly. The source's 115200 bps and Criteria's 115.2 kbps are equivalent units, not a conflict.
+- Completed: **27 / 942**
+- Last reviewed: `Functionality|837|Wistron-BMC-00127-V004` / `fe77cf6bf08ded24`
+- Next source-verified pending identity: `Functionality|838|Wistron-BMC-00128-V005` / `170cd88928d895b9`
+- Latest disposition: The general ipmitool live-SOL case is removed from Pending with separate proof of client/payload establishment and recognizable target console content. It preserves its own ipmitool compatibility identity, uses protected password prompting, checks the current session owner, runs one bounded PTY and verifies documented escape/cleanup without `head` or automatic retry.
 - Protected sources: unchanged.
 - DUT execution: none.
