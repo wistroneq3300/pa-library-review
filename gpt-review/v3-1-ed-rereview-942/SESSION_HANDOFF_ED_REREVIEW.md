@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **152 / 942**
-- Last reviewed: `Functionality|965|Wistron-BMC-00255-V002` / `1a42895db64c9648`
-- Next source-verified pending identity: `Functionality|966|Wistron-BMC-00256-V002` / `4e03ed7ba7e596d8`
-- Latest disposition: smbus is removed from Pending and reclassified FULLY AUTOMATABLE. It uses only the documented BMC inventory surface and actual WebUI; generic OEM blobs and all raw bus probes/register/OEM-control operations are prohibited. No query ran.
+- Completed: **153 / 942**
+- Last reviewed: `Functionality|966|Wistron-BMC-00256-V002` / `4e03ed7ba7e596d8`
+- Next source-verified pending identity: `Functionality|967|Wistron-BMC-00257-V002` / `ae345a0212f14b9f`
+- Latest disposition: SMC_FPGA is removed from Pending and reclassified FULLY AUTOMATABLE. Exact topology-backed component identity and active/backup/staged lifecycle replace substring matching; the case is inventory-only and permits no update/activate/reset action. No query ran.
 - Protected sources: unchanged.
 - DUT execution: none.
