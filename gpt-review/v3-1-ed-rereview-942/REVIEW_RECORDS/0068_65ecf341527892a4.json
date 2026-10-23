@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 68,
+  "source_key": "Functionality|878|Wistron-BMC-00168-V003",
+  "case_variant_id": "65ecf341527892a4",
+  "source_ref": {"sheet": "Functionality", "source_row": 878, "code": "Wistron-BMC-00168-V003", "original_row_sha256": "b070b5d9bc21b5f3d098ab6089e59d6402f1b51728ab3983137de2d2329c348d", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_OCP_1~2", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats `TEMP_OCP_1~2` as one literal name and truncates fallback inventory; it does not resolve two records, OCP meaning, slot population, sensor source, UI identity or specification.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly rejects range-query proof but incorrectly assumes OCP means over-current protection and invents rail/alarm semantics not present in the source."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1040_65ecf341527892a4.json",
+  "old_problem": "The tilde range was used as one likely nonexistent sensor identifier, while the platform meaning of OCP and the two physical positions were not resolved. Prior GPT V2 then introduced unsupported over-current rail/protection criteria, risking both a failed query and coverage replacement by an unrelated electrical test.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_ROW_OCP_POSITION_TEMPERATURE_MATRIX",
+  "disposition_reason": "Keep this as a passive two-position temperature display check. Require Project confirmation of the vendor meaning of OCP, then resolve position 1 and 2 into separate stable records bound to physical slots, fitted adapters/modules and actual sensor sources. Compare each complete OOB/two-UI record with its population-aware thermal specification; no electrical-protection, traffic-load or fault behavior is invented.",
+  "decision_basis": [
+    "XLSX row 878, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "Tilde notation expresses source coverage of positions 1 through 2; it is not proven IPMI wildcard syntax and requires two independently evidenced records.",
+    "In a server temperature sensor list, OCP plausibly denotes an OCP adapter/module position, but the Project must confirm its vendor meaning; GPT V2 over-current rail semantics are not adopted.",
+    "ED-13 controls empty-position N/A, ED-15 requires per-position acceptance, ED-17 preserves logs, and ED-20 preserves both positions independently."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_OCP position 1 and 2 independently against the confirmed platform OCP topology",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After confirming the platform-defined OCP meaning, verify temperature positions 1 and 2 are separately human readable in Dashboard and Server Health, map to their physical slots and fitted modules or board-local probes, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications at the recorded passive link/load/airflow state.",
+    "required_package": [
+      "Authoritative platform definition of `OCP_1~2` and exact chassis/board/BMC/BIOS configuration",
+      "Physical position numbering and fitted module/adapter FRU, PN, serial, firmware, PCIe BDF and host-interface inventory where applicable",
+      "Per-position sensor-source definition as module telemetry or board-local slot probe and separate stable SDR/API plus Dashboard/Server Health identities",
+      "Per-position units/scaling, approved range or reference delta, threshold capability/values/hysteresis, health, freshness and empty-position rules",
+      "Recorded link/traffic/power state, system load, fan mode/speeds, airflow, timing and approved tolerance/update-lag rules",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, generate traffic/load, change link/driver state, reset or service a module, alter airflow or write thresholds. First confirm the vendor meaning of OCP and build a two-row physical position/population/source matrix. Enumerate the complete sensor repository and resolve position 1 and position 2 separately; do not use `TEMP_OCP_1~2` as one literal record unless explicitly documented. Review the Script before use. Capture each independent command status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Compare each with its thermal specification under the recorded passive state. Stop without retry on missing, duplicate, swapped, stale or divergent identity.",
+    "expected_result": "Two distinct applicable records and UI rows map to the correct confirmed OCP physical positions, fitted FRUs and documented sensing sources. Each independently matches its thermal value/unit/threshold/status/freshness specification under the recorded passive state. An empty position is N/A only by approved population rule; one position or generic NIC telemetry never substitutes, and no electrical-protection behavior or state mutation is claimed.",
+    "pass_fail_basis": "PASS requires the authoritative OCP meaning, slot/population/source mapping and separate complete OOB/two-UI/spec agreement for both applicable positions with an engineer verdict. One literal range query, one position, name-only matching, generic NIC data, truncated output or invented over-current rail criteria cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-tolerance value or required threshold/status mismatch is FAIL. Missing topology/spec/reviewed method is NOT READY, not Pending or PASS; traffic thermal response and electrical protection are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; PCIe, network, thermal and BMC history is relevant context.",
+      "Do not interpret tilde text as a literal wildcard or one sensor; preserve two independent results and statuses.",
+      "Do not assume OCP means over-current protection or introduce rail/fault criteria without explicit source authority.",
+      "Do not infer card-internal versus board-local sensing or slot identity from label/value; bind each to physical inventory.",
+      "Do not generate traffic/load, alter link/driver/fan/airflow/thresholds, reset or service an adapter.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; population N/A needs proof and no automatic retry is allowed."
+    ],
+    "expected_evidence": [
+      "Platform-approved OCP meaning, chassis/board/BMC/BIOS identity, physical position numbering and fitted module PN/serial/FRU/firmware/BDF/interface inventory",
+      "Two separate complete raw identities, sensing-source paths, values, units, threshold capabilities/values, health and timestamps",
+      "Separate Dashboard and Server Health evidence for each position",
+      "Per-position thermal specification plus passive link/traffic/power/load/fan/airflow state and tolerance/update-lag comparison",
+      "Empty/missing/duplicate/swapped/stale and card-versus-board-source disposition with pinned Script or alternate-method audit",
+      "No-clear/no-write/no-stress/no-reset/no-service/no-retry proof, final adapter/BMC health and per-position engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On acronym, slot, source or identity ambiguity, stale/divergent values or unexpected adapter/BMC health change, stop and preserve both positions' first evidence plus inventory/link state. Use approved read-only board/adapter diagnostics; do not reset, reseat or stress an adapter to force evidence. Any separately authorized change is restored by the platform owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The row consistently requests passive display/spec verification of two temperature positions. The acronym needs Project definition, but GPT V2's unsupported over-current expansion is a review error rather than a source contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "Two passive temperature targets are clear. OCP meaning, position population, source mapping and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Authoritative OCP meaning, physical position/population/FRU/source map, separate sensor/UI identities, per-position values/thresholds/status/freshness/N/A rules, passive operating state and protected reviewed collection method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define OCP semantics, physical positions or acceptance."}],
+  "project_authority": "Platform OCP terminology/topology, slot and adapter inventory, sensor-source map, SDR thermal limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "literal_range_query_allowed_without_documentation": false, "two_position_non_substitution": true, "overcurrent_semantics_adopted": false, "network_or_fault_stimulus_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|879|Wistron-BMC-00169-V003", "next_pending_case_variant_id": "c56e91372d7ecd10"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
