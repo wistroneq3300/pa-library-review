@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 136,
+  "source_key": "Functionality|949|Wistron-BMC-00239-V002",
+  "case_variant_id": "bfa858a238c7a2e1",
+  "source_ref": {"sheet": "Functionality", "source_row": 949, "code": "Wistron-BMC-00239-V002", "original_row_sha256": "30e4314e314a2a469d96fed1993fe1ce9837f7bcb9b81fadc35ce732f4303b1c", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Chassis - OAM_0~7", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes `/redfish/v1/Chassis/OAM_0`, reads only Manufacturer/Model/SerialNumber, bypasses TLS verification, exposes credentials and extrapolates OAM_1~7 without querying or mapping them.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires Chassis enumeration, vendor OAM topology, complete per-member fields, sensitive-value redaction and WebUI correlation; however, once the read-only Project topology package is supplied, no per-action confirmation or manual operation is needed."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1108_bfa858a238c7a2e1.json",
+  "old_problem": "The eight-index coverage was reduced to one guessed member and three fields. Previous review correctly restored mapping and completeness but left the read-only case in a confirmation-gated class merely because the Project topology was not yet supplied. Topology and expected population are runtime input, not a reason to keep Engineering Decision Pending or require write approval.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_COLLECTION_DISCOVERED_EIGHT_POSITION_OAM_INVENTORY",
+  "disposition_reason": "Enumerate the protected Chassis collection, bind actual vendor member IDs to an approved OAM_0 through OAM_7 position matrix, account independently for every expected present or documented unfitted position, capture complete member detail and actual WebUI evidence, and compare to Project BOM/topology. All operations are read-only. The Project mapping is required for readiness and PASS but does not require human confirmation during execution.",
+  "decision_basis": [
+    "XLSX row 949, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 950 were directly reviewed; next pending identity was verified as Functionality row 950 / variant 0a5c189fe49b4e92.",
+    "The Items explicitly names OAM_0~7, so all eight logical positions must be accounted independently. `siblings analogous` is not evidence and resource IDs cannot be synthesized from OAM_0.",
+    "DMTF Chassis schema defines identity, type, manufacturer/model/part/serial/asset, status, power, location and relationship fields, but OAM naming and position mapping are vendor/Project-specific and must come from the approved topology package.",
+    "Absent/unfitted, unsupported, duplicate, omitted, unauthorized and failed member reads have different meanings; the approved population matrix makes each outcome objectively evaluable.",
+    "ED-02, ED-21, ED-26 and ED-33 through ED-38 preserve every indexed identity, permit safe parameterization and forbid one-member/template extrapolation or AI-owned DUT verdict."
+  ],
+  "test_case": {
+    "test_name": "Discover and validate every OAM_0 through OAM_7 chassis position independently",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify that all eight logical OAM positions are independently accounted as approved present or documented unfitted/unsupported states, that every present OAM's complete chassis identity/topology/status/detail is readable and correct in protected Redfish and the actual BMC WebUI, and that no inventory, power or hardware state changes.",
+    "required_package": [
+      "Immutable BMC/SUT/firmware/WebUI identity, trusted TLS chain, protected read-only credential path and sensitive serial/asset redaction rules",
+      "Vendor/Project definition of OAM, exact logical positions 0 through 7, physical slot/service-label mapping and approved present/unfitted/unsupported population from the platform recipe",
+      "Service-root-discovered complete paginated Chassis collection and target-supported Chassis schema/member-detail access; no assumed OAM member IDs",
+      "Per-present-position expected identity matrix: actual resource binding, ChassisType, manufacturer, model, part/SKU/redacted serial or stable token, location, Status.State/Health, PowerState and required Links",
+      "Approved representation of unfitted positions, duplicate/extra member policy, WebUI OAM table/detail mapping, freshness tolerance and raw/normalized evidence storage"
+    ],
+    "test_command": "READ ONLY. Verify immutable target and discover the complete Chassis collection from the Redfish service root; follow pagination and preserve the redacted raw member list. Do not fabricate `/Chassis/OAM_0` or sibling IDs. Using only the approved vendor topology, bind each actual member to logical OAM_0, OAM_1, OAM_2, OAM_3, OAM_4, OAM_5, OAM_6 or OAM_7 and separately record every position that is expected unfitted/unsupported. For each present member, follow its `@odata.id` and normalize Id/Name, ChassisType, manufacturer/model/part/SKU/redacted serial/asset token, location/service label, Status.State/Health, PowerState and required system/manager/contained-by links. Open the actual WebUI Hardware status > Inventory and LEDs OAM chassis table and each present detail view, capture timestamped visual evidence and reconcile every row/field/position with Redfish and the approved matrix. Distinguish absent, unfitted, unsupported, duplicate, extra, omitted, unauthorized and failed reads. Repeat only read-only collection fingerprints. Do not use `curl -k`, process-visible credentials, locator/power/reset/inventory writes or log clearing.",
+    "expected_result": "Exactly eight logical positions are accounted with no duplicate mapping: each Project-expected present OAM has one complete schema-valid member whose identity, physical slot, health/state, power and links match the approved topology/BOM and actual WebUI; each expected unfitted/unsupported position has the approved representation and is not confused with an API failure. No unexpected extra member, missing present slot, duplicate position, stale/unknown unexplained state or UI/API discrepancy exists, sensitive values are traceably redacted and pre/post fingerprints prove no change.",
+    "pass_fail_basis": "PASS requires independent OAM_0 through OAM_7 accounting, complete collection/member traversal, unique position-resource binding, actual WebUI visual correlation and exact Project matrix comparison. OAM_0 alone, inferred siblings, three identity fields, a collection count or a generic successful GET cannot pass. Missing/duplicate/extra positions, wrong physical mapping, unexplained absent/unknown/null, UI/API mismatch or incomplete evidence is FAIL or NOT READY by the approved policy. An unfitted/unsupported position is accepted only when the authoritative Project/platform recipe says so; missing topology data is NOT READY, not Engineering Decision Pending.",
+    "safety_gate": [
+      "Use only certificate-verified protected GET/read operations discovered from the service root; do not use `curl -k`, expose credentials or synthesize resource IDs.",
+      "Keep this case strictly read-only. Never invoke chassis power/reset, indicator, firmware, inventory or hardware actions and never clear logs.",
+      "Account for all eight logical indices independently and stop on ambiguous, duplicate or cross-SUT mapping; do not extrapolate one member to any sibling.",
+      "Distinguish documented unfitted/unsupported from missing member, omitted response, unauthorized request and transport failure; none may be silently converted to PASS.",
+      "Redact serial/asset values while retaining stable tokens, physical slot/service-label identity, timestamps and raw hashes sufficient for audit.",
+      "Do not modify physical OAM population or power state to satisfy the expected matrix; record discrepancies for engineer verdict."
+    ],
+    "expected_evidence": [
+      "Target BMC/SUT/WebUI/schema identity, trusted session, complete paginated Chassis collection and approved OAM_0~7 present/unfitted topology matrix",
+      "Complete raw redacted member response and normalized identity/location/status/power/link record for every present OAM",
+      "Eight-position reconciliation with explicit present, documented-unfitted/unsupported, missing, duplicate and extra outcomes",
+      "Actual WebUI OAM table/detail visual artifacts with per-position field parity and freshness timestamps",
+      "Pre/post read-only fingerprints, preserved audit/log evidence, no mutation and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On wrong target, incomplete pagination, ambiguous/duplicate mapping, credential exposure or UI/API discrepancy, stop collection, preserve/redact evidence and close the session. Do not invent sibling IDs, change OAM population, toggle indicators or power-cycle to repair inventory; obtain the correct vendor topology or Project recipe."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items explicitly defines the eight OAM positions and Procedure/Criteria consistently request their chassis details. DeepSeek's OAM_0-only shortcut is a review defect, not a Master conflict."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only multi-member purpose is defined. OAM member IDs, physical mapping and expected fitted population are finite Project readiness inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Target BMC/WebUI; vendor OAM definition; OAM_0~7 physical/resource map; expected present/unfitted population and per-slot BOM/status fields; Chassis schema; absent/extra/redaction/UI mapping rules.", "execution_status": "NOT STARTED; READ-ONLY EIGHT-POSITION OAM INVENTORY; NO REDFISH, WEBUI OR DUT QUERY EXECUTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis collection/member identity, type, manufacturer/model, status, power, location and relationship fields used for complete per-OAM evidence."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Provides authoritative current Chassis schema discovery; OAM naming and eight-position physical meaning remain vendor/Project bindings rather than standard resource IDs."}
+  ],
+  "project_authority": "The Project/vendor package binds actual Chassis members to OAM_0~7, specifies fitted/unfitted positions and expected field values, and owns PASS/FAIL. The collector itself is fully read-only and requires no point-of-action confirmation.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-21", "ED-26", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "all_eight_positions_preserved": true, "one_member_extrapolation_rejected": true, "collection_discovery_required": true, "webui_visual_evidence_required": true, "fully_automatable": true, "user_confirmation_required": false, "write_action_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|950|Wistron-BMC-00240-V002", "next_pending_case_variant_id": "0a5c189fe49b4e92"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_chassis_schema_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
