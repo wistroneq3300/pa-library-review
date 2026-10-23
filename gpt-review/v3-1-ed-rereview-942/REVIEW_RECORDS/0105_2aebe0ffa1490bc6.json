@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 105,
+  "source_key": "Functionality|916|Wistron-BMC-00206-V003",
+  "case_variant_id": "2aebe0ffa1490bc6",
+  "source_ref": {"sheet": "Functionality", "source_row": 916, "code": "Wistron-BMC-00206-V003", "original_row_sha256": "afac7e94e01bc021c2f293d9a0a5ce6bfbeae9b7782ae93b164dfcda8c5af250", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Virtual media", "procedure": "Power on, mount an ISO through BMC virtual media, install Linux with all packages, reboot, verify usability and inspect OS event logs; generic setup says clear logs.", "criteria": "OS installation completes, the system works after reboot and event logs contain no unapproved error/fail/warning entries.", "script": null, "deepseek": "PARTIAL posts InsertMedia to a fixed Redfish path using `curl -k` and HTTP media, then reads Image/Inserted. It proves neither secure media identity and transfer nor host attachment, safe disk selection, installation, reboot health, logs or eject cleanup.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL destructive risk correctly requires vendor endpoint discovery, trusted ISO, designated disposable disk, console installation proof, post-reboot checks and mandatory media/boot cleanup."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1077_2aebe0ffa1490bc6.json",
+  "old_problem": "A successful InsertMedia response is only the management-plane request. The source's real coverage includes ISO attachment, firmware selection, destructive full Linux installation, all-packages completion, reboot usability, log acceptance and cleanup; the supplied command guesses the endpoint, disables TLS trust and leaves the target disk and package/log criteria undefined.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SECURE_VIRTUAL_MEDIA_END_TO_END_OS_INSTALLATION",
+  "disposition_reason": "Retain the complete attach→host visibility→one-time boot→approved disk install→all-packages verification→reboot health/log review→eject/clear chain. The Review-layer case supplies explicit proof and stop gates while the Project binds the vendor media resource, immutable ISO, disposable disk, install/package recipe and known-event allowlist. Those runtime values do not require another engineering classification decision, but no destructive install is executable until they are supplied and approved.",
+  "decision_basis": [
+    "XLSX row 916, same-row DeepSeek, exact GPT V2, selection manifest, related operations context and preserved V3.1 record were directly reviewed.",
+    "Virtual-media request acceptance, BMC media transfer, host device visibility, firmware boot selection and completed OS installation are separate evidence layers; none implies the next.",
+    "The source explicitly includes Linux with all packages, reboot usability and event-log acceptance, so a mount-only result would unlawfully reduce coverage.",
+    "Disk identity, immutable ISO, Project package manifest and pinned known-event allowlist can be bound safely as execution prerequisites without guessing or keeping the engineering decision Pending."
+  ],
+  "test_case": {
+    "test_name": "Secure BMC virtual-media Linux installation, reboot validation and cleanup",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the selected BMC virtual-media implementation securely attaches the approved immutable Linux ISO to the correct SUT, boots it once, installs the Project-defined complete package profile only to the designated disposable disk, returns a usable OS after reboot, satisfies event-log acceptance and fully ejects media/clears temporary boot state.",
+    "required_package": [
+      "BMC/SUT/BIOS/storage identity plus vendor-discovered VirtualMedia instance, Insert/Eject actions, supported transport and connection-state fields",
+      "Immutable approved ISO URL, version/architecture, hash/signature, authenticated BMC-reachable TLS transport and trust chain",
+      "Exact disposable target disk identity/topology/capacity with proof it is not an OS/boot/EFI/mounted/swap/LVM/RAID/device-mapper or unknown protected device",
+      "Project OS edition, boot mode, partitioning, driver/repository and complete `all packages` manifest with expected verification output",
+      "Separate media-attach, one-time boot/power and destructive-install approvals with KVM/SOL/local recovery",
+      "Post-install OS/device/service acceptance and pinned event-log known-message allowlist, plus eject/override-clear final-state plan"
+    ],
+    "test_command": "CRITICAL DESTRUCTIVE WORKFLOW; DO NOT EXECUTE WITHOUT EACH APPROVAL. Preserve logs, discover the actual vendor VirtualMedia resource/actions, verify TLS/authentication and immutable ISO hash/signature, and prove the exact disposable disk while excluding every protected/unknown device. After attach approval, insert once and verify transfer, connected state, BMC audit and host media visibility. Obtain separate boot/power approval, set only an approved one-time media boot, and prove firmware selects that ISO. At the installer boundary, re-display target disk and obtain destructive-install approval; install the Project partition/package profile through KVM/SOL with complete console evidence. Verify package manifest, OS/device/service health and logs after reboot, then eject media, clear the temporary override and prove no out-of-scope storage changed. Never use guessed paths, `-k`, mutable unauthenticated HTTP, auto-retry or auto-reinstall.",
+    "expected_result": "The exact approved ISO is securely transferred, connected and visible to the intended host; one-time firmware boot selects it; the Project install profile and every required package complete on only the designated disk; the installed OS reboots to a usable state with expected devices/services and only allowlisted event entries. Virtual media is then disconnected/ejected, the one-time override is clear, persistent boot order is unchanged and all out-of-scope storage is untouched.",
+    "pass_fail_basis": "PASS requires the full evidence chain: discovered supported endpoint, verified image/trust, connected host media, actual media boot, exact safe disk, successful Project package manifest, usable post-reboot OS/device/service state, logs reconciled to a pinned allowlist, and eject/boot cleanup. HTTP success or Image/Inserted alone cannot pass. Wrong media/host/disk, checksum/transfer error, installer warning, missing package/device, unapproved log, failed reboot or cleanup failure is FAIL and stops without retry. Missing image, disk, recipe, allowlist, approval or recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear BMC/SEL, existing OS, installer, storage or audit evidence; preserve the complete baseline and first failure.",
+      "Never guess manager/media indices, expose credentials, disable TLS verification or use mutable/untrusted installation media.",
+      "Never infer a safe disk. Positively identify the disposable target and exclude OS/boot/EFI/mounted/swap/LVM/RAID/device-mapper and unknown devices before approval.",
+      "Obtain distinct approval for attach, boot/power and destructive partition/install boundaries; do not automate past a missing confirmation.",
+      "Stop on any identity, transfer, boot, disk, installer, device, log or cleanup mismatch; do not automatically retry download, boot, partition or installation."
+    ],
+    "expected_evidence": [
+      "Target/firmware/storage identity, protected-device map, Project install/package recipe, destructive approvals and preserved pre-test logs",
+      "Discovered VirtualMedia resource/actions, TLS/auth method, immutable ISO version/hash/signature and BMC reachability/transfer/connected/host-visibility proof",
+      "One-time boot flags and firmware/KVM evidence selecting the exact media without persistent-order change",
+      "Installer console evidence naming the exact disk, partition result, OS identity, drivers/repositories and complete required-package verification",
+      "Post-reboot OS Ready/usability, services, complete device/storage/network inventory and event-log reconciliation to the pinned allowlist",
+      "Media eject/disconnect, override clear, unchanged out-of-scope storage, recovery disposition, no-retry proof and engineer verdict"
+    ],
+    "recovery": "On wrong media, boot path or disk, checksum/transfer/installer failure, unexpected device/log result or reboot/cleanup failure, halt all later destructive actions and preserve BMC, console, installer and storage evidence. Detach media only when safe and use the pre-approved local/console recovery or approved image restore for the designated test disk. Do not repartition, reboot or reinstall as an automatic retry; any recovery mutation needs fresh authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Title, Procedure and Criteria consistently require an end-to-end virtual-media OS installation. Undefined `all packages`, known events and zero machine-time are readiness/data-quality gaps, not contradictory purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The end-to-end method, proof points and safe recovery are defined. Vendor endpoint, image, disk, install recipe and allowlist are Project execution inputs, so the engineering review can resolve without claiming readiness."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Vendor media endpoint/actions; trusted ISO and transport; disposable disk; OS/partition/package recipe; known-event allowlist; separate approvals, recovery and cleanup state.", "execution_status": "NOT STARTED; CRITICAL DESTRUCTIVE OS INSTALLATION; MULTIPLE POINT-OF-ACTION APPROVALS REQUIRED; NO MEDIA, BOOT OR INSTALL ACTION EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor VirtualMedia documentation, Project deployment/package recipe, approved storage map, PKI/media policy, event allowlist and recovery SOP define execution acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "mount_only_substitution_allowed": false, "all_packages_coverage_preserved": true, "os_disk_protection_required": true, "unknown_disk_selection_allowed": false, "automatic_retry_or_reinstall_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|917|Wistron-BMC-00207-V004", "next_pending_case_variant_id": "c5c56f50c587c88f"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
