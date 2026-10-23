@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 30,
+  "source_key": "Functionality|840|Wistron-BMC-00130-V003",
+  "case_variant_id": "508ba645e4a33630",
+  "source_ref": {"sheet": "Functionality", "source_row": 840, "code": "Wistron-BMC-00130-V003", "original_row_sha256": "97bdd1f4058f6b1a32a02aa127da323e740332779a622bb9b243411ed4982b0e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Language", "procedure": "Check language options on the login page and check language on each page.", "criteria": "The BMC Web UI supports English, Spanish and Russian.", "deepseek": "PARTIAL but narrows the case to reading/changing one language preference and omits the three-locale each-page coverage.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; restores English/Spanish/Russian page coverage, references, target identity, rollback and human judgment."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1002_508ba645e4a33630.json",
+  "old_problem": "The historical record already interpreted `each page` correctly and defined a safe localization matrix, but kept it on the engineering-decision queue because the exact page inventory, catalogs and preference scope were absent.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_THREE_LOCALE_COMPLETE_UI_MATRIX",
+  "disposition_reason": "The required locales and operation are explicit. Project route/role/state inventory, deployed translation catalogs, accepted untranslated technical terms, browser contexts and preference scope are runtime/test-package inputs. The Review-layer case can require the full English/Spanish/Russian cross-product without guessing expected strings: automation extracts and compares text/rendering, while authorized localization reviewers adjudicate linguistic context. ED-08 preserves real WebUI evidence, ED-14 prevents the source's short estimate from becoming a smoke-test substitute, and ED-36 permits the missing matrix/catalog bindings as prerequisites.",
+  "decision_basis": [
+    "XLSX row 840, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Login selector presence, preference persistence, text completeness, linguistic correctness, locale formatting and visual fit are distinct acceptance dimensions.",
+    "The authoritative translation source is the version-matched Project/vendor catalog plus approved customer terminology; no public generic translation is substituted.",
+    "ED-08 requires visual browser evidence, ED-14 forbids a short smoke path from replacing `each page`, ED-15 requires approved translation/layout tolerances, and ED-20 retains this case's full locale coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify English, Spanish and Russian throughout the complete BMC Web UI matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the login page exposes English, Spanish and Russian and that selecting each locale renders every Project-required role/page/control/status/dialog/validation/error/dynamic state with complete, contextually correct, readable text, correct locale formatting and no unintended fallback, clipping or corruption, then restores the approved final preference.",
+    "required_package": [
+      "BMC endpoint/certificate/device identity, firmware and WebUI build/bundle/hash",
+      "Exact English/Spanish/Russian locale identifiers, version-matched translation catalog/reference strings, customer terminology, approved technical terms and fallback policy",
+      "Complete route/navigation matrix by account role including login, pages, dialogs, validation/errors, notifications, empty/loading/help and other dynamic states",
+      "Date/time/number/unit/plural/interpolation expectations plus glyph, wrapping, clipping, overflow, alignment and linguistic tolerances",
+      "Supported browser/version, viewport/device scale/zoom/theme and browser locale contexts",
+      "Preference scope (anonymous cookie/session/per-user/global), initial/final values, dedicated accounts, active-user impact, approved mutation sequence and rollback",
+      "Protected login/session and DOM/screenshot redaction plus authorized English/Spanish/Russian localization reviewers"
+    ],
+    "test_command": "Bind the isolated browser to the exact BMC/UI build, record the initial preference/scope, enumerate the login selector and freeze the approved role/page/state matrix. After approval, select English, Spanish and Russian one at a time within the defined dedicated account/session scope. For every matrix cell, navigate or trigger the safe UI state, record route/role/message IDs, extract visible DOM/accessibility text and locale-sensitive values, capture redacted screenshots, compare with the version-matched references, and flag fallback/untranslated strings, interpolation/plural errors, missing glyphs, clipping/wrapping/overflow or layout changes. Do not silently skip inaccessible cells. Restore the original or approved final language and verify it in a clean reload/session. Do not clear logs, alter unrelated settings, retry automatically or treat the five-minute source estimate as permission to sample pages.",
+    "expected_result": "The login selector lists all three required locales. For every required role/page/state in each locale, expected text and locale-sensitive values match the approved references and fallback policy; translations are complete and contextually accepted, glyphs render correctly and no content is clipped, corrupted or functionally inaccessible. Preference scope behaves as specified, no other user/session is disrupted, and the original or approved final language is restored and independently read back.",
+    "pass_fail_basis": "PASS requires 100% accounted cells in the approved locale × role × page × state matrix, version-matched string/message evidence, locale-format checks, real screenshots for representative and every defect-bearing cell, authorized linguistic/visual acceptance, and verified restoration. A menu label, current setting, one role, static routes or a sampled smoke run cannot pass. Missing locale, untranslated/unapproved fallback, wrong/contextually bad translation, format/interpolation/plural error, clipped/corrupt UI, skipped required cell, preference leakage or failed restore is FAIL. Missing catalog/matrix/scope/accounts/tolerances/reviewer is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Confirm endpoint/build, preference scope, baseline, active-user impact and rollback before any language change; do not assume browser-local scope.",
+      "Use dedicated approved accounts/sessions and never overwrite another operator's per-user/global preference without consent.",
+      "Exclude/redact passwords, tokens, cookies, host identifiers and customer data from screenshots, DOM, storage and traces.",
+      "Do not clear BMC/system logs or use destructive actions merely to trigger dynamic messages; use approved safe UI states/fixtures.",
+      "Do not accept selector presence or raw string equality as the sole verdict; require context, formatting, fallback, glyph and visual-fit review.",
+      "Preserve first failure and stop if navigation or rollback is unsafe; no automatic mutation retry."
+    ],
+    "expected_evidence": [
+      "BMC certificate/device, firmware/UI build, catalog/reference version and browser/render metadata",
+      "Login selector showing English/Spanish/Russian locale codes plus initial preference and documented scope",
+      "Completed locale × role × page × state matrix with route/result, message IDs, extracted strings, locale values and fallback/untranslated report",
+      "Redacted screenshots for representative and all defect cells showing language, glyph, wrapping, clipping, alignment and dynamic state",
+      "Preference write/read/reload audit per locale with active-user impact and no automatic retry",
+      "Clean-session final restoration, untested-cell count of zero or explicit NOT READY, and authorized localization/engineer verdict"
+    ],
+    "recovery": "If preference scope is broader than expected, access degrades or restoration fails, stop navigation/mutation, preserve the first-failure browser evidence and use the recorded UI or alternate OOB path with the dedicated account to restore the saved baseline language. Revoke contaminated sessions and verify other users plus BMC health. Do not keep cycling locales or clear browser/BMC evidence until the owner resolves the scope."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require three locales at login and across the BMC Web pages."},
+  "blocked": {"before": false, "after": false, "reason": "The locale and full-page objective are explicit; catalog, route matrix, scope and reviewers are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI build, translation catalogs, complete role/page/state matrix, formatting/layout tolerances, preference scope/accounts/rollback and localization reviewers.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "Version-matched Project/vendor localization catalogs, approved customer terminology and the complete UI coverage matrix are authoritative; no generic machine translation is accepted as the oracle.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-14", "ED-15", "ED-20", "ED-31", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "required_locales": ["English", "Spanish", "Russian"], "short_smoke_substitution_allowed": false, "real_webui_evidence_required": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|841|Wistron-BMC-00131-V003", "next_pending_case_variant_id": "224925df3d984616"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
