@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 143,
+  "source_key": "Functionality|956|Wistron-BMC-00246-V002",
+  "case_variant_id": "409b78afbb342907",
+  "source_ref": {"sheet": "Functionality", "source_row": 956, "code": "Wistron-BMC-00246-V002", "original_row_sha256": "08819813538a55eab3af4e2ef0a54e8a1cb5c81a0ac081dc44fd0d42a756a84a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_FE_1~4", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES queries only an assumed FRU_FE_1 URI with insecure curl and declares FE_1 through FE_4 analogous; it projects three fields and omits all per-position WebUI/IPMI comparisons.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores four-position mapping, fitted/absent semantics and complete evidence but treats the required topology/reference package as an unresolved decision."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1115_409b78afbb342907.json",
+  "old_problem": "The original shortcut covers at most one of four explicitly indexed front-end FRUs. Numeric names are not guaranteed to align across physical position, WebUI, Redfish and IPMI, and a valid FE_1 record supplies no evidence for FE_2, FE_3 or FE_4. The historical review identified this gap but did not parameterize the four-position map and build population.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_FOUR_POSITION_FE_FRU_MATRIX",
+  "disposition_reason": "Build an explicit FE_1, FE_2, FE_3 and FE_4 topology/population matrix, bind each position independently to its physical identity and exact IPMI/UI/API objects, and execute the complete source-required parity check for every fitted position. Unfitted positions may pass only through approved build/SPEC evidence and defined absent behavior; no position is inferred from FE_1.",
+  "decision_basis": [
+    "XLSX row 956, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 957 were directly reviewed; next pending was verified as Functionality row 957 / variant e73b42cb20a13be1.",
+    "The Items field explicitly enumerates FE_1~4. ED-02 and ED-19 require all four source identities/coverage positions to remain independently auditable; the DeepSeek phrase '1..4 analogous' cannot satisfy them.",
+    "An absent member can mean intentionally unfitted, unsupported, undiscovered, inaccessible or failed. Only the approved build population and interface-specific absence contract can distinguish those states.",
+    "IPMI FRU areas and DMTF Assembly/Chassis fields support each member's content validation, while the Project FE topology is authoritative for cross-interface numeric mapping.",
+    "ED-08, ED-17, ED-21 and ED-30 retain actual WebUI and logs; ED-33 through ED-38 permit parameterized read-only execution while forbidding generated sibling URIs/device IDs and partial-interface substitution."
+  ],
+  "test_case": {
+    "test_name": "Validate FE_1 through FE_4 as four independent front-end FRU records",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Account for FE_1, FE_2, FE_3 and FE_4 independently, prove every fitted physical front-end module maps uniquely to its own IPMI FRU and actual WebUI/API inventory record, validate all applicable FRU fields against the per-position Project build record, and distinguish approved unfitted positions from missing or failed inventory without mutation.",
+    "required_package": [
+      "Immutable SUT/BMC/chassis identity and approved FE_1~4 physical topology/build population stating fitted, intentionally unfitted and unsupported positions",
+      "Per-position durable identity and complete enumerated IPMI FRU mapping with device ID, interface, channel, bridge/address and documented aliases",
+      "Per-position Redfish Chassis/Assembly or approved OEM relationships discovered from the service and actual WebUI Inventory and LEDs row/detail mapping",
+      "FE FRU area/field layout including required Board/Product/Chassis/MultiRecord/custom fields and per-position allowed differences",
+      "Per-position manufacturing/BOM/asset authority with expected part, serial, revision and custom values plus encoding/blank/padding/freshness rules",
+      "Interface-specific expected absent representation and trusted/protected credential, TLS, redaction and evidence-storage configuration"
+    ],
+    "test_command": "READ ONLY. Verify the immutable target and approved FE_1~4 population. Enumerate the complete IPMI FRU device set and actual Redfish inventory members before selection; bind each logical FE index independently through its approved durable physical relationships and do not derive an ID/URI for FE_2~4 from FE_1. For every fitted FE_n, run only `ipmitool ... fru print <mapped-FE_n-ID>`, retrieve the complete mapped Redfish/OEM record, and open/capture the actual rendered WebUI Hardware status > Inventory and LEDs row/detail. Decode every applicable FRU area and compare raw and approved-normalized values with that position's Project record. For each approved unfitted/unsupported position, verify the exact expected absence behavior in every interface and preserve the SPEC/build evidence; keep missing, unauthorized, timeout and parse error distinct. Check one-to-one uniqueness across all four. Repeat read fingerprints only; do not write/edit FRU, clear logs, refresh inventory, reset, reboot or power-cycle.",
+    "expected_result": "FE_1, FE_2, FE_3 and FE_4 are each accounted exactly once. Every expected fitted position has a unique physical/IPMI/UI/API binding, complete structurally valid FRU data and exact field-level agreement with its own manufacturing record and rendered WebUI. Every approved unfitted/unsupported position matches the documented absence representation across interfaces. No position is missing, duplicated, swapped or extrapolated; no unexplained extra/stale/error state or system mutation occurs.",
+    "pass_fail_basis": "PASS requires an explicit four-row matrix, one-to-one mapping for every fitted FE, full `ipmitool fru print` and actual WebUI evidence per fitted position, complete applicable-field parity and authoritative absence proof per unfitted position. FE_1 evidence, a count of four, synthesized sibling URIs or matching common product fields cannot pass other positions. Missing/duplicate/swapped FE, unapproved absence, parser/checksum error, missing required field or unexplained per-position mismatch is FAIL. Missing topology/population/reference is NOT READY rather than Pending; N/A requires approved build/SPEC evidence.",
+    "safety_gate": [
+      "Use only protected certificate-verified reads and approved IPMI routing; no process-visible secrets or insecure-TLS acceptance evidence.",
+      "Enumerate and bind FE_1~4 independently. Never increment a URI, FRU ID, channel or slot number from FE_1 to locate siblings.",
+      "Allow only IPMI FRU enumeration and mapped `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes, log clear, reset, reboot and power actions.",
+      "Do not translate missing, unauthorized, timeout or parse failure into unfitted/unsupported; only Project population/SPEC evidence can establish legitimate absence.",
+      "Preserve complete raw per-position artifacts and actual rendered WebUI evidence before normalization/redaction; retain stable member tokens for swap/duplicate detection.",
+      "Stop on any ambiguous, duplicate or cross-position mapping and do not automatically try adjacent IDs or resources."
+    ],
+    "expected_evidence": [
+      "Approved FE_1~4 physical topology/population matrix and immutable target identity",
+      "Complete enumerated IPMI FRU and Redfish inventory sets plus explicit per-FE physical/device/member/UI mapping",
+      "For each fitted FE, full timestamped `ipmitool fru print`, complete mapped API record and actual rendered WebUI row/detail with protected hashes",
+      "Four-row applicable-area/field comparison matrix with raw, normalized, expected and outcome values and cross-position uniqueness checks",
+      "For each unfitted/unsupported FE, authoritative build/SPEC evidence and exact interface-specific absence observations distinct from failures",
+      "Pre/post fingerprints, preserved SEL/audit logs, no-write/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On an ambiguous/swapped/duplicate FE mapping, unexpected absence, decode/checksum error or field disagreement, stop and preserve/redact evidence, then obtain the authoritative topology or reference. Do not infer or trial adjacent IDs, write FRU, clear logs, reset BMC, reboot, power-cycle or automatically retry against another FE."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master consistently requires FE_1~4 inventory correctness and IPMI parity. DeepSeek's FE_1-only implementation is a coverage omission, not a contradictory source requirement."},
+  "blocked": {"before": false, "after": false, "reason": "The four-position objective and safe read method are clear. Topology, population, mapping and expected records are finite Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "FE_1~4 physical/population map; per-position IPMI/UI/API identities; applicable FRU fields; per-position manufacturing values; authoritative absence behavior; normalization, freshness, trust and redaction.", "execution_status": "NOT STARTED; READ-ONLY FOUR-POSITION FRU_FE REVIEW ONLY; NO IPMI, REDFISH, WEBUI OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines the standard areas and field encodings validated independently for each fitted FE; Project build data defines position/population."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for enumerating/printing each mapped FRU, decoding fields and reporting checksum conditions without using write paths."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis/Assembly inventory relationships and properties used per FE when supported; numeric FE mapping remains vendor/Project authority."}
+  ],
+  "project_authority": "The approved build/topology package defines which FE_1~4 positions are fitted, their independent physical/IPMI/UI/API identities and per-position expected fields. Once supplied, the complete four-member read-only matrix is fully automatable.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-08", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "all_four_fe_positions_preserved": true, "fe1_extrapolation_rejected": true, "per_position_mapping_and_evidence_required": true, "absent_unfitted_failure_distinguished": true, "source_webui_and_ipmitool_both_preserved": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "fru_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|957|Wistron-BMC-00247-V002", "next_pending_case_variant_id": "e73b42cb20a13be1"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_four_fe_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
