@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 52,
+  "source_key": "Functionality|862|Wistron-BMC-00152-V002",
+  "case_variant_id": "affe8274895145cb",
+  "source_ref": {"sheet": "Functionality", "source_row": 862, "code": "Wistron-BMC-00152-V002", "original_row_sha256": "b87f6e3d25086342af2639049bd4ca585d1ade2095a1f812cb766cb4a1ed16b0", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SEL logs- check for hot plug in /out storage decive", "procedure": "Generic setup says clear logs; physically plug the storage device out and in and observe SEL after each action.", "criteria": "Messages and information match each plug-out/plug-in state; missing related SEL is high impact and requires defect triage.", "deepseek": "YES only greps likely English words and tails 20 SEL lines with a visible password and fixed cipher; it performs neither physical action, cannot bind the device or event window and incorrectly claims no risk.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores exact device/bay/controller identity, storage quiescence, qualified physical action, complete SEL evidence and data-loss recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1024_affe8274895145cb.json",
+  "old_problem": "The source does not identify the storage device, bay, controller, service state or authoritative removal/insertion event sequence and begins by erasing evidence. The DeepSeek lookup substitutes partial observation for hazardous physical coverage and cannot distinguish stale or OEM-coded records.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_STORAGE_REMOVAL_AND_INSERTION_WITH_COMPLETE_BOUNDED_SEL_CORRELATION",
+  "disposition_reason": "The test purpose and safe workflow are clear under the approved physical-hardware rule: a qualified operator performs one approved removal and, only after a safe intermediate checkpoint, one approved insertion on an explicitly mapped hot-pluggable non-system target. Automation only captures full pre/post intervals and correlates canonical BMC records with physical/controller/OS state. Exact topology and OEM event values are runtime Project parameters, not unresolved review logic.",
+  "decision_basis": [
+    "XLSX row 862, same-row DeepSeek, exact GPT V2, selection manifest and historical record were directly reviewed.",
+    "The user-approved rule assigns physical cable/LED/hardware operations to humans; read-only log commands cannot replace either hot-plug transition.",
+    "Removal and insertion are distinct transitions with potentially different assert/deassert or OEM record sequences and require separate boundaries and acceptance.",
+    "ED-17 preserves existing log evidence; ED-20 preserves both physical actions; ED-35 rejects filtered log observation as substitution; ED-38 requires target validation, approval, recovery and no automatic retry."
+  ],
+  "test_case": {
+    "test_name": "Verify storage removal and insertion SEL events for one approved hot-pluggable device",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify one Project-approved hot-pluggable storage device removal and one subsequent insertion each produce the authoritative SEL record or ordered sequence for the exact bay/device, with sensor identity, raw event data, direction/status, message and timing matching the physical and controller/OS transition, while protecting data and restoring the approved final topology.",
+    "required_package": [
+      "Exact chassis/host/BMC plus storage serial/model/protocol, bay/slot/port, backplane, controller/RAID/HBA, OS path and BMC sensor identity map",
+      "Vendor/Project proof that this populated device/bay supports hot removal and insertion in the selected host power, controller and service mode",
+      "Approved order, maintenance window, stabilization times and pre-action mount/swap/LVM/device-mapper/RAID membership, active-I/O, redundancy and rebuild checks",
+      "Disposable/no-required-data disposition or verified backup, qualified operator, physical service procedure, impact acceptance and storage/OOB recovery runbook",
+      "Authoritative removal and insertion SEL event matrix: sensor, record type/ID, raw event data, assert/deassert/status, record order, allowed latency and documented absence behavior",
+      "Validated protected SEL collection path, BMC/host/controller time correlation and complete record-ID/count/sequence boundary method"
+    ],
+    "test_command": "Do not clear logs. Bind the physical device label and serial through bay/backplane/controller/OS/RAID to the BMC sensor. Prove hot-plug support and that it is not boot/EFI, mounted, swap, LVM/device-mapper, active-I/O or an unsafe array member; record redundancy/rebuild and complete SEL/controller/OS baseline with a stable last-record boundary. Present the exact removal action and obtain approval; a qualified operator removes the device once. Capture every new SEL record and host/controller transition and compare canonical sensor/event data/direction/order/time with the removal matrix. Only if the intermediate state is safe, present and approve insertion; the operator reinserts once. Capture a new full interval and prove the device returns to its approved controller/OS/RAID state with the correct insertion record sequence. Preserve all logs. Do not rely on grep/tail, expose credentials, submit a defect automatically, repeat either action or perform any DUT action autonomously.",
+    "expected_result": "The approved device is removed and reinserted exactly once by the qualified operator without data, array, host or hardware damage. Separate bounded SEL intervals contain all and only the expected device/sensor record sequences for removal and insertion within allowed latency, with messages/statuses consistent with canonical OEM event data. Controller/OS/RAID evidence matches each physical state and the approved final topology/health is restored; all pre-existing evidence remains preserved.",
+    "pass_fail_basis": "PASS requires exact cross-domain device identity, hot-plug/data-safety proof, separate approved operator actions, complete bounded SEL and host/controller evidence for both removal and insertion, authoritative event-matrix match and restored final state, followed by engineer verdict. A keyword match, recent tail, stale record, read-only command or evidence from only one action cannot pass. Wrong/missing/extra/late/ambiguous events, unsafe degradation, device non-return, topology mismatch or unexpected critical logs is FAIL or recovery-required as defined by the engineer. Missing topology, capability, event matrix, approval or safe recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never remove an unknown, boot/EFI, mounted, swap, LVM/device-mapper, active-I/O or unapproved RAID device; stop on uncertain identity, redundancy, rebuild state or hot-plug support.",
+      "Do not clear SEL, kernel or controller logs. Preserve complete evidence and mark a stable record/sequence boundary immediately before each action.",
+      "Treat removal and insertion as separate approved manual actions with independent timestamps, evidence and stop decisions; neither proves the other.",
+      "Do not use grep or `tail -20` as completeness proof; OEM records may lack guessed English text and related sequences may exceed a terminal sample.",
+      "Use protected credentials and validated transport; never expose a password with `-P` or assume cipher suite 17.",
+      "No automatic or operator retry. Stop on wrong target, failed quiescence, array degradation, missing/ambiguous event, non-returning device, instability or unexpected critical log and invoke recovery."
+    ],
+    "expected_evidence": [
+      "Chassis/host/BMC and device serial/model/protocol plus bay/port/backplane/controller/RAID-HBA/OS-to-SEL-sensor identity map",
+      "Hot-plug capability and pre-action boot/mount/swap/LVM/device-mapper/I-O/RAID/rebuild/redundancy/data disposition evidence with approvals",
+      "Complete baseline SEL metadata and separate stable record/count/sequence boundaries synchronized to recorded removal and insertion times",
+      "For each action, full raw/decoded records matched to sensor, event data, direction/status, order and allowed latency",
+      "Post-removal and post-insertion controller/OS/RAID/device state, unexpected host/BMC logs and final restored topology/health",
+      "Operator record, protected collection audit, no-clear/no-retry proof, recovery/defect-triage notes and engineer verdict"
+    ],
+    "recovery": "If validation fails before removal, do nothing. After a problem, stop further physical actions, preserve all SEL/kernel/controller evidence and follow the approved controller/vendor/OOB recovery for the exact bay and array state. Reinsert only when that runbook and operator authorization require it; do not cycle the device to obtain another event. Escalate any data, RAID, filesystem or hardware impact."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require both storage transitions and matching SEL. The unsafe generic pre-clear and missing Project parameters are correctable method/readiness defects, not contradictory test intent."},
+  "blocked": {"before": false, "after": false, "reason": "A safe parameterized method is defined. Exact topology, hot-plug capability, event map and maintenance/recovery approval are mandatory execution inputs; absence prevents execution but not completion of the review decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Device/bay/backplane/controller/OS/BMC mapping, proven hot-plug mode, data and RAID safety state, qualified operator/window, removal/insertion event matrix, timing, protected collection and recovery.", "execution_status": "NOT STARTED; PHYSICAL ACTIONS NOT AUTHORIZED"},
+  "external_authorities": [],
+  "project_authority": "Project storage serviceability procedure, controller/backplane/device hot-plug specification, platform SEL sensor/event map and recovery runbook define the exact target, actions and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-09", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "physical_removal_manual": true, "physical_insertion_manual": true, "blanket_preclear_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|863|Wistron-BMC-00153-V002", "next_pending_case_variant_id": "414cde678fea061e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
