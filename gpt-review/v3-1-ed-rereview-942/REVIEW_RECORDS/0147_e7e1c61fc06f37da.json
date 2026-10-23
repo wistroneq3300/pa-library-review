@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 147,
+  "source_key": "Functionality|960|Wistron-BMC-00250-V002",
+  "case_variant_id": "e7e1c61fc06f37da",
+  "source_ref": {"sheet": "Functionality", "source_row": 960, "code": "Wistron-BMC-00250-V002", "original_row_sha256": "276447d6ecb6ce19b0c0fb42dd28c9f66ca7deb73a2b42f7ef44bf7dca55a500", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_MID", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes /redfish/v1/Chassis/FRU_MID and reads three fields with insecure curl; it does not define MID's platform role/topology or perform the source-required WebUI/IPMI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly adds mid-plane/interconnect topology and complete protected evidence but retains a decision gate for finite Project topology/reference inputs."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1119_e7e1c61fc06f37da.json",
+  "old_problem": "MID is not a standardized Redfish component name and can be confused with another interconnect, backplane or board. A valid three-field resource cannot prove the intended physical assembly. The earlier review captured that topology risk but left the read-only comparison Pending instead of parameterizing the Project-defined role and relationship map.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_TOPOLOGY_BOUND_MID_FRU_PARITY",
+  "disposition_reason": "Use the approved Project/vendor definition of MID and its physical upstream/downstream or enclosure relationships to identify the exact assembly before selecting IPMI/UI/API records, then validate complete FRU contents against the MID-specific build record. No standard or acronym inference is used, and missing topology becomes NOT READY rather than an engineering decision.",
+  "decision_basis": [
+    "XLSX row 960, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 961 were directly reviewed; next pending was verified as Functionality row 961 / variant 3743dff617e23083.",
+    "MID's essential discriminator is topology rather than common manufacturer/product/serial text. The Project must name its role and physical relationships; a resource suffix or enumeration position cannot do so.",
+    "Adjacent MB and PDB are independent physical boards and negative identity controls. Neither their fields nor a generic interconnect-like resource may satisfy MID.",
+    "After exact mapping, IPMI FRU area decoding and standard Redfish Chassis/Assembly semantics support deterministic complete comparison while actual WebUI and `ipmitool fru print` preserve the source method.",
+    "ED-02, ED-03, ED-08, ED-17, ED-19, ED-21 and ED-30 preserve identity/evidence and reject guessed OEM semantics; ED-33 through ED-38 permit bounded runtime topology inputs without retaining Pending."
+  ],
+  "test_case": {
+    "test_name": "Validate the Project-defined MID assembly through topology-bound complete FRU parity",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the exact physical assembly designated MID by the approved platform topology—rather than a guessed resource name—is uniquely represented by FRU_MID and that every applicable FRU field agrees across complete IPMI, actual WebUI, mapped standard/OEM API and its authoritative build record without cross-crediting MB or PDB.",
+    "required_package": [
+      "Approved Project/vendor definition of MID's hardware role and physical location, including durable enclosure/upstream/downstream or service relationships needed to distinguish it",
+      "Immutable SUT/BMC/chassis identity and topology map separating MID from MB, PDB, backplanes and other interconnect assemblies",
+      "Complete enumerated IPMI FRU map and approved MID device ID/interface/channel/bridge/address",
+      "Service-discovered Chassis/Assembly or approved OEM MID resource relationships and actual WebUI Inventory and LEDs MID row/detail mapping",
+      "MID-specific applicable FRU areas/standard/custom fields and authoritative BOM/build record with expected part, serial, revision and topology identifiers",
+      "Approved encoding/blank/padding/freshness rules, trusted TLS/protected credentials and stable-token redaction/evidence storage"
+    ],
+    "test_command": "READ ONLY. Verify immutable target and the approved definition/topology of MID. Enumerate all IPMI FRU devices and API inventory members, preserve their relationships and select MID only through the approved physical/topological association; do not interpret the acronym, assume `/Chassis/FRU_MID` or choose an interconnect-looking record. Execute only `ipmitool ... fru print <MID-FRU-ID>` and retain complete output, exit status and decoder/checksum diagnostics. Follow standard or approved OEM resource links and capture the actual rendered BMC WebUI Hardware status > Inventory and LEDs MID row/detail. Explicitly exclude MB, PDB and other boards. Decode every applicable FRU area/custom field, preserve raw values, apply only approved normalization and compare with the MID build authority and across IPMI/UI/API, retaining relationship evidence. Repeat read fingerprints only; do not write/edit FRU, clear logs, refresh inventory, reset, reboot or power-cycle.",
+    "expected_result": "The Project-defined physical MID assembly maps uniquely through its approved topology to one expected IPMI FRU and UI/API object and does not resolve to MB, PDB or another interconnect. Every applicable area decodes without reported structure/checksum errors; all required standard/custom and topology-associated fields are present or use an approved absent representation and exactly match the MID build record after traceable normalization. Complete IPMI, actual WebUI and mapped API evidence reconcile and no state changes.",
+    "pass_fail_basis": "PASS requires an authoritative MID role/topology definition, unique physical/device/member binding, complete `ipmitool fru print`, actual rendered WebUI detail, relationship evidence and exact complete-field parity. A MID-shaped URI, common product tuple or generic interconnect record cannot pass. Undefined/ambiguous topology, wrong/duplicate board, parser/checksum error, missing required field/relationship, unauthorized blank or unexplained source/reference mismatch is FAIL once the package exists. Missing topology/reference is NOT READY; N/A requires authoritative platform evidence.",
+    "safety_gate": [
+      "Never infer MID's meaning, physical role or OEM URI from the acronym. Use only approved Project/vendor topology and resource mappings.",
+      "Use protected certificate-verified reads and approved IPMI routing; do not expose credentials or accept insecure-TLS evidence.",
+      "Allow only FRU enumeration and mapped `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes, log clear, reset, reboot and power actions.",
+      "Keep MID independent from MB, PDB and other interconnect/backplane assemblies; name similarity or adjacency is not identity proof.",
+      "Preserve complete raw records, relationship links and actual rendered WebUI evidence before normalization/redaction.",
+      "Stop on undefined topology, ambiguous or duplicate mapping, stale data, decode/checksum failure or authority conflict and do not automatically probe another assembly."
+    ],
+    "expected_evidence": [
+      "Approved MID role/topology and immutable target/physical map distinguishing MB, PDB and other assemblies",
+      "Complete enumerated IPMI/API inventory with relationship graph and exact MID physical/device/member/UI binding",
+      "Timestamped full `ipmitool fru print <MID-FRU-ID>` with routing, exit/decode/checksum status and protected hash",
+      "Complete mapped API artifact and actual rendered WebUI MID row/detail with schema/firmware/trust metadata",
+      "MID-specific raw/normalized/expected field matrix plus preserved topology relationship evidence and negative identity controls",
+      "Pre/post fingerprints, preserved SEL/audit logs, no-write/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. If MID's topology/identity is ambiguous or data/decoding disagree, stop and preserve/redact evidence, then obtain the authoritative topology/build record. Do not infer the acronym, trial adjacent FRUs, write inventory, clear logs, reset, reboot, power-cycle or automatically retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master fields consistently require FRU_MID inventory correctness and IPMI parity. The missing vendor topology and incomplete DeepSeek command do not contradict the source."},
+  "blocked": {"before": false, "after": false, "reason": "The requested MID FRU comparison is clear; role/topology, mappings and expected fields are bounded Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Approved MID role/topology; physical MB/PDB/interconnect boundaries; MID IPMI/API/UI identities; applicable FRU fields and build values; normalization, freshness, trust and redaction.", "execution_status": "NOT STARTED; READ-ONLY FRU_MID INVENTORY REVIEW ONLY; NO IPMI, REDFISH, OEM, WEBUI OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines standard FRU area/field decoding after the Project identifies the topology-specific MID assembly."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete print/decode/checksum evidence and the strict read-only boundary."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines standard Chassis/Assembly inventory and relationship semantics where supported; MID naming/topology remains Project/vendor-specific."}
+  ],
+  "project_authority": "The Project/vendor topology alone defines which assembly is MID and its exact IPMI/UI/API bindings and expected FRU fields. Supplying those finite parameters resolves readiness without authorizing guessed OEM behavior or a human confirmation step.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "mid_role_and_topology_not_guessed": true, "mid_identity_separate_from_mb_pdb": true, "topology_relationship_evidence_required": true, "source_webui_and_ipmitool_both_preserved": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "oem_or_fru_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|961|Wistron-BMC-00251-V002", "next_pending_case_variant_id": "3743dff617e23083"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_mid_topology_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
