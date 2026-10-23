@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **137 / 942**
-- Last reviewed: `Functionality|950|Wistron-BMC-00240-V002` / `0a5c189fe49b4e92`
-- Next source-verified pending identity: `Functionality|951|Wistron-BMC-00241-V002` / `83f1846456011787`
-- Latest disposition: Chassis RETIMER_0~7 is removed from Pending and reclassified FULLY AUTOMATABLE. All eight devices require durable chassis/PCIe mapping plus distinct active/backup/staged firmware lifecycle and actual WebUI evidence; substring matching is locator-only. No query ran.
+- Completed: **138 / 942**
+- Last reviewed: `Functionality|951|Wistron-BMC-00241-V002` / `83f1846456011787`
+- Next source-verified pending identity: `Functionality|952|Wistron-BMC-00242-V003` / `fd0bdfa22703aee1`
+- Latest disposition: FRU_ADP is removed from Pending and reclassified FULLY AUTOMATABLE. The read-only case enumerates and uniquely maps the adapter FRU, preserves complete `ipmitool fru print` plus actual WebUI evidence, uses Redfish only as a mapped supporting plane, and compares every applicable FRU field to the Project authority. No query ran.
 - Protected sources: unchanged.
 - DUT execution: none.
