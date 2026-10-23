@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 83,
+  "source_key": "Functionality|894|Wistron-BMC-00184-V003",
+  "case_variant_id": "39e95ef82e1e80f2",
+  "source_ref": {"sheet": "Functionality", "source_row": 894, "code": "Wistron-BMC-00184-V003", "original_row_sha256": "6f4be4d951b59a518eec054d2a3bce6e2520d92ccc5640f6d1ecb91574102aec", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_PSU1~6", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats PSU1~6 as one literal sensor and truncates fallback inventory; it omits six fitted/empty bay identities, mixed-model PMBus fields, load-share/redundancy context and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires separate records, an installed-slot matrix, model-specific rules and no PSU manipulation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1055_39e95ef82e1e80f2.json",
+  "old_problem": "One literal range query or a sensor count could be claimed as six-bay coverage without binding each fitted module to bay, serial/model/capacity/feed and exact PMBus field or explicitly dispositioning empty bays. Mixed models, standby/load-share and degraded redundancy could be misjudged, and CRPS1/2 could be incorrectly substituted.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SIX_BAY_PSU_PMBUS_TEMPERATURE_MATRIX",
+  "disposition_reason": "Build an authoritative six-bay fitted/empty matrix distinct from CRPS1/2. Resolve every defined PSU record separately, bind fitted bays to immutable module identity, AC feed, current state and the model-specific PMBus page/object/temperature field, then compare complete OOB/two-UI evidence with the correct field/state limits under unchanged power and cooling conditions.",
+  "decision_basis": [
+    "XLSX row 894, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, adjacent/related source cases and historical record were directly reviewed.",
+    "Tilde shorthand is not proven IPMI syntax; all six bays require explicit fitted, empty or unavailable outcomes rather than a count or sample.",
+    "Mixed PSU models can expose different PMBus channels and limits, so bay/serial/model/page/object plus load-share state are necessary.",
+    "ED-03 forbids guessed OEM parameters, ED-13 governs empty/standby N/A, ED-15 requires model/field/state limits, ED-17 preserves logs and ED-20 separates all bays and CRPS coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify PSU1 through PSU6 temperatures as a complete fitted/empty bay and model-specific PMBus matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify all six defined PSU bays have an approved fitted/empty/unavailable outcome and every fitted module's temperature is separately human readable in Dashboard and Server Health, maps to the correct bay/module and exact PMBus field, and meets applicable value, units, health, threshold/hysteresis and freshness requirements for its current state.",
+    "required_package": [
+      "Chassis/power-subsystem PN/revision, BMC build and authoritative six-bay definition distinct from CRPS1/2",
+      "Per-bay AC feed, PN/serial/HW/FW/capacity, fitted/empty and active/standby/load-share state",
+      "Vendor PMBus reference for every fitted model with controller/bus/mux/address/page/command and exact inlet/internal/outlet field",
+      "Separate stable SDR/API and Dashboard/Server Health identities for PSU1 through PSU6",
+      "Per-model/field units/scaling, approved range/delta, threshold capability/values/hysteresis, health, polling/freshness and unavailable rules",
+      "Acceptance for empty bays, mixed models, capacity mismatch, degraded redundancy and asymmetric load sharing",
+      "Recorded system power, per-module input/output/current/load, fan speeds, ambient and airflow",
+      "Validated protected read-only BMC/PMBus/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL/kernel/PSU black-box/PMBus history, hot-remove/reseat modules, disconnect feeds, change load/redundancy/load-share/fans/thresholds or issue PMBus writes. Build a six-row bay/population/serial/model/feed/state/PMBus-field matrix from approved inventory and vendor specs. Enumerate the complete BMC repository and resolve PSU1 through PSU6 separately; do not use `TEMP_PSU1~6` as one record unless explicitly documented. Review the Script before use. Capture every row's independent query status, identity or defined absence, exact field, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health evidence. Compare fitted rows with model/field/state limits. Stop without retry on unexpected population, swapped, stale or divergent rows.",
+    "expected_result": "All six rows have an approved fitted/empty/unavailable outcome. Every fitted record and both UI rows map to the correct bay, serial/model/feed and vendor-defined PMBus field and independently match model/field/current-state value/unit/threshold/status/freshness rules. CRPS telemetry, aggregate health, one PSU or a partial count never substitutes and power state is unchanged.",
+    "pass_fail_basis": "PASS requires six explicit outcomes, fitted-module identity/PMBus semantics and separate complete OOB/two-UI/spec agreement for every applicable bay with engineer verdict. One literal range query, sample/count, CRPS data, generic limit, label-only match or truncated output cannot pass. Missing/swapped/stale identity, unjustified empty/N/A, wrong model field, out-of-limit value or required threshold/status/UI mismatch is FAIL. Missing vendor maps/state rules/reviewed method is NOT READY, not Pending or PASS; hot-swap, redundancy, efficiency, AC loss and threshold events are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, PSU black-box or PMBus history; power/thermal evidence must remain intact.",
+      "Do not interpret the range as one record; explicitly disposition all six bays and keep CRPS1/2 separate.",
+      "Do not assume identical models, fields or limits and do not guess OEM PMBus parameters.",
+      "Do not hot-swap/reseat modules, disconnect feeds, change load/redundancy/load-share/fans/thresholds or write PMBus.",
+      "Apply model, population, state and capability rules; empty or standby behavior is valid only when documented.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/power-subsystem PN/revision, BMC and authoritative six-bay matrix with per-bay feed/PN/serial/HW/FW/capacity/state",
+      "Per-model PMBus references plus controller/bus/mux/address/page/command and temperature-field map",
+      "Complete separate raw evidence for all bays with stable IDs, values or defined unavailable state, units, thresholds, health and timestamps plus UI rows",
+      "Recorded system/per-module power, load-share/redundancy, fan/ambient/airflow and model/field/state comparisons",
+      "Missing/swapped/mixed-model/empty/degraded/stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-hot-swap/no-feed-or-load-change/no-PMBus-write/no-retry proof, final PSU/BMC health and six-bay engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On population, bay, model, state or PMBus-field ambiguity, stale/divergent values or unexpected PSU/BMC health change, stop and preserve all first-pass evidence plus inventory/feed/load-share state. Obtain the correct vendor reference and use approved read-only diagnostics; do not alter hardware or power to force evidence. Any independently authorized power action requires its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "This row consistently requests passive PSU1-6 display/spec validation. A separate threshold row's incorrect CRPS Criteria is not part of this source identity."},
+  "blocked": {"before": false, "after": false, "reason": "The six-bay passive purpose is clear. Inventory and vendor PMBus specs can supply population, field and acceptance inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Six-bay population/serial/model/feed/state and PMBus field maps, separate sensor/UI identities, model/field/state thresholds/status/freshness/N/A rules, passive power/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO POWER SUBSYSTEM CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define bay population, module model or vendor PMBus fields."}],
+  "project_authority": "Power-bay/feed map, PSU inventory, vendor PMBus specs for all fitted models, BMC SDR definition, WebUI schema and Project power recipe define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "six_bay_outcomes_required": true, "literal_range_query_allowed_without_documentation": false, "crps_substitution_allowed": false, "oem_pmbus_parameter_guessing_allowed": false, "power_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|895|Wistron-BMC-00185-V003", "next_pending_case_variant_id": "d6ab5472a6fee245"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
