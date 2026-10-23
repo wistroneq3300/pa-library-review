@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **58 / 942**
-- Last reviewed: `Functionality|868|Wistron-BMC-00158-V002` / `f6fefd723dd88d8b`
-- Next source-verified pending identity: `Functionality|869|Wistron-BMC-00159-V003` / `061f2c3a2a35d92c`
-- Latest disposition: The no-DIMM POST-code case is removed from Pending as one qualified-operator, ESD-safe, all-DIMM-absent boot with authoritative 0xE310 correlation and exact serialized DIMM topology restoration. No historical-read substitution, log clear, automated hardware/power action or retry is allowed.
+- Completed: **59 / 942**
+- Last reviewed: `Functionality|869|Wistron-BMC-00159-V003` / `061f2c3a2a35d92c`
+- Next source-verified pending identity: `Functionality|870|Wistron-BMC-00160-V003` / `f087ced88bc41dad`
+- Latest disposition: SEL_RealErr_Full Sensor Page is removed from Pending as a read-only stable-identity join across complete SDR/API data, Dashboard, Server Health and the Project value/threshold/freshness matrix. No substring identity, truncated fallback, dynamic fault/SEL-fill claim, threshold write, log clear or unreviewed Script execution is allowed.
 - Protected sources: unchanged.
 - DUT execution: none.

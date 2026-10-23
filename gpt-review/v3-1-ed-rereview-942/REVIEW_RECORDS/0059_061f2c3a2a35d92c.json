@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 59,
+  "source_key": "Functionality|869|Wistron-BMC-00159-V003",
+  "case_variant_id": "061f2c3a2a35d92c",
+  "source_ref": {"sheet": "Functionality", "source_row": 869, "code": "Wistron-BMC-00159-V003", "original_row_sha256": "5c5f15de4b193ed7f5f7e89df9d880d9b943cd8500cce891af48ef8cecd25915", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SEL_RealErr_Full", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES assumes the case label is an exact sensor name and truncates its SDR fallback at 100 lines while calling it FULL; it omits stable identity, WebUI, spec, unit/scaling/threshold/freshness and safe Script review.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION keeps this row read-only and requires exact sensor/SDR identity, specification and UI/OOB correlation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1031_061f2c3a2a35d92c.json",
+  "old_problem": "The label was treated as a literal sensor name without proving the Dashboard/Server Health row maps to the same stable record. Expected reading/state, units, scaling, thresholds, hysteresis, freshness and unavailable semantics were missing, fallback was truncated, and the internal Script was unpinned.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_CANONICAL_SENSOR_UI_OOB_SPEC_CORRELATION",
+  "disposition_reason": "The source clearly asks for a read-only UI reading/threshold/spec comparison. Resolve the exact sensor through stable SDR/API identity, bind Project expected fields and freshness/tolerance, collect complete OOB plus both UI views and compare canonical values. The similarly titled dynamic row remains separate; no stimulus, threshold write, SEL fill or clear is invented. Exact mapping/spec/Script revision are execution prerequisites.",
+  "decision_basis": [
+    "XLSX row 869, same-row DeepSeek, exact GPT V2, internal Script reference, separate dynamic-row precedent, selection manifest and historical record were directly reviewed.",
+    "Sensor evidence is meaningful only when identity, units/scaling, analog/discrete semantics, threshold availability and freshness refer to the same record.",
+    "Dashboard and Server Health can round/cache the same backend differently, so approved normalization and timestamps are required rather than literal-text equality.",
+    "ED-15 requires an approved specification; ED-17 rejects unrelated clearing; ED-20 preserves both UI views; ED-35 prevents static evidence from claiming dynamic stimulus coverage."
+  ],
+  "test_case": {
+    "test_name": "Correlate the exact SEL_RealErr_Full sensor across Dashboard, Server Health and authoritative OOB data",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the Sensor Page representation associated with `SEL_RealErr_Full` is human readable and that the uniquely mapped sensor's current analog reading or discrete state, applicable warning/critical thresholds, units, health/status and freshness agree with the platform specification and authoritative OOB record across Dashboard and Server Health.",
+    "required_package": [
+      "Exact BMC/chassis, firmware/WebUI build, SDR repository revision, role and trusted endpoint identity",
+      "Stable case-label-to-sensor mapping using sensor ID/name/number/type/entity/instance and corresponding Dashboard/Server Health row identifiers",
+      "Project expected reading or state, units, conversion/scaling/rounding, tolerance, status and lower/upper noncritical/critical/nonrecoverable thresholds where applicable",
+      "Rules for analog versus discrete sensors, missing/unavailable thresholds, hysteresis, assertion state, disabled/not-readable values, cache age and stale timestamps",
+      "Validated protected ipmitool/API/browser versions and supported authentication/transport",
+      "Pinned immutable accessible `sensor.git` revision/checksum/content/dependency safety review, or an approved manual read-only collection method"
+    ],
+    "test_command": "Do not clear logs or mutate sensors. Bind the case label to exactly one stable SDR/API identity; stop on zero, duplicate or substring-only matches. If the internal Script is used, first pin and review its exact revision for target, reads/writes, clears, secrets and retries. Capture BMC time and the complete exact OOB record including ID/type/entity, analog reading or discrete state, units/scaling, all applicable thresholds/hysteresis, status and timestamp without `head`, `tail` or fallback truncation. Capture the same sensor in Dashboard and Server Health with refresh timestamps. Normalize only by approved conversion/rounding and compare identity, value/state, units, thresholds, status and freshness with Project SPEC. Reread to prove no mutation; never change thresholds, acknowledge/inject faults, heat/cool hardware, fill SEL or retry automatically.",
+    "expected_result": "One unique mapped sensor appears human readably in both Dashboard and Server Health. Each UI representation and the complete OOB record agree within approved scaling/rounding/freshness rules on identity, analog reading or discrete state, units, applicable threshold/hysteresis fields and status, and all fields match Project SPEC. Absent/NA/disabled thresholds are accepted only under the signed sensor-type rule. No log, threshold or sensor state changes.",
+    "pass_fail_basis": "PASS requires unique stable sensor mapping, complete nontruncated OOB evidence, both UI views, approved expected matrix and field-level identity/value/state/unit/threshold/status/freshness agreement with engineer verdict. A literal-name query, readable number, truncated SDR list or one UI view cannot pass. Missing/duplicate identity, unsupported units/scaling, stale value, unexplained UI/OOB/spec mismatch or unexpected mutation is FAIL. Missing mapping, expected matrix or reviewed method is NOT READY, not Pending or PASS. No dynamic error/SEL-full coverage is claimed.",
+    "safety_gate": [
+      "Do not clear SEL/dmesg/system logs; clearing is unrelated to read-only sensor validation and destroys diagnostic context.",
+      "Do not assume `SEL_RealErr_Full` is the literal SDR name or choose a substring; bind stable identity/type/entity metadata.",
+      "Do not use `head -100`, tail or terminal truncation; capture the complete exact record and command/status evidence.",
+      "Do not change thresholds, acknowledge faults, inject sensor states, heat/cool hardware or fill SEL; those require separate approved cases.",
+      "Do not expose passwords, assume cipher 17 or run the Script before immutable safety review.",
+      "Stop without retry on identity/unit/scaling ambiguity, stale/unavailable values, mismatch beyond tolerance, unexpected mutation or BMC instability."
+    ],
+    "expected_evidence": [
+      "BMC/chassis, firmware/WebUI/SDR identity, role/trusted access and exact case-label-to-sensor/UI mapping",
+      "Complete raw SDR/API record with stable identity, value/state, units/scaling, thresholds/hysteresis/status and timestamp",
+      "Dashboard and Server Health route/DOM/screenshots with refresh time and the same stable sensor identity",
+      "Approved Project expected matrix and normalized field comparison including tolerance and absent/NA/stale rules",
+      "Pinned Script revision/checksum/content review or signed alternate method and protected command audit",
+      "Before/after no-clear/no-write proof, mismatch/limitation report, BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On ambiguous identity, mismatch or unexpected state change, stop and preserve first evidence; use the approved OOB/vendor diagnostic path without changing thresholds or forcing a fault. If the Script mutates anything unexpectedly, isolate it, record the action and have the authorized owner restore the prior state from the captured baseline."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "This row's label, UI navigation and Criteria consistently define a read-only sensor reading/threshold/spec check. A similarly titled dynamic row is a separate Source Identity and is not imported."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only comparison and coverage are clear. Sensor mapping, expected matrix and Script revision are Project/vendor execution inputs that can be supplied without changing intent."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/SDR/UI identity, stable SEL_RealErr_Full mapping, expected value/state/unit/scaling/threshold/status/freshness matrix, protected client and pinned reviewed Script or manual method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "May be used only after an immutable revision is accessible, pinned and reviewed; URL/title do not define sensor semantics."}],
+  "project_authority": "Platform sensor/SDR specification, WebUI field definition and Project expected-value matrix define identity, units, thresholds, status and freshness acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "dynamic_fault_or_sel_fill_claimed": false, "sensor_write_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|870|Wistron-BMC-00160-V003", "next_pending_case_variant_id": "f087ced88bc41dad"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
