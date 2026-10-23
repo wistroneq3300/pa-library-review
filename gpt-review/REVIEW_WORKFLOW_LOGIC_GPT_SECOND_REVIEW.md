@@ -473,3 +473,20 @@ turning it into a safe execution plan.
 6. Repeat steps 1-5 until a user question/hard blocker occurs or the run quota
    reaches approximately 200 completed individual testcases.
 7. Never use the quota as evidence that individual review quality is sufficient.
+
+## User-approved engineering decision application (2026-10-24, ED-01 through ED-10)
+
+Authoritative decision record: `gpt-review/v3-1-full-3112/ENGINEERING_DECISIONS_USER_APPROVED_ED01_ED10_20261024.md`.
+This section governs future *review-layer* reasoning; it is not an execution permit, a blanket resolution of pending decisions, or a change to original Master sources.
+
+- Preserve each distinct source row and its coverage using Source Key + Variant ID even when the display Test Code is duplicated. Do not merge or delete distinct variants without separate authority (ED-02).
+- When a test's purpose and procedure conflict, investigate and document the exact row's authoritative objective and competing criteria. Never generalize that titles always win. For the specifically approved RAID0 row, omit incompatible RAID rebuild operations from the proposed review-layer plan; preserve the original source and unresolved data-safety requirements (ED-01).
+- For standard commands with incomplete target parameters, a documented, version-scoped draft may be prepared, but missing vendor/OEM semantics, device identity, firmware-specific payload, expected values or recovery must remain explicit unresolved gates. Do not guess or execute (ED-03).
+- Destructive FIO test plans may correct a proven mismatch with the approved objective, including the specifically approved 50/50 mixed workload, but no destructive command may run without explicit non-OS target identity, safety checks and authorization (ED-04).
+- Ethernet and InfiniBand, and warm versus cold/full-power reboot, are distinct coverage branches with separate method, evidence, pass criteria and pre-execution approval; do not silently substitute one for the other (ED-05, ED-06).
+- For the specifically approved BIOS version/flash row, include a controlled flash and before/after version oracle in the review-layer plan. Flash remains NOT STARTED until exact hardware/image/version compatibility, activation, authorization and recovery are verified; do not automatically extend this scope to other version-read tests (ED-07).
+- Where both WebUI session and KVM persistence are explicitly approved, verify both; required GUI/visual evidence cannot be replaced entirely with API calls (ED-08).
+- Present LED and actual RAID Rebuild LED are distinct test states; physical LED inspection needs human-confirmed evidence, and Locate commands cannot stand in for genuine rebuild (ED-09).
+- Correct copied model/mode content only where case-specific authority establishes the intended workload. For the approved MLPerf case, use RetinaNet Offline Inference v5.0 as the review-layer target, not unrelated BERT/training text; still require versioned harness, datasets and acceptance criteria (ED-10).
+
+Before applying these principles to the 942-item pending queue, independently reconcile original XLSX, historical ED approvals, locked Final Audit and safety constraints. Review every Source Key independently, preserve the original source, and report per-case changes plus Validator and independent QA. No batch or keyword-based auto-resolution, merge or DUT execution is authorized.
