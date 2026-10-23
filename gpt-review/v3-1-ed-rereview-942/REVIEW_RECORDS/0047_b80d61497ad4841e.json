@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 47,
+  "source_key": "Functionality|857|Wistron-BMC-00147-V002",
+  "case_variant_id": "b80d61497ad4841e",
+  "source_ref": {"sheet": "Functionality", "source_row": 857, "code": "Wistron-BMC-00147-V002", "original_row_sha256": "7bc01a6b50f60d6f16e443c831725133af593c74fa2b977beda38d2f638bc4a7", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Event logs", "procedure": "Generic Before Test says clear logs; then check Overview Event logs, select `View more`, and select `Export all` to download logs.", "criteria": "All information is correct and logs download without error.", "deepseek": "YES reads one assumed Entries URI but omits UI, export, pagination/file integrity and evidence preservation, and uses insecure credential/TLS handling.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds UI/API/export correlation, pagination, safe download, redaction and strict preservation of existing logs."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1019_b80d61497ad4841e.json",
+  "old_problem": "The source's generic clear-log setup conflicts with observing/exporting existing evidence and supplies no deterministic stimulus to repopulate it. The historical record safely corrected this but left LogService scope/export format/completeness inputs Pending.",
+  "new_disposition": "RESOLVED_WITH_ED17_LOG_PRESERVATION_OVERRIDE_AND_PARAMETERIZED_UI_EXPORT_RECONCILIATION",
+  "disposition_reason": "ED-17 resolves the safety conflict: BMC/SEL deletion requires prior evidence preservation and is not a harmless baseline step. For this viewer/export case, clearing has no purpose and would destroy the oracle, so the Review layer records it as an excluded source defect while retaining the original text and explicit untested clear behavior. The remaining viewer/export semantics are clear; LogService, fields, pagination, filters, export format and concurrent-append rules are Project inputs. ED-35 preserves both UI views and Export all rather than substituting an API GET.",
+  "decision_basis": [
+    "XLSX row 857, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Log viewer correctness and export correctness are independent: the first needs scope/filter/field/order evidence; the second needs file integrity, format and entry completeness.",
+    "A live log can append or wrap during capture, so reconciliation needs stable keys or bounded sequence/time rules instead of destructive clearing.",
+    "A single fixed Entries GET may use wrong IDs and only the first page; Manager/LogService discovery and full approved scope accounting are mandatory."
+  ],
+  "test_case": {
+    "test_name": "Verify Event logs Overview/View-more and one complete Export-all artifact without log mutation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the selected BMC LogService is rendered with the correct complete approved scope in Overview and `View more`, and that one `Export all` action produces a safe, readable, structurally valid and complete artifact for the same bounded scope, while preserving every BMC log entry and audit record.",
+    "required_package": [
+      "Exact BMC/controller/certificate, firmware/WebUI build and account role",
+      "Authoritative Manager/LogService identity and expected entry types, fields, severity/order, timezone, filters and role visibility",
+      "Pagination/page-size, retention/wrap, empty-log, maximum-entry and concurrent-event rules with stable keys or sequence/time bounds",
+      "Overview/View-more selectors/routes, default filters, loading state and summary/detail relationship",
+      "Export-all filename, MIME/container, compression, encoding, schema/columns, order, completeness semantics and approved parser",
+      "Isolated non-executable download directory, free space, checksum, redaction, retention/disposal and explicit no-clear/no-ack/no-delete approval"
+    ],
+    "test_command": "Preserve rather than clear the existing logs. Bind the exact BMC, discover the target Manager and LogService, enumerate every approved Entries page or define the signed bounded scope, and record count, filters, oldest/newest stable keys and sequence/time boundaries. Capture Overview, navigate once to `View more`, and verify the same service/scope, fields, order, filters, pagination and ready state. Invoke `Export all` exactly once to an isolated non-executable directory. Validate trusted origin, filename, MIME/container, size, checksum, encoding and parser result, then reconcile export entries against UI/API stable keys/count/time/fields while explicitly accounting for concurrent appended events or wrap under the approved rule. Do not clear, acknowledge, delete, resolve, create a fault, execute the file or automatically re-export on mismatch.",
+    "expected_result": "Overview and View more represent the approved LogService scope with correct fields, filters, order, pagination and time semantics. One Export-all download completes without browser/server error and yields a readable, valid artifact whose entries fully reconcile with the bounded UI/API snapshot under the approved concurrent-event rule. No log entry is cleared, acknowledged, deleted or modified, and sensitive content remains controlled.",
+    "pass_fail_basis": "PASS requires discovered service identity, all relevant pages or signed bounds, both UI views, one export, structural/file-integrity validation and stable-key/count/time/field reconciliation with approved concurrent-event accounting and engineer verdict. HTTP success, browser download indicator, first API page, raw JSON or readable file without completeness proof cannot pass. Partial/corrupt/unrecognized output, wrong filter/service, missing/extra unexplained entries, mutation or re-export-only success is FAIL. Missing scope/export/parser/concurrency rules is NOT READY, not Pending or PASS; clear-log behavior remains explicitly untested.",
+    "safety_gate": [
+      "Do not clear dmesg, syslog, SEL, BMC EventLog or audit logs. Preserve the original clear instruction as a known defect and the ED-17 override as traceable Review-layer correction.",
+      "Do not acknowledge, delete, resolve or modify entries and do not inject a fault solely to create content.",
+      "Discover Manager/LogService and account for pagination, filters and boundary entries; do not assume `bmc`, `EventLog` or first-page completeness.",
+      "Use trusted TLS/protected credentials and redact event payloads, hostnames, addresses, serials and secrets in all artifacts.",
+      "Download only from the trusted BMC origin into an isolated non-executable path; validate without executing active content.",
+      "Export once. Stop on error, partial/corrupt/unrecognized file, changed scope, mutation or concurrent-event ambiguity; preserve all first-attempt evidence and do not retry automatically."
+    ],
+    "expected_evidence": [
+      "BMC/controller/certificate, firmware/WebUI build and discovered Manager/LogService IDs/schema metadata",
+      "Approved service scope, field/filter/order/timezone/pagination/retention matrix and signed ED-17 decision to preserve rather than clear",
+      "Pre-export count/pages/filters and bounded stable entry keys/sequence/time range",
+      "Redacted Overview and View-more DOM/screenshots/routes showing fields, order, filters, pagination and ready state",
+      "Export request/download metadata: origin, filename, MIME/container, size, checksum, encoding/parser result and isolated path",
+      "Entry-level or bounded API/UI/export reconciliation, concurrent-event delta, proof no clear/ack/delete, limitations and authorized engineer verdict"
+    ],
+    "recovery": "No BMC mutation is intended. If entries are altered, stop and preserve the audit trail; do not attempt to recreate or rewrite them. If an unredacted local export is produced, quarantine it and follow the approved retention/disposal process. Use the OOB read-only path to verify the BMC log store, and do not re-export automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-17 authoritatively reconciles the generic clear-log step: preserve evidence and exclude deletion from this viewer/export test while retaining the original wording and explicitly recording clear behavior as untested."},
+  "blocked": {"before": false, "after": false, "reason": "Viewer/export semantics are clear once ED-17 preserves logs; service scope, pagination and export contract are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI identity, LogService/entry scope, fields/filters/pages/time/concurrency rules, export format/parser, safe download/redaction/retention and engineer approval of ED-17 no-clear override.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "LogService and LogEntry discovery, collection and field semantics."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned LogService and LogEntry schema lookup."}
+  ],
+  "project_authority": "Project event-log retention/redaction policy and vendor Export-all/UI mapping define service scope, fields, pagination, artifact format and concurrent-event reconciliation.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "overview_view_more_export_all_required": true, "clear_log_executed": false, "clear_log_coverage_claimed": false, "export_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|858|Wistron-BMC-00148-V002", "next_pending_case_variant_id": "1965be15feb02e56"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

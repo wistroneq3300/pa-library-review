@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **46 / 942**
-- Last reviewed: `Functionality|856|Wistron-BMC-00146-V002` / `bf967006c7025b1c`
-- Next source-verified pending identity: `Functionality|857|Wistron-BMC-00147-V002` / `b80d61497ad4841e`
-- Latest disposition: Power information is removed from Pending as a chassis/component-bound static-and-dynamic field matrix across Overview, View more and advertised Redfish/OEM resources. Live telemetry uses approved synchronized tolerance rules; no reset, power, PSU, cap/limit, apply or other control action is authorized.
+- Completed: **47 / 942**
+- Last reviewed: `Functionality|857|Wistron-BMC-00147-V002` / `b80d61497ad4841e`
+- Next source-verified pending identity: `Functionality|858|Wistron-BMC-00148-V002` / `1965be15feb02e56`
+- Latest disposition: Event logs is removed from Pending and its clear-log conflict is reconciled through ED-17: original wording is retained, but logs are preserved and clear behavior is explicitly untested. Overview, View more and one Export all artifact require complete, integrity-checked, concurrent-event-aware reconciliation without clear/ack/delete or automatic re-export.
 - Protected sources: unchanged.
 - DUT execution: none.
