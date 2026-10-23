@@ -1,0 +1,32 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 6,
+  "source_key": "Functionality|741|Wistron-BMC-00031-V003",
+  "case_variant_id": "afbfe40eb5e1438c",
+  "source_ref": {"sheet": "Functionality", "source_row": 741, "code": "Wistron-BMC-00031-V003", "original_row_sha256": "aa41e7171f32db7da9fdd835f95faa3acc71122b4feee34ff0108d9c7eab8095", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Check HIB-CPLD version", "procedure": "Check BMC/BIOS in BIOS and send BMC raw command 0x30 0x20.", "criteria": "Command success and correct versions before and after flashing.", "deepseek": "Filters assumed FirmwareInventory entries with the regex HIB|CPLD.", "gpt_v2": "Requires exact HIB-CPLD member identity, complete inventory evidence and safe read-only access."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0909_afbfe40eb5e1438c.json",
+  "old_problem": "The preserved method does not address HIB-CPLD, and DeepSeek's broad name regex can select another HIB-related firmware object or any CPLD without proving which version is active.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_TEST",
+  "disposition_reason": "This row's version-check identity and before/after oracle are sufficiently clear for a component-bound read-only contract. The HIB-CPLD inventory identity, active-version property and expected releases are intentionally runtime configuration. No BMC/BIOS value or regex match is silently substituted for the requested bridge CPLD.",
+  "decision_basis": ["XLSX row 741 and its DeepSeek, GPT V2 and historical record were read directly.", "Version inspection has a safe non-mutating method once the platform maps the HIB-CPLD to one stable inventory object.", "ED-36 and user rule C classify missing member IDs and Expected versions as readiness facts; ED-35 prevents BMC-version evidence from reducing HIB-CPLD coverage.", "Redfish inventory is discoverable, but OEM member identity and whether a Version is active or staged require platform confirmation."],
+  "test_case": {
+    "test_name": "Verify the active HIB-CPLD firmware version across the approved firmware change",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Read the same physical HIB-CPLD's authoritative active-version field before and after the separately controlled flash and compare each checkpoint with the approved release matrix.",
+    "required_package": ["HIB board/slot/FRU and CPLD inventory-member identity", "Supported Redfish or OEM read-only version property and active-versus-staged semantics", "Approved pre/post HIB-CPLD versions and flash activation record", "Secure BMC client, CA trust and optional vendor decoder"],
+    "test_command": "Discover and save the complete read-only firmware inventory, then select the owner-approved HIB-CPLD resource by stable ID/location/related-item—not by `HIB|CPLD` regex—and read its documented active Version. Repeat against the same resource after activation. Use raw 0x30/0x20 only when its approved decoder binds the response to this HIB-CPLD.",
+    "expected_result": "Exactly one selected member maps to the intended HIB-CPLD. Its active version equals the approved baseline before the flash and the approved target afterward, while the member identity/location remains stable and BMC/host/SEL health stays acceptable.",
+    "pass_fail_basis": "PASS requires exact member mapping, active-version equality at both checkpoints and clean correlated health. FAIL includes wrong member, staged-only value, unexpected unchanged version after a completed activation, malformed data or health regression. An HTTP 200, Name match or BMC version cannot decide PASS.",
+    "safety_gate": ["GET/read-only collection only", "No UpdateService write, BMC reset, CPLD flash or undocumented OEM raw request", "Verified TLS and non-logged secrets", "Stop on multiple HIB/CPLD candidates or active/staged ambiguity without changing state"],
+    "expected_evidence": ["HIB-CPLD FRU/location and stable inventory URI", "Full service discovery and all relevant member documents", "Documented active-version field with pre/post expected comparison", "Referenced flash/activation timeline and BMC/SEL/host health"],
+    "recovery": "Because this row only reads state, recovery is evidence preservation and escalation. Do not reset or reflash when inventory identity or version disagrees."
+  },
+  "source_conflict": {"before": true, "after": false, "preserved_original_conflict": "The immutable Procedure remains BMC/BIOS-oriented.", "resolution": "HIB-CPLD is the review-layer target; unrelated source steps are retained but cannot satisfy its coverage."},
+  "blocked": {"before": true, "after": false, "reason": "The review now has a deterministic safe pattern; member mapping and expected values are Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact HIB-CPLD member, active-version semantics and approved before/after versions.", "execution_status": "NOT STARTED"},
+  "external_authorities": [{"title": "DMTF Redfish Resource and Schema Guide DSP2046 2025.2", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "use": "FirmwareInventory is a linked inventory collection; platform mapping is still required to select the HIB-CPLD instance."}],
+  "traceability": {"applicable_decisions": ["ED-03", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|742|Wistron-BMC-00032-V003", "next_pending_case_variant_id": "68fd6d032bb4491c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
+
