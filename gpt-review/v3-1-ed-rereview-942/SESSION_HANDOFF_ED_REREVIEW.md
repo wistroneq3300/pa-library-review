@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **86 / 942**
-- Last reviewed: `Functionality|897|Wistron-BMC-00187-V003` / `80347cc8a709b0b4`
-- Next source-verified pending identity: `Functionality|898|Wistron-BMC-00188-V003` / `c04e5e5efb2edeea`
-- Latest disposition: PWR_MB_CPU0_ and PWR_MB_CPU1_ are removed from Pending as two prefix families, not two assumed exact sensors. Every Project-defined member requires socket/electrical-boundary/quantity/controller/scaling evidence; cross-boundary substitution, CPU stress/policy changes, log clear and unreviewed Script execution are prohibited.
+- Completed: **87 / 942**
+- Last reviewed: `Functionality|898|Wistron-BMC-00188-V003` / `c04e5e5efb2edeea`
+- Next source-verified pending identity: `Functionality|899|Wistron-BMC-00189-V003` / `f8e41fc21150e435`
+- Latest disposition: PWR_GB_GPU1~8 is removed from Pending as an eight-row non-M GPU-baseboard power matrix bound to physical position/serial/UUID/BDF and exact monitor boundaries. `_M` or host device power cannot substitute without approved equivalence; load, cap/policy, power-state, firmware, threshold, cooling and log changes are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.
