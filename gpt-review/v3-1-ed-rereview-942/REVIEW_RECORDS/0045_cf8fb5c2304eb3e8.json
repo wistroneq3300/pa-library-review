@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 45,
+  "source_key": "Functionality|855|Wistron-BMC-00145-V002",
+  "case_variant_id": "cf8fb5c2304eb3e8",
+  "source_ref": {"sheet": "Functionality", "source_row": 855, "code": "Wistron-BMC-00145-V002", "original_row_sha256": "95b72875c297c25d520268efdaabce8901137799027f2286149bad109af89300", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Network information", "procedure": "Open BMC Web Overview, check Network information, then select `View more` and check details.", "criteria": "All information should match the SPEC definition.", "deepseek": "YES reads a fixed Manager EthernetInterfaces collection, may return only member links, assumes ManagerId `bmc`, narrows all fields to IP/MAC and bypasses both UI views.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds interface disambiguation, DHCP/VLAN/address-family semantics, UI/API mapping, no-edit boundary and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1017_cf8fb5c2304eb3e8.json",
+  "old_problem": "The historical record established a safe per-interface comparison but retained Pending for the physical/shared/dedicated/failover map, complete field/value semantics, Manager/member mapping and alternate recovery.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_COMPLETE_BMC_NETWORK_INTERFACE_MATRIX",
+  "disposition_reason": "The source clearly requires all Overview and View-more Network information to match SPEC without configuration changes. Exact management paths, interface roles, current/configured addresses and topology are Project inputs. The Review layer requires Manager discovery, member traversal, stable interface-role binding and address origin/lifetime/VLAN context rather than flat IP/MAC comparison. ED-05 keeps Ethernet identity separate from IB, ED-15 requires the signed field matrix, ED-20 preserves all interfaces/fields, ED-35 rejects API-only substitution, and ED-38 enforces no-edit/no-retry plus alternate recovery.",
+  "decision_basis": [
+    "XLSX row 855, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "A BMC may expose dedicated, shared, sideband, virtual and failover interfaces simultaneously; array order or current URL cannot establish interface identity.",
+    "Network correctness includes address family, origin, prefix, lifetime, VLAN, gateway/DNS/hostname/link context as selected by the signed Project matrix, not bare IP/MAC strings.",
+    "Information observation authorizes no edit, apply, renew, release, reset, enable/disable or failover operation."
+  ],
+  "test_case": {
+    "test_name": "Verify all BMC Overview and View-more network fields against the signed interface/topology SPEC",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove every Project-required BMC management interface shown in Overview and `View more` maps to the correct physical/shared/dedicated/sideband/virtual/failover role and displays current and configured MAC, address, VLAN, link and related network semantics matching the signed Project specification, without affecting connectivity.",
+    "required_package": [
+      "Exact BMC/controller/certificate, firmware/WebUI build, current management path and independently verified alternate OOB recovery",
+      "Signed physical-port to interface-role map for dedicated/shared/sideband/virtual/failover paths with stable IDs and permanent/current MAC expectations",
+      "Per-interface expected IPv4/IPv6, DHCP/static origin, prefix/mask, gateway, DNS, VLAN, hostname/FQDN, link, speed and address-lifetime fields as applicable",
+      "Overview/View-more labels, order, role visibility, locale/format, selector/route and page-ready contract",
+      "Discovered Manager and EthernetInterfaces collection/member/OEM mappings without fixed IDs",
+      "Trusted TLS, protected authentication, sensitive address redaction, no-edit/no-apply interlock and reachability observer"
+    ],
+    "test_command": "Establish BMC identity, current access path and alternate OOB recovery. Discover the target Manager from `/redfish/v1/Managers`, then GET its EthernetInterfaces collection and every in-scope member/OEM detail through trusted read-only access. Independently bind each member to its physical/virtual role using stable ID, permanent/current MAC, topology and Project evidence. Capture Overview first, activate only the exact `View more` navigation once, and record every required UI field without entering edit mode. Produce a per-interface comparison of UI summary, UI detail, member/OEM data and signed SPEC including current/configured address, origin, family, prefix, lifetime, VLAN, gateway/DNS/hostname/link/speed as applicable. Record stale/temporary/failover/link-down/permission-filtered values separately. Do not edit/apply/reset/renew/release/fail over, clear logs, refresh state or retry automatically.",
+    "expected_result": "The BMC and every required interface are correctly identity-bound. Overview and View more account for every signed-matrix field and interface with correct role, MAC/address configuration and required link/network semantics at acceptable freshness. Current and configured/transient/failover values are classified correctly, no unintended or unapproved entry is hidden, management reachability is unchanged and no network operation is submitted.",
+    "pass_fail_basis": "PASS requires trusted BMC identity, verified current/alternate paths, complete physical/role map, both UI views, every in-scope member and 100% accounted signed field matrix with correct origin/lifetime/context and engineer verdict. A fixed `/Managers/bmc` path, first member, current URL, collection envelope, IP/MAC-only dump or API-only evidence cannot pass. Wrong/missing/extra interface, role mismatch, incorrect/stale address semantics, unexpected failover/link state, permission filtering contrary to matrix, UI/API mismatch or any edit/apply request is FAIL. Missing topology/matrix/mapping/recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not edit, apply, reset, enable/disable, renew/release, fail over or change IP, DHCP, VLAN, route, DNS or hostname.",
+      "Discover Manager and all in-scope members; do not assume ManagerId `bmc`, the first member or current URL represents the only interface.",
+      "Treat collections as discovery and retain origin, family, prefix, lifetime, VLAN and link context for every address.",
+      "Validate TLS, protect credentials and retain a separately verified alternate OOB recovery path before opening a configuration-capable page.",
+      "Never clear BMC/network/system/audit logs or trigger refresh/renew solely to make values current; use timestamps/lease metadata.",
+      "Navigate once and stop on reachability change, edit mode, apply request, wrong-interface mapping, transient failover, identity mismatch or ambiguous stale data; no automatic retry."
+    ],
+    "expected_evidence": [
+      "BMC/controller identity, firmware/WebUI build, trusted certificate, current management path and alternate OOB recovery",
+      "Signed physical-port/interface-role map and per-interface field/value/semantics matrix",
+      "Redacted Overview and View-more DOM/screenshots/routes with role, locale, page-ready state and timestamps",
+      "Discovered Manager URI, EthernetInterfaces collection and every in-scope member/OEM payload including stable ID, permanent/current MAC, address family/origin/lifetime, VLAN, link and required fields",
+      "Per-interface UI-summary/UI-detail/API/SPEC comparison covering missing, extra, stale, temporary, failover, link-down and permission-filtered values",
+      "Proof no edit/apply/renew/reset request or reachability change occurred, preserved audit logs and authorized engineer verdict"
+    ],
+    "recovery": "No mutation is intended. If edit/apply is invoked or reachability changes, stop all WebUI/network actions, preserve the request/time and use only the pre-verified alternate OOB path plus the Project network recovery procedure to assess/restore access. Do not guess or automatically reapply network settings, renew leases or force failover."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently define a read-only Network information comparison in Overview and View more; exact fields/topology are Project inputs."},
+  "blocked": {"before": false, "after": false, "reason": "The information-display comparison is clear; interface topology, field semantics, resource mapping and recovery are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI identity, current/alternate paths, full physical/interface-role and field/value matrix, Manager/EthernetInterface/OEM mapping, freshness/transient rules and redaction.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "Manager EthernetInterface and network-property semantics."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned Manager and EthernetInterface schema lookup."}
+  ],
+  "project_authority": "The signed Project management-network topology and address configuration SPEC plus vendor UI-to-EthernetInterface/OEM mapping define interface identity, required fields and transient/failover acceptance.",
+  "traceability": {"applicable_decisions": ["ED-05", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "overview_and_view_more_required": true, "all_in_scope_interfaces_accounted": true, "network_mutation_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|856|Wistron-BMC-00146-V002", "next_pending_case_variant_id": "bf967006c7025b1c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
