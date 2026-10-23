@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 73,
+  "source_key": "Functionality|883|Wistron-BMC-00173-V004",
+  "case_variant_id": "62b21a8c12cecafd",
+  "source_ref": {"sheet": "Functionality", "source_row": 883, "code": "Wistron-BMC-00173-V004", "original_row_sha256": "fd8928d19908dd6dcd233c79c7a7d3949afd1a2ff1c2e8410b0ea275cd6ff771", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_HIB_PEX1 ~4", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats the spaced range as one literal name and truncates fallback inventory; it omits four HIB/PEX device identities, ASIC/fabric/management-source mapping, population rules, complete fields and UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires four separate records and PCIe topology but overemphasizes bridge/slot semantics rather than proving the actual HIB PEX ASICs."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1045_62b21a8c12cecafd.json",
+  "old_problem": "The 1~4 range could yield no valid record while still being treated as four-device evidence. HIB and PEX were not authoritatively defined, and no record was independently bound to a physical HIB ASIC, device part/ID, fabric topology or BMC management temperature field, so downstream slot/card data or one PEX could be misused for all four.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FOUR_ROW_HIB_PEX_TEMPERATURE_MATRIX",
+  "disposition_reason": "Confirm the Project meanings of HIB and PEX, then resolve PEX1 through PEX4 independently and bind every row to the physical HIB assembly/ASIC, part/device ID, PCIe fabric position and BMC controller/bus/mux/address temperature field. Compare complete OOB/two-UI records with per-device thermal limits under the existing fabric/load/cooling state. No PCIe exercise is required.",
+  "decision_basis": [
+    "XLSX row 883, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "The spaced tilde text is source range notation, not proven query syntax; four independent identities and outcomes are required.",
+    "PEX1-4 presumptively denote PCIe switch/expander ASICs on a Host Interface Board, but Project evidence must confirm that meaning and the physical/fabric indices; downstream slots are not the default sensor identity.",
+    "ED-13 governs variant/absent-device N/A, ED-15 requires per-device acceptance, ED-17 preserves logs and ED-20 preserves all four PEX identities."
+  ],
+  "test_case": {
+    "test_name": "Verify HIB PEX1 through PEX4 temperatures independently by ASIC, fabric and BMC management source",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After confirming HIB/PEX terminology, verify four temperature records are separately human readable in Dashboard and Server Health, map to the correct physical PEX ASICs on the exact HIB revision and their BMC management fields, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications under the recorded passive fabric and cooling state.",
+    "required_package": [
+      "Project definitions of HIB and PEX1-4 plus exact chassis/HIB PN/revision, BMC/BIOS and PEX firmware identity",
+      "Per-index physical ASIC location, vendor/part/device ID/revision and PCIe upstream/downstream fabric topology",
+      "Per-device BMC controller/bus/mux/address management path and exact die or board temperature field",
+      "Separate stable SDR/API and Dashboard/Server Health identities for PEX1 through PEX4",
+      "Per-device units/scaling, approved range/delta, threshold capability/values/hysteresis, health, freshness and variant/absent rules",
+      "Recorded PCIe link/traffic/power, downstream population, system load, fan/HIB airflow and approved vendor-field equivalence if used",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/PCIe logs, generate PCIe traffic, reset/retrain a switch, change links, service the HIB/cards, alter fans/airflow/thresholds or flash PEX firmware. Confirm HIB/PEX meanings and build a four-row ASIC/part/fabric/BMC-source expectation matrix. Enumerate the complete sensor repository and resolve PEX1 through PEX4 separately; do not use `TEMP_HIB_PEX1 ~4` as one literal record unless explicitly documented. Review the Script before use. Capture per device its independent query status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Correlate vendor/host telemetry only after exact device and field equivalence is approved. Stop without retry on missing, duplicate, swapped, stale or divergent rows.",
+    "expected_result": "Four independently dispositioned records and UI rows map to the correct HIB PEX ASICs, fabric positions and documented BMC temperature fields for the installed variant. Each applicable row matches its value/unit/threshold/status/freshness specification under the recorded passive state. Downstream slot/card or generic bridge telemetry never substitutes, and PCIe/hardware state remains unchanged.",
+    "pass_fail_basis": "PASS requires authoritative HIB/PEX mapping and separate complete OOB/two-UI/spec agreement for every applicable PEX1-4 row with an engineer verdict. One literal range query, one device, host enumeration, downstream card temperature, label-only match or truncated output cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-limit value or required threshold/status mismatch is FAIL. Missing topology/source-field/spec/reviewed method is NOT READY, not Pending or PASS; PCIe traffic, link, AER, reset and firmware are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel or PCIe logs; AER, link, switch, thermal and BMC history is relevant evidence.",
+      "Do not interpret the range as one record or accept fewer than four independently dispositioned device rows.",
+      "Do not infer PEX indices are slots; bind each to physical HIB ASIC, device ID and fabric topology.",
+      "Do not replace the BMC field with host enumeration or vendor telemetry without controller/bus/mux/address and exact field equivalence.",
+      "Do not load/reset/retrain/flash/service PCIe devices or alter links, fans, airflow or thresholds.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; variant N/A needs proof and no automatic retry is allowed."
+    ],
+    "expected_evidence": [
+      "Chassis/HIB PN/revision, BMC/BIOS/PEX firmware and four-row ASIC physical location, part/device ID and PCIe fabric topology matrix",
+      "Per-PEX BMC controller/bus/mux/address and exact temperature-field source",
+      "Four separate complete raw identities, values, units, threshold capabilities/values, health and timestamps",
+      "Separate Dashboard and Server Health evidence mapped to the same four ASICs",
+      "Per-device specification plus passive PCIe link/traffic/power/downstream population and fan/HIB airflow state with tolerance/update-lag comparison",
+      "Missing/duplicate/swapped/stale/divergent disposition, pinned Script or alternate-method audit, no-clear/no-load/no-reset/no-service/no-retry proof, final PCIe/BMC health and four-row engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On terminology, ASIC, fabric or management-field ambiguity, stale/divergent values or unexpected PCIe/BMC health change, stop and preserve all first-pass evidence plus topology/link state. Use approved read-only BMC/PCIe diagnostics; do not reset, retrain or service devices to force evidence. Any independently authorized fabric action requires its own recovery plan and owner execution."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The range and terminology need Project resolution, but Items, UI Procedure and Criteria consistently request passive display/spec validation of four temperature records."},
+  "blocked": {"before": false, "after": false, "reason": "The four-device passive intent is identifiable. HIB/PEX terminology, ASIC/fabric/source mapping and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "HIB/PEX definitions, HIB revision and four-ASIC part/fabric/BMC-source map, separate sensor/UI identities, per-device thresholds/status/freshness/N/A rules, passive fabric/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO PCIE EXERCISE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define HIB/PEX ASIC, fabric or BMC management-field identity."}],
+  "project_authority": "HIB schematic/layout and PEX map, PCIe fabric topology, BMC management-bus/sensor definition, PEX thermal limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "four_pex_rows_required": true, "literal_range_query_allowed_without_documentation": false, "downstream_slot_or_card_substitution_allowed": false, "host_field_substitution_allowed_without_equivalence": false, "pcie_exercise_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|884|Wistron-BMC-00174-V003", "next_pending_case_variant_id": "62088eee318530d7"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
