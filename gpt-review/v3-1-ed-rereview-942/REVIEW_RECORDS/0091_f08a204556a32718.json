@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 91,
+  "source_key": "Functionality|902|Wistron-BMC-00192-V003",
+  "case_variant_id": "f08a204556a32718",
+  "source_ref": {"sheet": "Functionality", "source_row": 902, "code": "Wistron-BMC-00192-V003", "original_row_sha256": "912b685274e0dae51ba00251a2f933e77adfa396ef19338def64e879eff4bc23", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "PWR_CRPS1~2", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES passes CRPS1~2 as one literal sensor and truncates discovery, so neither supply, FRU/page identity, electrical boundary, load/redundancy context nor complete UI/spec evidence is proven.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires separate reads and vendor PMBus semantics. V3.1 additionally binds each CRPS record to slot/FRU serial/AC feed/model/PMBus page and keeps the following six PWR_PSU points separate."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1063_f08a204556a32718.json",
+  "old_problem": "`PWR_CRPS1~2` is not a documented IPMI range, and CRPS labels do not reveal whether telemetry is AC input power, DC output power, load-derived power or another quantity. Redundant units may be active/active or active/standby, so a generic limit or substitution from PWR_PSU1~6 could misjudge valid asymmetric readings.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_CRPS_FRU_FEED_PMBUS_POWER_MATRIX",
+  "disposition_reason": "Resolve both exact CRPS records independently and bind each to fitted PSU FRU/serial/model, physical slot, AC feed, redundancy role and exact PMBus page/command/electrical boundary. Record unchanged load/input/redundancy state and compare full raw/two-UI evidence only to the applicable vendor/Project rule. Missing mappings or rules makes execution NOT READY rather than review Pending.",
+  "decision_basis": [
+    "XLSX row 902, same-row DeepSeek, exact GPT V2, selection manifest, following six-PSU row, related CRPS behavior cases and preserved V3.1 history were directly reviewed.",
+    "CRPS1/2 cannot be assumed to mean PSU1/2 or aggregate six-bay telemetry; FRU inventory and the Project power tree must establish identity.",
+    "Input/output and load-derived power differ through efficiency, auxiliaries, power factor and averaging windows, while redundancy role changes the normal distribution.",
+    "ED-03 prohibits guessed PMBus pages, ED-13 governs absent/standby behavior, ED-15 requires boundary/state criteria, ED-17 preserves power logs and ED-20 preserves both CRPS identities separately from PWR_PSU1~6."
+  ],
+  "test_case": {
+    "test_name": "Verify PWR_CRPS1 and PWR_CRPS2 as two FRU/feed/page-bound CRPS power records",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify both Project-defined CRPS power records are independently displayed or have an approved absent/standby outcome and correctly map to physical PSU/FRU, AC feed, redundancy role and PMBus measurement boundary with correct quantity, units, value, health, supported thresholds and freshness in both UI paths.",
+    "required_package": [
+      "Chassis/power-backplane/BMC/PSU firmware identity and authoritative CRPS definition and relation to PSU1 through PSU6",
+      "CRPS1/2 slot, FRU PN/serial/model/capacity/firmware, AC feed, fitted/present state and active/standby/load-share/redundancy role",
+      "Per-record electrical boundary such as AC input, DC output or defined derived quantity plus units and conversion/accounting model",
+      "Vendor PMBus controller/bus/address/page/command/format/scaling/calibration/averaging window and stable SDR/API/UI identity",
+      "Recorded input voltage, feed health, host/GPU/system load, PSU share/mode and cooling state",
+      "Boundary/state-specific tolerance/limit, threshold capability/values/hysteresis, health, zero/unavailable/stale/absent rules",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, PSU, BMC or host power logs and do not remove/reseat a PSU, switch feeds, change load/redundancy/share mode, policy, thresholds, controller state or firmware. Build the approved two-row slot/FRU/feed/role/PMBus matrix. Enumerate the complete repository and read PWR_CRPS1 and PWR_CRPS2 separately; never use the tilde expression as one sensor or assume equivalence to PWR_PSU1~6. Review the Script before use. Capture each record's exact identity, boundary, quantity/units, value, supported thresholds, health, window and timestamp plus matching Dashboard and Server Health visual rows and unchanged load/redundancy context. Apply its approved rule and stop without retry on missing, swapped, stale or divergent evidence.",
+    "expected_result": "Both CRPS identities have explicit outcomes. Every applicable OOB/PMBus record and both UI views agree on slot, FRU/serial/model, feed, redundancy role, page/command, electrical boundary, quantity, units, value, supported thresholds, health and freshness and satisfy the vendor/Project rule for the recorded state. Absent or standby behavior is accepted only when specified; PWR_PSU records or aggregate values do not substitute.",
+    "pass_fail_basis": "PASS requires two explicit FRU/feed/page-bound outcomes and complete separate raw/two-UI evidence accepted against boundary/state-specific criteria. A range result, truncated list, assumed PSU numbering, aggregate/six-PSU data, generic watt limit or input/output comparison without efficiency/window accounting cannot pass. Missing/swapped/stale FRU/page identity, wrong boundary/unit/scaling, out-of-rule value or required UI/status/threshold mismatch is FAIL. Missing vendor PMBus mapping, current state or acceptance is NOT READY, not Pending or PASS. Hot removal, AC loss, failover, current sharing and efficiency are separate coverage.",
+    "safety_gate": [
+      "Preserve SEL, PSU, BMC and host power history; do not perform the generic clear-log step.",
+      "Read two exact names and bind them to FRU serial, slot, AC feed, role and PMBus page; do not infer CRPS1/2 equals PSU1/2.",
+      "Do not equate input, output or derived load power without approved boundary, conversion and aligned-window rules.",
+      "Do not remove/reseat a PSU, switch feeds, change load/redundancy/share/policy/thresholds, reset controllers or flash firmware.",
+      "Do not guess OEM PMBus parameters, truncate output, expose credentials, assume a cipher or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/power-backplane/BMC identity and approved CRPS definition",
+      "Two-row slot/FRU PN-serial-model-capacity-firmware/AC-feed/presence/redundancy-role/PMBus-page/SDR/UI map",
+      "Complete separate raw values with boundary, quantity/units, scaling/window, supported thresholds, health and synchronized timestamps plus matching UI rows",
+      "Recorded input voltage, feed health, share/mode, host/GPU/system load and cooling with boundary/state-specific vendor/Project comparisons",
+      "Absent/standby/fault/zero/unavailable/stale/divergent disposition and pinned Script/client audit",
+      "No-clear/no-PSU-or-feed-or-load-or-policy change/no-retry proof, final PSU/BMC health and per-CRPS engineer verdict"
+    ],
+    "recovery": "The check is passive. On FRU/feed/page ambiguity, stale/divergent data or unexpected PSU/BMC health, stop and preserve first-pass evidence and the unchanged redundancy/load state. Obtain the vendor PMBus and Project power-tree references and use approved read-only diagnostics; do not service supplies or change feeds to force evidence. Any separately authorized redundancy or feed test needs its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, both UI paths and Criteria consistently request passive validation of two CRPS power records. Missing expansion, mapping and boundary are Project readiness inputs, not contradictory purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The two-point passive objective is clear. Vendor PMBus documentation and Project FRU/power maps can supply exact semantics without PSU service actions."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "CRPS definition/relation to six PSU rows, two FRU/slot/feed/role/page maps, electrical boundaries/scaling/windows, stable IDs, boundary/state limit/threshold/status/freshness/absent rules, passive load/redundancy context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO PSU, FEED, LOAD, REDUNDANCY, POLICY, THRESHOLD OR FIRMWARE CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Pin and review before use; it cannot define CRPS mapping, vendor PMBus pages, electrical boundaries or state-specific acceptance."}],
+  "project_authority": "Project power tree/slot/feed map, CRPS vendor PMBus specification, FRU inventory, BMC SDR repository and WebUI schema define both identities and criteria.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "two_CRPS_outcomes_required": true, "PSU1_6_substitution_allowed": false, "oem_pmbus_guessing_allowed": false, "power_or_redundancy_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|903|Wistron-BMC-00193-V003", "next_pending_case_variant_id": "95217fc951169f98"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
