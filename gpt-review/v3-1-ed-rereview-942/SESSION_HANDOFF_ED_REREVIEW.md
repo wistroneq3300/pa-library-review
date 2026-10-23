@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **118 / 942**
-- Last reviewed: `Functionality|929|Wistron-BMC-00219-V002` / `e667fde9ca47b711`
-- Next source-verified pending identity: `Functionality|930|Wistron-BMC-00220-V002` / `614d2ed6140726e5`
-- Latest disposition: Delete LDAP Config is removed from Pending after pinned upstream documentation reconciled the title with `ldap disable` as its Delete/Erase action. PASS still requires exact config/CA/mapping/session post-state, new-LDAP denial, proven root/local recovery and separate restore approval; HTTP 200 is insufficient. No state changed.
+- Completed: **119 / 942**
+- Last reviewed: `Functionality|930|Wistron-BMC-00220-V002` / `614d2ed6140726e5`
+- Next source-verified pending identity: `Functionality|931|Wistron-BMC-00221-V002` / `0b9e1e52e1377530`
+- Latest disposition: Add privilege mapping is removed from Pending with separate priv-user/priv-admin coverage rows, canonical test groups, persisted mapping plus effective allow/deny proof, local recovery and exact cleanup. One role never passes the other; no mapping was created.
 - Protected sources: unchanged.
 - DUT execution: none.
