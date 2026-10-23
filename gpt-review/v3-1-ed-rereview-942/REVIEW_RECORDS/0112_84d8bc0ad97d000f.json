@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 112,
+  "source_key": "Functionality|923|Wistron-BMC-00213-V002",
+  "case_variant_id": "84d8bc0ad97d000f",
+  "source_ref": {"sheet": "Functionality", "source_row": 923, "code": "Wistron-BMC-00213-V002", "original_row_sha256": "85d07c82dc451a82c0dc274be3f70260b46d914d2b8cfab86ef44d5eedc15e73", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Policies", "procedure": "Check that policy options can be enabled and disabled; generic setup says clear logs.", "criteria": "Each option can be enabled and disabled.", "script": null, "deepseek": "PARTIAL reads only selected AccountService password/lockout numeric fields with insecure TLS and a truncated IPMI user list; it performs no enable/disable, persistence or enforcement check and may not represent the source WebUI Policies page.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL risk correctly requires an approved policy matrix, complete readback, one control at a time, temporary-account enforcement, independent recovery and baseline restoration."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1084_84d8bc0ad97d000f.json",
+  "old_problem": "The source does not name the policy options, and the proposed AccountService query lists a few numeric password/lockout fields rather than the actual enable/disable controls or their enforcement. Guessing a universal set could omit OEM controls, while indiscriminate toggling could weaken security, lock out administrators or change unrelated session behavior.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_DISCOVERED_SECURITY_POLICY_OPTION_MATRIX",
+  "disposition_reason": "Inventory the exact policy controls exposed by the target firmware/WebUI and map standard AccountService fields plus OEM controls without assuming equivalence. Preserve every discovered enable/disable option as an independent result; for each Project-approved reversible control, verify visual setting, API persistence, bounded enforcement on a disposable account and restoration before continuing. Unsafe or out-of-scope controls require authoritative N/A/deferred evidence and cannot be silently omitted. Firmware-specific option names and approved values are runtime configuration, not an open review decision.",
+  "decision_basis": [
+    "XLSX row 923, same-row DeepSeek, exact GPT V2, selection manifest, adjacent user-management case and preserved V3.1 record were directly reviewed.",
+    "The source's open-ended `option` means the actual firmware page is the authoritative inventory; a hardcoded four-field Redfish projection or truncated user list cannot establish full coverage.",
+    "DMTF AccountService supplies standard policy/account fields, but OEM policy controls and enforcement remain vendor-specific and must be mapped rather than guessed.",
+    "A stored checkbox/value and actual enforcement are separate checkpoints. One-control isolation, disposable-account tests and immediate restoration protect recovery access while retaining the required enable/disable behavior."
+  ],
+  "test_case": {
+    "test_name": "Verify every discovered BMC security policy enable/disable option, enforcement and restoration",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Discover the complete version-specific BMC Policies control set and independently verify each approved reversible enable/disable option persists through the WebUI/API, enforces its documented behavior on a disposable account or isolated session, records an audit event and returns exactly to the approved baseline without weakening protected access.",
+    "required_package": [
+      "Exact BMC/firmware/WebUI/Redfish schema identity and complete screenshots/schema capture of every Policies control, including OEM fields",
+      "Authoritative option-by-option semantics, allowed values, dependency/order, persistence scope and approved baseline",
+      "Project disposition for every discovered option: test enabled/disabled, SPEC-backed unsupported/N/A, or explicitly deferred with reason",
+      "Dedicated temporary account/session, safe bounded enforcement stimulus and expected result for each tested option",
+      "Protected/current/recovery account list, independent administrator channel and lockout/session recovery",
+      "Per-option approval, visual/audit/API evidence, secret redaction and exact baseline restoration plan"
+    ],
+    "test_command": "CRITICAL SECURITY-POLICY WRITES; DO NOT EXECUTE WITHOUT PER-OPTION APPROVAL. Preserve logs and visually inventory every control on the verified Policies page; discover complete standard/OEM API fields and bind each UI label to documented semantics. Create a coverage row for every option, including authoritative N/A/deferred dispositions. For one approved reversible row, capture baseline and protected access, obtain approval, change only that option to the first required state through the source WebUI, capture visual confirmation/audit and re-read persistence. Use only the approved disposable account/session to perform a bounded non-destructive enforcement check. Restore baseline and prove recovery before separately testing the opposite state if required. Never weaken a production policy, use the recovery account as a stimulus, bulk-write, rely on `user list`, disable TLS trust or auto-advance/retry.",
+    "expected_result": "Every discovered policy control has a traceable outcome. Each tested enable/disable state is visibly saved, persists in the mapped supported API, produces the documented enforcement outcome on only the disposable identity, records the correct audit event and restores exactly to baseline before another option. Protected/recovery accounts and sessions remain available; unsupported/N/A is accepted only with authoritative platform evidence.",
+    "pass_fail_basis": "PASS requires a complete option matrix and, per tested state, exact baseline, one isolated WebUI change, API/readback persistence, bounded enforcement, audit proof and restoration. A checkbox, GET output, `ipmitool user list` or command success alone cannot pass. Wrong/unknown semantics, failed enforcement, privilege weakening, protected-account impact, unexpected dependency, audit mismatch or restore failure is FAIL and stops. Missing option map, approved value, safe stimulus, approval or recovery is NOT READY; N/A requires SPEC.",
+    "safety_gate": [
+      "Do not clear security/audit logs, expose credentials/tokens or modify evidence-retention settings.",
+      "Inventory all controls first; do not guess labels, field mappings, dependencies or assume standard AccountService covers OEM policies.",
+      "Use only a disposable account/session for enforcement; never deliberately lock, disable or weaken the sole administrator/recovery path.",
+      "Obtain separate point-of-action approval and change exactly one reversible option/state at a time; restore and verify baseline before continuing.",
+      "Stop on access loss, unexpected security weakening, dependency change or recovery mismatch; do not bulk-reset, auto-retry or continue the matrix."
+    ],
+    "expected_evidence": [
+      "Target/version/schema identity, complete visual policy-page inventory, standard/OEM field mapping and approved baseline",
+      "Every-option coverage matrix with semantics, states, safe stimulus, expected enforcement and SPEC-backed N/A/deferred evidence",
+      "Per-state WebUI before/action/result captures, API persistence, approval timestamp and BMC audit event",
+      "Disposable-account/session enforcement proof and exact protected/recovery-access checks",
+      "Per-option restoration and final complete policy/account/session baseline reconciliation",
+      "Redacted preserved logs, no bulk/no retry proof and engineer-owned per-option verdict"
+    ],
+    "recovery": "On wrong enforcement, lockout, privilege weakening, protected-session impact or restore failure, stop all remaining policy rows and preserve security/audit evidence. Use the independent recovery administrator to restore only the recorded prior value through the approved vendor path, then verify full policy, account and session baselines. Do not reset all policies, loosen another control or repeat the failed write automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require policy enable/disable behavior. Missing option names are resolved through target-firmware discovery and an explicit matrix rather than inventing a conflicting scope."},
+  "blocked": {"before": false, "after": false, "reason": "The discovery, per-option state machine, acceptance and recovery are defined. Exact firmware controls and approved states are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Complete policy inventory/semantics, approved baseline and state matrix, disposable enforcement stimuli, protected accounts, per-option approvals and recovery.", "execution_status": "NOT STARTED; CRITICAL SECURITY-POLICY WRITES; PER-OPTION/STATE APPROVAL REQUIRED; NO POLICY CHANGED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Specification DSP0266", "url": "https://www.dmtf.org/sites/default/files/standards/documents/DSP0266_1.22.0.pdf", "application": "Defines AccountService/ManagerAccount security behavior, atomic account activity, role/privilege enforcement and potential session effects; OEM policy fields still require vendor mapping."}
+  ],
+  "project_authority": "BMC vendor policy schema/UI guide, approved security baseline, account/session test policy and recovery SOP define the discovered option matrix and runtime acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "all_discovered_options_require_disposition": true, "webui_visual_evidence_required": true, "stored_state_only_pass_allowed": false, "protected_account_as_stimulus_allowed": false, "bulk_or_automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|924|Wistron-BMC-00214-V002", "next_pending_case_variant_id": "422691425536928a"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
