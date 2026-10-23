@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 93,
+  "source_key": "Functionality|904|Wistron-BMC-00194-V004",
+  "case_variant_id": "fcc4729918b0d0c0",
+  "source_ref": {"sheet": "Functionality", "source_row": 904, "code": "Wistron-BMC-00194-V004", "original_row_sha256": "28dae26efd4640771d7e3891f0066c78d474b2d23c1b4569048d76c56a3da5f2", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "STATUS_FAN 1~N", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats symbolic 1~N as one sensor, cannot discover N or prove population coverage, assumes ordinary thresholds on a likely discrete status family, and truncates the inventory.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires discovery-first enumeration and vendor state decoding. V3.1 additionally binds each status channel to module/rotor/controller/header/redundancy zone and distinguishes discrete status fields from RPM, PWM, tach and temperature."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1065_fcc4729918b0d0c0.json",
+  "old_problem": "N is an unresolved platform population variable, not a runnable range. A fan module may expose multiple rotors or one composite status, optional positions may be absent, and discrete event states may have assertion masks rather than numeric thresholds. Guessing N as 16 from a conflicting physical-removal case would reduce or distort coverage.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_INVENTORY_DISCOVERED_ALL_FAN_STATUS_MATRIX",
+  "disposition_reason": "Define canonical N from the approved fitted module/rotor inventory, generate the exact expected status-record set, and validate every discrete raw state and both UI views without fault stimulus. Preserve applicable/not-applicable field semantics and explicitly disposition optional/unfitted channels. The Project inventory/state dictionary is an execution prerequisite, not an unresolved review decision.",
+  "decision_basis": [
+    "XLSX row 904, same-row DeepSeek, exact GPT V2, selection manifest, separate physical-removal case, RPM/thermal context and preserved V3.1 record were directly reviewed.",
+    "The separate dynamic case's `1~16` and temperature/status contradictions supply no authority for this passive row's N and remain outside its scope.",
+    "Fan status is normally discrete/composite coverage: numeric threshold fields may be not applicable and must not be fabricated to satisfy generic Criteria.",
+    "ED-09 assigns physical fan handling to humans, ED-13 governs optional/unfitted N/A, ED-15 requires the approved state dictionary, ED-17 preserves logs and ED-20 requires every discovered identity to remain separate."
+  ],
+  "test_case": {
+    "test_name": "Verify every inventory-defined STATUS_FAN channel without fan manipulation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the complete Project-installed fan status set is present and correctly displayed in Dashboard and Server Health, with canonical N derived from platform inventory and every channel mapped to its fan module/rotor/controller/header/zone and decoded according to the approved discrete-state definition and freshness rule.",
+    "required_package": [
+      "Chassis/fan-board/BMC/SDR build and approved fitted fan-module/rotor population establishing canonical N",
+      "Expected exact STATUS_FAN names and mapping to physical module, rotor, slot, controller/header, thermal zone and redundancy group",
+      "Stable SDR number/name/sensor type/event-reading type/entity instance and corresponding API/Dashboard/Server Health identity",
+      "Vendor raw assertion/deassertion masks, normal/degraded/failed/stalled/absent/redundancy-lost/unavailable/initializing/latch/clear/display definitions",
+      "Explicit applicability of numeric threshold fields and mapping to separate RPM/tach/PWM/temperature sensors where relevant",
+      "BMC polling cadence, UI propagation/freshness tolerance and current unchanged fan policy/mode",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, fan, thermal or BMC logs and do not stop/remove/reseat a fan, obstruct airflow, change PWM/policy, inject a fault, alter thresholds or power-cycle. Build the authoritative expected channel set and N from chassis inventory; never send `STATUS_FAN 1~N`, infer N from another case or count rotors/modules interchangeably. Enumerate the complete SDR/API repository, resolve every exact status record and review the Script before use. Capture stable identity, raw event bits/masks, decoded state, field applicability and timestamp plus matching Dashboard and Server Health visual rows. Compare with the approved topology/state/freshness rules and stop without retry on missing, duplicate, swapped, stale or divergent channels.",
+    "expected_result": "The discovered exact channel set equals the Project expected set and establishes N. Every applicable raw status and both UI views agree on physical module/rotor/controller/zone identity, approved decoded state and freshness. Optional/unfitted channels follow the specified absence behavior; non-applicable numeric thresholds are recorded as such rather than invented. RPM, temperature, dynamic removal and fault behavior remain separate coverage.",
+    "pass_fail_basis": "PASS requires authoritative canonical N, one explicit result for every expected status channel, complete raw/two-UI identity/state/freshness evidence and engineer acceptance under the vendor discrete-state map. A literal 1~N query, first-100-line fallback, summary health, count, guessed N, RPM value or fabricated numeric threshold cannot pass. Missing/extra/duplicate/swapped/stale identity, incorrectly decoded bits, unexpected absent/degraded/failed state or UI mismatch is FAIL. Missing topology/state definitions or reviewed interface is NOT READY, not Pending or PASS; physical fan fault/recovery is outside this row.",
+    "safety_gate": [
+      "Preserve SEL, fan, thermal and BMC history; do not execute the generic clear-log step.",
+      "Derive N from approved inventory and enumerate exact records; do not import 16 from the separate conflicting case or omit optional fitted hardware.",
+      "Keep presence/status distinct from RPM, PWM, tach and temperature; mark unsupported threshold fields not applicable only when the sensor definition proves it.",
+      "Do not stop/remove/reseat fans, block airflow, change PWM/policy, inject faults, alter thresholds or power-cycle.",
+      "Do not truncate output, expose credentials, assume a cipher or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/fan-board/BMC identity and approved module/rotor population establishing N",
+      "Complete per-channel module/rotor/slot/controller-header/zone/redundancy plus SDR/API/UI identity matrix",
+      "Separate full raw discrete state, assertion/deassertion masks, decoded state, field applicability and synchronized timestamp for every channel",
+      "Dashboard and Server Health visual rows plus recorded fan policy/polling/UI propagation and mapped corroborating RPM only where defined",
+      "Optional/unfitted/absent/degraded/failed/unavailable/stale/divergent disposition and reviewed Script/client audit",
+      "Preserved logs, no-fault/no-fan-or-airflow-or-policy change/no-retry proof, final cooling/BMC health and all-channel engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On unknown N/topology/state bits, missing or stale records, or unexpected cooling/BMC health, stop and preserve original evidence and fan policy. Obtain the approved inventory and event-state specification and continue only with read-only diagnostics; do not manipulate a fan to resolve ambiguity. Any separately authorized physical fault test requires human handling and its own thermal safety/recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Within this row, Items, passive UI Procedure and Criteria consistently target fan status presentation. The N/1~16 and temperature/status conflicts belong to a separate physical-removal source case."},
+  "blocked": {"before": false, "after": false, "reason": "The passive all-installed-status objective and safe discovery method are complete. Platform inventory and the discrete-state definition can bind N and acceptance without a fault."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Canonical fitted module/rotor inventory and exact N, per-channel physical/controller/SDR/UI map, discrete masks/state/latch/absence definitions, threshold applicability, polling/freshness rules and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO FAN, AIRFLOW, PWM, POLICY, FAULT, THRESHOLD OR POWER CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Pin and review before use; it cannot define canonical N, physical topology, discrete event semantics or acceptance."}],
+  "project_authority": "Platform fan topology/redundancy specification, fitted inventory, BMC SDR/event-state definition, fan-controller documentation and WebUI schema define N and the PASS/FAIL state map.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-09", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "all_inventory_defined_status_channels_required": true, "N_guessed_from_other_case": false, "numeric_thresholds_fabricated": false, "fan_fault_or_removal_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|905|Wistron-BMC-00195-V003", "next_pending_case_variant_id": "673a3c0d6cb60660"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
