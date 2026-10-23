@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 185,
+  "source_key": "Functionality|999|Wistron-BMC-00289-V004",
+  "case_variant_id": "4bbb9618d214e206",
+  "source_ref": {"sheet": "Functionality", "source_row": 999, "code": "Wistron-BMC-00289-V004", "original_row_sha256": "3af9f85a5b94da1781b3be2ab5a9e5257444cc87b1484896cfa7d189681664fa", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Get Device GUID (IB)", "procedure": "When the system is powered on, send in-band `ipmitool raw 0x06 0x08` on localhost.", "criteria": "Command should be sent without error.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/naomi/viking/bmc/ipmi-raw/5.get_device-guid", "deepseek": "YES substitutes high-level `ipmitool mc guid`, uses sshpass with host-key verification disabled and leaves the returned GUID for user judgment.", "gpt_v2": "FULLY AUTOMATABLE restores raw 0x06/0x08, exact length, canonical decoding, byte-order provenance and identity comparison."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1157_4bbb9618d214e206.json",
+  "old_problem": "The historical record retained Pending for target identity, a pinned byte-order interpretation and an authoritative GUID reference. IPMI defines a completion plus exactly 16 GUID bytes, and pinned ipmitool exposes explicit IPMI/SMBIOS/RFC4122/dump modes rather than requiring guesswork. The remaining platform binding is finite Project configuration.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULLY_AUTOMATABLE_IN_BAND_DEVICE_GUID_RAW_IDENTITY_VALIDATION",
+  "disposition_reason": "Execute the source's raw 0x06/0x08 once on the verified localhost in-band device, require successful completion and exactly 16 bytes, retain the raw octets as the primary identity and generate canonical text only with an explicitly approved encoding mode. Compare raw and canonical forms to the immutable inventory/SMBIOS or approved OOB reference. `mc guid` may independently corroborate the decode but cannot replace raw-path evidence or authorize inventory changes.",
+  "decision_basis": [
+    "XLSX row 999, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 1000 were directly reviewed; next pending was verified as Functionality row 1000 / variant dd1f49dd7900779a.",
+    "IPMI v2.0 section 20.8 defines completion plus GUID bytes 1 through 16 and describes the IPMI field ordering relative to RFC4122. It also recommends byte-for-byte network-order correlation with SMBIOS when an SMBIOS UUID exists.",
+    "The specification calls the GUID opaque to IPMI; version-specific parsing is descriptive and must not alter raw identity. A valid review therefore preserves the 16 octets and records the selected canonicalization rather than silently guessing byte order.",
+    "Pinned ipmitool rejects non-16-byte responses and supports explicit `ipmi`, `smbios`, `rfc4122` and `dump` decode modes. Its auto detection can be ambiguous for random GUIDs, so the Project-approved mode and raw reference remain authoritative.",
+    "ED-03, ED-15 through ED-19, ED-22 and ED-28 preserve exact command, identity and evidence; ED-33, ED-34, ED-36 and ED-38 allow fully automated read-only validation with no inventory write, command substitution or retry."
+  ],
+  "test_case": {
+    "test_name": "Read the in-band IPMI Device GUID and validate raw and canonical identity",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Prove the bound BMC returns a successful, exactly 16-byte Device GUID over the original raw path and that its immutable raw and explicitly normalized forms match the approved DUT/BMC identity reference without changing the device or inventory.",
+    "required_package": [
+      "Immutable DUT asset/serial to BMC/local-IPMI-device mapping, approved in-band interface/privilege and pinned ipmitool build",
+      "Versioned parser requiring completion 00 and exactly 16 payload bytes, preserving raw octets and supporting an explicitly selected IPMI/SMBIOS/RFC4122 canonicalization",
+      "Approved immutable reference containing the expected raw 16 bytes and canonical GUID or a byte-for-byte SMBIOS/OOB correlation with documented encoding mode",
+      "Validation rules rejecting all-zero/all-FF, malformed, unstable or mismatched identity without silently rewriting inventory",
+      "Protected local execution or verified secret-safe host access with timeout, pinned reviewed Script revision and redaction/freshness policy"
+    ],
+    "test_command": "READ-ONLY AUTOMATION ONLY; DO NOT RUN DURING REVIEW. Bind the exact DUT, BMC and local IPMI device and independently capture the approved identity reference. Preserve logs and invoke the pinned equivalent of `ipmitool raw 0x06 0x08` exactly once with a bounded timeout. Record tool/transport status and IPMI completion separately; require completion 00 and exactly 16 payload octets. Store those octets unchanged, reject prohibited sentinel/invalid values, and render canonical text only with the versioned Project-selected IPMI/SMBIOS/RFC4122 mode. Compare raw bytes and canonical value to the approved reference; optionally capture protected `mc guid <explicit-mode>` as corroboration. Do not use auto-detection as sole authority, substitute the high-level command for raw coverage, clear logs, update inventory, write/reset or retry automatically.",
+    "expected_result": "The one verified raw request completes successfully with exactly 16 stable, non-sentinel GUID octets. Raw bytes and the explicitly normalized canonical form match the approved DUT/BMC reference, and any supplemental high-level view agrees under the same named encoding. No inventory or device state changes.",
+    "pass_fail_basis": "PASS requires exact target binding, one raw 0x06/0x08 request, successful completion, exactly 16 valid bytes, recorded encoding mode and exact reference match in both raw and canonical forms. Command success alone, `mc guid` alone, implicit/ambiguous auto byte order, a different target, malformed/sentinel/unstable bytes, reference mismatch or an inventory overwrite cannot pass. Missing reference/mode is NOT READY rather than Engineering Decision Pending.",
+    "safety_gate": [
+      "Allow only read-only App NetFn 0x06 command 0x08 on the verified local IPMI device; deny reset, write, inventory mutation and arbitrary raw commands.",
+      "Interpret `(IB)` from localhost as in-band, not InfiniBand, and bind DUT/BMC identity before collection.",
+      "Use protected local/verified access; prohibit sshpass, plaintext credentials and host-key bypass. Preserve logs instead of generic clearing.",
+      "Retain raw bytes as primary evidence and require an explicit encoding mode; do not silently choose among plausible IPMI/SMBIOS/RFC4122 decodes.",
+      "Fail closed on timeout, nonzero completion, length other than 16, invalid/sentinel data, instability or mismatch; do not retry with another command or change inventory."
+    ],
+    "expected_evidence": [
+      "DUT asset/serial, intended BMC/local interface and pinned firmware/tool/parser/Script versions",
+      "Timestamp, tool/transport status, IPMI completion and exact ordered 16-byte payload",
+      "Parser validation, named canonicalization mode and resulting GUID with raw-to-text trace",
+      "Approved immutable inventory/SMBIOS/OOB raw and canonical reference plus exact comparison",
+      "No-write/no-inventory-change/no-clear/no-substitution/no-retry audit and automated result with engineer verdict ownership"
+    ],
+    "recovery": "No mutation is expected. On invalid or mismatched GUID, preserve raw bytes and reference provenance, close the session and investigate target mapping, parser mode or authoritative inventory under owner control. Do not overwrite the reference, reassign the DUT, reset the BMC or issue an alternate command automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master title and raw command coherently request Device GUID. DeepSeek's high-level substitution and unsafe transport are review defects, not competing source requirements."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI and pinned ipmitool define fixed-length acquisition and controlled decoding. Target, encoding mode and approved reference are finite Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DUT/BMC/local-IPMI binding; pinned tool/parser/Script; explicit IPMI/SMBIOS/RFC4122 mode; immutable raw/canonical reference; timeout, freshness and redaction policy.", "execution_status": "NOT STARTED; REVIEW-LAYER READ-ONLY CASE ONLY; NO IPMI, SSH, INVENTORY, LOG, BMC, HOST OR DUT COMMAND EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 20.8 and Tables 20-9/20-10 define the 16-byte GUID response, field ordering, opaque semantics and SMBIOS correlation guidance."},
+    {"title": "ipmitool pinned ipmi_mc.c", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_mc.c", "application": "Requires an exact 16-byte response and implements explicit IPMI/SMBIOS/RFC4122/dump modes, including warnings when detected encoding differs from IPMI."}
+  ],
+  "project_authority": "The Project owner binds the BMC and supplies the authoritative raw/canonical identity plus explicit encoding mode. It may reconcile an inventory mismatch only through a separate controlled asset process; this read case never updates inventory.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-22", "ED-28", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ib_interpreted_from_source_as_in_band_not_infiniband": true, "raw_0x06_0x08_preserved": true, "exact_16_byte_payload_required": true, "raw_guid_is_primary_identity": true, "explicit_encoding_mode_required": true, "high_level_mc_guid_is_corroboration_only": true, "inventory_write_prohibited": true, "logs_preserved": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|1000|Wistron-BMC-00290-V003", "next_pending_case_variant_id": "dd1f49dd7900779a"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_guid_schema_researched": true, "pinned_ipmitool_length_and_encoding_modes_researched": true, "case_specific_raw_identity_and_byte_order_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
