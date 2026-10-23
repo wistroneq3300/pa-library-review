@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **93 / 942**
-- Last reviewed: `Functionality|904|Wistron-BMC-00194-V004` / `fcc4729918b0d0c0`
-- Next source-verified pending identity: `Functionality|905|Wistron-BMC-00195-V003` / `673a3c0d6cb60660`
-- Latest disposition: STATUS_FAN 1~N is removed from Pending as an inventory-discovered complete discrete-status matrix. N cannot be borrowed as 16, numeric thresholds are capability-aware, and physical fan/PWM/airflow/fault/log changes are prohibited.
+- Completed: **94 / 942**
+- Last reviewed: `Functionality|905|Wistron-BMC-00195-V003` / `673a3c0d6cb60660`
+- Next source-verified pending identity: `Functionality|906|Wistron-BMC-00196-V003` / `8dc8a7cfcb778960`
+- Latest disposition: STATUS_CRPS1~2 is removed from Pending as two FRU/slot/feed/role-bound raw-status records with versioned standard/OEM bit decoding. Six-PSU or power data cannot substitute, and status clearing/injection, PSU/feed/load/reset/log changes are prohibited.
 - Protected sources: unchanged.
 - DUT execution: none.
