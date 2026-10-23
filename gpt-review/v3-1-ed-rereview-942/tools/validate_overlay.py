@@ -155,8 +155,11 @@ def main() -> int:
         f"{sequence}\t{record['source_key']}\t{record['case_variant_id']}\t{path.name}"
         for path, record, sequence in sorted(in_scope, key=lambda item: item[2])
     )
-    initial_adopted_count = recon.get("checkpoint_audit", {}).get("formal_queue_records_adopted")
-    initial_adopted = sorted(in_scope, key=lambda item: item[2])[:initial_adopted_count]
+    initial_sequences = set(range(1, 14)) | {15} | set(range(22, 57))
+    initial_adopted = sorted(
+        (item for item in in_scope if item[2] in initial_sequences),
+        key=lambda item: item[2],
+    )
     initial_text = "\n".join(
         f"{sequence}\t{record['source_key']}\t{record['case_variant_id']}\t{path.name}"
         for path, record, sequence in initial_adopted
