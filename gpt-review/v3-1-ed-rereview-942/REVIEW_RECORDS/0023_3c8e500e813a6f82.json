@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 23,
+  "source_key": "Functionality|833|Wistron-BMC-00123-V003",
+  "case_variant_id": "3c8e500e813a6f82",
+  "source_ref": {"sheet": "Functionality", "source_row": 833, "code": "Wistron-BMC-00123-V003", "original_row_sha256": "71fb05b7623892866e6560b44e38e80297574c110d59067c6cc7f502e9d54b26", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "COM 0 -> COM port", "procedure": "Set console through COM port (ttyS0).", "criteria": "COM port ttyS0 is set successfully and a connected terminal has correct output.", "deepseek": "PARTIAL; reads cmdline/GRUB over unsafe SSH but cannot prove an applied setting or physical output.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; adds board mapping, serial parameters, exact bootloader diff, controlled reboot/recovery and operator transcript."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0995_3c8e500e813a6f82.json",
+  "old_problem": "The historical record already defined a correct guarded hybrid workflow, but retained the case on the engineering-decision queue even though the remaining connector, serial, bootloader and acceptance values are Project readiness inputs rather than an unresolved test purpose.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_PHYSICAL_SERIAL_CONSOLE_TEST",
+  "disposition_reason": "Linux authoritatively defines the `console=device,options` interface and ttyS serial option format, while systemd documents automatic serial-getty creation for active kernel consoles. The source's software and physical success criteria are therefore testable without inventing a command. Board-specific COM0-to-UART/ttyS0 routing, electrical level, terminal settings, distribution bootloader transaction, output-phase matrix and reboot authorization remain mandatory Project Configuration. The operator owns cable attachment and visual/readability judgment under ED-09; automation can validate configuration and capture raw bytes but cannot replace the physical terminal evidence.",
+  "decision_basis": [
+    "XLSX row 833, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Linux kernel documentation defines serial console selection as `console=ttySx,<baud><parity><bits><flow>` and explains multiple-console ordering; it does not establish which board connector maps to ttyS0.",
+    "systemd-getty-generator documents that an active non-virtual kernel console can instantiate serial-getty, so kernel output and a login prompt are related but independently evidenced boot phases.",
+    "ED-09 assigns physical cable/hardware activity to a human, ED-18 requires a full controlled transition to OS-ready when activation needs reboot, ED-20 preserves this physical COM identity separately from SOL, and ED-36 permits the missing platform values as runtime prerequisites."
+  ],
+  "test_case": {
+    "test_name": "Configure Linux ttyS0 and verify output through the physical COM0 connector",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove that the exact platform COM0 connector is electrically and logically mapped to the intended ttyS0 UART, that the approved persistent Linux console/getty configuration becomes active, and that the physical terminal receives correct readable output for every required boot/runtime phase without losing alternate management or bootability.",
+    "required_package": [
+      "Immutable SUT/board/BIOS/BMC/CPLD/OS identity and authoritative COM0 connector-to-UART/ttyS0/mux/ownership map",
+      "Electrical standard/voltage, pinout/null-modem rule, approved cable/adapter and baud/data/parity/stop/flow/encoding/terminal settings",
+      "Distribution and bootloader-specific current configuration, exact reviewed proposed diff, generated-entry validation method and persistence rule",
+      "Approved expected phases and content: firmware/bootloader where applicable, kernel, init/getty/login and any bounded bidirectional interaction, with silence/garble timeouts",
+      "Maintenance and single activation/reboot authorization, backed-up known-good boot entry, independent BMC/KVM/local recovery and final retain-or-restore policy",
+      "Protected host-key-verified management access and timestamped raw serial capture tool; do not use sshpass or disabled host-key checking"
+    ],
+    "test_command": "Before any change, record SUT identity, `/proc/cmdline`, the active boot entry/source configuration, ttyS0 driver/device/getty state, mux ownership and alternate management health; preserve logs instead of clearing them. A qualified operator verifies voltage/pinout and attaches the approved capture terminal to the physical COM0 connector with the approved serial matrix. Prepare and peer-check the exact vendor/distribution-specific bootloader and getty diff; do not run a generic `grub-mkconfig` until its inputs/output destination and recovery entry are approved. After explicit authorization, apply that exact diff, validate the generated entry, arm raw serial and OOB capture, and perform one controlled activation/reboot if required. Correlate the active cmdline/device/getty state with raw physical-terminal bytes and operator readability for every approved phase, then retain or restore the setting according to the Project plan and verify OS/OOB health.",
+    "expected_result": "The approved boot entry activates the intended ttyS0 console with the exact serial options, the correct physical COM0 terminal receives readable expected output across all required phases and any approved input works, while no other UART owner or management path is disrupted. Active cmdline/getty/device state matches the approved persistent configuration, there are no unexpected boot/serial/BMC errors, and the selected retained or restored final state is verified.",
+    "pass_fail_basis": "PASS requires both checkpoints: (A) exact before/after/generated/active configuration and healthy OS/OOB evidence, and (B) timestamped raw capture plus operator confirmation from the mapped physical COM0 endpoint for every required phase. A config string, SSH output, SOL session or virtual console cannot pass B. Wrong connector/UART, electrical or serial mismatch, missing/garbled/truncated phase, no required prompt/input, duplicate console-order surprise, boot/management loss, unexpected logs or failed restore is FAIL. Missing mapping, exact diff, phase matrix, recovery or authorization is NOT READY, not Engineering Decision Pending or PASS.",
+    "safety_gate": [
+      "Verify physical connector, voltage, pinout, cable/adapter, mux and UART owner before attachment or configuration; do not assume COM0 equals ttyS0.",
+      "Back up the active boot entry and prove independent OOB/KVM/local recovery before applying a persistent change or rebooting.",
+      "Do not overwrite vendor boot configuration or use a generic GRUB regeneration path without reviewed distribution-specific inputs and destination.",
+      "Do not reboot or retry automatically; perform at most the separately authorized activation and stop on silence, garbling, wrong endpoint, boot failure or management loss.",
+      "Preserve baseline logs and raw serial bytes; do not clear evidence or normalize away framing/garble errors.",
+      "Physical cable work and readability/bidirectional observation are operator-owned; the agent must not claim them from remote configuration evidence."
+    ],
+    "expected_evidence": [
+      "Board/SUT identities and authoritative COM0/ttyS0/mux/electrical/pinout/ownership map",
+      "Terminal/cable/adapter identity and exact baud/parity/bits/flow/encoding settings with operator connection record",
+      "Before/after bootloader/getty diff, validated generated entry, active `/proc/cmdline`, ttyS0 driver/device/getty state and configuration hash",
+      "Timestamped raw physical serial transcript labeled by required boot/runtime phase plus operator readability/input confirmation",
+      "Single authorized activation/reboot timeline, preserved kernel/BMC/log delta, OS/OOB health and no automatic retry",
+      "Known-good recovery entry and executed retain-or-restore verification with final configuration diff"
+    ],
+    "recovery": "If output is absent/garbled, the wrong UART responds, boot fails or management degrades, stop without another reboot. Use the already verified independent OOB/KVM/local recovery path to select the known-good boot entry, restore the saved bootloader/getty configuration, preserve raw serial and failure logs, and confirm OS, BMC and original console health before any separately approved retry. Disconnect or rewire hardware only through the qualified operator."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Procedure and Criteria consistently require ttyS0 configuration plus physical COM terminal output; COM0 mapping and settings are platform inputs."},
+  "blocked": {"before": false, "after": false, "reason": "The test semantics, checkpoints and safety boundary are defined; missing board/configuration bindings are readiness prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "COM0/ttyS0 electrical and mux map, serial matrix, exact bootloader/getty diff, output phases/timeouts, activation approval and recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "Linux Kernel — Linux Serial Console", "url": "https://docs.kernel.org/admin-guide/serial-console.html", "use": "Defines `console=` device/options, serial settings and multiple-console behavior."},
+    {"title": "Linux Kernel — Kernel command-line parameters", "url": "https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html", "use": "Defines kernel command-line handling and applicability boundaries."},
+    {"title": "systemd-getty-generator", "url": "https://www.freedesktop.org/software/systemd/man/latest/systemd-getty-generator.html", "use": "Defines serial-getty generation for active kernel consoles and the login-prompt boundary."}
+  ],
+  "traceability": {"applicable_decisions": ["ED-09", "ED-18", "ED-20", "ED-31", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "physical_com_distinct_from_sol": true, "reboot_authorized_by_review": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|834|Wistron-BMC-00124-V004", "next_pending_case_variant_id": "72a5207cbca9f808"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
