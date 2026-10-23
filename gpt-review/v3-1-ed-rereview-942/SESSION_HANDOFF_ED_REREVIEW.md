@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **117 / 942**
-- Last reviewed: `Functionality|928|Wistron-BMC-00218-V002` / `1a253502f6adcc41`
-- Next source-verified pending identity: `Functionality|929|Wistron-BMC-00219-V002` / `e667fde9ca47b711`
-- Latest disposition: Secure LDAP is removed from Pending as a parameterized two-write contract: approved LDAP CA installation/active trust, then one complete `ldaps://` object with certificate identity, live auth/role/local-fallback and restoration proof. NonSecure remains separate. No CA or LDAP change was executed.
+- Completed: **118 / 942**
+- Last reviewed: `Functionality|929|Wistron-BMC-00219-V002` / `e667fde9ca47b711`
+- Next source-verified pending identity: `Functionality|930|Wistron-BMC-00220-V002` / `614d2ed6140726e5`
+- Latest disposition: Delete LDAP Config is removed from Pending after pinned upstream documentation reconciled the title with `ldap disable` as its Delete/Erase action. PASS still requires exact config/CA/mapping/session post-state, new-LDAP denial, proven root/local recovery and separate restore approval; HTTP 200 is insufficient. No state changed.
 - Protected sources: unchanged.
 - DUT execution: none.
