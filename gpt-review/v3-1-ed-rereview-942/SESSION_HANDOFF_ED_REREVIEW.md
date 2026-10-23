@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **170 / 942**
-- Last reviewed: `Functionality|983|Wistron-BMC-00273-V003` / `0ec7148b04e4c61a`
-- Next source-verified pending identity: `Functionality|984|Wistron-BMC-00274-V003` / `b68f0e7394ae9672`
-- Latest disposition: Power on/off is removed from Pending as a parameterized REQUIRES CONFIRMATION case. It preserves one explicitly authorized hard Power Down and one Power Up, stable Off proof, then POST/OS Ready/service recovery; the separate Power Soft, reset, cycle and AC semantics cannot substitute. No action ran.
+- Completed: **171 / 942**
+- Last reviewed: `Functionality|984|Wistron-BMC-00274-V003` / `b68f0e7394ae9672`
+- Next source-verified pending identity: `Functionality|985|Wistron-BMC-00275-V003` / `6dadbb370df2544e`
+- Latest disposition: Power Soft is removed from Pending as a parameterized REQUIRES CONFIRMATION case. Standard optional ACPI soft-shutdown semantics are used, but PASS requires normal OS shutdown, stable Off and passive SOL evidence; completion, SOL loss, hard fallback or retry cannot pass. No action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
