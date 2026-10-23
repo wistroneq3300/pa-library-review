@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 178,
+  "source_key": "Functionality|992|Wistron-BMC-00282-V004",
+  "case_variant_id": "87d08d0aa322ef67",
+  "source_ref": {"sheet": "Functionality", "source_row": 992, "code": "Wistron-BMC-00282-V004", "original_row_sha256": "f32b53dee32422246dba7cd0393558b218488616b8b5e9d2feb9065605dd71e3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Get Device ID (IB)", "procedure": "Send in-band `ipmitool raw 0x06 0x01` on localhost and check completion code 00 plus Device ID, Device Revision, BMC Firmware Version, IPMI Version, Additional Device Support, Manufacturer ID and Product ID bytes.", "criteria": "Command is sent without error.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/naomi/viking/bmc/ipmi-raw/1.get-device-id", "deepseek": "YES keeps the raw request but wraps it in sshpass with host-key checking disabled and labels the result `ipmitool mc info`, without exact byte decoding.", "gpt_v2": "FULLY AUTOMATABLE after protected in-band execution, completion/length validation, endian-aware decoding and comparison to the approved BMC reference."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1150_87d08d0aa322ef67.json",
+  "old_problem": "The historical record retained Pending for target, response schema/byte order and expected BMC identity. IPMI provides the authoritative Get Device ID response layout, and pinned ipmitool code demonstrates the field masks and little-endian Manufacturer/Product decoding. Exact expected IDs and firmware are platform parameters, not unresolved command semantics.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULLY_AUTOMATABLE_IN_BAND_IPMI_GET_DEVICE_ID_BYTE_DECODING",
+  "disposition_reason": "Treat `(IB)` as in-band because the source explicitly says localhost; it does not denote InfiniBand. Run the exact standard App NetFn 0x06 command 0x01 once through the bound local IPMI device, capture completion separately from the payload, require the minimum response length, decode every listed field with the standard masks/order, and compare to the versioned Project BMC reference. `mc info` may corroborate but never replaces raw-wire evidence.",
+  "decision_basis": [
+    "XLSX row 992, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 993 were directly reviewed; next pending was verified as Functionality row 993 / variant 818840293d936fe4.",
+    "IPMI v2.0 Get Device ID defines completion, Device ID/Revision, firmware revisions and availability, IPMI version, support mask, 3-byte Manufacturer ID, 2-byte Product ID and optional auxiliary firmware bytes.",
+    "Pinned ipmitool decodes Manufacturer ID from three bytes and Product ID little-endian, masks revision/firmware flags and exposes additional-support bits. A versioned parser can therefore make acceptance deterministic.",
+    "The source's byte numbering includes completion code as byte 1, while `ipmitool raw` reports command completion through status/error and prints payload bytes beginning with Device ID. The review-layer parser records this offset explicitly instead of expecting a literal leading `00` in stdout.",
+    "ED-03, ED-15 through ED-19, ED-22 and ED-28 preserve exact command/fields, official parsing and Project expected identities; ED-33, ED-34, ED-36 and ED-38 permit protected read-only automation with no log clear, substitution or retry."
+  ],
+  "test_case": {
+    "test_name": "Decode and validate the in-band IPMI Get Device ID raw response",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the bound localhost in-band IPMI path returns a successful, well-formed standard Get Device ID response and that every source-listed BMC identity/version/support field matches the approved Project reference without changing BMC or host state.",
+    "required_package": [
+      "Immutable DUT asset/serial to local BMC/IPMI device mapping, approved in-band interface/privilege and pinned ipmitool build",
+      "Versioned raw-response parser implementing standard completion handling, minimum 11-byte payload, field masks, IPMI version encoding and little-endian 3-byte Manufacturer/2-byte Product IDs",
+      "Approved expected Device ID, Device Revision, BMC firmware/availability, IPMI version, Additional Device Support mask, Manufacturer ID and Product ID for the exact model/firmware",
+      "Protected local execution agent or verified secret-safe host access with timeout; pinned reviewed Script revision if used",
+      "Evidence redaction and freshness policy; optional approved `mc info` correlation retained only as supplemental evidence"
+    ],
+    "test_command": "READ-ONLY AUTOMATION ONLY; DO NOT RUN DURING REVIEW. Bind the exact DUT and local IPMI device, verify in-band availability and invoke the pinned equivalent of `ipmitool raw 0x06 0x01` exactly once with a bounded timeout. Capture tool/transport status, IPMI completion and the exact raw payload separately. Require completion 00 and at least 11 payload bytes; decode Device ID, revision/SDR-support flag, firmware major/second byte and availability, IPMI version, Additional Device Support bits, three-byte Manufacturer ID and two-byte Product ID with the standard masks and order; preserve optional auxiliary bytes if present. Compare every required normalized field to the approved Project reference, store redacted raw plus structured evidence, and stop on any mismatch. Do not use sshpass, disable host verification, clear logs, substitute `mc info`, send another raw command or retry automatically.",
+    "expected_result": "The bound in-band request completes successfully with IPMI completion 00, a valid minimum payload and no extra malformed data. All required fields decode unambiguously and match the approved exact BMC/model/firmware reference; optional auxiliary data is preserved without invented OEM interpretation. No state or log mutation occurs.",
+    "pass_fail_basis": "PASS requires exact DUT/BMC/local-device binding, one successful raw 0x06/0x01 request, completion 00, valid payload length, deterministic standard decode and match of every approved required field. Exit success without parsing, a literal-00 stdout assumption, `mc info`, wrong byte order, unknown/mismatched IDs/version/support, short/malformed response, stale evidence, sshpass or a different command cannot pass. Missing expected Project values is NOT READY rather than Engineering Decision Pending.",
+    "safety_gate": [
+      "Allow only read-only App NetFn 0x06 command 0x01 on the bound local IPMI device; deny reset, write and arbitrary raw commands.",
+      "Verify localhost/DUT/BMC association before invocation; `(IB)` means in-band here and must not be rerouted to an InfiniBand interface.",
+      "Use local protected execution or verified secret-safe access; prohibit sshpass, plaintext secrets and host-key bypass.",
+      "Do not clear logs. Preserve exact raw bytes, completion, parser version and decoded values with required redaction.",
+      "Fail closed on timeout, interface error, nonzero completion, short/long-malformed payload, unavailable bit, decode ambiguity or reference mismatch; do not automatically retry or issue another command."
+    ],
+    "expected_evidence": [
+      "DUT asset/serial, local BMC/IPMI device/interface binding and pinned ipmitool/parser/Script versions",
+      "Timestamp, timeout, tool status, IPMI completion and redacted exact raw payload",
+      "Length/offset/mask/endianness validation and decoded Device ID/Revision/Firmware/IPMI/Support/Manufacturer/Product fields",
+      "Approved Project reference and field-by-field comparison; optional auxiliary bytes kept as raw vendor data",
+      "No-write/no-clear/no-retry audit and automated result with engineer verdict ownership"
+    ],
+    "recovery": "No mutation is expected. On command, schema or identity failure, close the local session, retain raw diagnostics and verify only the target mapping, driver/interface, parser or Project reference under owner control. Do not reset the BMC, send an alternate raw command or clear logs as recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master consistently specifies standard in-band Get Device ID fields. DeepSeek's unsafe wrapper and `mc info` label are review defects, not authoritative conflicts."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI and pinned ipmitool define the complete schema and decoding. Exact target/reference values and local access are ordinary Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DUT-to-local-BMC mapping; in-band device/interface; pinned tool/parser/Script; exact Device/Revision/Firmware/IPMI/Support/Manufacturer/Product reference; timeout/freshness and redaction.", "execution_status": "NOT STARTED; REVIEW-LAYER READ-ONLY CASE ONLY; NO IPMI, SSH, LOG, BMC, HOST OR DUT COMMAND EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 20.1 defines Get Device ID response fields, Manufacturer/Product identity and optional auxiliary firmware information."},
+    {"title": "ipmitool pinned ipmi_mc.c", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_mc.c", "application": "Implements standard Get Device ID completion handling, masks, Manufacturer/Product byte order, support-bit decoding and optional auxiliary output."},
+    {"title": "ipmitool pinned ipmi_mc.h", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/include/ipmitool/ipmi_mc.h", "application": "Defines the packed response structure and constants used to validate the versioned parser against the raw payload."}
+  ],
+  "project_authority": "The Project owner binds the local IPMI device to the intended BMC and supplies exact platform identity/version/support expectations. These are finite model/firmware values and do not require a new decision about the standard query or parser.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-22", "ED-28", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ib_interpreted_from_source_as_in_band_not_infiniband": true, "raw_0x06_0x01_preserved": true, "completion_separated_from_ipmitool_payload": true, "all_source_fields_decoded": true, "manufacturer_and_product_byte_order_validated": true, "mc_info_substitution_rejected": true, "sshpass_and_host_key_bypass_rejected": true, "read_only_no_log_clear": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|993|Wistron-BMC-00283-V004", "next_pending_case_variant_id": "818840293d936fe4"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_get_device_id_schema_researched": true, "pinned_ipmitool_decoder_researched": true, "case_specific_in_band_byte_decode_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
