@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 61,
+  "source_key": "Functionality|871|Wistron-BMC-00161-V004",
+  "case_variant_id": "a7fd9f34be2388e6",
+  "source_ref": {"sheet": "Functionality", "source_row": 871, "code": "Wistron-BMC-00161-V004", "original_row_sha256": "0196ed938e8ebfe0e2b59e53ad04fd9790410f77c0f856aeaa9c6e430df6e764", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_AMBIENT", "procedure": "Generic setup says clear logs; open Hardware Status > Sensors and compare each sensor reading/setting with BMC sensor spec.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES reads a presumed literal sensor name and truncates its fallback at 100 lines; it omits physical location, calibrated reference, accuracy/tolerance, update delay, complete thresholds and WebUI/spec correlation.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds exact identity, location-aware calibrated ambient reference and protected read-only comparison."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1033_a7fd9f34be2388e6.json",
+  "old_problem": "A single BMC value was treated as ambient truth without defining whether the sensor measures rack inlet, chassis inlet, room or local board air. Sensor identity, reference-probe placement/calibration, spatial gradient, load/airflow, update lag, tolerance and complete thresholds were absent; fallback and Script provenance were unsafe/incomplete.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TIME_ALIGNED_LOCATION_AWARE_AMBIENT_SENSOR_COMPARISON",
+  "disposition_reason": "The source is a read-only current-reading/setting check. Bind the exact sensor and physical measurand, use a calibrated reference at the specification-defined location under a documented stable airflow/load condition, collect complete OOB and WebUI data at aligned times and compare with an approved combined-uncertainty/tolerance model. Exact location/spec/reference values are execution inputs, not unresolved test logic.",
+  "decision_basis": [
+    "XLSX row 871, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "Ambient temperature is location- and airflow-dependent; room and local inlet temperatures may legitimately differ, so physical mapping and co-location are part of identity.",
+    "Sensor lag, UI caching and reference accuracy require a defined stability window and combined uncertainty rather than string equality.",
+    "ED-15 requires approved tolerances, ED-17 rejects unrelated clearing, ED-20 preserves reading/threshold/UI coverage and ED-35 prevents an unrequested thermal stimulus from being invented."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_AMBIENT against complete WebUI/OOB data and a co-located calibrated reference",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the exact `TEMP_AMBIENT` environmental sensor is human readable in Hardware Status > Sensors and that its current Celsius reading, units, health, supported thresholds and timestamps agree with the platform specification and a properly located, time-aligned calibrated ambient reference within the approved combined tolerance.",
+    "required_package": [
+      "Exact BMC/chassis, firmware/WebUI build, SDR repository, trusted endpoint/role and stable sensor number/type/entity/instance-to-UI mapping",
+      "Documented physical sensor location and intended measurand plus reference-probe placement distance/orientation, airflow and shielding/co-location constraints",
+      "Expected Celsius range, scaling/rounding, sensor accuracy, combined uncertainty/tolerance, update period and stabilization window",
+      "Threshold capability mask, lower/upper values, hysteresis, status and N/A/unavailable handling",
+      "Calibrated reference thermometer identity, current certificate, accuracy/resolution and synchronized timestamp record",
+      "Validated protected OOB/API/browser client and pinned reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, modify thresholds/environment/fans or run an unreviewed Script. Bind the exact TEMP_AMBIENT SDR/API object and physical location to one UI row; stop on duplicate/unknown mapping. Verify the reference instrument calibration and have an operator place it at the approved point without disturbing airflow. Record rack/chassis/load/fan/airflow condition and wait the defined stability interval. Capture synchronized complete sensor identity, raw reading, Celsius conversion, status, threshold capability/values/hysteresis and timestamp through protected OOB plus Hardware Status > Sensors with refresh time. Record stable reference readings and timestamps. Apply only approved scaling, UI rounding, update lag and combined uncertainty; compare sensor, UI, reference and Project SPEC. A passive reread is allowed only when the predefined stability rule requires it, not as failure retry.",
+    "expected_result": "One unique TEMP_AMBIENT sensor/UI/physical location is proven. Complete OOB and WebUI identity, Celsius reading, status and applicable thresholds agree under approved formatting/freshness rules and match Project SPEC. Time-aligned reference measurements at the specified point differ from the sensor by no more than the approved combined tolerance under the documented stable airflow/load condition. No log, threshold, fan or environment mutation occurs.",
+    "pass_fail_basis": "PASS requires stable identity/location mapping, complete OOB and UI fields, valid reference calibration/placement/stability, approved tolerance calculation and sensor-UI-reference-spec agreement with engineer verdict. A plausible value, room thermometer at an unapproved point, literal name, truncated SDR list or human-readable UI alone cannot pass. Identity/location uncertainty, stale data, unjustified gradient, out-of-tolerance result, threshold/spec mismatch or mutation is FAIL. Missing location/reference/tolerance/Script review is NOT READY, not Pending or PASS; no active thermal behavior is claimed.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; thermal/health context must remain intact.",
+      "Do not equate room temperature with local sensor air temperature; use the specified point and record airflow/load/rack state.",
+      "Do not heat, cool, obstruct airflow, alter fan controls or change thresholds; any sweep/transition is a separate approved thermal case.",
+      "Do not select by label alone; bind stable SDR/API identity and physical mapping and stop on aliases/duplicates.",
+      "Do not truncate fallback output or call empty/partial data complete; preserve full object/status/timestamps/errors.",
+      "Do not expose credentials, assume cipher 17 or run an unpinned Script; stop without retry on calibration, location, unit or freshness ambiguity."
+    ],
+    "expected_evidence": [
+      "BMC/chassis, firmware/WebUI/SDR identity and stable TEMP_AMBIENT sensor/UI/physical-location map",
+      "Complete raw record with Celsius reading/scaling, threshold capability/values/hysteresis, status and synchronized timestamp",
+      "Hardware Status > Sensors DOM/screenshot tied to the same object and refresh/update interval",
+      "Reference probe identity/calibration/accuracy, placement photo/diagram, airflow/load/rack state, stable readings and timestamps",
+      "Approved tolerance/uncertainty/rounding/lag calculation and field-level sensor/UI/reference/spec comparison",
+      "Pinned Script review or alternate method, no-clear/no-write/no-stimulus/no-retry proof, BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On identity, reference or tolerance ambiguity, stop and preserve first synchronized evidence; reposition only under the approved placement procedure and never alter the platform environment to force agreement. If the Script mutates state, isolate it and have the authorized owner restore the captured baseline."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Sensor Page procedure and Criteria consistently define a read-only ambient sensor/spec comparison. Location/reference/tolerance are execution inputs, not competing purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The sensor/UI/spec objective is clear. Physical mapping, calibrated reference, thresholds and tolerance are Project/vendor readiness inputs that can be supplied."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/SDR/UI and physical sensor map, reference placement/calibration, environment/load/stability condition, expected range/scaling/thresholds/tolerance/freshness, protected client and pinned reviewed Script or manual method.", "execution_status": "NOT STARTED; READ ONLY; REFERENCE SETUP AND SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "May be used only after immutable pinning and content/safety review; it does not supply physical location or tolerance."}],
+  "project_authority": "Platform thermal sensor map/specification, WebUI definitions, Project environmental limits and reference-instrument calibration record define location, uncertainty and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "active_thermal_stimulus_authorized": false, "threshold_write_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|872|Wistron-BMC-00162-V004", "next_pending_case_variant_id": "1cdb4bb72758f161"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
