@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 85,
+  "source_key": "Functionality|896|Wistron-BMC-00186-V003",
+  "case_variant_id": "2f85faaf14985c9f",
+  "source_ref": {"sheet": "Functionality", "source_row": 896, "code": "Wistron-BMC-00186-V003", "original_row_sha256": "830b579fe8a2830bf7e8decf8e27a28f1e9f07b4540e89e16931aad06c1177f1", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SPD_FAN1_F~SPD_FAN16_F", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES passes FAN1_F~FAN16_F as one literal sensor name and truncates fallback SDR data; it cannot prove sixteen identities, decode F, establish tach scaling or correlate full UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly rejects aggregate proof and unsafe stimulus but primarily treats F as a fault/status suffix. The SPD prefix and paired `_R` family make a front-speed channel interpretation more plausible, while still requiring Project authority."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1057_2f85faaf14985c9f.json",
+  "old_problem": "DeepSeek's literal range cannot validate sixteen records, while GPT V2 risks changing coverage by recasting an SPD sensor family as fault-state telemetry. `_F` remains platform-defined; neither fault nor front may be asserted from one letter, and RPM cannot be accepted without physical/controller identity, tach scaling and contemporaneous fan-control context.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SIXTEEN_F_LABELED_FAN_SPEED_CHANNEL_MATRIX",
+  "disposition_reason": "Preserve this source as its own sixteen-channel speed family, distinct from the preceding `_R` family. At runtime the Project must define `_F`; if confirmed as front rotor, bind each token to that rotor and tach input, otherwise bind the documented alternative without changing the SPD speed/display purpose. Independently collect every F-labeled record and both UI rows under unchanged cooling conditions. Undefined Project bindings make execution NOT READY, not review Pending.",
+  "decision_basis": [
+    "XLSX row 896, same-row DeepSeek, exact GPT V2, selection manifest, immediately paired `_R` row and the preserved V3.1 history were directly reviewed.",
+    "`SPD` plus paired `_F`/`_R` families supports a front/rear tach hypothesis more strongly than GPT V2's fault-state interpretation, but only the platform fan/controller specification may authorize that expansion.",
+    "This F-family is independent coverage: even if front and rear rotors share one physical fan assembly or PWM target, sixteen R results cannot stand in for sixteen F results.",
+    "ED-03 forbids guessed OEM/controller semantics, ED-15 requires approved state-specific limits, ED-17 retains cooling evidence and ED-20 preserves this row's sixteen unique identities."
+  ],
+  "test_case": {
+    "test_name": "Verify SPD_FAN1_F through SPD_FAN16_F as sixteen independently mapped speed channels",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify each F-labeled speed sensor is separately present or has an approved defined absence, maps to the authoritative physical fan/rotor or Project-defined controller channel, and presents correct speed, units, health, supported thresholds and freshness in Dashboard and Server Health for the unchanged current cooling state.",
+    "required_package": [
+      "Chassis, fan-board/controller and BMC build plus authoritative SPD_FAN and `_F`/`_R` suffix definitions",
+      "Sixteen-row F-family map to physical fan module, front rotor if confirmed or other documented channel, thermal zone, airflow direction, fan PN/serial and controller tach input",
+      "Tach pulses-per-revolution/scaling, controller/bus/channel identity and stable SDR/API/Dashboard/Server Health names",
+      "Approved state-specific RPM units/rounding/tolerance, threshold capability/values/hysteresis, health, polling/freshness and stale/no-reading rules",
+      "Current fan mode, PWM duty/target, system power/load, inlet/ambient, altitude and airflow context plus approved F/R mismatch handling",
+      "Acceptance for unfitted channels, a stopped/missing F channel, duplicate/swapped mapping and degraded cooling without fault injection",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Preserve SEL, BMC, kernel and thermal logs. Do not infer that F means front or fault: load the approved suffix and topology map first. Do not use `SPD_FAN1_F~SPD_FAN16_F` as one query unless the interface explicitly documents that syntax. Enumerate the complete sensor repository, resolve each exact F token separately, review the Script before use, and capture full identity, mapped physical/controller channel, RPM/value, units, health, supported threshold fields and timestamp with matching Dashboard and Server Health visual rows. Record the same-time fan mode, PWM target/duty, load and ambient/airflow state, then apply only its approved rule. Stop without automatic retry on absent, duplicate, swapped, stale or F/R-divergent evidence; do not manipulate cooling to create a fault.",
+    "expected_result": "Sixteen explicit F-family outcomes are present and remain distinct from the R-family. For every applicable channel, the OOB record and both UI views agree with the approved physical/controller mapping, speed semantics, units, health, supported thresholds and freshness, and the reading meets the approved rule for its recorded state. If `_F` is not front rotor, the documented Project meaning is used without converting this passive speed case into an unapproved fault-injection test.",
+    "pass_fail_basis": "PASS requires the approved `_F` definition, sixteen explicit independently evidenced outcomes and engineer-confirmed mapping/value/threshold/status/freshness agreement in OOB and both UI locations. A literal range, first-100-line fallback, all-healthy summary, count, R-family evidence, assumed front/fault meaning or generic RPM limit cannot pass. Missing/swapped/duplicate/stale mapping, wrong unit/scaling, out-of-rule speed or required UI/status/threshold mismatch is FAIL. Missing suffix/topology/state rules or reviewed access is NOT READY, not Pending or PASS. Dynamic fan-fault, stall/latch/clear and control-response validation is separate coverage.",
+    "safety_gate": [
+      "Do not perform the generic clear-log step; preserve fan, thermal, SEL and BMC history.",
+      "Do not infer F as fault or front, and do not reuse the R-family verdict; require the Project suffix and channel map.",
+      "Do not stop/remove/reseat a fan, obstruct airflow, change fan policy/PWM, add thermal load, alter thresholds or inject a fault.",
+      "Do not guess OEM controller parameters or judge state-dependent RPM with one invariant limit.",
+      "Do not truncate evidence, expose credentials or execute an unreviewed Script; stop without automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/fan-board/controller/BMC identity and approved explanation of SPD_FAN `_F` relative to `_R`",
+      "Sixteen exact F tokens mapped to physical module/confirmed rotor-or-channel/zone/PN/serial/controller tach input with scaling",
+      "Complete separate OOB readings with speed/value, units, thresholds, state and synchronized timestamps plus corresponding Dashboard and Server Health visual evidence",
+      "Simultaneous PWM target/duty, fan mode, load, inlet/ambient, altitude and airflow plus the applied per-state rule and F/R correlation",
+      "Unfitted/missing/stopped/duplicate/swapped/stale/mismatched disposition, reviewed Script/client audit and explicit statement that no fault was induced",
+      "No-clear/no-fan-or-airflow-or-load-or-control change/no-retry proof, final cooling/BMC health and sixteen-channel engineer verdict"
+    ],
+    "recovery": "The method is observational. If the F meaning, channel binding or scaling is unresolved, or telemetry is stale/divergent, stop and preserve original evidence and cooling context. Obtain the authoritative controller/fan definition and repeat only under an approved read-only plan; do not stop a fan or alter cooling to disambiguate. Any separately authorized fault stimulus requires isolation, safety gates and its own recovery procedure."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "`SPD`, the UI Procedure and Criteria consistently request speed-sensor display validation. The suffix is underdefined but the source does not require a contradictory fault injection; GPT V2's fault interpretation is corrected without altering source coverage."},
+  "blocked": {"before": false, "after": false, "reason": "A safe passive sixteen-record method exists. The Project fan/controller dictionary can bind the F family and its acceptance before execution."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Authoritative `_F`/`_R` meaning, sixteen physical fan/rotor-or-channel/controller/tach mappings, scaling, stable sensor/UI IDs, state-specific speed/threshold/status/freshness rules, F/R mismatch handling, cooling context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO FAN FAULT INJECTION OR COOLING CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Pin and review before use; it cannot establish F semantics, physical rotor/channel topology, tach scaling or Project limits."}],
+  "project_authority": "Platform fan drawing, controller/SDR mapping, thermal-control policy, WebUI schema and Project recipe define `_F`, its relationship to `_R`, channel identity and state-specific acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "sixteen_F_labeled_outcomes_required": true, "F_interpreted_as_front_or_fault_without_project_definition": false, "R_family_substitution_allowed": false, "fault_injection_authorized": false, "literal_range_query_allowed_without_documentation": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|897|Wistron-BMC-00187-V003", "next_pending_case_variant_id": "80347cc8a709b0b4"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
