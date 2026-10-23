@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 96,
+  "source_key": "Functionality|907|Wistron-BMC-00197-V002",
+  "case_variant_id": "73eb45829b19ae54",
+  "source_ref": {"sheet": "Functionality", "source_row": 907, "code": "Wistron-BMC-00197-V002", "original_row_sha256": "6047948b57a960cf447becd38ac7a5672dbd27c87df86444274a56530ab88e43", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "KVM - Mouse and Keyboard check", "procedure": "Login to WebUI KVM and use keyboard and mouse for a long time; one week is given as an example. Generic setup/teardown also says clear logs and collect photos.", "criteria": "Sensor Reading & Threshold is human readable and match with spec.", "script": null, "deepseek": "NO correctly identifies the human interactive KVM boundary but supplies no target-safety, input matrix, visual evidence, soak duration/cadence or measurable stability criteria.", "gpt_v2": "MANUAL ONLY correctly adds safe representative input and visual/operator evidence but treats the long soak as optional. V3.1 identifies the copied Sensor Reading Criteria as a source conflict and requires Project-defined duration and a distinct functional-versus-endurance evidence contract."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1068_73eb45829b19ae54.json",
+  "old_problem": "The Master Criteria cannot judge KVM input at all, `long time` is undefined, the one-week duration is only an example, and the 1/0-minute estimate cannot support endurance coverage. A screenshot or short marker demonstration could otherwise be misreported as proof of sustained keyboard/mouse fidelity.",
+  "new_disposition": "RESOLVED_MANUAL_KVM_INPUT_FUNCTION_AND_LONG_DURATION_STABILITY_CHECK",
+  "disposition_reason": "Reconcile the copied Criteria in the versioned Review layer using the unambiguous KVM title/Procedure and ED-08: require real visual evidence of a safe input-event matrix on the verified SUT. Preserve the long-duration intent as a second mandatory checkpoint with Project parameter `T_soak`, probe cadence and failure limits; ED-14 prohibits a short smoke check from replacing it. The exact duration/client matrix is runtime Project configuration, not a new engineering decision.",
+  "decision_basis": [
+    "XLSX row 907, same-row DeepSeek, exact GPT V2, selection manifest, adjacent multi-user case and the preserved V3.1 history were directly reviewed.",
+    "Title and Procedure consistently target remote KVM keyboard/mouse function and long-time stability, while the Sensor Reading/Threshold Criteria is unrelated copied text and cannot be retained as the Review-layer acceptance basis.",
+    "ED-08 requires true visual KVM evidence, and ED-14 requires the formal long-duration test rather than a short smoke substitute. The example week is not silently converted into a universal duration; the Project must set `T_soak`.",
+    "ED-17 preserves KVM/BMC/host evidence and ED-20 keeps this input-fidelity identity separate from concurrent-user capacity, video and virtual-media coverage."
+  ],
+  "test_case": {
+    "test_name": "Manually verify KVM keyboard/mouse fidelity and Project-defined long-duration stability",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Verify end-to-end BMC remote-KVM keyboard and mouse events reach the correct SUT with the expected visible focus, key, pointer and control response, and remain reliable throughout the approved long-duration interval without lost, duplicated or stuck input or unaccepted session interruption.",
+    "required_package": [
+      "Approved BMC/SUT asset identities, dedicated KVM account, KVM firmware/type, target BIOS/OS/display and a safe non-privileged test application",
+      "Supported client/browser/plugin/OS/input-device/network-path matrix for the selected execution",
+      "Approved keyboard layout and representative printable/modifier/navigation/function/repeat/clipboard-if-applicable action matrix",
+      "Approved mouse move/click/double-click/right-click/drag/wheel and absolute/relative pointer-alignment matrix with multi-monitor applicability",
+      "Project `T_soak`, active-probe cadence, idle/session-timeout and reconnect schedule, maximum accepted latency/interruption and first-failure stop rule",
+      "Prohibited power/reset/security/destructive actions, stuck-input/session cleanup and independent target-state recovery procedure",
+      "Timestamped screen recording/screenshot, browser/client console, BMC audit/session and host application/input evidence plan"
+    ],
+    "test_command": "MANUAL ONLY. Preserve logs and verify BMC plus visible SUT identity through an independent asset marker before input. In a dedicated safe application, the operator performs every approved keyboard and mouse action and records expected versus visible response, focus, pointer alignment and event timing. Then keep the KVM session under the approved `T_soak` plan, performing scheduled active probes, idle/session-timeout and approved reconnect checks while recording latency, lost/duplicated/stuck events, video/focus behavior, disconnects and recovery. Stop at first failure without automatic retry. Never issue power/reset, firmware/BIOS, destructive shell, credential or uncontrolled click/drag actions. Remove the marker, release all inputs, close the session and verify unchanged SUT state.",
+    "expected_result": "Every functional-matrix input produces exactly one correct visible response on the verified SUT with correct layout, modifiers, focus and pointer alignment, and no prohibited action occurs. Across the full approved `T_soak`, scheduled probes remain correct and any latency, timeout, disconnect/reconnect and recovery stay within explicit Project limits with no lost, duplicate or stuck event. The exact achieved duration and client coverage are reported; a short smoke run cannot claim long-duration PASS.",
+    "pass_fail_basis": "PASS requires human-performed end-to-end visual evidence for every approved key/mouse action and completion of the entire approved `T_soak`/cadence with all measurable limits satisfied and engineer/operator sign-off. CLI reachability, a screenshot, session-open time, one marker or a shorter duration cannot pass. Wrong target, incorrect/missing/duplicate/stuck input, pointer/focus error, frozen video, unaccepted latency/disconnect/recovery or any unintended SUT action is FAIL and stops the run. Missing `T_soak`, client/input matrix, limits, safe target or evidence ownership is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear BMC, KVM, browser, host or audit logs; prior disconnect/input evidence must remain.",
+      "Confirm both BMC and visible SUT identity before every new/reconnected session; never rely only on a window title.",
+      "Use a dedicated non-privileged safe application and prohibit power/reset shortcuts, BIOS/firmware navigation, destructive commands, credential entry, security changes and uncontrolled targets.",
+      "Do not replace `T_soak` with a smoke test or infer that a passive open session proves input fidelity; execute scheduled visible probes.",
+      "Stop on wrong target, lost/duplicate/stuck input, severe latency, frozen video, focus/pointer error, disconnect or unintended action; no automatic retry."
+    ],
+    "expected_evidence": [
+      "BMC/SUT/client/browser/plugin/input-device/network and OS/display identities plus approved KVM-specific acceptance matrix",
+      "Redacted video or timestamped screenshots showing correct target and each keyboard/mouse action with expected versus visible response, focus and pointer alignment",
+      "Full `T_soak` timeline with active probes, idle/session-timeout/reconnect checkpoints, latency and every lost/duplicated/stuck/disconnect/recovery observation",
+      "Browser/client console/network, BMC audit/session and host application/input logs with preservation hashes and no-clear evidence",
+      "Exact achieved duration and supported-client coverage statement; explicit separation from multiple-user, video and virtual-media coverage",
+      "Safe marker cleanup, all keys/buttons released, session closed, unchanged SUT state and manual engineer/operator verdict"
+    ],
+    "recovery": "On wrong target or unexpected input, immediately cease input and close the KVM session without sending reset/power commands. Verify SUT state through an independent channel, release any logically stuck key/button using the approved client cleanup, preserve first-failure video/logs and escalate to the owner. Do not automatically reconnect/retry. Any unintended state change follows the Project recovery runbook under human authority."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master Sensor Reading/Threshold Criteria remains preserved as historical source text, but it is conclusively unrelated to the KVM title and Procedure. ED-08 and ED-14 authorize a Review-layer KVM visual/input plus long-duration acceptance contract without modifying Master; therefore the conflict is reconciled rather than silently ignored."},
+  "blocked": {"before": false, "after": false, "reason": "The manual end-to-end method and safety boundary are complete. `T_soak`, client/input matrix and limits are Project execution parameters that can be supplied without another engineering decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/SUT/client versions, safe test application, keyboard/mouse matrix, mandatory `T_soak`, probe/idle/reconnect cadence, latency/interruption limits, evidence ownership and recovery runbook.", "execution_status": "NOT STARTED; MANUAL VISUAL KVM REQUIRED; NO POWER/RESET/DESTRUCTIVE INPUT; NO SHORT-SMOKE SUBSTITUTION"},
+  "external_authorities": [],
+  "project_authority": "Project remote-KVM requirements, BMC vendor compatibility/session policy, supported client matrix and approved endurance plan define duration, input coverage and measurable limits.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-14", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "functional_input_matrix_required": true, "long_duration_soak_required": true, "one_week_hardcoded": false, "short_smoke_can_substitute": false, "CLI_or_nonvisual_substitution_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|908|Wistron-BMC-00198-V002", "next_pending_case_variant_id": "60fd0a0afaee7846"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
