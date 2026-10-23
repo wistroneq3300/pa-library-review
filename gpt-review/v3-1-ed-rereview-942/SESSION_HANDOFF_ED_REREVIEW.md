@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **151 / 942**
-- Last reviewed: `Functionality|964|Wistron-BMC-00254-V002` / `ff1b456c9f6bd2ef`
-- Next source-verified pending identity: `Functionality|965|Wistron-BMC-00255-V002` / `1a42895db64c9648`
-- Latest disposition: Miramar_Sensor is removed from Pending and reclassified FULLY AUTOMATABLE. The review requires complete typed sensor membership, units, status, thresholds and freshness plus actual WebUI evidence; temperature-only coverage and any stimulus/threshold change are rejected. No query ran.
+- Completed: **152 / 942**
+- Last reviewed: `Functionality|965|Wistron-BMC-00255-V002` / `1a42895db64c9648`
+- Next source-verified pending identity: `Functionality|966|Wistron-BMC-00256-V002` / `4e03ed7ba7e596d8`
+- Latest disposition: smbus is removed from Pending and reclassified FULLY AUTOMATABLE. It uses only the documented BMC inventory surface and actual WebUI; generic OEM blobs and all raw bus probes/register/OEM-control operations are prohibited. No query ran.
 - Protected sources: unchanged.
 - DUT execution: none.
