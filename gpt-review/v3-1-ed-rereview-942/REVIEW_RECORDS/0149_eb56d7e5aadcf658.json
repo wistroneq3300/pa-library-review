@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 149,
+  "source_key": "Functionality|962|Wistron-BMC-00252-V002",
+  "case_variant_id": "eb56d7e5aadcf658",
+  "source_ref": {"sheet": "Functionality", "source_row": 962, "code": "Wistron-BMC-00252-V002", "original_row_sha256": "b918e3808032bc1ffa317494b520d488f1a2610820a9917b328c3d1663dc7bb9", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_SCM", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes /redfish/v1/Chassis/FRU_SCM, disables certificate verification and selects Manufacturer, ProductName and PartNumber; it omits SCM role/instance proof and complete WebUI/IPMI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly adds control-plane mapping, typed PartNumber semantics and a no-control boundary, but keeps finite Project inputs as a review decision."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1121_eb56d7e5aadcf658.json",
+  "old_problem": "SCM is a platform-specific, potentially management-critical role, so neither the acronym nor a friendly URI proves the physical module. A single PartNumber is also insufficient without its assembly/PCB namespace. The old review found these issues but retained Pending even though exact mapping and reference data can be supplied as read-only prerequisites.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_SCM_FRU_PARITY_WITH_NO_CONTROL_BOUNDARY",
+  "disposition_reason": "Define SCM's approved platform role and physical/control-plane instance, bind its exact IPMI/UI/API inventory objects, decode all applicable FRU areas with typed identifier semantics and compare them to the SCM assembly authority. Prohibit every SCM control, reset, firmware or FRU mutation; management criticality does not require confirmation for static reads.",
+  "decision_basis": [
+    "XLSX row 962, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 963 were directly reviewed; next pending was verified as Functionality row 963 / variant d27f3f20cafb2393.",
+    "SCM has no universal IPMI/Redfish component meaning. The Project/vendor map must define the role and management-plane relationships; OEM endpoint or control semantics must not be guessed.",
+    "Correct FRU inventory does not validate SCM control, failover, reset or availability behavior. The source requests only WebUI/IPMI inventory parity, so a strict no-control scope preserves intent and safety.",
+    "PartNumber must be typed as assembly/PCB/finished-board or other approved namespace, with product, revision, serial and custom fields validated independently.",
+    "ED-02, ED-03, ED-08, ED-11, ED-17, ED-19, ED-21 and ED-30 preserve identity/evidence and prohibit uncontrolled changes; ED-33 through ED-38 allow Project parameterization without partial coverage or guessed OEM behavior."
+  ],
+  "test_case": {
+    "test_name": "Validate Project-defined SCM FRU with typed identifiers and no management-control action",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the exact Project-defined physical/control-plane SCM maps uniquely to FRU_SCM and all applicable inventory fields—including correctly typed part/model/revision/serial data—agree across complete IPMI, actual WebUI, mapped API and the authoritative SCM assembly record, without executing any SCM control or availability-affecting action.",
+    "required_package": [
+      "Approved vendor/Project definition of SCM role, physical instance and control-plane relationships, plus immutable SUT/BMC/chassis identity",
+      "Physical topology separating SCM from PDB, SYS and other management/control boards, with durable service/slot identifiers",
+      "Complete enumerated IPMI FRU map and approved SCM device ID/interface/channel/bridge/address",
+      "Service-discovered Chassis/Assembly or approved OEM SCM inventory resource and actual WebUI Inventory and LEDs SCM row/detail mapping",
+      "SCM FRU area/custom-field layout and authoritative assembly/BOM record with typed assembly PN, PCB PN, model, revision, serial and allowed absent values",
+      "Trusted TLS/protected read credentials, normalization/freshness/redaction rules and audit controls proving no SCM control/reset/firmware/write/log-clear operation"
+    ],
+    "test_command": "READ ONLY. Verify immutable target and the approved SCM role, physical instance and control-plane relationships. Enumerate complete IPMI FRU and API inventory sets, selecting SCM only through the approved durable map; do not interpret the acronym, construct `/Chassis/FRU_SCM` or choose a default FRU. Execute only `ipmitool ... fru print <SCM-FRU-ID>` and retain complete output, exit status and decode/checksum diagnostics. Follow service/approved OEM inventory links and capture the actual rendered BMC WebUI Hardware status > Inventory and LEDs SCM row/detail. Exclude PDB, SYS and other control boards. Decode all applicable areas, preserve raw values, map PartNumber and related identifiers to approved semantic namespaces, normalize only under approved rules and compare with the SCM assembly authority and across IPMI/UI/API. Repeat read fingerprints only; invoke no SCM control/failover/reset, firmware action, FRU write, log clear, reboot or power action.",
+    "expected_result": "The approved physical/control-plane SCM maps uniquely to one IPMI FRU and UI/API object, excluding PDB, SYS and other boards. All applicable areas decode without reported structure/checksum errors; every required typed standard/custom field is present or has its authorized absent representation and exactly matches the SCM assembly record after traceable normalization. Complete IPMI, actual WebUI and mapped API evidence reconcile, management availability/state remains unchanged and no control function is claimed.",
+    "pass_fail_basis": "PASS requires an authoritative SCM role/instance, unique binding, full `ipmitool fru print`, actual rendered WebUI detail, complete applicable-field parity and no control/state change. A guessed SCM URI, three-field response, untyped PartNumber or correct FRU data used as proof of SCM control behavior cannot pass. Wrong/ambiguous module, parser/checksum error, PN-namespace conflation, missing required field, unauthorized blank, unexplained mismatch or any control/reset/availability mutation is FAIL. Missing map/reference is NOT READY, not Pending.",
+    "safety_gate": [
+      "Use only approved static inventory reads. Prohibit SCM control/failover actions, service takeover, resets, firmware changes, reboot and power operations.",
+      "Do not infer SCM role or OEM endpoint/control semantics. Bind the exact instance through the approved Project/vendor physical/control-plane map.",
+      "Use protected certificate-verified sessions and approved IPMI routing; reject process-visible secrets and insecure-TLS evidence.",
+      "Allow only FRU enumeration and mapped `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes and log clearing.",
+      "Keep PartNumber namespaces and other identifiers distinct, and preserve complete raw IPMI/API plus actual rendered WebUI evidence before normalization/redaction.",
+      "Stop on instance ambiguity, management-state change, stale data, decode/checksum failure or authority conflict and do not automatically query another module."
+    ],
+    "expected_evidence": [
+      "Approved SCM role/physical/control-plane topology and immutable target identity distinguishing PDB/SYS/other boards",
+      "Complete enumerated IPMI/API inventory and exact SCM physical/device/member/UI binding",
+      "Timestamped full `ipmitool fru print <SCM-FRU-ID>` with routing, exit/decode/checksum status and protected hash",
+      "Complete mapped API artifact and actual rendered WebUI SCM row/detail with schema/firmware/trust metadata",
+      "SCM-specific typed raw/normalized/reference field matrix including PN namespaces and negative identity controls",
+      "Pre/post management-state fingerprints, preserved SEL/audit logs, no-control/no-write/no-clear/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On ambiguous SCM identity, management-state change, decode/checksum failure or data disagreement, stop and preserve/redact evidence; obtain the authoritative mapping/reference. Do not invoke SCM recovery/failover/reset, firmware changes, FRU writes, log clear, reboot, power cycle or automatic retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master consistently requests SCM inventory readability/correctness with IPMI comparison. Control-plane mapping and PartNumber semantics are Project prerequisites, not competing source intent."},
+  "blocked": {"before": false, "after": false, "reason": "The static SCM inventory purpose and no-control boundary are clear. Role, mapping and expected identifiers are bounded Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "SCM role/physical/control topology; SCM IPMI/API/UI identities; applicable FRU fields; typed part/model/revision/serial assembly reference; normalization, freshness, trust, redaction and no-control audit rules.", "execution_status": "NOT STARTED; READ-ONLY FRU_SCM INVENTORY ONLY; NO IPMI, REDFISH, OEM, WEBUI, SCM CONTROL OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines FRU Board/Product identifiers and area encoding after the Project identifies SCM and its semantic field namespaces."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for complete read/print decoding and checksum evidence; all write/control paths remain excluded."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines standard Chassis/Assembly inventory semantics where supported, but not the OEM SCM role or control-plane behavior."}
+  ],
+  "project_authority": "The approved Project/vendor control-plane map defines SCM's role and exact management identities, while the assembly/BOM package defines typed expected fields. These parameters enable safe full automation of static inventory without authorizing control actions.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-11", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "scm_role_and_oem_behavior_not_guessed": true, "inventory_not_control_function": true, "typed_part_number_semantics_required": true, "source_webui_and_ipmitool_both_preserved": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "scm_control_or_fru_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|963|Wistron-BMC-00253-V002", "next_pending_case_variant_id": "d27f3f20cafb2393"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_scm_control_plane_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
