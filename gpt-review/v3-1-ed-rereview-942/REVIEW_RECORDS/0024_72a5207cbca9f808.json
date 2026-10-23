@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 24,
+  "source_key": "Functionality|834|Wistron-BMC-00124-V004",
+  "case_variant_id": "72a5207cbca9f808",
+  "source_ref": {"sheet": "Functionality", "source_row": 834, "code": "Wistron-BMC-00124-V004", "original_row_sha256": "074de3c37333e27403ab518e565d7230abb1e8d3eabec7cfd78c828ed74a2862", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "COM 0 -> SOL", "procedure": "Set console through SOL (ttyS0).", "criteria": "SOL ttyS0 is set successfully and the connected SOL terminal has correct output.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/linux-console/com-0_sol", "deepseek": "PARTIAL; only reads host cmdline/GRUB over unsafe SSH and does not discover, configure, activate, capture or close the BMC SOL payload.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; adds BMC SOL channel/identity, ttyS0 mapping, exact boot diff, protected session evidence and alternate recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0996_72a5207cbca9f808.json",
+  "old_problem": "The prior record already separates Linux configuration from real BMC SOL evidence and classifies the test correctly, but the case remained Pending solely for platform bindings and approval-controlled activation rather than an unresolved engineering purpose.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_BOUNDED_IPMI_SOL_CONSOLE_TEST",
+  "disposition_reason": "IPMI 2.0 defines SOL as serial data carried as an RMCP+ payload and explicitly distinguishes system serial routing/mux behavior from the LAN session. Linux defines ttyS0 console syntax, while the approved SOL client can collect the interactive stream. Thus the source has a complete testable model: prove host/BMC routing and matching parameters, then prove a bounded SOL session receives correct output and closes cleanly. The exact board mux, payload/channel, client, cipher, boot transaction and phase acceptance remain Project Configuration; they do not require a new engineering decision. No OEM value is guessed and the referenced mutable Script remains gated on pinned review.",
+  "decision_basis": [
+    "XLSX row 834, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Intel IPMI v2.0 section 15 defines SOL packet/protocol behavior, serial-port sharing and mux states, while stating the system-side serial controller implementation is not mandated; the ttyS0/channel map must therefore come from the target platform.",
+    "Linux kernel documentation defines the host `console=ttySx,options` interface and multiple-console ordering, which is configuration evidence but not proof of a live SOL payload.",
+    "The ipmitool implementation documentation shows SOL activation is an RMCP+ payload lifecycle with asynchronous data and a deactivation on clean exit; equivalent client behavior must be evidenced for the approved tool.",
+    "ED-20 keeps SOL separate from physical COM, ED-18 gates any reboot through full recovery/OS-ready verification, and ED-36 permits the target-specific mapping/session values as prerequisites."
+  ],
+  "test_case": {
+    "test_name": "Route ttyS0 to the BMC SOL payload and verify a bounded protected console session",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the target host ttyS0 UART is routed to the intended BMC SOL payload/channel with matching persistent host/BMC serial settings, and prove a protected bounded SOL session receives correct readable output for every required phase, supports only the approved non-destructive input, and terminates without a stale or conflicting session.",
+    "required_package": [
+      "Host/BMC/BIOS/CPLD/OS identity and authoritative ttyS0-UART-mux-BMC SOL payload/channel/ownership map",
+      "Matching host and BMC baud/volatile/nonvolatile bitrate, data, parity, stop, flow, encoding and console/getty ordering",
+      "Exact reviewed host bootloader/getty and BMC SOL enable/configuration diff, generated-entry validation, persistence and restore plan",
+      "Approved IPMI 2.0/RMCP+ SOL client and version, BMC endpoint identity, protected credential input, privilege and allowed cipher suite",
+      "Payload instance/channel, existing-session ownership/takeover policy, inactivity/overall timeout, escape/close/deactivate behavior and transcript redaction rules",
+      "Required firmware/bootloader/kernel/init/login phases and bounded input acceptance, single activation/reboot approval if needed, backup entry and independent KVM/OOB recovery",
+      "Pinned accessible hash/revision and step/recovery review of the internal com-0_sol Script before use"
+    ],
+    "test_command": "Preserve host cmdline/boot/getty, BMC SOL parameters/status, active management sessions and logs. Using protected identity-validated management access, read the approved SOL channel/payload and verify it maps through the platform mux to ttyS0; do not assume physical COM or a default channel. Prepare the exact reversible host/BMC diff and validate matching serial parameters. Only after explicit approval, apply that diff and perform one authorized activation/reboot if required with KVM/OOB recovery live. Start the approved client in a bounded PTY/RMCP+ session without exposing credentials, record payload/channel/cipher/session ownership and timestamp raw output for every required phase, send only the approved benign input, exit through the documented escape/close path and verify payload deactivation or the explicitly retained state. Restore or retain configuration per plan and confirm OS, BMC, KVM/OOB and session health; do not retry automatically.",
+    "expected_result": "The approved persistent host/BMC settings match, the intended ttyS0 traffic is routed to the selected BMC SOL payload, and one authorized SOL session receives readable correctly ordered output through every required phase with the permitted input response. Endpoint/session/cipher identity is correct, no unrelated session is displaced, no sensitive output is leaked beyond the approved capture, the client closes cleanly without a stale payload, and final host/BMC/OOB health and retained/restored configuration match the plan.",
+    "pass_fail_basis": "PASS requires both (A) exact active host/BMC/mux/payload configuration evidence and (B) a timestamped raw SOL transcript/session lifecycle covering every approved phase plus clean close/deactivation. Host `/proc/cmdline`, BMC SOL status, a physical COM transcript or a brief banner alone cannot pass. Wrong payload/channel/host, serial mismatch, missing/garbled/duplicated output, unauthorized takeover/input, cipher/auth failure, timeout outside criteria, stale session, boot/management loss or failed restore is FAIL. Missing platform map, exact diff, client/session policy, phase matrix, recovery or approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Verify ttyS0-to-mux-to-SOL payload/channel ownership and matching endpoint parameters before any edit, activation or reboot.",
+      "Do not seize or deactivate an existing SOL payload until its owner and stale/active state are known and takeover is separately authorized.",
+      "Use protected credential input and an approved authenticated RMCP+ cipher; never put passwords on the command line or transcript.",
+      "Do not execute the internal Script until an immutable revision/hash, parameters, credential handling, termination and recovery are reviewed.",
+      "Bound session duration/output and input; never send credentials, break, arbitrary keystrokes or power controls under this case.",
+      "Do not clear logs or automatically retry configuration, reboot, activation or SOL connection. Stop on wrong endpoint, conflict, unreadable/leaking output or management loss."
+    ],
+    "expected_evidence": [
+      "Host/BMC/firmware identities and authoritative ttyS0/UART/mux/SOL payload/channel/ownership map",
+      "Host and BMC serial parameter matrix, SOL enable/status and exact before/after bootloader/getty/BMC configuration diff",
+      "Approved client/version, endpoint certificate or BMC identity, cipher/privilege, protected-secret attestation and pinned Script review",
+      "Existing-session check, approval and bounded session metadata with timestamped raw redacted transcript labeled by required phase/input",
+      "Single authorized activation/reboot timeline if used, backup entry, KVM/OOB/OS health and preserved log delta",
+      "Documented escape/close/deactivate result, absence of stale/conflicting payload and retained/restored final-state diff"
+    ],
+    "recovery": "On wrong channel/host, session conflict, unreadable or sensitive output, boot failure or management degradation, stop without retry or arbitrary input. Exit using the approved client escape, deactivate only the owned test payload when authorized, use independent KVM/OOB or the known-good boot entry to restore saved host/BMC settings, preserve transcript and failure logs, and verify host, BMC and other session health before any separately approved rerun."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require ttyS0 through BMC SOL; mappings and session policy are platform bindings."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI SOL and Linux console semantics define the test boundary; target channel, mux, client and boot values are execution prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "ttyS0/mux/SOL map, endpoint parameters, exact host/BMC diff, client/cipher/session ownership, phase thresholds, activation and recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "Intel Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "use": "Defines SOL payload, session transport, serial controller interface and serial-port-sharing mux behavior."},
+    {"title": "Linux Kernel — Linux Serial Console", "url": "https://docs.kernel.org/admin-guide/serial-console.html", "use": "Defines ttyS console syntax, serial settings and multiple-console behavior."},
+    {"title": "ipmitool SOL implementation README", "url": "https://github.com/ipmitool/ipmitool/blob/master/src/plugins/lanplus/README.sol", "use": "Documents RMCP+ SOL activation, asynchronous stream handling, escape and deactivation lifecycle for one approved client option."}
+  ],
+  "traceability": {"applicable_decisions": ["ED-18", "ED-20", "ED-31", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "sol_distinct_from_physical_com": true, "reboot_or_session_takeover_authorized_by_review": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|835|Wistron-BMC-00125-V003", "next_pending_case_variant_id": "a7e1b4b0465f05c2"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
