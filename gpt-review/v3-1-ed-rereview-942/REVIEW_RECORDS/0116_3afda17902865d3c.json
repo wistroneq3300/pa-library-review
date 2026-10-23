@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 116,
+  "source_key": "Functionality|927|Wistron-BMC-00217-V002",
+  "case_variant_id": "3afda17902865d3c",
+  "source_ref": {"sheet": "Functionality", "source_row": 927, "code": "Wistron-BMC-00217-V002", "original_row_sha256": "49c8b6bf04649c5f90de13ec79ea21242730dedc0db117a90714c1d2c3df7af5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "NonSecure Create LDAP Configuration by openbmctool", "procedure": "Download/install openbmc-tools and run `openbmctool ... ldap enable` with an `ldap://` URI, bind/base DN, bind password, scope and OpenLDAP/ActiveDirectory type; notes say BMC DNS must already exist for FQDN and the tool cannot configure it.", "criteria": "Command succeeds and a certificate uploads successfully, repeating the DNS/tool notes.", "script": null, "deepseek": "PARTIAL retains the non-secure enable operation but exposes BMC/bind credentials through command strings, accepts HTTP 200, omits full readback/authentication/role/local-fallback/restore proof and incorrectly repeats the certificate-upload claim.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL risk correctly restricts this to an isolated approved lab, pinned tool, disposable secrets, verified DNS/connectivity, remote/local authentication tests and guaranteed disable/restore."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1088_3afda17902865d3c.json",
+  "old_problem": "The title/procedure use non-TLS `ldap://` and contain no certificate action, while Criteria claims certificate upload; that checkpoint belongs to the adjacent secure `ldaps://` case. The literal command also hardcodes a default-looking root password and exposes the bind password, and command/HTTP success proves neither authentication, scope/role mapping nor local-admin recovery.",
+  "new_disposition": "RESOLVED_WITH_REVIEW_LAYER_NONSECURE_LDAP_AUTHENTICATION_AND_RESTORE_CRITERIA",
+  "disposition_reason": "Reconcile the copied certificate criterion using protocol, tool and adjacent-row evidence: upstream openbmctool documents separate NonSecure `ldap://` and Secure `ldaps://` flows and requires a CA certificate for the secure flow, not this one. This Review-layer row therefore validates only an explicitly approved isolated-lab non-secure configuration, real valid/invalid LDAP authentication, role mapping, local fallback and full disable/restore. The original criterion remains traceable, but certificate upload is not claimed here.",
+  "decision_basis": [
+    "XLSX row 927, same-row DeepSeek, exact GPT V2, selection manifest, following secure-LDAP row, upstream tool documentation and preserved V3.1 record were directly reviewed.",
+    "Pinned openbmctool documentation separates `ldap://` NonSecure from `ldaps://` Secure and associates LDAP root-CA upload with the secure flow; this resolves the source conflict without inventing a certificate step.",
+    "RFC 4516 defines the `ldap` URL scheme and warns that reusable passwords can be exposed in transit; this case is therefore an approved non-production security exception, never normal production automation.",
+    "openbmctool supports prompt/environment handling for the BMC password, but the LDAP bind secret is still supplied as a command parameter; a disposable least-privilege bind identity, isolated executor and immediate rotation are mandatory containment."
+  ],
+  "test_case": {
+    "test_name": "Create, verify and remove an isolated non-secure OpenBMC LDAP configuration",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify, only on an approved isolated non-production management network, that a pinned supported openbmctool can create the exact `ldap://` configuration, persist the intended URI/base/bind/scope/server type, authenticate one disposable valid LDAP identity with correct role, deny an invalid identity, preserve local recovery and restore the complete prior authentication policy without claiming certificate coverage.",
+    "required_package": [
+      "Security-exception approval naming the non-production BMC, isolated network path, maintenance window and prohibition on production use",
+      "Pinned reviewed openbmctool/openbmc-tools commit compatible with the target firmware and checksum/provenance evidence",
+      "Dedicated LDAP server/IP or resolvable FQDN, port, server type, base DN, bind DN, scope and pre-existing group-to-BMC-role mapping",
+      "Disposable least-privilege bind credential and test LDAP valid/invalid identities with approved short lifetime and rotation/destruction plan",
+      "BMC DNS/network/ACL reachability evidence plus complete current LDAP/auth/local-user policy export",
+      "Independently verified local administrator/console recovery, exact `ldap disable` restoration procedure and owner approvals"
+    ],
+    "test_command": "CRITICAL AUTHENTICATION/PLAINTEXT-TRANSPORT EXCEPTION; DO NOT EXECUTE OUTSIDE THE APPROVED ISOLATED LAB. Preserve logs, pin/review openbmctool and verify target, DNS/IP/port, URI, base/bind DN, scope, server type, role mapping and local recovery. Never use source `root/0penBmc`; use `-A` or the documented protected environment path for BMC authentication. Because the required bind password parameter can be exposed, use only a disposable least-privilege bind credential on a restricted single-user executor with history/process/log containment and approved immediate rotation. After point-of-action approval, create the `ldap://` configuration once, read back every non-secret field and audit record, then from independent sessions verify the valid LDAP user and expected role, invalid-user denial and local-admin fallback. Disable/remove the test LDAP configuration, restore the exact baseline and rotate disposable secrets. Do not upload a certificate, clear logs or retry automatically.",
+    "expected_result": "The pinned tool applies exactly the approved non-secure URI/base/bind/scope/server type once and the BMC readback/audit state matches without exposing secrets. The disposable LDAP user authenticates through supported services with the approved mapped role, an invalid identity is denied, and the independent local administrator remains available. The configuration is then disabled/restored to the exact baseline and disposable secrets are rotated/destroyed. No certificate action or secure-LDAP result is claimed.",
+    "pass_fail_basis": "PASS requires isolated-lab/security approval, pinned tool, exact redacted configuration readback, valid login and role, invalid denial, local fallback, audit evidence, full restore and secret rotation. Command exit/HTTP 200 alone cannot pass. Credential exposure outside containment, wrong URI/scope/type/role, unexpected access, local lockout, inability to disable/restore or residual config is FAIL and stops. Missing isolation, disposable identities, DNS/connectivity, mapping, approval or recovery is NOT READY. Certificate upload is explicitly excluded.",
+    "safety_gate": [
+      "Never execute non-secure LDAP on a production or untrusted management network; require a named isolated-lab exception.",
+      "Do not use default BMC credentials, production directory accounts or persistent/high-privilege bind secrets; never record secrets in history, logs or review artifacts.",
+      "Pin/review the tool and verify BMC DNS/IP/port, exact DN/scope/type and role mapping before one enable action.",
+      "Keep local admin and independent console recovery active; do not disable local users or remove recovery while testing LDAP.",
+      "Stop on unexpected roles, auth failure, exposure or recovery impact; do not retry. Disable/restore and rotate test secrets through the approved plan."
+    ],
+    "expected_evidence": [
+      "Named security exception, isolated network/target, pinned tool commit/hash, target firmware and complete redacted authentication baseline",
+      "DNS/IP/port/ACL reachability, exact approved URI/base/bind/scope/server type and role mapping without bind password",
+      "One enable approval, redacted tool/API response, complete persisted-field readback and BMC security audit event",
+      "Valid disposable LDAP login with expected role, invalid-user denial and independent local-admin fallback",
+      "Disable/restore audit, final baseline equality and disposable bind/test-secret rotation or destruction record",
+      "No certificate action/no secure coverage/no retry proof and engineer verdict"
+    ],
+    "recovery": "On wrong configuration, role mapping, auth behavior, secret exposure or local-access impact, stop all retries, use the independent local-admin/console path to run the approved disable/restore procedure, preserve security/audit evidence and rotate every exposed disposable credential. Do not leave `ldap://` enabled or switch to secure LDAP as an implicit recovery/test continuation."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Upstream openbmctool documentation and the adjacent secure row prove that CA-certificate upload belongs to `ldaps://`, while this title/procedure explicitly use `ldap://`. The Review layer corrects acceptance to non-secure config/auth/restore and preserves the copied certificate text only as history."},
+  "blocked": {"before": false, "after": false, "reason": "The isolated exception, standard/tool semantics, authentication proof and recovery are defined. Endpoint, DNs, scope, identities and mapping are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Isolated-lab approval; pinned tool; LDAP endpoint/DNs/scope/type/mapping; disposable secrets; BMC DNS/network; local recovery and restore/rotation plan.", "execution_status": "NOT STARTED; CRITICAL AUTHENTICATION AND PLAINTEXT-LDAP STATE CHANGE; SECURITY EXCEPTION/APPROVAL REQUIRED; NO LDAP CONFIGURATION CHANGED"},
+  "external_authorities": [
+    {"title": "OpenBMC openbmctool documentation at pinned commit 2cec864", "url": "https://gerrit.openbmc.org/plugins/gitiles/openbmc/openbmc-tools/%2B/2cec86428a1cc906aafa759ce730c0bd0bca3fb4/openbmctool/", "application": "Documents BMC password prompt/environment options, separate non-secure `ldap://` and secure `ldaps://` flows, DNS prerequisite, CA upload for secure LDAP and `ldap disable` recovery."},
+    {"title": "RFC 4516 LDAP URL", "url": "https://www.rfc-editor.org/info/rfc4516/", "application": "Defines the `ldap` URL scheme/default port/scope syntax and warns that reusable authentication information can be exposed without an explicitly permitted security policy."}
+  ],
+  "project_authority": "Project security exception, isolated-network design, OpenBMC compatibility, directory DNs/roles, disposable-secret handling, recovery and audit policy define execution acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "master_conflict_preserved_as_history": true, "certificate_upload_claimed": false, "secure_and_nonsecure_ldap_kept_distinct": true, "default_credentials_allowed": false, "production_execution_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|928|Wistron-BMC-00218-V002", "next_pending_case_variant_id": "1a253502f6adcc41"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
