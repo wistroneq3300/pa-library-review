@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 103,
+  "source_key": "Functionality|914|Wistron-BMC-00204-V003",
+  "case_variant_id": "0670bf5f45a10127",
+  "source_ref": {"sheet": "Functionality", "source_row": 914, "code": "Wistron-BMC-00204-V003", "original_row_sha256": "ece227e2995c418492b2d1c1af9b6f169c7264480886ada27bf819536379ce0d", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Next Boot Option - Under Power off", "procedure": "From power off, exercise none, PXE, disk, diagnostic, CD/DVD, BIOS and floppy/removable; compare IPMI boot parameter 5 with WebUI, select one-time boot, then perform the next boot and verify the destination; generic setup says clear logs.", "criteria": "IPMI boot setting succeeds and the one-time option boots correctly at the next start.", "script": null, "deepseek": "PARTIAL hardcodes only PXE, exposes the BMC password, combines override and power-on without separate approval, uses fixed sleeps and finishes with chassis status rather than actual destination or flag-consumption evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires an independently verified powered-off state, all supported option rows, full IPMI/WebUI readback, separate power-on approval, destination proof and post-consumption clearing."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1075_0670bf5f45a10127.json",
+  "old_problem": "The original wording says Power off but later says reboot, does not define the required off state, and the proposed sequence proves neither the full seven-option matrix nor the selected boot path. A generic chassis status can conceal S5/G3 ambiguity, and an unattended override-plus-power-on can start an unsafe PXE/media target or strand the host.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SEVEN_OPTION_POWERED_OFF_STATE_ONE_TIME_BOOT_MATRIX",
+  "disposition_reason": "Retain this case independently from the booted-state variant: the override must be accepted and retained while the host is in the Project-defined powered-off state. Preserve all seven source labels as separate outcomes, then require exact off-state evidence, one approved write, full readback, a separately approved power-on, destination proof, consumption/clear and final-state restoration. Missing runtime bindings make a row NOT READY, not Engineering Decision Pending; unsupported N/A requires authoritative platform SPEC.",
+  "decision_basis": [
+    "XLSX row 914, same-row DeepSeek, exact GPT V2, selection manifest, adjacent booted-state case and preserved V3.1 record were directly reviewed.",
+    "The booted-state case cannot substitute for programming while host DC power is off: BMC availability, flag persistence and the next power-on path are distinct coverage.",
+    "`none` is verified against documented clear/no-change semantics, while PXE, disk, diagnostic, optical, BIOS and floppy/removable retain separate applicability and destination outcomes; sampling is prohibited.",
+    "Power-state readback, requested boot flags, actual firmware destination and post-boot consumption are independent evidence layers. Override write and host power-on require separate point-of-action authorization."
+  ],
+  "test_case": {
+    "test_name": "Verify all listed one-time boot options set while the SUT is powered off",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "From the exact Project-defined powered-off state with BMC management still available, independently verify none, PXE, disk, diagnostic, CD/DVD, BIOS and floppy/removable one-time overrides: IPMI and WebUI agree before power-on, the subsequent separately approved start reaches the intended trusted destination, the override is consumed/cleared and persistent boot order/power policy remain unchanged.",
+    "required_package": [
+      "BMC/SUT/chassis/BIOS identity and independent evidence for the exact powered-off state, including whether it is AC-present S5/soft-off or another approved state",
+      "Authoritative seven-label applicability matrix and exact IPMI boot-option/WebUI mapping including `none` semantics",
+      "Known trusted PXE, default disk, diagnostic, optical/removable and BIOS destinations with unique firmware/console markers",
+      "Complete boot-parameter-5 decoder, persistent boot order, current override, power-restore policy and initial-state baseline",
+      "Separate override-write and power-on approvals, action-specific boot timeout, console/physical recovery and required final power state",
+      "Protected BMC credentials and preserved SEL/BMC/firmware/boot-console evidence plan"
+    ],
+    "test_command": "STATE-CHANGING; DO NOT EXECUTE WITHOUT SEPARATE APPROVALS. Preserve logs and create seven explicit rows. For one applicable row, independently prove the exact powered-off state and safe destination, baseline persistent order/power policy/full boot flags, then set only that one-time option using the validated interface. Decode parameter 5 and compare all flags and scope with the WebUI before any power transition. Obtain a distinct point-of-action approval, power on once, and prove the actual path with firmware/console plus destination-specific evidence—not chassis status or fixed sleep. Verify one-time consumption/clear, unchanged persistent order/policy and the required restored final state before any later row. Never chain power actions, auto-advance or retry.",
+    "expected_result": "All seven labels have an applicable result or authoritative SPEC-backed unsupported result. For each applicable option, the BMC accepts and preserves the one-time setting while the host remains in the defined off state; decoded IPMI and WebUI agree; exactly the next approved power-on reaches the unique intended destination; the flag then clears/consumes and persistent boot order, power policy and required final state remain intact. `none` follows the documented clear/no-change behavior.",
+    "pass_fail_basis": "PASS requires seven explicit outcomes and, for every applicable row, exact initial off-state proof, matching decoded IPMI/WebUI one-time state before power-on, destination-specific evidence after the separately approved start, consumption/reversion and persistent-order/policy preservation. Command success, final chassis status, fixed sleep or testing PXE alone cannot pass. Wrong state/destination, unexpected transition, boot failure, persistent flag/order change or recovery failure is FAIL and stops the matrix. Missing mapping, safe destination, approval or recovery is NOT READY; N/A requires authoritative unsupported evidence.",
+    "safety_gate": [
+      "Do not clear logs; preserve initial chassis/host state, boot settings, power policy, audit/SEL and first-failure console evidence.",
+      "Verify target and exact powered-off state independently; do not treat one generic chassis-status line as proof of AC/S5/G3 semantics.",
+      "Obtain separate approval for the override write and host power-on; never combine them into an unattended command chain.",
+      "Do not expose passwords, use untrusted PXE/removable media, modify persistent boot order or accept fixed-sleep/status-only evidence.",
+      "Stop on unexpected power transition, wrong destination, timeout, console loss or leaked flags. Do not retry, power-cycle or proceed to another row automatically."
+    ],
+    "expected_evidence": [
+      "Target/firmware identity, independent exact off-state proof, persistent boot order/power policy and complete initial IPMI/WebUI flag baseline",
+      "Seven-row applicability and trusted-destination matrix with authoritative unsupported evidence where applicable",
+      "Per-row override authorization, write/audit record, complete parameter-5 decode and WebUI agreement while host power state remains unchanged",
+      "Separate power-on authorization and timestamped firmware/console plus unique destination proof through OS Ready or the approved non-OS endpoint",
+      "Post-boot consumed/cleared override, unchanged persistent settings and restoration to the specified normal/off final state",
+      "Preserved logs, no insecure credentials/no-retry proof and engineer-owned per-option verdict"
+    ],
+    "recovery": "On a wrong destination, boot timeout, unexpected power state, console loss or persistent flag leakage, stop and preserve first-failure evidence. Use the pre-approved local/console path to clear only the one-time override and restore the verified normal boot and required final power state without blind power cycling or changing persistent order. Do not repeat or advance until engineering closes the failure."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The title and option procedure consistently target programming before the next start. Source `reboot` wording is normalized to the subsequent power-on because the host begins off; it does not create a competing test purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The distinct off-state behavior, seven-row method, acceptance evidence and safe recovery are fully definable. Project mappings and destinations are execution configuration rather than an unresolved engineering decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact powered-off-state definition; seven-option applicability and mappings; parameter decoder; trusted destinations; separate write/power approvals; timeouts, recovery and final-state plan.", "execution_status": "NOT STARTED; STATE-CHANGING; SEPARATE OVERRIDE AND POWER-ON APPROVAL REQUIRED; NO DUT ACTION EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "Platform chassis-power semantics, IPMI boot mapping, BMC WebUI guide, BIOS/UEFI policy, trusted boot infrastructure and Project recovery SOP define runtime applicability and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "powered_off_and_booted_variants_kept_distinct": true, "all_seven_option_outcomes_required": true, "unsupported_NA_requires_SPEC": true, "status_only_or_fixed_sleep_as_boot_proof_allowed": false, "persistent_boot_order_change_authorized": false, "automatic_power_or_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|915|Wistron-BMC-00205-V003", "next_pending_case_variant_id": "229a9220edcaa0ab"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
