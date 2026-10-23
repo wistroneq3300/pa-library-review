@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 46,
+  "source_key": "Functionality|856|Wistron-BMC-00146-V002",
+  "case_variant_id": "bf967006c7025b1c",
+  "source_ref": {"sheet": "Functionality", "source_row": 856, "code": "Wistron-BMC-00146-V002", "original_row_sha256": "a321cffe23e550d97a418644d9bb9e79b8a9556e12a4f249b055348a2fa615ac", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Power information", "procedure": "Open BMC Web Overview, check Power information, then select `View more` and check details.", "criteria": "All information should match the SPEC definition.", "deepseek": "YES reads a fixed legacy `/Chassis/system/Power`, assumes ChassisId, bypasses both UI views and supplies no field, unit, freshness or tolerance model.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds stable operating state, units/tolerances, chassis/sensor identity, freshness and no-power-action controls."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1018_bf967006c7025b1c.json",
+  "old_problem": "The historical record defined a safe schema-aware synchronized comparison but retained Pending for the field/sensor matrix, stable load/PSU condition, units/tolerances, advertised resource mapping and UI contract.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_STATIC_AND_DYNAMIC_POWER_INFORMATION_MATRIX",
+  "disposition_reason": "The source clearly requires all read-only power information in Overview and View more to match SPEC. Chassis/resource identities, in-scope fields, stable operating condition and dynamic tolerances are Project parameters. The Review layer distinguishes static ratings/health from time-varying telemetry, discovers legacy or current resources via advertised links, and enforces a no-control boundary. ED-15 prevents PASS without approved tolerances, ED-18 reserves actual power-cycle coverage for separate tests, ED-20 preserves all fields and ED-35 rejects a fixed API dump as UI/SPEC proof.",
+  "decision_basis": [
+    "XLSX row 856, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Dynamic watts/current/voltage/energy may be sampled, averaged and rounded at different times, while static capacity/limit/health fields require different exact or enumerated acceptance rules.",
+    "Platforms may advertise legacy Power, newer PowerSubsystem/PowerSupply/Sensor/metric or OEM resources; fixed ChassisId/resource assumptions are unsafe.",
+    "Read-only telemetry authorizes no reset, power action, PSU/outlet control, power-cap write, enable/disable or apply operation."
+  ],
+  "test_case": {
+    "test_name": "Verify complete Overview and View-more power information under a defined stable condition",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove every Project-required Power information field displayed in Overview and `View more` belongs to the intended chassis/component, uses the correct units and lifecycle/health semantics, and matches static SPEC exactly or live telemetry within approved synchronized sampling/tolerance rules, without changing host power or policy.",
+    "required_package": [
+      "Exact BMC/controller/certificate, firmware/WebUI build, target chassis and host power state",
+      "Signed field matrix naming UI field, source component/sensor, units, static/dynamic class, expected value or range/tolerance and required health/status",
+      "Stable workload/load band, PSU population/feed/redundancy state, sampling window and maximum UI-to-source timestamp skew",
+      "Overview/View-more selectors/routes, role, locale/format, loading/freshness indicator, rounding and aggregation rules",
+      "Vendor mapping to advertised Chassis Power, PowerSubsystem, PowerSupply, Sensor, metric or OEM resources with schema semantics",
+      "Trusted TLS/protected authentication, redaction, hard exclusion of power/limit controls and OOB recovery"
+    ],
+    "test_command": "Verify BMC/chassis identity, host power state, PSU/feed topology and the approved stable load band. Capture Overview Power information, activate only the exact `View more` navigation once, and record all matrix fields, units, statuses and freshness timestamps without focusing/submitting controls. Discover the target Chassis and follow only its advertised read-only legacy Power, PowerSubsystem, PowerSupply, Sensor, metric or approved OEM links. During the bounded stable window, correlate each UI and source sample by component identity and timestamp. Apply exact rules to static properties and only approved unit conversion, rounding, averaging window and tolerance to dynamic telemetry; report stale/null/zero/unavailable/aggregate values under their defined semantics. Do not send PATCH/POST/DELETE or reset/power/limit/apply actions, clear logs or reread automatically until values match.",
+    "expected_result": "The intended chassis/topology and stable condition are proven. Overview and View more account for every signed-matrix field with correct component, unit, status and freshness. Static values match exactly as specified; dynamic values fall within approved synchronized ranges/tolerances after documented conversion/rounding/aggregation. Unavailable values follow explicit rules, and no power state, limit, policy, task, reachability or audit state changes.",
+    "pass_fail_basis": "PASS requires identity/topology/stable-state evidence, both UI views, every signed matrix field, advertised source mapping, synchronized timestamps and approved per-field exact/tolerance evaluation with engineer verdict. A fixed `/Chassis/system/Power` dump, one sample without timing, zero/null assumed valid, string equality across asynchronous rounded data or UI/API agreement without SPEC cannot pass. Wrong sensor/chassis, missing field, unit/state mismatch, stale/ambiguous reading, out-of-tolerance dynamic value or any control request is FAIL. Missing matrix/load/tolerance/resource mapping is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never issue Reset, chassis power, PSU/outlet, power-cap/limit, enable/disable, apply, PATCH, POST or DELETE actions.",
+      "Discover the Chassis and advertised resource model; do not assume ChassisId `system` or force a legacy Power endpoint.",
+      "Bind every value to a component/sensor and unit; zero, null, unavailable, stale and aggregate readings require explicit semantics.",
+      "Capture dynamic UI/source values in the approved stable window; do not demand equality between differently averaged/rounded timestamps.",
+      "Use trusted TLS/protected secrets and never clear BMC/host/power/audit logs; this remains a high-impact control surface.",
+      "Navigate/read once and stop on power change, action/task creation, control focus/submission, sensor mismatch, unstable load, timing ambiguity or reachability loss; no automatic retry."
+    ],
+    "expected_evidence": [
+      "BMC/chassis identity, certificate, firmware/WebUI build, host power state, PSU/feed/redundancy topology and stable-load evidence",
+      "Signed field/component/sensor/unit matrix with static expectations or dynamic range/tolerance, sampling and freshness rules",
+      "Redacted Overview and View-more DOM/screenshots/routes with labels, values, units, statuses and timestamps",
+      "Discovered Chassis and advertised power-resource/schema evidence plus timestamped mapped member/sensor/OEM samples",
+      "Per-field UI-summary/UI-detail/source/SPEC comparison with exact results, dynamic deltas, rounding/averaging, unavailable/stale status and uncertainty",
+      "Proof no power/limit/control/action request occurred and host/BMC state remained unchanged; preserved logs and authorized engineer verdict"
+    ],
+    "recovery": "No state change is intended. If a control/action is invoked or host state changes, stop all UI/API activity, preserve the exact request/task/time and use only the pre-approved OOB and workload-aware power recovery procedure. Do not send another power action, change limits or retry the observation until the owner has reconciled state and evidence."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently define a Power information display/SPEC comparison; open field/tolerance details are Project inputs."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only UI objective is clear; chassis/resource mapping, field selection, stable condition and tolerances are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/chassis/UI identity, power field/sensor/unit matrix, host/load/PSU stable condition, exact/dynamic tolerances, sampling/freshness and advertised resource mappings.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "Power, PowerSubsystem, PowerSupply, Sensor and metric data-model semantics."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned chassis and power-related schema lookup."}
+  ],
+  "project_authority": "The signed Project power-information specification, topology/load condition and vendor UI-to-resource mapping define sensor identity, units, sampling, tolerances and required fields.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-15", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "overview_and_view_more_required": true, "dynamic_telemetry_tolerance_required": true, "power_or_limit_action_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|857|Wistron-BMC-00147-V002", "next_pending_case_variant_id": "b80d61497ad4841e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **45 / 942**
-- Last reviewed: `Functionality|855|Wistron-BMC-00145-V002` / `cf8fb5c2304eb3e8`
-- Next source-verified pending identity: `Functionality|856|Wistron-BMC-00146-V002` / `bf967006c7025b1c`
-- Latest disposition: Network information is removed from Pending as a complete interface/topology matrix across Overview, View more and discovered Manager EthernetInterface/OEM members. Each shared/dedicated/virtual/failover path and address origin/lifetime/context must be bound and compared; no network edit, renew, reset or failover is authorized.
+- Completed: **46 / 942**
+- Last reviewed: `Functionality|856|Wistron-BMC-00146-V002` / `bf967006c7025b1c`
+- Next source-verified pending identity: `Functionality|857|Wistron-BMC-00147-V002` / `b80d61497ad4841e`
+- Latest disposition: Power information is removed from Pending as a chassis/component-bound static-and-dynamic field matrix across Overview, View more and advertised Redfish/OEM resources. Live telemetry uses approved synchronized tolerance rules; no reset, power, PSU, cap/limit, apply or other control action is authorized.
 - Protected sources: unchanged.
 - DUT execution: none.
