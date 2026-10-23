@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **40 / 942**
-- Last reviewed: `Functionality|850|Wistron-BMC-00140-V002` / `d806e215425cf3e3`
-- Next source-verified pending identity: `Functionality|851|Wistron-BMC-00141-V002` / `701c49f03248adb8`
-- Latest disposition: Menu Bar (column) is removed from Pending and its Source Conflict is reconciled as two independent checkpoints because the Procedure explicitly contains both branches: a complete role/locale/viewport/feature menu matrix with every option accounted, and a separate customer-logo visual check. Direct action controls are not omitted or blanket-authorized; they keep the overall case NOT READY until a dedicated safe plan exists.
+- Completed: **41 / 942**
+- Last reviewed: `Functionality|851|Wistron-BMC-00141-V002` / `701c49f03248adb8`
+- Next source-verified pending identity: `Functionality|852|Wistron-BMC-00142-V002` / `59bf5f48a8891b8e`
+- Latest disposition: BMC time is removed from Pending as a read-only Overview-to-reference comparison with discovered Redfish Manager property corroboration. The Project must supply timezone/format/DST and a real skew threshold; API-only evidence, a guessed `/Managers/bmc/DateTime` child URI or a plausible-looking timestamp cannot pass.
 - Protected sources: unchanged.
 - DUT execution: none.

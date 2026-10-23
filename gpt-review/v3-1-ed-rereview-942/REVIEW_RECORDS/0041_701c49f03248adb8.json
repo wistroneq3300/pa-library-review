@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 41,
+  "source_key": "Functionality|851|Wistron-BMC-00141-V002",
+  "case_variant_id": "701c49f03248adb8",
+  "source_ref": {"sheet": "Functionality", "source_row": 851, "code": "Wistron-BMC-00141-V002", "original_row_sha256": "a9c722d5a01f8594c412d83372d9d966849b2ea8c9362067e40b0ca7dc682081", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "BMC time", "procedure": "Open BMC Web Overview and check BMC time.", "criteria": "BMC date and time should be correct.", "deepseek": "YES uses insecure fixed `/redfish/v1/Managers/bmc/DateTime`; standard Redfish models DateTime on a discovered Manager resource, and API-only output does not test Overview rendering.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds a reference clock, timezone/format, tolerance and UI/API correlation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1013_701c49f03248adb8.json",
+  "old_problem": "The historical record defined a correct synchronized comparison but retained Pending because the Project reference clock, timezone/display convention, allowed skew, UI selector and vendor Manager mapping were not supplied.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_OVERVIEW_TIME_REFERENCE_COMPARISON",
+  "disposition_reason": "The purpose is unambiguous and safely read-only. Reference-clock identity/uncertainty, timezone/offset/DST format, maximum skew, UI refresh cadence and Manager mapping are Project acceptance parameters. DMTF Redfish supplies standard Manager DateTime and DateTimeLocalOffset semantics, while the source Overview remains the primary checkpoint. ED-15 prevents PASS without an approved tolerance, ED-33 preserves the Overview method, ED-35 forbids API-only substitution, and ED-36 treats missing target/tolerance values as prerequisites.",
+  "decision_basis": [
+    "XLSX row 851, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Time correctness is a normalized instant comparison, not a plausible-looking string; acquisition latency and reference uncertainty must be included in the threshold.",
+    "The Redfish Manager URI must be discovered from `/redfish/v1/Managers`; DateTime and DateTimeLocalOffset are properties of that Manager, not a guessed DateTime child resource.",
+    "The API corroborates clock value/offset but cannot prove that the Overview renders the right current value with the expected locale and freshness."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC Overview date/time against an authoritative reference with Redfish Manager corroboration",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the identified BMC Web Overview displays a fresh date/time representing the correct instant under the Project timezone/UTC-offset, locale, format and DST convention, within the approved uncertainty/skew budget relative to an authoritative clock; corroborate it with supported properties from the identity-bound Redfish Manager without changing any clock.",
+    "required_package": [
+      "Exact BMC endpoint/certificate/controller, firmware and Overview/WebUI build",
+      "Authoritative Project time source, synchronization status, capture method and quantified source uncertainty",
+      "Expected Overview timezone/UTC offset, locale/display format, DST/leap handling and maximum allowed normalized delta",
+      "Overview time selector, display update cadence, stale/frozen rule and supported browser locale/timezone",
+      "Discovered Redfish Manager URI, `@odata.type`, platform support/mapping for DateTime, DateTimeLocalOffset and optional source/sync metadata",
+      "Trusted TLS, protected read-only browser/API account, monotonic capture timing and evidence-redaction policy"
+    ],
+    "test_command": "Bind browser and API sessions to the exact BMC certificate/controller/build. Discover the target Manager through `/redfish/v1/Managers`, follow its member URI and record identity/`@odata.type`; do not guess `bmc` or a DateTime subresource. With no clock-setting action, bracket the observation with authoritative reference readings and monotonic start/end times. Capture the Overview date/time, browser locale/timezone and UI freshness state, then read supported DateTime, DateTimeLocalOffset and source/sync metadata from the Manager near the same instant. Parse offset-bearing values, convert UI/API/reference to a common instant, bound capture latency and source uncertainty, and calculate UI-to-reference, API-to-reference and UI-to-API deltas against the approved threshold. Preserve logs and first capture; do not refresh/retry until a preferred value appears.",
+    "expected_result": "The Overview renders the approved date/time format and timezone/offset with a fresh value. After normalization and latency/uncertainty accounting, its instant and the supported Manager DateTime agree with the authoritative reference within the separately approved limits; DateTimeLocalOffset and optional source/sync context match Project policy. All values belong to the same BMC and no clock, NTP, timezone, RTC or log state changes.",
+    "pass_fail_basis": "PASS requires identity-bound Overview visual/DOM evidence, discovered Manager property evidence, bracketed authoritative reference readings, explicit offset/format conversion, capture-duration/uncertainty accounting and every calculated delta within an approved nonzero-or-zero Project threshold, plus engineer acceptance. API agreement alone, UI plausibility, raw string equality, an untrusted host clock or the guessed `/Managers/bmc/DateTime` URI cannot pass. Wrong/stale/frozen display, incorrect offset/format, unsupported/ambiguous Manager mapping, clock step during capture or delta beyond threshold is FAIL. Without reference/timezone/tolerance the case is NOT READY, never PASS or Pending.",
+    "safety_gate": [
+      "Keep the test strictly read-only: never PATCH DateTime, offset/source, NTP, timezone, RTC or browser/system clock.",
+      "Discover and GET the Manager resource; do not assume ManagerId `bmc` or treat DateTime as a subresource unless a versioned vendor document explicitly defines it.",
+      "Validate TLS and protect BMC credentials/cookies/tokens; no `-k`, visible reusable secret or unredacted full response.",
+      "Normalize all values to a common instant and account for request/render duration; do not decide from appearance or string equality.",
+      "Never clear BMC/system/audit logs because their timestamps are relevant evidence.",
+      "No automatic retry or refresh-to-pass; stop on Manager ambiguity, identity mismatch, stale UI, clock step, missing offset semantics or threshold uncertainty."
+    ],
+    "expected_evidence": [
+      "BMC/controller/certificate identity, firmware/WebUI build and discovered Manager URI with `@odata.type`",
+      "Redacted Overview screenshot/DOM with displayed date/time, browser locale/timezone, freshness state and capture timestamp",
+      "Raw Manager DateTime, DateTimeLocalOffset and supported source/synchronization context from a trusted read-only GET",
+      "Authoritative reference readings bracketing acquisition with source identity, sync status, uncertainty and monotonic duration",
+      "Explicit parsing/offset conversion and UI-to-reference, API-to-reference and UI-to-API delta calculations against approved thresholds",
+      "Proof no time/NTP/timezone/RTC/log change occurred, anomalies/limitations and authorized engineer verdict"
+    ],
+    "recovery": "No state change is intended. If identity, Manager mapping, reference synchronization or time semantics are uncertain, stop and preserve the capture; use the approved OOB/read-only path to confirm inventory and policy. Do not correct the clock in this case, clear logs or repeat capture until the owner resolves the prerequisite."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently target the Overview date/time. Missing reference/format/tolerance and DeepSeek's malformed method are readiness/review defects, not competing source purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only comparison is clear; reference, offset/format, threshold, UI selector and Manager mapping are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI identity, authoritative reference and uncertainty, timezone/format/DST convention, approved skew, Overview selector/cadence and discovered Manager property mapping.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.2.pdf", "application": "Manager resource DateTime and DateTimeLocalOffset property semantics."},
+    {"title": "DMTF Redfish Resource and Schema Guide DSP2053", "url": "https://redfish.dmtf.org/schemas/v1/DSP2053_2025.2.pdf", "application": "Redfish resource discovery and schema context for the versioned Manager implementation."}
+  ],
+  "project_authority": "Project time policy defines the reference, timezone/format/DST and maximum skew; vendor documentation maps the Overview field and supported Manager properties for the exact build.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "overview_primary_checkpoint": true, "redfish_manager_discovery_required": true, "clock_mutation_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|852|Wistron-BMC-00142-V002", "next_pending_case_variant_id": "59bf5f48a8891b8e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
