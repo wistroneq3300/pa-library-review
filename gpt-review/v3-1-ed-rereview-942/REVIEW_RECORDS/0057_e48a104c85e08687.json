@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 57,
+  "source_key": "Functionality|867|Wistron-BMC-00157-V002",
+  "case_variant_id": "e48a104c85e08687",
+  "source_ref": {"sheet": "Functionality", "source_row": 867, "code": "Wistron-BMC-00157-V002", "original_row_sha256": "f1aba46e5c54c2d13b45d134e7e5bfe502ddc3599bc886cc893b997562661693", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "BMC to collect all the log files via Redfish & Web UI", "procedure": "Generic setup says clear logs; in WebUI select System Logs > Collect System Logs.", "criteria": "One downloaded package contains System Event, Security, SEL, OEM and POST logs; total duration is at most 10 minutes.", "deepseek": "YES concatenates one SEL listing with LogServices metadata; it does not invoke/track a collection job, download a package, verify five families or measure duration and uses insecure credentials/TLS.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores asynchronous collection/download, five-family package validation and the ten-minute criterion."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1029_e48a104c85e08687.json",
+  "old_problem": "The source's blanket pre-clear makes package completeness vacuous, while the proposed commands substitute listings for the actual WebUI collection pipeline. Job/result semantics, one-package traceability, five-family content, duration boundary, safe archive handling and source nonmutation were unspecified.",
+  "new_disposition": "RESOLVED_WITH_SINGLE_TRACEABLE_COLLECTION_JOB_SAFE_FIVE_FAMILY_PACKAGE_VALIDATION",
+  "disposition_reason": "The end-to-end workflow and acceptance are explicit and can be parameterized: preserve source logs and per-family boundaries, start exactly one supported collection job, track its immutable result, download one package, safely verify manifest and all five families against the snapshot, and measure the approved interval against 10 minutes. Firmware-specific job/package schemas are execution inputs, not an engineering decision.",
+  "decision_basis": [
+    "XLSX row 867, same-row DeepSeek, exact GPT V2, selection manifest and historical record were directly reviewed.",
+    "Collection is an artifact-production transaction from source services through job/result URI to downloaded bytes and parsed components; metadata listing is not functional equivalence.",
+    "The five named log families and ten-minute limit provide concrete coverage and acceptance once snapshot and timing boundaries are bound.",
+    "ED-17 protects existing logs, ED-20 preserves package/timing coverage, ED-35 rejects concatenated reads, and ED-38 requires one approved job, recovery and no retry."
+  ],
+  "test_case": {
+    "test_name": "Collect one BMC system-log package and verify five-family snapshot fidelity within 10 minutes",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Use the supported BMC System Logs collection function once to produce and download one traceable package containing System Event, Security, SEL, OEM and POST logs; prove each required component is safely readable and faithful to the defined collection snapshot and the approved end-to-end interval is no more than ten minutes without deleting or mutating source logs.",
+    "required_package": [
+      "Exact BMC/certificate, firmware/WebUI build, role and System Logs > Collect System Logs control or supported equivalent action",
+      "Vendor job creation/status/progress/terminal/error/result URI lifetime, polling, safe cancellation, timeout and existing-job behavior",
+      "Package container/manifest/version, names and mapping for all five required families, nested-archive/encoding/schema and empty-family semantics",
+      "Approved ten-minute start/end definition using synchronized monotonic/wall clocks, including whether completion or completed download is the end",
+      "Pre-job service IDs/counts/sequences/timestamps, snapshot cutoff/concurrent-event rules and expected post-job nonmutation",
+      "Isolated space-limited storage, maximum size/depth/file count, safe archive parser, checksum, traversal/link/device protections, redaction/custody and BMC/OOB recovery"
+    ],
+    "test_command": "Do not clear logs. Validate the target, job contract, isolated evidence storage and safe parser; capture complete metadata plus representative stable IDs/counts/sequences/times for System Event, Security, SEL, OEM and POST. Obtain approval and start exactly one supported Collect System Logs transaction, recording request/action and immutable job ID with the approved start timestamp. Poll only at the documented rate; on its defined completed state download the single result directly to isolated storage and record completion/download times. Hash the bytes before parsing; enforce size/depth/file-count limits and reject absolute paths, `..`, unsafe links/devices and unexpected executable content. Validate manifest/container, map and parse all five families, reconcile their IDs/count/time ranges with the snapshot/concurrent-event rule, calculate duration and reread source services/BMC health to prove nonmutation. Do not substitute individual GETs, retry a timeout/unknown job or open an unsafe archive.",
+    "expected_result": "One approved job reaches its documented completed state and yields one identifiable, checksummed package. Safe validation finds readable, schema-valid System Event, Security, SEL, OEM and POST components whose declared snapshot boundaries and representative records reconcile with preserved source services, including approved empty/concurrent-event treatment. The approved end-to-end duration is at most 10 minutes, source logs are unchanged and BMC management remains healthy. No pre-clear, concatenated-output substitution or retry occurs.",
+    "pass_fail_basis": "PASS requires one traceable action/job/result/package chain, safe artifact validation, all five mapped families, snapshot fidelity, approved duration <=10 minutes, source nonmutation, BMC health and engineer verdict. A service list, CLI concatenation, job success without bytes, downloaded file without safe parsing, family filename without readable content or timing without agreed boundaries cannot pass. Missing/corrupt family, unsafe archive, mismatch, timeout over criterion, job error/stall, source mutation or management degradation is FAIL/ERROR per contract. Missing job/package/timing rules is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never pre-clear any family; it destroys comparison records and makes empty placeholders look complete.",
+      "Only one artifact produced by the supported collection transaction satisfies the function; separate reads or concatenated output do not.",
+      "Use trusted endpoint identity and protected credentials; store the sensitive archive outside shared/default downloads with controlled access.",
+      "Treat the archive as untrusted: limit size/depth/count, reject absolute/traversal paths, links/devices and executable surprises, and parse in isolation.",
+      "Start one approved job only, respect documented polling, monitor BMC responsiveness and never retry automatically after timeout or unknown state.",
+      "Stop on target/storage mismatch, unknown manifest, corrupt/oversized archive, missing family, job error/stall, management degradation, leak or evidence mutation; use vendor recovery only."
+    ],
+    "expected_evidence": [
+      "BMC/firmware/WebUI/certificate/role and exact collection action/job schema identity",
+      "Pre-job five-service IDs, counts/sequences/timestamps and representative records with no-clear proof",
+      "Single action/request, job ID/status/progress/error/result URI and synchronized start/completion/download timestamps",
+      "Artifact origin/name/size/checksum, safe extraction inventory and manifest/container/parser validation with archive protections",
+      "Per-family presence, readability/schema/freshness and stable-ID/count/time reconciliation including concurrent/empty-family treatment",
+      "Ten-minute calculation, post-job source nonmutation, BMC resource/health, custody/redaction, no-retry/recovery and engineer verdict"
+    ],
+    "recovery": "If the one job stalls or burdens management, do not start another. Preserve job/status and any partial artifact, use the vendor-supported cancel only when its contract says it is safe, verify BMC/OOB health and escalate. Quarantine corrupt/unsafe packages; do not extract further or clear source logs."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-17 excludes the blanket pre-clear while preserving it historically; existing representative per-family records provide a meaningful package snapshot and the explicit collection/criteria remain unchanged."},
+  "blocked": {"before": false, "after": false, "reason": "The collection action, five-family package and ten-minute criterion are explicit. Exact job/package/timing/parser contracts are normal vendor/Project execution bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC collection action/job schema, package manifest/family mapping, timing boundary, source snapshot/concurrency rules, isolated parser/storage limits, custody, one-job approval and recovery.", "execution_status": "NOT STARTED; COLLECTION JOB NOT AUTHORIZED"},
+  "external_authorities": [],
+  "project_authority": "Vendor System Logs collection action/job/package specification and Project sensitive-log retention/redaction policy define result identity, five-family mapping, timing and safe custody.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "individual_get_substitution_allowed": false, "single_collection_only": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|868|Wistron-BMC-00158-V002", "next_pending_case_variant_id": "f6fefd723dd88d8b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
