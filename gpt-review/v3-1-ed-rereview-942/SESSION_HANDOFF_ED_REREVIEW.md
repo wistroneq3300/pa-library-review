@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **171 / 942**
-- Last reviewed: `Functionality|984|Wistron-BMC-00274-V003` / `b68f0e7394ae9672`
-- Next source-verified pending identity: `Functionality|985|Wistron-BMC-00275-V003` / `6dadbb370df2544e`
-- Latest disposition: Power Soft is removed from Pending as a parameterized REQUIRES CONFIRMATION case. Standard optional ACPI soft-shutdown semantics are used, but PASS requires normal OS shutdown, stable Off and passive SOL evidence; completion, SOL loss, hard fallback or retry cannot pass. No action ran.
+- Completed: **172 / 942**
+- Last reviewed: `Functionality|985|Wistron-BMC-00275-V003` / `6dadbb370df2544e`
+- Next source-verified pending identity: `Functionality|986|Wistron-BMC-00276-V003` / `c6d1a9c5367d67f3`
+- Latest disposition: Power reset is removed from Pending/BLOCKED/source conflict as a parameterized REQUIRES CONFIRMATION case. IPMI defines hard reset—not final Off—and the source itself says booted into OS; review-layer acceptance is corrected to one new boot, final On, POST and OS Ready, while preserving the original defective `off` text for audit. No action ran.
 - Protected sources: unchanged.
 - DUT execution: none.
