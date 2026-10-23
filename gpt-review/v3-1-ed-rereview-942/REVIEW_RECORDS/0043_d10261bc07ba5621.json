@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 43,
+  "source_key": "Functionality|853|Wistron-BMC-00143-V002",
+  "case_variant_id": "d10261bc07ba5621",
+  "source_ref": {"sheet": "Functionality", "source_row": 853, "code": "Wistron-BMC-00143-V002", "original_row_sha256": "f03aac8729f284d82a2ade3bf5b2dd5245f1fef5938a8fc3bf67bb3bd70fa9e5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Server information", "procedure": "Open BMC Web Overview, check Server information, then select `View more` and check details.", "criteria": "All information should match the SPEC definition.", "deepseek": "YES reads guessed `/redfish/v1/Systems/system`, narrows all information to Model/Serial, bypasses both UI views, disables TLS verification and exposes credentials.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires a field/SPEC matrix, linked-resource mapping, UI summary/detail, freshness, role and redaction evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1015_d10261bc07ba5621.json",
+  "old_problem": "The historical record established a complete UI/API/SPEC comparison but retained Pending for the Project field/value matrix, physical-System binding, Redfish/OEM mapping, normalization and sensitive-identifier policy.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_EXHAUSTIVE_SERVER_INFORMATION_MATRIX",
+  "disposition_reason": "The source's workflow and oracle type are explicit: every Project-defined field in Overview and View more must match the authoritative SPEC. The exact field inventory, values, format rules and Redfish/vendor mappings are Project inputs. The Review layer can require zero unaccounted fields, collection discovery instead of a guessed member, physical-server binding, separate summary/detail evidence and controlled comparison of sensitive identifiers. ED-15 prevents PASS without the signed matrix, ED-20 preserves `all information`, ED-33 retains both UI steps and ED-35 rejects API-only substitution.",
+  "decision_basis": [
+    "XLSX row 853, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Raw JSON volume and Model/Serial alone cannot prove `all information`; completeness is defined by a signed row-per-field matrix covering both UI views.",
+    "The ComputerSystem URI must be discovered from the Systems collection and independently bound to the intended physical server; related properties may reside on Chassis, Manager, Assembly, OEM or vendor resources.",
+    "Sensitive serial/asset/UUID values must still be compared in a controlled artifact rather than omitted from coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify all Overview and View-more Server information against the signed Project SPEC",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove every required Server information field shown in BMC Overview and the `View more` detail represents the intended physical SUT and matches the signed Project SPEC/asset recipe, with each UI field mapped to its authoritative source and supported Redfish/vendor property while preserving sensitive identity data.",
+    "required_package": [
+      "Exact BMC/controller/certificate, firmware/WebUI build and physical server identity",
+      "Signed exhaustive field matrix listing Overview/detail location, label, expected value, normalization/case/format rule, authoritative source and sensitivity class",
+      "Approved role, locale, viewport, View-more selector/route and loading-complete/permission behavior",
+      "Discovered Redfish Systems member URI with stable evidence binding it to the target physical chassis/server",
+      "Vendor mapping for ComputerSystem, Chassis, Manager, Assembly, OEM or linked resources plus freshness/ETag/stale and unavailable rules",
+      "Trusted TLS, protected browser/API authentication, controlled raw comparison artifact and redacted reporting policy"
+    ],
+    "test_command": "Bind the BMC and physical SUT identities, enumerate `/redfish/v1/Systems`, and select only the ComputerSystem member explicitly correlated to the target; record `@odata.id`, schema type and identity evidence. Capture Overview Server information first, activate the exact `View more` control once and wait for the approved detail-ready state. Collect every field named by the signed matrix from summary and detail DOM/screenshots and the mapped read-only Redfish/vendor resources. Produce a row-per-field comparison of UI summary, UI detail, authoritative API/source and SPEC using only approved normalization rules; account for missing, extra, truncated, stale, redacted, unavailable and permission-filtered values. Retain sensitive exact comparisons in controlled storage and share redacted results. Do not assume `/Systems/system`, clear logs, trigger inventory refresh or retry automatically.",
+    "expected_result": "The correct BMC and selected System resource are bound to the intended physical SUT. Every required Overview and View-more field is present in the expected location/role, displays the correct normalized value and agrees with its authoritative Project SPEC/source at acceptable freshness. No required field is silently omitted, sensitive identifiers compare exactly in controlled evidence, and no inventory or log state changes.",
+    "pass_fail_basis": "PASS requires verified BMC-to-SUT-to-ComputerSystem identity, successful Overview-to-View-more workflow, 100% accounted signed matrix rows, only approved normalization, fresh source evidence and engineer acceptance. A `/Systems/system` dump, Model/Serial match, one UI view, whole-JSON attachment or redaction that prevents controlled equality cannot pass. Any wrong target, missing/extra/unapproved value, mismatch, truncation that hides comparison, stale/mixed data, permission filtering contrary to matrix or unaccounted field is FAIL. Missing signed matrix/mapping is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Enumerate Systems and bind the member to the physical SUT; never assume member ID `system`.",
+      "Use trusted TLS and protected credentials; no `-k`, reusable secret in command/process output or unredacted full inventory response.",
+      "Do not equate Model/Serial with all information; both Overview summary and View-more detail require exhaustive matrix evidence.",
+      "Tokenize/redact serials, asset tags, UUIDs and customer identifiers in general artifacts while preserving exact controlled comparison.",
+      "Do not refresh/rescan/synchronize or edit inventory, and never clear dmesg, syslog, SEL, BMC or audit logs.",
+      "Perform navigation/read once and stop on wrong-system evidence, identity ambiguity, stale/mixed data, unexpected mutation or inability to protect sensitive values; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Trusted BMC endpoint/certificate, controller firmware/WebUI build, physical SUT identity and selected ComputerSystem `@odata.id`/schema binding",
+      "Signed field matrix with expected value, authoritative source, normalization and sensitivity for every required field",
+      "Redacted Overview summary and View-more detail screenshots/DOM/routes with role, locale, viewport, ready state and timestamps",
+      "Per-field UI-summary/UI-detail/Redfish-or-vendor-source/SPEC table including exact, missing, extra, truncated, stale, redacted and permission-filtered outcomes",
+      "Controlled sensitive-identifier equality evidence plus redacted shareable artifacts and resource freshness/ETag metadata",
+      "Proof no inventory/log mutation occurred, zero unaccounted fields or explicit NOT READY, limitations and authorized engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On wrong-system binding or sensitive-data exposure, stop, close sessions, quarantine/discard unauthorized unredacted copies and verify the target through the approved OOB inventory path. Do not trigger inventory repair/refresh or repeat collection until the identity/redaction issue is resolved."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require all Server information in Overview and View more to match SPEC; the absent field list is a Project input, not a competing purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The workflow and comparison objective are clear; exact fields, values, resource mappings and redaction are supplyable execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/SUT identity, signed exhaustive field/value matrix, summary/detail UI contract, discovered System mapping, linked/OEM resource mapping, freshness/unavailable and sensitivity rules.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "ComputerSystem and linked inventory data-model semantics."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned ComputerSystem and related resource schema discovery."}
+  ],
+  "project_authority": "The signed Project SPEC/asset/configuration recipe defines expected fields/values, while the vendor UI-to-Redfish/OEM map defines the implementation source and freshness for the exact build.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "all_information_matrix_required": true, "overview_and_view_more_required": true, "fixed_system_member_assumption_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|854|Wistron-BMC-00144-V002", "next_pending_case_variant_id": "1553e9a86a3bc6dd"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
