@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **106 / 942**
-- Last reviewed: `Functionality|917|Wistron-BMC-00207-V004` / `c5c56f50c587c88f`
-- Next source-verified pending identity: `Functionality|918|Wistron-BMC-00208-V003` / `2d24545fc9957035`
-- Latest disposition: IPMI date/time is removed from Pending and its source conflict is reconciled using IPMI v2.0: `sel time set/get` targets the SEL-device timestamp clock, not an assumed OEM WebUI clock. UTC-offset reset, NTP policy, audit boundary and recovery are explicit; no clock write was executed.
+- Completed: **107 / 942**
+- Last reviewed: `Functionality|918|Wistron-BMC-00208-V003` / `2d24545fc9957035`
+- Next source-verified pending identity: `Functionality|919|Wistron-BMC-00209-V003` / `2e0599774104785c`
+- Latest disposition: WebUI date/time is removed from Pending as a controlled manual UI save/display/audit/synchronization test. Random time, assumed SEL equivalence and API-only substitution are prohibited; before/save/settled visual evidence and policy restoration are required. No clock write was executed.
 - Protected sources: unchanged.
 - DUT execution: none.

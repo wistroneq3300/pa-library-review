@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 107,
+  "source_key": "Functionality|918|Wistron-BMC-00208-V003",
+  "case_variant_id": "2d24545fc9957035",
+  "source_ref": {"sheet": "Functionality", "source_row": 918, "code": "Wistron-BMC-00208-V003", "original_row_sha256": "7e01c0a0d3abe644e55fdff4361ea964b04d8482646ce30dae824f15621897e6", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Set date / time - WebUI", "procedure": "Manually choose a random date/time in the BMC WebUI, save it and check the resulting date/time; generic setup says clear logs.", "criteria": "The date/time changes successfully and the displayed value matches the setting.", "script": null, "deepseek": "PARTIAL retains manual WebUI plus IPMI verification but accepts random time, exposes credentials, assumes nonstandard `mc time get`, omits the remote target on a later read and does not define clock ownership, timezone, tolerance, NTP overwrite or restoration.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly replaces random time with a controlled value and requires WebUI/audit evidence, normalized multi-surface readback, time-sync policy and preserved event boundaries."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1079_2d24545fc9957035.json",
+  "old_problem": "A random time can damage audit chronology and time-dependent functions, while a green WebUI save state does not prove which clock changed or whether synchronization immediately replaced it. The proposed IPMI verification also relies on an unvalidated command and could read a different target or the SEL clock rather than the UI-managed clock.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_WEBUI_CLOCK_SET_SAVE_DISPLAY_AND_SYNC_POLICY_TEST",
+  "disposition_reason": "The source purpose is a real WebUI date/time mutation and visual confirmation. Replace unsafe randomness with one controlled Project-approved timestamp, retain before/save/after UI captures and use only vendor-documented API/IPMI surfaces as corroboration. The exact UI-managed clock, timezone, tolerance and NTP behavior are version-specific execution bindings; they do not prevent a complete Review-layer case. The prior IPMI SEL-clock row remains independent and cannot substitute for this WebUI path.",
+  "decision_basis": [
+    "XLSX row 918, same-row DeepSeek, exact GPT V2, selection manifest, adjacent IPMI/DST rows and preserved V3.1 record were directly reviewed.",
+    "The source explicitly requires manual WebUI setting, so screenshots or equivalent visual capture of target, entered value, save result and settled display are mandatory; API readback alone loses coverage.",
+    "The standard IPMI SEL clock is not automatically the OEM WebUI clock. Only version-specific vendor documentation may bind those surfaces; otherwise comparisons are recorded without inventing equivalence.",
+    "A controlled timestamp, approved tolerance, synchronization policy and reversible restoration convert the unsafe random operation into an auditable parameterized test without reducing the mutation requirement."
+  ],
+  "test_case": {
+    "test_name": "Set and verify BMC date/time through the WebUI under controlled synchronization policy",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the actual BMC WebUI Date and Time control accepts and visibly saves one controlled approved timestamp, displays the correct timezone-normalized value through the approved settling interval, produces an audit event and follows the documented relationship to vendor-supported API/IPMI/SEL surfaces and NTP policy.",
+    "required_package": [
+      "Exact BMC asset/firmware/WebUI identity, authorized operator account and vendor documentation for the WebUI-managed clock",
+      "Owner-approved timestamp, trusted reference, timezone/DST context, numeric tolerance and immediate/settled observation interval",
+      "Current WebUI clock/timezone/NTP source and supported vendor API/IPMI/SEL comparison surfaces; no assumed `mc time get`",
+      "Impact check for certificates, tokens, schedules, power automation, audit consumers and concurrent time synchronization",
+      "Visual WebUI capture plus preserved BMC/SEL/audit evidence before, during and after the save",
+      "Approved restoration value and NTP/timezone policy with recovery access"
+    ],
+    "test_command": "STATE-CHANGING MANUAL WEBUI TEST; DO NOT EXECUTE WITHOUT APPROVAL. Preserve event/audit history and capture the verified target's Date and Time page, current value, timezone and synchronization source. Compare supported clock surfaces to a trusted reference and establish the vendor clock relationship. Use one explicit owner-approved timestamp—not random time—and obtain point-of-action approval. Manually enter and save it once in the WebUI while capturing the entered value, confirmation and audit event. Re-open/read the WebUI immediately and after the approved settling interval; compare only documented API/IPMI/SEL surfaces with timezone normalization and observe NTP behavior. Record the first post-change event, then restore or retain the approved policy. Never clear logs, guess commands, disable NTP or retry automatically.",
+    "expected_result": "The verified WebUI visibly accepts the exact controlled value, the saved page and audit event identify that value, and immediate/settled displays are within the approved normalized tolerance or change exactly as documented by the active synchronization policy. Vendor-documented related clock surfaces agree as specified; unrelated SEL/host clocks are recorded but not falsely required to match. Logs remain preserved and the approved time/timezone/NTP policy is restored or retained.",
+    "pass_fail_basis": "PASS requires actual before/save/after WebUI visual evidence, exact requested timestamp, approved timezone/tolerance, settled display behavior, audit boundary and documented synchronization/cross-surface result. A save toast, API/IPMI output alone, random time or an assumed SEL-clock match cannot pass. Wrong clock/value/timezone, out-of-tolerance settled result, unexpected NTP overwrite, missing audit evidence or failed restoration is FAIL. Missing vendor semantics, tolerance, timestamp, approval or recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear SEL/audit/OS logs; preserve the pre-change boundary and first post-change evidence.",
+      "Verify target and exact WebUI page; do not substitute an API/IPMI write for the source's manual WebUI control.",
+      "Do not use random/local time, guess `mc time` support, assume SEL equivalence, disable NTP or alter timezone without explicit scope.",
+      "Assess certificate/schedule/token impact and obtain point-of-action approval before the one save.",
+      "Stop on ambiguous clock ownership, UI/API mismatch, sync overwrite or unexpected impact; do not click save again automatically."
+    ],
+    "expected_evidence": [
+      "Target/firmware/WebUI identity, approved timestamp/reference/timezone/tolerance/NTP policy and time-sensitive impact authorization",
+      "Visual before-state WebUI page plus supported vendor API/IPMI/SEL/reference reads and preserved audit/event boundary",
+      "Visual entered value, save confirmation and BMC audit event with exact target and timestamp",
+      "Immediate and settled WebUI display with normalized drift and documented NTP behavior",
+      "Vendor-documented cross-surface comparison, first post-change event chronology and explicit non-equivalence where applicable",
+      "Restored/retained approved policy, preserved logs, no-retry proof and engineer verdict"
+    ],
+    "recovery": "If the wrong clock/value/timezone is saved or time-sync behavior is unexpected, stop and preserve the WebUI/audit/SEL boundary. Through the verified WebUI/vendor method, restore the approved prior time/timezone/NTP policy only after fresh authorization, then re-read the UI and every documented related clock. Do not clear or rewrite logs and do not use repeated saves as trial-and-error recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require the WebUI time control and displayed result. Randomness and missing clock-policy details are unsafe readiness gaps, not competing source purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The WebUI action, visual evidence, acceptance and recovery are defined. Firmware-specific clock mapping and time policy can be supplied as Project execution configuration."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "WebUI-managed clock semantics, controlled timestamp, reference/tolerance, timezone/NTP policy, supported comparison surfaces, impact approval and restoration plan.", "execution_status": "NOT STARTED; TIME/AUDIT STATE-CHANGING MANUAL WEBUI TEST; APPROVAL REQUIRED; NO CLOCK WRITE EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor WebUI clock documentation, Project timezone/tolerance/NTP policy, time-sensitive impact rules and recovery SOP define execution acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "webui_visual_evidence_required": true, "ipmi_substitution_allowed": false, "random_timestamp_allowed": false, "sel_webui_equivalence_assumed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|919|Wistron-BMC-00209-V003", "next_pending_case_variant_id": "2e0599774104785c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
