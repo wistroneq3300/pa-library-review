@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **123 / 942**
-- Last reviewed: `Functionality|934|Wistron-BMC-00224-V002` / `bf9e2cca700c8ffa`
-- Next source-verified pending identity: `Functionality|935|Wistron-BMC-00225-V003` / `eaf5d18c97193323`
-- Latest disposition: Replace LDAP certificate is removed from Pending after pinned source proved certificate-only Root-CA input, a Redfish ReplaceCertificate branch and a distinct non-atomic legacy DELETE/PUT branch. Exact target object, isolation, live trust/auth and mode-specific rollback are mandatory. No certificate was changed.
+- Completed: **124 / 942**
+- Last reviewed: `Functionality|935|Wistron-BMC-00225-V003` / `eaf5d18c97193323`
+- Next source-verified pending identity: `Functionality|936|Wistron-BMC-00226-V003` / `162dfb214c9c0a6f`
+- Latest disposition: View user account - WebUI is removed from Pending using an explicit configured-versus-proven-factory baseline, complete trusted Redfish corroboration and mandatory human visual evidence for every page/filter. API-only evidence and account writes are prohibited. No UI/API action ran.
 - Protected sources: unchanged.
 - DUT execution: none.

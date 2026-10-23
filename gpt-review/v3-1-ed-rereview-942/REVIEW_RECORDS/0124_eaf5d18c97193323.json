@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 124,
+  "source_key": "Functionality|935|Wistron-BMC-00225-V003",
+  "case_variant_id": "eaf5d18c97193323",
+  "source_ref": {"sheet": "Functionality", "source_row": 935, "code": "Wistron-BMC-00225-V003", "original_row_sha256": "148e185a592256b2b5577dded43c3ef79f31939b2358a47e1bf43a5c1965879c", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "View user account - WebUI", "procedure": "Open BMC WebUI Settings > User Management and check the user list after generic prechecks/log clearing.", "criteria": "The user list matches the configured list or a default list.", "script": null, "deepseek": "PARTIAL correctly keeps a human WebUI checkpoint and read-only API comparison but uses `curl -k`, embeds Basic credentials, does not paginate, extracts only ID/username/role and cannot prove UI page/filter completeness, state freshness or protected-account handling.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with MEDIUM read-only risk correctly requires complete paginated AccountService records, every WebUI page/filter, ID/username/role/enabled/locked normalization, an approved baseline, redaction and no writes."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1096_eaf5d18c97193323.json",
+  "old_problem": "The phrase `same as you set or like default` does not identify which baseline applies, and one screenshot or three-field unpaginated API response can omit accounts, filters, page state and lock/enable information. API-only evidence cannot satisfy the prescribed WebUI view, while viewing must not mutate accounts or clear the security evidence needed to investigate discrepancies.",
+  "new_disposition": "RESOLVED_WITH_PARAMETERIZED_COMPLETE_WEBUI_VISUAL_AND_REDFISH_ACCOUNT_BASELINE_RECONCILIATION",
+  "disposition_reason": "Bind the expected inventory at runtime to either the approved configured-account manifest or, only for a proven clean factory state, the vendor-documented default. Preserve actual Settings > User Management visual evidence for every page/filter, collect complete trusted Redfish account records as corroboration, normalize identity/slot/role/state and report every mismatch under a strict no-write boundary. Baseline values are Project configuration, not a remaining engineering decision.",
+  "decision_basis": [
+    "XLSX row 935, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, adjacent Replace-Certificate/Add-User rows and preserved V3.1 record were directly reviewed; row 936 and its manifest identity were independently verified.",
+    "ED-20/ED-23 require actual WebUI/visual evidence and allow API only as corroboration; therefore the source-named WebUI coverage cannot be passed by Redfish alone.",
+    "DMTF Redfish AccountService/ManagerAccount resources provide a structured authoritative read surface for account collection and supported role/state fields, but implementation fields and pagination remain target-version inputs.",
+    "ED-24's reusable default distinction prevents treating factory defaults as the configured Project baseline without proof of the applicable state."
+  ],
+  "test_case": {
+    "test_name": "Visually verify every WebUI User Management account against complete Redfish and approved baseline",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify that the BMC WebUI Settings > User Management view displays the complete current account inventory across all pages and filters, and that each visible account identity/slot, role and supported enabled/locked/local-directory state matches the time-aligned complete Redfish inventory and the explicitly selected configured or factory-default baseline without changing any account or session.",
+    "required_package": [
+      "Target BMC/firmware/WebUI build identity, trusted management endpoint and supported Redfish AccountService/ManagerAccount schema",
+      "Explicit baseline selector: approved configured-account manifest, or vendor-documented factory-default inventory plus evidence that the BMC is in that exact clean factory state",
+      "Complete UI-to-Redfish mapping for account/member ID, displayed username, role, enabled/locked state, account type/slot and local versus directory representation",
+      "Protected least-privilege read account, trusted TLS validation, pagination/member-expansion method and synchronized timestamps",
+      "Human/operator access to capture every User Management page, filter/sort state, total count and relevant detail view",
+      "Redaction/access-control plan for account metadata and protected recovery-account identification"
+    ],
+    "test_command": "READ ONLY WITH REQUIRED VISUAL EVIDENCE. Verify target and trusted TLS; preserve audit logs rather than clearing them. Select and record exactly one authoritative expected baseline. Collect the complete paginated/expanded Redfish AccountService account inventory over authenticated trusted transport without `-k`, preserving raw redacted records and count. A human/operator opens the verified BMC WebUI Settings > User Management page, records current filters/sort/page size/total, captures every page and required detail state, and refreshes once only if freshness can be proven without writes. Normalize WebUI, Redfish and expected baseline by stable account/member identity, username, role and supported state; distinguish local and directory identities and report missing, extra, stale or mismatched fields. Repeat read-only inventory for no-change evidence. Do not add, modify, enable, disable or delete accounts; do not terminate recovery sessions or clear logs.",
+    "expected_result": "Every account in the selected approved baseline appears exactly once in the complete WebUI view and complete Redfish inventory with matching stable identity/slot, username, role and supported state; no unexpected account is present. Page totals, filters and pagination prove completeness, local/directory representation is correctly explained, visual evidence is time-aligned with API evidence, and protected account metadata is handled per policy. Pre/post inventory and audit evidence show no account or session configuration change.",
+    "pass_fail_basis": "PASS requires an authoritative selected baseline, complete trusted paginated Redfish records, actual visual evidence for every WebUI page/filter, a normalized one-to-one comparison of all supported identity/role/state fields, freshness/no-change proof and no write. A visible page, screenshot of one page, HTTP 200 or partial API fields cannot pass. Missing/extra/duplicate/stale account, unexplained UI/API mismatch, wrong role/state, incomplete pagination, untrusted TLS, sensitive-data exposure or any write is FAIL and stops. Missing baseline/schema/protected access is NOT READY, not Engineering Decision Pending.",
+    "safety_gate": [
+      "Use a read-capable account and trusted TLS; do not use `curl -k`, expose passwords/tokens or capture unnecessary sensitive directory metadata.",
+      "Actual WebUI visual evidence is mandatory. API/DOM alone cannot replace the prescribed operator-visible User Management view.",
+      "Verify filters, sort, page size, total count and every page; stop on partial/hidden inventory or stale-target ambiguity.",
+      "Do not add, modify, disable, enable or delete accounts, force-refresh through a write, terminate protected sessions or clear security logs.",
+      "Treat configured and factory-default baselines as distinct; never infer a default solely because no Project manifest was supplied."
+    ],
+    "expected_evidence": [
+      "Target BMC/firmware/WebUI identity, selected configured-or-factory baseline and authority proving it applies",
+      "Complete trusted paginated/expanded raw redacted AccountService/ManagerAccount inventory with count/hash/timestamp",
+      "Human-captured User Management screenshots for every page plus filter/sort/page-size/total/detail context",
+      "Normalized WebUI/Redfish/baseline matrix for stable ID/slot, username, role, enabled/locked/type and every discrepancy",
+      "Pre/post no-change and preserved audit evidence, protected-account handling and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On wrong target, UI/API incompleteness, stale display, schema ambiguity or sensitive-data exposure, stop, preserve/redact evidence and close the read sessions. Do not create/modify an account to force an expected list. Escalate the discrepancy for schema or Project-baseline correction."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require read-only WebUI list verification. `Configured` versus `default` is an explicit baseline selection parameter, not a competing test purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The WebUI, corroborating API, comparison and safety contract are defined. Account baseline, field mapping and protected access are Project readiness inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Target/WebUI/Redfish schema; configured or proven factory-default account baseline; UI/API field mapping; protected read access/TLS; visual capture and redaction policy.", "execution_status": "NOT STARTED; READ-ONLY WEBUI VISUAL TEST; NO WEBUI, API OR ACCOUNT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://www.dmtf.org/sites/default/files/standards/documents/DSP0268_2025.3.pdf", "application": "Defines Redfish AccountService and ManagerAccount resource relationships/fields used as structured corroboration for the WebUI inventory."}
+  ],
+  "project_authority": "Project account manifest or documented applicable factory-default state, target UI/schema mapping, account-data redaction policy and engineer verdict bind the expected list.",
+  "traceability": {"applicable_decisions": ["ED-20", "ED-23", "ED-24", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_webui_path_preserved": true, "actual_visual_evidence_required": true, "api_only_substitution_allowed": false, "configured_and_factory_defaults_distinguished": true, "account_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|936|Wistron-BMC-00226-V003", "next_pending_case_variant_id": "162dfb214c9c0a6f"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_rows_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
