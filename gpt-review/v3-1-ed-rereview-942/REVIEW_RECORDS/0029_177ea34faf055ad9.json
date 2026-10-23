@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 29,
+  "source_key": "Functionality|839|Wistron-BMC-00129-V003",
+  "case_variant_id": "177ea34faf055ad9",
+  "source_ref": {"sheet": "Functionality", "source_row": 839, "code": "Wistron-BMC-00129-V003", "original_row_sha256": "7dc1fc98d3ea2604d760d718bd5c03e0993f1e8d46ce1cd24eddad2e27cb3246", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Logo check", "procedure": "Check logo design.", "criteria": "Logo is clear, has no spelling error and matches the customer's requirement.", "deepseek": "PARTIAL; proposes a login-page screenshot but does not bind BMC/build/reference/matrix or protect screenshot data.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; adds exact endpoint, approved reference, fixed viewport, redaction and owner judgment."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1001_177ea34faf055ad9.json",
+  "old_problem": "The test purpose, browser observation and human verdict boundary were already clear, but the absent customer asset and rendering matrix were treated as an engineering-decision dependency instead of ordinary Project Configuration.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_CUSTOMER_BRANDING_VISUAL_TEST",
+  "disposition_reason": "There is no public standard that can define this customer's intended logo. The authoritative package is the approved logo asset/hash, brand guide, exact wordmark and rendering matrix. Once supplied, automation can bind the capture to the exact BMC/UI build and produce reproducible screenshots, OCR and image measurements, while an authorized customer/engineer decides clarity and design conformance. ED-08 requires the real WebUI evidence and ED-36 allows the absent endpoint/reference/matrix as prerequisites, so the record can leave Pending without fabricating a logo or verdict.",
+  "decision_basis": [
+    "XLSX row 839, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "The source consistently asks for a visual BMC-web logo check; it contains no competing method or target.",
+    "Customer-specific brand correctness can only be judged against a versioned Project authority, not a generic web or OEM assumption.",
+    "ED-08 mandates genuine WebUI visual evidence, ED-15 forbids an unapproved similarity threshold from deciding PASS, and ED-20 preserves this Source Key/Variant even if other UI cases reuse the same page."
+  ],
+  "test_case": {
+    "test_name": "Compare the rendered BMC Web logo with the customer-approved branding package",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "On the exact intended BMC web UI, verify the rendered logo is clear, contains the approved correctly spelled wordmark and matches the customer-approved asset, proportions, colors, placement and responsive presentation in every required display context.",
+    "required_package": [
+      "BMC endpoint/certificate, device identity, firmware and WebUI bundle/build/hash plus exact public/authenticated page locations",
+      "Customer-approved lossless logo asset with hash, brand-guide/version, expected wordmark/spelling, colors, aspect ratio, placement and minimum-size/contrast rules",
+      "Required browser/version, viewport/resolution, device-pixel ratio, zoom, theme, language and responsive-state matrix",
+      "Approved OCR, pixel/perceptual, clipping, contrast and rendering tolerances plus rules for human adjudication",
+      "Isolated browser/session, screenshot redaction/storage policy and authorized customer/engineer reviewer"
+    ],
+    "test_command": "Validate the BMC certificate/device and firmware/UI build, start an isolated supported browser, and load each approved page/matrix cell without changing BMC configuration. Record browser, viewport, device scale, zoom, theme and language; capture a lossless redacted full-page screenshot and reproducible logo crop. Compare asset dimensions/aspect ratio/color/placement, OCR the exact approved wordmark, generate overlay/difference evidence and inspect clipping, blur and scaling. Present raw and annotated images to the authorized reviewer for the separate clarity/spelling/customer-design verdict. Close the isolated session and verify no state changed; do not clear logs, upload branding or silently omit matrix cells.",
+    "expected_result": "Every required page/context shows the logo tied to the approved asset and wordmark, with no spelling defect, clipping, distortion, unintended blur, color/contrast/placement violation or unacceptable rendering difference under the approved tolerances. Full-page and cropped visual evidence is free of secrets, the authorized reviewer confirms clarity and customer-design match, and BMC configuration remains unchanged.",
+    "pass_fail_basis": "PASS requires exact BMC/UI identity, full evidence for every required matrix cell, objective asset/OCR/layout checks within approved tolerances, and an authorized visual acceptance. A screenshot alone, OCR alone, pixel score alone or one arbitrary viewport cannot pass. Wrong target/build, missing/incorrect wordmark, mismatch outside tolerance, clipping/blur/poor contrast, contaminated evidence or reviewer rejection is FAIL. Missing customer asset/guide, matrix, tolerances or reviewer is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Observation only: do not upload, replace, restyle or configure any branding or firmware.",
+      "Verify endpoint/certificate/device/build before capture; a correct logo from another BMC is invalid evidence.",
+      "Use an isolated session and exclude/redact credentials, tokens, cookies, account names and unrelated sensitive page data.",
+      "Do not clear logs or automatically recapture after a wrong-target/sensitive screenshot; quarantine it and revalidate the setup first.",
+      "Do not let OCR or similarity metrics issue the customer verdict or invent unapproved thresholds.",
+      "Report every untested page/viewport/theme/language cell explicitly; absence of evidence is not PASS."
+    ],
+    "expected_evidence": [
+      "BMC certificate/device, firmware/UI build and exact page identity",
+      "Approved logo asset hash, brand-guide/version, expected wordmark and complete acceptance matrix/tolerances",
+      "Lossless redacted full-page and reproducible logo crops with browser/version, viewport, device scale, zoom, theme, language and timestamp",
+      "OCR result, dimension/aspect/color/contrast/placement measurements and overlay/difference output per matrix cell",
+      "Annotated clipping, blur, spelling or branding findings and explicit untested cells",
+      "Authorized customer/engineer visual verdict and proof no BMC configuration changed"
+    ],
+    "recovery": "No configuration recovery should be needed. If the endpoint/build is wrong or sensitive data appears, stop, close the isolated session, restrict/quarantine or delete the contaminated evidence according to the approved data-handling policy, validate the target/redaction setup and obtain confirmation before a new capture. Do not modify the BMC to repair the logo under this test."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently define a visual customer-branding check."},
+  "blocked": {"before": false, "after": false, "reason": "The visual checkpoints are defined; customer asset, matrix, thresholds and reviewer are readiness inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI identity, approved logo asset/brand guide, rendering matrix/tolerances, redaction policy and authorized reviewer.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "The versioned customer-approved logo asset and brand guide are the sole design authority; no external public source was substituted.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "real_webui_visual_evidence_required": true, "automated_similarity_is_final_verdict": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|840|Wistron-BMC-00130-V003", "next_pending_case_variant_id": "508ba645e4a33630"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}

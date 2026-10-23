@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **28 / 942**
-- Last reviewed: `Functionality|838|Wistron-BMC-00128-V005` / `170cd88928d895b9`
-- Next source-verified pending identity: `Functionality|839|Wistron-BMC-00129-V003` / `177ea34faf055ad9`
-- Latest disposition: The mixed NTP/post-flash row is removed from Pending by retaining three separately gated checkpoints: NTP configure/converge, bounded isolated-server time-change tracking, and post-BMC-flash preservation of BMC LAN plus both named UBB-IP and Virtual-NIC reachability. Flash is mandatory coverage but remains dependent on a separate signed vendor/project package and explicit authorization; no flash was executed or invented.
+- Completed: **29 / 942**
+- Last reviewed: `Functionality|839|Wistron-BMC-00129-V003` / `177ea34faf055ad9`
+- Next source-verified pending identity: `Functionality|840|Wistron-BMC-00130-V003` / `508ba645e4a33630`
+- Latest disposition: Logo check is removed from Pending as an identity-bound visual comparison against a customer-approved asset/hash and brand guide across the Project viewport/theme/language matrix. OCR and image metrics are supporting gates only; actual WebUI screenshots and an authorized customer/engineer visual verdict remain mandatory.
 - Protected sources: unchanged.
 - DUT execution: none.
