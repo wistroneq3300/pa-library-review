@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 53,
+  "source_key": "Functionality|863|Wistron-BMC-00153-V002",
+  "case_variant_id": "414cde678fea061e",
+  "source_ref": {"sheet": "Functionality", "source_row": 863, "code": "Wistron-BMC-00153-V002", "original_row_sha256": "0e98373f7b3c78f98f65512c8cc4de3973962a629da673feb292126ecfdc868e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "OEM logs", "procedure": "Generic setup says clear logs; display/check OEM demand logs; use `Save Logs`; then use `Clear All Logs`.", "criteria": "All information/messages match status; OEM logs export and clear successfully.", "deepseek": "YES assumes `/Managers/bmc/LogServices/OemLog/Entries`, disables TLS validation and returns only a read response while omitting WebUI/export/clear; it cannot establish proprietary semantics, pagination or no-risk.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires vendor schema/resource validation, complete retained export, clear authorization and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1025_414cde678fea061e.json",
+  "old_problem": "The source deletes the representative OEM records before viewing/exporting them, supplies no stimulus to recreate them, then requests another clear. The assumed resource name does not define proprietary fields or severity, and service identity, decoder, complete export/raw payload and clear scope were unresolved.",
+  "new_disposition": "RESOLVED_WITH_VENDOR_SCHEMA_BOUND_OEM_VIEW_EXPORT_AND_ONE_AUTHORIZED_CLEAR",
+  "disposition_reason": "The review-layer flow can be fully defined without guessing an OEM command: discover the supported service, use a firmware-matched vendor schema/decoder to bind raw OEM records to WebUI rendering, validate a complete raw-capable Save Logs artifact, retain it externally, then perform one vendor-defined clear only after retention/FAE authorization. Exact proprietary identifiers are Project/vendor execution inputs.",
+  "decision_basis": [
+    "XLSX row 863, same-row DeepSeek, exact GPT V2, selection manifest and historical record were directly reviewed.",
+    "OEM path labels and rendered strings are not authoritative field semantics; stable identity plus raw payload and the firmware-matched vendor decoder are required.",
+    "Viewer, Save Logs support artifact and Clear All Logs are separate functional checkpoints; a generic GET cannot substitute for any other checkpoint.",
+    "ED-03 permits a standard BMC draft but forbids guessed OEM parameters; ED-17 requires backup first; ED-20 preserves coverage; ED-38 requires one approved destructive action and no retry."
+  ],
+  "test_case": {
+    "test_name": "Verify vendor-decoded OEM Logs, complete support-grade Save Logs export, and one approved scoped clear",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the BMC OEM Logs page correctly represents a bounded, representative vendor-defined record set and statuses from stable raw OEM identities; verify `Save Logs` exports the complete intended service including support-required raw fields; then, after external evidence retention and fresh vendor/owner approval, clear exactly the authorized OEM service once and verify its documented isolated post-state.",
+    "required_package": [
+      "Exact BMC/certificate, firmware/WebUI build, account role and discovered OEM LogService/resource identifiers",
+      "Firmware-matched vendor schema/decoder for stable ID, raw/OEM payload, component/source, message, status/severity, timestamp/timezone, sequence and WebUI rendering",
+      "Representative retained OEM-event dataset plus pagination, rollover, duplication, ordering and concurrent-record boundary rules",
+      "Save Logs filename/MIME/container, encoding/schema, inclusion of raw OEM fields, full-scope behavior, parser, checksum, redaction and support/custody acceptance",
+      "Vendor/support retention policy, clearable versus protected classes, exact clear control and expected empty/marker/sequence-reset semantics with excluded services",
+      "Dedicated lab target, protected credentials/trusted TLS, maintenance window, explicit FAE/owner clear authority, alternate OOB access and incident escalation"
+    ],
+    "test_command": "Do not pre-clear. Discover the supported OEM LogService from the target build; capture all pages, metadata, stable record IDs and raw OEM payload through trusted protected access. Bound concurrent writes and decode only with the matching vendor schema; compare component/message/status/severity/time presentation with the WebUI, preserving unknown fields as unresolved evidence. Invoke `Save Logs` once; quarantine, parse and checksum the artifact, reconcile all bounded IDs/raw fields/time coverage and confirm the artifact is usable by vendor support before external approved custody. Present the exact service, clearable records, retained artifact, excluded services and vendor-defined post-state and obtain fresh approval. Invoke the supported OEM clear once, then verify old-record disposition or marker/sequence behavior and that other log services remain unchanged. Never assume `/Managers/bmc/LogServices/OemLog`, use `curl -k`, expose passwords, infer unknown OEM meanings or retry clear.",
+    "expected_result": "All representative OEM records are completely enumerated and their vendor-decoded WebUI fields match the authoritative raw payload and matrix. The Save Logs artifact is readable, complete, retains support-required raw data and is accepted into controlled custody. After fresh authorization, one clear affects exactly the OEM service/classes approved and reaches the documented marker/count/sequence post-state while unrelated logs and the retained artifact remain intact. No blanket pre-clear, guessed OEM semantics or repeated destructive action occurs.",
+    "pass_fail_basis": "PASS requires discovered service/build identity, authoritative schema/decoder, complete bounded raw-to-WebUI reconciliation, verified support-grade export, retention evidence, immediate exact-scope approval, one clear and isolated documented post-state with engineer/FAE verdict. HTTP success, one JSON page, UI text or file existence alone cannot pass. Unknown required fields, incomplete/raw-stripped export, wrong/multiple clear, cross-service deletion or unexplained record mismatch is FAIL. Missing vendor schema, representative data, export/retention contract or clear authority is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never execute the generic pre-test clear; it removes the representative OEM dataset and no safe source stimulus recreates it.",
+      "Do not infer proprietary meanings or severity from a URI or displayed string; retain raw payload and use the firmware-matched vendor decoder.",
+      "Do not assume ManagerId, LogServiceId, one-page completeness or HTTP 200. Discover the service and reconcile all pages by stable identity.",
+      "Use trusted TLS and protected credentials; OEM records may contain support-sensitive implementation details, so preserve controlled originals and policy-approved redactions.",
+      "A verified export preserves evidence but does not restore deleted live controller state. Clear only the approved disposable lab service after vendor/retention authorization.",
+      "Invoke clear exactly once and never retry automatically; stop on partial export, ambiguous scope, unsupported raw data, rollover, multi-service deletion, unknown response or access loss."
+    ],
+    "expected_evidence": [
+      "Target BMC/certificate, firmware/WebUI build, role and discovered OEM service/schema/decoder identities",
+      "Complete bounded pre-clear record set with stable IDs, raw/OEM payload, decoded component/message/status/severity/time and pagination/sequence metadata",
+      "Redacted WebUI evidence and field-level reconciliation, explicitly preserving undecoded and presentation-only fields",
+      "Save Logs trusted origin, filename/MIME/size, checksum, parser result, stable-ID/raw-field completeness, custody and support-usability acceptance",
+      "Written vendor/retention authority, fresh exact-action approval, one clear request/response, expected marker/sequence behavior and unrelated-service proof",
+      "Protected audit, no-pre-clear/no-retry proof, limitations/recovery notes and engineer/FAE verdict"
+    ],
+    "recovery": "The controlled complete OEM export preserves support evidence but may not restore live BMC state. On wrong scope, unexpected deletion, unknown response or lost access, stop immediately, preserve action/audit evidence and invoke only the approved vendor/OOB incident path. Escalate protected or required record loss and never manufacture replacement OEM entries."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-17 resolves the contradictory setup by retaining but prohibiting generic pre-clear. A representative existing dataset is viewed and exported first; the original final clear remains a separately authorized lab-only checkpoint."},
+  "blocked": {"before": false, "after": false, "reason": "Viewer, export and clear functions are identifiable. Proprietary service/schema/decoder, representative data and retention/clear semantics are normal vendor/Project execution inputs, not a missing review decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC build and discovered OEM service, vendor schema/decoder and representative matrix, export/raw-field contract and custody, retention/clearable scope, lab target, FAE approval, excluded-service observers and recovery.", "execution_status": "NOT STARTED; OEM SCHEMA AND DESTRUCTIVE CLEAR NOT AUTHORIZED"},
+  "external_authorities": [],
+  "project_authority": "Firmware-matched platform OEM log schema/decoder and support guide, vendor WebUI Save/Clear contract and Project evidence-retention policy define proprietary meaning, export completeness and destructive scope.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "oem_parameters_guessed": false, "blanket_preclear_allowed": false, "export_before_clear_required": true, "clear_requires_fresh_explicit_approval": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|864|Wistron-BMC-00154-V002", "next_pending_case_variant_id": "aa04653285562bca"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
