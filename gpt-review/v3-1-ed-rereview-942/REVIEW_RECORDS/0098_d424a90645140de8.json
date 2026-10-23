@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 98,
+  "source_key": "Functionality|909|Wistron-BMC-00199-V002",
+  "case_variant_id": "d424a90645140de8",
+  "source_ref": {"sheet": "Functionality", "source_row": 909, "code": "Wistron-BMC-00199-V002", "original_row_sha256": "366fc199d844ea4ad44fd1e1b26f0345810377a69a54e5c3e8f3761d79f42963", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Reboot BMC", "procedure": "Generic setup says clear logs; During Test says `Reboot system with WebUI`; collect photos and inspect logs afterward.", "criteria": "BMC reboots without error, BMC settings do not change, and sensor list becomes readable after an RD-defined readiness delay.", "script": null, "deepseek": "PARTIAL silently replaces the WebUI action with `ipmitool mc reset cold`, exposes credentials, assumes cold-reset semantics and a fixed 90 seconds, and uses `mc info` as false proof of settings and sensor recovery.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires point-of-action approval, complete baseline, bounded staged readiness and one attempt. V3.1 flags `system` target and WebUI-versus-IPMI reset semantics as a source conflict."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1070_d424a90645140de8.json",
+  "old_problem": "The Procedure's word `system` could imply host/chassis reboot even though title and all Criteria say BMC, and DeepSeek silently changes both interface and reset type. A fixed sleep and `mc info` cannot establish staged service/auth/UI/sensor recovery, settings persistence or unchanged host state, while an automatic retry could create a reset loop.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ONE_SHOT_WEBUI_BMC_REBOOT_WITH_STAGED_RECOVERY",
+  "disposition_reason": "Reconcile the target as BMC because the title and all three acceptance statements independently specify BMC; host/chassis reboot remains explicitly prohibited. Preserve the source-specified WebUI path and parameterize its vendor-documented warm/cold/graceful semantics, recovery deadlines, persistent-setting scope and exact menu action. A tool reset is only an approved override with a recorded WebUI coverage gap. Missing runtime documentation or recovery access makes execution NOT READY, not review Pending.",
+  "decision_basis": [
+    "XLSX row 909, same-row DeepSeek, exact GPT V2, selection manifest, other reboot variants and the preserved V3.1 record were directly reviewed.",
+    "The Reboot BMC title plus Criteria 1-3 outweigh the lone ambiguous noun `system` and establish the intended target without inventing a host action; the exact WebUI control/reset type remains Project/vendor configuration.",
+    "ED-03 permits a standard BMC-operation draft but forbids guessed OEM action parameters, while ED-06 and ED-18 prevent substituting host/power cycles. ED-17 preserves logs and ED-20 preserves WebUI action coverage.",
+    "A BMC reboot is a one-shot approved state change; transport, management services, authentication/UI/API, time and full sensor readiness are separate postconditions."
+  ],
+  "test_case": {
+    "test_name": "Verify one approved WebUI BMC reboot preserves configuration, host state and complete sensor readiness",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the exact approved WebUI action reboots only the BMC with its documented reset semantics, restores all required management phases within Project/vendor deadlines, preserves the approved persistent configuration and complete applicable sensor inventory, and does not change host power or OS state.",
+    "required_package": [
+      "BMC/chassis/host asset, MAC/IP, firmware/build/active image and exact WebUI menu/action with vendor-defined warm/cold/graceful semantics",
+      "Approved maintenance/change window, point-of-action authority, expected outage and confirmation that no firmware/KVM/SOL/virtual-media/power/config/log-export/OOB operation is active",
+      "Redacted persistent-setting baseline covering network, user/role metadata, certificate metadata, time/NTP, alerting, logging, fan/power policy and thresholds with secret/volatile exclusions",
+      "Complete applicable pre-reset FRU/SDR/sensor identity/value/status matrix and independent host power/OS observer",
+      "Project/vendor disconnect, transport, management-service, authentication, UI/API, time-sync, sensor and total recovery deadlines",
+      "Independent local/console recovery path and approved non-return, network/auth change, boot-loop, host-state change or incomplete-sensor escalation SOP",
+      "WebUI screenshot/audit capture or explicit Project override approval with method/version/reason and uncovered WebUI-control coverage"
+    ],
+    "test_command": "STATE-CHANGING; DO NOT EXECUTE WITHOUT POINT-OF-ACTION APPROVAL. Preserve SEL/audit/BMC/host logs, confirm asset and exact vendor-documented WebUI BMC-reboot action, verify no conflicting operation, export/hash the redacted persistent settings and collect full sensor plus independent host baseline. A human invokes the approved WebUI action once. Timestamp disconnect and bounded low-rate recovery phases for transport, services, authentication, WebUI/API, time and full sensors while independently observing host continuity. Recollect and compare all approved settings and every applicable sensor. Do not use host reboot, chassis power, factory reset, AC cycle, fixed sleep, blind IPMI substitution or a second reset; stop and escalate at the first deadline/mismatch.",
+    "expected_result": "One WebUI BMC reboot produces the documented audit/reset event and staged outage/recovery within every approved deadline. BMC firmware/active image and all nonvolatile approved settings match baseline, management paths/authentication/time work, the entire applicable FRU/SDR/sensor set is ready with accepted values/status, preserved logs contain no unaccepted error and independently observed host power/OS remain unchanged. Any override reports the untested WebUI-control gap.",
+    "pass_fail_basis": "PASS requires explicit action approval, exact WebUI method evidence, one reset only, complete staged recovery timing, persistent-setting comparison, full sensor readiness and independent unchanged-host evidence with engineer verdict. `mc info`, ping, one sensor, a fixed 90-second wait or an ipmitool reset without approved equivalence cannot pass. Wrong target/reset type, missed deadline, unexpected setting/network/auth/time/firmware change, missing/stale sensor, boot loop, unaccepted log or host-state change is FAIL and stops execution. Missing exact action semantics, baseline, deadlines or recovery access is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear SEL, audit, journal or host logs; preserve baseline and first-failure evidence.",
+      "Confirm the exact BMC WebUI target/action and vendor reset semantics; host reboot, chassis power, factory reset and AC cycle are prohibited substitutes.",
+      "Do not reset during firmware activation/update, configuration writes, KVM/SOL/virtual-media use, power sequencing or another critical OOB operation.",
+      "Obtain point-of-action approval, execute once and never issue a second reset because recovery is slow; observe host state independently.",
+      "Use protected credentials and bounded low-rate polling; do not expose secrets, assume cipher 17, use a fixed sleep or restore/write settings without separate approval."
+    ],
+    "expected_evidence": [
+      "BMC/chassis/host identity, firmware/active image, exact WebUI action/reset semantics, maintenance approval and no-conflicting-operation checklist",
+      "Redacted pre-reset persistent settings/hashes, network/auth/time/audit metadata, complete expected FRU/SDR/sensor matrix and independent host state",
+      "WebUI screenshot/audit, approval timestamp, reset event/cause and disconnect/transport/service/auth/UI/API/time/sensor recovery timeline",
+      "Post-reset setting comparison with secret/volatile exclusions, full sensor values/status, firmware/network/auth/time health and unchanged host continuity",
+      "Deadline/escalation disposition, preserved logs, one-reset/no-retry proof and explicit WebUI-versus-approved-override coverage statement",
+      "Final BMC/host health and engineer-owned PASS/FAIL/NOT-READY disposition"
+    ],
+    "recovery": "If the BMC misses any approved deadline or returns with changed configuration, incomplete sensors, a boot loop or host impact, do not reset again. Preserve logs and first-failure timings, use the pre-arranged independent local/console recovery path and escalate to the BMC owner/vendor SOP. Do not factory-reset, power-cycle, rewrite settings or activate another firmware bank without a separately approved recovery action."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master ambiguity is preserved, but title plus all Criteria conclusively identify a BMC—not host/chassis—reboot. The Review layer retains WebUI coverage and requires the exact vendor-documented action/reset semantics at runtime, so it reconciles the target conflict without guessing OEM parameters or altering Master."},
+  "blocked": {"before": false, "after": false, "reason": "The one-shot BMC-reboot purpose, safety gates, postconditions and recovery are complete. Exact WebUI semantics and deadlines are required Project/vendor execution bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact WebUI action and documented reset type, persistent/volatile setting scope, complete sensor applicability, staged recovery deadlines, maintenance approval, independent host/recovery access and any alternative-tool override.", "execution_status": "NOT STARTED; STATE-CHANGING; ONE APPROVED WEBUI BMC REBOOT ONLY; NO DUT ACTION EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor WebUI reset/recovery documentation, Project operation map, persistent-setting definition, sensor initialization timing and recovery SOP define action semantics and deadlines.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-06", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "target_is_BMC_not_host_or_chassis": true, "source_WebUI_method_preserved": true, "ipmitool_cold_reset_assumed_equivalent": false, "full_sensor_and_setting_comparison_required": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|910|Wistron-BMC-00200-V002", "next_pending_case_variant_id": "f342f7c7102da38d"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
