@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **31 / 942**
-- Last reviewed: `Functionality|841|Wistron-BMC-00131-V003` / `224925df3d984616`
-- Next source-verified pending identity: `Functionality|842|Wistron-BMC-00132-V003` / `97d6bb4b18e355ff`
-- Latest disposition: Login check is removed from Pending as six independent authentication, privilege, logout and password-reset branches. Execution still requires disposable accounts, bounded attempts, isolated SMTP/mailbox, protected secrets and approved recovery; the source-required nonexistent-user hint is retained and any anti-enumeration override must be explicit rather than silently passed.
+- Completed: **32 / 942**
+- Last reviewed: `Functionality|842|Wistron-BMC-00132-V003` / `97d6bb4b18e355ff`
+- Next source-verified pending identity: `Functionality|843|Wistron-BMC-00133-V003` / `e3be568a8702da92`
+- Latest disposition: First-login password change is removed from Pending as a parameterized genuine WebUI state-transition test. The source literal credential is historical data only, and an AccountService PATCH or ordinary profile change cannot replace proof that the mandatory Web prompt gates normal access and leads to protected new-password re-authentication.
 - Protected sources: unchanged.
 - DUT execution: none.

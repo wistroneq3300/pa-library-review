@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 32,
+  "source_key": "Functionality|842|Wistron-BMC-00132-V003",
+  "case_variant_id": "97d6bb4b18e355ff",
+  "source_ref": {"sheet": "Functionality", "source_row": 842, "code": "Wistron-BMC-00132-V003", "original_row_sha256": "21ff73c5c77bbee2148a44e38a79f663925e553570b02763f04eaf08b7b37de5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Change password when first login", "procedure": "Discover the BMC address, open its HTTPS WebUI, and authenticate on first login using the source-embedded root/default credential.", "criteria": "The WebUI prompts for a password change on first login, then refreshes/returns to authentication and permits login with the new password.", "deepseek": "PARTIAL proposes browser or Redfish AccountService PATCH, but a direct PATCH can bypass the WebUI first-login enforcement under test.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; rejects literal use of the embedded secret and requires genuine first-login state, trusted HTTPS identity, protected secrets, session invalidation, recovery and cleanup."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1004_97d6bb4b18e355ff.json",
+  "old_problem": "The historical record defined the safe one-time browser state transition correctly but retained Engineering Decision Pending because the exact endpoint/build, authentic first-login account, password/session policy, secret channel and recovery were absent.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_GENUINE_FIRST_LOGIN_WEB_ENFORCEMENT_TEST",
+  "disposition_reason": "The source semantics are clear: an authentic first-login state must gate normal WebUI access behind a password change and then require authentication with the new secret. Endpoint, vendor state flag/provisioning method, disposable account, password policy, protected secret injection, session expectations and recovery are controlled runtime prerequisites. The literal source credential is preserved as historical data but is never execution guidance, and an administrative API password write cannot satisfy the browser workflow.",
+  "decision_basis": [
+    "XLSX row 842, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "This case tests a one-time WebUI authentication state machine; it is distinct from ordinary profile password change and from direct AccountService mutation.",
+    "The version-matched Project/vendor first-login, account, password and session specifications are authoritative; account identity, secrets and policy values are not guessed.",
+    "ED-08 requires real WebUI evidence, ED-15 requires approved transition expectations, ED-20 preserves first-login coverage, ED-35 rejects an API-only substitution, and ED-38 requires explicit credential-change approval and recovery."
+  ],
+  "test_case": {
+    "test_name": "Verify mandatory password change on genuine first BMC Web login",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove that an approved disposable account in the vendor-defined first-login state cannot reach normal BMC Web content before changing its password, that the protected WebUI change succeeds under the approved policy, that the pre-change session/credential is invalidated as specified, and that a new clean login with the new secret establishes the intended identity and privilege.",
+    "required_package": [
+      "Immutable BMC identity, management address/MAC/certificate, firmware/WebUI/auth-provider build and authoritative management-path mapping",
+      "Vendor definition and non-secret observable proof of the genuine first-login/forced-change state plus approved provisioning/reset method",
+      "Approved disposable account and exact privilege; the source literal username/password is not approved unless separately authorized through a protected channel",
+      "Password complexity/history/expiration policy, protected temporary/new-secret handles, secret custodian and final rotation/retirement state",
+      "Supported browser/clean-profile context, expected forced page, redirect/refresh, cookie/session invalidation and audit-event mapping",
+      "Attempt budget below lockout/rate limits, MFA/CAPTCHA/SSO/CSRF handling, alternate administrator/console recovery, maintenance window and cleanup plan"
+    ],
+    "test_command": "Bind the target using independent BMC identity/certificate evidence, confirm the disposable account's non-secret genuine first-login flag and privilege, record baseline session/account/audit state, and approve policy, attempt budget, recovery and final account state. In a clean supported browser, supply the approved temporary secret through protected input exactly once; assert that the forced password-change page appears before any normal privileged page is accessible. Submit one policy-compliant generated secret through the WebUI, capture only redacted transition evidence, verify the specified refresh or return to login and pre-change session invalidation, then within the approved attempt budget prove the old credential is rejected and the new credential authenticates the intended identity/role. Preserve audit events, revoke sessions and rotate, restore or retire the test account as approved. Do not use the source literal secret, clear logs, retry automatically or substitute a Redfish PATCH for the browser test.",
+    "expected_result": "The identity-validated BMC accepts the approved account only into its mandatory first-login password-change gate; no normal privileged content is reachable first. The policy-compliant change succeeds once, the browser follows the documented refresh/re-authentication transition, the old session and credential are rejected as specified, and a clean login with the new secret establishes the expected identity/privilege. Audit events and final account/session state match Project policy with no leaked secret or management lockout.",
+    "pass_fail_basis": "PASS requires non-secret proof of genuine first-login state, real browser evidence of the forced gate before normal access, one approved WebUI password change, documented redirect/refresh, expected old-session and old-credential rejection, protected new-password login bound to the intended identity/privilege, audit evidence and verified cleanup/recovery readiness. A direct AccountService PATCH, ordinary profile change, HTTP success, refreshed page or new-password login without first-login-state evidence cannot pass. Missing prompt, direct dashboard access, wrong identity/role, session persistence contrary to policy, rejected/unknown new secret, lockout, secret disclosure or failed cleanup is FAIL. Missing account/policy/approval/recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Treat the source-embedded root/default credential only as immutable historical Master content; never paste, log, screenshot or execute it by assumption.",
+      "Verify endpoint, certificate, build, account alias and privilege before any secret submission; `ipmitool lan print` alone does not prove the active Web management endpoint.",
+      "Use only an approved disposable/lab account already placed in an authentic first-login state; do not reset a production/shared account merely to create the state.",
+      "Keep all passwords, cookies, CSRF tokens and recovery credentials in the approved protected channel and out of artifacts.",
+      "Do not submit until password policy, attempt budget, MFA/lockout behavior, alternate recovery and final owner/state are confirmed; no automatic retry.",
+      "An API call may be separately approved for setup/inspection/cleanup but cannot replace the forced WebUI prompt, redirect and re-authentication checkpoints.",
+      "Never clear audit, SEL or system logs; stop on certificate mismatch, wrong privilege, missing prompt, unexpected direct access, rejected secret or uncertain recovery."
+    ],
+    "expected_evidence": [
+      "BMC endpoint/MAC/certificate identity, firmware/WebUI/auth build and authoritative management-path mapping",
+      "Approved disposable account alias/privilege and non-secret proof of genuine first-login/forced-change state, policy and attempt budget",
+      "Redacted clean-browser DOM/screenshot evidence that the mandatory change gate precedes access to normal WebUI content",
+      "Redacted change submission and exact refresh/redirect plus proof of pre-change session invalidation, with no secret values",
+      "Bounded old-credential rejection and protected new-password login bound to the intended identity/privilege with audit events",
+      "Session revocation, account rotation/restore/retirement, recovery-path health and authorized engineer verdict"
+    ],
+    "recovery": "If the prompt is absent, the account locks, the new secret is rejected/unknown, or session state is unsafe, stop immediately and preserve first-failure browser/audit evidence. The authorized owner uses the pre-verified alternate administrator/console path to revoke sessions and restore, rotate or retire only the disposable account, then verifies BMC access and audit continuity. Do not guess credentials, repeat the transition or clear logs."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently describe a browser first-login forced-password-change transition. Placeholder/literal credentials are unsafe inputs, not competing requirements."},
+  "blocked": {"before": false, "after": false, "reason": "The required UI state transitions are explicit; endpoint/build, authentic first-login state, disposable account, policies, secret channel and recovery are supplyable prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC identity/build, genuine first-login account/provisioning, privilege, password/session/lockout policy, protected secrets, browser expectations, recovery and final account state.", "execution_status": "NOT STARTED"},
+  "external_authorities": [],
+  "project_authority": "The version-matched Project/vendor first-login, account, password, Web session and recovery specifications are authoritative. Any replacement of the source account/credential must retain equivalent forced-WebUI coverage and trace the approved override.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-15", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "literal_source_credential_execution_allowed": false, "api_only_substitution_allowed": false, "credential_mutation_requires_explicit_approval": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|843|Wistron-BMC-00133-V003", "next_pending_case_variant_id": "e3be568a8702da92"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
