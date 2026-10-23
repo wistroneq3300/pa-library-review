@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 79,
+  "source_key": "Functionality|890|Wistron-BMC-00180-V003",
+  "case_variant_id": "80c26dbd1a837918",
+  "source_ref": {"sheet": "Functionality", "source_row": 890, "code": "Wistron-BMC-00180-V003", "original_row_sha256": "dfc45bb548fa9ea2fd899bdac29a94a13e3e676848c1bcaabb5a425d6cfa725b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_GB_GPU1_M~TEMP_GB_GPU8_M", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES sends the compound range as one literal sensor and truncates fallback inventory; it omits `_M` semantics, eight stable GPU/source identities, population rules and complete UI/spec evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires suffix decoding, separate records, GPU/resource mapping and absent/disabled behavior."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1051_80c26dbd1a837918.json",
+  "old_problem": "One compound range response could be claimed as eight records without defining `_M`, fixing GPU indices to physical positions and UUID/BDF identities or proving the exact BMC temperature field. `_M` could be incorrectly assumed to mean memory and unrelated die/HBM telemetry or unstable `nvidia-smi` indices could substitute for the intended channels.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_EIGHT_ROW_GPU_M_MEASUREMENT_MATRIX",
+  "disposition_reason": "Require an authoritative `_M` measurement-point definition, then resolve GPU1_M through GPU8_M independently and bind each to the physical GPU position, PN/serial/UUID/BDF, population/power state and BMC controller/bus/mux/address field. Compare complete OOB/two-UI evidence with field-specific limits under the existing passive GPU/cooling state; no workload or reset is required.",
+  "decision_basis": [
+    "XLSX row 890, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, paired source cases and historical record were directly reviewed.",
+    "The compound range is not proven IPMI syntax and one response cannot satisfy eight independently mapped records.",
+    "Paired TEMP/PWR GPU*_M names suggest a module channel but do not prove module, memory, board or another field; `_M` remains Project-defined and host die/HBM data is not automatically equivalent.",
+    "ED-13 governs absent/disabled GPU N/A, ED-15 requires measurement-specific limits, ED-17 preserves XID/thermal logs and ED-20 preserves all eight identities."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_GB_GPU1_M through GPU8_M independently by physical GPU and Project-defined `_M` measurement point",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After defining `_M`, verify eight GPU-associated temperature records are separately human readable in Dashboard and Server Health, map to the correct physical GPU identities and exact BMC measurement fields, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications under the recorded passive presence, power, load and cooling state.",
+    "required_package": [
+      "Authoritative GB/GPU/`_M` naming and measurement-point definition plus chassis/GPU-baseboard PN/revision and BMC/BIOS",
+      "Per-index physical GPU position, board reference, GPU PN/serial/UUID/BDF/firmware and present/absent/disabled/power-state matrix",
+      "Per-GPU sensor part/source and BMC controller/bus/mux/address exact temperature field",
+      "Separate stable SDR/API and Dashboard/Server Health identities for GPU1_M through GPU8_M",
+      "Measurement-specific units/scaling, approved range/delta, threshold capability/values/hysteresis, health, polling/freshness and unavailable rules",
+      "Recorded GPU driver/persistence/power/load, fan speeds, inlet/airflow and approved NVIDIA-field equivalence if used",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/NVIDIA XID/thermal logs, start GPU workload, enable persistence, reset/power-cycle/reseat a GPU, alter fans/airflow/thresholds or flash firmware. Confirm `_M` and build an eight-row physical-position/UUID/BDF/population/BMC-field matrix. Enumerate the complete BMC repository and resolve GPU1_M through GPU8_M separately; do not use the compound range as one record unless explicitly documented. Review the Script before use. Capture per row its independent query status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Use NVIDIA telemetry only after exact GPU and measurement-field equivalence is approved. Stop without retry on missing, duplicate, swapped, stale or divergent rows.",
+    "expected_result": "Eight independently dispositioned records and UI rows map to the correct physical GPUs and documented `_M` BMC measurement fields for the population. Each applicable row matches its measurement-specific value/unit/threshold/status/freshness specification under the recorded passive state. Unmatched die/HBM, unstable software indices, aggregate health or one GPU never substitutes and GPU state remains unchanged.",
+    "pass_fail_basis": "PASS requires the authoritative `_M` definition, eight physical/stable GPU/source identities and separate complete OOB/two-UI/spec agreement for every applicable row with engineer verdict. One compound query, one GPU, `nvidia-smi` index, guessed memory meaning, unmatched die/HBM value or truncated output cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-limit value or required threshold/status mismatch is FAIL. Missing suffix/source/spec/reviewed method is NOT READY, not Pending or PASS; workload response, throttling, threshold events and protection are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, NVIDIA XID or thermal logs; GPU health history is relevant evidence.",
+      "Do not interpret the compound range as one record or accept fewer than eight independently dispositioned rows.",
+      "Do not infer GPU number from BDF order or `nvidia-smi` index and do not infer `_M` means memory.",
+      "Do not replace the BMC field with die/HBM/NVIDIA telemetry without exact measurement equivalence.",
+      "Do not load/reset/power-cycle/reseat GPUs, change persistence/driver/fans/airflow/thresholds or flash firmware.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; population N/A needs proof and no automatic retry is allowed."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS, authoritative `_M` definition and eight-row physical position plus GPU PN/serial/UUID/BDF/firmware/presence/power matrix",
+      "Per-GPU BMC controller/bus/mux/address and exact temperature field plus stable SDR/UI identity",
+      "Eight separate complete raw values, units, threshold capabilities/values, health and timestamps plus separate Dashboard and Server Health rows",
+      "Measurement-specific specification and recorded driver/persistence/power/load/fan/inlet/airflow state with any approved NVIDIA-field comparison",
+      "Missing/duplicate/swapped/stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-load/no-reset-or-service/no-retry proof, final GPU/BMC health and eight-row engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On suffix, GPU, population or management-field ambiguity, stale/divergent values or unexpected GPU/BMC health change, stop and preserve all first-pass evidence plus GPU state. Use approved read-only BMC/GPU inventory diagnostics; do not reset, power-cycle, reseat or load a GPU to force evidence. Any independently authorized GPU action requires its own recovery plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "`_M` is Project-defined and the range is unsuitable as one query, but Items, UI Procedure and Criteria consistently request passive display/spec validation of eight GPU-associated records."},
+  "blocked": {"before": false, "after": false, "reason": "The eight-record passive purpose is clear. Suffix definition, stable GPU/source mapping and field-specific acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "`_M` definition, eight physical GPU/UUID/BDF/population/BMC-field maps, separate sensor/UI identities, field-specific thresholds/status/freshness/N/A rules, passive GPU/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO GPU EXERCISE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define `_M`, physical GPU identity or field equivalence."}],
+  "project_authority": "GPU-baseboard population/index map, GPU inventory, BMC management-bus/sensor definition, measurement-specific thermal specification, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "eight_gpu_m_rows_required": true, "literal_range_query_allowed_without_documentation": false, "m_suffix_inferred_as_memory": false, "nvidia_field_substitution_allowed_without_equivalence": false, "gpu_exercise_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|891|Wistron-BMC-00181-V003", "next_pending_case_variant_id": "746a8aa500701e1d"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
