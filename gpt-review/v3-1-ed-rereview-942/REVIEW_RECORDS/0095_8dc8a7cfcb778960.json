@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 95,
+  "source_key": "Functionality|906|Wistron-BMC-00196-V003",
+  "case_variant_id": "8dc8a7cfcb778960",
+  "source_ref": {"sheet": "Functionality", "source_row": 906, "code": "Wistron-BMC-00196-V003", "original_row_sha256": "661a0b51c13c4395ed62bef2635c987940ba3ba66e4342d8b8ddcb5efdaf4701", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "STATUS_PSU1~6", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES queries a literal six-slot range, proving no individual record, fitted population, FRU/feed mapping, model-specific raw status semantics, latch/freshness or UI fidelity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires six separate model-aware raw reads without fault injection. V3.1 additionally keys all outcomes to immutable serial/feed/role identities, handles mixed/unfitted slots and preserves the distinct STATUS_CRPS1~2 architecture."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1067_8dc8a7cfcb778960.json",
+  "old_problem": "Six slots may be mixed-model, intentionally unfitted or hot-spare, and their standard/OEM PMBus bits can differ by firmware. A range, count, generic OK icon or single decoder could hide missing channels, simultaneous faults, sticky history, wrong slot/page mapping or a valid state that differs from active supplies.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SIX_SLOT_RAW_PSU_STATUS_MATRIX",
+  "disposition_reason": "Disposition all six physical slots and bind every fitted status record to FRU serial/model/firmware, bay, feed, redundancy role and the correct PMBus standard/OEM sources and decoder. Preserve raw concurrent conditions and verify both UI summaries under unchanged load/redundancy without clearing or injecting faults. Inventory and decoder inputs are runtime readiness, not a remaining engineering decision.",
+  "decision_basis": [
+    "XLSX row 906, same-row DeepSeek, exact GPT V2, selection manifest, preceding CRPS status/power cases, separate physical-service case and preserved V3.1 record were directly reviewed.",
+    "A six-row population matrix is required even when not all bays are fitted; absent/N/A is acceptable only under the approved chassis and per-model rules.",
+    "Each installed PSU needs its own decoder revision because standard and OEM bitfields, polarity and composite-state precedence can vary by model/firmware.",
+    "ED-03 forbids guessed OEM bits, ED-13 governs unfitted/standby states, ED-15 requires approved model decoders, ED-17 preserves fault history and ED-20 keeps every PSU slot separate from CRPS status."
+  ],
+  "test_case": {
+    "test_name": "Verify STATUS_PSU1 through STATUS_PSU6 as a complete serial-bound raw status matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify all six defined PSU slots have an approved fitted/unfitted status outcome and every fitted module's complete standard/OEM raw conditions map to the correct FRU, bay, feed and role and are decoded and displayed consistently in Dashboard and Server Health for the current power/redundancy configuration.",
+    "required_package": [
+      "Chassis/power-backplane/BMC identity and approved six STATUS_PSU versus two STATUS_CRPS architecture",
+      "Slots 1-6 fitted state, FRU PN/serial/model/firmware/rating, AC feed and active/standby/hot-spare/redundancy role",
+      "Per-model PMBus bus/address/page and STATUS_WORD/STATUS_BYTE/substatus/OEM register definitions, polarity and decoder revision",
+      "Raw-bit mapping for present, power-good, input/output, fan, temperature, communication, standby, degraded and fault conditions including concurrent states",
+      "Stable SDR/API/UI identity, event masks, composite-state precedence, latch/sticky/clear ownership, BMC polling and UI propagation/freshness rules",
+      "Approved fitted/unfitted/off/active/standby/hot-spare/redundancy-lost/degraded/failed/unavailable/stale outcomes",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Do not clear SEL, PMBus fault history, BMC or PSU logs and do not remove/reseat modules, switch feeds, change load/redundancy/hot-spare, reset or clear a PSU/BMC, inject faults, write registers or flash firmware. Build the six-row population/FRU/feed/role/decoder matrix. Enumerate complete inventory and read STATUS_PSU1 through STATUS_PSU6 separately; never send the tilde range, assume slot/page order or substitute STATUS_CRPS1~2. Review the Script before use. For each row capture defined absence or full raw standard/OEM words, concurrent decoded conditions, event masks, latch/freshness and timestamps plus matching Dashboard and Server Health evidence. Apply the correct model/role rule and stop without retry on missing, swapped, stale or divergent data.",
+    "expected_result": "All six slots have an approved explicit outcome. Each fitted raw status source and both UI views agree on bay, FRU serial/model/firmware, feed, role and applicable decoded composite health, with accepted latch/freshness behavior and no hidden unaccepted concurrent condition. Unfitted, standby and hot-spare states follow their documented rules; CRPS summaries and numeric power do not substitute.",
+    "pass_fail_basis": "PASS requires six slot outcomes, model-correct raw decoder provenance and complete independent raw/two-UI evidence with engineer acceptance under current role/freshness rules. A literal range, count, generic green icon, CRPS summary, numeric power value, one decoder for mixed models or fabricated numeric threshold cannot pass. Missing/swapped/stale identity, unjustified N/A, unknown/incorrectly decoded bit, unaccepted degraded/fault condition or raw/UI mismatch is FAIL. Missing population/model status references/role rules is NOT READY, not Pending or PASS. Removal, AC loss, failover and fault clear/recovery are separate coverage.",
+    "safety_gate": [
+      "Preserve SEL, PMBus fault history, BMC and PSU logs; do not clear intermittent/sticky evidence.",
+      "Explicitly disposition all six bays and bind fitted records to serial/model/feed/role and correct decoder; do not substitute CRPS status.",
+      "Do not apply one OEM decoder to another model/revision or flatten simultaneous bits into a top-level OK state.",
+      "Do not remove/reseat PSUs, switch feeds, change load/redundancy/hot-spare, reset/clear devices, inject faults, write registers or update firmware.",
+      "Do not truncate output, expose credentials, assume a cipher or execute an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/power-backplane/BMC identity and approved six-slot fitted/mixed-model population plus STATUS_PSU-to-CRPS relationship",
+      "Per-slot FRU PN/serial/model/firmware/rating/feed/role and PMBus bus/address/page/register plus stable SDR/API/UI identity",
+      "Complete raw standard/OEM fields, simultaneous decoded conditions, event masks, latch/history/freshness and synchronized timestamps with UI rows",
+      "Recorded feed/load/redundancy context and fitted/unfitted/off/active/standby/hot-spare/degraded/fault/unavailable/stale comparison",
+      "Missing/swapped/unknown-bit/divergent disposition and pinned Script/client/decoder audit",
+      "Preserved fault history, no-service/no-reset-or-fault-injection/no-retry proof, final PSU/BMC health and six-slot engineer verdict"
+    ],
+    "recovery": "No mutation is authorized. On population/decoder ambiguity, stale/lost data or unexpected PSU/BMC health, stop and preserve raw words, UI, logs and current feed/redundancy state. Obtain the correct per-model firmware reference and Project mapping and continue only read-only; do not reset or clear a supply to normalize status. Any later service/fault test requires separate authorization and recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "This passive row consistently targets six per-slot status displays. The physical-service/temperature conflict exists only in another source case; population and decoder gaps are readiness inputs."},
+  "blocked": {"before": false, "after": false, "reason": "The six-slot passive status objective and population-aware method are complete. FRU inventory and model-specific PMBus references can supply exact semantics without a fault."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Six-slot fitted/FRU/model/firmware/feed/role map, STATUS_PSU-to-CRPS architecture, per-model standard/OEM decoders, stable IDs, composite/latch/poll/freshness rules, role-specific acceptance and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO PSU, FEED, LOAD, REDUNDANCY, RESET, FAULT-CLEAR/INJECTION, REGISTER OR FIRMWARE CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Pin and review before use; it cannot define slot population, FRU/feed mapping, per-model OEM bits or role acceptance."}],
+  "project_authority": "Project slot/feed/redundancy map, PSU FRU inventory, each vendor PMBus firmware specification, BMC SDR/event mapping and WebUI schema define six outcomes.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "six_PSU_status_outcomes_required": true, "CRPS_substitution_allowed": false, "single_decoder_for_mixed_models_allowed": false, "fault_clear_or_injection_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|907|Wistron-BMC-00197-V002", "next_pending_case_variant_id": "73eb45829b19ae54"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
