@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 155,
+  "source_key": "Functionality|968|Wistron-BMC-00258-V002",
+  "case_variant_id": "76df9a21fbd2144e",
+  "source_ref": {"sheet": "Functionality", "source_row": 968, "code": "Wistron-BMC-00258-V002", "original_row_sha256": "8a4a40d070bc457e6375cec02d24df17c5263c666f4d3381aa6af3a668e881b5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "UBB_FPGA", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes an inline FirmwareInventory array and selects names containing both UBB and FPGA with insecure curl; substring conjunction still does not prove the physical target, collection completeness, active/staged role or actual WebUI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly adds exact UBB-FPGA binding, complete lifecycle evidence and strict no-update controls but leaves finite mapping/version inputs as a review decision."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1127_76df9a21fbd2144e.json",
+  "old_problem": "Multiple inventory records can include both UBB and FPGA text, and an AND-substring is still only a candidate filter. The UBB assembly identity/Status does not establish its FPGA firmware, and a displayed Version may be staged rather than active. The prior review fixed these risks but retained Pending for ordinary component/lifecycle/version configuration.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_EXACT_UBB_FPGA_FIRMWARE_LIFECYCLE_INVENTORY",
+  "disposition_reason": "Bind the exact FPGA instance within the approved UBB topology to durable firmware member identity, enumerate every firmware-inventory member/page, distinguish active/running from backup/staged/pending images under the vendor lifecycle model, and compare complete inventory with the actual WebUI and UBB-FPGA firmware matrix. No flash, activation, rollback or reset is part of this case.",
+  "decision_basis": [
+    "XLSX row 968, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 969 were directly reviewed; next pending was verified as Functionality row 969 / variant 112bf97fa18d1d33.",
+    "UBB assembly coverage and UBB_FPGA firmware coverage are independent: chassis manufacturer/model/status cannot substitute for FPGA SoftwareId/Version/lifecycle, and an FPGA version cannot prove the UBB assembly fields.",
+    "Redfish firmware inventory is a collection of member resources that may paginate. Complete traversal and member retrieval precede exact topology-backed target selection; the source's assumed `.FirmwareInventory[]` shape is not portable.",
+    "Version requires lifecycle context. The approved vendor map determines which record is active/running, backup, staged or pending activation; neither first/highest version nor naming establishes that role.",
+    "ED-02, ED-03, ED-07, ED-08, ED-12, ED-17, ED-19, ED-21 and ED-30 preserve exact target/lifecycle/evidence; ED-33 through ED-38 and ED-44 permit safe read-only parameterization while prohibiting cross-credit and firmware action."
+  ],
+  "test_case": {
+    "test_name": "Validate the exact UBB FPGA firmware component and active/staged lifecycle",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the precise FPGA physically associated with the Project-defined UBB is uniquely represented in complete BMC firmware inventory, its durable identity, active/running and any backup/staged firmware, health/state and updateability match the approved UBB-FPGA lifecycle matrix, and actual WebUI evidence agrees without using UBB assembly status as a substitute or changing firmware.",
+    "required_package": [
+      "Immutable SUT/BMC/platform/firmware/WebUI identity and approved UBB physical topology showing the exact FPGA instance and durable association",
+      "Service-root-discovered UpdateService/FirmwareInventory or approved SoftwareInventory collection, supported schemas, pagination and complete member access",
+      "Authoritative UBB-FPGA mapping using SoftwareId, related component/topology link or vendor durable ID; UBB+FPGA name match is locator-only",
+      "Vendor lifecycle semantics defining active/running, backup, staged, pending activation, unsupported and stale records plus expected uniqueness",
+      "Approved UBB-FPGA firmware matrix with per-role Version/VersionScheme, SoftwareId, Status.State/Health, Updateable and applicable date/minimum-version expectations",
+      "Actual WebUI Inventory and LEDs UBB_FPGA row/detail mapping, trusted TLS/protected credentials, freshness/redaction and no-update audit controls"
+    ],
+    "test_command": "READ ONLY. Verify immutable target and approved UBB-to-FPGA topology. Discover the advertised FirmwareInventory/SoftwareInventory collection, traverse all pages and retrieve every `Members[].@odata.id`, preserving full redacted records; do not assume an inline array. Use UBB+FPGA text only to find candidates, then select the exact device through the approved durable SoftwareId/component relationship and reject unrelated FPGA records, the UBB chassis resource and SMC_FPGA. Record Id/Name, SoftwareId, Version, VersionScheme, Status.State/Health, Updateable, ReleaseDate, LowestSupportedVersion and target-advertised lifecycle/OEM fields when supported. Classify active/running, backup and staged/pending solely with documented vendor semantics and compare each to its own Project baseline. Capture the actual rendered WebUI Inventory and LEDs UBB_FPGA row/detail and reconcile identity/version/lifecycle/health within freshness tolerance. Repeat read fingerprints only; never upload/update/activate/rollback firmware, reset FPGA/BMC, reboot, power-cycle or clear logs.",
+    "expected_result": "Complete inventory yields exactly one approved UBB FPGA component association, distinct from UBB assembly and SMC_FPGA. Its active/running version, identity and health exactly match the Project baseline; any backup/staged/pending record is separately labeled and matches its own expected state/version. Supported metadata is schema-valid, WebUI and API reconcile within freshness tolerance, no relevant member is missing/duplicated/unknown and no firmware, reset, power or management state changes.",
+    "pass_fail_basis": "PASS requires complete collection/member traversal, exact UBB-topology-backed FPGA binding, explicit active/backup/staged roles, exact expected version/health/updateability comparison and actual rendered WebUI evidence. A UBB+FPGA substring, UBB chassis status, first/highest version or version-only JSON cannot pass. Missing/duplicate/ambiguous component, staged version credited as active, unexplained null/unknown state, UI/API mismatch or wrong per-role version is FAIL. Missing mapping/lifecycle/version matrix is NOT READY, not Pending; no version expectation is invented.",
+    "safety_gate": [
+      "Use only certificate-verified protected GET/read operations discovered from the service; never follow UpdateService actions or expose credentials/security-sensitive inventory.",
+      "Bind the FPGA to the approved UBB physical topology and durable component ID; conjunction substring matching remains candidate discovery only.",
+      "Keep UBB assembly identity/Status and UBB_FPGA firmware lifecycle as independent coverage and keep active/running, backup, staged and pending roles separate.",
+      "Prohibit firmware upload, SimpleUpdate, HTTP push, activation, rollback, FPGA/BMC reset, reboot, power action and log clearing.",
+      "Retain complete raw collection/member data and actual rendered WebUI evidence before normalization/redaction, including unsupported/null fields.",
+      "Stop on incomplete pagination, ambiguous target, unknown lifecycle, credential exposure or WebUI/API disagreement and do not automatically retry with update/reset."
+    ],
+    "expected_evidence": [
+      "Immutable target and approved UBB-to-FPGA topology/durable member map with explicit UBB-assembly and SMC-FPGA separation",
+      "Complete paginated firmware/software inventory and protected full raw record for every UBB-FPGA-related member",
+      "Normalized per-role lifecycle matrix with SoftwareId, Version/VersionScheme, active/running, backup/staged, Status/Health, Updateable and exact baseline comparison",
+      "Actual rendered WebUI Inventory and LEDs UBB_FPGA row/detail visual artifacts with synchronized component/version/lifecycle timestamps",
+      "Explicit rejection of other UBB/FPGA candidates and accounting for missing/null/unsupported/stale fields",
+      "Pre/post fingerprints, preserved SEL/audit logs, no-update/no-activate/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On incomplete inventory, ambiguous UBB-FPGA association, unknown lifecycle, version mismatch or WebUI/API disagreement, stop and preserve/redact evidence and obtain the authoritative topology/lifecycle matrix. Do not upload, update, activate, roll back, reset, reboot, power-cycle, clear logs or automatically retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master clearly targets UBB_FPGA information in WebUI. DeepSeek's substring selection and assumed collection shape are incomplete implementation guidance, not a conflicting component."},
+  "blocked": {"before": false, "after": false, "reason": "Exact-target UBB FPGA firmware inventory is technically defined. Topology, lifecycle semantics and version baseline are bounded Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "UBB-to-FPGA topology/durable member map; actual inventory collection/schema; active/backup/staged lifecycle semantics; expected per-role versions/health/updateability; WebUI mapping; trust, freshness and redaction.", "execution_status": "NOT STARTED; READ-ONLY UBB_FPGA FIRMWARE INVENTORY ONLY; NO REDFISH, WEBUI, UPDATE, RESET, POWER OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines UpdateService and SoftwareInventory/FirmwareInventory collection/member fields used for complete read-only component lifecycle evidence."},
+    {"title": "DMTF Redfish Data Model Specification 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.3.pdf", "application": "Provides normative collection and SoftwareInventory semantics; the vendor/Project mapping assigns the exact member to the physical UBB FPGA and lifecycle role."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Provides authoritative schema artifacts for validation of target-advertised firmware inventory resources."}
+  ],
+  "project_authority": "The Project/vendor package uniquely binds the FPGA to the UBB and inventory member, defines lifecycle roles and supplies expected active/backup/staged versions. It enables read-only automation but never authorizes firmware mutation.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-07", "ED-08", "ED-12", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38", "ED-44"], "user_ed_01_30_reviewed": true, "exact_ubb_fpga_topology_identity_required": true, "ubb_assembly_and_smc_fpga_not_cross_credited": true, "substring_first_highest_version_rejected": true, "active_backup_staged_separated": true, "actual_webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "firmware_action_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|969|Wistron-BMC-00259-V002", "next_pending_case_variant_id": "112bf97fa18d1d33"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_redfish_inventory_sources_researched": true, "case_specific_ubb_fpga_lifecycle_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
