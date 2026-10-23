@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 74,
+  "source_key": "Functionality|884|Wistron-BMC-00174-V003",
+  "case_variant_id": "62088eee318530d7",
+  "source_ref": {"sheet": "Functionality", "source_row": 884, "code": "Wistron-BMC-00174-V003", "original_row_sha256": "846434e10c27b38fff88da23922a21601c63d26358376ef25aedb8f9d75467e3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_GB_NVS1~4", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES treats NVS1~4 as one literal sensor and truncates fallback inventory; it omits GB/NVS semantics, four physical ASIC/fabric identities, BMC source fields, complete records and UI/spec correlation.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires four platform-specific records but leaves NVS as a generic GPU/board zone rather than proving the likely NVSwitch ASIC identities."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1046_62088eee318530d7.json",
+  "old_problem": "One literal range query could be presented as four temperatures without confirming that GB means GPU baseboard and NVS1-4 are NVSwitch-class ASICs. No record was independently bound to physical ASIC, stable fabric identity or BMC management temperature field, so GPU slot temperature, aggregate fabric health or one NVS could falsely satisfy the row.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FOUR_ROW_GPU_BASEBOARD_NVS_TEMPERATURE_MATRIX",
+  "disposition_reason": "Confirm GB/NVS terminology, then resolve NVS1 through NVS4 independently and bind each to the physical baseboard ASIC, part/firmware, stable NVSwitch/fabric identity and BMC controller/bus/mux/address field. Compare complete OOB/two-UI records with per-ASIC thermal limits under the existing GPU/NVLink/fabric and cooling state. No fabric load or reset is required.",
+  "decision_basis": [
+    "XLSX row 884, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "Tilde shorthand is not proven IPMI syntax and one response cannot satisfy four independent ASIC identities.",
+    "NVS plausibly denotes NVSwitch devices on the GPU baseboard, but the Project must confirm that meaning; GPU slots, GPU die temperature and aggregate fabric status are not equivalent.",
+    "ED-13 governs baseboard-variant N/A, ED-15 requires per-ASIC acceptance, ED-17 preserves NVIDIA/fabric logs and ED-20 preserves all four identities."
+  ],
+  "test_case": {
+    "test_name": "Verify GPU-baseboard NVS1 through NVS4 temperatures independently by ASIC, fabric identity and BMC source",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "After confirming GB/NVS terminology, verify four temperature records are separately human readable in Dashboard and Server Health, map to the correct physical NVS ASICs and BMC fields on the exact GPU-baseboard revision, and independently meet applicable value, units, health, threshold/hysteresis and freshness specifications under the recorded passive GPU/NVLink/fabric and cooling state.",
+    "required_package": [
+      "Project confirmation that GB is the relevant GPU baseboard and NVS1-4 identify its four NVSwitch-class devices, plus exact chassis/baseboard PN/revision and BMC/BIOS",
+      "Per-index physical ASIC location, vendor/part/device identity, firmware and stable UUID/fabric identifier",
+      "GPU/NVLink/NVSwitch topology and Fabric Manager inventory for identity correlation",
+      "Per-ASIC BMC controller/bus/mux/address path and exact die or board temperature field",
+      "Separate stable SDR/API and Dashboard/Server Health identities for NVS1 through NVS4",
+      "Per-ASIC units/scaling, approved range/delta, threshold capability/values/hysteresis, health, freshness and baseboard-variant rules",
+      "Recorded GPU/NVLink/fabric load and power, fan/baseboard airflow and approved NVIDIA-field equivalence if used",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/NVIDIA XID/fabric logs, start GPU/NVLink traffic or stress, reset an NVS or Fabric Manager, change links/power, service the baseboard, alter fans/airflow/thresholds or flash firmware. Confirm GB/NVS meanings and build a four-row ASIC/part/firmware/fabric/BMC-source matrix. Enumerate the complete BMC repository and resolve NVS1 through NVS4 separately; do not use `TEMP_GB_NVS1~4` as one record unless explicitly documented. Review the Script before use. Capture per ASIC its independent query status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus matching Dashboard and Server Health rows. Use NVIDIA telemetry only after exact ASIC and temperature-field equivalence is approved. Stop without retry on missing, duplicate, swapped, stale or divergent rows.",
+    "expected_result": "Four independently dispositioned records and UI rows map to the correct physical NVS ASICs, stable fabric identities and documented BMC temperature fields for the installed baseboard variant. Each applicable row matches its value/unit/threshold/status/freshness specification under the recorded passive state. GPU die/slot temperature or aggregate fabric health never substitutes, and GPU/fabric/hardware state remains unchanged.",
+    "pass_fail_basis": "PASS requires authoritative GB/NVS semantics and separate complete OOB/two-UI/spec agreement for every applicable NVS1-4 row with physical/fabric/source proof and engineer verdict. One literal range query, one ASIC, GPU slot/die temperature, aggregate health, label-only match or truncated output cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-limit value or required threshold/status mismatch is FAIL. Missing topology/source-field/spec/reviewed method is NOT READY, not Pending or PASS; fabric traffic, functionality, reset and firmware are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, NVIDIA XID or fabric logs; switch, NVLink, GPU and thermal history is relevant evidence.",
+      "Do not interpret the range as one record or accept fewer than four independently dispositioned ASIC rows.",
+      "Do not map NVS indices to GPU slots or OS enumeration; bind physical baseboard ASICs to stable fabric identities.",
+      "Do not replace the BMC field with NVIDIA/Fabric Manager telemetry without controller/bus/mux/address and exact field equivalence.",
+      "Do not load/reset/flash/service GPU or fabric devices or alter links, power, fans, airflow or thresholds.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; variant N/A needs proof and no automatic retry is allowed."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS, confirmed GB/NVS terminology and four-row ASIC physical location, part/firmware and stable fabric-identity matrix",
+      "GPU/NVLink/NVSwitch topology and Fabric Manager inventory used only for identity correlation",
+      "Per-NVS BMC controller/bus/mux/address and exact temperature-field source",
+      "Four separate complete raw identities, values, units, threshold capabilities/values, health and timestamps plus separate Dashboard and Server Health rows",
+      "Per-ASIC specification plus passive GPU/NVLink/fabric load/power and fan/baseboard airflow state with tolerance/update-lag and any approved equivalent telemetry",
+      "Missing/duplicate/swapped/stale/divergent disposition, pinned Script or alternate-method audit, no-clear/no-load/no-reset/no-service/no-retry proof, final GPU/fabric/BMC health and four-row engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On terminology, ASIC, fabric or management-field ambiguity, stale/divergent values or unexpected GPU/fabric/BMC health change, stop and preserve all first-pass evidence plus topology/fabric state. Use approved read-only BMC/NVIDIA inventory diagnostics; do not reset Fabric Manager, switches or GPUs to force evidence. Any independently authorized fabric action requires its own recovery plan and owner execution."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The range and terminology need Project confirmation, but Items, UI Procedure and Criteria consistently request passive display/spec validation of four temperature records."},
+  "blocked": {"before": false, "after": false, "reason": "The four-record passive intent is identifiable. GB/NVS semantics, ASIC/fabric/source mapping and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "GB/NVS definitions, baseboard revision and four-ASIC part/firmware/fabric/BMC-source map, separate sensor/UI identities, per-ASIC thresholds/status/freshness/N/A rules, passive fabric/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO GPU/FABRIC EXERCISE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define GB/NVS ASIC, fabric or BMC management-field identity."}],
+  "project_authority": "GPU-baseboard schematic/layout and NVS map, NVSwitch/fabric inventory, BMC management-bus definition, ASIC thermal limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "four_nvs_rows_required": true, "literal_range_query_allowed_without_documentation": false, "gpu_or_aggregate_substitution_allowed": false, "nvidia_field_substitution_allowed_without_equivalence": false, "gpu_or_fabric_exercise_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "skipped_nonpending_row_verified": "Functionality|885|Wistron-BMC-00175-V003 / 1236d7f856c3dd2f is COMPLETED_FINAL_AUDIT_BASELINE sequence 51", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|886|Wistron-BMC-00176-V003", "next_pending_case_variant_id": "ef5cf8a2364e8615"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
