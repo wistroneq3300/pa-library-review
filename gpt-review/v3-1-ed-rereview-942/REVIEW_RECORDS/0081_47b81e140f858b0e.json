@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 81,
+  "source_key": "Functionality|892|Wistron-BMC-00182-V003",
+  "case_variant_id": "47b81e140f858b0e",
+  "source_ref": {"sheet": "Functionality", "source_row": 892, "code": "Wistron-BMC-00182-V003", "original_row_sha256": "ecfddd07e200fa8d2b0445fc68b94ba0e84cd9b6be998b5942f96658835b277b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_GB_FPGA", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES may read the label but truncates fallback inventory and cannot prove the exact FPGA/bitstream, BMC source, on-die versus board-local field or complete UI/spec agreement.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires FPGA identity/location, passive read-only collection and complete UI/spec evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1053_47b81e140f858b0e.json",
+  "old_problem": "A named temperature could be accepted without proving the exact FPGA instance, role, board reference and active image or whether the value is an on-die/package sensor or nearby board channel. Another FPGA/CPLD, board aggregate, version evidence or host utility value could falsely substitute, and reset/programming could be added without authority.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_GPU_BASEBOARD_FPGA_TEMPERATURE_CHECK",
+  "disposition_reason": "Bind the stable record and both UI rows to the exact FPGA silicon, part/revision/reference designator/role and active image, then to the BMC controller/bus/mux/address die/package/board field. Compare complete evidence with measurement-specific thermal limits under the existing passive power/load/cooling state. Identity and limits are Project parameters; no FPGA state change is required.",
+  "decision_basis": [
+    "XLSX row 892, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest, related source cases and historical record were directly reviewed.",
+    "FPGA labeling does not distinguish among programmable devices or prove whether the reading is silicon junction, package or adjacent board temperature.",
+    "Active bitstream identity helps bind the target but is not itself temperature evidence; host/vendor telemetry is equivalent only when the same FPGA and field are proven.",
+    "ED-15 requires field-specific limits, ED-17 preserves FPGA/thermal logs and ED-14 keeps dynamic threshold and functional behavior separate."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_GB_FPGA against the exact FPGA, active image and BMC measurement field",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify TEMP_GB_FPGA maps to the intended GPU-baseboard FPGA and exact die/package/board field and is human readable in Dashboard and Server Health with correct value, units, health, implemented thresholds/hysteresis and freshness under the recorded passive FPGA/system load and cooling state.",
+    "required_package": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS and FPGA role",
+      "FPGA vendor/device/part/revision/serial/reference designator, active bitstream/image version and configuration state",
+      "Exact die/package or board-local sensor part and BMC controller/bus/mux/address/field",
+      "Stable SDR/API and Dashboard/Server Health identities",
+      "Field-specific units/scaling, approved range/delta, threshold capability/values/hysteresis, health, polling/freshness and unavailable rules",
+      "Recorded host/GPU/FPGA power and functional-load state, fan speeds, inlet and baseboard airflow",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear SEL/kernel/FPGA/thermal logs, start FPGA workload, reset/reconfigure/reprogram the FPGA, reload a bitstream, service hardware, alter fans/airflow/thresholds or flash firmware. Confirm the exact FPGA instance/role/reference and active image and bind the BMC measurement field. Resolve one stable TEMP_GB_FPGA identity from the complete repository; review the Script before use. Capture complete identity, value, units, capability/threshold/hysteresis, health and timestamp plus unchanged Dashboard and Server Health rows. Record passive FPGA/system load and cooling state and compare only with the approved field-specific specification. Stop without retry on identity, source, stale or UI/OOB/device divergence.",
+    "expected_result": "One stable record and both UI rows map to the documented FPGA instance, active image context and exact BMC die/package/board field. Complete OOB/UI value, units, thresholds, health and freshness match field-specific limits under the recorded passive state. Another FPGA/CPLD, board aggregate, image/version or unmatched host field never substitutes and FPGA state remains unchanged.",
+    "pass_fail_basis": "PASS requires exact FPGA/image/source identity, complete OOB and both-UI agreement, field-specific specification and engineer verdict. Label existence, image version, another programmable device, board aggregate, plausible value, truncated output or command success alone cannot pass. Wrong/stale identity, out-of-limit value or required threshold/status/UI mismatch is FAIL. Missing FPGA/source/spec/reviewed method is NOT READY, not Pending or PASS; logic function, workload response, reset/programming and dynamic threshold behavior are outside scope.",
+    "safety_gate": [
+      "Do not clear SEL, kernel, FPGA or thermal logs; device-health context must be preserved.",
+      "Do not accept the label alone; prove exact FPGA silicon/reference/role/image and die/package/board measurement point.",
+      "Do not replace the BMC field with FPGA function/version evidence or vendor telemetry without exact field equivalence.",
+      "Do not load/reset/reconfigure/reprogram/service the FPGA, reload bitstream, alter cooling/thresholds or flash firmware.",
+      "Preserve the existing power/load/cooling state; static display does not authorize dynamic testing.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard PN/revision, BMC/BIOS and exact FPGA vendor/device/part/revision/serial/reference/role/active-image identity",
+      "BMC controller/bus/mux/address and exact die/package/board temperature field with stable SDR/UI identity",
+      "Complete stable raw value, units, threshold capabilities/values, health and timestamp plus separate Dashboard and Server Health rows",
+      "FPGA/field-specific specification and recorded host/GPU/FPGA power/load, fan/inlet/airflow state with any approved equivalent telemetry",
+      "Stale/divergent disposition and pinned Script or alternate-method audit",
+      "No-clear/no-load/no-reset-or-programming/no-retry proof, final FPGA/BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On FPGA, active-image or measurement-field ambiguity, stale/divergent data or unexpected FPGA/BMC health change, stop and preserve the first complete evidence plus configuration state. Use approved read-only BMC/FPGA inventory diagnostics; do not reset, reload or reprogram the device to force evidence. Any independently authorized FPGA action requires its own recovery image and owner execution."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The exact FPGA and field are Project-defined, but Items, UI Procedure and Criteria consistently request passive display/spec validation of one FPGA-associated temperature."},
+  "blocked": {"before": false, "after": false, "reason": "The passive FPGA-temperature purpose is clear. Exact device/image/source field and acceptance are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "FPGA silicon/part/reference/role/active-image and BMC-source field, stable sensor/UI identity, field-specific thresholds/status/freshness, passive load/cooling state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO FPGA STATE CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot identify FPGA silicon/image or measurement field."}],
+  "project_authority": "GPU-baseboard schematic/BOM, FPGA inventory and image manifest, FPGA thermal/telemetry specification, BMC management-bus/SDR definition, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-14", "ED-15", "ED-17", "ED-20", "ED-31", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "fpga_instance_image_and_field_required": true, "device_or_version_substitution_allowed": false, "fpga_functional_or_dynamic_threshold_coverage_claimed": false, "fpga_state_change_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|893|Wistron-BMC-00183-V003", "next_pending_case_variant_id": "309fc36221555fcc"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
