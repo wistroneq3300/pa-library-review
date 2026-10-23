@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 88,
+  "source_key": "Functionality|899|Wistron-BMC-00189-V003",
+  "case_variant_id": "f8e41fc21150e435",
+  "source_ref": {"sheet": "Functionality", "source_row": 899, "code": "Wistron-BMC-00189-V003", "original_row_sha256": "f53de92daec80094a48f9befa19fb3b4f17f402a78320c9ea8badde2df53d6d5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "PWR_GB_GPU1_M~PWR_GB_GPU8_M", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES sends the complete GPU1_M-to-GPU8_M expression as one literal sensor and truncates fallback data. It cannot prove eight records or establish `_M`, component identity, electrical boundary, controller scaling and UI parity.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires suffix decoding and separate records but lists memory/module/input/output as possibilities. The exact `_M` meaning remains Project-defined and must be explicitly distinguished from the adjacent non-M family."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1060_f8e41fc21150e435.json",
+  "old_problem": "The source does not define `_M`; memory, module, motherboard, mezzanine or a monitor-channel tag would imply different components and electrical boundaries. A literal range or reuse of the non-M result could omit eight independent channels, and dynamic load language from another case could be incorrectly imported into this passive UI check.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_EIGHT_GPU_M_LABELED_POWER_CHANNEL_MATRIX",
+  "disposition_reason": "Keep `_M` literal until the platform power tree defines it, then bind each of eight records to a physical GPU/component and exact power-monitor channel and boundary. Capture all eight passive readings and both UI views with aligned timestamps and unchanged GPU state. Project-specific suffix/boundary/limit inputs are runtime prerequisites; they do not require another engineering decision.",
+  "decision_basis": [
+    "XLSX row 899, same-row DeepSeek, exact GPT V2, selection manifest, adjacent non-M row, related dynamic/list rows and the preserved V3.1 record were directly reviewed.",
+    "Related use of the word module is only a clue; it is not authority to expand `_M` as module or memory, nor to select a rail/register.",
+    "This passive Sensor Page identity does not inherit workload or threshold-event stimulus from a different test. Eight `_M` outcomes remain independent of eight non-M outcomes.",
+    "ED-03 prevents OEM monitor guessing, ED-15 requires boundary/state/window-specific criteria, ED-17 preserves logs and ED-20 prevents merging the two GPU power families."
+  ],
+  "test_case": {
+    "test_name": "Verify PWR_GB_GPU1_M through PWR_GB_GPU8_M as eight Project-defined M-labeled power channels",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every `_M` GPU-related power record is separately present or has an approved absent/powered-off outcome, maps to its authoritative physical GPU/component and monitor field, and presents the correct quantity, units, value, health, supported thresholds and freshness in Dashboard and Server Health under the unchanged passive state.",
+    "required_package": [
+      "Chassis/GPU-baseboard, BIOS, BMC/SDR and monitor-controller identity plus authoritative `_M` definition and explicit difference from the non-M family",
+      "Eight-row physical position, component/module identity, GPU PN/serial/UUID/BDF/VBIOS/FW, presence and power-state map",
+      "Per-record electrical boundary, quantity/units and monitor controller/bus/mux/address/channel/register identity",
+      "Per-channel scaling, accuracy, averaging/integration window, update/polling rules and stable SDR/API/UI names",
+      "Approved boundary/state-specific tolerance/limit, threshold capability/values/hysteresis, health, stale and unavailable behavior",
+      "Recorded driver/persistence, clocks, power cap, processes/workload, fan/inlet/airflow and any approved boundary-equivalent telemetry",
+      "Validated protected read-only BMC/browser client and pinned immutable reviewed `sensor.git` revision/checksum or approved manual method"
+    ],
+    "test_command": "Preserve SEL, kernel, NVIDIA XID, power and thermal logs. Do not expand `_M` from its letter or borrow the non-M/dynamic-test interpretation. Build the approved eight-row `_M` component/monitor matrix, enumerate the full sensor repository and query all exact records separately; never use the tilde expression as one sensor. Review the Script before use. Capture each record's stable identity, physical GPU/component/UUID/BDF, monitor field, electrical boundary, quantity/units, value, supported thresholds, health and synchronized timestamp plus matching Dashboard and Server Health visual rows. Record the unchanged GPU policy/load/power/cooling state and apply only the approved boundary/window rule. Stop without retry on missing, duplicate, swapped, stale or divergent data; perform no load or mutation.",
+    "expected_result": "All eight `_M` identities have explicit independent outcomes distinct from the non-M family. Each applicable OOB record and both UI views agree with the Project-defined physical component, monitor channel, electrical boundary, quantity, units, value, supported threshold fields, health and freshness and satisfy the approved passive-state rule. Zero/unavailable for absent or powered-off hardware is valid only when specified; no guessed meaning or dynamic stimulus is used.",
+    "pass_fail_basis": "PASS requires the authoritative `_M` definition, eight component/monitor mappings and complete independent OOB/two-UI evidence accepted against boundary/state/window-specific rules. A literal range, truncated inventory, count, non-M data, guessed memory/module meaning, generic watt limit or host reading from another boundary cannot pass. Missing/swapped/duplicate/stale identity, wrong component/boundary/unit/scaling, out-of-rule value or required UI/status/threshold mismatch is FAIL. Missing `_M` definition, topology, monitor reference or acceptance is NOT READY, not Pending or PASS. Load response and threshold assert/deassert remain separate cases.",
+    "safety_gate": [
+      "Do not clear SEL, XID, kernel, power or thermal logs; existing evidence is part of the passive state.",
+      "Do not infer `_M` as memory, motherboard or module, and do not substitute the adjacent non-M family.",
+      "Map all eight by physical component plus serial/UUID/BDF and exact monitor channel; GPU index alone is insufficient.",
+      "Do not start workload, change persistence/clocks/cap/power state/firmware/thresholds, reset/power-cycle/reseat hardware or alter cooling.",
+      "Do not guess OEM parameters, compare unlike boundaries/windows, truncate output, expose credentials or execute an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/GPU-baseboard/BIOS/BMC/monitor identity, authoritative `_M` definition and explicit non-M distinction",
+      "Eight-row physical position/component identity/GPU PN/serial/UUID/BDF/VBIOS/FW/presence/power-state map",
+      "Per-record electrical boundary and controller/bus/mux/address/channel/register/scaling/window map with stable SDR/UI identity",
+      "Complete separate raw values, units, supported thresholds, health and synchronized timestamps plus matching Dashboard and Server Health visual evidence",
+      "Recorded driver/persistence/clocks/cap/processes/workload/fan/inlet/airflow and boundary/time-aligned rule application or approved corroboration",
+      "Missing/swapped/powered-off/stale/divergent disposition, Script/client audit, no-clear/no-load-or-policy-change/no-retry proof, final GPU/BMC health and eight-channel engineer verdict"
+    ],
+    "recovery": "No mutation is planned. If `_M`, component mapping, boundary or sampling semantics are unknown, or readings diverge, stop and preserve first-pass evidence and current GPU/power/cooling context. Obtain the platform power-tree and monitor references before further read-only collection; do not create workload or change GPU state to diagnose this row. Any separate stimulated test requires its own approval, safety gate and recovery."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The `_M` expansion and electrical boundary are underdefined, but Items, UI Procedure and Criteria consistently request passive display/specification validation. Adjacent non-M and dynamic cases are distinct coverage, not conflicting instructions."},
+  "blocked": {"before": false, "after": false, "reason": "The passive eight-point objective and safe parameterized method are clear. Project power-tree/controller documentation can bind `_M`, topology and acceptance at execution readiness."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Authoritative `_M` versus non-M definition, eight physical GPU/component/UUID/BDF/monitor mappings, electrical boundary, scaling/window, stable IDs, state-specific limit/threshold/status/freshness/powered-off rules, passive GPU context and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; NO GPU LOAD, POLICY, POWER, FIRMWARE, THRESHOLD OR COOLING CHANGE; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after pinning and review; it cannot define `_M`, physical component topology, electrical boundary, controller scaling or acceptance."}],
+  "project_authority": "GPU-baseboard power tree and `_M` label definition, immutable GPU/component topology, monitor-controller specification, BMC SDR/WebUI schema and power recipe define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "eight_M_labeled_outcomes_required": true, "M_expansion_guessed": false, "non_M_substitution_allowed": false, "dynamic_load_inherited": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|900|Wistron-BMC-00190-V003", "next_pending_case_variant_id": "090021d31f0d8d4f"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
