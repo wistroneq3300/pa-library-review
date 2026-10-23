@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 99,
+  "source_key": "Functionality|910|Wistron-BMC-00200-V002",
+  "case_variant_id": "f342f7c7102da38d",
+  "source_ref": {"sheet": "Functionality", "source_row": 910, "code": "Wistron-BMC-00200-V002", "original_row_sha256": "d302441e6e118638532eedf778e2a38716c4d3fefd471550d64e2ff4839256ca", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SOL console - in BIOS setup menu and output BIOS log , keyboard type check", "procedure": "Conditionally run an unspecified IPMI OEM `Set SOL Enable`; open Operations > SOL console in BMC WebUI; power on SUT, enter BIOS setup, inspect console and keyboard; generic setup says clear logs.", "criteria": "SOL shows boot log and BIOS setup screen, and keyboard input responds correctly.", "script": null, "deepseek": "NO correctly refuses to substitute plain SSH for BIOS-stage SOL but provides no approved OEM enablement, serial/UART parameters, WebUI evidence, power authorization, safe key matrix or recovery.", "gpt_v2": "MANUAL ONLY adds target, safe BIOS input and cleanup controls. V3.1 refines this to REQUIRES PACKAGE / USER CONFIRMATION because approved SOL transcript capture and bounded keys can be assisted while WebUI rendering, BIOS interpretation and power/BIOS boundaries remain human-controlled."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1071_f342f7c7102da38d.json",
+  "old_problem": "The source names an OEM enable action but gives no command bytes, channel, payload instance, UART or BIOS-redirection parameters; guessing them could affect the wrong target. `Any key` is unsafe in BIOS, plain SSH/OS serial logs cannot prove BIOS-stage WebUI SOL, and the power-on plus exit/restore path is unspecified.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_HYBRID_WEBUI_SOL_BIOS_TRANSCRIPT_AND_SAFE_KEY_MATRIX",
+  "disposition_reason": "Retain the exact BMC WebUI SOL and BIOS-stage coverage. Require vendor/Project-approved enable/readback/restore and serial parameters instead of guessing OEM bytes, one separately approved power-on/boot, attributable POST/setup markers and a harmless navigation-only key matrix with human visual confirmation. Project bindings and authorization are execution prerequisites, not further engineering decisions.",
+  "decision_basis": [
+    "XLSX row 910, same-row DeepSeek, exact GPT V2, selection manifest, following OS-stage SOL case and preserved V3.1 record were directly reviewed.",
+    "SOL transport capture and bounded input may be assisted by an approved client, but the source explicitly covers the BMC WebUI path and BIOS menu rendering; host SSH or an alternate client alone cannot substitute.",
+    "ED-03 permits a standard management draft but prohibits guessed OEM parameters, ED-08 requires true visual evidence, ED-11 prohibits arbitrary BIOS changes and ED-20 keeps BIOS-stage SOL separate from OS-stage SOL.",
+    "The source power-on and BIOS interaction are state-changing/human-controlled boundaries. This review specifies them but does not execute them."
+  ],
+  "test_case": {
+    "test_name": "Verify BMC WebUI SOL BIOS POST/setup rendering and safe keyboard transport",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the intended BMC WebUI SOL session carries attributable BIOS POST/boot output, renders the BIOS setup menu and transports an approved harmless keyboard navigation matrix correctly for the verified SUT without saving BIOS changes or substituting OS/SSH evidence.",
+    "required_package": [
+      "BMC/SUT asset, MAC/IP, BMC firmware/WebUI build, BIOS build and current host power state with independent observation/recovery path",
+      "Current SOL enable-state readback and exact vendor-approved enable/disable or WebUI method; no guessed OEM bytes",
+      "SOL channel/payload instance/privilege, UART baud/data/parity/stop/flow, terminal type/encoding and BIOS serial-redirection port map",
+      "Supported WebUI browser/client/account/role/session/audit configuration and any approved alternate capture client with stated coverage gap",
+      "Approved maintenance/power-on/boot window, BIOS-entry timing and target-specific POST/setup markers",
+      "Harmless keys such as arrows, Tab and Esc with expected focus/navigation, latency/drop/repeat/garble limits and prohibited save/reset/security/storage actions",
+      "Exit-without-save, SOL close, temporary-enable restore, final-state verification and recovery plan"
+    ],
+    "test_command": "HYBRID; DO NOT EXECUTE POWER OR BIOS ACTIONS WITHOUT POINT-OF-ACTION APPROVAL. Preserve SEL/BMC/SOL/boot/host logs and verify the BMC/SUT plus current state. If SOL is disabled, use only the exact approved enable/readback method and record original state; never guess OEM bytes/channel/UART parameters. A human opens Operations > SOL console in the WebUI and performs one approved host power-on/boot, capturing timestamped target-specific POST markers and BIOS setup rendering. On a preselected harmless menu, send only approved navigation keys and visually record exact response/latency/drop/repeat/garble. Stop at first anomaly, exit BIOS without saving, close SOL, restore only a temporary approved enable state and verify final host/BMC/BIOS state. An alternate client is corroborative unless explicitly approved as an override.",
+    "expected_result": "The source WebUI SOL connects to the correct SUT, shows complete attributable BIOS-stage POST/boot markers and the BIOS setup menu, and every harmless key produces the expected single navigation/focus response within limits with no dropped/repeated/garbled input. BIOS configuration remains unchanged, the approved boot path completes or stops at its defined endpoint, SOL closes cleanly and any temporary enable state is restored. OS/SSH output alone does not pass.",
+    "pass_fail_basis": "PASS requires approved SOL/BIOS serial parameters and enablement, visual WebUI evidence of target-specific POST plus BIOS setup, complete safe-key results, one authorized boot, exit-without-save and verified final/restore state with engineer/human confirmation. Linux SSH, OS-stage serial output, passive boot logs, an alternate client without WebUI equivalence or arbitrary `any key` cannot pass. Wrong target, missing/garbled BIOS output, unsafe/incorrect/repeated/dropped key, unintended BIOS change, failed cleanup or unaccepted host state is FAIL. Missing OEM method, parameters, power approval, markers or recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not clear SEL, BMC audit, SOL, boot or host logs; preserve baseline and first failure.",
+      "Verify BMC/SUT and host power state before enabling SOL or presenting power-on; no reset, power-cycle or automatic retry substitute.",
+      "Do not guess OEM enable bytes, channel, payload, privilege, UART or terminal parameters; use only vendor/Project-approved values.",
+      "Do not save BIOS changes or alter boot order, firmware, security, passwords, storage or platform settings; use only the harmless navigation matrix.",
+      "Stop on wrong target, garbled stream, repeated/dropped key or uncertain BIOS state; exit without save, close SOL and restore only approved temporary state."
+    ],
+    "expected_evidence": [
+      "BMC/SUT identity, BMC/BIOS/WebUI/client versions, host power baseline, SOL enable state/method and channel/UART/BIOS-redirection configuration",
+      "Power/boot and WebUI session approvals, redacted login/session/audit timestamps and independent host observation",
+      "Raw timestamped SOL capture with target-specific POST/boot markers plus screenshots proving WebUI BIOS setup rendering",
+      "Per-key matrix with transmitted harmless key, visible response/focus, latency and repeated/dropped/garbled result with human confirmation",
+      "Exit-without-save, session close, temporary-state restore and unchanged final BIOS/BMC/host evidence",
+      "Preserved logs, explicit alternate-client/WebUI coverage difference, no-retry proof and engineer-owned verdict"
+    ],
+    "recovery": "On wrong target, garbled output, unexpected key behavior or uncertain BIOS state, cease input immediately, exit without saving if safely possible and close SOL. Verify host/BMC/BIOS state through the independent path, preserve first-failure evidence and restore only a documented temporary SOL state. Do not guess another OEM command, reboot or power-cycle automatically; escalate under the approved recovery SOP."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Title, Procedure and Criteria consistently require BIOS-stage BMC WebUI SOL output and keyboard response. Missing OEM/serial parameters are Project readiness inputs, not contradictory purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The hybrid WebUI/BIOS purpose, safe key scope and recovery are complete. Vendor/Project documentation can supply enablement, serial parameters, markers and power authorization."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact SOL enable/readback/restore method, channel/payload/UART/BIOS-redirection settings, WebUI/client versions, one boot approval, POST/setup markers, safe-key limits and independent recovery plan.", "execution_status": "NOT STARTED; HYBRID HUMAN BIOS VISUAL/POWER APPROVAL REQUIRED; NO OEM GUESSING OR DUT ACTION EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor SOL/OEM command manual, BIOS serial-redirection specification, Project WebUI/client matrix, maintenance plan and recovery SOP define execution bindings and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-08", "ED-11", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "source_WebUI_SOL_and_BIOS_stage_required": true, "OS_or_SSH_substitution_allowed": false, "OEM_parameters_guessed": false, "BIOS_save_or_arbitrary_key_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|911|Wistron-BMC-00201-V003", "next_pending_case_variant_id": "3d7d53bf425559be"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
