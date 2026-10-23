@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 148,
+  "source_key": "Functionality|961|Wistron-BMC-00251-V002",
+  "case_variant_id": "3743dff617e23083",
+  "source_ref": {"sheet": "Functionality", "source_row": 961, "code": "Wistron-BMC-00251-V002", "original_row_sha256": "817ee4b24969f775e92142f54cb7f9557f2b3df77a1d491ae55c319043076227", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "FRU_PDB", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information, then compare FRU data with ipmitool fru print.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES queries an assumed /redfish/v1/Chassis/FRU_PDB URI with insecure curl and three fields; it omits exact power-topology identity, complete WebUI/IPMI parity and an explicit no-power boundary.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION adds the correct PDB topology, complete protected evidence and no-power safeguards, but retains an unnecessary confirmation gate for a strictly read-only inventory case."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1120_3743dff617e23083.json",
+  "old_problem": "PDB identity depends on the platform power-distribution topology, not merely a name, and correct FRU data cannot prove electrical paths, redundancy or load behavior. The prior review correctly separated inventory from power actions but left topology/device/reference inputs as Engineering Decision Pending rather than execution readiness.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_PDB_FRU_INVENTORY_WITH_STRICT_NO_POWER_BOUNDARY",
+  "disposition_reason": "Bind the exact physical power-distribution board and domain through the approved Project topology, select its mapped IPMI/UI/API inventory records, validate every applicable FRU field against the PDB build authority and explicitly prohibit any power/control operation or electrical-function conclusion. The missing topology and expected values are finite parameters.",
+  "decision_basis": [
+    "XLSX row 961, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 962 were directly reviewed; next pending was verified as Functionality row 962 / variant eb56d7e5aadcf658.",
+    "The source procedure is inventory-only despite the component's power role. It requires WebUI and IPMI FRU comparison but contains no electrical stimulus, load, failover or power-cycle step; none may be added or claimed.",
+    "The Project power topology is necessary to distinguish the intended PDB instance/domain from similar boards. Standard FRU and Redfish inventory schemas cannot infer that OEM topology.",
+    "Adjacent MID and SCM identities are separate boards and negative controls. Complete field equality is credited only after physical/topological PDB binding.",
+    "ED-02, ED-03, ED-06, ED-08, ED-17, ED-18, ED-19, ED-21 and ED-30 preserve identity/evidence and separate power actions; ED-33 through ED-38 permit parameterized read-only execution without guessed OEM behavior."
+  ],
+  "test_case": {
+    "test_name": "Validate PDB FRU inventory by approved power topology without exercising power",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the exact Project-defined physical power-distribution board is uniquely represented by FRU_PDB and its complete applicable inventory matches the authoritative PDB build record across IPMI, actual WebUI and mapped API evidence, while making no claim about electrical distribution, redundancy or load behavior and performing no power action.",
+    "required_package": [
+      "Immutable SUT/BMC/chassis identity and approved PDB physical/power-domain topology distinguishing every PDB instance from MID, SCM and other boards",
+      "Complete enumerated IPMI FRU map and approved PDB device ID/interface/channel/bridge/address with durable domain/slot association",
+      "Service-discovered Chassis/Assembly or approved OEM PDB inventory mapping and actual WebUI Inventory and LEDs PDB row/detail",
+      "PDB-specific applicable FRU Board/Product/Chassis/MultiRecord/custom-field layout and authoritative manufacturing/BOM/build record",
+      "Approved normalization, absent, encoding, padding and freshness rules and serial/topology redaction policy",
+      "Trusted TLS/protected read credentials plus read-only audit controls proving no power, reset, firmware, FRU write or log-clear operation"
+    ],
+    "test_command": "READ ONLY. Verify the immutable target and approved PDB/power-domain topology. Enumerate complete IPMI FRU and API inventory sets, then select the PDB only through its durable physical/domain relationship; do not construct `/Chassis/FRU_PDB` or choose a default FRU. Execute only `ipmitool ... fru print <PDB-FRU-ID>` and retain complete output, exit status and decode/checksum diagnostics. Follow actual standard or approved OEM inventory links and capture the rendered BMC WebUI Hardware status > Inventory and LEDs PDB row/detail. Explicitly exclude MID, SCM and other boards. Decode all applicable FRU fields, preserve raw values, normalize only under approved rules and compare with the PDB build authority and across IPMI/UI/API. Record pre/post power-state fingerprints but invoke no power/control action, load stimulus, firmware operation, FRU write, log clear, reset or reboot.",
+    "expected_result": "The intended physical PDB and power domain map uniquely to one expected IPMI FRU and approved UI/API object, excluding MID/SCM/other boards. All applicable areas decode without reported structure/checksum errors and every required standard/custom field exactly matches the PDB authority after traceable normalization. Complete IPMI, actual WebUI and mapped API evidence reconcile; pre/post power state is unchanged, and no electrical-function or redundancy conclusion is claimed.",
+    "pass_fail_basis": "PASS requires authoritative PDB topology, unique device/member binding, complete `ipmitool fru print`, actual rendered WebUI evidence and exact complete-field parity while power remains unchanged. A PDB-like URI, three-field match or electrical assumption cannot pass. Wrong/ambiguous board/domain, parser/checksum error, missing required field, unauthorized blank, unexplained source/reference mismatch or any power/control mutation is FAIL. Missing topology/reference is NOT READY; FRU inventory success is never evidence that electrical distribution/failover works.",
+    "safety_gate": [
+      "Keep this case inventory-only. Prohibit AC/DC/warm/cold cycle, chassis power commands, rail/output control, load/failover stimulus, reset, reboot and firmware actions.",
+      "Use approved physical power topology to bind PDB before selection; do not infer instance/domain from name, ID order or common manufacturer/product values.",
+      "Use protected certificate-verified reads and approved IPMI routing; do not expose credentials or accept insecure-TLS evidence.",
+      "Allow only FRU enumeration and mapped `fru print`; prohibit FRU write/edit/upgEkey, raw storage writes and log clearing.",
+      "Preserve complete raw IPMI/API evidence and actual rendered WebUI artifacts before normalization/redaction; retain pre/post power-state fingerprints solely as no-change proof.",
+      "Stop on topology ambiguity, unexpected power-state difference, stale data, decode/checksum failure or authority conflict and do not automatically retry or switch boards."
+    ],
+    "expected_evidence": [
+      "Approved PDB physical/power-domain topology and immutable target identity distinguishing MID/SCM/other boards",
+      "Complete enumerated IPMI/API inventory and exact PDB physical/device/member/UI binding",
+      "Timestamped full `ipmitool fru print <PDB-FRU-ID>` with routing, exit/decode/checksum status and protected hash",
+      "Complete mapped API artifact and actual rendered WebUI PDB row/detail with schema/firmware/trust metadata",
+      "PDB-specific raw/normalized/reference field matrix and negative identity controls",
+      "Matching pre/post power-state fingerprints, preserved SEL/audit logs, no-power/no-write/no-clear/no-reset proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On topology ambiguity, unexpected power-state change, decode/checksum failure or data mismatch, stop immediately and preserve/redact evidence. Do not attempt power recovery, cycle, failover, reset, reboot, FRU write or log clear; obtain the authoritative topology/reference and escalate any externally caused state change."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master Items, Procedure and Criteria consistently request PDB inventory parity. PDB power topology is contextual identity, not a competing electrical test purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The inventory-only PDB objective and no-power boundary are clear. Topology, mappings and expected fields are bounded Project prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "PDB physical/power-domain topology; PDB IPMI/API/UI identities; applicable FRU fields and build values; normalization, freshness, trust, redaction and no-power audit configuration.", "execution_status": "NOT STARTED; READ-ONLY FRU_PDB INVENTORY ONLY; NO IPMI, REDFISH, WEBUI, POWER OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Platform Management FRU Information Storage Definition, v1.0 rev. 1.3", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-platform-mgt-fru-info-storage-def-v1-0-rev-1-3-spec-update.pdf", "application": "Defines standard PDB FRU area/field decoding but not electrical function or Project power topology."},
+    {"title": "ipmitool FRU implementation", "url": "https://github.com/ipmitool/ipmitool/blob/be11d948f89b10be094e28d8a0a5e8fb532c7b60/lib/ipmi_fru.c", "application": "Primary implementation for read/print decoding and checksum evidence; mutation-capable paths remain prohibited."},
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis/Assembly inventory semantics where supported; it cannot establish the OEM PDB power domain or electrical correctness."}
+  ],
+  "project_authority": "The Project/vendor power topology identifies the exact PDB instance/domain and its management objects and expected FRU values. Those inputs make inventory parity automatable but do not authorize or validate any power operation.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-06", "ED-08", "ED-17", "ED-18", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "pdb_topology_required": true, "inventory_not_electrical_function": true, "all_power_actions_prohibited": true, "source_webui_and_ipmitool_both_preserved": true, "webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "fru_or_power_write_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|962|Wistron-BMC-00252-V002", "next_pending_case_variant_id": "eb56d7e5aadcf658"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_fru_and_redfish_sources_researched": true, "case_specific_pdb_no_power_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
