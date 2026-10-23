@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 51,
+  "source_key": "Functionality|861|Wistron-BMC-00151-V004",
+  "case_variant_id": "c9b6e9522df6a93d",
+  "source_ref": {"sheet": "Functionality", "source_row": 861, "code": "Wistron-BMC-00151-V004", "original_row_sha256": "74e3157d3fe85aef04f5b0251bb0d43e2b338f0862aab90d642b6f7dd15264e3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SEL logs", "procedure": "Generic setup says clear logs; compare the BMC SEL WebUI with `ipmitool sel elist`; use `Save Logs`; then use `Clear All Logs`.", "criteria": "All information/messages match status; BMC SEL exports and clears successfully.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/bmc-logs/sel-logs", "deepseek": "YES runs `sel list` and only the final 50 `sel elist` lines with fixed cipher and visible password, yet calls the result FULL and no-risk; it omits WebUI, Save Logs and clear.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores full record comparison, export and a separately approved clear, rejecting initial clear and truncated output."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1023_c9b6e9522df6a93d.json",
+  "old_problem": "The source destroys the SEL before comparison/export, then clears again; the proposed command truncates the supposedly complete evidence and does not implement WebUI, export or clear. Cross-rendering equality, Script provenance, credential/cipher support, full-export semantics and destructive scope were unresolved.",
+  "new_disposition": "RESOLVED_WITH_ED17_COMPLETE_CANONICAL_SEL_CORRELATION_EXPORT_FIRST_AND_ONE_APPROVED_CLEAR",
+  "disposition_reason": "The safe review method is determinable: preserve the existing SEL, bind the supported IPMI transport and a pinned reviewed Script (or approved manual equivalent), capture `sel info` plus every record, correlate canonical event identity across ipmitool/WebUI/export rather than literal strings, verify and retain the complete Save Logs artifact, then obtain fresh approval for one scoped clear. OEM values remain execution prerequisites and do not require a new engineering decision.",
+  "decision_basis": [
+    "XLSX row 861, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "`sel list`, `sel elist`, raw records, SDR-based rendering, WebUI and exported files may describe the same event differently; record identity and normalized fields are the correct comparison basis.",
+    "ED-17 requires backup before BMC/SEL deletion; ED-20 preserves WebUI, ipmitool, Save Logs and Clear All coverage; ED-35 rejects a truncated CLI sample as substitution.",
+    "ED-38 requires pinned reviewed automation, protected credentials, exact target, one-time approval, recovery and no automatic retry."
+  ],
+  "test_case": {
+    "test_name": "Correlate complete BMC SEL across WebUI and ipmitool, validate Save Logs, then perform one approved scoped clear",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove every bounded BMC SEL record is represented consistently in the WebUI and the supported full `ipmitool sel elist`/raw view using canonical identity fields; prove `Save Logs` contains that complete set; then, after verified retention and fresh explicit authorization, invoke one SEL clear and prove the defined post-state without affecting other log services.",
+    "required_package": [
+      "Exact lab BMC/certificate, firmware/WebUI build, SEL service, account role, maintenance window and supported IPMI transport/cipher/privilege",
+      "Pinned immutable commit/tag and readable content/checksum/dependency review for the referenced `bmc-logs/sel-logs` Script, or signed approved manual method",
+      "Validated ipmitool version and protected credential/session mechanism; exact commands for `sel info`, full `sel elist` and raw evidence without output truncation",
+      "Canonical mapping for SEL record ID, sensor number/type/name, raw event data, generator, assert/deassert direction, timestamp/timezone, message/status and vendor SDR repository/decoder",
+      "Save Logs filename, MIME/container, encoding/schema, pagination/full-scope behavior, parser, checksum, retention/redaction and concurrent-event boundary method",
+      "Exact one-time SEL clear semantics, clear marker/count/sequence boundary, excluded-service observers, explicit authority, alternate OOB access and incident escalation"
+    ],
+    "test_command": "Do not pre-clear. Confirm the exact target and supported protected IPMI session. Record `sel info`, count/capacity/overflow/sequence and capture all `sel elist` plus raw fields without `head`, `tail`, filters or terminal truncation, with stdout/stderr/exit status separated. Bound concurrent events, snapshot the WebUI and join entries by record ID/raw event identity; compare sensor, direction, event data, time and status using the approved SDR/timezone mapping rather than literal rendered text. Invoke WebUI `Save Logs` once, quarantine/hash/parse it and reconcile every bounded record. Present the exact target/service, retained checksum/location, excluded services and post-state, then obtain fresh explicit approval. Invoke the supported SEL clear exactly once and verify the defined count/marker/new sequence plus preservation of excluded Audit/security/system logs. Do not execute the internal Script until its immutable revision is accessible and safety-reviewed; never use `-P`, assume cipher 17, or retry clear.",
+    "expected_result": "The complete bounded SEL has no unexplained missing, duplicate or mismatched record across canonical ipmitool/raw, WebUI and parsed Save Logs representations; approved decoder/timezone presentation differences are documented. The export is complete, valid and retained. Following fresh approval, one clear reaches the vendor-defined SEL post-state and expected marker/boundary while unrelated log services and retained evidence remain intact. No initial clear, truncation, credential disclosure, unsupported Script or repeated destructive action occurs.",
+    "pass_fail_basis": "PASS requires target/tool/Script provenance, full non-truncated SEL metadata and records, canonical record-by-record WebUI and export reconciliation, verified retained export, immediate approval, exactly one scoped clear, correct post-state and excluded-service proof, with engineer verdict. Recent-only output, literal string equality, a UI toast, file existence or empty display alone cannot pass. Unexplained field/record mismatch, incomplete export, overflow without bounded reconciliation, wrong/multiple clear or cross-service loss is FAIL. Missing Script/tool/mapping/export/clear inputs or approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never perform the generic pre-test clear; it destroys the SEL oracle required for WebUI/ipmitool/export comparison.",
+      "Never call `tail -50`, filtered output or a terminal sample complete; preserve `sel info`, every record, raw identity, exit status and stderr.",
+      "Do not compare rendered strings literally; use canonical record and raw event identity with approved SDR, locale and timezone transformations.",
+      "Do not run the internal Script until an immutable readable revision is reviewed for targets, secrets, clear timing, retries, errors and dependencies.",
+      "Do not expose secrets with `-P`, assume cipher suite 17 or weaken TLS; use the platform-approved protected authentication method.",
+      "Clear only after complete verified export and fresh explicit approval, invoke once, observe excluded services and never retry automatically."
+    ],
+    "expected_evidence": [
+      "BMC/SEL identity, certificate, firmware/WebUI build, role, ipmitool version, protected transport/cipher/privilege and SDR repository identity",
+      "Pinned internal Script commit/checksum/content safety review or signed alternate-method approval",
+      "Complete pre-clear `sel info`, capacity/overflow/sequence and all entry/raw evidence with separate stdout/stderr/exit status",
+      "Record-keyed WebUI correlation across sensor, raw event, direction, timestamp/timezone, message/status and documented decoder differences",
+      "Save Logs trusted-origin metadata, size, checksum, parser result and complete bounded record reconciliation",
+      "Fresh clear approval, one exact action/response, post-state marker/count/sequence, excluded-service proof, no retry and engineer verdict"
+    ],
+    "recovery": "The complete checksummed retained SEL export is the pre-clear evidence recovery control; erased controller records may not be restorable. On target mismatch, unexpected deletion, mapping failure or unknown response, stop, preserve action/audit evidence and invoke only the approved vendor/OOB incident procedure. Do not rerun the Script or clear, and never fabricate missing SEL entries."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-17 excludes the contradictory generic pre-clear while retaining it historically; the existing complete SEL is first compared and exported, and the original final clear remains as a separately approved functional checkpoint."},
+  "blocked": {"before": false, "after": false, "reason": "The required comparison, export and clear semantics are clear. Exact tool/Script revisions, mapping, credentials and OEM clear behavior are execution-readiness bindings that can be supplied without changing the test intent."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/SEL identity, pinned Script or approved manual method, supported protected IPMI transport, SDR/canonical mapping, complete export/parser/retention, clear semantics, lab authorization, excluded-log observers and recovery.", "execution_status": "NOT STARTED; INTERNAL SCRIPT NOT APPROVED; DESTRUCTIVE CLEAR NOT AUTHORIZED"},
+  "external_authorities": [
+    {"title": "Master-referenced internal SEL logs Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/script_library/functionality/bmc/bmc-logs/sel-logs", "application": "May be used only after a readable immutable revision is pinned and reviewed; the URL alone is not execution authority."}
+  ],
+  "project_authority": "Platform IPMI/SEL and SDR documentation, vendor WebUI Save/Clear contract, pinned reviewed internal Script and Project retention policy define transport, canonical mapping, export completeness and destructive scope.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "complete_sel_capture_required": true, "save_logs_before_clear_required": true, "clear_requires_fresh_explicit_approval": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|862|Wistron-BMC-00152-V002", "next_pending_case_variant_id": "affe8274895145cb"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
