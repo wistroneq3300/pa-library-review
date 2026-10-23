@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 115,
+  "source_key": "Functionality|926|Wistron-BMC-00216-V002",
+  "case_variant_id": "cb813ffe054a3a2f",
+  "source_ref": {"sheet": "Functionality", "source_row": 926, "code": "Wistron-BMC-00216-V002", "original_row_sha256": "e0c5316737709efaf87ea66b789bf50301e6932c657abb0a6e6b02e5ac3bf7f1", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Upload CERTIFICATE MANAGEMENT", "procedure": "Use BMC WebUI Settings → SSL Settings → Upload Certificate Management; the SSL certificate key changes; view that the certificate matches modified settings; generic setup says clear logs.", "criteria": "Result is human readable and BMC Web login succeeds.", "script": null, "deepseek": "PARTIAL describes a generic multipart upload and guessed certificate endpoint, conflates generation/upload history, uses insecure post-checks and does not define certificate/key/chain pairing, slot, activation, reconnect, rollback or private-key protection.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL risk correctly requires protected pre-validation, exact vendor upload/activation semantics, explicit approval, served-chain/slot verification, bounded reconnect and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1087_cb813ffe054a3a2f.json",
+  "old_problem": "The source requires a real supplied-certificate upload and changed HTTPS identity, but the prior method gives no authoritative multipart fields, distinguishes neither certificate-only pairing with a BMC-generated key nor certificate-plus-key import, and treats certificate-list output as activation proof. A wrong key, chain order, SAN or slot can immediately break trusted management access and cannot be repaired by metadata alone.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_SINGLE_CERTIFICATE_UPLOAD_PAIRING_ACTIVATION_AND_TRUSTED_LOGIN_WORKFLOW",
+  "disposition_reason": "Keep Upload separate from the preceding Generate path. Before execution, bind the vendor-supported import mode: a signed certificate paired to an existing BMC key/CSR, or an approved certificate-plus-private-key package when unavoidable. Pre-validate public-key pairing, SAN, chain and cryptographic policy; upload once to the exact slot, separately authorize activation/restart if needed, then prove pending/active state, served fingerprint/chain and trusted WebUI login. Project artifacts and recovery inputs make the case executable without guessing OEM fields or exposing private keys.",
+  "decision_basis": [
+    "XLSX row 926, same-row DeepSeek, exact GPT V2, selection manifest, adjacent Generate/LDAP cases and preserved V3.1 record were directly reviewed.",
+    "The source explicitly says Upload; BMC-side generation is an independent preceding identity and cannot substitute for supplied certificate acceptance and pairing.",
+    "DMTF Certificate resources expose identity, public key and fingerprint metadata, but the actual vendor upload/replace/activation action and slot semantics must be discovered instead of guessed.",
+    "Upload acceptance, key pairing, activation, served identity, hostname trust and successful login are independent checkpoints; a response code or inventory row proves only part of the workflow."
+  ],
+  "test_case": {
+    "test_name": "Upload, pair and activate one approved BMC HTTPS certificate with trusted-login verification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the target BMC WebUI Upload function accepts one owner-approved HTTPS certificate/chain through its documented key-pairing mode, places it in the intended slot, activates it only as authorized, serves the exact trusted identity and preserves recoverable WebUI/API management access without exposing private keys.",
+    "required_package": [
+      "Exact BMC/firmware/WebUI/certificate-service identity and vendor-documented upload form, file format, size, chain order, slot, pending/active and restart semantics",
+      "Approved leaf certificate and full chain with hostname/SAN, validity, key usage, algorithm and fingerprints plus trusted CA/reference bundle",
+      "Documented pairing mode: existing BMC-generated key/CSR SPKI or securely supplied matching private key; exact public-key equality pre-check",
+      "Complete pre-change active/pending certificate roles, served chain/fingerprint and bounded HTTPS/BMC reconnect expectation",
+      "Independent console/recovery path and restorable known-good certificate/key identity or previous-slot rollback; metadata alone is insufficient",
+      "Separate upload and, if applicable, activation/restart approvals with WebUI visual/audit evidence and private-key-safe handling"
+    ],
+    "test_command": "CRITICAL HTTPS CERTIFICATE/KEY-STORE CHANGE; DO NOT EXECUTE WITHOUT APPROVAL. Preserve logs, discover the exact vendor WebUI upload mode/slot and capture active/pending roles, served fingerprint/chain and recovery identity. Offline, verify leaf↔chain, hostname/SAN, validity/key use/algorithms and public-key equality to the BMC CSR/key or securely handled supplied key; never log key material. After upload approval, use the exact WebUI form to upload one approved package to one verified slot and capture visual/audit response plus pending/active state. If activation or BMC/HTTPS restart is separate, stop for distinct approval. Monitor bounded reconnect, then use trusted hostname/SNI verification to prove the served leaf/chain and Redfish/WebUI active slot match the approved fingerprints and that a fresh WebUI/API login succeeds. Never use guessed multipart fields, `-k` as PASS, delete the previous identity, repeat upload or auto-retry.",
+    "expected_result": "The approved certificate/chain is accepted exactly once, pairs with the intended key, occupies the intended slot and reaches the documented pending or active state without modifying unrelated roles. After separately approved activation where required, the BMC serves the exact approved leaf and chain, hostname/SAN/validity/key-use/trust all pass policy, and fresh WebUI/API login succeeds within the reconnect bound. Private-key material remains protected and the prior recovery identity/path remains usable.",
+    "pass_fail_basis": "PASS requires offline certificate/key/chain validation, exact slot, audited WebUI upload, documented pending/active transition, fingerprint-equal served identity, verified hostname/chain trust and fresh login with recovery intact. HTTP success, readable metadata, a pending record or `curl -k` cannot pass. Key mismatch, wrong slot, malformed/incomplete chain, unexpected activation, trust/hostname failure, reconnect timeout, lost recovery or private-key exposure is FAIL and stops. Missing upload semantics, owner package, pairing proof, approval or recovery is NOT READY.",
+    "safety_gate": [
+      "Do not clear audit logs, expose/store private keys in commands/output/review artifacts, or upload to an unverified target/slot.",
+      "Discover and validate vendor upload/activation semantics; do not guess multipart names, endpoints, chain order or key-import requirements.",
+      "Prove leaf/public-key pairing, hostname/SAN, chain and crypto policy before upload and maintain an independent recovery plus restorable identity.",
+      "Obtain approval for upload and a separate approval for activation/restart when they are distinct state changes.",
+      "Stop on any mismatch or access loss; do not repeat upload, delete another certificate, reset BMC or bypass trust verification automatically."
+    ],
+    "expected_evidence": [
+      "Target/version/vendor upload semantics, exact slot/mode/formats, approval records and independent recovery/restorable identity",
+      "Redacted offline leaf/chain/SAN/validity/key-use/fingerprint validation and public-key pairing proof without private-key content",
+      "Complete pre-change WebUI/API/served certificate roles and active/pending fingerprint baseline",
+      "Visual upload form/confirmation, BMC audit event, target slot and pending/active status; separate activation/restart approval when applicable",
+      "Bounded reconnect plus trusted hostname/SNI full-chain verification, fingerprint equality and fresh WebUI/API login",
+      "Unchanged unrelated slots, protected prior recovery, preserved logs, no retry/private-key exposure and engineer verdict"
+    ],
+    "recovery": "On wrong certificate, slot, pairing, activation, trust result or management loss, stop further certificate operations and preserve WebUI/audit/TLS evidence. Use the independent recovery channel and pre-approved vendor method to reactivate the known-good prior slot or restore the known-good certificate/key package after exact target verification and fresh approval, then verify fingerprint, hostname trust and login. Never upload or delete additional identities blindly."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently require supplied-certificate upload, changed identity, readable settings and successful login. Pairing/activation semantics are version-specific parameters, not competing purposes."},
+  "blocked": {"before": false, "after": false, "reason": "The upload, pairing, activation, acceptance and recovery workflow is defined. Exact vendor form, certificate package and slot are Project execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Vendor upload/pairing/slot/activation semantics; approved leaf/chain and protected key mode; hostname/PKI policy; reconnect bound; restorable identity and approvals.", "execution_status": "NOT STARTED; CRITICAL BMC HTTPS CERTIFICATE/KEY-STORE CHANGE; UPLOAD/ACTIVATION APPROVALS REQUIRED; NO CERTIFICATE UPLOADED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide DSP2046", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.pdf", "application": "Defines Certificate/CertificateCollection identity, key, validity and fingerprint fields used for pre/post slot correlation; vendor replacement semantics remain platform-specific."},
+    {"title": "OpenSSL s_client documentation", "url": "https://docs.openssl.org/3.4/man1/openssl-s_client/", "application": "Provides hostname/SNI, sent-chain and failure-enforced trust verification for the served post-activation identity."}
+  ],
+  "project_authority": "BMC vendor upload/activation guide, Project PKI and key-handling policy, approved slot/identity, reconnect bound, recovery package and rollback SOP bind execution.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "upload_and_generate_kept_distinct": true, "webui_visual_evidence_required": true, "private_key_in_artifact_allowed": false, "pending_only_state_as_pass_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|927|Wistron-BMC-00217-V002", "next_pending_case_variant_id": "3afda17902865d3c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
