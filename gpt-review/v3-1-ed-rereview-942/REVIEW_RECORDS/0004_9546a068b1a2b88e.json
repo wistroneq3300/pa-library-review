@@ -1,0 +1,43 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 4,
+  "source_key": "Functionality|739|Wistron-BMC-00029-V003",
+  "case_variant_id": "9546a068b1a2b88e",
+  "source_ref": {"sheet": "Functionality", "source_row": 739, "code": "Wistron-BMC-00029-V003", "original_row_sha256": "6626186b6f5c1f7a90a3e24637addab95ea2a30cf561678fee52bba848b90d9e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Check FPGA version",
+    "procedure": "Check BMC/BIOS version in BIOS and issue `ipmitool raw 0x30 0x20`; collect results/photos and post-test logs.",
+    "criteria": "The command succeeds and versions are correct before and after flashing.",
+    "deepseek": "YES; proposes grep-filtered `mc info` and `lspci` evidence for FPGA.",
+    "gpt_v2": "REQUIRES PACKAGE; requires exact FPGA identity, authoritative version mapping and full read-only output."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/0907_9546a068b1a2b88e.json",
+  "old_problem": "The Items define an FPGA-version check, but the Procedure names BMC/BIOS and labels raw `0x30 0x20` a BMC version command. Neither `lspci` enumeration nor a generic grep establishes an FPGA firmware version.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_TEST",
+  "disposition_reason": "The row's test identity and measurable before/after criterion make the intended property—FPGA firmware version—clear enough to specify safely. Exact FPGA instance, inventory path and raw decoder are project/platform bindings. Their absence prevents execution and PASS, but does not require the static review to stay BLOCKED. The copied BMC/BIOS method remains historical and receives no FPGA coverage credit.",
+  "decision_basis": [
+    "The protected XLSX row, same-row DeepSeek, GPT V2 and active historical review were all read for variant 9546a068b1a2b88e.",
+    "The operation can be restricted to read-only inventory/version collection; no flash, reset or PCI configuration write belongs to this testcase.",
+    "User rule C permits target/BDF/device mapping to be a runtime prerequisite when purpose, safety and evidence are defined.",
+    "Redfish FirmwareInventory can be discovered and used when the platform exposes the exact FPGA member; an OEM raw response requires an approved decoder and cannot be guessed."
+  ],
+  "test_case": {
+    "test_name": "Check the identified FPGA active firmware version before and after a separately approved flash",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Read an authoritative firmware-version field for the project-selected FPGA instance and compare the same component before and after the referenced flash transaction without performing that flash in this row.",
+    "required_package": ["FPGA FRU/device/BDF or stable inventory identity", "Platform-approved read-only version interface and, for OEM raw data, its firmware-scoped decoder", "Expected before/after versions and separate flash audit reference", "Authenticated BMC or host tools with protected secrets and trusted endpoints"],
+    "test_command": "Discover complete BMC/Redfish FirmwareInventory and/or collect the vendor-approved read-only FPGA version response for `<FPGA_ID>`; when the FPGA is a PCI endpoint, preserve `lspci -Dnnk -s <BDF>` only as identity/context. Do not use grep-only output or assume `ipmitool raw 0x30 0x20` is FPGA data without its approved decoder.",
+    "expected_result": "The exact FPGA instance is present, its canonical active-version field is non-empty and decodes deterministically, the pre-flash value equals the approved source version, and the post-flash value equals the approved target version with unchanged component identity and healthy BMC/PCI/host state.",
+    "pass_fail_basis": "PASS requires identity-bound, full before/after version evidence matching the approved matrix. FAIL covers wrong/unchanged/undecodable version or health regression after the referenced flash. A command exit code, `fpga` string or PCI enumeration alone is insufficient. BLOCK execution when identity, interface or decoder cannot be supplied.",
+    "safety_gate": ["Read-only queries only", "No FPGA flash, reset, driver reload, PCI config write or undocumented raw command", "Use protected authentication and verified host/TLS identity", "Stop interpretation on multiple candidates or decoder disagreement; preserve full raw output and do not retry by changing state"],
+    "expected_evidence": ["FPGA component identity and expected-version source", "Complete inventory/member or vendor raw response plus decoder/tool versions", "Exact-BDF PCI identity when applicable", "Pre/post comparison tied to the separate flash timestamp", "BMC/PCI/host health and logs"],
+    "recovery": "A read-only mismatch requires no state recovery. Preserve the raw data, revalidate component mapping and escalate to FPGA/platform owners; do not attempt a flash or reset to make the value match."
+  },
+  "source_conflict": {"before": true, "after": false, "preserved_original_conflict": "Master Procedure still describes BMC/BIOS and raw 0x30/0x20.", "resolution": "The review-layer objective is the FPGA version named by this row; copied methods remain uncovered unless the project proves an FPGA-specific mapping."},
+  "blocked": {"before": true, "after": false, "reason": "A safe read-only parameterized contract now exists; missing device identity/decoder is an execution prerequisite."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact FPGA identity, approved version interface/decoder and expected before/after values.", "execution_status": "NOT STARTED"},
+  "external_authorities": [{"title": "DMTF Redfish Resource and Schema Guide DSP2046 2025.2", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.2.pdf", "use": "FirmwareInventory supplies discoverable software/firmware inventory resources; component identity and OEM exposure remain platform-specific."}],
+  "traceability": {"applicable_decisions": ["ED-03", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|740|Wistron-BMC-00030-V003", "next_pending_case_variant_id": "95cd96aad56b5ff0"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
+
