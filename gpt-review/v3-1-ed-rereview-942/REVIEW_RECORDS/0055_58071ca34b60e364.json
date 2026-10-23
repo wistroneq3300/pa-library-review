@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 55,
+  "source_key": "Functionality|865|Wistron-BMC-00155-V002",
+  "case_variant_id": "58071ca34b60e364",
+  "source_ref": {"sheet": "Functionality", "source_row": 865, "code": "Wistron-BMC-00155-V002", "original_row_sha256": "fa63719fe5ee0cd59c453d248b1776f6dbda3d7622e27c785cc0a17aec02b758", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SEL Policy", "procedure": "Generic setup says clear logs; navigate to Settings > Log Settings > SEL Log Settings Policy and check Linear Storage Policy and Circular Storage Policy.", "criteria": "SEL should be human readable.", "deepseek": "YES proposes undocumented OEM `raw 0x44 0x00` with fixed cipher and visible password; raw hex does not prove two UI choices, current selection or Project acceptance.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION reframes the case as read-only policy correlation, preserves SEL evidence and requires BMC-specific decode and expected mode."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1027_58071ca34b60e364.json",
+  "old_problem": "Procedure checks Linear/Circular storage policy while the only Criteria speaks about human-readable SEL, leaving option availability, selected state and acceptable mode unstated. The raw command semantics and enum were also undocumented, and generic pre-clear was unrelated and destructive.",
+  "new_disposition": "RESOLVED_WITH_READ_ONLY_THREE_PART_POLICY_ACCEPTANCE_AND_PROJECT_EXPECTED_MODE",
+  "disposition_reason": "The mismatch is reconciled without inventing a write test: preserve the Master readability criterion as the decoded-label/readability checkpoint; use the explicit Procedure to require both Linear and Circular options be visible; record the unchanged current selection and compare it to a Project-configured expected mode. A version-bound vendor read-only property is used only when documented. Switching, persistence and fill-to-capacity behavior remain explicitly outside this case.",
+  "decision_basis": [
+    "XLSX row 865, same-row DeepSeek, exact GPT V2, invalidated historical notice, selection manifest and historical record were directly reviewed.",
+    "The Procedure explicitly supplies the two option names, while the original Criteria is retained as a human-readable decode/presentation check; Project expected mode is a permitted runtime configuration parameter.",
+    "No selection, Apply/Save, fill stimulus or persistence test appears in the Master, so adding one would expand rather than preserve coverage.",
+    "ED-03 forbids guessed OEM raw parameters; ED-15 forbids PASS without an approved expected mode; ED-17 rejects unrelated pre-clear; ED-20 preserves each stated check."
+  ],
+  "test_case": {
+    "test_name": "Read and correlate SEL policy options, current selection and Project-approved expected mode without mutation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the SEL Log Settings Policy page exposes human-readable Linear Storage Policy and Circular Storage Policy choices, identify the current selected mode without changing it, correlate that selection with a firmware-matched documented read-only management value and determine whether it matches the Project-approved retention mode.",
+    "required_package": [
+      "Exact BMC/certificate, firmware/WebUI build, role and SEL policy page/control identity",
+      "Firmware-specific documented read-only policy property or complete OEM command contract including net function, command, request bytes, privilege, completion codes, response size/byte order and enum values",
+      "Project-approved expected current mode and explicit statement that this case checks option inventory/current configuration rather than switching behavior",
+      "Authoritative Linear stop-on-full and Circular overwrite definitions, capacity/overflow indicators and retained-entry semantics needed to interpret the selection",
+      "Validated browser and management client versions with protected authentication and trusted endpoint identity",
+      "Before/after readback/audit plan and an approved restoration owner if an accidental UI mutation occurs"
+    ],
+    "test_command": "Do not clear logs or click/select/apply/save a policy. Record target build plus current SEL count, capacity, overflow and sequence. Open Settings > Log Settings > SEL Log Settings Policy and capture both human-readable Linear and Circular labels, which value is selected and whether controls are read-only/dirty. Use the vendor-documented read-only property to capture exact response/status and decode its enum; use `raw 0x44 0x00` only if the complete firmware-matched contract proves it is this read-only query. Compare UI selection, decoded value and Project expected mode as three distinct results. Close without applying and reread policy and SEL metadata to prove no change/clear. Use protected credentials and stop without retry on unknown enum, response shape, reserved value, disagreement or accidental mutation.",
+    "expected_result": "Both Linear Storage Policy and Circular Storage Policy labels are present and human readable; exactly one current selection is unambiguous; its documented read-only value decodes to the same mode; and that mode matches the Project-approved expectation. Before/after policy plus SEL count/capacity/overflow/sequence prove no policy or log mutation. The record explicitly states that switching, persistence and full-capacity behavior were not tested.",
+    "pass_fail_basis": "PASS requires both named readable choices, an unambiguous unchanged selection, a version-matched documented decode, agreement across UI/property and the approved expected mode, plus no-mutation evidence and engineer verdict. Raw hex alone, visible labels alone or human-readable log entries alone cannot pass. Missing option, unknown/reserved enum, UI/property disagreement, unexpected mutation or selection different from the approved expectation is FAIL. Missing decoder or expected mode is NOT READY, not Pending or PASS. No claim may be made about policy switching, reboot persistence or capacity behavior.",
+    "safety_gate": [
+      "Do not clear SEL/kernel/system logs; deletion is irrelevant and removes capacity/retention context.",
+      "Do not execute `raw 0x44 0x00` unless the exact firmware-specific command contract proves read-only semantics and response decoding.",
+      "Do not select or save Linear/Circular values; changing retention policy needs a separate approved write/readback/persistence/restore case.",
+      "Report option availability, current selection and compliance separately; none substitutes for another or for untested fill behavior.",
+      "Use protected authentication and supported transport; never expose a password with `-P` or assume cipher suite 17.",
+      "Stop without retry on unknown enum, unexpected completion/length, disagreement, reserved value, unclear expected mode or accidental mutation."
+    ],
+    "expected_evidence": [
+      "Target BMC/certificate, firmware/WebUI build, role and exact policy control/property identity",
+      "Vendor query contract and tool revision plus request/status/exact response value and enum decode without exposed credentials",
+      "WebUI/DOM evidence showing both Linear/Circular labels and the selected value with no Apply/Save action",
+      "Project expected mode and three-part result for readable option inventory, selected-state correlation and acceptance",
+      "Before/after SEL count/capacity/overflow/sequence and policy readback proving no clear, write or incidental mutation",
+      "Unsupported functional coverage list, no-retry audit, decoder limitations and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. If the policy changes accidentally, stop, record the UI/request and resulting audit state, then have the authorized owner restore the previously recorded mode through the vendor-approved procedure and verify readback plus SEL retention state. Never clear records or guess a raw write to recover."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The original readability Criteria is preserved as decoded human-readable option evidence; the explicit Procedure supplies the required two-option inventory; the selected-state expectation is a named Project configuration prerequisite. This reconciles acceptance without inventing policy switching or capacity behavior."},
+  "blocked": {"before": false, "after": false, "reason": "The read-only objective and three acceptance dimensions are explicit. Firmware decoder and expected mode are Project/vendor execution inputs; absence prevents execution but does not require another review decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI identity, documented read-only property/enum, Project expected mode, Linear/Circular definitions, validated protected client and accidental-change restoration owner.", "execution_status": "NOT STARTED; READ ONLY; POLICY WRITE NOT AUTHORIZED"},
+  "external_authorities": [],
+  "project_authority": "Vendor SEL policy and OEM read-only property documentation plus the Project log-retention requirement define enum decoding, selected-mode acceptance and capacity/overflow meaning.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-11", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "oem_raw_semantics_guessed": false, "blanket_preclear_allowed": false, "policy_write_authorized": false, "fill_behavior_claimed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|866|Wistron-BMC-00156-V003", "next_pending_case_variant_id": "1d4a2f496ac4172b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
