@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 190,
+  "source_key": "Functionality|1004|Wistron-BMC-00294-V002",
+  "case_variant_id": "473bef4f089d38ff",
+  "source_ref": {"sheet": "Functionality", "source_row": 1004, "code": "Wistron-BMC-00294-V002", "original_row_sha256": "67caa6a7e7a9bb81b8759bc974bc6aa101dc3d19554894efc31d4bbdc74f55b9", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Get BMC Global Enables", "procedure": "During Test is literally `TBD`; no read command is supplied.", "criteria": "TBD", "script": null, "deepseek": "NO refuses to derive a read from the TBD source and asks for exact steps, expected state and verification.", "gpt_v2": "BLOCKED identifies the need for a complete parser and monitoring policy, but incorrectly treats the standard command and response bit schema as vendor-undefined."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1162_473bef4f089d38ff.json",
+  "old_problem": "The historical record retained Pending/BLOCKED because the Master Procedure and Criteria are TBD. IPMI section 22.2 authoritatively defines mandatory App command 0x2F, its completion plus one-byte payload, all standard bits, reserved-bit rule and OEM-bit handling. Only target binding and the expected monitoring policy remain Project prerequisites.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULLY_AUTOMATABLE_STANDARD_BMC_GLOBAL_ENABLE_POLICY_READ",
+  "disposition_reason": "Preserve the Master TBD history but implement a read-only Review-layer case using standard raw 0x06/0x2F. Require completion and exactly one state byte, decode standard bits 3:0, require reserved bit 4 zero, retain OEM bits 7:5 as uninterpreted evidence unless a vendor addendum exists, and compare the complete mask to the versioned Project monitoring policy. Never borrow the Set case, clear logs or mutate a bit to diagnose a mismatch.",
+  "decision_basis": [
+    "XLSX row 1004, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 1005 were directly reviewed; next pending was verified as Functionality row 1005 / variant f8bad83c6f2588d4.",
+    "IPMI v2.0 Table 22-1 makes Get BMC Global Enables mandatory; section 22.2 and Appendix G define App command 0x2F with no request data and one response byte after completion.",
+    "Bits 3:0 report System Event Logging, Event Message Buffer, buffer-full interrupt and receive-message/KCS interrupt; bit 4 is reserved; bits 7:5 are OEM-defined and generic software must ignore their semantics while preserving their raw values.",
+    "Unsupported receive-message or event-buffer-full interrupts should report zero. This supports deterministic policy evaluation without probing through a write; deeper support testing remains separate Set coverage.",
+    "ED-03, ED-15 through ED-19, ED-22, ED-24 and ED-28 permit an authoritative standards-based read; ED-33, ED-34, ED-36 and ED-38 preserve TBD provenance while allowing read-only automation with Project policy binding and no write/retry."
+  ],
+  "test_case": {
+    "test_name": "Read and validate the complete standard BMC Global Enables mask",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Read the bound BMC's complete Global Enables byte, prove all standard monitoring/message bits match the approved Project policy, retain OEM evidence without guessed interpretation and make no configuration or log change.",
+    "required_package": [
+      "Immutable DUT/BMC/interface identity, pinned firmware/ipmitool/parser and protected App 0x2F raw runner",
+      "Versioned strict parser requiring completion 00 and exactly one payload byte, decoding bits 3:0, enforcing reserved bit 4 zero and retaining OEM bits 7:5 raw",
+      "Approved Project policy for expected SEL logging, Event Message Buffer, buffer-full interrupt and receive-message/KCS interrupt states plus platform support expectations",
+      "Optional exact OEM/System Integrator bit definitions when OEM bits must be interpreted; otherwise they remain opaque and are compared only to an approved raw baseline",
+      "Passive SEL/event/message/KCS health correlation, evidence freshness/redaction and protected local or verified secret-safe access"
+    ],
+    "test_command": "READ-ONLY AUTOMATION ONLY; DO NOT RUN DURING REVIEW. Bind the exact DUT/BMC/interface, preserve existing logs and invoke the pinned equivalent of `ipmitool raw 0x06 0x2f` exactly once with a bounded timeout. Capture tool/transport status and IPMI completion separately; require completion 00 and exactly one payload byte. Decode bit 3 System Event Logging, bit 2 Event Message Buffer, bit 1 buffer-full interrupt and bit 0 receive-message/KCS interrupt; require reserved bit 4 zero; retain OEM bits 7:5 in raw/hex form and interpret them only if an approved vendor addendum is supplied. Compare standard bits and any approved OEM raw baseline to the versioned Project policy and record passive monitoring correlation. Do not clear logs, invoke Set 0x2E, probe support with a write, change any flag or retry automatically.",
+    "expected_result": "The one standard read completes successfully with exactly one valid mask byte. Reserved bit 4 is zero, every standard enable matches the approved policy/support expectations, OEM bits are faithfully retained and any approved raw baseline matches, and passive monitoring evidence is consistent. No mutation occurs.",
+    "pass_fail_basis": "PASS requires exact target, one raw 0x06/0x2F request, completion 00, exact one-byte payload, valid reserved bit and field-by-field Project-policy match. TBD provenance, command success alone, missing payload, reserved bit set, policy mismatch, guessed OEM meaning, stale baseline or contradictory monitoring cannot pass. Missing policy/vendor mapping is NOT READY for those comparisons rather than Engineering Decision Pending; OEM semantics are not invented.",
+    "safety_gate": [
+      "Allow only read-only App NetFn 0x06 command 0x2F on the verified BMC/interface; deny Set, clear, reset, power and arbitrary raw commands.",
+      "Preserve SEL/event/message/KCS evidence and do not execute the generic source log-clear step.",
+      "Use protected local/verified access; prohibit sshpass, plaintext credentials and host-key bypass.",
+      "Treat OEM bits as opaque without an approved vendor definition and never normalize them to zero or success.",
+      "Fail closed on timeout, nonzero completion, wrong length, reserved bit, parse ambiguity or policy mismatch; do not issue 0x2E or retry as diagnostics."
+    ],
+    "expected_evidence": [
+      "Master TBD snapshot, authoritative standard mapping, exact target and pinned firmware/tool/parser/policy versions",
+      "Timestamp, tool/transport status, IPMI completion and exact one-byte raw mask",
+      "Bit-by-bit standard decode, reserved-bit check and raw OEM-bit preservation with vendor reference if interpreted",
+      "Project policy/support comparison and passive SEL/event/message/KCS correlation",
+      "No-write/no-clear/no-probe/no-retry audit and automated result with engineer verdict ownership"
+    ],
+    "recovery": "No mutation is expected. On malformed, mismatched or alarming output, preserve the raw byte and monitoring evidence, close the session and escalate to the BMC/monitoring owner. Any Set Global Enables or message/log remediation is a separately approved case and is never triggered from this read."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The protected Master remains TBD, but the exact named mandatory read has an authoritative standard command and response schema. Project policy supplies acceptance without borrowing Set behavior or inventing OEM meaning."},
+  "blocked": {"before": true, "after": false, "reason": "Core read semantics are fully standardized. Target, expected standard-bit policy and optional OEM raw baseline are finite Project readiness inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DUT/BMC/interface binding; pinned raw runner/parser; expected standard-bit policy and support matrix; optional OEM raw baseline/vendor mapping; monitoring correlation, timeout, freshness and evidence policy.", "execution_status": "NOT STARTED; REVIEW-LAYER READ-ONLY CASE ONLY; MASTER TBD PRESERVED; NO IPMI, GLOBAL-ENABLE, SEL, MESSAGE, KCS, LOG OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Section 22.2, Table 22-3 and Appendix G define mandatory App 0x2F, the one-byte response, standard/OEM/reserved bits and unsupported-interrupt zero behavior."}
+  ],
+  "project_authority": "The Project BMC/monitoring owner provides the expected standard-bit policy, platform support and any approved OEM raw baseline. Only OEM/System Integrator documentation may assign OEM semantics; this case remains read-only regardless of mismatch.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-22", "ED-24", "ED-28", "ED-33", "ED-34", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "master_tbd_history_preserved": true, "standard_raw_0x06_0x2f_defined": true, "all_standard_bits_decoded": true, "reserved_bit_zero_required": true, "oem_bits_preserved_without_guessing": true, "set_or_support_probe_prohibited": true, "sel_and_message_evidence_preserved": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|1005|Wistron-BMC-00295-V002", "next_pending_case_variant_id": "f8bad83c6f2588d4"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_global_enable_get_schema_researched": true, "historical_tbd_block_reconciled_with_standard": true, "case_specific_standard_policy_and_opaque_oem_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
