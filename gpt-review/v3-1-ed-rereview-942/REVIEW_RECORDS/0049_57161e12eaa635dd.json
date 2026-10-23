@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 49,
+  "source_key": "Functionality|859|Wistron-BMC-00149-V002",
+  "case_variant_id": "57161e12eaa635dd",
+  "source_ref": {"sheet": "Functionality", "source_row": 859, "code": "Wistron-BMC-00149-V002", "original_row_sha256": "27803f3c0ca68e3fad57ab280ae7c2e34599232be46b1dcbbe9c5cf8c86f9c02", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "System Event logs", "procedure": "Generic setup says clear logs; inspect sensor event list plus system and audit logs, use `Save Logs`, then use `Clear All Logs`.", "criteria": "Information/messages match status; SEL exports and clears successfully.", "deepseek": "YES supplies dubious/truncated read-only ipmitool output, exposes a password, omits WebUI export/clear and falsely calls the destructive case no-risk.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores complete baseline/export, explicit one-time clear approval, maintenance window, post-clear scope and recovery."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1021_57161e12eaa635dd.json",
+  "old_problem": "The source conflates system/audit/SEL language and orders an evidence-destroying blanket pre-clear, while the actual Criteria scope export and clear to SEL. The historical record preserved the conflict and left service/destructive-scope selection Pending.",
+  "new_disposition": "RESOLVED_WITH_ED17_BACKUP_FIRST_SCOPE_SPLIT_AND_SINGLE_APPROVED_SEL_CLEAR",
+  "disposition_reason": "The Master can be reconciled without dropping coverage: viewer correctness covers separately identified System Event/SEL and Audit services; `Save Logs` and `Clear All Logs` functional checkpoints apply to the SEL named by Criteria unless an approved Project mapping explicitly adds another service. ED-17 forbids blanket pre-clear and requires complete verified evidence preservation before deletion. The exact service IDs, message matrix, export format and clear semantics are runtime Project bindings; the one irreversible clear remains separately confirmed immediately before execution.",
+  "decision_basis": [
+    "XLSX row 859, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Viewer/status, complete export and destructive clear are three independent checkpoints with escalating evidence and authorization.",
+    "Criteria explicitly name SEL for export and clear, while Procedure's audit-log wording is retained as a distinct view-correctness checkpoint rather than silently deleted or cleared.",
+    "ED-17 requires backup-first evidence preservation; ED-20 preserves all viewer/export/clear coverage; ED-35 rejects read-only listing as functional substitution; ED-38 requires exact target, approval, recovery and no retry."
+  ],
+  "test_case": {
+    "test_name": "Verify System Event/SEL and Audit viewers, complete SEL Save Logs, and one backup-first approved SEL clear",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the identified System Event/SEL and Audit views display complete, correctly decoded messages/statuses for their separate services; prove `Save Logs` produces a complete valid SEL artifact; then, only on the authorized lab target after independent backup verification and a fresh explicit approval, invoke the exact SEL `Clear All Logs` once and prove only the approved SEL scope reaches its defined cleared state while Audit/security and excluded logs remain intact.",
+    "required_package": [
+      "Exact BMC/controller/certificate, firmware/WebUI build, account role and non-production maintenance window",
+      "Authoritative service map separating System Event/SEL and Audit stores, view tabs/filters and protected/excluded services",
+      "Expected sensor/message/status/severity/timestamp/timezone/sequence/order/filter/pagination/capacity/overflow matrix for each viewed service",
+      "SEL Save Logs filename, MIME/container, encoding, schema/columns, full-scope semantics, parser, checksum and secure retention policy",
+      "Exact one-time SEL Clear All UI/API semantics, post-clear marker/count/boundary, evidence-retention authority and proof excluded Audit/security stores remain untouched",
+      "Protected UI/API/IPMI authentication, validated client versions, alternate OOB path and incident/escalation procedure for wrong-scope deletion"
+    ],
+    "test_command": "Do not perform the generic pre-clear. Discover and label the SEL/System Event and Audit services, capture complete paginated baseline entries/metadata and correlate messages, statuses, timestamps, filters and capacity with their separate WebUI views. Invoke SEL `Save Logs` once, quarantine/hash/parse the artifact and reconcile stable entry IDs/count/time/fields with the complete SEL baseline. Present the exact lab BMC, service, irreversible control, verified checksum/retention location, excluded services and stop conditions; obtain a fresh explicit approval. Invoke the exact SEL `Clear All Logs` once, then verify the defined cleared count/marker/new boundary and independently prove Audit/security/excluded service identities/counts/boundaries remain intact. Preserve all action/audit evidence. Do not use `sel list system`, `head -50`, `-P`, generic output, blanket clear or automatic retry.",
+    "expected_result": "System Event/SEL and Audit viewers each match their approved services and message/status matrices. The one SEL Save Logs artifact is readable, structurally valid and complete against the baseline. After separate explicit approval, one clear affects exactly the approved SEL service, reaches the defined cleared state and creates only expected audit/new-boundary evidence; the verified export remains intact and Audit/security/excluded stores are unchanged. No pre-clear, truncation, credential leak or repeated destructive action occurs.",
+    "pass_fail_basis": "PASS requires independent viewer evidence for both selected service classes, complete verified SEL export before deletion, recorded immediate approval, exactly one scoped clear, correct post-clear state and proof excluded stores are preserved, with engineer verdict. Read-only listing, truncated output, UI success toast, empty page, post-clear zero without backup completeness or clear of an ambiguous generic service cannot pass. Message/status mismatch, incomplete export, wrong/multiple clear, protected-log loss, unknown response or unexplained remaining/deleted entries is FAIL. Missing scope/retention/clear contract/approval is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Never perform the source's blanket pre-test clear; it destroys the messages and export oracle and has no safe service scope.",
+      "Do not clear until the entire approved SEL scope is exported, parsed, checksummed, retained and independently verified complete.",
+      "Keep System Event/SEL and Audit/security services distinct; Audit is view-only under this reconciliation unless an additional separately approved source-to-action mapping exists.",
+      "Do not use the DeepSeek command, truncate evidence, expose password with `-P` or assume universal ipmitool syntax/exit semantics.",
+      "Clear All is irreversible: require exact dedicated target/service, maintenance authority, fresh explicit approval, one invocation and excluded-service observers; no automatic retry.",
+      "Stop if backup completeness, retention authority, service identity, protected-store separation or recovery cannot be proven; never fabricate lost entries."
+    ],
+    "expected_evidence": [
+      "BMC/controller/certificate, firmware/WebUI build, role and discovered SEL/System Event/Audit service map",
+      "Signed checkpoint scope showing separate viewer, SEL Save Logs and SEL Clear All targets plus excluded/protected services",
+      "Complete pre-clear paginated entries/metadata with sensor/status/time/sequence/capacity context and redacted per-service WebUI comparison",
+      "SEL Save Logs origin, filename, MIME/container, size, checksum, parser result and stable-key/count/time-bound completeness reconciliation",
+      "Fresh explicit approval and exact single clear request/response, before/after count/marker/new boundary and excluded-service preservation",
+      "Protected action audit, verified retained export, no retry, incident/recovery status, limitations and authorized engineer verdict"
+    ],
+    "recovery": "Before clear, recovery is the verified retained export and protected-service isolation. If wrong-scope deletion occurs, stop immediately, preserve all audit/action evidence and use only the approved vendor/OOB incident procedure; do not fabricate or rewrite entries. Escalate any Audit/security loss and do not repeat clear."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Review-layer reconciliation uses the explicit SEL Criteria to scope Save/Clear to SEL, preserves Procedure's system/audit wording as separate viewer checks, and applies ED-17 to reject blanket pre-clear while retaining all original text and clear functionality."},
+  "blocked": {"before": false, "after": false, "reason": "Viewer, export and clear operations are identifiable. Service IDs, message matrix, export/retention and destructive scope are supplyable execution inputs with a separate approval gate."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/UI identity, SEL/System Event/Audit service map, message/status matrix, export format/parser/retention, exact SEL clear semantics, lab window, protected-store observers, approval and recovery.", "execution_status": "NOT STARTED; DESTRUCTIVE CLEAR NOT AUTHORIZED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "LogService/LogEntry discovery and clear-action context where implemented."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned LogService and LogEntry schema lookup."}
+  ],
+  "project_authority": "Vendor System Event/SEL and Audit WebUI/export/clear documentation plus Project evidence-retention policy define service identities, backup completeness and allowable destructive scope.",
+  "traceability": {"applicable_decisions": ["ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "sel_export_before_clear_required": true, "audit_clear_authorized": false, "sel_clear_requires_fresh_explicit_approval": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|860|Wistron-BMC-00150-V002", "next_pending_case_variant_id": "44a71c97ae74a6f7"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
