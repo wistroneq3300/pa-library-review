@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 106,
+  "source_key": "Functionality|917|Wistron-BMC-00207-V004",
+  "case_variant_id": "c5c56f50c587c88f",
+  "source_ref": {"sheet": "Functionality", "source_row": 917, "code": "Wistron-BMC-00207-V004", "original_row_sha256": "fe5d5d871ef727bdb7e128d3c7a3be0bb8ec2d2b2a172d465a5f9104bbb164cd", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Set date / time - IPMI", "procedure": "Use `ipmitool sel time set <mm/dd/yyyy hh:mm:ss>` and verify with `ipmitool sel time get`; generic setup says clear logs.", "criteria": "Date/time is set successfully and the displayed value matches the setting.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/naomi/viking/bmc/function/bmc_time.git", "deepseek": "PARTIAL uses an escaped local shell substitution, exposes credentials, then performs an unqualified local `sel time get`; it does not prove the same remote target, UTC offset, NTP behavior or preserved event chronology.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly identifies the BMC-versus-SEL clock ambiguity and requires an approved clock target, timezone/NTP/tolerance, multi-surface readback and event-boundary preservation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1078_c5c56f50c587c88f.json",
+  "old_problem": "The prior record kept an engineering decision open because the BMC Time Setting group could imply a general WebUI/system clock while the only normative procedure invokes the IPMI Set/Get SEL Time commands. The suggested local-date substitution also lacks target, timezone and audit integrity, and can be overwritten by synchronization.",
+  "new_disposition": "RESOLVED_AS_STANDARD_IPMI_SEL_DEVICE_TIME_SET_GET_WITH_DOCUMENTED_CROSS_SURFACE_RELATION",
+  "disposition_reason": "The explicit item and command make this row the IPMI SEL-device time path. IPMI v2.0 defines Get/Set SEL Time as reading/initializing the time used by the SEL Device for event timestamping, and separately defines the SEL UTC-offset commands. Therefore the Review-layer PASS target is the SEL clock, not an assumed OEM WebUI/system clock. BMC WebUI/API/NTP surfaces are captured to document the platform relationship but are required to match only when authoritative platform documentation says they share that clock. The following WebUI row retains its own control-path coverage.",
+  "decision_basis": [
+    "XLSX row 917, same-row DeepSeek, exact GPT V2, selection manifest, following WebUI time case and preserved V3.1 record were directly reviewed.",
+    "Intel IPMI v2.0 sections 31.10 and 31.11 state that Get/Set SEL Time operates the SEL Device time used for event timestamping; this resolves the core standard-command semantics without guessing OEM coupling.",
+    "IPMI v2.0 section 31.11b states that Set SEL Time resets the SEL UTC offset to unspecified, so the approved offset must be explicitly observed and, when required, restored after the write.",
+    "The title's BMC grouping is preserved as platform context while the explicit IPMI/SEL method governs this row; WebUI system-clock behavior remains separately testable and cannot be silently claimed here."
+  ],
+  "test_case": {
+    "test_name": "Set and verify the IPMI SEL-device time with UTC-offset and audit-boundary control",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the standard IPMI Set SEL Time path changes the intended remote SEL-device clock to one approved controlled value, reads it back within the Project tolerance with correct UTC-offset handling, preserves event chronology evidence and documents—without assuming—the firmware-specific relationship to BMC WebUI/system time and NTP.",
+    "required_package": [
+      "Exact BMC asset/firmware and validated remote ipmitool interface with credentials supplied through a protected mechanism",
+      "Owner-approved SEL timestamp, reference clock, timezone/DST normalization, numeric tolerance and settling interval",
+      "Current SEL Time, optional SEL UTC Offset support/value, WebUI/API time, host/reference time and NTP/synchronization policy baseline",
+      "Impact check for certificates, tokens, schedules, power automation and other time-sensitive services",
+      "Reviewed revision of the source Script or documented reason for using the standard command directly",
+      "Preserved pre/post SEL/audit export and approved restoration of prior time/offset/synchronization policy"
+    ],
+    "test_command": "STATE-CHANGING; DO NOT EXECUTE WITHOUT APPROVAL. Preserve SEL/audit records and recent event boundaries; verify the exact remote BMC in every set/get call. Record SEL Time, supported UTC offset, WebUI/API clock, reference time and NTP state. Choose an explicit owner-approved timestamp—never unqualified local `date` output—and obtain point-of-action approval. Set the remote SEL-device time once with the validated IPMI method, then read back that same remote SEL clock immediately and after the approved settling interval. Because Set SEL Time resets the standard UTC offset to unspecified, read the offset and restore the approved value only when supported and authorized. Normalize values to the trusted reference, record the first post-change event and observe WebUI/NTP behavior without claiming shared-clock coverage unless vendor documentation proves it. Do not clear logs or retry automatically.",
+    "expected_result": "The intended remote SEL-device clock accepts the approved timestamp and its immediate/settled readbacks fall within the approved normalized tolerance. The UTC offset is unspecified or restored exactly as the approved policy requires, first post-change SEL/audit events follow the resulting chronology, and NTP behavior matches policy. WebUI/API time either follows according to documented shared-clock semantics or is recorded as a distinct clock without failing this SEL-specific row; no unrelated host clock or log content changes.",
+    "pass_fail_basis": "PASS requires target-consistent remote set/get, exact requested value, approved tolerance, correct UTC-offset disposition, preserved first-event chronology and approved time-sync policy. Command exit status, a local shell clock or one formatted display alone cannot pass. Wrong target/clock, offset policy violation, out-of-tolerance settled value, timestamp disorder beyond the approved discontinuity, unintended WebUI/host change or failed restoration is FAIL. Missing tolerance, timezone/NTP policy, authorization or recovery is NOT READY. The WebUI clock is not claimed by this PASS unless the platform SPEC proves shared semantics.",
+    "safety_gate": [
+      "Do not clear or rewrite SEL/audit history; export/hash the pre-change boundary and preserve first post-change evidence.",
+      "Verify identical remote target/interface for all reads and the write; do not expose credentials or accidentally run a local-interface readback.",
+      "Do not use a random or unqualified local timestamp, disable NTP, alter host time or assume WebUI/SEL clocks are identical without authority.",
+      "Assess certificates, schedules, tokens and time automation, then obtain point-of-action approval before one write.",
+      "Stop on ambiguous clock ownership, offset mismatch, synchronization override or unexpected time-sensitive impact; do not automatically set again."
+    ],
+    "expected_evidence": [
+      "Target/firmware/ipmitool/Script identity, approved SEL timestamp/reference/timezone/tolerance/NTP policy and impact authorization",
+      "Pre-change remote SEL Time and UTC-offset capability/value, WebUI/API/reference/host clocks with normalized offsets, and preserved recent SEL/audit boundary",
+      "Protected remote Set SEL Time request/response and audit event naming the exact requested value",
+      "Immediate and settled remote SEL readbacks, UTC-offset reset/restoration evidence and normalized drift calculation",
+      "First post-change event chronology plus documented WebUI/API/NTP relationship without overclaiming shared-clock coverage",
+      "Restored/retained approved policy, no log clear/no retry proof and engineer verdict"
+    ],
+    "recovery": "If the wrong clock/target/value is changed or offset/NTP behavior is incorrect, stop further writes and preserve all time-boundary evidence. Use the approved trusted reference and vendor/Project procedure to restore the prior SEL time, UTC offset and sync policy exactly once after fresh authorization, then re-read every affected surface. Never clear or rewrite event history to hide discontinuity."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Authoritative standard semantics and source specificity reconcile the mismatch: this IPMI row validates the SEL-device clock used for event timestamping. Generic BMC grouping does not prove OEM WebUI/system-clock equivalence, which is explicitly excluded unless platform documentation binds it and is separately covered by the next WebUI case."},
+  "blocked": {"before": false, "after": false, "reason": "The standard target clock, method, evidence and recovery are now defined. Time value, tolerance, offset and synchronization policy are safe Project runtime parameters."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Approved SEL timestamp/reference, tolerance, timezone/UTC-offset policy, NTP behavior, time-sensitive impact window, secure target interface and restoration authority.", "execution_status": "NOT STARTED; TIME/AUDIT STATE-CHANGING; POINT-OF-ACTION APPROVAL REQUIRED; NO CLOCK WRITE EXECUTED"},
+  "external_authorities": [
+    {"title": "Intel Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/product-specifications/ipmi-v2-rev1-1-spec-errata-6-markup.pdf", "application": "Sections 31.10/31.11 define SEL-device timestamp time; 31.11a/31.11b define UTC offset and its reset after Set SEL Time."},
+    {"title": "OpenBMC IPMITOOL cheatsheet", "url": "https://github.com/openbmc/docs/blob/master/IPMITOOL-cheatsheet.md", "application": "Identifies `ipmitool ... sel time get` as displaying the SEL clock, consistent with the IPMI standard."}
+  ],
+  "project_authority": "Project timezone/tolerance/NTP policy, vendor shared-clock documentation, time-sensitive impact approval and recovery SOP bind execution values but do not change the standardized SEL target.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "standard_sel_clock_semantics_applied": true, "webui_clock_equivalence_assumed": false, "sel_logs_cleared": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|918|Wistron-BMC-00208-V003", "next_pending_case_variant_id": "2d24545fc9957035"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "authoritative_standard_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
