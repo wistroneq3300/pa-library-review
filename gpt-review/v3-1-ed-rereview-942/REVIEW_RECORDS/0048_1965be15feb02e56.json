@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 48,
+  "source_key": "Functionality|858|Wistron-BMC-00148-V002",
+  "case_variant_id": "1965be15feb02e56",
+  "source_ref": {"sheet": "Functionality", "source_row": 858, "code": "Wistron-BMC-00148-V002", "original_row_sha256": "f1377165983e64d0921e418d0bd9801e6d4c3b95d2e81efb19eb1267ea503e36", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Inventory and LEDs", "procedure": "Check Overview and `View more` inventory, then turn an LED on and off and check physical behavior.", "criteria": "All information matches SPEC and LED behavior is correct.", "deepseek": "YES substitutes a likely nonstandard read-only inventory GET, omits the LED state change and physical observation, assumes ChassisId and calls it no-risk.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION restores target mapping, bounded LED change, physical observer, readback, fault/ownership controls and restoration."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1020_1965be15feb02e56.json",
+  "old_problem": "The historical record preserved both inventory and physical LED coverage but retained Pending for the exact inventory matrix, controllable locator target, visual behavior, owner/fault context and recovery.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_INVENTORY_PLUS_MANUAL_PHYSICAL_LOCATOR_LED_TEST",
+  "disposition_reason": "The two source checkpoints are explicit. Project component fields, exact locator/identify LED resource and expected visual pattern are supplyable inputs, while ED-09 assigns physical LED observation to a human. The Review layer distinguishes locator/identify from fault/status indicators, uses three-layer command/logical/physical evidence, and restores the exact baseline rather than blindly forcing Off. ED-20 preserves both inventory and on/off branches, ED-35 rejects read-only substitution, and ED-38 requires explicit state-change approval and no retry.",
+  "decision_basis": [
+    "XLSX row 858, same-row DeepSeek, exact GPT V2 and historical record were directly reviewed.",
+    "Physical LED function requires correlation of requested state, BMC readback and emitted color/blink/location; API readback alone is insufficient.",
+    "Locator/identify controls must not be confused with fault/health indicators whose state represents a real condition.",
+    "Inventory correctness remains an independent exhaustive component/instance/SPEC comparison across Overview and View more."
+  ],
+  "test_case": {
+    "test_name": "Verify complete inventory and one approved physical locator/identify LED on/off sequence",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove every Project-required Inventory field in Overview and `View more` matches the signed component/instance/location SPEC, then prove the exact approved controllable locator/identify LED responds logically and physically to one bounded active/inactive sequence with correct color/blink/location and exact baseline restoration, without affecting another indicator or service state.",
+    "required_package": [
+      "Exact BMC/controller/certificate, firmware/WebUI build, chassis and inventory topology",
+      "Signed inventory field/value/source matrix for every required Overview and View-more component instance",
+      "Exact LED purpose, component/chassis resource or UI control, physical location label and proof it is locator/identify rather than fault/status unless explicitly designed otherwise",
+      "Vendor-supported write/readback semantics, preferring LocationIndicatorActive when supported or documenting legacy IndicatorLED/OEM equivalence",
+      "Baseline logical/physical state, active locator owner, fault/status context, expected active/inactive color/blink/timing and maximum dwell",
+      "Qualified physical observer/camera, protected authentication, explicit approval, cleanup proof and wrong/stuck-LED recovery"
+    ],
+    "test_command": "First discover and bind the BMC/chassis/component inventory and LED identities. Capture Overview and `View more` once and reconcile every matrix field with signed SPEC and authoritative read-only resources. Before any LED change, record exact logical/physical baseline, current locator owner and all fault/status context; confirm the target resource maps to the labeled physical locator and the qualified observer is ready. After explicit approval, set the supported locator/identify control active once for the bounded dwell, record command/readback and synchronized physical color/blink/location, set it inactive once and observe/read back again, then restore the recorded baseline if it was not inactive. Verify no unrelated LED, inventory, power or fault state changed. Do not clear logs, use an invented `/Inventory` URI, toggle an unspecified/fault LED or retry automatically.",
+    "expected_result": "Every required inventory field and component instance matches the signed SPEC in both UI views. The approved locator/identify resource controls exactly the intended physical LED: active and inactive logical readback and physical color/blink/location match the approved behavior within timing limits. The exact pre-test baseline and ownership context are restored, no fault is masked, no unrelated indicator or service state changes and audit evidence is preserved.",
+    "pass_fail_basis": "PASS requires complete inventory-matrix evidence plus exact LED target/purpose/location binding, explicit approval, one active/inactive sequence, synchronized command/logical/physical evidence for both states, exact baseline restoration and engineer/operator verdicts. Inventory JSON, UI/API state, photo alone or forcing Off without knowing baseline cannot pass. Wrong/stuck/no physical LED, readback disagreement, masked fault, owner conflict, unexpected related state change, inventory mismatch or failed restoration is FAIL. Missing target/behavior/observer/recovery is NOT READY, not Pending or PASS.",
+    "safety_gate": [
+      "Do not reduce the case to inventory or logical readback; the original physical on/off checkpoint requires a qualified observer.",
+      "Do not toggle until resource/control and physical label prove the exact locator/identify LED and exclude an active health/fault indicator.",
+      "Capture baseline and current owner and restore that exact state; never assume final Off is correct.",
+      "Use one approved active/inactive sequence with bounded dwell and stop on wrong lamp, fault masking, owner conflict, state disagreement or failed restore; no automatic retry.",
+      "Discover actual chassis/component/assembly resources for inventory; do not assume `/Chassis/system/Inventory`.",
+      "Use trusted TLS/protected secrets, preserve BMC/SEL/host/fault logs and redact asset/location images under policy."
+    ],
+    "expected_evidence": [
+      "BMC/chassis/component identity, certificate, firmware/WebUI build and mapped inventory/LED resource schemas",
+      "Signed inventory field/component/instance/location/value matrix and redacted Overview/View-more comparison",
+      "Physical LED purpose/location/photo reference, baseline logical/physical state, current owner and no-conflicting-fault evidence",
+      "Approved active/inactive requests with timestamps, UI/API readback and synchronized physical observation of color/blink/location for both states",
+      "Proof exact baseline restoration, no unrelated LED/inventory/power/fault change and healthy BMC/host",
+      "Preserved audit/fault logs, explicit coverage limits and authorized engineer/operator verdicts"
+    ],
+    "recovery": "If the wrong LED changes, a fault is obscured or restoration fails, stop without another toggle, preserve command/readback/physical/audit evidence and use only the approved mapped control plus qualified onsite/OOB owner to restore the recorded baseline. Escalate a stuck indicator or masked fault; do not guess another resource or force unrelated LEDs."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently combine inventory verification with LED on/off physical behavior; the missing target is a parameter, not a competing purpose."},
+  "blocked": {"before": false, "after": false, "reason": "Both purposes are identifiable; component/LED mapping, expected behavior, observer and recovery are supplyable execution inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/chassis/UI identity, exhaustive inventory matrix, exact locator/identify resource and physical label, baseline/owner/fault context, visual pattern/dwell, human observer and recovery.", "execution_status": "NOT STARTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "application": "Inventory resources and LocationIndicatorActive/legacy indicator semantics."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Versioned chassis/component/indicator schema lookup."}
+  ],
+  "project_authority": "The signed Project inventory/indicator specification and vendor physical-resource mapping define required fields, exact LED purpose/location and expected visual behavior.",
+  "traceability": {"applicable_decisions": ["ED-09", "ED-15", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "physical_observer_required": true, "inventory_only_substitution_allowed": false, "led_state_change_requires_explicit_approval": true, "exact_baseline_restore_required": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|859|Wistron-BMC-00149-V002", "next_pending_case_variant_id": "57161e12eaa635dd"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
