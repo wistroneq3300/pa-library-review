@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **89 / 942**; append-only review events: **240**.
-- Last formal review: `Functionality|1426|Wistron-BMC-00718-V002` / `7a736f069e05256c` (formal queue sequence 89; review event 240).
-- Next source-verified pending identity: `Functionality|1433|Wistron-BIOS-00001-V003` / `937cfeeea4f3936c` (first missing formal queue sequence 90).
-- Latest disposition: Mismatched DIMMs is removed from Pending/Conflict as a hybrid manual test using two individually supported modules in one platform-documented prohibited mix, one controlled training attempt, slot-specific BMC/UEFI events, genuine human LED evidence and exact supported-layout recovery. QPI/core wording is not executed. No DUT action ran.
-- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-240 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
+- Completed formal queue: **90 / 942**; append-only review events: **241**.
+- Last formal review: `Functionality|1433|Wistron-BIOS-00001-V003` / `937cfeeea4f3936c` (formal queue sequence 90; review event 241).
+- Next source-verified pending identity: `Functionality|1436|Wistron-BIOS-00004-V003` / `69759b3dcd2307c2` (first missing formal queue sequence 91).
+- Latest disposition: BIOS Menu FW Version is removed from Pending/Conflict through a full-source union: FW/BIOS Version, Compliancy and Core Version are separately captured from the actual Main page and independently compared with a Project build-manifest matrix; no field equivalence is guessed. UI evidence is primary, mapped SMBIOS/BMC is corroboration only, and the separate row-1436 flash plus row-365 Core Version identities remain intact. No DUT action ran.
+- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-241 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
 - Protected sources: unchanged.
 - DUT execution: none.
