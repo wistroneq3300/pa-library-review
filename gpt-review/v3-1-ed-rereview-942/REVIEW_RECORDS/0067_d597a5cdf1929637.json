@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 67,
+  "source_key": "Functionality|877|Wistron-BMC-00167-V003",
+  "case_variant_id": "d597a5cdf1929637",
+  "source_ref": {"sheet": "Functionality", "source_row": 877, "code": "Wistron-BMC-00167-V003", "original_row_sha256": "58b9e84457b0888dfc8d46df56a8de1fea023eb7addaf211c1d0636cfd5384ae", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "TEMP_MB_PSU1_IN, TEMP_MB_PSU2_IN", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES passes both comma-separated labels as one quoted sensor name, truncates fallback inventory, exposes credentials and does not prove distinct board-probe source, PSU bay/FRU/feed mapping or per-sensor UI/spec compliance.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires separate PSU1/PSU2 records, physical/PMBus source and slot mapping, inventory/redundancy context and complete UI/spec evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1039_d597a5cdf1929637.json",
+  "old_problem": "The two source labels were converted into one likely invalid sensor operand. Neither result was independently bound to its physical PSU bay, installed FRU and actual motherboard-probe versus PSU-internal source, so swapped labels, an absent PSU, stale data or PMBus telemetry could be falsely accepted as both inlet sensors.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TWO_ROW_PSU_INLET_SENSOR_MATRIX",
+  "disposition_reason": "The source clearly requires two passive sensor checks. Resolve and collect PSU1_IN and PSU2_IN independently, map each to the chassis bay, installed PSU inventory, AC feed and real sensing source, then compare each complete OOB/two-UI record against its own population-aware specification. Exact bay/source mapping and values are Project parameters; no PSU service or stimulus is required.",
+  "decision_basis": [
+    "XLSX row 877, same-row DeepSeek, exact GPT V2, internal Script reference, selection manifest and historical record were directly reviewed.",
+    "A quoted comma-separated operand is not evidence for two records; each sensor needs an independent identity, query status and evidence chain.",
+    "The `MB` label does not by itself prove a motherboard probe or equivalence to a PSU-internal PMBus channel; bay/FRU/source mapping is required.",
+    "ED-13 controls population-aware N/A, ED-15 requires per-bay acceptance, ED-17 preserves logs, and ED-20 preserves both named sensors independently."
+  ],
+  "test_case": {
+    "test_name": "Verify TEMP_MB_PSU1_IN and TEMP_MB_PSU2_IN independently by physical bay, FRU and sensing source",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the two motherboard PSU-inlet temperature records are individually human readable in Dashboard and Server Health, correctly mapped to PSU bay 1 and bay 2 and their actual sensing paths, and independently meet applicable value, units, health, threshold/hysteresis and freshness requirements under the recorded passive power and airflow state.",
+    "required_package": [
+      "Exact chassis/board/BMC/BIOS configuration, physical PSU bay numbering, AC-feed topology, redundancy mode and installed PSU PN/serial/FRU/firmware inventory",
+      "For each label, documented motherboard-probe or PSU PMBus/I2C/controller/address/channel source and physical inlet location",
+      "Separate stable SDR/API name/number/type/entity/instance and Dashboard/Server Health row for PSU1_IN and PSU2_IN",
+      "Per-sensor units/scaling, approved range or reference delta, threshold capability/values/hysteresis, health, freshness and absent-module behavior",
+      "Recorded system power/load, fan mode/speeds, inlet/airflow state, timing and approved tolerance/update-lag rules",
+      "Validated protected OOB/API/browser clients and pinned immutable reviewed `sensor.git` revision/checksum or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, remove/reseat a PSU, disable a feed, change redundancy/power cap, add load, obstruct airflow or write thresholds. Establish a two-row bay/FRU/feed/source expectation matrix from inventory and platform documentation. Enumerate the complete repository and resolve TEMP_MB_PSU1_IN and TEMP_MB_PSU2_IN separately; never pass the comma-separated pair as one identifier. Review the Script before use. Capture each independent command status, stable identity, value, units, capability/threshold/hysteresis, health and timestamp plus its matching Dashboard and Server Health rows. Compare each with its per-bay specification under recorded passive power/load/fan/airflow state, using PMBus/reference data only when its different source is explicit. Stop without retry on missing, duplicate, swapped, stale or divergent identity.",
+    "expected_result": "Two distinct stable records and their UI rows map to the correct physical PSU bays, installed FRUs and documented sensing sources. Each applicable sensor independently matches its value/unit/threshold/status/freshness specification in the recorded passive state. An absent module follows only the approved population rule; one bay or PSU-internal telemetry never substitutes for the other motherboard inlet, and no state is mutated.",
+    "pass_fail_basis": "PASS requires inventory/source/bay proof and separate complete OOB/two-UI/spec agreement for both applicable sensors with an engineer verdict. One comma operand, one bay, label-only matching, similar values, truncated output or unqualified PMBus substitution cannot pass. Missing/swapped/duplicate/stale identity, unjustified N/A, out-of-tolerance value or required threshold/status mismatch is FAIL. Missing bay/source/spec/reviewed method is NOT READY, not Pending or PASS; redundancy failover and hot-swap are not covered.",
+    "safety_gate": [
+      "Do not clear SEL/system logs; power, PSU, PMBus and thermal history is relevant context.",
+      "Do not query the comma-separated pair as one name; preserve two independent results and statuses.",
+      "Do not infer PSU presence, bay or motherboard/PMBus source from labels or values; bind to physical inventory.",
+      "Do not service a PSU/feed, change redundancy/power/load/fan/airflow or write thresholds.",
+      "Use population and threshold capability rules; an empty bay or unsupported field is N/A only with specification proof.",
+      "Do not truncate output, expose credentials or run an unreviewed Script; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Chassis/board/BMC/BIOS, physical bay numbering, AC feeds, redundancy state and installed PSU PN/serial/FRU/firmware inventory",
+      "Two separate complete raw identities, sensing-source paths, values, units, threshold capabilities/values, health and timestamps",
+      "Separate Dashboard and Server Health evidence for each bay",
+      "Per-bay specification plus passive power/load/fan/airflow state and approved tolerance/update-lag comparison",
+      "Absent/missing/duplicate/swapped/stale and PMBus-versus-board-source disposition with pinned Script or alternate-method audit",
+      "No-clear/no-write/no-service/no-stress/no-retry proof, final redundancy/BMC health and per-bay engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On identity, source or bay ambiguity, stale/divergent values or unexpected PSU/BMC health change, stop and preserve both sensors' first evidence plus inventory/feed state. Use approved read-only PSU/BMC diagnostics; do not reseat/remove a PSU or alter a feed to force evidence. Any independently authorized change is restored only by the platform owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items clearly list two motherboard PSU-inlet sensors and Procedure/Criteria consistently require passive UI/spec verification. The combined command interpretation is defective, not the source purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The two-target passive purpose is clear. Bay, FRU, source and acceptance mappings are supplyable Project inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "PSU bay/feed/redundancy/FRU inventory, board-probe versus PMBus source map, separate sensor/UI identities, per-bay values/thresholds/status/freshness/N/A rules, passive load/fan/airflow state and protected reviewed method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "Use only after immutable pinning and safety review; it cannot define bay numbering, FRU ownership or board-versus-PMBus source."}],
+  "project_authority": "Chassis/board PSU-bay and sensor-source drawings, PSU/PMBus inventory map, SDR thermal limits, WebUI schema and Project configuration define identity and acceptance.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "comma_pair_as_one_query_allowed": false, "two_bay_non_substitution": true, "pmbus_substitution_allowed_without_mapping": false, "psu_service_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|878|Wistron-BMC-00168-V003", "next_pending_case_variant_id": "65ecf341527892a4"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
