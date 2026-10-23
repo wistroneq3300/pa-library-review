@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 191,
+  "source_key": "Functionality|1005|Wistron-BMC-00295-V002",
+  "case_variant_id": "f8bad83c6f2588d4",
+  "source_ref": {"sheet": "Functionality", "source_row": 1005, "code": "Wistron-BMC-00295-V002", "original_row_sha256": "9bef1ae3066bf20749d74aff1d81b9dc29ed5ab29dcef2a886e0b5a5e2b503fd", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Clear Message Flags", "procedure": "During Test is literally `TBD`; no clear command or flag scope is supplied.", "criteria": "TBD", "script": null, "deepseek": "NO correctly refuses to invent an evidence-clearing operation and requests exact flag scope and expected post-state.", "gpt_v2": "BLOCKED correctly emphasizes irreversible evidence loss, but incorrectly treats the standard flag mask and Get readback as vendor-undefined."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1163_f8bad83c6f2588d4.json",
+  "old_problem": "The historical record retained Pending/BLOCKED because the Master Procedure and Criteria are TBD and clearing can destroy unread messages. IPMI section 22.3 authoritatively defines mandatory App command 0x30, its one-byte mask and completion response; section 22.4 defines Get Message Flags 0x31. The exact disposable test flag and evidence-preservation scope can be parameterized under ED-17 rather than guessed.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_REQUIRES_CONFIRMATION_EVIDENCE_PRESERVING_SINGLE_MESSAGE_FLAG_CLEAR",
+  "disposition_reason": "Preserve the Master TBD history but allow only an isolated, owner-approved standard one-bit clear after immutable evidence capture. For bits 0/1, use only controlled disposable test messages whose sender/audit copies are already retained because the command flushes unread queue/buffer contents. For bit 3, clear only a pre-existing approved watchdog pre-timeout flag and never trigger a watchdog to manufacture coverage. OEM bits require vendor semantics; reserved bits stay zero. Verify exact 0x31 before/after and never retry an uncertain clear.",
+  "decision_basis": [
+    "XLSX row 1005, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 1006 were directly reviewed; next pending was verified as Functionality row 1006 / variant 4ce1f555063671d5.",
+    "IPMI v2.0 section 22.3 defines App command 0x30 with one mask byte: bit 0 flushes Receive Message Queue, bit 1 clears Event Message Buffer, bit 3 clears watchdog pre-timeout flag, bits 7:5 clear OEM flags and bits 4/2 are reserved.",
+    "Clearing bits 0/1 flushes unread data and clears the associated available/full flags. This is irreversible evidence mutation, so pre-captured controlled-source copies, one-bit scope and immediate approval are the safety contract; SEL/log wholesale clear is unrelated and forbidden.",
+    "Get Message Flags 0x31 supplies exact pre/post bit readback. An implementation need not error when clearing unsupported Event Message Buffer, so completion alone or a no-op cannot prove coverage.",
+    "ED-03, ED-15 through ED-19, especially ED-17, ED-24, ED-26 through ED-28 and ED-30 permit an approved evidence-preserving clear; ED-33 through ED-38 preserve TBD/OEM uncertainty and prohibit bulk clear, write substitution and retry."
+  ],
+  "test_case": {
+    "test_name": "Clear one approved standard BMC message flag after immutable evidence capture",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify one selected standard message flag can be cleared on an isolated controlled fixture while all diagnostic content needed for audit is already preserved, unrelated standard/OEM flags remain unchanged and no SEL/log wholesale deletion occurs.",
+    "required_package": [
+      "Immutable DUT/BMC/interface identity, pinned firmware/ipmitool/parser and protected App 0x30/0x31 raw runner",
+      "Versioned coverage matrix for standard bit 0 Receive Message Queue, bit 1 Event Message Buffer and bit 3 watchdog pre-timeout flag, with feature support, exact disposable fixture, owner and SPEC-backed N/A",
+      "Immutable pre-clear package: raw 0x31, SMS_ATN/interface state, timestamps, controlled message/event producer copies, related SEL/audit/log evidence and hash/retention proof",
+      "OEM/System Integrator definition and handler only if bits 7:5 are ever tested; otherwise OEM flags are never cleared, and reserved bits 4/2 remain zero",
+      "Independent OOB/console and message/queue health observer, immediate approval, no-retry rule and incident escalation for uncertain completion or unrelated data loss"
+    ],
+    "test_command": "AUTHORIZED HYBRID MATRIX PROCEDURE ONLY; DO NOT EXECUTE DURING REVIEW. Bind the exact isolated target and select one approved flag. Require a controlled disposable fixture: externally retain the exact producer/audit copies for queue/buffer data, or for bit 3 use only an already-present approved watchdog flag; never create watchdog pre-timeout in this case. Preserve SEL, logs and full raw 0x31 baseline. Construct a one-bit `ipmitool raw 0x06 0x30 <mask>` with reserved bits zero and OEM bits zero unless vendor-defined. Immediately before the irreversible clear, show the exact flag/data loss and obtain confirmation. Send once and capture completion; never retry if uncertain. Read 0x31 and require only the selected flag cleared with all unrelated standard/OEM flags unchanged; compare queue/buffer/interface health and retained evidence. Do not clear SEL/logs, use a multi-bit/all-flags mask, drain via alternate commands as substitution, or generate events/watchdog actions automatically.",
+    "expected_result": "The selected supported flag is proven set before action, all disposable content is independently retained, one approved 0x30 clear completes, and 0x31 shows only that flag cleared. Unrelated standard/OEM flags, SEL/audit/log evidence, BMC health and message interfaces remain intact. Unsupported/no-op behavior is not PASS, and no action is repeated.",
+    "pass_fail_basis": "PASS requires exact target/single flag, immutable pre-evidence, immediate approval, one exact mask, completion 00, pre-set to post-clear 0x31 transition, unchanged unrelated bits and intact retained evidence/health. Command success, clearing an already-zero flag, unsupported Event Buffer silent acceptance, multi-bit/OEM/reserved mask, missing producer copies, SEL/log deletion, unexpected data loss or retry cannot pass. Missing controlled fixture/scope is NOT READY rather than Pending.",
+    "safety_gate": [
+      "Require point-of-action confirmation after showing raw 0x31, exact one-bit mask, unread data that will be flushed, immutable copies and unrelated flags that must remain.",
+      "Use only controlled disposable test messages/events in an isolated scope; never flush production, incident or unexplained unread data.",
+      "Never clear OEM bits without vendor semantics/handler approval and never set reserved bits 4 or 2.",
+      "Do not execute the generic source log clear; preserve SEL, audit, event and producer evidence before any irreversible clear per ED-17.",
+      "Do not trigger watchdog pre-timeout, RAS, reset or message flood to create a flag in this case; fixture creation is separately approved.",
+      "No automatic retry after timeout or uncertain completion. Re-read once only under the pre-approved verification step and escalate discrepancies."
+    ],
+    "expected_evidence": [
+      "Master TBD snapshot, standard flag map, exact target/firmware/tool/parser and Project fixture-matrix revision",
+      "Pre-clear raw 0x31, decoded full flag byte, SMS_ATN/interface state and immutable controlled producer/audit/SEL/log package with hashes",
+      "Immediate approval, exact one-bit 0x30 request, completion/framing and no-retry audit",
+      "Post-clear raw 0x31 proving selected transition and unchanged unrelated/OEM bits plus queue/buffer/interface health",
+      "Explicit irreversible-data disposition, preserved evidence locations and independent engineer verdict"
+    ],
+    "recovery": "Cleared unread data cannot be restored; safety depends on controlled disposable fixtures and immutable pre-capture. On uncertain completion or unexpected flag/data loss, stop all clears, preserve remaining flags/logs/interfaces and escalate through the BMC/incident process. Do not recreate evidence, clear more data, reset/power the system or retry to make the result appear consistent."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The protected Master remains TBD, but the exact named mandatory operation has a complete standard command/bit/readback contract. A Project-controlled disposable fixture and single-bit scope provide acceptance without guessing OEM flags or using the generic log clear."},
+  "blocked": {"before": true, "after": false, "reason": "Core standard clear semantics and verification are defined. Exact existing flag, disposable evidence scope, feature support and approval are finite Project prerequisites under the explicit irreversible-data safety gate."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "DUT/BMC/interface binding; pinned 0x30/0x31 tooling; standard-bit support/coverage matrix; controlled disposable fixture and immutable producer/audit copies; OEM mapping if ever applicable; immediate approval and incident plan.", "execution_status": "NOT STARTED; REVIEW-LAYER HYBRID CASE ONLY; MASTER TBD PRESERVED; NO MESSAGE FLAG, QUEUE, BUFFER, WATCHDOG, SEL, LOG, IPMI, RESET, POWER OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "Intelligent Platform Management Interface Specification v2.0 rev. 1.1", "url": "https://www.intel.com/content/dam/www/public/us/en/documents/specification-updates/ipmi-intelligent-platform-mgt-interface-spec-2nd-gen-v2-0-spec-update.pdf", "application": "Sections 22.3/22.4, Tables 22-4/22-5 and Appendix G define mandatory App 0x30/0x31, flush/clear effects, standard/OEM/reserved flag bits and unsupported Event Buffer no-error behavior."}
+  ],
+  "project_authority": "The Project BMC/incident owner selects an existing controlled standard flag, proves its unread content is disposable and independently retained, and approves the irreversible one-shot clear. OEM flags require OEM authority; no Project choice can make missing pre-evidence recoverable after the fact.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-24", "ED-26", "ED-27", "ED-28", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-37", "ED-38"], "user_ed_01_30_reviewed": true, "master_tbd_history_preserved": true, "standard_raw_0x06_0x30_and_get_0x31_defined": true, "single_standard_bit_only": true, "unread_data_flush_semantics_preserved": true, "oem_and_reserved_bits_protected": true, "immutable_preclear_evidence_required": true, "sel_and_logs_not_cleared": true, "unsupported_noop_not_pass": true, "explicit_confirmation_required": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|1006|Wistron-BMC-00296-V002", "next_pending_case_variant_id": "4ce1f555063671d5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_ipmi_clear_and_get_message_flag_schema_researched": true, "historical_tbd_block_reconciled_with_standard": true, "case_specific_irreversible_queue_buffer_evidence_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
