@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 60,
+  "source_key": "Functionality|870|Wistron-BMC-00160-V003",
+  "case_variant_id": "f087ced88bc41dad",
+  "source_ref": {"sheet": "Functionality", "source_row": 870, "code": "Wistron-BMC-00160-V003", "original_row_sha256": "fc0714624674e22e7b4a728e8d8ecc197a927df4fecf1dd6e052bc20d3e3fe4c", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SEL_InfoErr_Full", "procedure": "Generic setup says clear logs; open Dashboard and Server Health > Sensor Reading.", "criteria": "Sensor reading and threshold are human readable and match specification.", "script": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "deepseek": "YES assumes a literal unique sensor name and calls a 100-line SDR prefix FULL; it omits Info/Error state taxonomy, analog-versus-discrete capability, stable identity, WebUI/spec/freshness and protected Script review.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION requires exact sensor semantics, complete read-only OOB data and Dashboard/Server Health correlation."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1032_f087ced88bc41dad.json",
+  "old_problem": "The case label was treated as self-defining and forced into a generic reading/threshold command. The source does not establish whether the object is analog or discrete, which bits mean Info versus Error, whether thresholds apply, or how the two UI views map to the stable SDR/API object; output was truncated and Script provenance absent.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_CAPABILITY_AWARE_INFO_ERROR_SENSOR_CORRELATION",
+  "disposition_reason": "The row is a read-only display/spec case. First map the label to one stable object and inspect its capability/type. For analog data compare approved value/unit/scaling/thresholds; for discrete data decode approved state bits and mark numeric thresholds N/A where the specification says they do not apply. Correlate the same unchanged object across complete OOB, Dashboard and Server Health. Dynamic event generation and SEL-capacity coverage remain separate.",
+  "decision_basis": [
+    "XLSX row 870, same-row DeepSeek, exact GPT V2, internal Script reference, distinct dynamic-row precedent, selection manifest and historical record were directly reviewed.",
+    "`InfoErr` may encode discrete state/severity bits; applying analog threshold assumptions before reading capability metadata can produce plausible but meaningless evidence.",
+    "The user-approved N/A rule allows threshold fields to be N/A only when the authoritative sensor specification proves non-applicability.",
+    "ED-13 governs N/A proof, ED-15 requires approved state/value criteria, ED-17 rejects unrelated clearing and ED-35 prevents static UI evidence from substituting for dynamic stimulus coverage."
+  ],
+  "test_case": {
+    "test_name": "Verify SEL_InfoErr_Full analog or discrete state consistently across complete OOB and both Sensor Page views",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Confirm the uniquely mapped `SEL_InfoErr_Full` object is readable in Dashboard and Server Health and that its current analog reading or discrete Info/Error state, units/status, applicable thresholds and freshness match the versioned platform sensor specification without generating or acknowledging any event.",
+    "required_package": [
+      "Exact BMC/chassis, firmware/WebUI build, SDR repository, trusted endpoint and read-only role identity",
+      "Stable label-to-object mapping using sensor/resource number, name, type, entity/instance and Dashboard/Server Health row identity",
+      "Authoritative object type/capability mask; for discrete data exact state-bit, assertion and Info/Error/severity meanings; for analog data expected value, unit, scaling/rounding and tolerance",
+      "Applicable threshold/hysteresis values and explicit rules for N/A, disabled, unavailable, unreadable, stale or cached fields",
+      "Validated protected OOB/API/browser client and supported authentication/transport",
+      "Pinned immutable accessible `sensor.git` revision/checksum with read/write/clear/secret/retry review, or approved manual read-only method"
+    ],
+    "test_command": "Do not clear logs, inject events, acknowledge alarms or write thresholds. Bind `SEL_InfoErr_Full` to exactly one stable SDR/API and UI object; stop on missing, duplicate or substring matches. Review the pinned Script before use. Capture repository identity, full capability mask, raw analog value or discrete state bits, units/scaling, status, all applicable threshold/hysteresis fields and timestamp without truncation. Capture the same unchanged object in Dashboard and Server Health with refresh times. Apply the firmware-matched decoder: compare analog fields only when analog, or decode Info/Error bits when discrete and mark numeric thresholds N/A only under the signed capability rule. Compare all applicable fields with Project SPEC, reread for freshness/no mutation and stop without automatic retry on unknown bits or disagreement.",
+    "expected_result": "One unique object is identified. Its authoritative capability model, complete OOB record and both WebUI views agree within approved freshness/format rules: analog values use correct units/scaling/tolerances and applicable thresholds, or discrete state bits render the correct Info/Error status with non-applicable numeric thresholds explicitly justified. All applicable fields match Project SPEC and no log, alarm, threshold or sensor state changes.",
+    "pass_fail_basis": "PASS requires stable unique mapping, capability-aware decoder, complete OOB evidence, both UI views, approved analog/discrete expected matrix and field-level state/value/unit/threshold/status/freshness agreement with engineer verdict. A literal-name command, truncated list, readable label/number or fabricated numeric thresholds for a discrete object cannot pass. Unknown bits, unjustified N/A, identity collision, stale data, mismatch or mutation is FAIL. Missing mapping/taxonomy/spec/reviewed method is NOT READY, not Pending or PASS. Dynamic InfoErr/SEL-full behavior is not covered.",
+    "safety_gate": [
+      "Do not clear SEL or host logs; existing diagnostic events may explain current Info/Error state.",
+      "Do not assume the label is an exact SDR name or take the first substring; use stable object identity and stop on ambiguity.",
+      "Do not force a discrete object into analog threshold semantics; N/A is allowed only when the specification/capability mask proves it.",
+      "Do not truncate SDR output, suppress command errors or call a missing record readable; preserve completion/status and timestamps.",
+      "Do not change thresholds, acknowledge/clear an alarm, inject an Info/Error state or reuse dynamic-row evidence.",
+      "Do not expose passwords, assume cipher 17 or run an unreviewed Script; stop without retry on unknown state bits, stale data or BMC instability."
+    ],
+    "expected_evidence": [
+      "BMC/chassis, firmware/WebUI/SDR identity, trusted role and exact label-to-object/UI-row mapping",
+      "Complete raw record with number/type/entity/capability mask, analog value or discrete bits, units/scaling, status, applicable thresholds/hysteresis and timestamp",
+      "Dashboard and Server Health DOM/screenshots tied to the same object and refresh interval",
+      "Approved Project matrix defining Info/Error bits or analog values, threshold applicability, tolerance and stale/NA/disabled handling",
+      "Pinned Script revision/checksum/content review or signed alternate method and protected command audit",
+      "No-clear/no-write/no-stimulus evidence, discrepancy/limitation report, unchanged BMC health and engineer verdict"
+    ],
+    "recovery": "No mutation is expected. On unknown state bits, identity ambiguity, disagreement or unexpected change, stop and preserve first evidence; use the approved OOB/vendor diagnostic path without acknowledging, clearing, writing thresholds or forcing another state. If a Script mutates state, isolate it and have the authorized owner restore from the recorded baseline."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "This Sensor Page row consistently specifies read-only readability/spec comparison. Dynamic InfoErr and SEL-capacity operations belong to a different Source Identity and are not imported."},
+  "blocked": {"before": false, "after": false, "reason": "The static UI/OOB/spec purpose is clear. Object mapping, analog/discrete taxonomy, threshold applicability and reviewed method are supplyable Project/vendor inputs."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "BMC/SDR/UI identity, stable SEL_InfoErr_Full mapping, analog/discrete capability and Info/Error taxonomy, expected fields/threshold applicability/freshness, protected client and pinned reviewed Script or manual method.", "execution_status": "NOT STARTED; READ ONLY; SCRIPT NOT APPROVED"},
+  "external_authorities": [{"title": "Master-referenced internal sensor Script", "url": "https://dqms-gitlab.wistron.com/Script_LIB/mxm/wistron/e-wing/bmc/sensor.git", "application": "May be used only after an immutable revision is accessible, pinned and reviewed; the label and repository URL do not define state semantics."}],
+  "project_authority": "Platform SDR/sensor state specification, WebUI field definition and Project expected-state matrix define object type, Info/Error bits, thresholds and freshness acceptance.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-15", "ED-17", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "blanket_preclear_allowed": false, "threshold_na_requires_spec": true, "dynamic_fault_or_sel_fill_claimed": false, "sensor_write_authorized": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|871|Wistron-BMC-00161-V004", "next_pending_case_variant_id": "a7fd9f34be2388e6"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
