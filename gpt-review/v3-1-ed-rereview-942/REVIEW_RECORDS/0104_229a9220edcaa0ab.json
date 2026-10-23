@@ -1,0 +1,57 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 104,
+  "source_key": "Functionality|915|Wistron-BMC-00205-V003",
+  "case_variant_id": "229a9220edcaa0ab",
+  "source_ref": {"sheet": "Functionality", "source_row": 915, "code": "Wistron-BMC-00205-V003", "original_row_sha256": "352a3fa8f781ef7b146215721ee2f4672ab3fc0f5b598242b8926d4c9cb4097e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Server power operation", "procedure": "Discover WebUI power actions such as power cycle, power reset, cold/warm reboot and NMI, then use every supported action once; generic setup says clear logs.", "criteria": "Every power action is accepted and performs its correct semantics, including normal versus immediate cycle, and no OS-visible device is lost afterward.", "script": null, "deepseek": "PARTIAL chains IPMI off, fixed sleeps, on and final power status. It does not exercise the source WebUI matrix, distinguish graceful/immediate/reset/cycle/warm/cold/NMI semantics, prove OS shutdown or compare devices.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with CRITICAL risk correctly requires supported-action discovery, workload drain, one approved action at a time, bounded transition evidence, complete OS/device comparison and stop on first failure."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1076_229a9220edcaa0ab.json",
+  "old_problem": "A chained off/on sequence collapses materially different WebUI actions into one path. Power status alone cannot distinguish graceful shutdown, immediate removal, warm reset, cold/cycle behavior or an NMI interrupt, and cannot establish the source requirement that OS-visible devices remain present.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_WEBUI_POWER_ACTION_SEMANTIC_AND_DEVICE_INTEGRITY_MATRIX",
+  "disposition_reason": "Create one isolated outcome for every WebUI action actually supported by the approved firmware, retaining the source examples as separate semantic classes. Each row receives its own expected transition, authorization, visual WebUI/audit proof, independent console/OS/chassis observations, recovery bound and post-state device comparison. Project action labels and timeouts are runtime bindings; unsupported N/A requires authoritative SPEC. NMI remains a separately governed interrupt/crash-dump path, never a substitute for power-cycle evidence.",
+  "decision_basis": [
+    "XLSX row 915, same-row DeepSeek, exact GPT V2, selection manifest, adjacent operations cases and preserved V3.1 record were directly reviewed.",
+    "The approved rules require warm, cold, AC and DC/power-cycle behaviors to remain distinct; a generic off/on pair cannot claim their coverage.",
+    "The source explicitly requires the WebUI action inventory and no device loss, so actual UI visual evidence and complete pre/post device identity are mandatory rather than API status alone.",
+    "NMI success is the documented interrupt/crash-dump result, not necessarily a power transition; it needs an approved dump policy, isolated environment and recovery path."
+  ],
+  "test_case": {
+    "test_name": "Verify each supported BMC WebUI server power action and post-action device integrity",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Independently verify every Project-supported WebUI server action—including graceful and immediate operations, reset, cycle, warm/cold reboot and NMI where exposed—performs its documented transition exactly once, reaches the specified stable state and preserves all applicable OS-visible devices and persistent boot/power settings.",
+    "required_package": [
+      "BMC/SUT/WebUI/BIOS/OS identity and authoritative version-specific action label-to-semantics map",
+      "Dedicated drained-host maintenance window proving no active jobs, users, storage/RAID work, firmware update or dependent service",
+      "Per-action expected OS shutdown/reset/NMI markers, OFF/ON/OS Ready transitions, stable-state and recovery time limits",
+      "Complete applicable baseline inventory for storage, mounted filesystems, PCIe, GPU, NIC/IB and required services",
+      "For NMI, approved fault-injection scope, crash-kernel/dump policy, expected result, dump destination and console recovery",
+      "Independent BMC/host console, WebUI visual capture, preserved SEL/audit/OS logs and owner-approved recovery/escalation path"
+    ],
+    "test_command": "CRITICAL STATE-CHANGING; DO NOT EXECUTE WITHOUT PER-ACTION APPROVAL. Inventory and screenshot every supported WebUI action and bind each exact label to authoritative semantics; retain graceful off/reboot, immediate off/reset, power cycle, warm/cold reboot and NMI as separate rows where supported. For one row only, verify target and drained state, preserve logs, capture full power/OS/device/persistent-setting baseline, obtain point-of-action approval and invoke the exact WebUI control. Correlate visual/audit evidence with bounded console, OS and chassis transitions; for NMI collect the specified dump/interrupt evidence. After the required stable state or OFF→ON→OS Ready path, compare the complete device/service baseline and persistent settings. Stop on first mismatch; never chain actions, substitute API evidence for WebUI coverage, or retry automatically.",
+    "expected_result": "Every displayed supported WebUI action has an independent result matching its documented graceful, immediate, reset, cycle, warm, cold or NMI semantics and required final state. Each returning-to-OS action reaches OS Ready within its approved bound with no unexpected storage, filesystem, PCIe, GPU, Ethernet, InfiniBand or service loss and no persistent boot/power-policy change. NMI produces the specified interrupt/crash-dump behavior. Unsupported actions are N/A only with authoritative platform evidence.",
+    "pass_fail_basis": "PASS is issued per action only when exact WebUI visual/audit proof, expected action-specific transition markers, stable final state, complete pre/post device/service equivalence and preserved persistent settings all agree. An off/on pair, HTTP/command success, a fixed sleep or final chassis status cannot pass the matrix. Wrong semantics, missing OFF→ON where required, absent graceful shutdown, missing NMI dump, timeout, filesystem error, device loss or recovery failure is FAIL and stops later actions. Missing mapping, window, dump policy or recovery is NOT READY; N/A needs SPEC.",
+    "safety_gate": [
+      "Do not clear SEL, audit, OS journal, crash or storage evidence; preserve baseline and first-failure data.",
+      "Verify the exact target and WebUI label immediately before each action; drain all workloads and obtain separate point-of-action approval.",
+      "Never combine off/on/reset/cycle/NMI, infer warm/cold/AC/DC equivalence, or accept a fixed sleep and power status as transition proof.",
+      "Treat NMI as an isolated fault action with approved crash-dump behavior and recovery; do not use it as a power-operation surrogate.",
+      "Stop on wrong transition, timeout, lost console/BMC, filesystem error or device mismatch. Do not issue another reset/power action or auto-retry as recovery."
+    ],
+    "expected_evidence": [
+      "Target/version identity, approved action-semantic matrix, maintenance/workload-drain evidence and complete initial OS/device/persistent-setting baseline",
+      "Per-action before/confirmation/after WebUI captures plus BMC audit event and point-of-action authorization timestamp",
+      "Independent timestamped console, host, chassis and OS markers proving the specific graceful/immediate/reset/cycle/warm/cold behavior",
+      "NMI-specific interrupt and crash-dump evidence against the approved policy where applicable",
+      "Bounded recovery to the required final state and complete storage/filesystem/PCIe/GPU/NIC/IB/service comparison",
+      "Preserved logs, first-failure/recovery record, no-retry proof and engineer-owned verdict for every supported action"
+    ],
+    "recovery": "At any wrong action, timeout, console loss, boot failure, filesystem/device mismatch or missing NMI dump, stop the entire remaining matrix and preserve evidence. Use only the action-specific pre-approved console/OOB recovery path; a second reset or power action needs fresh owner authorization and is recovery, not a retry or PASS attempt. Re-establish and verify the complete baseline before rescheduling any remaining action."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The source consistently requests the supported WebUI action matrix and correct action-specific behavior. Example labels are incomplete/vendor-dependent but become explicit Project bindings without changing the purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The per-action state machines, evidence and recovery are defined. Firmware-specific labels, timing and inventory are runtime configuration, so the review decision is resolved without claiming execution readiness."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact WebUI action list/semantics, drained maintenance window, per-action transition/time limits, complete device scope, NMI dump policy, approvals and recovery.", "execution_status": "NOT STARTED; CRITICAL STATE-CHANGING WEBUI ACTIONS; PER-ACTION APPROVAL REQUIRED; NO DUT POWER OR NMI ACTION EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "BMC vendor WebUI semantics, platform power-state specification, OS shutdown/crash-dump policy, device acceptance list and Project maintenance/recovery SOP define runtime outcomes.",
+  "traceability": {"applicable_decisions": ["ED-13", "ED-15", "ED-17", "ED-18", "ED-20", "ED-31", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_coverage_preserved": true, "webui_visual_evidence_required": true, "warm_cold_cycle_reset_nmi_kept_distinct": true, "complete_device_comparison_required": true, "unsupported_NA_requires_SPEC": true, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|916|Wistron-BMC-00206-V003", "next_pending_case_variant_id": "2aebe0ffa1490bc6"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
