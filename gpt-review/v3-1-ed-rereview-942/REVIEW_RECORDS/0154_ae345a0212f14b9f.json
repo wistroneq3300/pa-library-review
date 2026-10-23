@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 154,
+  "source_key": "Functionality|967|Wistron-BMC-00257-V002",
+  "case_variant_id": "ae345a0212f14b9f",
+  "source_ref": {"sheet": "Functionality", "source_row": 967, "code": "Wistron-BMC-00257-V002", "original_row_sha256": "f720741b28c3bd482c511d08d9c29009cd6492adc260f7c4b2e64e3d8ae731ac", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "UBB", "procedure": "In BMC WebUI Hardware status > Inventory and LEDs, check Chassis information and detail information.", "criteria": "Data should be readable and correct.", "script": "None.", "deepseek": "YES assumes acronym UBB maps directly to `/redfish/v1/Chassis/UBB`, reads Manufacturer, Model, SerialNumber and Status with insecure curl, and omits complete topology, identity fields, freshness and actual WebUI evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION correctly requires vendor-defined UBB topology and separate static/live evaluation but leaves the definition, mapping and baseline as an engineering-decision gate."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1126_ae345a0212f14b9f.json",
+  "old_problem": "UBB is not a universal Redfish resource type, so neither the acronym nor a matching URI establishes the physical assembly. The four-property query also combines persistent identity with dynamic Status and can accept stale health. The prior review identified these problems but did not convert the platform definition, topology, expected identity and Status policy into runtime prerequisites.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_TOPOLOGY_BOUND_UBB_INVENTORY_AND_SEPARATE_STATUS",
+  "disposition_reason": "Require the approved Project/vendor definition of UBB and its exact physical/topological instance, bind the actual WebUI and standard/OEM API inventory objects through durable relationships, validate the complete persistent identity against the build record, and evaluate Status only in a separate timestamped checkpoint. The source does not mandate IPMI, so it is supplementary only when explicitly mapped and may not be invented.",
+  "decision_basis": [
+    "XLSX row 967, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, historical V3.1 record and adjacent row 968 were directly reviewed; next pending was verified as Functionality row 968 / variant 76df9a21fbd2144e.",
+    "UBB meaning and topology are Project-specific. DMTF Chassis semantics can describe an assembly only after the Project establishes which resource and relationships represent the intended UBB.",
+    "The source requires actual WebUI information/detail and does not explicitly require `ipmitool`; an approved IPMI record may corroborate identity but cannot become a fabricated mandatory method.",
+    "Persistent manufacturer/model/serial/part data and dynamic Status have different authorities and freshness. They need separate acceptance rows, and a momentary acceptable Status cannot prove full UBB functionality or UBB_FPGA firmware lifecycle.",
+    "ED-02, ED-03, ED-08, ED-14, ED-15, ED-17, ED-19, ED-21 and ED-30 preserve exact identity, visual evidence and thresholds; ED-33 through ED-38 permit parameterized mapping while rejecting guessed OEM paths and cross-credit from UBB_FPGA or FRU_SYS."
+  ],
+  "test_case": {
+    "test_name": "Validate Project-defined UBB topology and complete inventory with separate live Status",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify the exact physical assembly designated UBB by the approved platform topology is uniquely represented in BMC inventory, all applicable persistent identity/manufacturing fields agree with the Project build record and actual WebUI, and the separately timed supported Status fields meet their approved freshness/health policy without claiming FPGA firmware or broader function coverage.",
+    "required_package": [
+      "Approved vendor/Project definition of UBB, its hardware role, physical location/instance and durable relationships to chassis/system/components",
+      "Immutable SUT/BMC/platform/firmware/WebUI identity and topology map distinguishing UBB from FRU_SYS, UBB_FPGA and similarly named assemblies",
+      "Service-root-discovered standard Chassis/Assembly relationships or explicitly approved OEM UBB inventory schema/resource for the exact firmware",
+      "Complete persistent field baseline with manufacturer, model/product, part, serial, asset/revision/custom values and allowed absent/encoding behavior",
+      "Approved Status policy for supported State/Health/HealthRollup or OEM fields, acceptable values, unknown/absent behavior and cache/freshness tolerance",
+      "Actual WebUI Hardware status > Inventory and LEDs UBB table/detail mapping, visual capture method, trusted TLS/protected credentials and evidence/redaction storage"
+    ],
+    "test_command": "READ ONLY. Verify immutable target and the approved UBB definition/topology, enumerate actual Chassis/Assembly or approved OEM inventory members and bind the UBB through durable physical relationships; do not assume `/Chassis/UBB` or accept the acronym/name as identity. Retrieve the complete mapped inventory object with certificate verification and preserve raw links/fields. Open the actual rendered BMC WebUI Hardware status > Inventory and LEDs UBB row/detail and capture all required fields. First compare persistent identity/manufacturing fields to the UBB build authority, preserving raw and approved-normalized values. Then separately record supported Status fields with timestamps/cache age and compare only to the approved live-status policy and contemporaneous UI. If the Project explicitly maps a read-only IPMI inventory record it may be supplemental evidence, but absence is not a source failure. Do not clear logs, write FRU/inventory, invoke OEM actions, reset, reboot, power-cycle or perform FPGA update.",
+    "expected_result": "The Project-defined physical UBB maps uniquely to one approved UI/API inventory object and is not confused with FRU_SYS or UBB_FPGA. Every required persistent field is present or has an authorized absent representation and exactly matches the UBB build authority after traceable normalization. Separately, supported live Status is fresh, schema-valid and meets the approved policy and contemporaneous WebUI; no stale/unknown state is silently accepted. No firmware, control, power or inventory state changes and no broader UBB/FPGA function claim occurs.",
+    "pass_fail_basis": "PASS requires authoritative UBB definition/topology, unique resource binding, complete persistent-field comparison, actual rendered WebUI evidence and a separate fresh Status checkpoint when supported. A UBB-shaped URI, four-property sample, Healthy label or UBB_FPGA firmware entry cannot pass complete UBB inventory. Wrong/duplicate/ambiguous assembly, missing required field, unauthorized blank, stale/unknown Status outside policy or UI/API/reference mismatch is FAIL. Missing definition/map/baseline/status policy is NOT READY rather than Pending; no health threshold is invented.",
+    "safety_gate": [
+      "Do not infer UBB meaning or construct an OEM/Chassis path from the acronym; use only approved Project/vendor topology and schema mappings.",
+      "Use protected certificate-verified reads and do not expose credentials or follow any OEM Action/write link.",
+      "Keep persistent identity and dynamic Status in separate timestamped checkpoints; neither may substitute for the other or for UBB_FPGA firmware coverage.",
+      "Do not invent IPMI requirements absent from the source; any approved IPMI evidence remains supplemental and read-only.",
+      "Prohibit log clearing, FRU/inventory writes, OEM controls, firmware upload/update/activation, reset, reboot and power actions.",
+      "Stop on ambiguous UBB mapping, stale/unknown Status, credential exposure or authority disagreement and do not automatically retry via reset/power/update."
+    ],
+    "expected_evidence": [
+      "Approved UBB definition/topology and immutable target identity with explicit FRU_SYS/UBB_FPGA separation",
+      "Complete discovered Chassis/Assembly or approved OEM resource relationship and protected raw inventory artifact with schema/trust metadata",
+      "Actual rendered WebUI Inventory and LEDs UBB row/detail visual artifacts with freshness timestamps",
+      "Persistent raw/normalized/reference field matrix for every required identity/manufacturing property",
+      "Separate Status matrix with API/UI values, timestamps/cache age, approved expected semantics and scoped outcome",
+      "Pre/post fingerprints, preserved SEL/audit evidence, no-write/no-update/no-reset/no-power proof and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On undefined/ambiguous UBB mapping, stale Status or data mismatch, stop and preserve/redact evidence and obtain the authoritative topology/baseline/status policy. Do not guess another resource, clear logs, write inventory, invoke OEM control, update FPGA, reset, reboot, power-cycle or automatically retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master has one broad UBB WebUI inventory purpose. The ambiguous acronym/path and DeepSeek's partial fields are missing implementation details, not conflicting requirements."},
+  "blocked": {"before": false, "after": false, "reason": "UBB identity/status validation is technically defined once the Project supplies its platform-specific meaning, topology and baselines."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "UBB definition/physical topology; UI/API resource relationships; complete persistent baseline; supported Status/freshness policy; trust, normalization and redaction; optional approved IPMI mapping.", "execution_status": "NOT STARTED; READ-ONLY UBB INVENTORY/STATUS REVIEW ONLY; NO API, WEBUI, IPMI, OEM, FIRMWARE, POWER OR DUT ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "DMTF Redfish Resource and Schema Guide 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP2046_2025.3.html", "application": "Defines Chassis/Assembly persistent inventory properties, relationships and Status semantics; UBB naming/topology remains Project-specific."},
+    {"title": "DMTF Redfish Data Model Specification 2025.3", "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.3.pdf", "application": "Provides normative Redfish data-model semantics used to separate persistent identity from supported live State/Health fields."},
+    {"title": "DMTF Redfish Schema Index", "url": "https://redfish.dmtf.org/redfish/schema_index", "application": "Provides authoritative schema versions for validation of the target-advertised standard resources; OEM UBB schema still requires vendor approval."}
+  ],
+  "project_authority": "The Project/vendor package alone defines UBB's physical role/resource mapping, complete build identity and acceptable live Status/freshness. These finite inputs make read-only collection automatable without inventing IPMI or UBB_FPGA coverage.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-14", "ED-15", "ED-17", "ED-19", "ED-21", "ED-30", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ubb_definition_and_topology_not_guessed": true, "static_identity_and_live_status_separated": true, "ubb_fpga_and_fru_sys_not_cross_credited": true, "ipmi_not_invented": true, "actual_webui_visual_evidence_required": true, "project_parameters_do_not_keep_pending": true, "fully_automatable": true, "user_confirmation_required": false, "write_update_or_power_action_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|968|Wistron-BMC-00258-V002", "next_pending_case_variant_id": "76df9a21fbd2144e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_row_read": true, "official_redfish_inventory_status_sources_researched": true, "case_specific_ubb_topology_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
