@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.0",
+  "rereview_sequence": 128,
+  "source_key": "Functionality|939|Wistron-BMC-00229-V003",
+  "case_variant_id": "b3b64b8e1b76feab",
+  "source_ref": {"sheet": "Functionality", "source_row": 939, "code": "Wistron-BMC-00229-V003", "original_row_sha256": "195259cb85384d4e2433d249344e3ea4286e894ff85729458335a51027174b2d", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "View user account - IPMI", "procedure": "Run `ipmitool user list <Channel number>` after generic prechecks/log clearing.", "criteria": "The user account list is displayed correctly.", "script": "Internal `useraccount_check-add-set` path whose name suggests broader add/set behavior.", "deepseek": "YES recognizes a read-only inventory but omits the required channel, hardcodes cipher suite 17, exposes the password with `-P`, covers one implicit channel and does not normalize access/privilege columns or distinguish empty, unauthorized and transport failures.", "gpt_v2": "FULLY AUTOMATABLE with MEDIUM read-only risk correctly requires supported-channel discovery, separate complete `user list <channel>` reads, protected credentials, untruncated raw output, slot/access/privilege normalization, redaction and a strict no-write boundary."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1100_b3b64b8e1b76feab.json",
+  "old_problem": "IPMI user access is channel-scoped, but DeepSeek drops the source's channel parameter and assumes one implicit current channel. A command success or one list cannot prove full relevant-channel coverage or correct Call-in/Link Auth/IPMI Msg/Channel Priv Limit fields. The referenced internal script appears to include add/set behavior and cannot be trusted for this read-only case without a pinned inspection.",
+  "new_disposition": "RESOLVED_AS_FULLY_AUTOMATABLE_EXPLICIT_PER_CHANNEL_IPMI_USER_SLOT_INVENTORY",
+  "disposition_reason": "Use direct pinned ipmitool read-only `user list <channel>` calls for every Project-declared session-capable management channel, preserve complete raw output, normalize every slot/access field, correlate with an approved channel/slot baseline and separate empty/unauthorized/transport errors. Target channels and schema are runtime configuration. The broad internal script is excluded unless an exact revision is reviewed and proven read-only; no user confirmation is required for the approved read contract.",
+  "decision_basis": [
+    "XLSX row 939, same-row DeepSeek, exact GPT V2, tests JSON, selection manifest, adjacent WebUI-Modify/IPMI-Add rows and preserved V3.1 record were directly reviewed; row 940 and its manifest identity were independently verified.",
+    "Upstream ipmitool source defines `user list [<channel number>]`, defaults omission to current channel `0x0E`, and retrieves per-channel user access plus name for all slots. The explicit source channel must therefore be supplied and recorded.",
+    "The upstream output fields are ID, Name, Callin, Link Auth, IPMI Msg and Channel Priv Limit; correctness requires field normalization and an authorized expected matrix, not merely printable output.",
+    "ED-03/ED-13 and ED-33 through ED-38 allow a parameterized read-only command contract while forbidding write-script substitution and separating review completion from DUT verdict."
+  ],
+  "test_case": {
+    "test_name": "Inventory and validate every relevant IPMI user slot per explicit management channel",
+    "automation_classification": "FULLY AUTOMATABLE",
+    "purpose": "Verify through direct read-only ipmitool calls that every user slot on each Project-declared supported management channel is completely displayed with the correct username, empty/used state, Call-in, Link Authentication, IPMI Messaging and channel privilege limit, while distinguishing channel/error conditions and making no account or channel change.",
+    "required_package": [
+      "Target BMC/firmware identity, pinned supported ipmitool version and protected RMCP+ access",
+      "Project/vendor list of relevant supported management channel numbers or an approved read-only channel-capability discovery method",
+      "Authoritative per-channel user-slot baseline including maximum/used slots, username/redaction token, Call-in, Link Auth, IPMI Msg and privilege limit",
+      "Target privilege vocabulary, empty/fixed/disabled slot semantics and any documented WebUI/Redfish-to-IPMI identity mapping",
+      "Protected credential prompt/provider that avoids `-P` process exposure, approved cipher negotiation/policy and metadata redaction rules",
+      "Complete raw plus normalized evidence store; the internal add-set script remains prohibited unless pinned and independently proven list-only"
+    ],
+    "test_command": "READ ONLY. Verify target identity, pinned ipmitool and protected RMCP+ credential handling; do not hard-code cipher suite 17 unless target policy explicitly selects it. Preserve logs rather than clearing them. Establish the complete relevant channel set using Project/vendor data or approved read-only channel discovery. For each explicit channel, run `ipmitool ... user list <channel>` without `-P`, capture complete untruncated raw output/status and normalize every slot into channel, ID, redacted name, Call-in, Link Auth, IPMI Msg, Channel Priv Limit and empty/used state. Compare to the approved per-channel baseline and optional read-only account mapping, keeping empty list/slot, invalid channel, insufficient privilege, authentication and transport errors distinct. Repeat only read-only fingerprints to prove no change. Do not execute the broad `useraccount_check-add-set` script or any user set/password/enable/disable/priv/channel setaccess/SOL payload command.",
+    "expected_result": "Every relevant supported channel has a complete slot inventory; each slot's ID, username identity token, empty/used state and all access/privilege columns match the approved channel baseline. Invalid/unsupported channels and authentication/transport failures are classified separately rather than as empty accounts. Optional identity correlation is documented without collapsing channel-specific flags. Pre/post inventories and audit context show no user, channel or session configuration change.",
+    "pass_fail_basis": "PASS requires explicit complete channel coverage, verified target/tool, complete raw per-channel output, normalized every-slot fields, equality to the authorized baseline, distinct error interpretation, protected credentials and no-change proof. A channel-less call, one assumed channel, command exit or generic output cannot pass. Missing channels/slots, wrong access/privilege/name state, incomplete output, untrusted credentials, ambiguous errors or any write invocation is FAIL and stops. Missing channel/schema/baseline access is NOT READY; no user confirmation is needed for the approved read-only collection.",
+    "safety_gate": [
+      "Use direct read-only `user list <channel>` and protected credential handling; never place BMC passwords in `-P`, logs, processes, screenshots or records.",
+      "Supply and record every channel explicitly; do not treat current-channel `0x0E` or one LAN channel as universal coverage.",
+      "Do not execute the broader add-set script unless its exact revision is reviewed and all write paths are excluded for this case.",
+      "Do not issue user set/password/enable/disable/priv, channel setaccess, SOL payload or any other account/channel write, and do not clear logs.",
+      "Stop on wrong target, unknown channel/field semantics, incomplete output, sensitive-data exposure or inability to distinguish empty from authorization/transport failure."
+    ],
+    "expected_evidence": [
+      "Target BMC/firmware, pinned ipmitool version, protected interface/cipher policy and complete relevant channel set",
+      "Complete raw redacted `user list <channel>` output/status/hash for every explicit channel",
+      "Normalized channel-slot matrix covering ID/name, empty/used, Call-in, Link Auth, IPMI Msg and privilege limit",
+      "Authorized baseline comparison and distinct invalid-channel/empty/authorization/authentication/transport interpretations",
+      "Pre/post no-change/audit proof, excluded write-script evidence and engineer verdict"
+    ],
+    "recovery": "No mutation is intended. On wrong target/channel, unexpected write path, incomplete schema or sensitive-data exposure, stop, preserve/redact the first raw evidence and close the IPMI session. Do not run user/account writes to populate or repair the list; escalate channel/schema discrepancies to the owner."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Items, Procedure and Criteria consistently define read-only IPMI user display. DeepSeek's missing channel and the broad Script name are method/coverage defects, not a competing Master purpose."},
+  "blocked": {"before": false, "after": false, "reason": "The direct per-channel list method and fields are defined by upstream ipmitool. Channel set, baseline and protected access are runtime prerequisites."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Target BMC/ipmitool version; relevant explicit channels; per-channel slot/access baseline; protected RMCP+ credentials/cipher policy; redaction and optional identity mapping.", "execution_status": "NOT STARTED; READ-ONLY IPMI INVENTORY; NO IPMI COMMAND OR ACCOUNT/CHANNEL ACTION EXECUTED"},
+  "external_authorities": [
+    {"title": "ipmitool upstream user implementation", "url": "https://github.com/ipmitool/ipmitool/blob/master/lib/ipmi_user.c", "application": "Defines `user list [channel]`, current-channel default, per-channel Get User Access/Name iteration, output fields and privilege vocabulary."},
+    {"title": "OpenBMC user-management architecture", "url": "https://github.com/openbmc/docs/blob/master/architecture/user-management.md", "application": "Documents channel-based IPMI user restrictions and account-management architecture used to interpret channel-specific access."}
+  ],
+  "project_authority": "Target firmware channel map and Project account/access policy bind the relevant channels, expected slot matrix, credential/cipher policy, redaction and verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-13", "ED-33", "ED-34", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "original_ipmitool_user_list_coverage_preserved": true, "explicit_channel_required": true, "all_relevant_channels_independent": true, "fully_automatable": true, "user_confirmation_required": false, "write_script_allowed": false, "automatic_retry_allowed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_pending_source_key_verified_from_xlsx_and_manifest": "Functionality|940|Wistron-BMC-00230-V003", "next_pending_case_variant_id": "70158ba1e5c63bc5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_record_read": true, "adjacent_rows_read": true, "upstream_tool_source_researched": true, "case_specific_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
