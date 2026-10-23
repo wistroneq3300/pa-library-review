@@ -1,8 +1,8 @@
 # Engineering Decision Re-review Handoff
 
-- Completed: **158 / 942**
-- Last reviewed: `Functionality|971|Wistron-BMC-00261-V002` / `e6ee840e716640bd`
-- Next source-verified pending identity: `Functionality|972|Wistron-BMC-00262-V003` / `656357a525234c9f`
-- Latest disposition: SPD_FAN1_R through SPD_FAN16_R is removed from Pending and reclassified FULLY AUTOMATABLE. `_R` is not guessed: all sixteen channels and any approved `_F`/`_R` pairing retain independent evidence, contextual limits and actual WebUI detail; no fan manipulation, control, stimulus, reset or power action is allowed. No query ran.
+- Completed: **159 / 942**
+- Last reviewed: `Functionality|972|Wistron-BMC-00262-V003` / `656357a525234c9f`
+- Next source-verified pending identity: `Functionality|973|Wistron-BMC-00263-V003` / `8ccd622910ebb050`
+- Latest disposition: Storage Drive details is removed from Pending and reclassified FULLY AUTOMATABLE. Every expected bay is topology-bound through complete Storage/Drive link traversal with protected identity, health, capacity and model-specific authoritative firmware plus actual WebUI evidence; no rescan, storage write, volume/RAID change, erase, flash, reset or power action is allowed. No query ran.
 - Protected sources: unchanged.
 - DUT execution: none.
