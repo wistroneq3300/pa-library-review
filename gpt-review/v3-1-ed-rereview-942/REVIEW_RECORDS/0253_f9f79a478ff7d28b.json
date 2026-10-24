@@ -1,0 +1,55 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 253,
+  "formal_queue_sequence": 102,
+  "source_key": "Functionality|1625|Wistron-BMC-00896-V002",
+  "case_variant_id": "f9f79a478ff7d28b",
+  "source_ref": {"sheet": "Functionality", "source_row": 1625, "code": "Wistron-BMC-00896-V002", "original_row_sha256": "08fcc2128d5f91ffab05e0a69e69206f3834dcd7bc990c9a9bee6918ead224f3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Inventory and LEDs - Power supplies", "procedure": "Open BMC-Web Hardware Status / Inventory and LEDs but check `Fans` information; boilerplate requests clearing logs.", "criteria": "All information should match SPEC definition.", "script": "None; 10 attended and 10 machine minutes.", "deepseek": "YES; projects only Name, Model, SerialNumber and Status from PowerSupplies, bypasses TLS and assumes the PSU branch.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; requires a PSU-versus-Fans decision plus complete per-member, physical, health and redundancy evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1763_f9f79a478ff7d28b.json",
+  "old_problem": "Items and DeepSeek point to power supplies, yet the literal procedure points to Fans. A PSU record has fitted-bay, feed, capacity/input-output, health and redundancy meanings; a fan record has rotor/location, speed/unit and thermal meaning. The generic criterion and four-field DeepSeek sample do not select or complete either contract. The next Assembles/Fans row is a distinct source identity and cannot donate scope or evidence.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_WITH_PSU_OR_FAN_READ_ONLY_INVENTORY_BRANCHES",
+  "disposition_reason": "Retain Pending and source conflict, with REQUIRES PACKAGE / USER CONFIRMATION rather than BLOCKED. Each candidate is a safe read-only inventory activity after a BMC/platform owner chooses the source scope and supplies its field/member matrix. Neither branch can be declared resolved now: selecting PowerSupplies from the title/DeepSeek would discard the literal Fans instruction, while a fan check cannot establish PSU identity or redundancy. The review layer preserves conditional branches, full evidence/recovery gates and zero power/fan-control activity until the conflict is formally dispositioned.",
+  "decision_basis": [
+    "The original XLSX row 1625, same-row DeepSeek/test-json content, V2, V3.1 historical record, pending/conflict analyses and exact source history were reread. The next formal queue identity was reconstructed and directly opened as row 1626 / Wistron-BMC-00897-V002 / 8be978e637e0cb77.",
+    "PSU correctness is not a four-display-field comparison: it depends on complete population, physical slot/serial/feed, presence, input/output or capacity where applicable, health/status, redundancy role and freshness. Those cannot be inferred from fan speed/rotor observations, and the inverse is also true.",
+    "The DeepSeek endpoint supports only the Items branch, has unsafe TLS/credential handling and does not prove complete members, UI state, physical mapping, redundancy semantics or source conflict resolution.",
+    "No configured power, redundancy, input/output, chassis, thermal or fan control is needed for either inspection branch. Project selection and matrices are readiness inputs, but the semantic choice of which Master branch to accept remains Engineering Decision Pending.",
+    "ED-12 has no source-key-approved correction for this row; ED-20 preserves actual BMC-Web visual evidence; ED-24 preserves the conflict as overlay. ED-02/ED-21 keep it independent; ED-03/ED-13 prohibit invented BMC semantics; ED-26, ED-33, ED-35, ED-36 and ED-38 retain source/evidence and prohibit retry or DUT verdict."
+  ],
+  "test_case": {
+    "test_name": "Inventory and LEDs - Power supplies — PSU/Fans scope-decision read-only contract",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Preserve the competing PSU and Fan inspection scopes until an owner selects one or authorizes separate checkpoints. No observation from one hardware population is treated as acceptance evidence for the other.",
+    "required_package": [
+      "Owner selection of Power supplies, Fans or separate checkpoints, with preserved Master conflict and specified treatment of the unselected wording",
+      "Same-SUT/BMC/chassis identity, BMC firmware/UI and protected BMC-Web/API access with validated TLS",
+      "For PSU: signed member/bay/serial/model/feed/capacity-or-reading/health/status/redundancy/special-state matrix and physical mapping; for Fans: signed rotor/location/status/speed/unit/thermal matrix",
+      "Vendor schema/UI mapping, complete selected resources/member payloads, BMC-Web screenshots/photos, timestamps, raw-evidence storage and no-mutation audit"
+    ],
+    "test_command": "NOT STARTED — do not use any API response as a row-1625 result before scope selection. After a PSU ruling, capture protected BMC-Web evidence and every selected power-supply resource/member, map logical entries to approved physical bay/feed, compare every signed identity/health/redundancy field and report membership/freshness exceptions. After a Fans ruling, collect the independently defined full fan resource/UI matrix instead. Preserve relevant logs without clearing. Do not use `curl -k`, inline secrets, a four-field filter, opaque aggregate data or API-only proof in place of required BMC-Web visual evidence.",
+    "expected_result": "Current expected output is an owner-declared inspection domain and complete matrix. A future PSU result requires complete expected member identity, location/feed, state and redundancy comparison; a Fan result requires its separate rotor/health/thermal comparison. Separate checkpoints remain independently reported. No hardware PASS, FAIL or N/A is asserted now.",
+    "pass_fail_basis": "Pending remains until scope and its matching accepted matrix are supplied. A future PSU PASS needs full same-SUT population and physical-map correlation, with no unexplained missing/extra/duplicate/stale/faulted/mismatched member or redundancy-role difference. A future Fan PASS needs its own full selected matrix. HTTP success, four fields, aggregate wattage, a generic `matches SPEC` claim, adjacent row evidence or a successful UI page is not PASS. The engineer decides final DUT status.",
+    "safety_gate": [
+      "Do not call Fans a typo or silently let the PowerSupplies URI choose the source scope.",
+      "Perform no PSU power-policy, redundancy, feed, chassis-power, fan, thermal, BIOS or firmware control action; inventory capture remains read-only.",
+      "Do not clear SEL, syslog, dmesg or audit data. Preserve power/health evidence and stop interpretation for stale, cross-host, partial or unmapped data.",
+      "Use protected credentials/TLS and retain actual BMC-Web visual proof; API telemetry only supports the selected scope.",
+      "Do not retry inconsistent readings automatically or initiate physical power/fan diagnosis from this inventory-only record."
+    ],
+    "expected_evidence": [
+      "Exact source identity, literal PSU/Fans branches and owner disposition",
+      "Same-SUT/BMC/UI identity, selected signed matrix/schema and timestamped BMC-Web screenshots/photos",
+      "Complete selected raw member resources with physical-map, health/status/freshness and PSU-redundancy or Fan-specific comparison ledger",
+      "No-control-mutation proof, preserved audit/SEL/health evidence, exceptions and engineer-owned verdict; current no-DUT-action audit"
+    ],
+    "recovery": "No mutation is authorized. On unresolved scope, stale/missing members or mapping conflict, stop comparison, preserve UI/raw BMC evidence, close the protected session and verify no power/redundancy/fan/thermal/chassis setting changed. Do not clear logs, cycle power, remove a PSU, alter a feed or repeat a read as an assumed recovery."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Power supplies and Fans name distinct hardware populations with materially different identity, power/redundancy and health acceptance; neither source branch may override the other by implication."},
+  "blocked": {"before": false, "after": false, "reason": "Both scopes have bounded non-mutating collection/recovery methods after owner selection. Missing scope/matrix is a decision/readiness gate, not an unknown destructive operation."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "PSU-versus-Fans decision or separate checkpoints; selected UI/API semantics; PSU physical/feed/redundancy or Fan rotor/thermal matrix; same-SUT mapping; protected evidence and engineer disposition.", "execution_status": "NOT STARTED; NO PSU/FAN/POWER/REDUNDANCY/THERMAL/LOG/DUT ACTION AUTHORIZED OR EXECUTED BEFORE SCOPE RULING"},
+  "external_authorities": [],
+  "project_authority": "The BMC/platform owner selects the scope and resource semantics; power owner supplies PSU/feed/redundancy data if selected; thermal owner supplies fan evidence if selected; operator captures UI/physical mapping; engineer owns verdict. Master is unchanged and neither branch grants power-control authority.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-12", "ED-13", "ED-20", "ED-21", "ED-24", "ED-26", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "no_source_key_specific_correction": true, "psu_and_fan_coverage_kept_independent": true, "psu_redundancy_not_replaced_by_four_fields": true, "webui_evidence_preserved": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1626|Wistron-BMC-00897-V002", "next_missing_formal_queue_case_variant_id": "8be978e637e0cb77"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_conflict_record_read": true, "pending_and_conflict_analyses_read": true, "duplicate_code_search_completed": true, "next_formal_queue_identity_directly_read": true, "case_specific_psu_feed_redundancy_fan_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
