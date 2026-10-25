@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 301,
+  "formal_queue_sequence": 150,
+  "source_key": "Functionality|1811|Wistron-HW-00433-V002",
+  "case_variant_id": "07e79485818af389",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1811, "code": "Wistron-HW-00433-V002", "original_row_sha256": "c98fa7bc0b69b7eadb8d19f0908e25ce66a1ea23b91f3c80d9196265c35efd9b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "E1S_BD2", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No BD2 identity, modality or relationship to row 1812 is supplied.", "deepseek": "NO; assumes physical connection/continuity with possible BMC corroboration.", "gpt_v2": "MANUAL ONLY at HIGH risk; develops physical BD2 controls but cannot establish whether that scope differs from adjacent I2C E1S_BD2.", "historical_v3_1": "SOURCE_CONFLICT and BLOCKED because this row and row 1812 name BD2 yet have missing semantics and incompatible inferred physical-versus-logical modes."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1944_07e79485818af389.json",
+  "old_problem": "Two independent Source Identities name E1S_BD2: this row and Functionality row 1812 I2C E1S_BD2. Neither supplies a specification. Reference reviews infer physical continuity here and logical scanning there, but the Master does not say whether they are duplicates, separate stages or overlapping coverage. Sharing one result would risk double counting or omission.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_SOURCE_CONFLICT_AND_BLOCKED_FOR_E1S_BD2_CROSS_ROW_SCOPE; KEEP_BOTH_IDENTITIES_AND_EVIDENCE_SEPARATE",
+  "disposition_reason": "Retain Pending, Source Conflict and BLOCKED. ED-02/ED-19 preserve each Source Key and Variant ID, but they do not invent a duplicate/split relationship. Engineering must assign non-overlapping scope or explicitly rule duplication, then define BD2 identity, logical and/or physical method, acceptance and recovery for each retained row. Until then MANUAL ONLY and shared evidence are both premature.",
+  "decision_basis": [
+    "The exact XLSX row 1811, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1812 / Wistron-HW-00012-V003 / 5eacac5ccc73ffb3.",
+    "Row 1811 E1S_BD2 and row 1812 I2C E1S_BD2 have different codes/test sets but identical placeholder procedure/criteria, so their relationship is not derivable.",
+    "Physical integrity and logical BMC reachability cover different failure modes; an unapproved physical/logical split is as unsafe as treating the rows as duplicates.",
+    "ED-02 and ED-19 require retaining both identities and coverage until an explicit source ruling exists; no result may be counted twice.",
+    "ED-09 reserves physical work for humans, while ED-03/ED-15 forbid guessed topology and PASS criteria for any logical stage.",
+    "No I2C, BMC, E1.S, NVMe, physical, continuity, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "E1S_BD2 source-identity and physical/logical scope reconciliation — blocked",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve this BD2 Source Identity independently from row 1812 and, after an owner ruling, validate only its assigned non-overlapping logical and/or physical checkpoints against the exact BD2 board, slot, cable and connector.",
+    "required_package": [
+      "Engineering duplicate-or-split ruling for rows 1811 and 1812 with separate coverage/evidence ownership",
+      "Exact E1S_BD2 board, slot, cable, connector, endpoint and revision identity",
+      "If logical scope is assigned: BMC/OOB controller/mux/bus/address/transaction and expected-response matrix",
+      "If physical scope is assigned: pinout, isolation/ESD state, qualified operator/instrument and measurement limits",
+      "Per-row E1.S/NVMe/storage-health criteria, aborts, independent recovery and fresh review"
+    ],
+    "test_command": "BLOCKED; perform no bus or physical action and do not reuse row-1812 evidence. After Engineering assigns non-overlapping scope and a fresh review authorizes it, execute only this row's named checkpoints: bounded secure BMC/OOB reads for logical coverage and/or qualified-human inspection/continuity in an approved safe state for physical coverage. Capture this Source Key/Variant ID separately with pre/post E1.S/NVMe, BMC SEL/SDR and OS health. Do not copy BD1/row1812, invent pins/addresses/limits, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. Future PASS requires the explicit cross-row ruling, exact BD2 identity, every checkpoint assigned to this row meeting its own response or physical limits, and no storage/management health change; evidence must not be reused to satisfy row 1812 unless the ruling explicitly defines shared coverage and traceability.",
+    "pass_fail_basis": "Current result is BLOCKED with Source Conflict. Missing cross-row ruling or specification, overlapping/double-counted evidence, wrong BD2 identity, omitted assigned stage, response or physical-limit failure, storage/management anomaly or incomplete traceability is FAIL/BLOCKED for owner verdict. One row cannot silently substitute for the other.",
+    "safety_gate": [
+      "Keep row 1811 and row 1812 Source Keys/Variant IDs and evidence packages independent pending an explicit ruling.",
+      "Do not infer physical-only scope or copy BD1/row1812 topology, pins, buses, addresses or criteria.",
+      "Physical work is human-only under approved ESD/isolation; logical work requires a route/register allowlist.",
+      "Stop on damage, open/short, device disappearance, storage, BMC or bus anomaly; do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved duplicate/split-scope ruling for both BD2 rows and separate fresh reviews",
+      "Exact BD2 board/slot/cable/connector/endpoint identity and this row's assigned checkpoints",
+      "Logical raw responses and/or human physical photos/measurements as assigned",
+      "Non-duplication trace plus pre/post E1.S/NVMe/storage, BMC SEL/SDR and OS health",
+      "Per-row verdict, abort/no-retry/independent-recovery audit and owner disposition"
+    ],
+    "recovery": "No action is authorized now. Each retained BD2 row must receive a stage-specific independent recovery plan. On any defect or health change, stop and preserve this row's evidence without retry; connector work, bus/NVMe reset, reboot or power cycle requires separate explicit authorization."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Rows 1811 and 1812 retain distinct identities but unresolved duplicate-versus-split scope and conflicting inferred physical/logical methods; no approved reconciliation exists."},
+  "blocked": {"before": true, "after": true, "reason": "Both the cross-row relationship and this row's core operation modality, target details, acceptance and recovery remain undefined."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "BD2 cross-row duplicate/split ruling, exact hardware identity, per-row logical/physical method and non-overlapping evidence/acceptance, storage-health criteria and recovery.", "execution_status": "BLOCKED; NO I2C, BMC, E1S, NVME, PHYSICAL, CONTINUITY, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-02/ED-03/ED-09/ED-15/ED-19", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Preserves both identities, prohibits guessed scope/topology, assigns physical work to humans and requires independent accepted coverage."}],
+  "project_authority": "E1.S/storage/platform owner must reconcile both BD2 Source Identities and approve per-row scope, evidence, acceptance and recovery; qualified humans own physical work and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-09", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "bd2_identity_preserved": true, "adjacent_bd2_overlap_detected": true, "source_conflict_retained": true, "evidence_double_count_prohibited": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1812|Wistron-HW-00012-V003", "next_missing_formal_queue_case_variant_id": "5eacac5ccc73ffb3"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "case_specific_bd2_cross_row_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
