@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 284,
+  "formal_queue_sequence": 133,
+  "source_key": "Functionality|1790|Wistron-HW-00423-V002",
+  "case_variant_id": "02b4c80c0e22fe26",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1790, "code": "Wistron-HW-00423-V002", "original_row_sha256": "cb81f37ef65e7be2d9fe94e97638dabcf44f8d1192cf15bd26aba107644e531a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Decode: H.265", "procedure": "Display video and check for no issue or `bleeding edge`; HEVC input/profile/path/oracle is absent and Criteria is TBD.", "criteria": "TBD.", "script": "No Script; 3 attended and 1 machine minute.", "deepseek": "PARTIAL; raw frames are sent to an uncertain `hevc` encoder and null output, so no compressed H.265 stream reaches a decoder.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk; requires supported HEVC media/decoder and visual evidence.", "round2_history": "UNRESOLVED because the HEVC decode contract was incomplete."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1924_02b4c80c0e22fe26.json",
+  "old_problem": "The prior record correctly separated this decoder from H.265/HEVC Encode rows and rejected the encode request, but kept absent media and golden values as engineering-decision blockers. Those concrete values are safe fail-closed configuration once HEVC decoder-specific capability, integrity, visual and recovery semantics are explicit.",
+  "new_disposition": "RESOLVED_TO_PARAMETERIZED_HEVC_PROFILE_TIER_BITDEPTH_HARDWARE_DECODE_AND_PHYSICAL_DISPLAY_TEST; DECODE_EVIDENCE_INDEPENDENT_FROM_H265_HEVC_ENCODE; RUNTIME_PROJECT_CONFIGURATION_REQUIRED",
+  "disposition_reason": "Resolve Engineering Decision Pending and BLOCKED. NVIDIA NVDEC documentation defines HEVC hardware decode with profile, level, bit-depth and chroma capability boundaries; FFmpeg exposes bitstream/frame metadata, selected decoder logs and deterministic reconstructed-frame signatures. Runtime supplies immutable HEVC media, exact device and golden values. PASS requires profile/tier/level capability, parameter-set and picture-order integrity, no fallback, exact frame/timestamp signatures and full physical display evidence. Encode rows remain directionally separate.",
+  "decision_basis": [
+    "The exact XLSX row 1790, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, Round-2 UNRESOLVED result, pending/blocked analyses, ED-01 through ED-30 and official NVIDIA/FFmpeg documentation were read. The next formal identity was directly opened as Functionality row 1791 / Wistron-HW-00424-V002 / 9b2ae28583a741fb.",
+    "H.265 Decode and displaying decoded frames are coherent. DeepSeek's raw-input encoder request is a review defect, not Source Conflict.",
+    "HEVC runtime configuration binds container/Annex-B, VPS/SPS/PPS, profile/tier/level, bit depth/chroma, coded/display dimensions, color/HDR metadata where present, CTU/tile/WPP features, reference/reorder structure, rate/time base, duration/frame count and pinned output format.",
+    "Capability must be proven on the exact GPU because supported HEVC profile, chroma and bit depth vary. Software fallback or a successful HEVC encode is not decoder evidence.",
+    "Frame/timestamp/golden comparison validates reconstructed output; the separate connector-bound observation preserves the original visual coverage including banding, color/HDR mapping and edge artifacts.",
+    "No H.265/HEVC encode/decode, GPU workload, media write, playback, display inspection, log clear or DUT action was executed."
+  ],
+  "test_case": {
+    "test_name": "HEVC profile/tier/bit-depth hardware decode integrity and physical display",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Validate the approved HEVC stream's exact profile/tier/level and coding features are hardware-decoded on the bound GPU with correct picture order and reconstructed pixels, then physically displayed without defects, independently from encoding.",
+    "required_package": [
+      "Immutable HEVC input and SHA-256 with container/Annex-B, VPS/SPS/PPS, profile/tier/level, bit depth/chroma, dimensions, color/HDR, CTU/tile/WPP, reference/reorder, rate/time base and frame expectations",
+      "Golden display-order `framemd5`, expected PTS/DTS and pinned output pixel/tone-map policy",
+      "Exact GPU serial/UUID/BDF, driver/VBIOS and ffmpeg/ffprobe build with positive HEVC capability and verbose NVDEC no-fallback evidence",
+      "Bounded scratch/evidence root; approved connector/display/HDR mode/player/capture route and qualified operator",
+      "Health/event thresholds, abort criteria and non-destructive recovery"
+    ],
+    "test_command": "PARAMETERIZED REVIEW-LAYER PROCEDURE — do not execute until approved. Verify HEVC input/golden hashes, scratch capacity, exact GPU profile/bit-depth capability and baseline without clearing logs. Record `ffprobe -v error -show_streams -show_format -show_frames -select_streams v:0 -of json \"$HEVC_INPUT\"`; require approved profile/tier/level, parameter sets, bit depth/chroma, color/HDR, coding features, frame types and PTS/DTS. Record ffmpeg build/hardware capability. Run `ffmpeg -hide_banner -loglevel repeat+level+verbose -hwaccel \"$APPROVED_HWACCEL\" -hwaccel_device \"$GPU_SELECTOR\" -i \"$HEVC_INPUT\" -map 0:v:0 -an -vf \"$APPROVED_HW_DOWNLOAD_PIXEL_FORMAT_AND_COLOR_POLICY\" -f framemd5 \"$HEVC_ACTUAL_FRAMEMD5\"`; require exact NVDEC/no fallback and golden/display-order equality. Play the complete same stream using the approved connector/display mode, collect time-correlated visual evidence and final health/events. Stop on anomaly; do not retry.",
+    "expected_result": "HEVC hashes and profile/tier/level/VPS-SPS-PPS/bit-depth/chroma/color/coding metadata match; exact GPU capability and hardware decoder are proven without fallback; all display-order frames, timestamps and signatures match and ffmpeg exits 0 without parser/decode error. Complete physical playback has no corruption, wrong reorder, banding beyond reference, color/HDR error, freeze, tearing, crop/aspect or edge artifact; health remains acceptable.",
+    "pass_fail_basis": "PASS requires every HEVC capability, parameter-set/picture-order, signature, health and visual check. FAIL on encode-evidence substitution, unsupported required tier/profile/bit depth/chroma, fallback, parameter-set/parser error, frame/timestamp/signature mismatch, truncated playback, visual/color defect, nonzero exit or health breach. BLOCKED at runtime when bindings are absent. End user owns verdict.",
+    "safety_gate": [
+      "Reject raw-input `-c:v hevc`, H.265/HEVC Encode results and software fallback as decoder evidence.",
+      "Verify immutable media/golden and exact profile/tier/bit-depth/color contract plus device capability before workload.",
+      "Use bounded approved scratch only, preserve logs/events and uniquely tag decoder artifacts.",
+      "Keep reconstructed-frame comparison distinct from connector-bound visual/HDR evidence.",
+      "Stop on media/parser/decoder/GPU/thermal/storage/display/evidence anomaly; no retry, reset, reboot, log clear or firmware change."
+    ],
+    "expected_evidence": [
+      "HEVC input/golden hashes and VPS/SPS/PPS/profile/tier/level/bit-depth/chroma/color/coding/reorder metadata",
+      "Exact GPU/driver/VBIOS/ffmpeg identity, positive HEVC capability, selected NVDEC path and no-fallback log",
+      "Complete parser/decode log, exit status, picture/timestamp accounting and exact `framemd5` comparison",
+      "Connector/display/HDR mode/player identity and full-clip time-correlated qualified visual record",
+      "Decode-only tags, encode non-reuse audit, scratch/health/events, no-retry audit and verdict"
+    ],
+    "recovery": "Stop decoder/player on first parser, reconstruction, visual or health failure; preserve decode-only media, manifests, logs, captures and events and do not retry. Remove only approved scratch after retention; restore approved display/session state without reset, reboot or firmware action and escalate if health remains abnormal."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "H.265 Decode and display are coherent; the encode suggestion is downstream review error."},
+  "blocked": {"before": true, "after": false, "reason": "HEVC capability, parameter-set/picture-order, reconstructed-frame and visual acceptance are now parameterized with fail-closed runtime bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Immutable HEVC input/golden/profile-tier-level/bit-depth/chroma/color/reorder contract; exact GPU/decoder/driver/ffmpeg; scratch/display/operator/threshold/recovery.", "execution_status": "REVIEW RESOLVED TO PARAMETERIZED TEST CASE; RUNTIME PREREQUISITES NOT PROVIDED; NO HEVC ENCODE/DECODE, GPU WORKLOAD, MEDIA WRITE, PLAYBACK, DISPLAY, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "NVIDIA NVDEC Video Decoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvdec-video-decoder-api-prog-guide/index.html", "application": "Defines HEVC hardware decode capability boundaries and decoded-frame/display stages."},
+    {"authority": "FFmpeg documentation", "url": "https://ffmpeg.org/documentation.html", "application": "Defines HEVC stream/frame probing, hardware path logging and deterministic frame signatures."}
+  ],
+  "project_authority": "Project owner binds HEVC decoder-specific media/golden/device/display values; operator owns physical observation and end user owns verdict. Encode evidence is not substitutable. No DUT action occurred.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-17", "ED-18", "ED-19", "ED-20", "ED-21", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "round2_unresolved_preserved_as_history_and_superseded": true, "parameterized_test_case_rule_applied": true, "hevc_profile_tier_bitdepth_contract_defined": true, "decode_evidence_independent_from_encode": true, "hardware_no_fallback_required": true, "physical_visual_evidence_required": true, "runtime_blocked_if_parameters_missing": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1791|Wistron-HW-00424-V002", "next_missing_formal_queue_case_variant_id": "9b2ae28583a741fb"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "round2_unresolved_and_historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "official_nvidia_nvdec_and_ffmpeg_docs_checked": true, "case_specific_hevc_capability_picture_order_and_encode_separation_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
