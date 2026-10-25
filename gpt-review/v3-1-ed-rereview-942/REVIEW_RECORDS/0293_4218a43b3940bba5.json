@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 293,
+  "formal_queue_sequence": 142,
+  "source_key": "Functionality|1803|Wistron-HW-00005-V003",
+  "case_variant_id": "4218a43b3940bba5",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1803, "code": "Wistron-HW-00005-V003", "original_row_sha256": "1799f3af6381f7100391d65fea4accc06daa97c53d5b87f4713d81b405818268", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C FAN_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No fan-controller topology, safe register or thermal oracle is supplied.", "deepseek": "YES/no-risk; scans every host-visible bus using unsafe SSH, truncates output and gathers no synchronized cooling evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk with fan RPM/PWM/temperature monitoring.", "historical_v3_1": "BLOCKED because FAN_BD revision, controller/mux/address/register map, safe transaction, resource oracle and independent thermal recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1936_4218a43b3940bba5.json",
+  "old_problem": "The missing specification defines whether an I2C transaction is benign observation or fan-control hazard. DeepSeek cannot identify FAN_BD, its mux branch or expected resources, may contend with active thermal control, and claims no risk without collecting RPM, PWM, tach fault or temperature evidence.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_FAN_BOARD_I2C_AND_THERMAL_CONTRACT; GENERIC_SCAN_REJECTED_AS_CRITICAL_COOLING_RISK",
+  "disposition_reason": "Retain Pending and BLOCKED. A parameterized test still needs an approved physical fan-resource map and register-level read allowlist; neither can be inferred from host bus enumeration. Wrong access can alter PWM/watchdog/control behavior or obscure tach data. Exact expected values, thermal aborts and independent cooling recovery are core safety and PASS semantics.",
+  "decision_basis": [
+    "The exact XLSX row 1803, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1804 / Wistron-HW-00006-V003 / 1b1a5a481c05cebb.",
+    "FAN_BD I2C defaults to BMC/platform-management scope and requires the owning controller/mux, physical fan mapping and expected response.",
+    "Finding an address cannot prove correct fan identity, tach/PWM resource mapping, valid telemetry or unchanged cooling control.",
+    "ED-03 forbids guessed OEM paths/registers and ED-15 forbids PASS without approved RPM, PWM, temperature and fault thresholds.",
+    "Cooling safety requires independent monitoring/recovery and immediate stop without automatic retry on any fan or thermal anomaly.",
+    "No SSH, I2C, fan-control, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Fan-board I2C identity/status verification with thermal guard — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Verify the exact FAN_BD branch and allowlisted identity/status resources while continuously proving fan RPM/PWM/tach, temperature, BMC and OS thermal health remain within approved limits.",
+    "required_package": [
+      "Fan-board model/revision and approved I2C/controller specification",
+      "BMC/OOB controller, mux branch, bus/address and physical fan/PWM/tach/sensor resource map",
+      "Exact non-mutating register/transaction allowlist plus control/PWM/watchdog/reserved exclusions",
+      "Expected response/resource matrix and approved RPM/PWM/tach-fault/temperature abort thresholds",
+      "Approved tool/version, maintenance/cooling state, independent thermal monitoring, shutdown/recovery and owner"
+    ],
+    "test_command": "BLOCKED; perform no I2C or fan access. After the complete cooling-domain contract and fresh review authorize execution, verify adequate cooling and independent monitoring, use secure BMC/OOB access to the exact controller/mux branch, and read only allowlisted identity/status registers. Capture complete raw output with synchronized RPM, PWM, tach-fault, temperature, BMC SEL/SDR/sensors and OS thermal evidence before/during/after. Never globally scan, touch control/PWM/watchdog space, force/write, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. In a future authorized run, every expected fan-board resource and raw response must match the approved board-revision matrix while fan RPM/PWM/tach status, temperatures, BMC and OS remain within limits with no control-mode or cooling-state change.",
+    "pass_fail_basis": "Current result is BLOCKED. Bus/address visibility cannot PASS. Future PASS requires exact path/register/response matches and clean synchronized cooling-health evidence. Missing contract, wrong resource, unapproved transaction, response mismatch, RPM/PWM/tach/temperature anomaly, evidence gap or management change is FAIL/BLOCKED for thermal-owner verdict.",
+    "safety_gate": [
+      "Do not access FAN_BD until topology, physical resource map and register-level safe-read list are approved.",
+      "Prohibit generic scans and any PWM, mode, watchdog, control, force or write operation.",
+      "Establish independent thermal monitoring/recovery and preserve synchronized RPM/PWM/temperature evidence.",
+      "Stop immediately on fan, temperature, BMC or bus anomaly; do not retry, reset or reboot automatically."
+    ],
+    "expected_evidence": [
+      "Approved FAN_BD specification, board revision and physical resource/response matrix",
+      "Controller/mux/bus/address/register allowlist, exclusions, tool/version and session audit",
+      "Complete per-target raw responses mapped to physical fans/sensors",
+      "Synchronized baseline/during/final RPM, PWM, tach fault, temperatures, BMC SEL/SDR/sensors and OS thermal state",
+      "Abort/no-retry/independent-cooling-recovery audit and thermal/platform owner verdict"
+    ],
+    "recovery": "No access or recovery action is authorized now. In a future approved run, stop at the first cooling or management anomaly, preserve evidence and do not retry. Use the independent approved thermal/console/BMC shutdown or recovery path; fan-controller/bus reset, reboot or power action requires an explicit separate authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "No contradiction exists; both source procedure and criterion defer to the same absent fan-board specification."},
+  "blocked": {"before": true, "after": true, "reason": "The fan-resource map, safe register semantics, thermal oracle and independent recovery determine safety and PASS and cannot be inferred generically."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "FAN_BD revision/topology, physical resource and safe-register map, expected responses, RPM/PWM/tach/temperature thresholds and independent recovery.", "execution_status": "BLOCKED; NO SSH, I2C, FAN-CONTROL, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires defined BMC/platform targets, prohibits guessed OEM fan-control registers and prevents PASS without approved cooling thresholds."}],
+  "project_authority": "Thermal/platform owner must define FAN_BD topology, safe reads, resource/response matrix, abort limits and independent cooling recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "fan_board_identity_preserved": true, "critical_cooling_risk_applied": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1804|Wistron-HW-00006-V003", "next_missing_formal_queue_case_variant_id": "1b1a5a481c05cebb"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_fan_board_thermal_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
