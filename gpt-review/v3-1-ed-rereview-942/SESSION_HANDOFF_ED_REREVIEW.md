@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **145 / 942**; append-only review events: **296**.
-- Last formal review: `Functionality|1806|Wistron-HW-00008-V003` / `edd92d2e81d957ba` (formal queue sequence 145; review event 296).
-- Next source-verified pending identity: `Functionality|1807|Wistron-HW-00009-V003` / `d5017d37c7d6614a` (first missing formal queue sequence 146).
-- Latest disposition: RIO_BD remains Pending/BLOCKED because even the acronym, physical function and board identity are undefined; GPT V2's remote-I/O expansion is not source-authorized. No I2C method, oracle or recovery can be safely designed. No SSH, I2C, RIO, reset, retry or DUT action ran.
-- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-296 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
+- Completed formal queue: **146 / 942**; append-only review events: **297**.
+- Last formal review: `Functionality|1807|Wistron-HW-00009-V003` / `d5017d37c7d6614a` (formal queue sequence 146; review event 297).
+- Next source-verified pending identity: `Functionality|1808|Wistron-HW-00010-V003` / `fc6266db315d68a3` (first missing formal queue sequence 147).
+- Latest disposition: FIO_BD remains Pending/BLOCKED because its function/revision and connector/device/indicator population, safe-register contract, logical/physical oracle and recovery are absent. Generic presence scanning cannot establish coverage. No SSH, I2C, FIO, indicator, reset, retry or DUT action ran.
+- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-297 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
 - Protected sources: unchanged.
 - DUT execution: none.

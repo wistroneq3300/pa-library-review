@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 297,
+  "formal_queue_sequence": 146,
+  "source_key": "Functionality|1807|Wistron-HW-00009-V003",
+  "case_variant_id": "d5017d37c7d6614a",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1807, "code": "Wistron-HW-00009-V003", "original_row_sha256": "605b5a366cc7e8ef0606d95a4354dca1079a5b0dfa7311e269f29d0693b513cf", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C FIO_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No physical resource, topology, safe transaction or oracle is supplied.", "deepseek": "YES/no-risk; scans all host buses through unsafe SSH and truncates results without selecting FIO_BD.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; assumes front I/O and proposes device/indicator/sensor controls, but source does not confirm the expansion or population.", "historical_v3_1": "BLOCKED because FIO board function/location/revision, connector/device/indicator population, controller/mux/address/register map, expected states and recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1940_d5017d37c7d6614a.json",
+  "old_problem": "The source provides only a project acronym and missing-spec placeholders. A generic scan cannot map responders to physical connectors, inventory EEPROMs, sensors, indicator drivers or controls. GPT V2's front-I/O model is plausible but not source-authorized, and neither review supplies the logical-to-physical oracle needed for coverage.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_FIO_BOARD_RESOURCE_AND_I2C_CONTRACT; GENERIC_PRESENCE_SCAN_REJECTED",
+  "disposition_reason": "Retain Pending and BLOCKED. Engineering must define FIO_BD's function, location, revision and populated physical resources before a safe controller path and response matrix can exist. Some endpoints can mix identity/status with button, LED or other control registers. Board identity, safe transaction semantics and any visual correlation are core requirements, not mere runtime bindings.",
+  "decision_basis": [
+    "The exact XLSX row 1807, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1808 / Wistron-HW-00010-V003 / fc6266db315d68a3.",
+    "FIO_BD defaults to BMC/platform-management scope, but project-specific acronym expansion and physical resource population cannot be guessed.",
+    "Address presence does not identify a connector/device or prove correct sensor/indicator state; physical LED evidence remains manual under ED-09 when required.",
+    "ED-03 forbids guessed OEM routes/registers and ED-15 forbids PASS without an approved per-resource response/state oracle.",
+    "Generic scanning can reach indicator, button, EEPROM or control endpoints and is not acceptable without a register-level allowlist.",
+    "No SSH, I2C, FIO, indicator, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "FIO_BD physical-resource and I2C identity/status verification — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Validate every approved FIO_BD resource through the exact BMC/OOB path and safe identity/status reads, correlating logical state with physical connector, sensor or indicator evidence where the specification requires it.",
+    "required_package": [
+      "Authoritative FIO_BD definition, location, model/revision and connector/device/indicator/sensor population",
+      "Approved BMC/OOB controller, mux path, bus/address/device/register map",
+      "Permitted identity/status transactions plus button/LED/control/EEPROM/write/force/reserved exclusions",
+      "Expected logical response/resource matrix and any required human visual/physical state criteria",
+      "Approved tool/version, secure access, health monitoring, maintenance window and independent recovery"
+    ],
+    "test_command": "BLOCKED; perform no FIO I2C access. After the complete FIO contract and fresh review authorize execution, use secure BMC/OOB access to only the named controller/mux branch and read allowlisted identity/status fields for each named resource. Capture complete raw output mapped to board revision/connectors/devices and synchronized BMC SEL/SDR, sensor and OS health. Obtain human visual evidence for physical indicators when specified. Do not assume front I/O, globally scan, touch button/LED/control/EEPROM-write space, force/write, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. In a future authorized run, every expected FIO resource must be present at the specified path and match its approved logical response, required physical indicator/sensor state and clean BMC/OS health, with no unexpected device or state change.",
+    "pass_fail_basis": "Current result is BLOCKED. Address visibility cannot PASS. Future PASS requires exact board/resource/path/response matches and all required physical correlations. Missing specification, unsupported acronym expansion, wrong/missing/extra resource, unapproved transaction, logical/physical mismatch, evidence gap or health change is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not infer a generic front-I/O population or access FIO until board and physical-resource maps are approved.",
+      "Prohibit global scans and button, LED, control, EEPROM-write, force or unknown-register access.",
+      "Preserve complete logical and platform-health evidence; physical indicator confirmation is human-observed when required.",
+      "Stop on any FIO, indicator, sensor, BMC or bus anomaly; do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved FIO_BD definition/specification, location/revision and connector/device/indicator population",
+      "Controller/mux/bus/address/register allowlist, exclusions, tool/version and authenticated session",
+      "Complete raw responses mapped to each physical resource",
+      "Required human visual/physical evidence plus BMC SEL/SDR/sensors and OS baselines/deltas",
+      "Abort/no-retry/independent-recovery audit and FIO/platform owner verdict"
+    ],
+    "recovery": "No action is authorized now. In a future approved run, stop on the first FIO or management anomaly, preserve evidence and do not retry. Use the independent approved console/BMC/FIO recovery appropriate to the defined board; any reset, LED/output change, reboot or power action requires separate explicit authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master is incomplete but not internally contradictory; both operative fields depend on the missing FIO specification."},
+  "blocked": {"before": true, "after": true, "reason": "Physical board/resource identity, safe register semantics, logical/physical oracle and recovery are undefined core semantics."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "FIO_BD function/location/revision and resource population, BMC/OOB route, safe register matrix, expected logical/physical states and recovery.", "execution_status": "BLOCKED; NO SSH, I2C, FIO, INDICATOR, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-09/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Prohibits guessed OEM endpoints, retains manual physical evidence and prevents PASS without approved response/state criteria."}],
+  "project_authority": "FIO/platform owner must define the board, physical resources, safe I2C contract, expected logical/physical states and recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-09", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "literal_fio_identity_preserved": true, "physical_resource_correlation_required": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1808|Wistron-HW-00010-V003", "next_missing_formal_queue_case_variant_id": "fc6266db315d68a3"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_fio_resource_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
