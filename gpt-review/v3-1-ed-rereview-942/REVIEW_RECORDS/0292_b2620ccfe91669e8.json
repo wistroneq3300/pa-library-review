@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 292,
+  "formal_queue_sequence": 141,
+  "source_key": "Functionality|1802|Wistron-HW-00004-V003",
+  "case_variant_id": "b2620ccfe91669e8",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1802, "code": "Wistron-HW-00004-V003", "original_row_sha256": "753dc3fcd6a370a1cf42041688c22c44c1e00da51c099a98e49764b3fb3feec0", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C PSU_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No PSU/PMBus target, safe register or oracle is supplied.", "deepseek": "YES/no-risk; globally scans every host-visible bus with i2cdetect -y, unsafe SSH and truncated output.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk with PSU telemetry, redundancy and recovery controls.", "historical_v3_1": "BLOCKED because PSU population, controller/mux/address, approved PMBus-safe transaction, power/telemetry oracle and independent recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1935_b2620ccfe91669e8.json",
+  "old_problem": "Both method and criterion defer to an absent PSU-board specification. DeepSeek's global address scan does not bind a populated PSU slot or PMBus controller path, may transact with live power devices, omits redundancy and telemetry evidence, and falsely labels the operation no-risk.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_PSU_BOARD_I2C_PMBUS_CONTRACT; GENERIC_SCAN_REJECTED_AS_CRITICAL_POWER_RISK",
+  "disposition_reason": "Retain Pending and BLOCKED. PMBus shares I2C transport but includes state-changing command semantics; neither package availability nor runtime binding can establish which endpoint/register is a safe non-mutating read. The populated PSU map, mux route, register-level allowlist, nominal telemetry/redundancy oracle and independent power recovery are indispensable project/OEM specifications.",
+  "decision_basis": [
+    "The exact XLSX row 1802, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1803 / Wistron-HW-00005-V003 / 4218a43b3940bba5.",
+    "PSU_BD I2C defaults to BMC/platform-management scope and must be bound to a specific PSU slot, controller, mux path, address and PMBus register contract.",
+    "An address response cannot prove slot identity, correct PSU population, valid telemetry, redundancy health or non-mutating behavior.",
+    "ED-03 prohibits guessed OEM topology/registers; ED-15 prohibits PASS without approved nominal telemetry, redundancy and health thresholds.",
+    "A generic i2cdetect probe is not categorically read-only for every live PMBus device and cannot replace the vendor safe-command matrix.",
+    "No SSH, I2C, PMBus, PSU, power, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "PSU-board I2C/PMBus identity and telemetry verification — blocked pending power contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Verify named populated PSU slots through the approved BMC/OOB I2C/PMBus path using only explicitly safe identity/status/telemetry reads, without changing output, policy, redundancy or management state.",
+    "required_package": [
+      "Approved PSU-board/PMBus specification, board revision and populated PSU slot/model/serial/firmware map",
+      "BMC/OOB controller, mux route, bus/address mapping and exact PMBus read-register/length allowlist",
+      "Reserved, write, quick-write, control and vendor-command exclusions",
+      "Nominal input/output/load/fan/temperature telemetry ranges, redundancy and management-health acceptance",
+      "Approved tool/version, stable load and redundancy state, maintenance authorization and independent console/BMC/power recovery"
+    ],
+    "test_command": "BLOCKED; perform no I2C/PMBus access. After the complete power-domain contract and fresh review authorize execution, verify stable load/redundancy and use secure BMC/OOB access to the named controller/mux path. Read only approved identity/status/telemetry registers on named populated PSU slots, capture complete raw responses and correlate them with FRU/SDR/SEL and PSU input/output/redundancy health. Never use a generic all-bus scan, reserved/control/write/quick-write/force operation, log clear or automatic retry.",
+    "expected_result": "No current executable PASS exists. In a future authorized run, each named PSU slot must match approved model/serial/firmware and raw PMBus response/range, while output, load sharing, redundancy, thermal/fan, BMC and OS health remain within approved limits with no unexpected endpoint or state change.",
+    "pass_fail_basis": "Current result is BLOCKED. Bus/address enumeration cannot PASS. Future PASS requires the exact path/register allowlist, correct per-slot identity and approved telemetry/redundancy/health deltas. Missing contract, wrong slot/path, unapproved command, response/range mismatch, output or redundancy change, evidence gap or management anomaly is FAIL/BLOCKED for power-owner verdict.",
+    "safety_gate": [
+      "Do not access a PSU/PMBus endpoint until slot population, path and register-level safe-read allowlist are approved.",
+      "Prohibit global scans, quick-write, force, control/write/vendor commands and any operation that can change PSU output or policy.",
+      "Confirm stable load and redundancy first; preserve complete PSU/BMC/FRU/SDR/SEL evidence without clearing logs.",
+      "Stop on any telemetry, output, redundancy, thermal, management or bus anomaly; do not retry or power-cycle automatically."
+    ],
+    "expected_evidence": [
+      "Approved PSU_BD/PMBus specification, populated slot map and register safe-read matrix",
+      "Controller/mux/bus/address identity, tool/version and secure session audit",
+      "Complete per-slot raw responses correlated with model/serial/firmware and FRU/SDR",
+      "Before/after input/output/load/fan/temperature/redundancy plus BMC SEL and OS health",
+      "Abort/no-retry/independent-recovery audit and power/platform owner verdict"
+    ],
+    "recovery": "No access or recovery action is authorized now. In a future approved run, stop at the first mismatch or power/management change, preserve evidence and do not retry. Use the independent approved console/BMC/power recovery path; any bus reset, PSU reset, failover or power cycle requires an explicit owner procedure and separate authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The row is incomplete but internally consistent: Procedure and Criteria both defer to the absent PSU-board contract."},
+  "blocked": {"before": true, "after": true, "reason": "Safe PMBus endpoint/register semantics, per-slot expected responses, redundancy acceptance and independent recovery cannot be inferred or generically parameterized."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "PSU population and revision, BMC/OOB path, PMBus register allowlist/exclusions, expected responses/ranges, redundancy oracle and independent power recovery.", "execution_status": "BLOCKED; NO SSH, I2C, PMBUS, PSU, POWER, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires defined BMC/platform targets, prohibits guessed OEM PMBus commands and prevents PASS without approved telemetry/redundancy thresholds."}],
+  "project_authority": "Power/platform owner must provide the PSU population, path/register safe-read and acceptance contract and authorize independent recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "psu_pmbus_domain_preserved": true, "critical_power_risk_applied": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1803|Wistron-HW-00005-V003", "next_missing_formal_queue_case_variant_id": "4218a43b3940bba5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_psu_pmbus_power_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
