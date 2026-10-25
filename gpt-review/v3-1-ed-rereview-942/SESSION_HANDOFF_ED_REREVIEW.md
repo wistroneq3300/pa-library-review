@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **200 / 942**; append-only review events: **351**.
-- Last formal review: `Functionality|2031|Wistron-BMC-01050-V002` / `7b76556bdd0ea222` (formal queue sequence 200; review event 351).
-- Next source-verified pending identity: `Functionality|2032|Wistron-BMC-00484-V003` / `ce41ec26bca184f9` (first missing formal queue sequence 201).
-- Latest disposition: WATCHDOG2 Pending and Source Conflict are resolved to record-type-aware passive state decoding with reset/SEL preservation. No arm, pet, expire, reset, configure, clear or automatic retry is authorized. No DUT action ran.
-- Integrity disposition: the locked 942 queue hash is unchanged. Forty-nine initial formal records plus events 201-351 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Formal checkpoint 200 is ready for full validation and push.
+- Completed formal queue: **201 / 942**; append-only review events: **352**.
+- Last formal review: `Functionality|2032|Wistron-BMC-00484-V003` / `ce41ec26bca184f9` (formal queue sequence 201; review event 352).
+- Next source-verified pending identity: `Functionality|2033|Wistron-BMC-01052-V002` / `ec498048700e53f3` (first missing formal queue sequence 202).
+- Latest disposition: shared-code row-2032 STATUS Pending and Source Conflict are resolved through exact variant isolation, signed component membership and raw-state decoding. Row 1194 SEL Allocation remains separate; no evidence is cleared. No DUT action ran.
+- Integrity disposition: formal checkpoint 200 was fully validated and pushed at `4185ff58`; the locked 942 queue hash is unchanged. Forty-nine initial formal records plus events 201-352 are authoritative; 151 out-of-scope records remain historical.
 - Protected sources: unchanged.
 - DUT execution: none.
