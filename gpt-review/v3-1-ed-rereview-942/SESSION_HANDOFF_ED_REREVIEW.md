@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **103 / 942**; append-only review events: **254**.
-- Last formal review: `Functionality|1626|Wistron-BMC-00897-V002` / `8be978e637e0cb77` (formal queue sequence 103; review event 254).
-- Next source-verified pending identity: `Functionality|1635|Wistron-BMC-00906-V003` / `034875486cc4de67` (first missing formal queue sequence 104).
-- Latest disposition: Inventory and LEDs - Assembles retains Engineering Decision Pending but is not irreducibly BLOCKED. An OEM links object is navigation, not proof of a complete part/relationship/location graph; Fans remains a distinct literal branch. The overlay parameterizes the selected read-only topology or Fan evidence after owner scope/schema approval, preserves BMC-Web visual evidence and prohibits chassis/power/thermal/hardware mutations. No DUT action ran.
-- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-254 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
+- Completed formal queue: **104 / 942**; append-only review events: **255**.
+- Last formal review: `Functionality|1635|Wistron-BMC-00906-V003` / `034875486cc4de67` (formal queue sequence 104; review event 255).
+- Next source-verified pending identity: `Functionality|1638|Wistron-BMC-00909-V003` / `7049bc17971bc0ac` (first missing formal queue sequence 105).
+- Latest disposition: the persistent BIOS Setup override remains Engineering Decision Pending but is parameterized as a critical, approval-gated state machine rather than irreducibly BLOCKED. Vendor/owner must map the 60-second auto-clear to the correct flag layer and prove the clear path; both reboot observations, POST/KVM evidence, explicit clear and normal OS Ready restoration remain mandatory. No boot flag, reboot, BIOS or DUT action ran.
+- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-255 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
 - Protected sources: unchanged.
 - DUT execution: none.
