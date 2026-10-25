@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 294,
+  "formal_queue_sequence": 143,
+  "source_key": "Functionality|1804|Wistron-HW-00006-V003",
+  "case_variant_id": "1b1a5a481c05cebb",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1804, "code": "Wistron-HW-00006-V003", "original_row_sha256": "4c87901bf6c39b5f86cb60b8d4f59b6e0ba6bdf5315346283b328f18d622d452", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C PDB_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No PDB route, channel/register mapping or acceptance values are supplied.", "deepseek": "YES/no-risk; scans all host buses through unsafe SSH, truncates output and supplies no rail/channel correlation.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk with PDB/PSU telemetry and redundancy controls.", "historical_v3_1": "BLOCKED because PDB revision, rail/channel topology, controller/mux/address/register map, expected scaled telemetry and independent power recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1937_1b1a5a481c05cebb.json",
+  "old_problem": "The source omits the PDB contract that maps I2C responders and registers to physical rails/channels. DeepSeek's global scan cannot distinguish telemetry from control/limit/latch endpoints, does not prove PSU-to-PDB topology or units/scaling, and can expose the whole SUT power domain to unbounded probes.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_PDB_CHANNEL_AND_REGISTER_CONTRACT; GENERIC_SCAN_REJECTED_AS_WHOLE_SYSTEM_POWER_RISK",
+  "disposition_reason": "Retain Pending and BLOCKED. A PDB response is meaningful only with a board-revision route, physical rail/channel map, register units/scaling and expected ranges. The same endpoint may expose observation and power-control functions. These are core target, safety and PASS semantics, not values that a generic package or runtime parameter can invent.",
+  "decision_basis": [
+    "The exact XLSX row 1804, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1805 / Wistron-HW-00007-V003 / 528461acfa38307e.",
+    "PDB_BD I2C defaults to BMC/platform-management scope and requires an explicit controller/mux/address and per-channel register map.",
+    "An address grid cannot prove physical input/output rail mapping, measurement scaling, redundancy behavior or unchanged distribution state.",
+    "ED-03 forbids guessed OEM paths/registers and ED-15 forbids PASS without approved voltage/current/power/temperature and redundancy criteria.",
+    "Because PDB control and telemetry may share a device, generic i2cdetect probing cannot be presumed harmless in the whole-system power domain.",
+    "No SSH, I2C, PDB, PSU, power, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "PDB I2C channel identity and scaled telemetry verification — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Validate the exact PDB management path and per-rail/channel identity and telemetry through allowlisted read transactions while proving power distribution, PSU redundancy and platform management remain unchanged.",
+    "required_package": [
+      "Approved PDB specification/revision and PSU-to-input/output rail/channel topology",
+      "BMC/OOB controller, mux route, bus/address/device and telemetry/identity register allowlist",
+      "Units/scaling plus control, limit, latch, clear, write, force and reserved-register exclusions",
+      "Expected per-channel voltage/current/power/temperature ranges and redundancy/management acceptance",
+      "Approved tool/version, stable load/redundancy state, independent measurement, maintenance window and console/BMC/power recovery"
+    ],
+    "test_command": "BLOCKED; perform no PDB bus access. After the full PDB contract and fresh review authorize execution, confirm stable load/redundancy and independent recovery, use secure BMC/OOB access to the specified controller/mux branch, and read only allowlisted identity/telemetry registers. Capture complete raw and scaled per-channel results correlated with PSU, BMC SDR/SEL and independent measurements. Never globally scan, access control/limit/latch/clear space, force/write, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. In a future authorized run, every PDB/rail/channel identity and raw-to-scaled value must match the approved topology and range, with no output, distribution, redundancy, PSU, BMC or OS health change and no unexpected endpoint.",
+    "pass_fail_basis": "Current result is BLOCKED. Address enumeration cannot PASS. Future PASS requires exact route/register mapping, correct units/scaling and all per-channel/independent/redundancy health criteria. Missing contract, wrong rail/channel, unapproved register, range/correlation mismatch, power-state change, evidence gap or management anomaly is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not access PDB buses until board revision, rail/channel topology and register-level read allowlist are approved.",
+      "Prohibit generic scans and all control, limit, latch, clear, write, force or vendor-unknown transactions.",
+      "Verify stable PSU/load/redundancy and preserve synchronized PDB/PSU/BMC and independent evidence.",
+      "Stop on any rail, telemetry, redundancy, management or bus anomaly; do not retry, reset or power-cycle automatically."
+    ],
+    "expected_evidence": [
+      "Approved PDB specification, revision and PSU/rail/channel topology",
+      "Controller/mux/bus/address/register allowlist, exclusions, units/scaling and tool/session identity",
+      "Complete per-channel raw and converted telemetry mapped to physical rails",
+      "Synchronized PSU, BMC SDR/SEL, load/redundancy and independent-measurement baselines/deltas",
+      "Abort/no-retry/independent-power-recovery audit and power/platform owner verdict"
+    ],
+    "recovery": "No access or recovery action is authorized now. In a future approved run, stop at the first power or management anomaly, preserve complete evidence and do not retry. Use an independent console/BMC/power recovery path; bus reset, PDB/PSU reset, failover, reboot or power cycle requires an explicit separate procedure and authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The row has no competing requirements; Procedure and Criteria are consistently incomplete because the PDB specification is absent."},
+  "blocked": {"before": true, "after": true, "reason": "PDB topology, safe register semantics, units/scaling, expected channel ranges and recovery define the operation and cannot be inferred."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "PDB revision/topology, BMC/OOB route, channel/register map with units/scaling and exclusions, expected ranges, redundancy oracle and independent power recovery.", "execution_status": "BLOCKED; NO SSH, I2C, PDB, PSU, POWER, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires defined BMC/platform targets, prohibits guessed OEM power registers and prevents PASS without approved per-channel thresholds."}],
+  "project_authority": "Power/platform owner must define PDB topology, safe registers, scaling/ranges, redundancy acceptance and independent recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "pdb_channel_identity_preserved": true, "whole_system_power_risk_applied": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1805|Wistron-HW-00007-V003", "next_missing_formal_queue_case_variant_id": "528461acfa38307e"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_pdb_channel_power_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
