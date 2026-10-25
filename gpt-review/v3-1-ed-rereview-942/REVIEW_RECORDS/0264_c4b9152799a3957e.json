@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 264,
+  "formal_queue_sequence": 113,
+  "source_key": "Functionality|1741|Wistron-HW-00372-V003",
+  "case_variant_id": "c4b9152799a3957e",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1741, "code": "Wistron-HW-00372-V003", "original_row_sha256": "2a5f7db20d7dba2ece52fa2714ffd0d5fd2dc9ef0340d0d7a184cd4c28e8c52a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "System Reset button", "procedure": "Verify normal host state, ping OS-IP, have an operator press the physical system-reset button, observe system reset and require recovery in 10-15 minutes; generic setup asks to clear logs.", "criteria": "Contradictorily require the BMC-reset button, BMC reset, BMC-IP outage and BMC-IP recovery.", "script": "No script; 15 attended and 15 machine minutes.", "deepseek": "NO; correctly reserves physical button action for a person but misses the System-versus-BMC reset and OS-IP-versus-BMC-IP conflict.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; resolve reset semantics, drain workload, press once under approval and collect independent host/BMC evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1876_c4b9152799a3957e.json",
+  "old_problem": "Procedure and Criteria specify different physical controls, reset domains and reachability oracles. A system reset normally targets the ComputerSystem/host and OS-IP, while a BMC reset targets the management controller and BMC-IP; the unaffected plane may remain available. Monitoring both after a press cannot retroactively determine which mutually inconsistent objective was authoritative, and a wrong button press is a critical disruptive action.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_FOR_SYSTEM_RESET_OS_IP_VERSUS_BMC_RESET_BMC_IP_TARGET; PARAMETERIZE_SINGLE_OPERATOR_PRESS_DUAL_PLANE_TIMELINE",
+  "disposition_reason": "Retain Engineering Decision Pending and Source Conflict. DMTF Redfish defines ComputerSystem.Reset and Manager.Reset as separate resource actions, corroborating that system and management-controller resets are distinct standard domains. ED-17/ED-25 keep the physical button human-operated, but no approved decision chooses the source's competing branch. The owner must identify the exact button, intended reset domain and OS/BMC reachability matrix before one disruptive press. Workload, IP, deadline and observer values are parameterizable, so the case is not inherently BLOCKED.",
+  "decision_basis": [
+    "The exact XLSX row 1741, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, pending/conflict analyses, duplicate identity result and ED-01 through ED-30 rules were read. The actual next formal queue identity was reconstructed and directly opened as Functionality row 1754 / Wistron-HW-00387-V003 / ab9fd4e62e1b1a80.",
+    "DMTF's standard data model gives `ComputerSystem.Reset` an action on the system resource and `Manager.Reset` an action that resets/reboots the manager. This supports separate outage domains; it does not choose which physical panel button this project intended.",
+    "The Procedure's system-reset/OS-IP branch and Criteria's BMC-reset/BMC-IP branch can produce opposite reachability states. Silent merging would allow the wrong action to pass against the wrong oracle.",
+    "Physical press, button identification and LED/console observation remain authorized-operator tasks. Automation may only prepare baselines and collect synchronized OS-IP, BMC-IP, console, BMC health and preserved-log evidence.",
+    "Because a system reset can interrupt workloads and lose volatile data, approval requires maintenance window, workload drain, backups/recovery readiness and independent observer. No API/SSH reset substitutes for the physical-button objective.",
+    "The 10-15 minute source window is preserved but cannot become PASS authority until the owner confirms it for the selected reset type. ED-18 forbids inventing a replacement deadline.",
+    "ED-19 excludes pre-test log clearing, ED-26 forbids a second press or power-cycle retry, and no DUT/reset action was executed."
+  ],
+  "test_case": {
+    "test_name": "Physical reset button — unresolved system versus BMC target with dual-plane timeline",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "After an owner selects the authoritative reset type and physical control, validate one approved button press against a signed host/BMC outage-and-recovery matrix while protecting workloads and retaining synchronized OS, management, console, LED and log evidence.",
+    "required_package": [
+      "Written ruling selecting System Reset/OS-IP, BMC Reset/BMC-IP or separately accepted checkpoints, with exact button/panel mapping and expected unaffected plane",
+      "Exact SUT/BMC/firmware/OS identity, OS-IP/BMC-IP and signed before/during/recovery state matrix for host, manager, console, LEDs and services",
+      "Approved recovery deadline including disposition of the source 10-15 minute window, packet interval/loss semantics and clock synchronization",
+      "Maintenance/workload-drain approval, data protection/backup confirmation, authorized physical operator, independent observer and recovery console",
+      "Read-only dual-plane ping/health/log collector, timestamped photo/video evidence path and platform/BMC escalation procedure"
+    ],
+    "test_command": "DO NOT EXECUTE until the written reset ruling and critical-action approval exist. Drain/protect workloads, verify exact target/button and capture healthy OS-IP, BMC-IP, console, service, LED and preserved-log baselines. Start synchronized independent monitoring; the authorized operator photographs the control and presses it exactly once. Record both reachability planes, console/LED/reset events and recovery through the signed deadline, then verify selected and unaffected domains plus services. Do not clear logs, let the agent press hardware, substitute API/SSH reset, press again or power-cycle.",
+    "expected_result": "The single approved physical press produces exactly the signed reset-domain signature: selected-plane outage/reset and recovery, explicitly defined behavior of the other plane, correct console/LED events and healthy post-recovery services within the approved deadline. No unintended domain, boot loop, data/service corruption or unplanned configuration change occurs, and complete pre/during/post evidence remains preserved.",
+    "pass_fail_basis": "Review remains PENDING until button/target/oracle authority is signed. After binding, PASS requires the exact one-press dual-plane timeline, physical evidence, selected-domain recovery and unaffected-domain behavior defined by that matrix. A ping drop alone, only OS-IP or BMC-IP, eventual recovery without deadline, API reset or repeated press is insufficient. Wrong outage domain, unsafe workload impact, timeout, boot loop, missing evidence or recovery action is reported for engineer FAIL/BLOCKED disposition; the end user decides the verdict.",
+    "safety_gate": [
+      "Do not press any control until system-versus-BMC semantics, exact panel button and expected dual-plane states are approved.",
+      "Drain workloads, preserve data and require explicit critical-action authorization plus an independent observer and recovery path.",
+      "Only the authorized operator presses once; the agent must not touch hardware or substitute remote/API reset.",
+      "Do not clear SEL/dmesg/syslog, press again, issue reset/power commands or power-cycle to force recovery; preserve first failure evidence.",
+      "Stop/escalate on wrong button/domain, unexpected loss of both planes, boot loop, unsafe state or deadline expiry."
+    ],
+    "expected_evidence": [
+      "Exact Source Key/Variant, written reset-target ruling, button mapping, signed dual-plane oracle and recovery deadline",
+      "SUT/BMC/firmware/OS identities, OS-IP/BMC-IP, workload-drain/data-protection approval, operator/observer and synchronized clocks",
+      "Physical button/LED photo or video and one-press timestamp correlated to OS/BMC ping, console, health and reset events",
+      "Complete preserved pre/during/post SEL/dmesg/syslog/service evidence and recovery-duration/outage-scope comparison",
+      "No-substitution/no-second-press/no-power-cycle audit, exceptions/recovery and engineer-owned PENDING/PASS/FAIL/BLOCKED verdict"
+    ],
+    "recovery": "On wrong domain, unexpected outage, boot loop, service/data concern or deadline expiry, stop monitoring only after evidence is secured and do not press/reset/power-cycle again. Transfer control to the platform/BMC owner and invoke the pre-approved recovery path for the selected reset type using the recovery console. Preserve all logs/timelines and document every owner-directed recovery action."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "System Reset plus OS-IP in Procedure conflicts with BMC Reset plus BMC-IP in Criteria. Standards confirm separate system/manager reset resources; only project authority can select the intended physical control and oracle."},
+  "blocked": {"before": false, "after": false, "reason": "The approval, monitoring, evidence and recovery framework are defined. Exact reset target/button, dual-plane states and deadline are owner-supplied Project inputs; execution remains gated but the test is not inherently impossible."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Written system-versus-BMC reset ruling; exact physical button/panel; expected OS-IP/BMC-IP/console/LED/service matrix; source 10-15 minute deadline disposition; target identities; workload drain/data protection; operator/observer; recovery/escalation procedure.", "execution_status": "REVIEW COMPLETE BUT ENGINEERING DECISION PENDING; EXECUTION NOT STARTED; NO BUTTON PRESS, RESET, REBOOT, POWER CYCLE, LOG CLEAR, BMC/DUT OR OTHER HARDWARE ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "DMTF Redfish Data Model Specification", "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.2.pdf", "application": "Separately defines ComputerSystem.Reset as resetting the system and Manager.Reset as resetting/rebooting the manager, supporting distinct host and management reset domains without selecting this platform's physical button."}
+  ],
+  "project_authority": "The platform/BMC owner selects the reset domain, exact button, dual-plane oracle and recovery deadline. The workload owner authorizes drain/data protection; an authorized operator performs one press; an independent observer captures the timeline. The end user decides verdict, and AI may not select a branch from the observed outage.",
+  "traceability": {"applicable_decisions": ["ED-06", "ED-10", "ED-17", "ED-18", "ED-19", "ED-20", "ED-21", "ED-23", "ED-24", "ED-25", "ED-26", "ED-29", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "system_vs_bmc_reset_scope_unresolved": true, "dual_plane_evidence_preserved": true, "single_operator_press_only": true, "no_reset_substitution_or_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1754|Wistron-HW-00387-V003", "next_missing_formal_queue_case_variant_id": "ab9fd4e62e1b1a80"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_conflict_record_read": true, "pending_and_conflict_analyses_read": true, "official_system_vs_manager_reset_semantics_checked": true, "duplicate_code_search_completed": true, "next_formal_queue_identity_directly_read": true, "case_specific_physical_button_outage_domain_and_recovery_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
