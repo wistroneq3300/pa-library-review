@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 302,
+  "formal_queue_sequence": 151,
+  "source_key": "Functionality|1812|Wistron-HW-00012-V003",
+  "case_variant_id": "5eacac5ccc73ffb3",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1812, "code": "Wistron-HW-00012-V003", "original_row_sha256": "3bfdbad7440921715be96a2ce328491e932e9a6a26aa0cbf785d06d652776e37", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C E1S_BD2", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No unique carrier-2 route, device map, safe response or relation to row 1811 is supplied.", "deepseek": "YES/no-risk; scans every host bus without selecting carrier 2, uses unsafe SSH and truncates output.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk; assumes a distinct logical carrier-2 stage without reconciling row 1811 E1S_BD2.", "historical_v3_1": "SOURCE_CONFLICT and BLOCKED because this row and row 1811 share the BD2 target while the Master does not authorize a logical/physical split or duplicate disposition."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1945_5eacac5ccc73ffb3.json",
+  "old_problem": "The I2C prefix suggests logical coverage but does not prove this row is a unique stage. The preceding row independently names E1S_BD2 with the same placeholders and was interpreted physically. DeepSeek's global scan neither selects carrier 2 nor maps a responder to slot/device and cannot establish unique additional coverage.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_SOURCE_CONFLICT_AND_BLOCKED_FOR_DISTINCT_E1S_BD2_LOGICAL_CONTRACT; GENERIC_SCAN_AND_EVIDENCE_REUSE_REJECTED",
+  "disposition_reason": "Retain Pending, Source Conflict and BLOCKED. ED-02/ED-19 preserve this Source Identity, but Engineering must decide whether it is a distinct logical checkpoint, a duplicate or part of an approved split with row 1811. If retained logically, it still needs a carrier-2-specific BMC route, slot/device map, safe registers, expected responses and storage-health recovery. Preceding-row physical evidence cannot substitute.",
+  "decision_basis": [
+    "The exact XLSX row 1812, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1813 / Wistron-HW-00434-V002 / 7aef3ac880f69ad5.",
+    "Rows 1811 and 1812 name the same BD2 target but use different codes/test sets and no operative specification, so uniqueness is not authoritative.",
+    "The I2C prefix does not by itself define controller/mux/slot/address/register or prove that a physical/logical split was intended.",
+    "ED-02/ED-19 require separate identity and coverage; no evidence may be double counted while the relationship remains unresolved.",
+    "ED-03/ED-15 forbid guessed carrier topology and PASS without exact per-slot responses and NVMe/platform health criteria.",
+    "No SSH, I2C, E1.S, NVMe, storage, physical, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "E1S_BD2 distinct logical I2C sideband verification — blocked pending reconciliation",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "If Engineering retains this as the distinct logical BD2 checkpoint, verify the exact carrier-2 BMC/OOB sideband resources per populated slot without substituting or duplicating row-1811 physical evidence and without affecting NVMe storage.",
+    "required_package": [
+      "Approved duplicate-or-split ruling for rows 1811/1812 and unique requirement/evidence boundary for this Source Identity",
+      "Exact E1S_BD2 carrier/revision, slot and installed NVMe model/serial/firmware population",
+      "BMC/OOB controller, mux route, bus/address/device and safe identity/status/temperature register allowlist",
+      "Power/reset/control/EEPROM-write exclusions plus expected per-slot response and storage-health matrix",
+      "Approved tool/version, maintenance/storage state, secure access, independent console/BMC/storage recovery and fresh review"
+    ],
+    "test_command": "BLOCKED; perform no carrier-2 access and do not reuse row-1811 evidence. After the cross-row ruling and complete logical contract receive fresh review, baseline exact NVMe devices/namespaces/health, use secure BMC/OOB access to only the carrier-2 route, and read allowlisted identity/status/temperature fields per slot. Capture complete responses mapped to serial/firmware plus BMC SEL/SDR, kernel and OS health. Never scan all buses, touch power/reset/control/write space, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. Future PASS requires this row's unique approved logical scope, exact carrier-2 route and all per-slot sideband responses matching the retained device matrix, with no NVMe disappearance/reset/namespace/media/thermal or management-health change and no double-counted row-1811 evidence.",
+    "pass_fail_basis": "Current result is BLOCKED with Source Conflict. Missing relationship ruling or logical contract, duplicate evidence, wrong slot/path, unapproved access, response mismatch, device/reset/health anomaly or incomplete traceability is FAIL/BLOCKED for owner verdict. The I2C prefix and address presence alone cannot PASS.",
+    "safety_gate": [
+      "Keep row 1812 identity/evidence separate from row 1811 until an explicit duplicate/split ruling exists.",
+      "Do not scan all host buses or access unknown carrier power/reset/control/EEPROM endpoints.",
+      "Correlate every sideband response to exact populated slot/NVMe identity and preserve storage/BMC evidence.",
+      "Stop on device disappearance, reset, thermal, media, BMC or bus anomaly; do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved rows-1811/1812 relationship and this Source Identity's unique logical scope",
+      "Carrier-2 revision, slot/NVMe population and controller/mux/address/register allowlist",
+      "Complete per-slot raw responses mapped to serial/firmware and expected matrix",
+      "Non-duplication trace plus pre/post NVMe namespaces/SMART/media/temperature, kernel and BMC SEL/SDR health",
+      "Abort/no-retry/independent-storage-recovery audit and owner verdict"
+    ],
+    "recovery": "No access is authorized now. A future retained logical stage must use recovery independent of carrier 2. Stop and preserve evidence on any anomaly without retry; bus/NVMe reset, reboot or power cycle requires a separate owner-approved procedure and authorization."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Rows 1811/1812 share the BD2 target but the Master neither declares a duplicate nor approves a physical/logical split; inferred execution modes conflict."},
+  "blocked": {"before": true, "after": true, "reason": "The cross-row relationship and unique carrier-2 topology, safe operation, expected response and recovery are all unresolved."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "BD2 cross-row ruling, this row's unique logical scope, carrier/slot/device map, BMC route/register allowlist, expected responses, storage criteria and recovery.", "execution_status": "BLOCKED; NO SSH, I2C, E1S, NVME, STORAGE, PHYSICAL, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-02/ED-03/ED-15/ED-19", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Preserves this identity, prohibits guessed OEM carrier parameters and double counting, and requires approved response/health criteria."}],
+  "project_authority": "E1.S/storage/platform owner must reconcile both BD2 rows and, if this logical case is retained, approve its unique route, response, health and recovery contract; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "bd2_logical_identity_preserved": true, "adjacent_bd2_overlap_detected": true, "source_conflict_retained": true, "physical_evidence_not_substituted": true, "generic_scan_rejected": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1813|Wistron-HW-00434-V002", "next_missing_formal_queue_case_variant_id": "7aef3ac880f69ad5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "case_specific_bd2_logical_overlap_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
