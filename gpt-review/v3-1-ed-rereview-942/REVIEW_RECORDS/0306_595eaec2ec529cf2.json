@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 306,
+  "formal_queue_sequence": 155,
+  "source_key": "Functionality|1912|Wistron-HW-00462-V002",
+  "case_variant_id": "595eaec2ec529cf2",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1912, "code": "Wistron-HW-00462-V002", "original_row_sha256": "dadb0ac252b4392e27ccdb0db3937084d2e2452be52de341942280097e866721", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Power Button LED Check", "procedure": "Green Solid when powered on; under Green Blink, no blink during BMC/HMC initialization and no blink during POST; Amber Solid/Blink not defined.", "criteria": "Green Solid; Green Blink; Amber Solid Not Defined; Amber Blink Not Defined.", "script": "No Script; 15 attended and 5 machine minutes.", "deepseek": "NO; correctly requires physical observation and asks whether an agent-readable state exists.", "gpt_v2": "MANUAL ONLY; requires visual evidence but does not resolve the Green Blink heading versus no-blink instructions.", "historical_v3_1": "MANUAL ONLY with Source Conflict and Engineering Decision Pending; continuous phase-correlated video required, amber modes preserved undefined."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2043_595eaec2ec529cf2.json",
+  "old_problem": "The source expresses opposite polarities: a Green Blink section and Criteria entry imply a required blink state, while the procedure explicitly says no blink throughout both BMC/HMC and POST initialization. Sparse photos or a controller register cannot prove absence of brief optical transitions, and Amber Solid/Blink have no acceptance definition.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_SOURCE_CONFLICT_FOR_GREEN_BLINK_POLARITY_AND_AMBER_STATE_MATRIX; MANUAL_VISUAL_METHOD_CONFIRMED_BY_ED09",
+  "disposition_reason": "Retain Pending and Source Conflict, not BLOCKED. ED-09/ED-08 settle the method: a qualified operator must capture uninterrupted contextual/close visual evidence and any register is corroboration only. However no general rule can choose between actual Green Blink and prohibited blink without falsifying one source statement. Engineering must provide a revision-scoped phase/state matrix and amber disposition before final PASS.",
+  "decision_basis": [
+    "The exact XLSX row 1912, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1913 / Wistron-HW-00463-V002 / 0f400c1ce90bf42b.",
+    "ED-09 requires true human visual evidence for a physical LED; ED-08 similarly prevents controller state from substituting for emitted color/cadence.",
+    "Continuous video aligned to BMC/HMC and POST phase markers is required because still images can miss short transitions at ownership handoffs.",
+    "The Green Blink label/criterion and two no-blink instructions are irreconcilable without an authoritative polarity decision; choosing either would manufacture PASS semantics.",
+    "ED-13/ED-15 prohibit treating undefined amber modes as N/A or PASS without platform specification and criteria.",
+    "No power-on, reset, LED stimulus, physical observation, register read, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Power Button LED power-on and initialization behavior — pending polarity decision",
+    "automation_classification": "MANUAL ONLY",
+    "user_confirmation_required": true,
+    "purpose": "Visually verify the exact Power Button LED from an approved power-on event through BMC/HMC initialization, POST and stable powered state, preserving both the solid-green requirement and the unresolved Green Blink/no-blink polarity plus undefined amber states.",
+    "required_package": [
+      "Exact physical Power Button LED and controller mapping plus hardware/BMC/HMC/BIOS revision",
+      "Approved phase/state matrix resolving Green Blink versus no-blink for BMC/HMC, POST and steady state",
+      "Observable phase markers, maximum timing and defined color/cadence/duty-cycle tolerance",
+      "Revision-scoped Amber Solid/Blink definitions or specification-backed N/A disposition",
+      "Approved power-on stimulus, continuous contextual/close video, passive telemetry and independent recovery"
+    ],
+    "test_command": "MANUAL ONLY; after the phase/state matrix and power-on authorization are approved, a qualified operator records one uninterrupted contextual and close video of the exact Power Button LED from before the power-on event through BMC/HMC initialization, POST completion and stable powered state. Correlate every visible transition to console/BMC/HMC/power timestamps and any approved read-only controller state. Do not use a register as optical proof, invent amber fault stimuli, reset/power-cycle outside the approved sequence or automatically retry.",
+    "expected_result": "Green is solid at the approved powered-on stable point. Initialization behavior cannot receive final PASS until Engineering decides whether blink is required or prohibited in each BMC/HMC and POST phase and supplies cadence/timing limits. Amber modes are evaluated only when defined or specification-backed N/A. No unexpected color/cadence, boot stall, power instability or platform fault occurs.",
+    "pass_fail_basis": "Current review remains Pending because polarity and amber acceptance are unresolved. After approval, PASS requires uninterrupted video proving every phase/state/timing criterion and clean platform health. FAIL on wrong color, unauthorized blink/no-blink, cadence/timing violation, missed phase, evidence gap, BMC/HMC/POST stall or power/thermal fault. A controller bit, sparse snapshots or assumed amber N/A cannot PASS; end user owns verdict.",
+    "safety_gate": [
+      "Do not issue any power/reset stimulus without explicit approval and independent recovery.",
+      "Use direct continuous visual evidence; a register or SSH status is supporting-only.",
+      "Do not invent amber stimuli or acceptance and do not resolve the Green polarity by reviewer preference.",
+      "Stop on stalled POST, BMC/HMC loss, power instability, thermal/fault indication or evidence loss; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Approved indicator mapping, platform revisions and phase/state/polarity/cadence/timing matrix",
+      "Continuous timestamped contextual and close video through power-on, BMC/HMC, POST and stable state",
+      "Synchronized console, BMC/HMC phase, passive power and any supporting controller-state evidence",
+      "Amber state or specification-backed N/A disposition",
+      "Power authorization, abort/no-retry/recovery audit and engineer/end-user verdict"
+    ],
+    "recovery": "If boot, power, thermal or indicator behavior is abnormal, stop observation, preserve continuous evidence and do not retry. Use the independently approved platform recovery to return to the defined stable state; any further reset or power cycle requires a new explicit authorization."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Green Blink is named as a section and criterion while the instructions prohibit blinking in both initialization phases; no approved polarity decision exists."},
+  "blocked": {"before": false, "after": false, "reason": "The manual observation method and evidence can be prepared; final acceptance remains Pending on the phase/state decision rather than being technically impossible."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Green Blink/no-blink phase polarity, color/cadence/timing limits, phase markers, amber definitions/N/A basis, LED mapping, power authorization and recovery.", "execution_status": "STATIC MANUAL TEST DESIGN RETAINED PENDING AUTHORITATIVE LED MATRIX; NO POWER, RESET, LED, VISUAL, REGISTER, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-08/ED-09/ED-13/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires direct visual evidence, prohibits inferred N/A/PASS and keeps undefined or contradictory state criteria pending."}],
+  "project_authority": "Hardware/BMC/HMC owner must resolve the phase/state polarity and amber modes and approve the power stimulus/recovery; qualified operator captures visual evidence and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-08", "ED-09", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "physical_visual_evidence_preserved": true, "green_polarity_conflict_retained": true, "all_boot_phases_preserved": true, "amber_states_not_invented": true, "controller_state_supporting_only": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1913|Wistron-HW-00463-V002", "next_missing_formal_queue_case_variant_id": "0f400c1ce90bf42b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "pending_and_conflict_analyses_read": true, "case_specific_power_button_led_polarity_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
