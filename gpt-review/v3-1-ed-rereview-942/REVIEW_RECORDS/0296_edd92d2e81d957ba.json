@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 296,
+  "formal_queue_sequence": 145,
+  "source_key": "Functionality|1806|Wistron-HW-00008-V003",
+  "case_variant_id": "edd92d2e81d957ba",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1806, "code": "Wistron-HW-00008-V003", "original_row_sha256": "66840b1f6b1f7adb5adfee26d5a14198a31af764974d98a7a68932ff075502f6", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C RIO_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "Neither RIO_BD nor its bus contract is defined.", "deepseek": "YES/no-risk; scans every host bus through unsafe SSH and truncated output without locating the named board.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION but assumes RIO means remote I/O and invents channel/output scope not present in the source.", "historical_v3_1": "BLOCKED because RIO acronym/function/location, board revision, controller/mux/address/register map, safe transaction, expected response and recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1939_edd92d2e81d957ba.json",
+  "old_problem": "The target board itself is semantically undefined: RIO may be project-specific and the source supplies no expansion, location, function or specification. DeepSeek cannot associate a scanned bus with RIO_BD, while GPT V2's remote-I/O interpretation is unsupported and would manufacture scope, device expectations and recovery assumptions.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_AUTHORITATIVE_RIO_BOARD_IDENTITY_AND_I2C_CONTRACT; UNSUPPORTED_ACRONYM_EXPANSION_AND_GLOBAL_SCAN_REJECTED",
+  "disposition_reason": "Retain Pending and BLOCKED. Before parameterizing bus numbers, Engineering must identify what RIO_BD is. Its physical function determines blast radius, safe registers, health monitoring and recovery. Default BMC ownership does not authorize inventing remote-I/O or rear-I/O semantics. No relevant method or PASS oracle can be built from the acronym alone.",
+  "decision_basis": [
+    "The exact XLSX row 1806, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1807 / Wistron-HW-00009-V003 / d5017d37c7d6614a.",
+    "Project-specific board acronyms are not safely expanded from general technical usage; RIO_BD could denote different functions with different targets and recovery.",
+    "I2C defaults to BMC/platform-management scope, but ED-03 still prohibits guessing OEM board identity, topology or parameters.",
+    "A responding address cannot prove coverage of an unidentified physical board or define its expected BOM/resource matrix.",
+    "ED-15 prevents PASS without authoritative expected responses and board-function-specific health limits.",
+    "No SSH, I2C, RIO, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "RIO_BD identity-bound I2C verification — blocked until board semantics are defined",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve the literal I2C RIO_BD coverage while requiring Engineering to identify the board before defining a bounded BMC/OOB route, safe transaction, expected resources, health oracle and independent recovery.",
+    "required_package": [
+      "Authoritative RIO acronym expansion, board function/location, model/revision and BOM",
+      "Approved board-specific I2C specification and BMC/OOB controller/mux/bus/address/device/register map",
+      "Exact permitted non-mutating transactions and reserved/control/write exclusions",
+      "Expected raw responses/resource matrix and health/abort criteria appropriate to the actual board function",
+      "Approved tool/version, maintenance conditions, secure transport and independent board-function-specific recovery"
+    ],
+    "test_command": "BLOCKED; perform no RIO or I2C access. After Engineering defines RIO_BD and a fresh review approves the complete contract, use secure BMC/OOB access to only the named controller/mux path and issue only allowlisted identity/status reads. Capture complete raw output and board-function-specific pre/during/post health plus BMC SEL/SDR and OS evidence. Do not assume remote or rear I/O, scan all host buses, probe unknown/control endpoints, force/write, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. A future PASS requires authoritative physical-board identity, exact path and allowlisted response matches for the approved BOM/resource matrix, plus no board-function, BMC or OS health change.",
+    "pass_fail_basis": "Current result is BLOCKED. Address enumeration cannot identify RIO_BD or PASS. Missing board definition/specification, unsupported acronym interpretation, wrong path/device, unapproved transaction, response mismatch, incomplete evidence or any function-specific health change remains FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not assume what RIO means or infer its blast radius from neighboring board names.",
+      "Do not access a bus until physical board identity, topology, safe transactions and exclusions are approved.",
+      "Reject generic scans, embedded credentials, disabled host verification, truncated evidence and force/write operations.",
+      "Stop on any device, I/O, management or bus change; preserve evidence and do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved RIO_BD name/function/location/specification, revision and BOM",
+      "Controller/mux/bus/address/register allowlist, exclusions and exact expected-response matrix",
+      "Complete authenticated command/output transcript mapped to physical resources",
+      "Function-specific baseline/during/final state plus BMC SEL/SDR and OS health",
+      "Abort/no-retry/independent-recovery audit and platform owner verdict"
+    ],
+    "recovery": "No action is authorized while the board function is unknown. A future contract must provide recovery independent of the path under test and appropriate to the actual RIO function. On anomaly, stop, preserve evidence and do not retry; any reset, reboot, output change or power action requires separate explicit approval."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The source is incomplete, not contradictory; RIO_BD and both operative fields all depend on the missing specification."},
+  "blocked": {"before": true, "after": true, "reason": "The physical target and function are undefined, so blast radius, command semantics, expected result and recovery cannot be bounded."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Authoritative RIO_BD identity/function/location/revision, I2C topology, safe transactions, expected responses/health oracle and independent recovery.", "execution_status": "BLOCKED; NO SSH, I2C, RIO, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Default BMC scope does not permit guessed OEM board semantics, and PASS requires an authoritative expected response."}],
+  "project_authority": "Platform owner must define RIO_BD itself and then approve its path, transaction, acceptance and recovery contract; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "literal_rio_identity_preserved": true, "unsupported_remote_io_expansion_rejected": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1807|Wistron-HW-00009-V003", "next_missing_formal_queue_case_variant_id": "d5017d37c7d6614a"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_undefined_rio_identity_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
