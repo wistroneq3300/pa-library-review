@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 262,
+  "formal_queue_sequence": 111,
+  "source_key": "Functionality|1723|Wistron-BMC-00995-V005",
+  "case_variant_id": "89223851e4065ad0",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1723, "code": "Wistron-BMC-00995-V005", "original_row_sha256": "85fd99c8664fc880e31a25032103032cce92d5b2b09bd707510762e4808e049e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "UPPER_FAN1~5_F", "procedure": "Collect SDR-List and Sensor-List through standard IB/OOB ipmitool, broadly filter fan records and check BMC Web; generic setup asks to clear logs.", "criteria": "Sensor name, description and reading in SDR, Sensor and Web views match SPEC.", "script": "Private `upper_fan_f`; 3 attended and 3 machine minutes; adjacent Wistron-BMC-00996-V005 has identical content but a distinct Source Key/Variant.", "deepseek": "PARTIAL and over-restrictive: claims raw implementation-specific bytes are required although the source explicitly supplies standard high-level SDR/Sensor reads.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at MEDIUM risk; preserves five-member mapping and five-view evidence but unnecessarily makes unknown vendor raw bytes a prerequisite."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1859_89223851e4065ad0.json",
+  "old_problem": "The historical Pending state asks the owner to invent a unique purpose versus an adjacent content-identical code and treats unknown raw bytes as required. Neither is necessary: approved duplicate-coverage rules require separate identity/evidence, not different semantics, and the Master Procedure already defines standard read-only SDR and Sensor commands. The real technical need is an exact five-member upper-bank front-tachometer map so a broad fan list does not substitute rear, lower or PSU fan records.",
+  "new_disposition": "RESOLVED_BY_DUPLICATE_IDENTITY_RULE_AND_STANDARD_HIGH_LEVEL_READ_PATH_AS_INDEPENDENT_FIVE_UPPER_FRONT_TACHOMETER_CORRELATION",
+  "disposition_reason": "Resolve Engineering Decision Pending and Source Conflict at the Review layer. The approved duplicate rules require Wistron-BMC-00995-V005 and adjacent Wistron-BMC-00996-V005 to retain independent Source Key/Variant, execution evidence and verdict even if their intended coverage is identical; no fabricated semantic distinction or deletion is required. Standard ipmitool `sdr elist` and `sensor list` already implement the source's read-only collection, so unprovided raw bytes are not a prerequisite. Exact fan FRU/rotor mapping, RPM limits and target values remain runtime Project configuration under the user's parameterization rule.",
+  "decision_basis": [
+    "The exact XLSX row 1723, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, pending/conflict analyses, exact adjacent row 1724 comparison and ED-01 through ED-30 rules were read. The actual next formal queue identity was directly opened as Functionality row 1724 / Wistron-BMC-00996-V005 / f7131bc24cf8b6e5.",
+    "Approved duplicate/coverage rules prohibit merging or discarding repeated tests and require each Source Key/Variant to retain independent verification identity. They do not require an owner to manufacture different intent where Master content is identical.",
+    "This row remains a separate checkpoint with its own target binding, evidence hashes, timestamps, Web capture and verdict. Evidence from row 1724 cannot satisfy this row, and this row cannot satisfy row 1724.",
+    "The Procedure explicitly supplies stock `ipmitool sdr elist` and `ipmitool sensor list` through IB/OOB. Upstream ipmitool defines these standard read families; no guessed raw bytes are needed for the stated name/description/reading comparison.",
+    "`UPPER_FAN1~5_F` is interpreted only through a signed five-row map: upper bank positions 1-5, front rotor/tachometer, physical FRU/entity and canonical SDR/Sensor/Web identity. Broad `grep fan` is discovery only and cannot define scope.",
+    "Five independent evidence planes remain mandatory: IB SDR, OOB SDR, IB Sensor, OOB Sensor and actual BMC Web. Exact RPM/status/threshold/freshness acceptance and control-mode/load tolerance are Project bindings under ED-18, not a remaining Engineering Decision.",
+    "ED-10/ED-21 preserve real WebUI evidence, ED-19 removes generic log clearing, ED-26 prohibits retrying for matching RPM, and no fan/PWM/curve/threshold/power/BMC/DUT mutation is authorized."
+  ],
+  "test_case": {
+    "test_name": "UPPER_FAN1~5_F — independent five upper-front tachometer correlation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Independently verify this Source Key's five upper-bank front-rotor tachometers across IB/OOB SDR, IB/OOB Sensor List and the same-target BMC Web page against the signed fan FRU/RPM matrix, without reusing evidence from the identical adjacent testcase.",
+    "required_package": [
+      "Exact SUT/BMC/firmware and this Source Key/Variant execution identity; separate evidence namespace and verdict from Wistron-BMC-00996-V005",
+      "Signed five-row upper-bank fan map covering positions 1-5, physical FRU/entity, front versus rear rotor/tachometer and canonical SDR/Sensor/Web IDs",
+      "Approved fan-control mode, thermal/load context, RPM/status/unit/threshold/freshness rules, paired-rotor behavior and timestamp/skew tolerance",
+      "Supported secret-safe ipmitool IB/OOB collectors, same-target proof, complete untruncated SDR/Sensor parsers, comparator and immutable evidence destination",
+      "Protected TLS-validated BMC Web access and authorized reviewer with page/filter/pagination/refresh context; reviewed private script only if used as an additive path"
+    ],
+    "test_command": "Bind evidence to this Source Key/Variant, verify one target and record fan-control plus thermal/load context. Capture/hash complete IB `ipmitool sdr elist`, OOB `sdr elist`, IB `sensor list` and OOB `sensor list`; capture all five mapped upper-front rows/details from the same BMC Web Sensor page. Normalize FRU/entity/position/rotor/name/description/RPM/unit/status/threshold/freshness and compare to the signed matrix. Use `grep fan` only after complete capture for discovery. Do not require or guess raw bytes; any approved private/raw script is additive and must not replace these five views. Do not reuse row 1724 evidence, clear logs or change fan state.",
+    "expected_result": "Exactly five approved upper-bank front tachometers appear once in every applicable plane, map to the correct positions/FRUs/front rotors and agree on name, description, unit, status, thresholds and fresh RPM within the signed control-mode/load/time tolerance. Rear rotors, lower-bank fans and PSU fans are excluded. Evidence is unique to this Source Key/Variant and collection causes no fan, SDR, BMC, power or log mutation.",
+    "pass_fail_basis": "PASS evidence requires this row's own complete five-member/five-view comparison against the signed matrix and genuine WebUI captures; command exit zero, a broad fan grep, plausible RPM, one view, guessed raw response or copied adjacent-row evidence is insufficient. Missing/extra/duplicate/stale/misnumbered members, wrong bank/rotor/FRU, unexplained cross-view/RPM/status difference or unapproved tolerance is reported for engineer FAIL/BLOCKED disposition. Runtime values may be bound by the Project; the end user decides the verdict.",
+    "safety_gate": [
+      "Maintain this Source Key/Variant and evidence namespace independently; never merge, copy or substitute evidence/verdict from row 1724.",
+      "Do not guess raw IPMI bytes or treat a private script as mandatory unless its reviewed read-only contract is supplied; standard high-level reads are the approved base path.",
+      "Keep all operations read-only: do not change fan PWM/mode/curve/threshold, reset fans/BMC, modify SDR, alter workload/power or clear logs.",
+      "Verify same-target IB/OOB/Web identity, protect credentials/tokens and reject truncated, cached, cross-host or paginated-away evidence.",
+      "Stop on unmapped rotor, target mismatch, stale/missing/divergent data and preserve the first result; do not automatically retry."
+    ],
+    "expected_evidence": [
+      "Exact Source Key/Variant and independent evidence namespace plus target/firmware/same-target identity",
+      "Signed five-position upper-bank FRU/front-tachometer map and fan-control/thermal/load/RPM acceptance matrix",
+      "Complete hashed raw IB/OOB SDR and Sensor lists with timestamps and normalized five-member comparison",
+      "Timestamped BMC Web captures for all five rows with target/filter/pagination/refresh context",
+      "No-evidence-reuse/no-mutation/no-log-clear/no-retry audit, exceptions and engineer-owned PASS/FAIL/BLOCKED verdict"
+    ],
+    "recovery": "Approved operations are reads. On identity, mapping, access, freshness or view mismatch, stop, preserve this row's raw/UI evidence and close sessions; do not alter fan controls, clear logs, reset or retry. If an unintended setting change occurs, invoke only the pre-approved owner procedure for that exact setting and verify the original control mode independently."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The adjacent content-identical row no longer requires a fabricated unique purpose: approved duplicate rules resolve it by preserving both independent identities, evidence sets and verdicts with equal coverage."},
+  "blocked": {"before": false, "after": false, "reason": "Standard high-level read commands, evidence planes, safety gates and recovery are defined. Target, five-fan mapping and RPM policy are runtime Project configuration rather than missing core command semantics."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact target/firmware; five-position upper-bank/front-rotor FRU and SDR/Sensor/Web mapping; fan-control/thermal/load context; RPM/unit/status/threshold/freshness and time-skew tolerance; protected IB/OOB/Web access; independent evidence path. Optional private/raw script requires separate review if used.", "execution_status": "REVIEW RESOLVED; EXECUTION NOT STARTED; NO FAN/PWM/THRESHOLD/SDR/LOG, BMC/DUT OR OTHER HARDWARE ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "ipmitool upstream manual", "url": "https://github.com/ipmitool/ipmitool/blob/master/doc/ipmitool.1.in", "application": "Documents the standard SDR and sensor read families already named by the source, supporting a non-destructive high-level collection path without invented raw bytes."}
+  ],
+  "project_authority": "The platform/thermal owner supplies the five-FRU/front-rotor map and signed RPM/control-context rules. The BMC owner maps SDR/Sensor/Web fields; an authorized reviewer preserves genuine WebUI evidence. Each duplicate-content testcase retains its own execution record and end-user verdict; neither replaces the other.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-10", "ED-13", "ED-18", "ED-19", "ED-21", "ED-24", "ED-26", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "duplicate_identity_and_coverage_preserved": true, "adjacent_evidence_reuse_prohibited": true, "standard_high_level_reads_sufficient": true, "five_upper_front_members_and_views_preserved": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1724|Wistron-BMC-00996-V005", "next_missing_formal_queue_case_variant_id": "f7131bc24cf8b6e5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_conflict_record_read": true, "pending_and_conflict_analyses_read": true, "adjacent_identical_row_directly_compared": true, "official_high_level_command_semantics_checked": true, "next_formal_queue_identity_directly_read": true, "case_specific_duplicate_identity_front_rotor_and_five_view_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
