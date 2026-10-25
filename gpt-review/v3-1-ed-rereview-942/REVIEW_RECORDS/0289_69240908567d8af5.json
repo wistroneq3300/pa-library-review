@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 289,
+  "formal_queue_sequence": 138,
+  "source_key": "Functionality|1798|Wistron-HW-00431-V054",
+  "case_variant_id": "69240908567d8af5",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1798, "code": "Wistron-HW-00431-V054", "original_row_sha256": "8a6876ee4370250741f2a63ec29a6df81a21f14512cac6b6a08418be3af27a34", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Display with 3840X2160 with Furmark(8 hrs)(Windows)", "procedure": "Install FurMark 1.29.0.0, launch an unspecified OpenGL 4.6 benchmark and grep SEL ECC; no eight-hour or 4K control is provided and Criteria is TBD.", "criteria": "TBD.", "script": "No Script; 15 attended and 20 machine minutes versus eight hours in Items.", "deepseek": "PARTIAL; assumes an eight-hour 4K run without reconciling the 24-fold duration mismatch, render/scanout layers or long-run recovery.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; adds periodic monitoring but silently accepts title duration.", "historical_v3_1": "BLOCKED for eight hours versus 20 minutes and undefined internal/physical 4K semantics."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1932_69240908567d8af5.json",
+  "old_problem": "Items requires eight hours at 3840x2160, Machine Time says 20 minutes and Procedure supplies neither duration nor 4K setting. Prior review treated duration and 4K layers as unresolved core semantics. Exact preset, thresholds, watchdog, physical evidence cadence and recovery also remained absent.",
+  "new_disposition": "RESOLVED_BY_ED14_TO_CONTINUOUS_EIGHT_HOUR_3840X2160_FURMARK_RENDER_AND_PHYSICAL_LINK_SOAK; ED15_THRESHOLDS_WATCHDOG_AND_INDEPENDENT_RECOVERY_REQUIRED",
+  "disposition_reason": "Resolve Pending, Source Conflict and BLOCKED. ED-14 preserves the explicit eight-hour formal coverage; Machine Time 20 and any short calibration cannot replace or accumulate toward it. The review separates 4K internal render, Windows active mode and negotiated physical output. Artifact/preset, score/stability, ECC, thermal/power/link thresholds, sampling cadence, watchdog and independent recovery are fail-closed Project Configuration under ED-15, not unresolved review semantics.",
+  "decision_basis": [
+    "The exact XLSX row 1798, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1799 / Wistron-HW-00001-V003 / 774186bb46364dc2.",
+    "ED-14 makes the eight-hour Items requirement authoritative for formal coverage; 20 minutes and calibration are non-passing planning/validation activities.",
+    "Eight hours must be continuous with complete monitoring. A crash, watchdog loss, data gap or restart invalidates the run; segments are not summed and no automatic retry is permitted.",
+    "3840x2160 is independently proven for FurMark render buffer, Windows requested/active mode and monitor-link negotiated timing/refresh/scaling/HDR/color state.",
+    "ED-15 requires approved score/stability, ECC delta/severity, core/hotspot/memory thermal, power, clock/throttle, driver/event, link and visual thresholds before PASS.",
+    "No download, installation, FurMark run, GPU stress, display action, log clear, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "FurMark 3840x2160 continuous eight-hour GPU/display-link soak",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Sustain the approved FurMark/OpenGL workload for eight continuous hours with verified 4K internal render and physical output, while trending GPU/platform health and periodically proving link and visible-pixel stability under an independently recoverable watchdog.",
+    "required_package": [
+      "Approved FurMark 1.29.0.0 artifact/source/license/hash and exact burn-in preset, AA, fullscreen/window and 3840x2160 render settings",
+      "Exact Windows/GPU/driver/VBIOS/OpenGL identity plus requested/active/negotiated 3840x2160 refresh, scaling, HDR/color and link data",
+      "Approved continuous eight-hour duration, telemetry and visual sampling cadence, score/stability threshold and invalid-run rule",
+      "ECC baseline/delta/severity and GPU thermal/power/clock/throttle, driver/reset, display-link and platform-event abort limits",
+      "Dedicated cooled window, watchdog/alerting with independent recovery, qualified operator coverage, bounded evidence storage and cooldown plan"
+    ],
+    "test_command": "REQUIRES CONFIRMATION; after approved bindings and execution OK, verify artifact hash, exact GPU/display identity, positive OpenGL support, separate 4K render/active/negotiated modes, baseline ECC/events, evidence capacity, watchdog and recovery path without clearing logs. Launch only the approved FurMark preset for eight continuous hours. Sample GPU/link/BMC/Windows state and physical display evidence at the approved cadence; retain complete result and gap-free timeline. Any interruption, monitor loss or watchdog gap invalidates coverage and is not auto-retried. Stop immediately at any abort limit, then collect final ECC/event deltas and cooldown health.",
+    "expected_result": "The approved preset runs uninterrupted for at least eight hours with internal render, active desktop and negotiated physical output all at 3840x2160; telemetry/evidence has no gap, result meets the approved threshold, no hang/reset/disallowed throttle occurs, thermal/power/link and ECC/event trends stay within limits, and every sampled physical observation shows no corruption, flicker, tearing, freeze, scaling/HDR/color or edge artifact.",
+    "pass_fail_basis": "PASS requires a gap-free continuous eight-hour run and every 4K layer, score/stability, health, ECC/event, watchdog and sampled visual threshold. Twenty minutes, calibration or summed segments cannot PASS. FAIL on interruption/gap, wrong render/link mode, invalid result, artifact/hang, watchdog/recovery failure, thermal/power/throttle/link/driver limit or unacceptable ECC/event delta. BLOCKED at runtime when any required configuration is absent. End user owns verdict.",
+    "safety_gate": [
+      "Do not install unapproved artifacts or run sustained FurMark on production; require dedicated cooling/power and independent recovery.",
+      "Prove internal 4K render, Windows active mode and physical negotiated link separately; screenshots alone are insufficient.",
+      "Preflight evidence capacity and watchdog; preserve complete baseline/delta logs and never clear SEL/Windows/GPU evidence.",
+      "Stop on first approved limit or monitoring gap; do not retry, reset or reboot automatically, and record extended cooldown/final health."
+    ],
+    "expected_evidence": [
+      "Approved artifact/hash/preset/thresholds, cadence, watchdog/recovery and eight-hour authorization",
+      "Exact GPU/driver/OpenGL/display identity plus internal-render, active and negotiated 4K proof",
+      "Gap-free timestamped eight-hour timeline and complete FurMark result/validity/score",
+      "Periodic thermal/power/clock/throttle/link and complete ECC/SEL/Windows baseline-trend-delta evidence",
+      "Periodic physical 4K visual records, watchdog/abort/no-retry/recovery/cooldown audit and end-user verdict"
+    ],
+    "recovery": "Stop FurMark on first limit or monitoring failure, preserve the full partial-run timeline and do not retry. Use the independent approved Windows/console recovery, allow extended cooldown, verify GPU/driver/display/BMC health and restore the approved session without automatic reset/reboot."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-14 selects eight continuous hours as formal coverage; Machine Time 20 cannot shorten it. The three 4K layers are explicit checks."},
+  "blocked": {"before": true, "after": false, "reason": "Duration and 4K semantics are resolved; remaining artifact, thresholds, cadence and recovery are fail-closed configuration."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Artifact/hash/preset, 4K render-active-link bindings, score/ECC/thermal/power/clock/link thresholds, cadence, watchdog/operator/recovery/cooldown.", "execution_status": "REVIEW RESOLVED TO CONTINUOUS EIGHT-HOUR PARAMETERIZED TEST; NO INSTALL, FURMARK, GPU STRESS, DISPLAY, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved ED-14 and ED-15 project rulings", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Preserve eight-hour formal coverage and prohibit PASS without approved thresholds."}],
+  "project_authority": "Project owner binds signed artifact, exact 4K preset/layers, thresholds, cadence and recovery; operator owns sampled physical pixels and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ed14_eight_hour_duration_applied": true, "ed15_threshold_gate_applied": true, "render_active_physical_4k_layers_separated": true, "continuous_no_segment_accumulation": true, "watchdog_and_independent_recovery_required": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1799|Wistron-HW-00001-V003", "next_missing_formal_queue_case_variant_id": "774186bb46364dc2"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "case_specific_4k_eight_hour_watchdog_ed14_ed15_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
