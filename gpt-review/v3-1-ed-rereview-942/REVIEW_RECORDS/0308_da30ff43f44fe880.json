@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 308,
+  "formal_queue_sequence": 157,
+  "source_key": "Functionality|1916|Wistron-GB NV PVP SW-00002-V002",
+  "case_variant_id": "da30ff43f44fe880",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1916, "code": "Wistron-GB NV PVP SW-00002-V002", "original_row_sha256": "d68965b0953b33aeba5400ef2ab312bf3605f385adaa2c95e35039477391c0b6", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SW.2_NVRASTool", "procedure": "Complete NVRASTool using the cited Grace RAS, Server RAS, CPER, Debug/RAS and ARM LibCper references.", "criteria": "NVRAS Pass rate 100%.", "script": "No Script; 30 attended and 60 machine minutes.", "deepseek": "PARTIAL; read-only EDAC/rasdaemon/dmesg inventory plus vendor suite, but insecure SSH and an undefined GPG wording in its evidence request.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; requires full manifest, injection/recovery approval and preserved per-case evidence.", "historical_v3_1": "Pending/Source Conflict because the vendor package/manifest and injection contracts are absent and DeepSeek says GPG while Master says NVRAS."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2047_da30ff43f44fe880.json",
+  "old_problem": "Prior review elevated DeepSeek's undefined GPG wording into a metric conflict and kept package/manifest readiness as Engineering Pending. Read-only EDAC/rasdaemon/dmesg inventory cannot prove NVRASTool completion, and an undisclosed suite could include hazardous injection, evidence clearing or unsupported recovery. The Master nevertheless supplies a clear authoritative outcome: complete NVRAS with 100% pass rate.",
+  "new_disposition": "RESOLVED_TO_MASTER_AUTHORITATIVE_100_PERCENT_NVRAS_MANIFEST_QUALIFICATION_WITH_ED16_PER_CASE_INJECTION_GATES; DEEPSEEK_GPG_WORDING_REJECTED",
+  "disposition_reason": "Resolve Pending and Source Conflict. Master Criteria, not DeepSeek's proposed log wording, defines the metric as NVRAS pass rate 100%. Missing artifact/version/manifest are fail-closed Project Configuration rather than unresolved review semantics. ED-16 supplies the safety rule: every manifest item must be classified as observation or injection and carry approved target, expected CPER/EDAC propagation, isolation, abort and independent recovery before the vendor runner may launch.",
+  "decision_basis": [
+    "The exact XLSX row 1916, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict analysis and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1920 / Wistron-GB NV PVP HW-00465-V003 / 7c72f0f9a6dbd8e3.",
+    "The Master Procedure and Criteria explicitly require completion of NVRASTool and NVRAS pass rate 100%; GPG appears only in DeepSeek's proposed evidence prose and has no authority to change the source metric.",
+    "ED-16 permits a review-layer RAS test only with an approved tool, isolated environment and recovery; it does not require the AI to invent vendor suite internals.",
+    "The complete resolved manifest is the denominator. Every required case must PASS; skips, waived cases and infrastructure errors cannot silently enter the numerator or denominator unless the authoritative NVIDIA policy explicitly defines them.",
+    "Each case requires immutable baseline/stimulus/propagation/result evidence across NVRASTool, CPER, EDAC/rasdaemon, kernel, BMC and console; log clearing is prohibited by ED-17.",
+    "No package installation, NVRASTool launch, RAS injection, log clear, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Complete NVIDIA NVRASTool Grace RAS qualification with 100% NVRAS result",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Execute the complete approved NVRASTool manifest for the exact Grace platform, correlate every observation or injected fault with expected containment and CPER/EDAC/BMC/OS evidence, and calculate the Master-authoritative NVRAS 100% result without hidden omissions.",
+    "required_package": [
+      "Approved licensed NVRASTool artifact/version/hash/launcher and compatible rasdaemon version/configuration",
+      "Complete resolved required-case manifest and cited NVIDIA RAS/CPER/Debug/LibCper reference revisions",
+      "Per-case observation/injection taxonomy with component, severity, mechanism, expected propagation, timeout, abort and recovery",
+      "Authoritative denominator/skip/waiver/infrastructure-error policy implementing Master NVRAS 100%",
+      "Isolated non-production configuration, preserved evidence storage, independent console/BMC/power/thermal/data-integrity monitoring and owner approval"
+    ],
+    "test_command": "REQUIRES PACKAGE / USER CONFIRMATION; after artifact, compatibility, full manifest, denominator and every injection contract are approved, collect immutable pre-test RAS/CPER/EDAC/rasdaemon/kernel/BMC baselines without clearing logs. Execute the documented vendor launcher serially for each required manifest case, only within its approved isolation/target/severity boundary, while preserving full stdout/stderr and independent console/power/thermal/data-integrity monitoring. Stop at the first unexpected fatal/uncorrectable behavior or evidence loss; do not retry. Collect post-state and calculate NVRAS passes divided by the complete authoritative required-case denominator. Read-only inventory alone is never qualification.",
+    "expected_result": "Every required manifest case executes once and PASSes with the intended component/error/severity, documented injection acknowledgment when applicable, correct containment and expected CPER/EDAC/rasdaemon/kernel/BMC propagation, no unexpected reboot/data-integrity/power/thermal effect, complete immutable evidence and restored healthy state. NVRAS pass rate is exactly 100% with no hidden skip, waiver or infrastructure omission.",
+    "pass_fail_basis": "PASS requires all authoritative required cases in the resolved denominator to PASS and the independently recalculated NVRAS rate to equal 100%, with complete per-case propagation and recovery evidence. FAIL on any case failure, unexpected severity/layer, skip/waiver not allowed by policy, incomplete evidence, unsafe injection, health/recovery issue or rate below 100%. BLOCKED at runtime when any package, manifest, compatibility, injection approval, denominator or recovery input is missing. DeepSeek GPG wording is ignored; end user owns verdict.",
+    "safety_gate": [
+      "Do not launch until every injection-capable case, target, severity, isolation, abort and independent recovery is disclosed and approved.",
+      "Never inject fatal/uncorrectable/persistent faults outside the exact isolated authorization or continue after unexpected machine check, reboot or data-integrity concern.",
+      "Preserve all baseline and new RAS/CPER/EDAC/kernel/BMC evidence; never clear logs to create a clean baseline.",
+      "Use secure credentials/host verification, stop on monitoring/evidence loss and never automatically retry a suite or injection."
+    ],
+    "expected_evidence": [
+      "Artifact/reference/firmware/kernel/rasdaemon identities, compatibility approval and complete resolved manifest",
+      "Per-case observation/injection target/severity/expected-propagation/abort/recovery contract",
+      "Immutable pre/during/post NVRASTool stdout/stderr, CPER, EDAC/rasdaemon, kernel, BMC and console evidence",
+      "Independent denominator table with every required PASS/FAIL/skip/error and recalculated 100% NVRAS rate",
+      "No-log-clear/no-auto-retry audit, restored platform/data health and engineer/end-user verdict"
+    ],
+    "recovery": "Stop immediately on unexpected uncorrectable/fatal error, machine check, reboot, data-integrity concern, lost console, thermal/power limit or evidence loss; preserve all partial evidence and do not retry. Use the per-case independently approved recovery, then verify RAS, storage/data, BMC, kernel and platform health before any further separately authorized case."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Master Criteria unambiguously defines NVRAS 100%; undefined GPG appears only in DeepSeek's proposed evidence text and is rejected rather than treated as a competing source requirement."},
+  "blocked": {"before": false, "after": false, "reason": "The review-layer contract is complete and fail-closed; missing proprietary artifact/manifest/injection approvals block runtime execution, not the engineering review."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Signed NVRASTool/rasdaemon stack, complete manifest/references, compatibility, per-case injection contracts, authoritative denominator policy, isolated environment, monitoring and recovery.", "execution_status": "REVIEW RESOLVED TO PACKAGE-GATED 100% NVRAS QUALIFICATION; NO INSTALL, SUITE, RAS INJECTION, LOG CLEAR, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Master XLSX Procedure/Criteria plus approved ED-16 and ED-17", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Master fixes NVRAS 100%; ED-16 requires approved RAS tool/isolation/recovery and ED-17 preserves error evidence."}],
+  "project_authority": "NVIDIA/platform/RAS owner binds the signed stack, complete manifest, per-injection contract and denominator policy; authorized operator executes under isolation and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-07", "ED-08", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-21", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "master_nvrAS_criterion_authoritative": true, "deepseek_gpg_wording_rejected": true, "complete_manifest_denominator_required": true, "per_case_ras_injection_gate": true, "logs_preserved": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1920|Wistron-GB NV PVP HW-00465-V003", "next_missing_formal_queue_case_variant_id": "7c72f0f9a6dbd8e3"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "pending_conflict_and_safety_analyses_read": true, "case_specific_nvras_manifest_injection_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
