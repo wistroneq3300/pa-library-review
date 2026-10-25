@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 298,
+  "formal_queue_sequence": 147,
+  "source_key": "Functionality|1808|Wistron-HW-00010-V003",
+  "case_variant_id": "fc6266db315d68a3",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1808, "code": "Wistron-HW-00010-V003", "original_row_sha256": "f797d30aa5be0f88dc724252cdb38e9ea2eea61df674cbc843501f9a802258ae", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C Cable", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No harness identity, endpoints, pinout or evidence modality is supplied.", "deepseek": "YES/no-risk; scans all host buses and treats address presence as cable validation despite unknown endpoints.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with endpoint topology, but still does not decide whether coverage means logical reachability, assembly, continuity or signal integrity.", "historical_v3_1": "BLOCKED because cable PN/revision/endpoints/pinout and the fundamental logical-versus-physical/electrical test objective, thresholds and recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1941_fc6266db315d68a3.json",
+  "old_problem": "A cable is an interconnect, not an I2C address. The source does not identify the harness or whether the intended proof is endpoint reachability, correct assembly/pinout, pin continuity, intermittent-contact detection or signal margin. DeepSeek's global scan maps no responder to this harness and could touch unrelated bridged devices.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_CABLE_IDENTITY_AND_COVERAGE_MODALITY; ADDRESS_PRESENCE_REJECTED_AS_COMPLETE_CABLE_PROOF",
+  "disposition_reason": "Retain Pending and BLOCKED. Logical reachability, physical inspection, continuity and signal-integrity testing prove different properties and require different power states, instruments, safety controls and acceptance thresholds. ED-09 also reserves physical cable actions for humans. Choosing one modality without the harness specification would invent and potentially reduce coverage.",
+  "decision_basis": [
+    "The exact XLSX row 1808, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1809 / Wistron-HW-00011-V003 / 63582d1f5105f068.",
+    "A downstream response demonstrates only momentary logical reachability through some conductors; it does not prove every pin, connector seating, routing or signal margin.",
+    "Continuity or physical inspection likewise does not prove protocol ownership and response correctness, so required checkpoints must be specified separately.",
+    "ED-09 assigns physical cable handling and inspection to qualified humans; ED-03 forbids guessed OEM endpoints, and ED-15 requires approved thresholds.",
+    "Any future active probe must use the exact BMC/OOB route and safe endpoint allowlist; any continuity/signal measurement needs an approved isolated state and instrument method.",
+    "No SSH, I2C, cable manipulation, continuity, signal measurement, scan, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "I2C cable/harness logical, physical and electrical validation — blocked pending coverage decision",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve I2C cable coverage and, after owner definition, independently verify every required logical-reachability, physical-assembly/pinout, continuity and/or signal-integrity checkpoint for the exact harness without conflating their evidence.",
+    "required_package": [
+      "Exact cable/harness part number, revision, length/routing, source/destination boards/connectors and pinout",
+      "Owner decision listing required logical, physical, continuity and signal-integrity checkpoints separately",
+      "For logical checks: BMC/OOB controller/mux/bus/address/device map, safe transaction and expected responses",
+      "For physical/electrical checks: approved power/isolation state, human procedure, instruments/probes and numeric thresholds",
+      "Endpoint health monitoring, maintenance authorization, evidence plan and recovery independent of the path under test"
+    ],
+    "test_command": "BLOCKED; perform no bus or physical cable action. After the harness and coverage contract receive fresh review, execute only approved checkpoints: bounded endpoint-specific BMC/OOB reads for logical continuity; qualified-human visual/reseat work only when explicitly required; and pin-to-pin or signal-integrity measurements only in the approved isolated state with specified instruments. Capture each checkpoint independently with endpoint/BMC/OS health. Never infer the path from all-bus scans, manipulate a live cable, probe unknown endpoints, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. Future PASS requires the exact harness/endpoints and every owner-required checkpoint to pass independently: expected logical devices/responses, correct physical PN/routing/seating/pinout, approved continuity values and/or signal waveform/timing margins, with no endpoint or platform health change.",
+    "pass_fail_basis": "Current result is BLOCKED. A downstream address alone cannot PASS the cable. Missing harness/coverage definition, absent checkpoint, wrong endpoint, response mismatch, physical/pinout defect, continuity or signal threshold failure, incomplete evidence or endpoint/platform anomaly is FAIL/BLOCKED for owner verdict. One modality cannot silently substitute for another.",
+    "safety_gate": [
+      "Do not scan all buses to infer cable topology or probe unknown devices behind a harness.",
+      "Do not unplug, reseat, continuity-test or instrument a live cable without an approved power/isolation state and human procedure.",
+      "Keep logical, visual, continuity and signal-integrity evidence and verdicts separate.",
+      "Stop on any endpoint, management, power or bus anomaly; preserve evidence and do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved harness PN/revision/endpoints/connectors/pinout/routing and required-checkpoint matrix",
+      "Logical route/transaction/raw-response evidence when required",
+      "Qualified-human physical assembly/retention evidence when required",
+      "Instrument identity/calibration and complete continuity or waveform/timing/margin data when required",
+      "Pre/post endpoint, BMC SEL/SDR and OS health plus abort/no-retry/recovery and per-checkpoint owner verdict"
+    ],
+    "recovery": "No action is authorized now. The approved contract must define an isolated safe state and independent endpoint/platform recovery. On any anomaly, stop and preserve evidence without retry. Cable reseat, bus reset, reboot or power action is human/owner-controlled and requires explicit separate authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The source does not state competing methods; it omits the specification that must define the cable objective and acceptance."},
+  "blocked": {"before": true, "after": true, "reason": "Harness identity and fundamental evidence modality are unresolved, so selecting a scan, inspection or electrical test would invent scope."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Harness PN/revision/endpoints/pinout/routing, required logical/physical/continuity/signal checkpoints, route/transactions, instruments/thresholds, safe power state and recovery.", "execution_status": "BLOCKED; NO SSH, I2C, CABLE MANIPULATION, CONTINUITY, SIGNAL MEASUREMENT, SCAN, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-09/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Forbids guessed OEM endpoints, assigns physical cable work to humans and prevents PASS without approved modality-specific thresholds."}],
+  "project_authority": "Cabling/platform owner must identify the harness and approve each required evidence modality, safe state, threshold and recovery; qualified humans perform physical work and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-09", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "cable_identity_preserved": true, "evidence_modalities_separated": true, "physical_actions_human_only": true, "generic_scan_rejected": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1809|Wistron-HW-00011-V003", "next_missing_formal_queue_case_variant_id": "63582d1f5105f068"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_cable_evidence_modality_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
