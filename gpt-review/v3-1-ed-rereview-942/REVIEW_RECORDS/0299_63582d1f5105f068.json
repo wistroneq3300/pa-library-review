@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 299,
+  "formal_queue_sequence": 148,
+  "source_key": "Functionality|1809|Wistron-HW-00011-V003",
+  "case_variant_id": "63582d1f5105f068",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1809, "code": "Wistron-HW-00011-V003", "original_row_sha256": "5715b8107a6fa5b443b1273486604023e441ee8d8d0c0c9343de62c5fe729721", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C M2_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No M.2 sideband topology, slot map, safe register or storage-health oracle is supplied.", "deepseek": "YES/no-risk; scans every host I2C bus through unsafe SSH and truncated output without correlating M.2/NVMe devices.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk with M.2/NVMe presence, temperature and health evidence.", "historical_v3_1": "BLOCKED because M2_BD revision/slots, BMC mux route, sideband endpoints/registers, expected responses and storage-safe recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1942_63582d1f5105f068.json",
+  "old_problem": "The source does not distinguish the M.2 management sideband from the PCIe/NVMe data path or map sideband responders to physical slots and installed devices. DeepSeek's global scan can touch EEPROM, sensor, power or reset/control endpoints and supplies no check for device disappearance, reset, namespace or media-health impact.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_M2_SIDEBAND_SLOT_AND_SAFE_REGISTER_CONTRACT; GLOBAL_SCAN_REJECTED_FOR_STORAGE_AVAILABILITY_RISK",
+  "disposition_reason": "Retain Pending and BLOCKED. NVMe enumeration does not prove the BMC/platform sideband, while an I2C response does not identify an M.2 slot or storage device. The owner must bind board revision, slot population, controller/mux/address/registers, expected response and storage-health recovery. Those define target, safe operation and PASS, not merely runtime values.",
+  "decision_basis": [
+    "The exact XLSX row 1809, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1810 / Wistron-HW-00432-V002 / 5068136d5993e9db.",
+    "M2_BD I2C defaults to BMC/platform-management scope and must remain distinct from the PCIe/NVMe data path.",
+    "A sideband responder requires explicit correlation to slot, device serial/firmware and expected inventory/temperature/status response.",
+    "ED-03 forbids guessed OEM topology/registers and ED-15 forbids PASS without approved identity, thermal and storage-health criteria.",
+    "Unknown M.2 endpoints can include EEPROM, sensors and power/reset controls; generic scanning cannot be treated as no-risk on live storage.",
+    "No SSH, I2C, M.2, NVMe, storage, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "M.2-board sideband identity/status and NVMe health correlation — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Validate each populated M.2 slot's approved BMC/OOB sideband identity/status/temperature resources and correlate them with the exact NVMe device while proving storage presence, namespaces, media health and platform management remain unchanged.",
+    "required_package": [
+      "Approved M2_BD specification/revision and slot-to-device model/serial/firmware population map",
+      "BMC/OOB controller, mux route, bus/address/device and identity/status/temperature register allowlist",
+      "Power/reset/control/EEPROM-write/force/reserved exclusions and exact transaction semantics",
+      "Expected sideband response matrix plus NVMe presence, namespace, SMART/media, temperature and reset/event acceptance",
+      "Approved tool/version, maintenance/storage state, secure access and independent console/BMC/storage recovery"
+    ],
+    "test_command": "BLOCKED; perform no M.2 I2C access. After the complete sideband contract and fresh review authorize execution, baseline exact NVMe devices/namespaces/SMART/events, use secure BMC/OOB access to the specified controller/mux path, and read only allowlisted inventory/status/temperature fields per slot. Capture complete raw responses mapped to serial/firmware plus synchronized NVMe, kernel, BMC SEL/SDR and OS health before/after. Never globally scan, touch power/reset/control/write space, run storage I/O, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. In a future authorized run, every populated slot must have the specified sideband responder and approved values mapped to the correct NVMe identity, with no device/namespace disappearance, reset, media/SMART/temperature degradation, kernel error or BMC/platform health change.",
+    "pass_fail_basis": "Current result is BLOCKED. NVMe enumeration or address visibility alone cannot PASS. Future PASS requires exact slot/device/path/register/response correlation and clean storage-health deltas. Missing contract, wrong/missing/extra mapping, unapproved access, response mismatch, reset/disappearance, namespace/media/thermal/event change or evidence gap is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not access M2_BD until board revision, populated slot map and register-level sideband allowlist are approved.",
+      "Keep sideband and PCIe/NVMe evidence distinct; prohibit generic scans and power/reset/control/write/force operations.",
+      "Preserve active storage, namespace, SMART/media, kernel and BMC evidence without running writes or clearing logs.",
+      "Stop on device disappearance, reset, temperature, media, BMC or bus anomaly; do not retry/reset/reboot automatically."
+    ],
+    "expected_evidence": [
+      "Approved M2_BD specification/revision and slot/device serial/firmware population map",
+      "Controller/mux/bus/address/register allowlist, exclusions, tool/version and authenticated session",
+      "Complete per-slot raw sideband responses mapped to the exact NVMe device",
+      "Pre/post NVMe presence, namespaces, SMART/media/temperature, kernel and BMC SEL/SDR health",
+      "Abort/no-retry/independent-storage-recovery audit and storage/platform owner verdict"
+    ],
+    "recovery": "No access or recovery action is authorized now. In a future approved run, stop on the first storage or management anomaly, preserve evidence and do not retry. Use independent console/BMC/storage recovery; any bus reset, controller reset, NVMe reset, reboot or power cycle requires a separate owner-approved procedure and authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The row is consistently incomplete; its procedure and criterion both depend on the absent M.2 board specification."},
+  "blocked": {"before": true, "after": true, "reason": "Sideband identity, slot mapping, safe register semantics, expected responses and storage-safe recovery cannot be inferred from i2c-tools or NVMe enumeration."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "M2_BD revision/slot population, BMC/OOB route, sideband register allowlist/exclusions, expected responses, NVMe health criteria and recovery.", "execution_status": "BLOCKED; NO SSH, I2C, M2, NVME, STORAGE, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires defined BMC/platform targets, forbids guessed storage-sideband registers and prevents PASS without approved response/health criteria."}],
+  "project_authority": "Storage/platform owner must define M2_BD topology, slot/device correlation, safe sideband reads, health criteria and independent recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-04", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "m2_sideband_data_path_separated": true, "slot_device_correlation_required": true, "generic_scan_rejected": true, "storage_writes_not_authorized": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1810|Wistron-HW-00432-V002", "next_missing_formal_queue_case_variant_id": "5068136d5993e9db"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_m2_sideband_storage_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
