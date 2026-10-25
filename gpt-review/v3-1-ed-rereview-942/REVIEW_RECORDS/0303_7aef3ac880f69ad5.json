@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 303,
+  "formal_queue_sequence": 152,
+  "source_key": "Functionality|1813|Wistron-HW-00434-V002",
+  "case_variant_id": "7aef3ac880f69ad5",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1813, "code": "Wistron-HW-00434-V002", "original_row_sha256": "4cf6315fcda135c9173fe862fdbf7950600f9b73458d34065f1315b2612ff8e6", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "E1S_BD3", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No BD3 identity, required stages, topology or criteria are supplied.", "deepseek": "NO; conditionally assumes a physical board connection/continuity test with optional BMC readback.", "gpt_v2": "MANUAL ONLY at HIGH risk; supplies physical safety controls but derives physical-only scope outside the Master.", "historical_v3_1": "BLOCKED because this is the sole BD3 row and it is unknown whether complete coverage requires logical BMC I2C, physical/continuity or both."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1946_7aef3ac880f69ad5.json",
+  "old_problem": "Unlike BD2, the manifest contains no second logical I2C E1S_BD3 Source Identity. Treating this sole row as MANUAL ONLY based on reference inference could silently omit the BD3 management-sideband path. Conversely, choosing only a logical probe could miss connector and conductor defects. The external specification is required to define complete coverage.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_COMPLETE_SOLE_E1S_BD3_SCOPE; PHYSICAL_ONLY_OR_LOGICAL_ONLY_INTERPRETATION_REJECTED",
+  "disposition_reason": "Retain Pending and BLOCKED. BD3 has one Source Identity, so Engineering must explicitly assign every required logical and physical/electrical stage to it. ED-09 makes any physical work human-only but does not authorize dropping logical I2C coverage. Board/slot/connector identity, route or pinout, acceptance and recovery remain core semantics.",
+  "decision_basis": [
+    "The exact XLSX row 1813, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1814 / Wistron-HW-00013-V003 / 49dc9aab2d16a28c.",
+    "Manifest-wide history found no separate I2C E1S_BD3 row; this case must not lose any intended management-sideband coverage through a physical-only inference.",
+    "Logical I2C cannot prove every conductor/mechanical condition, and physical inspection/continuity cannot prove mux/address/firmware response.",
+    "ED-09 assigns physical work to humans; ED-03/ED-15 prohibit guessed logical topology and unapproved physical/electrical thresholds.",
+    "BD1/BD2 routes, pins and results cannot be copied because ED-19 preserves independent BD3 identity and coverage.",
+    "No I2C, BMC, E1.S, NVMe, physical, continuity, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Complete E1S_BD3 logical and physical connection validation — blocked pending scope",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve all intended coverage in the sole BD3 case by separately validating every owner-required logical BMC/I2C and physical inspection/continuity checkpoint for the exact BD3 hardware.",
+    "required_package": [
+      "E1S_BD3 vendor/platform specification and exact board/slot/cable/connector/endpoint identity",
+      "Complete coverage matrix explicitly listing required logical-I2C, visual/physical, continuity and any signal checkpoints",
+      "For logical stages: BMC/OOB controller/mux/bus/address/transaction and expected-response matrix",
+      "For physical/electrical stages: pinout, isolation/ESD state, qualified operator/instrument and numeric limits",
+      "E1.S/NVMe presence/health criteria, maintenance authorization, evidence plan and independent recovery"
+    ],
+    "test_command": "BLOCKED; perform no bus or physical action. After the complete BD3 contract receives fresh review, execute each approved stage separately: secure bounded BMC/OOB reads for logical coverage and qualified-human inspection/continuity or signal measurements in the specified safe state for physical/electrical coverage. Capture BD3-specific evidence with pre/post E1.S/NVMe, BMC SEL/SDR and OS health. Do not copy BD1/BD2, invent addresses/pins/limits, energize incomplete hardware, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. Future PASS requires exact BD3 identity and every required stage independently meeting its endpoint-response, physical-condition, continuity and/or signal limits, with E1.S/NVMe presence, namespaces/storage health and platform management unchanged.",
+    "pass_fail_basis": "Current result is BLOCKED. MANUAL ONLY, logical enumeration or a single evidence modality cannot PASS unless the owner explicitly defines it as complete. Missing stage/specification, copied topology, wrong endpoint/pin, response or measurement failure, damage, storage/management anomaly or incomplete evidence is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not assume physical continuity is the complete sole-BD3 requirement or omit the logical sideband without owner approval.",
+      "Do not copy BD1/BD2 topology or probe unknown BD3 pins, buses, addresses or control endpoints.",
+      "All physical work requires a qualified human and approved ESD/power isolation; logical work requires an exact allowlist.",
+      "Stop on damage, open/short, device disappearance, storage, BMC or bus anomaly; do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved complete BD3 specification, hardware identity and coverage matrix",
+      "Logical controller/mux/address and raw-response evidence for every required management checkpoint",
+      "Human photos/inspection and continuity/signal measurements for every required physical checkpoint",
+      "Pre/post E1.S/NVMe presence/namespaces/health plus BMC SEL/SDR and OS evidence",
+      "Per-stage verdict, abort/no-retry/independent-recovery audit and owner disposition"
+    ],
+    "recovery": "No action is authorized now. Future recovery must be independent of BD3 and stage-specific. Stop and preserve evidence on any defect or health change without retry; connector work, bus/NVMe reset, reboot or power cycle requires separate explicit owner authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The sole BD3 Master row is incomplete but not contradictory and no companion BD3 identity creates a cross-row conflict."},
+  "blocked": {"before": true, "after": true, "reason": "The only BD3 row lacks its complete operation modalities, hardware identity, route/pinout, acceptance and recovery; classification would risk coverage loss."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Complete BD3 hardware and stage matrix, logical route/responses, physical pinout/limits, storage-health criteria and independent recovery.", "execution_status": "BLOCKED; NO I2C, BMC, E1S, NVME, PHYSICAL, CONTINUITY, SIGNAL, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-09/ED-15/ED-19", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Prevents guessed methods and coverage loss, assigns physical work to humans and requires approved criteria for the independent BD3 identity."}],
+  "project_authority": "E1.S/storage/platform owner must define the sole BD3 case's complete stage matrix, hardware, route/pinout, acceptance and recovery; qualified humans own physical work and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-09", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "sole_bd3_identity_preserved": true, "complete_modality_matrix_required": true, "physical_only_assumption_rejected": true, "neighbor_topology_not_substituted": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1814|Wistron-HW-00013-V003", "next_missing_formal_queue_case_variant_id": "49dc9aab2d16a28c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_sole_bd3_complete_coverage_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
