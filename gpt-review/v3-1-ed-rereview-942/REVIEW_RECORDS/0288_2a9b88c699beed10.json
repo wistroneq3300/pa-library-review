@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 288,
+  "formal_queue_sequence": 137,
+  "source_key": "Functionality|1797|Wistron-HW-00430-V054",
+  "case_variant_id": "2a9b88c699beed10",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1797, "code": "Wistron-HW-00430-V054", "original_row_sha256": "b1c28402c47ca32937e120bc62f52675b91b6a034cb0b784e870e684e7d1228b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Display with 2560X1440 with Furmark(1 hrs)(Windows)", "procedure": "Install FurMark 1.29.0.0 and launch an unspecified OpenGL 4.6 benchmark; duration and render/output settings are omitted, ECC is a single SEL grep and Criteria is TBD.", "criteria": "TBD.", "script": "No Script; 15 attended and 20 machine minutes versus one hour in Items.", "deepseek": "PARTIAL; assumes one hour and 1440p but does not prove internal render, physical link, exact mode or safety envelope.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; adds controls but does not reconcile 20 minutes.", "historical_v3_1": "BLOCKED for duration and 1440p render/scanout ambiguity."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1931_2a9b88c699beed10.json",
+  "old_problem": "One-hour Items conflicts with 20-minute Machine Time and Procedure lacks duration. The 2560x1440 label also was not bound separately to FurMark internal render, Windows active desktop and negotiated physical output. Earlier review predated the approved long-test rule and treated these plus thresholds as unresolved semantics.",
+  "new_disposition": "RESOLVED_BY_ED14_TO_FULL_ONE_HOUR_2560X1440_FURMARK_RENDER_AND_PHYSICAL_LINK_STRESS; PARAMETERIZED_THRESHOLDS_REQUIRED_UNDER_ED15",
+  "disposition_reason": "Resolve Pending, Source Conflict and BLOCKED. ED-14 makes the formal one-hour Items coverage authoritative; the 20-minute estimate cannot shorten it. The review now requires independent proof of 2560x1440 internal render, Windows active mode and physical link. Artifact, preset, score/stability, ECC, thermal/power/link and visual thresholds are fail-closed Project Configuration under ED-15, so absence blocks runtime PASS rather than the review decision.",
+  "decision_basis": [
+    "The exact XLSX row 1797, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict/blocked analyses and ED-01 through ED-30 were read. The next formal identity was directly opened as Functionality row 1798 / Wistron-HW-00431-V054 / 69240908567d8af5.",
+    "ED-14 preserves 60 continuous minutes; a 20-minute run or calibration is not equivalent and cannot PASS.",
+    "The 1440p identity has three independently recorded layers: FurMark render buffer, Windows requested/active mode and monitor-link negotiated timing/refresh/scaling/HDR state.",
+    "ED-15 requires approved score or stability, ECC delta/severity, thermal/power/clock/throttle, driver/event, display-link and physical visual thresholds before any verdict.",
+    "This Source Key retains its own 1440p artifacts and verdict; 1080p or later 4K evidence cannot substitute.",
+    "No download, installation, FurMark run, GPU stress, display action, log clear, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "FurMark 2560x1440 continuous one-hour render/display-link stress",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Sustain the approved FurMark workload for one continuous hour with verified 2560x1440 render and physical output, while independently validating GPU health, high-resolution display-link stability, ECC/events and visible pixels.",
+    "required_package": [
+      "Approved FurMark 1.29.0.0 artifact/source/license/hash and exact burn-in preset, AA, fullscreen/window and 2560x1440 render settings",
+      "Exact Windows/GPU/driver/VBIOS/OpenGL identity plus requested/active/negotiated 2560x1440 refresh, scaling, color and link data",
+      "Approved continuous 60-minute duration, sampling cadence, comparable score/stability threshold and invalid-result rule",
+      "ECC baseline/delta/severity and GPU core/hotspot/memory thermal, power, clock/throttle, driver and link abort thresholds",
+      "Dedicated cooled window, bounded evidence storage, qualified physical operator and independent recovery/cooldown"
+    ],
+    "test_command": "REQUIRES CONFIRMATION; after approved bindings and execution OK, verify artifact hash, exact GPU/display identity, positive OpenGL support, separate 2560x1440 render/active/negotiated modes, baseline ECC/events and safe headroom without clearing logs. Launch only the approved FurMark preset for 60 continuous minutes, sample GPU/link/platform state at the approved cadence and retain complete result plus time-correlated physical display evidence. An interruption invalidates coverage and is not auto-retried. Collect final ECC/event deltas and health and stop at any abort limit.",
+    "expected_result": "Approved preset runs uninterrupted for at least 60 minutes with internal render, active desktop and negotiated physical output all at 2560x1440; result meets the approved threshold, no hang/reset/disallowed throttle occurs, thermal/power/link and ECC/event values remain within limits, and physical output has no corruption, flicker, tearing, freeze, scaling/crop/color or edge artifact.",
+    "pass_fail_basis": "PASS requires the complete one-hour run and every 1440p layer, score/stability, health, ECC/event and visual threshold. A 20-minute run cannot PASS. FAIL on interruption, wrong render/link mode, invalid result, artifact/hang, thermal/power/throttle/link/driver limit or unacceptable ECC/event delta. BLOCKED at runtime when required configuration is absent. End user owns verdict.",
+    "safety_gate": [
+      "Do not install unapproved artifacts or run on production; require dedicated cooling/power and independent recovery.",
+      "Do not infer internal render from desktop mode or physical link from screenshots; capture all three layers.",
+      "Preserve complete existing SEL/Windows/GPU evidence and use baseline/delta rather than one grep.",
+      "Stop on first approved limit and do not retry, reset or reboot automatically; record cooldown/final health."
+    ],
+    "expected_evidence": [
+      "Approved artifact/hash/preset/thresholds and one-hour authorization",
+      "Exact GPU/driver/OpenGL/display identity plus render/active/negotiated 2560x1440 proof",
+      "Timestamped uninterrupted runtime and full FurMark result/validity/score",
+      "Thermal/power/clock/throttle/link timeline and complete ECC/SEL/Windows baseline-delta",
+      "1440p-specific physical visual record, no-cross-resolution-reuse audit, recovery/cooldown and verdict"
+    ],
+    "recovery": "Stop FurMark at the first failure, preserve all 1440p evidence and do not retry. Use only approved Windows recovery, cool down, verify GPU/driver/display/BMC health and restore the approved session without automatic reset/reboot."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-14 selects the one-hour formal coverage; 20-minute Machine Time is not a replacement. Resolution layers are now explicit runtime checks."},
+  "blocked": {"before": true, "after": false, "reason": "Duration and 1440p layer semantics are resolved; remaining artifact/settings/thresholds are fail-closed Project Configuration."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Artifact/hash/preset, 1440p render-active-link bindings, score/stability/ECC/thermal/power/clock/link thresholds, sampling, operator and recovery.", "execution_status": "REVIEW RESOLVED TO FULL ONE-HOUR PARAMETERIZED TEST; NO INSTALL, FURMARK, GPU STRESS, DISPLAY, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved ED-14 and ED-15 project rulings", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Preserve the formal long run and forbid PASS without approved thresholds."}],
+  "project_authority": "Project owner binds the signed artifact, exact 1440p preset/layers, thresholds and recovery; operator owns physical pixels and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ed14_full_duration_applied": true, "ed15_threshold_gate_applied": true, "render_active_physical_layers_separated": true, "one_hour_continuous": true, "no_cross_resolution_evidence": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1798|Wistron-HW-00431-V054", "next_missing_formal_queue_case_variant_id": "69240908567d8af5"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "case_specific_1440p_layer_and_ed14_ed15_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
