@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 309,
+  "formal_queue_sequence": 158,
+  "source_key": "Functionality|1920|Wistron-GB NV PVP HW-00465-V003",
+  "case_variant_id": "7c72f0f9a6dbd8e3",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1920, "code": "Wistron-GB NV PVP HW-00465-V003", "original_row_sha256": "8fc7808a189fb28f487ce39de5a8b27c345f9b2d20f18cd87de485028b16bb32", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SD.1_Storage E1.S Hot swap", "procedure": "Hot Swap E1.S drives.", "criteria": "E1.S drives enumerate after being hot swapped.", "script": "Manual Validation; 60 attended and 60 machine minutes; code shared by three rows.", "deepseek": "PARTIAL; proposes a BMC DC power cycle and uptime/AER tail, omitting physical removal/insertion and explicit drive enumeration.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; physical operator, drive/slot mapping, workload drain, secure checks and storage recovery required.", "historical_v3_1": "Pending/Source Conflict because the Master requires hot swap while DeepSeek substitutes unrelated shared-code DC reboot semantics."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2051_7c72f0f9a6dbd8e3.json",
+  "old_problem": "The code is shared with unrelated System reboot variants, and DeepSeek contaminated this exact SD.1 identity with a DC-cycle command that performs no live drive removal/insertion and proves neither the correct drive nor storage-stack health. Target bay/serial/path, service procedure, data protection and recovery are project bindings, but the required operation and enumeration outcome are already clear in the Master.",
+  "new_disposition": "RESOLVED_TO_VARIANT_BOUND_HYBRID_E1S_LIVE_HOT_SWAP_WITH_HUMAN_PHYSICAL_ACTION_AND_READ_ONLY_ENUMERATION_HEALTH_EVIDENCE; DC_CYCLE_REJECTED_AS_SUBSTITUTE",
+  "disposition_reason": "Resolve Pending and Source Conflict. ED-02/ED-19 bind the exact row/variant and prohibit inheriting SY.4/SY.5 semantics. ED-09 makes E1.S removal/insertion a qualified human action, while the agent may safely collect read-only identity, disappearance/re-enumeration and health evidence after confirmation. Exact bay/serial, supported-service procedure and thresholds are fail-closed Project Configuration. Any DC cycle is separate recovery authorization, never test coverage.",
+  "decision_basis": [
+    "The exact XLSX row 1920, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict analysis and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1923 / Wistron-GB NV PVP HW-00005-V005 / dde877b0ced7038b.",
+    "Master explicitly requires physical E1.S hot swap and post-hot-swap enumeration; the DeepSeek BMC power cycle is a non-authoritative mismatched command and is removed.",
+    "ED-02/ED-19 preserve Source Key and Variant ID for this shared code so no System reboot row can substitute for SD.1 coverage.",
+    "ED-09 assigns removal/insertion, latch/LED confirmation and ESD handling to a qualified operator; automation is limited to read-only correlation and evidence.",
+    "OS device names are not identity. The plan binds bay and physical serial/PN/FW to backplane/controller/BDF/NVMe identifiers before and after, protecting boot/mount/RAID/LVM/data state.",
+    "No drive access, unmount, storage write, physical hot swap, BMC power command, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "E1.S live hot-swap with exact bay/serial re-enumeration and storage-health proof",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Have a qualified operator live-remove and reinsert the exact approved E1.S drive while read-only automation proves intended disappearance and re-enumeration of the same physical device with healthy PCIe/NVMe/storage-stack and data state.",
+    "required_package": [
+      "Exact Source Key/Variant ID and E1.S drive serial/PN/FW, bay, backplane, controller/BDF and OS/NVMe identity map",
+      "Platform/vendor confirmation that this bay/configuration supports live hot swap plus removal/insertion/dwell/latch/LED/ESD procedure",
+      "Approved workload drain and boot/mount/swap/RAID/LVM/device-mapper/multipath/backup/data-disposition plan",
+      "Expected disappearance/reappearance timeout, identity, NVMe SMART/health, PCIe AER/DPC, RAID/volume/filesystem and event limits",
+      "Qualified operator, read-only evidence tools, independent console/BMC/storage recovery and explicit decision on any DC-cycle recovery"
+    ],
+    "test_command": "REQUIRES CONFIRMATION; after exact identity mapping, supported-live-service proof, workload drain/data protection and recovery approval, collect complete read-only block/NVMe/PCIe/mount/RAID/LVM/multipath/filesystem/BMC/kernel baselines. A qualified operator records the correct bay/serial removal, dwell, insertion, latch and LED sequence. Correlate timestamps with expected device disappearance and return, then collect complete identity/health and stack evidence until stable. Do not use /dev naming alone, write storage, rebuild RAID, power-cycle, reset or retry. A separately approved DC cycle may be invoked only as recovery after preserving failed evidence and never counts as hot-swap execution.",
+    "expected_result": "The exact target drive disappears within the approved interval after removal and the same serial/PN/FW reappears through the expected bay/backplane/controller/BDF/NVMe path after insertion. PCIe link, NVMe health, namespaces, RAID/volume/filesystem/multipath state and BMC/kernel events meet approved limits, no wrong/extra device changes, no data-integrity error occurs and the workload remains stopped until owner restoration approval.",
+    "pass_fail_basis": "PASS requires direct physical evidence of the approved live removal/insertion and exact serial/bay/path re-enumeration plus every storage, PCIe, event and data-integrity criterion. A DC reboot, uptime or AER tail cannot PASS. FAIL on wrong bay/drive, unsupported action, missing/late/wrong identity, AER/DPC/reset storm, degraded RAID/volume/filesystem, media/data error, health/evidence gap or recovery issue. BLOCKED at runtime when service support, identity/data-protection/recovery inputs are absent; end user owns verdict.",
+    "safety_gate": [
+      "Never remove boot, mounted, swap, active-write, RAID/LVM/device-mapper or multipath storage without its explicit owner-approved handling and protection.",
+      "Bind physical bay/serial to controller/BDF/NVMe identity; stop on wrong label, latch resistance, damage or unexpected device change.",
+      "Physical handling is human-only with ESD/service controls; preserve all storage/kernel/BMC evidence without clearing logs.",
+      "Do not power-cycle, reset, rebuild or automatically retry; any recovery action is separate and owner-authorized."
+    ],
+    "expected_evidence": [
+      "Exact row/variant and all shared-code identities plus approved bay/serial/backplane/controller/BDF/NVMe map",
+      "Supported hot-swap procedure, workload/data-protection/RAID/mount approval and independent recovery",
+      "Timestamped physical removal/dwell/insertion/latch/LED evidence and synchronized disappearance/reappearance timeline",
+      "Complete pre/post NVMe identity/SMART, PCIe AER/DPC, kernel/BMC, namespaces, RAID/LVM/multipath/filesystem and data-health evidence",
+      "DC-cycle disposition, no-wrong-drive/no-auto-retry audit, workload-restore authorization and engineer/end-user verdict"
+    ],
+    "recovery": "On wrong target, missing re-enumeration, AER/DPC/reset storm, degraded storage, data error, physical damage or management/thermal anomaly, stop, keep workloads quiesced, preserve evidence and do not retry. Use independent console/BMC/storage recovery; any reseat, controller reset, RAID action, reboot or DC cycle requires a separate approved step and cannot retroactively satisfy hot-swap coverage."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master hot-swap procedure/criterion is authoritative; the unrelated DeepSeek DC-cycle/shared-System command is rejected rather than treated as competing required behavior."},
+  "blocked": {"before": false, "after": false, "reason": "The hybrid method and PASS boundary are clear; exact target, service support, thresholds and recovery are fail-closed runtime configuration."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact drive/bay/path map, supported hot-swap procedure, workload/data protection, timing/health thresholds, operator and independent recovery/DC-cycle disposition.", "execution_status": "REVIEW RESOLVED TO HUMAN-PHYSICAL/READ-ONLY-EVIDENCE HYBRID TEST; NO DRIVE, STORAGE WRITE, HOT SWAP, POWER, RESET, REBUILD, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Master XLSX plus approved ED-02/ED-09/ED-18/ED-19", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Preserves exact shared-code variant, assigns physical action to humans, separates power-cycle semantics and retains independent coverage."}],
+  "project_authority": "Storage/platform owner binds the drive/bay/path, live-service procedure, data protection, limits and recovery; qualified operator performs physical action and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-09", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-21", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "shared_code_variant_bound": true, "physical_hot_swap_preserved": true, "dc_cycle_substitution_rejected": true, "exact_drive_identity_required": true, "storage_writes_and_rebuild_not_authorized": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1923|Wistron-GB NV PVP HW-00005-V005", "next_missing_formal_queue_case_variant_id": "dde877b0ced7038b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "pending_conflict_and_storage_safety_analyses_read": true, "case_specific_e1s_hot_swap_variant_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
