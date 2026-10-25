@@ -1,0 +1,62 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 287,
+  "formal_queue_sequence": 136,
+  "source_key": "Functionality|1796|Wistron-HW-00429-V054",
+  "case_variant_id": "e6e6424db216ff6d",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1796, "code": "Wistron-HW-00429-V054", "original_row_sha256": "14fcaa8a0d151201694b93bd323be33e6117c3cdacfc71896c8f7d5563292337", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Display with 1920x1080 with Furmark(1hrs)(Windows)", "procedure": "Install FurMark 1.29.0.0, launch OpenGL 4.6 benchmark and grep SEL ECC; Procedure omits duration/preset and Criteria is TBD.", "criteria": "TBD.", "script": "No Script; 15 attended and 20 machine minutes, versus one hour in Items.", "deepseek": "PARTIAL; assumes a one-hour 1080p run but omits the metadata conflict, exact mode, health envelope and recovery.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; also assumes one hour and requires owner settings.", "historical_v3_1": "BLOCKED for one-hour title versus 20-minute Machine Time."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1930_e6e6424db216ff6d.json",
+  "old_problem": "The source contains a one-hour FurMark requirement in Items and 20-minute Machine Time, while Procedure has no duration. Earlier reviews lacked the later approved rule that a short smoke or scheduling estimate cannot replace a formal long-duration test, so they left duration undecidable. FurMark mode, score/stability, ECC, thermal and visual thresholds also remained unbound.",
+  "new_disposition": "RESOLVED_BY_ED14_TO_FULL_ONE_HOUR_1920X1080_FURMARK_STRESS_WITH_PARAMETERIZED_PRESET_THRESHOLDS_AND_PHYSICAL_DISPLAY; MACHINE_TIME_20_NOT_COVERAGE_DURATION",
+  "disposition_reason": "Resolve Pending, Source Conflict and BLOCKED. ED-14 directly selects the formal one-hour coverage stated in Items: the 20-minute Machine Time is planning metadata and cannot truncate or substitute for the long test. FurMark artifact/hash, exact burn-in preset, render/scanout settings, comparable score or stability threshold, ECC delta, thermal/power aborts and recovery are fail-closed Project Configuration Requirements. No PASS is allowed until those thresholds are approved, satisfying ED-15 without keeping the review decision pending.",
+  "decision_basis": [
+    "The exact XLSX row 1796, same-row DeepSeek/test-json, GPT V2, historical V3.1 record, pending/conflict/blocked analyses and ED-01 through ED-30 were read. The next formal identity was directly opened as Functionality row 1797 / Wistron-HW-00430-V054 / 2a9b88c699beed10.",
+    "ED-14 says a short smoke cannot replace a formal long test. Items explicitly owns one hour, so the run must sustain 60 continuous minutes; the 20-minute Machine Time cannot be used as duration.",
+    "A separately authorized short calibration may validate capture/abort controls but returns no testcase PASS and does not count toward the one-hour soak.",
+    "ED-15 prevents PASS without an approved threshold. Exact performance/stability, ECC delta/severity, GPU core/memory/hotspot temperature, power/clock/throttle, driver/event and physical visual thresholds are mandatory runtime configuration.",
+    "The 1920x1080 requirement must be proven separately for FurMark internal render, Windows active mode and physical negotiated output; a screenshot alone is insufficient.",
+    "No download, installation, FurMark run, GPU stress, display action, SEL/log clear, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "FurMark 1920x1080 continuous one-hour GPU/display stress",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Sustain the approved FurMark/OpenGL workload for one continuous hour at verified 1920x1080 render and physical output, while validating display stability, GPU thermal/power/clock behavior and zero unacceptable ECC/platform-event deltas.",
+    "required_package": [
+      "Approved FurMark 1.29.0.0 artifact/source/license/hash and exact burn-in preset, AA, fullscreen/window, render dimensions and command/GUI settings",
+      "Exact Windows/GPU/driver/VBIOS/OpenGL 4.6 identity and requested/active/negotiated 1920x1080 display path",
+      "Approved 60-minute continuous duration, sampling cadence, score/stability threshold and invalid-result rule",
+      "Approved GPU core/hotspot/memory temperature, power, clock/throttle, driver-reset/Xid/event and ECC baseline-delta-severity thresholds",
+      "Dedicated cooled maintenance window, bounded evidence storage, physical operator/capture and recovery/cooldown plan"
+    ],
+    "test_command": "REQUIRES CONFIRMATION; after all bindings and a separate execution OK, verify signed artifact hash, exact GPU/display identity, 1920x1080 render/active/negotiated modes, baseline ECC/events and safe thermal/power headroom without clearing logs. Launch only the approved FurMark 1.29.0.0 burn-in preset and run for 60 continuous minutes; any interruption invalidates the coverage and is not auto-retried. Sample GPU thermal/power/clock/throttle and platform events at the approved cadence, retain complete FurMark result/log and continuous or time-correlated physical display evidence, then collect final ECC/event deltas and health. Stop immediately at any approved abort limit.",
+    "expected_result": "The approved FurMark preset runs continuously for at least 60 minutes at verified 1920x1080 render, Windows active mode and physical link; result/score meets the approved comparable threshold, no crash/hang/driver reset or disallowed throttle occurs, all thermal/power metrics remain within limits, ECC/event deltas remain within the approved zero/severity policy, and physical output shows no corruption, flicker, tearing, freeze or edge artifact.",
+    "pass_fail_basis": "PASS requires the complete uninterrupted one-hour evidence and every approved score/stability, resolution, visual, ECC/event and health threshold. A 20-minute run or short calibration cannot PASS. FAIL on interruption, wrong preset/resolution, missing threshold, invalid/incomparable result, artifact/hang, thermal/power/throttle/driver limit or unacceptable ECC/event delta. BLOCKED at runtime if artifact, license, parameters, thresholds, dedicated window, operator or recovery are absent. End user owns verdict.",
+    "safety_gate": [
+      "Do not install from the named third-party URL until artifact source/license/hash is approved.",
+      "Do not run FurMark on production or without independent recovery, cooling/power headroom and explicit user confirmation.",
+      "Preserve existing SEL/Windows/GPU evidence; use complete baseline/delta collection rather than one ECC grep.",
+      "Stop at first thermal/power/clock/driver, ECC/event, display or evidence limit; do not auto-retry, reset or reboot.",
+      "Record cooldown/final health and treat an interrupted run as incomplete rather than accumulating segments."
+    ],
+    "expected_evidence": [
+      "Approved artifact/hash/license, exact preset/settings, thresholds and 60-minute authorization",
+      "Exact GPU/driver/VBIOS/OpenGL/display identity and separate render/active/negotiated 1920x1080 proof",
+      "Timestamped continuous runtime and complete FurMark result/validity/score",
+      "Thermal/power/clock/throttle timeline, complete ECC/SEL/Windows baseline-delta and final health",
+      "Time-correlated physical display evidence, abort/no-retry/cooldown/recovery audit and end-user verdict"
+    ],
+    "recovery": "Stop FurMark on the first limit, preserve all evidence and do not retry. Use only the approved local Windows recovery path, allow the defined cooldown, verify driver/display/GPU/BMC health and restore the approved session; escalate if recovery fails. No automatic reset/reboot is authorized."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "ED-14 makes the one-hour Items requirement authoritative for coverage; Machine Time 20 is a planning estimate and cannot shorten it."},
+  "blocked": {"before": true, "after": false, "reason": "Duration is resolved by ED-14; workload settings and thresholds are explicit fail-closed Project Configuration Requirements."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Approved FurMark artifact/hash/preset, 1080p render/scanout, score/stability and ECC/thermal/power/clock/event thresholds, sampling, window/operator and recovery.", "execution_status": "REVIEW RESOLVED TO FULL ONE-HOUR PARAMETERIZED TEST; RUNTIME PREREQUISITES NOT PROVIDED; NO DOWNLOAD, INSTALL, FURMARK, GPU STRESS, DISPLAY, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "Approved ED-14 and ED-15 project rulings", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Preserve formal long duration and prohibit PASS without approved thresholds."}
+  ],
+  "project_authority": "Project owner binds the signed artifact, exact preset, thresholds and recovery; operator owns physical display observation and end user owns verdict. Review does not authorize execution.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "ed14_full_duration_applied": true, "machine_time_not_coverage_duration": true, "ed15_threshold_gate_applied": true, "short_calibration_not_pass": true, "one_hour_must_be_continuous": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1797|Wistron-HW-00430-V054", "next_missing_formal_queue_case_variant_id": "2a9b88c699beed10"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "ed14_and_ed15_case_specific_application": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
