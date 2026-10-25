@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 310,
+  "formal_queue_sequence": 159,
+  "source_key": "Functionality|1923|Wistron-GB NV PVP HW-00005-V005",
+  "case_variant_id": "dde877b0ced7038b",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1923, "code": "Wistron-GB NV PVP HW-00005-V005", "original_row_sha256": "2bed56368078a0424ddb96e7e107f0dc11f260b8a88abfef64ab2f81e63945d4", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SY.2_Warm reboot test", "procedure": "Test that the system can perform a warm reboot.", "criteria": "System warm-reboots successfully, boots to OS, has no unexpected AER and preserves complete PCIe enumeration after every cycle.", "script": "Manual Validation; 10 attended and 20 machine minutes; unique code.", "deepseek": "PARTIAL; proposes BMC chassis power cycle, fixed sleeps, uptime and a truncated dmesg tail while exposing credentials and disabling SSH host verification.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; correctly flags the warm-versus-DC ambiguity and incomplete PCIe/AER evidence."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2054_dde877b0ced7038b.json",
+  "old_problem": "The Master requires a warm reboot, but DeepSeek substitutes BMC `chassis power cycle`, whose common semantics include an OFF/ON transition and therefore overlap the separately covered DC path. Uptime and a 20-line dmesg tail also cannot prove the full per-cycle PCIe and AER criteria. The former review left selection of the warm mechanism as an engineering decision.",
+  "new_disposition": "RESOLVED_TO_OS_INITIATED_WARM_REBOOT_WITH_RESET_CLASS_PROOF_AND_COMPLETE_PER_CYCLE_PCIE_AER_EVIDENCE; BMC_CHASSIS_POWER_CYCLE_REJECTED",
+  "disposition_reason": "Resolve Pending and Source Conflict under ED-06/ED-18/ED-29. The authoritative operation is a normal OS-initiated reboot through the platform-supported service manager or an explicitly documented equivalent that never enters chassis OFF and never removes run or standby power. BMC `chassis power cycle` is excluded from this row. Exact command, cycle count, timeout, expected PCIe inventory and error limits are fail-closed Project Configuration, not unresolved command semantics. A state-based observer proves reboot and OS Ready; complete normalized topology and error windows prove the Master criteria.",
+  "decision_basis": [
+    "The exact XLSX row 1923, same-row tests.json/DeepSeek, GPT V2, historical V3.1 record, Pending/Source Conflict analyses and ED-01 through ED-30 were read. The actual next formal identity was directly opened as Functionality row 1925 / Wistron-GB NV PVP HW-00465-V003 / 8613c1834873ecff.",
+    "ED-06 requires warm, cold, DC and AC cycles to stay distinct. An OS-initiated normal reboot with continuous chassis power is the review-layer warm path; a BMC chassis OFF/ON action is not accepted even if it eventually returns to OS.",
+    "ED-29 requires a complete transition and OS Ready rather than fixed sleep or uptime alone. Independent BMC/console observation must show no chassis OFF or rail-loss state while Boot ID and boot milestones change.",
+    "The Master explicitly requires all PCIe devices and unexpected AER review after every cycle. Evidence therefore uses a complete expected device/link manifest and the complete bounded kernel/AER/DPC/BMC event window, not a grep tail.",
+    "Cycle count, service window, state timeout, allowed expected reset messages and exact PCIe inventory depend on the Project build; their absence makes execution NOT READY but does not prevent a correct parameterized test definition.",
+    "No reboot, power command, SSH connection, log collection, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "OS warm reboot with no chassis power loss and complete per-cycle PCIe/AER recovery",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Verify the exact SUT completes each approved OS-initiated warm reboot without chassis OFF or rail loss, returns to OS Ready and restores every expected PCIe function/link with no unapproved new AER/DPC or platform-health event.",
+    "required_package": [
+      "Exact SUT/BMC/board/BIOS/OS identity and a platform-supported OS warm-reboot command or service-manager interface",
+      "Owner-approved cycle count, maintenance window, workload/storage quiescence, reset/POST/OS Ready timeouts and expected reset-class evidence",
+      "Normalized expected PCIe BDF/vendor/device/subsystem/serial/link-width/link-speed inventory and allowed topology changes",
+      "Approved AER/DPC/kernel/BMC/SEL acceptance policy with complete per-cycle time windows and any explicitly allowed reset messages",
+      "Secure authenticated OS access, independent serial/BMC console and power-state observer, evidence collector and owner-approved recovery runbook"
+    ],
+    "test_command": "REQUIRES CONFIRMATION; bind the exact target and collect Boot ID, full normalized PCIe/link inventory, storage/RAID health, BMC power state and complete error-log baseline. After workload drain and point-of-action approval, invoke the approved OS warm-reboot command once per configured cycle through authenticated access. From an independent observer, require loss and return of the OS session, Boot ID change, boot milestones and OS Ready while chassis power stays ON and no OFF/AC-loss/standby-loss event occurs. For every cycle, collect complete PCIe identity/link, AER/DPC/kernel/BMC/SEL and storage-health evidence and compare with the approved manifest and limits. Do not use `chassis power cycle`, fixed sleep, plaintext credentials, disabled host verification, truncated logs, automatic retry or a cold/DC/AC substitute.",
+    "expected_result": "For every configured cycle, the approved warm-reboot request is audited, the same target changes Boot ID and reaches OS Ready within the allowed interval without chassis OFF or power-rail loss. Every expected PCIe function returns at the approved BDF or mapped identity with allowed link width/speed, storage and management health remain normal, and the complete event window contains no unapproved AER/DPC, boot, firmware or BMC error.",
+    "pass_fail_basis": "PASS requires all configured cycles, independent warm-reset classification, Boot ID and OS Ready proof, complete expected PCIe enumeration/link comparison, complete error windows and final health. FAIL on chassis OFF/rail loss, wrong reset class, boot timeout, missing/extra/misidentified/downtrained device outside policy, unapproved AER/DPC/firmware/BMC/storage event, lost access or incomplete evidence. NOT READY applies when the exact command, cycle/timing, manifest, thresholds, approval or recovery is absent. A BMC power cycle, uptime, fixed wait or dmesg tail cannot PASS; end user owns verdict.",
+    "safety_gate": [
+      "Require explicit maintenance and workload/storage-quiescence approval immediately before each reboot sequence; preserve unsaved state and evidence.",
+      "Use only the approved OS warm-reboot path. Stop if independent power telemetry shows OFF, AC loss, standby loss or any reset class other than the approved warm path.",
+      "Use secure secret handling and verified host identity; never place passwords on command lines or disable certificate/SSH verification.",
+      "Preserve complete logs and first-failure state. Do not clear logs, power-cycle, issue another reboot or automatically retry after any anomaly."
+    ],
+    "expected_evidence": [
+      "Exact row/variant/hash, target/firmware/OS identity, approved warm command, cycle/timing/window and workload authorization",
+      "Pre-cycle and per-cycle Boot IDs, independent console boot timeline, BMC power/rail audit proving no OFF/DC/AC transition and OS Ready",
+      "Complete normalized pre/per-cycle PCIe identity and link manifests with explicit missing/extra/change diff",
+      "Complete per-cycle AER/DPC/kernel/BMC/SEL and storage/RAID health windows with policy evaluation",
+      "No-insecure-secret/no-fixed-sleep/no-power-cycle/no-auto-retry audit, recovery or workload-restore authorization and engineer verdict"
+    ],
+    "recovery": "On wrong reset class, boot timeout, device/link loss, AER/DPC, storage, power, thermal or access anomaly, stop the sequence, preserve independent console/BMC and host evidence and do not reboot or power-cycle again automatically. Keep workloads stopped and use only the owner-approved recovery runbook through the independent console/BMC path; any cold/DC/AC cycle is separate recovery authorization and cannot count as this warm-reboot coverage."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master warm-reboot intent is authoritative. ED-06 excludes DeepSeek's BMC chassis power cycle and binds a powered OS reboot with independent reset-class proof, so the conflicting command is removed rather than guessed equivalent."},
+  "blocked": {"before": false, "after": false, "reason": "The safe warm mechanism, evidence and recovery boundaries are defined. Project-specific command spelling, cycle count, inventory and limits gate execution but do not require another generic engineering decision."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Exact supported OS reboot command, cycle count/window/timeouts, workload drain, PCIe identity/link manifest, event limits, secure access and independent recovery.", "execution_status": "REVIEW RESOLVED TO PARAMETERIZED OS WARM-REBOOT TEST; NO REBOOT, POWER, SSH, LOG, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Master XLSX plus approved ED-06/ED-18/ED-29", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Separates warm from DC/AC behavior, requires secure parameters and proves complete transition to OS Ready."}],
+  "project_authority": "Platform/OS owner supplies the exact supported warm-reboot interface, cycle/timing, expected topology, limits and recovery; operations approves interruption and end user owns verdict. They may not relabel chassis OFF/ON as warm without a versioned platform contract, waive full PCIe/AER evidence or authorize automatic retries.",
+  "traceability": {"applicable_decisions": ["ED-04", "ED-06", "ED-13", "ED-14", "ED-15", "ED-18", "ED-20", "ED-21", "ED-26", "ED-29", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "warm_dc_ac_coverage_kept_distinct": true, "bmc_power_cycle_rejected": true, "os_warm_reboot_parameterized": true, "complete_pcie_and_error_evidence_required": true, "secure_access_required": true, "no_automatic_retry": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1925|Wistron-GB NV PVP HW-00465-V003", "next_missing_formal_queue_case_variant_id": "8613c1834873ecff"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "pending_and_source_conflict_analyses_read": true, "case_specific_warm_reset_power_boundary_and_pcie_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
