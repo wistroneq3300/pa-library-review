@@ -1,0 +1,61 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 290,
+  "formal_queue_sequence": 139,
+  "source_key": "Functionality|1799|Wistron-HW-00001-V003",
+  "case_variant_id": "774186bb46364dc2",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1799, "code": "Wistron-HW-00001-V003", "original_row_sha256": "802c36ecb3135faf924819758d9397b4f767ad67382a37236ef65eb188a3e593", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C MB", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No authoritative executable command or target contract is supplied.", "deepseek": "YES/read-only; proposes password-bearing sshpass, disables host-key checking and scans every host-visible bus with i2cdetect -y while truncating evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with vendor allowlist and platform-health controls.", "historical_v3_1": "BLOCKED because controller/bus/mux/address, safe operation, reserved ranges, expected response, acceptance and recovery are all absent; generic scan rejected."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1933_774186bb46364dc2.json",
+  "old_problem": "The source delegates both procedure and criteria to an unavailable specification. DeepSeek replaces the missing motherboard I2C contract with an indiscriminate all-bus scan, exposes credentials, disables SSH host verification and truncates evidence. The prior review correctly found that the target, safe transaction, expected response and recovery are unknown.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_COMPLETE_MOTHERBOARD_I2C_SPECIFICATION; GENERIC_ALL_BUS_SCAN_REJECTED",
+  "disposition_reason": "Retain Pending and BLOCKED. Parameterization can bind an already-defined target, but it cannot safely invent the motherboard-management controller, topology, device allowlist, permissible I2C transaction, response semantics or recovery. Those missing elements determine whether access itself is safe and what constitutes PASS. A project/vendor specification and fresh case review are required before any bus access.",
+  "decision_basis": [
+    "The exact XLSX row 1799, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1801 / Wistron-HW-00003-V003 / 6cd565fbbc742754.",
+    "The approved workflow treats I2C/I3C as BMC/platform-management scope by default and requires an identified controller/bus, target address, OOB path, vendor specification/tool and expected response.",
+    "No standard can determine this board-specific bus/mux topology, reserved addresses, device allowlist or safe transaction from the label I2C MB alone.",
+    "Generic i2cdetect scanning is not a substitute: probing can have device-specific side effects, misses mux/path semantics and cannot establish the required response or acceptance rule.",
+    "ED-03 permits a standards-based BMC draft but prohibits guessing OEM parameters; ED-15 prohibits PASS without an approved acceptance threshold or exact response contract.",
+    "No SSH, I2C, BMC, scan, write, reset, retry or other DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Motherboard I2C specification-bound BMC/OOB transaction — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve the I2C MB validation identity and, only after a board-specific contract is approved, verify the exact management controller path and allowlisted target with an explicitly safe transaction and authoritative response while proving platform-management health.",
+    "required_package": [
+      "Board/platform name, revision and approved motherboard I2C specification revision",
+      "BMC/OOB controller and access path, bus/mux topology, channel state and exact allowlisted target addresses/device identities",
+      "Reserved/no-probe address exclusions and exact permitted read-only or otherwise approved transaction, register/length/timeout/retry semantics",
+      "Authoritative raw expected response, masks/ranges and per-target PASS/FAIL rule",
+      "Approved tool/package/version, authenticated transport without embedded secrets, pre/post health evidence and owner-approved recovery"
+    ],
+    "test_command": "BLOCKED; perform no I2C access. After the complete project/vendor contract is approved and a fresh review authorizes execution, authenticate over the approved BMC/OOB path without embedded credentials or disabled host verification, enumerate only the named controller path, and issue only the explicitly permitted transaction to allowlisted targets. Capture complete untruncated output and before/after BMC, PMBus, sensor, SEL/SDR and OS health. Do not use a generic all-bus i2cdetect -y scan, force access, quick-write/write commands, log clearing or automatic retry.",
+    "expected_result": "There is no executable PASS result under the current evidence. In a future authorized run, every approved target must be reached only through its specified controller/mux path, return the exact approved raw response or masked value, and leave BMC, sensor, PMBus, SEL/SDR and OS health unchanged with no unknown, missing or extra access.",
+    "pass_fail_basis": "Current result is BLOCKED. Bus enumeration or scan completion cannot PASS. A future PASS requires the complete approved contract plus exact target/path/transaction/response agreement and clean health deltas. Missing specification, an unknown path/address, unsafe or unapproved transaction, response mismatch, incomplete evidence or any management/platform health change remains FAIL/BLOCKED for the end-user verdict.",
+    "safety_gate": [
+      "Do not probe any I2C bus or address until the board-specific topology, exclusions and permitted transaction are approved.",
+      "Never use embedded credentials, disable SSH host verification, force driver access, clear evidence or truncate command output.",
+      "Reject generic all-bus scans and any write/quick-write transaction not explicitly authorized by the device specification.",
+      "Stop on the first mismatch or health change, preserve evidence and do not retry or reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved board revision and motherboard I2C specification with controller/bus/mux/address map and exclusions",
+      "Approved tool/version and exact transaction plus expected raw response/mask and acceptance rule",
+      "Authenticated session audit and complete untruncated command/output transcript",
+      "Per-target controller/path/address/device identity and response comparison",
+      "Before/after BMC, PMBus, sensor, SEL/SDR and OS health plus stop/no-retry/recovery and end-user verdict"
+    ],
+    "recovery": "No recovery action is authorized now because no access is authorized. In a future approved run, stop immediately on a mismatch or health change, preserve the full transcript and do not retry. Use the independently approved console/BMC/platform recovery path; perform a bus reset or controller recovery only when the project/vendor specification explicitly defines and authorizes it."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The source is incomplete rather than internally contradictory; both procedure and criteria consistently defer to the same absent specification."},
+  "blocked": {"before": true, "after": true, "reason": "The missing board-specific target, safe transaction, authoritative response and recovery are core semantics and safety controls, not ordinary runtime bindings."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Complete motherboard I2C controller/bus/mux/address contract, exclusions, permitted transaction, expected response/acceptance, approved tooling and recovery.", "execution_status": "BLOCKED; NO SSH, I2C, BMC, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires BMC/platform-management scope, forbids guessed OEM parameters and forbids PASS without an approved acceptance contract."}
+  ],
+  "project_authority": "Project/OEM owner must provide the board-specific I2C topology, safe-operation and expected-response contract and recovery; end user owns the final verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "i2c_bmc_scope_applied": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "threshold_gate_applied": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1801|Wistron-HW-00003-V003", "next_missing_formal_queue_case_variant_id": "6cd565fbbc742754"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_motherboard_i2c_safety_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
