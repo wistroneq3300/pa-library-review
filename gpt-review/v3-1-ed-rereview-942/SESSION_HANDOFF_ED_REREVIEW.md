@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **114 / 942**; append-only review events: **265**.
-- Last formal review: `Functionality|1754|Wistron-HW-00387-V003` / `ab9fd4e62e1b1a80` (formal queue sequence 114; review event 265).
-- Next source-verified pending identity: `Functionality|1760|Wistron-HW-00393-V003` / `4a9df0a3dee080c6` (first missing formal queue sequence 115).
-- Latest disposition: Space-Fullness is RESOLVED at Review layer as a sequential test over every positively allowlisted eligible E1.S test filesystem. It preserves true-full, 480-minute, reboot and MD5 coverage, adds SHA-256 and cleanup evidence, and permanently excludes OS/boot/swap/RAID/valid-data/raw targets. No write, mount, reboot, cleanup, log or DUT action ran.
-- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-265 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
+- Completed formal queue: **115 / 942**; append-only review events: **266**.
+- Last formal review: `Functionality|1760|Wistron-HW-00393-V003` / `4a9df0a3dee080c6` (formal queue sequence 115; review event 266).
+- Next source-verified pending identity: `Functionality|1766|Wistron-HW-00399-V002` / `ae889fa7f041a287` (first missing formal queue sequence 116).
+- Latest disposition: the BlueField flash case remains Engineering Decision Pending and Source Conflict. NVIDIA confirms BFB normally updates NIC firmware, the later forced updater is a separate firmware path, and activation may require platform-specific BlueField reset/reboot/power sequencing. The owner must define distinct component/version stages and activation; flash/version coverage remains intact and no write/retry is authorized. No BFB, firmware, reset, power, log or DUT action ran.
+- Integrity disposition: the event-0200 checkpoint reproduced the locked 942 queue hash. Forty-nine initial formal records plus events 201-266 are authoritative; 151 out-of-scope records remain historical and do not affect metrics. Push is withheld until 200 formal identities pass the overlay validator.
 - Protected sources: unchanged.
 - DUT execution: none.
