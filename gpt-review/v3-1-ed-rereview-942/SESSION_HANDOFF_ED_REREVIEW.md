@@ -1,9 +1,9 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **266 / 942**; append-only review events: **417**.
-- Last formal review: `Functionality|2098|Wistron-GB NV PVP HW-00020-V002` / `90ed1d39e5e7a349` (formal queue sequence 266; review event 417).
-- Next source-verified pending identity: `Functionality|2099|Wistron-GB NV PVP HW-00021-V002` / `53d46ab928ffb484` (first missing formal queue sequence 267).
-- Latest disposition: row-2098 is resolved as a parameterized NVQual Test #7 EDPp test; the product numeric/window contract, scenario recipe and calibrated lab configuration remain mandatory Project Configuration and no PASS is possible without them. No DUT action ran.
+- Completed formal queue: **267 / 942**; append-only review events: **418**.
+- Last formal review: `Functionality|2099|Wistron-GB NV PVP HW-00021-V002` / `53d46ab928ffb484` (formal queue sequence 267; review event 418).
+- Next source-verified pending identity: `Functionality|2100|Wistron-GB NV PVP HW-00022-V002` / `1bb020da69aeb7ad` (first missing formal queue sequence 268).
+- Latest disposition: row-2099 is resolved as a parameterized NVQual Test #17 fifty-loop lane-resolved EOM qualification; vendor limits/topology remain mandatory Project Configuration and failed or missing loops cannot be replaced. No DUT action ran.
 - Integrity disposition: formal checkpoint 200 was fully validated and pushed at `4185ff58`; the locked 942 queue hash is unchanged. Forty-nine initial formal records plus events 201-355 are authoritative; 151 out-of-scope records remain historical.
 - Protected sources: unchanged.
 - DUT execution: none.
