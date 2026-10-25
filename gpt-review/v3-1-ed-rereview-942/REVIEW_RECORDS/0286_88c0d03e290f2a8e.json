@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 286,
+  "formal_queue_sequence": 135,
+  "source_key": "Functionality|1795|Wistron-HW-00428-V054",
+  "case_variant_id": "88c0d03e290f2a8e",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1795, "code": "Wistron-HW-00428-V054", "original_row_sha256": "51141a5b7f11f1b922a2719536451f3dd1cd50d554b4236217742fade0e029e5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Display with 3840X2160 with 3D mark(Windows)", "procedure": "Install 3DMark v2.20.7274 plus standard Time Spy, run DirectX 12, check result and grep SEL ECC; no Time Spy Extreme, custom render resolution or physical-output layer is identified.", "criteria": "TBD.", "script": "No Script; 15 attended and 20 machine minutes.", "deepseek": "PARTIAL; assumes a generic 3840x2160 3DMark run plus screenshot and visual judgment.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk but leaves standard Time Spy versus Extreme and render versus scanout unresolved.", "round2_history": "UNRESOLVED; exact workload and resolution layer were not decided."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1929_88c0d03e290f2a8e.json",
+  "old_problem": "Items requires 3840x2160 3DMark coverage while Procedure explicitly names standard Time Spy. Official UL semantics make standard Time Spy a 2560x1440 internal render and Time Spy Extreme a 3840x2160 internal render; Windows desktop/physical scanout resolution is a separate layer. Criteria does not say which layer or combination is authoritative.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_SOURCE_CONFLICT_AND_BLOCKED_FOR_4K_RENDER_VERSUS_SCANOUT_AND_BENCHMARK_VARIANT; PRESERVE_ROUND2_UNRESOLVED",
+  "disposition_reason": "Retain Pending, Source Conflict and BLOCKED. Public authority can prove the variants differ but cannot choose project intent. Parameterizing artifact, license, display identity, score and ECC thresholds would not resolve whether the row means standard Time Spy scaled to 4K scanout, Time Spy Extreme true-4K render, an approved custom workload, or separate render and scanout checkpoints. The choice changes exercised coverage and comparable score, so it is a core engineering specification.",
+  "decision_basis": [
+    "The exact XLSX row 1795, same-row DeepSeek/test-json, GPT V2, historical record, Round-2 UNRESOLVED, pending/conflict/blocked analyses, ED-01 through ED-30 and official UL benchmark documentation were read. The next formal identity was directly opened as Functionality row 1796 / Wistron-HW-00429-V054 / e6e6424db216ff6d.",
+    "UL documents standard Time Spy internal rendering at 2560x1440 and Time Spy Extreme at 3840x2160; desktop display resolution does not define benchmark render resolution.",
+    "A 4K monitor screenshot can prove physical/desktop output but not true 4K render. Conversely, a 4K internal render result does not prove a negotiated 4K physical link.",
+    "The literal Procedure must not be silently rewritten from Time Spy to Time Spy Extreme, and score baselines cannot cross variants/presets.",
+    "Even after scope ruling, runtime still needs an approved licensed artifact/hash, exact preset/run count, requested/active/negotiated display modes, comparable score oracle, complete ECC baseline/delta/severity, thermal/power/link limits and recovery.",
+    "No download, installation, 3DMark execution, GPU stress, display inspection, SEL clear, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "3DMark 3840x2160 coverage — blocked pending render/scanout scope",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve the 3840x2160 DirectX 12 display/performance objective while preventing standard 1440p Time Spy, scaled 4K scanout and true 4K rendering from being treated as equivalent.",
+    "required_package": [
+      "Engineering ruling: standard Time Spy on verified 4K scanout, Time Spy Extreme/custom true-4K render, or separately accepted render and scanout checkpoints",
+      "Approved licensed 3DMark artifact/version/source/hash and exact workload/preset/run count",
+      "Exact Windows/DirectX/GPU/driver and monitor/link identity with requested, active and negotiated modes",
+      "Variant-specific comparable score validity/range, visual/link oracle and ECC source/baseline/delta/severity",
+      "Dedicated maintenance window, thermal/power/link abort limits, operator evidence and recovery"
+    ],
+    "test_command": "BLOCKED; do not install or run 3DMark. After Engineering selects the resolution layer(s) and benchmark variant, perform a fresh review. The future run must independently capture internal render resolution, Windows active mode and physical negotiated 3840x2160 link, execute only the approved signed/licensed preset, retain full result validity/score and physical visual evidence, compare complete ECC/event deltas, monitor GPU thermal/power/link health, stop on anomaly and never retry automatically.",
+    "expected_result": "No authoritative PASS exists. Eventual PASS requires every selected render/scanout checkpoint, its variant-specific score/validity, physical visual/link criteria, ECC/event delta and health limits to pass with complete evidence. Results from another Time Spy variant or resolution layer cannot substitute.",
+    "pass_fail_basis": "Current status is BLOCKED. A standard Time Spy score, 4K desktop screenshot or Time Spy Extreme result alone cannot PASS an unspecified layer. After fresh review, wrong variant/preset, invalid or incomparable score, resolution-layer mismatch, scaled output presented as 4K render, link/visual artifact, ECC/event delta, thermal/power breach or incomplete evidence is FAIL/BLOCKED for end-user disposition.",
+    "safety_gate": [
+      "Do not choose Time Spy Extreme/custom or collapse render and scanout on behalf of Engineering.",
+      "Do not download/install the third-party link or any artifact until source, license and hash are approved.",
+      "Use a dedicated cooled SUT and preserve existing BMC/Windows/GPU evidence; do not clear SEL/logs.",
+      "Stop on benchmark/driver/display hang, invalid result, thermal/power/link, ECC/event or evidence failure; no retry, reset or reboot automatically."
+    ],
+    "expected_evidence": [
+      "Engineering scope ruling and fresh review",
+      "Approved artifact/license/hash and exact variant/preset/run/score oracle",
+      "Separate internal-render, Windows-active and physical-link resolution evidence",
+      "Complete benchmark result, physical 4K visual record and GPU thermal/power/link health",
+      "ECC/SEL/Windows baseline-delta evidence, abort/recovery/no-retry audit and end-user verdict"
+    ],
+    "recovery": "No DUT action is authorized now. In a future approved run, stop and preserve complete result, screen/link, GPU and platform evidence on first failure; terminate only through the approved Windows recovery, allow cooling and restore the approved display session. Do not retry or reboot/reset automatically."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "3840x2160 Items conflicts with standard Time Spy's 2560x1440 internal render unless 4K means only scanout; source does not select the layer."},
+  "blocked": {"before": true, "after": true, "reason": "Workload identity and resolution layer determine coverage and score comparability and cannot be supplied by ordinary runtime parameters."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Engineering render-versus-scanout/variant ruling; then artifact/license/hash, preset/run/score, GPU/display/link, visual/ECC/health thresholds and recovery.", "execution_status": "REVIEW COMPLETE BUT ENGINEERING DECISION PENDING, SOURCE CONFLICT AND BLOCKED; NO DOWNLOAD, INSTALL, BENCHMARK, GPU STRESS, DISPLAY ACTION, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "UL Solutions — Time Spy benchmark overview", "url": "https://support.benchmarks.ul.com/support/solutions/articles/44002136075", "application": "Defines standard Time Spy workload/render semantics."},
+    {"authority": "UL Solutions — Time Spy Extreme overview", "url": "https://support.benchmarks.ul.com/support/solutions/articles/44002136104-overview-of-3dmark-time-spy-extreme-benchmark", "application": "Defines the separate 3840x2160 Time Spy Extreme workload."},
+    {"authority": "UL Solutions — desktop resolution and score", "url": "https://support.benchmarks.ul.com/support/solutions/articles/44001789016-does-my-desktop-resolution-affect-my-3dmark-score-", "application": "Separates benchmark internal render resolution from Windows desktop resolution."}
+  ],
+  "project_authority": "GPU/display/benchmark owner must choose resolution layer(s) and variant; AI cannot infer them. Operator owns physical link/visual observation and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "round2_unresolved_preserved": true, "render_scanout_scope_unresolved": true, "standard_time_spy_not_4k_render": true, "no_cross_variant_score": true, "fresh_review_required_after_ruling": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1796|Wistron-HW-00429-V054", "next_missing_formal_queue_case_variant_id": "e6e6424db216ff6d"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "round2_unresolved_and_historical_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "official_ul_docs_checked": true, "case_specific_render_scanout_and_score_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
