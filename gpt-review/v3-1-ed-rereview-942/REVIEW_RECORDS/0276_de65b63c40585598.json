@@ -1,0 +1,65 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 276,
+  "formal_queue_sequence": 125,
+  "source_key": "Functionality|1782|Wistron-HW-00415-V002",
+  "case_variant_id": "de65b63c40585598",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1782, "code": "Wistron-HW-00415-V002", "original_row_sha256": "eb11d6023c51dbe5b6172594d03d8b9ff28b34339e9f4a426a3d14fc0364f5d4", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Encode: HEVC", "procedure": "Display video and visually check for no issue or `bleeding edge`; no HEVC encode operation, duration, output shape, retained bitstream or display path is defined.", "criteria": "TBD.", "script": "No Script; 3 attended and 1 machine minute.", "deepseek": "PARTIAL; uses CPU `libx265` to null while claiming GPU HEVC encode/decode, with no retained output, reverse decode or physical visual check.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk; proposes a hardware HEVC pipeline but does not resolve title/procedure scope or its independent purpose versus H.265.", "round1_pilot": "UNRESOLVED; explicitly requested duration and expected output shape, but no approved completion was found."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1916_de65b63c40585598.json",
+  "old_problem": "This exact HEVC row was already UNRESOLVED in Round 1 for missing duration and expected output shape. The deeper source still says Encode in Items but only display video in Procedure, with Criteria TBD, and the preceding independent case uses the synonymous H.265 label. CPU libx265-to-null does not prove GPU hardware, retain media or display pixels. Duration/output alone would still leave pipeline and independent evidence ownership undefined.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_SOURCE_CONFLICT_AND_BLOCKED_FOR_HEVC_PIPELINE_DURATION_OUTPUT_AND_INDEPENDENT_IDENTITY; PRESERVE_ROUND1_UNRESOLVED_AND_ED21_NO_SHARED_VERDICT",
+  "disposition_reason": "Retain Engineering Decision Pending, Source Conflict and BLOCKED. NVIDIA/FFmpeg authority proves `hevc_nvenc`, NVDEC and scanout are different stages and `libx265` is software. ED-21 requires this HEVC Source Key to remain separately executable/verifiable from Wistron-HW-00414 H.265 even though the codec names and body overlap; one evidence bundle cannot pass both. The Round-1 missing duration/output shape remains unresolved, and this row also lacks its unique stage/profile/workload and visual oracle. These are authoritative test-definition gaps, not ordinary runtime values, so neither public research nor safe parameterization can choose them.",
+  "decision_basis": [
+    "The exact XLSX row 1782, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, Round-1 pilot UNRESOLVED evidence, pending/conflict/blocked analyses, preceding H.265 comparison, ED-21 and official NVIDIA/FFmpeg documentation were read. The next formal identity was directly opened as Functionality row 1783 / Wistron-HW-00416-V002 / 751fa3c3bdf0ce3b.",
+    "Round 1 explicitly required ENCODE_DURATION_S and expected output shape; no user-approved values or later source revision exists. The 1-minute Machine Time is scheduling metadata, not an encoding duration or frame count.",
+    "HEVC and H.265 are synonymous, but ED-21 mandates independent identities. This row therefore needs its own unique stage/profile/bit-depth/resolution/workload and its own artifacts/verdict; it may not reuse the preceding row's future result.",
+    "Items/Procedure remain internally different: NVENC encoding creates a HEVC bitstream; NVDEC and display consume media through separate engines. A clean displayed reference cannot prove an encoder and a valid bitstream cannot prove pixels.",
+    "FFmpeg identifies `libx265` as software and `hevc_nvenc` as NVIDIA hardware with build/GPU/driver-dependent capabilities. The DeepSeek null-output command proves neither hardware selection nor expected output.",
+    "The owner must define HEVC profile/tier/level, 8/10-bit and chroma, resolution/rate, GOP/rate control, duration/frame count, retained container/bitstream shape, reference/quality and the precise visual artifact oracle.",
+    "No media command, GPU workload, scratch write, playback, display inspection, log clear or DUT action was executed."
+  ],
+  "test_case": {
+    "test_name": "HEVC independent media case — blocked pending stage, duration and output contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve this HEVC Source Key as an independent ED-21 identity and require a unique hardware pipeline, duration/frame scope, retained output shape and visual/quality oracle before any result can be attributed to it.",
+    "required_package": [
+      "Owner ruling for encode, decode/display or separate stages and a unique coverage assignment relative to Wistron-HW-00414 H.265",
+      "Approved encode duration or exact frame count and expected output shape/container/bitstream, resolving the Round-1 questions",
+      "Exact GPU serial/UUID/BDF, NVENC/NVDEC capability, driver/VBIOS, SDK and ffmpeg build with hardware encoder/decoder and no-fallback evidence",
+      "HEVC profile/tier/level, bit depth/chroma/pixel format, resolution/frame rate, GOP, rate control/bitrate/quality, deterministic input/reference and bounded scratch",
+      "Defined `bleeding edge`/visual oracle and exact connector/display/capture path if display is owned here; health thresholds, recovery and per-row evidence location"
+    ],
+    "test_command": "BLOCKED; no HEVC execution. After owner resolution, bind the exact GPU and verify the pinned ffmpeg hardware path (`hevc_nvenc`, not `libx265`, when encoding is assigned). Execute only this row's unique approved profile/workload for the approved duration/frame count; retain the expected container/bitstream and complete logs. Decode and/or display only if explicitly assigned, retaining decoded references and real connector-bound visual evidence. Tag every artifact with this Source Key/Variant and never share a verdict with the H.265 row. Use bounded scratch, preserve events and stop on fallback/anomaly. A fresh review is mandatory; no null output, log clear or retry.",
+    "expected_result": "No hardware result is currently defined. Eventual PASS requires the exact approved HEVC hardware stage(s), duration/frame count and output shape to complete on the bound GPU, all profile/quality/reference and visual criteria to pass, and a healthy final system. Evidence must be unique to this Source Key even if the neighboring H.265 test uses the same codec family.",
+    "pass_fail_basis": "Current status is BLOCKED. The 1-minute Machine Time, libx265 exit, generic HEVC playback, a file hash or the H.265 row's result cannot PASS. After a fresh review, fallback, wrong engine/profile, missing/short/corrupt output, duration/frame mismatch, decode/reference/visual failure, shared evidence, wrong GPU/display, or GPU/thermal/storage/event regression is reported for engineer FAIL/BLOCKED disposition. The end user decides the eventual verdict.",
+    "safety_gate": [
+      "Preserve Round-1 UNRESOLVED status until duration/output and the deeper pipeline/oracle gaps are authoritatively completed.",
+      "Keep this identity and verdict separate under ED-21; do not merge with H.265 or reuse its evidence.",
+      "Reject CPU `libx265` and silent fallback when GPU HEVC is required; bind exact GPU and hardware-engine evidence.",
+      "Bound scratch/storage and workload, preserve all logs/events, and require direct visual evidence only for explicitly assigned display coverage.",
+      "Stop on fallback, GPU/driver/Xid, thermal/power, storage, media/reference, display or evidence failure. Do not retry, reset, reboot or clear logs automatically."
+    ],
+    "expected_evidence": [
+      "Owner pipeline/unique-coverage ruling and closure of Round-1 duration/output-shape questions",
+      "Completed Procedure/Criteria with exact GPU/driver/VBIOS/SDK/ffmpeg/hardware-engine and no-fallback contract",
+      "HEVC profile/tier/level/bit-depth/chroma/resolution/rate/GOP/quality/input/reference/output/container/frame-duration specification",
+      "Per-row retained bitstream/logs, decoded metrics and/or genuine visual evidence as ruled, all Source Key/Variant tagged and not shared with H.265",
+      "Fresh review, preserved health/events/no-retry audit, final state and engineer-owned PASS/FAIL/BLOCKED verdict"
+    ],
+    "recovery": "No DUT action is authorized now. In a future approved run, stop on fallback, GPU/driver/Xid, thermal, storage, output/decode/reference or display failure; preserve this row's unique media and logs and do not retry or substitute H.265 evidence. Remove only approved scratch after retention, restore the GPU/display under the owner plan and escalate media/GPU service if health remains abnormal."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Encode title conflicts with display-only Procedure and TBD Criteria; independent scope versus synonymous H.265 remains undefined. ED-21 mandates separation but does not invent the unique contract."},
+  "blocked": {"before": true, "after": true, "reason": "Pipeline ownership, duration/frame count, output shape, unique profile/workload and visual/quality acceptance are core missing specifications. Public standards define mechanisms, not this project's intended row contract."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Owner stage and unique-coverage ruling versus H.265; approved duration/frame count and output shape; exact GPU/NVENC/NVDEC/driver/ffmpeg; HEVC profile/tier/level/bit-depth/chroma/resolution/rate/GOP/quality/input/reference; visual oracle/path; scratch/limits/recovery; completed Criteria and fresh review.", "execution_status": "REVIEW COMPLETE BUT ENGINEERING DECISION PENDING, SOURCE CONFLICT AND BLOCKED; ROUND1 UNRESOLVED PRESERVED; NO FFMPEG, NVENC, NVDEC, MEDIA WRITE, PLAYBACK, DISPLAY, LOG CLEAR, RETRY OR OTHER DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "NVIDIA NVENC Video Encoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvenc-video-encoder-api-prog-guide/index.html", "application": "Defines HEVC hardware encoding and capability-dependent profiles/bit depths; cannot choose this row's duration/output or stage."},
+    {"authority": "NVIDIA NVDEC Video Decoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvdec-video-decoder-api-prog-guide/index.html", "application": "Establishes hardware decode as a separate path that may feed later display."},
+    {"authority": "FFmpeg codec documentation", "url": "https://ffmpeg.org/ffmpeg-codecs.html", "application": "Distinguishes software `libx265` from hardware `hevc_nvenc` and documents runtime/build capability dependencies."}
+  ],
+  "project_authority": "ED-21 preserves separate H.265 and HEVC identities. The project media/GPU/display owner must close the historical duration/output questions and assign this row a unique stage/profile/workload/oracle; a visual operator may judge approved pixels, and the end user decides verdict. AI cannot infer or share evidence.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-18", "ED-19", "ED-20", "ED-21", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "round1_unresolved_preserved": true, "ed21_independent_identity_applied": true, "duration_and_output_shape_unresolved": true, "pipeline_and_unique_coverage_unresolved": true, "libx265_not_gpu_evidence": true, "no_shared_verdict_or_evidence": true, "fresh_review_required_after_ruling": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1783|Wistron-HW-00416-V002", "next_missing_formal_queue_case_variant_id": "751fa3c3bdf0ce3b"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "round1_pilot_and_historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "ed21_case_specific_decision_applied": true, "official_nvidia_nvenc_nvdec_and_ffmpeg_docs_checked": true, "preceding_h265_row_directly_read": true, "next_formal_queue_identity_directly_read": true, "case_specific_round1_duration_output_and_independent_evidence_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
