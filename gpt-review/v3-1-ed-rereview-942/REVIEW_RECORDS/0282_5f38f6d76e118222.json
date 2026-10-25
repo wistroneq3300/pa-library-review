@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 282,
+  "formal_queue_sequence": 131,
+  "source_key": "Functionality|1788|Wistron-HW-00421-V002",
+  "case_variant_id": "5f38f6d76e118222",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1788, "code": "Wistron-HW-00421-V002", "original_row_sha256": "6a386de18fc8518d86af826b6fddb8576eee4defd7db6763a5d0ae6cb4936a1f", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Decode: VP9", "procedure": "Display video and check for no issue or `bleeding edge`; Criteria is TBD and no VP9 stream/profile/path/oracle is specified.", "criteria": "TBD.", "script": "No Script; 3 attended and 1 machine minute.", "deepseek": "PARTIAL; generic `libvpx` encodes generated frames to null, may select VP8, and supplies neither a VP9 bitstream nor decode/display evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk; requires VP9-specific media, decoder and acceptance.", "round2_history": "UNRESOLVED because VP9 identity, supported path and oracle were not bound."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1922_5f38f6d76e118222.json",
+  "old_problem": "The historical review accurately rejected ambiguous generic-libvpx encode-to-null, but treated concrete VP9 media and golden values as irreducible semantics. It also correctly warned that VP8 evidence cannot be reused. The approved parameterization rule now permits those concrete identities to be runtime prerequisites while retaining codec-specific proof.",
+  "new_disposition": "RESOLVED_TO_PARAMETERIZED_VP9_PROFILE_BITDEPTH_HARDWARE_DECODE_AND_PHYSICAL_DISPLAY_TEST; VP9_EVIDENCE_INDEPENDENT_FROM_VP8; RUNTIME_PROJECT_CONFIGURATION_REQUIRED",
+  "disposition_reason": "Resolve Engineering Decision Pending and BLOCKED. NVIDIA NVDEC documentation defines VP9 decode and architecture-dependent profile/bit-depth capability; FFmpeg provides explicit VP9 probing, selected decoder logs and deterministic decoded-frame signatures. Require immutable VP9 media, exact device capability, profile/bit-depth/chroma/superframe/keyframe metadata, no fallback, golden frame/timestamp equality and complete connector-bound visual evidence. Paths, selectors and golden values are fail-closed runtime configuration, and no VP8 artifact may satisfy this row.",
+  "decision_basis": [
+    "The exact XLSX row 1788, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, Round-2 UNRESOLVED result, pending/blocked analyses, ED-01 through ED-30 and official NVIDIA/FFmpeg documentation were read. The next formal identity was directly opened as Functionality row 1789 / Wistron-HW-00422-V002 / 6303f6e7c94729e0.",
+    "VP9 Decode and displaying its decoded output are coherent; the generic-libvpx encode command is a downstream review defect, not Source Conflict.",
+    "Generic `libvpx` does not prove VP9 identity. Runtime input must probe as VP9 and the decoder/hardware log must identify the approved VP9 path on the exact GPU with no software fallback.",
+    "VP9-specific coverage binds profile, 8/10/12-bit depth where applicable, chroma/pixel format, coded/display dimensions, color/range, frame rate/time base, duration/frame count, keyframe and superframe behavior and a pinned decoded output format.",
+    "Input hash, capability result, decode log, frame manifest, physical visual record and verdict are unique to this VP9 Source Key/Variant and cannot be copied from VP8.",
+    "No VP9 encode/decode, GPU workload, media write, playback, display inspection, log clear or DUT action was executed."
+  ],
+  "test_case": {
+    "test_name": "VP9 profile/bit-depth hardware decode integrity and physical display",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Validate the exact approved VP9 profile/bit-depth stream is hardware-decoded on the bound GPU with complete frame/keyframe/superframe integrity and displayed without visual defects, independently from VP8.",
+    "required_package": [
+      "Immutable VP9 WebM/Matroska or IVF input and SHA-256; approved profile, bit depth/chroma, dimensions, color/range, rate/time base, duration/frame count, keyframe and superframe map",
+      "Golden decoded `framemd5`, expected timestamps and pinned output pixel format",
+      "Exact GPU serial/UUID/BDF, driver/VBIOS and ffmpeg/ffprobe build with positive VP9 profile/bit-depth capability and verbose no-fallback NVDEC path",
+      "Bounded scratch/evidence root; approved connector/display/mode/player/capture route and qualified visual operator",
+      "Health/event thresholds, abort criteria and non-destructive recovery"
+    ],
+    "test_command": "PARAMETERIZED REVIEW-LAYER PROCEDURE — do not execute until approved. Verify VP9 input/golden hashes, scratch capacity, exact GPU profile/bit-depth capability and healthy baseline while preserving logs. Record `ffprobe -v error -show_streams -show_format -show_frames -select_streams v:0 -of json \"$VP9_INPUT\"`; require explicit VP9 identity and approved profile/bit-depth/chroma, dimensions, color/range, rates, duration/frame count and keyframe/superframe expectations. Record ffmpeg build and hardware decoder capability. Run `ffmpeg -hide_banner -loglevel repeat+level+verbose -hwaccel \"$APPROVED_HWACCEL\" -hwaccel_device \"$GPU_SELECTOR\" -i \"$VP9_INPUT\" -map 0:v:0 -an -vf \"$APPROVED_HW_DOWNLOAD_AND_PIXEL_FORMAT\" -f framemd5 \"$VP9_ACTUAL_FRAMEMD5\"`; require exact hardware VP9 decode/no fallback and complete golden/timestamp equality. Play the complete stream through the approved physical route, collect time-correlated visual evidence and final health/events. Stop on anomaly; do not retry.",
+    "expected_result": "VP9 hashes and all profile/bit-depth/keyframe/superframe metadata match; the exact GPU supports and selects the approved hardware VP9 decoder without fallback; every frame/timestamp/signature equals the VP9 golden manifest and ffmpeg exits 0 without error. Complete physical playback shows no corruption, banding beyond reference, color/range error, missing/frozen frames, tearing, crop/aspect or edge artifact; final health is acceptable and evidence is VP9-only.",
+    "pass_fail_basis": "PASS requires every VP9 capability, metadata, frame-signature, health and qualified visual condition. FAIL on ambiguous/generic libvpx identity, VP8 evidence reuse, unsupported required profile/bit depth, fallback, wrong input/GPU, keyframe/superframe/timestamp/frame/signature mismatch, visual defect, nonzero exit or health breach. BLOCKED at runtime—not Engineering Decision Pending—when approved bindings are absent. End user owns verdict.",
+    "safety_gate": [
+      "Reject generic libvpx encode-to-null and VP8 artifacts as VP9 decode evidence; prove exact codec, device capability and no fallback.",
+      "Verify immutable VP9 input/golden and profile/bit-depth/keyframe/superframe contract before workload; uniquely tag artifacts.",
+      "Use approved bounded scratch only; preserve logs/events and complete configured duration.",
+      "Keep decoded-frame integrity distinct from connector-bound human visual proof.",
+      "Stop on media/decoder/GPU/thermal/storage/display/evidence anomaly; never retry, reset, reboot, clear logs or alter firmware automatically."
+    ],
+    "expected_evidence": [
+      "VP9-only input/golden hashes and ffprobe codec/profile/bit-depth/chroma/dimension/color/rate/frame/keyframe/superframe metadata",
+      "Exact GPU/driver/VBIOS/ffmpeg identities, positive VP9 capability, selected hardware decoder and no-fallback log",
+      "Complete exit status, timestamp/frame accounting, actual `framemd5` and exact VP9 golden comparison",
+      "Connector/display/mode/player identity and full-clip time-correlated qualified visual record",
+      "Source Key/Variant tags, VP8 non-reuse audit, scratch/health/events, no-retry audit and end-user verdict"
+    ],
+    "recovery": "Stop the VP9 decoder/player at first failure, preserve VP9-only media, manifests, logs, captures and events and do not retry. Remove only approved scratch after retention and restore only approved display/session state without reset, reboot or firmware action; escalate if health remains abnormal."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "VP9 Decode and display are coherent; ambiguous generic-libvpx is a review-command defect."},
+  "blocked": {"before": true, "after": false, "reason": "VP9-specific capability, profile/bit-depth, frame/superframe and visual acceptance are now defined with fail-closed runtime bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "VP9-only immutable input/golden/profile/bit-depth/keyframe/superframe/frame/timestamp contract; exact GPU/decoder/driver/ffmpeg; scratch; display/operator; thresholds/recovery.", "execution_status": "REVIEW RESOLVED TO PARAMETERIZED TEST CASE; RUNTIME PREREQUISITES NOT PROVIDED; NO VP9 ENCODE/DECODE, GPU WORKLOAD, MEDIA WRITE, PLAYBACK, DISPLAY, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "NVIDIA NVDEC Video Decoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvdec-video-decoder-api-prog-guide/index.html", "application": "Defines VP9 decode capabilities by architecture/profile/bit depth and separates decoded frames from display."},
+    {"authority": "FFmpeg documentation", "url": "https://ffmpeg.org/documentation.html", "application": "Defines explicit stream/frame probing, decoder-path logs and deterministic frame signatures."}
+  ],
+  "project_authority": "Project owner binds VP9-specific media/golden/device/display values; qualified operator owns visual observation and end user owns verdict. VP8 evidence is not substitutable. No DUT action occurred.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "round2_unresolved_preserved_as_history_and_superseded": true, "parameterized_test_case_rule_applied": true, "vp9_profile_bitdepth_superframe_contract_defined": true, "vp9_evidence_independent_from_vp8": true, "generic_libvpx_rejected": true, "hardware_no_fallback_required": true, "physical_visual_evidence_required": true, "runtime_blocked_if_parameters_missing": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1789|Wistron-HW-00422-V002", "next_missing_formal_queue_case_variant_id": "6303f6e7c94729e0"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "round2_unresolved_and_historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "official_nvidia_nvdec_and_ffmpeg_docs_checked": true, "case_specific_vp9_profile_bitdepth_and_independent_evidence_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
