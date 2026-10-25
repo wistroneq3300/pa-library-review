@@ -1,0 +1,63 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 283,
+  "formal_queue_sequence": 132,
+  "source_key": "Functionality|1789|Wistron-HW-00422-V002",
+  "case_variant_id": "6303f6e7c94729e0",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1789, "code": "Wistron-HW-00422-V002", "original_row_sha256": "7ed5c2d5500a15ee58c175ef097c42fb73b30d24981fff4639a13e3fa8b42de8", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Decode: H.264", "procedure": "Display video and check for no issue or `bleeding edge`; no coded input, profile/level, decoder or oracle is specified and Criteria is TBD.", "criteria": "TBD.", "script": "No Script; 3 attended and 1 machine minute.", "deepseek": "PARTIAL; raw `testsrc` is sent to an H.264 encoder and discarded, so no H.264 bitstream is decoded or displayed.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk; proposes a future owner-supplied decode pipeline.", "round2_history": "UNRESOLVED because decoder input and acceptance were not bound."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1923_6303f6e7c94729e0.json",
+  "old_problem": "The prior record correctly separated H.264 Decode from the earlier Encode row and rejected DeepSeek's encode-to-null, but kept absent concrete media and golden values as a core block. Under the approved parameterization rule, those values can be fail-closed runtime prerequisites once decoder-specific semantics and criteria are explicit.",
+  "new_disposition": "RESOLVED_TO_PARAMETERIZED_H264_SPS_PPS_REORDER_HARDWARE_DECODE_AND_PHYSICAL_DISPLAY_TEST; DECODE_EVIDENCE_INDEPENDENT_FROM_H264_ENCODE; RUNTIME_PROJECT_CONFIGURATION_REQUIRED",
+  "disposition_reason": "Resolve Engineering Decision Pending and BLOCKED. NVIDIA NVDEC authority defines H.264 hardware decode and capability limits; FFmpeg can expose stream/frame metadata, selected hardware path and deterministic decoded signatures. Bind immutable H.264 media and golden outputs at runtime, but require profile/level, SPS/PPS, bit depth/chroma, reference/B-frame reordering and scan semantics, exact no-fallback decoder evidence, full frame/timestamp equality and real display evidence. The H.264 Encode row cannot satisfy decoder parser/reconstruction/display coverage.",
+  "decision_basis": [
+    "The exact XLSX row 1789, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, Round-2 UNRESOLVED result, pending/blocked analyses, ED-01 through ED-30 and official NVIDIA/FFmpeg documentation were read. The next formal identity was directly opened as Functionality row 1790 / Wistron-HW-00423-V002 / 02b4c80c0e22fe26.",
+    "H.264 Decode and display are coherent. DeepSeek's encoder invocation is rejected as a review-layer error, not Source Conflict.",
+    "The runtime contract identifies container/Annex-B form, profile/level, SPS/PPS, bit depth/chroma, coded/display dimensions, progressive/interlaced/MBAFF status, frame rate/time base, reference structure, B-frame reorder, duration/frame count and output pixel format.",
+    "PASS requires the exact GPU capability and hardware decoder with no fallback, parser/decode success, complete presentation timestamps and display-order frames, golden signature equality, physical playback and healthy final state.",
+    "H.264 Encode artifacts prove neither coded-input parsing nor reconstructed frames. All decode artifacts and verdict remain separately tagged to this Source Key/Variant.",
+    "No H.264 encode/decode, GPU workload, media write, playback, display inspection, log clear or DUT action was executed."
+  ],
+  "test_case": {
+    "test_name": "H.264 parser/reorder hardware decode integrity and physical display",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Validate an approved H.264 access-unit stream is parsed and hardware-decoded on the bound GPU with correct reference/B-frame display ordering and is physically displayed without visual defects, independently from H.264 encoding.",
+    "required_package": [
+      "Immutable H.264 input and SHA-256 with container/Annex-B, profile/level, SPS/PPS, bit depth/chroma, scan/MBAFF, dimensions, rate/time base, reference/B-frame structure and expected frame count",
+      "Golden display-order `framemd5`, expected PTS/DTS mapping and pinned output pixel/deinterlace policy",
+      "Exact GPU serial/UUID/BDF, driver/VBIOS and ffmpeg/ffprobe build with approved H.264 NVDEC capability and verbose no-fallback evidence",
+      "Bounded scratch/evidence root; approved connector/display/mode/player/capture route and qualified operator",
+      "Health/event thresholds, abort criteria and recovery"
+    ],
+    "test_command": "PARAMETERIZED REVIEW-LAYER PROCEDURE — do not execute until approved. Verify H.264 input/golden hashes, capacity, exact device capability and baseline without clearing logs. Record `ffprobe -v error -show_streams -show_format -show_frames -select_streams v:0 -of json \"$H264_INPUT\"`; require approved H.264 profile/level, parameter sets, scan, dimensions/rates, frame types and PTS/DTS/display-order expectations. Record ffmpeg build/hardware capability. Run `ffmpeg -hide_banner -loglevel repeat+level+verbose -hwaccel \"$APPROVED_HWACCEL\" -hwaccel_device \"$GPU_SELECTOR\" -i \"$H264_INPUT\" -map 0:v:0 -an -vf \"$APPROVED_HW_DOWNLOAD_PIXEL_FORMAT_AND_DEINTERLACE_POLICY\" -f framemd5 \"$H264_ACTUAL_FRAMEMD5\"`; require bound NVDEC/no fallback and exact golden/display-order/timestamp equality. Play the same complete input on the approved connector and collect time-correlated visual evidence and final health/events. Stop on anomaly; do not retry.",
+    "expected_result": "Hashes and H.264 profile/level/SPS/PPS/scan/reference/reorder metadata match; the exact GPU selects the approved hardware decoder without fallback; all display-order frames, PTS and signatures match the golden manifest and ffmpeg exits 0 without parser/decode error. Full physical playback has no corruption, wrong reorder/judder, unapproved combing, freeze, tearing, crop/aspect/color or edge artifact; health remains acceptable and evidence is decode-only.",
+    "pass_fail_basis": "PASS requires all H.264 metadata/parser/reorder, hardware, frame-signature, health and qualified visual checks. FAIL on encode-row evidence substitution, fallback, unsupported required profile, SPS/PPS/parser error, wrong input/GPU, PTS/DTS/display-order/frame/signature mismatch, truncated playback, visual defect, nonzero exit or health breach. BLOCKED at runtime when bindings are absent. End user owns verdict.",
+    "safety_gate": [
+      "Reject encode-to-null and H.264 Encode-row artifacts as decoder evidence; bind exact decoder and no-fallback proof.",
+      "Verify immutable media/golden and SPS/PPS/profile/reorder contract before workload; uniquely tag decode evidence.",
+      "Use only bounded approved scratch and preserve logs/events; complete the configured input.",
+      "Keep decoded-frame integrity separate from connector-bound visual evidence.",
+      "Stop on media/parser/decoder/GPU/thermal/storage/display/evidence anomaly; no retry, reset, reboot, log clear or firmware change."
+    ],
+    "expected_evidence": [
+      "H.264 input/golden hashes and profile/level/SPS/PPS/scan/reference/B-frame/PTS-DTS metadata",
+      "Exact GPU/driver/VBIOS/ffmpeg identity, positive H.264 capability, selected NVDEC path and no-fallback log",
+      "Complete parser/decode log, exit status, display-order frame/timestamp accounting and exact `framemd5` comparison",
+      "Connector/display/mode/player identity and full-clip time-correlated visual record",
+      "Decode-only Source Key/Variant tags, encode non-reuse audit, scratch/health/events, no-retry audit and verdict"
+    ],
+    "recovery": "Stop decoder/player on first parser, integrity, visual or health failure; preserve decode-only media, manifests, logs, captures and events and do not retry. Remove only approved scratch after retention; restore approved display/session state without reset, reboot or firmware action and escalate if health remains abnormal."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "H.264 Decode and display are coherent; DeepSeek's encoder choice is not protected-source conflict."},
+  "blocked": {"before": true, "after": false, "reason": "Decoder-specific input semantics, parser/reorder oracle, hardware proof and visual criteria are now parameterized with fail-closed bindings."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Immutable H.264 input/golden/profile/level/SPS-PPS/scan/reorder/timestamp contract; exact GPU/decoder/driver/ffmpeg; scratch/display/operator/threshold/recovery.", "execution_status": "REVIEW RESOLVED TO PARAMETERIZED TEST CASE; RUNTIME PREREQUISITES NOT PROVIDED; NO H264 ENCODE/DECODE, GPU WORKLOAD, MEDIA WRITE, PLAYBACK, DISPLAY, LOG CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "NVIDIA NVDEC Video Decoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvdec-video-decoder-api-prog-guide/index.html", "application": "Defines H.264 hardware decode capability and decoded-frame/display stages."},
+    {"authority": "FFmpeg documentation", "url": "https://ffmpeg.org/documentation.html", "application": "Defines H.264 stream/frame probing, hardware path logging and deterministic frame signatures."}
+  ],
+  "project_authority": "Project owner binds H.264 decoder-specific media/golden/device/display values; operator owns physical observation and end user owns verdict. Encode evidence is not substitutable. No DUT action occurred.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "round2_unresolved_preserved_as_history_and_superseded": true, "parameterized_test_case_rule_applied": true, "h264_parser_reorder_contract_defined": true, "decode_evidence_independent_from_encode": true, "hardware_no_fallback_required": true, "physical_visual_evidence_required": true, "runtime_blocked_if_parameters_missing": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1790|Wistron-HW-00423-V002", "next_missing_formal_queue_case_variant_id": "02b4c80c0e22fe26"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "round2_unresolved_and_historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "official_nvidia_nvdec_and_ffmpeg_docs_checked": true, "case_specific_h264_parser_reorder_and_encode_separation_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
