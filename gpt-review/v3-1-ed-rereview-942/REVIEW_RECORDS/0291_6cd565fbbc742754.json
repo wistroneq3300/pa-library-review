@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 291,
+  "formal_queue_sequence": 140,
+  "source_key": "Functionality|1801|Wistron-HW-00003-V003",
+  "case_variant_id": "6cd565fbbc742754",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1801, "code": "Wistron-HW-00003-V003", "original_row_sha256": "a6826496fb9fa09a1a004a71dfb12eaf9ed5ee9f942b18800f6d48b8d5ff0050", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C SW_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No authoritative switch-board path, operation or oracle is supplied.", "deepseek": "YES/read-only; scans every host-visible bus with i2cdetect -y over credential-bearing SSH, disables host-key checking and truncates evidence.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION with a switch-board allowlist, fabric health and recovery controls.", "historical_v3_1": "BLOCKED because switch-board identity/revision, controller/mux branch, safe transaction, expected devices/responses, fabric-health boundary and recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1934_6cd565fbbc742754.json",
+  "old_problem": "The case points to an unavailable specification and supplies no switch-board identity, topology, safe transaction or expected response. DeepSeek's global scan neither selects the SW_BD mux branch nor distinguishes switch management, EEPROM and sensor endpoints; it can touch unrelated live buses and discards output.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_SWITCH_BOARD_I2C_CONTRACT; GENERIC_HOST_BUS_SCAN_REJECTED",
+  "disposition_reason": "Retain Pending and BLOCKED. The SW_BD label does not identify which controller and mux branch reaches the intended switch board or which identity/status fields are safe. A runtime parameter cannot safely choose among live switch-control, EEPROM and sensor endpoints or create a PASS oracle. The board/revision-specific sideband contract, fabric-health boundary and independent recovery are core prerequisites.",
+  "decision_basis": [
+    "The exact XLSX row 1801, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1802 / Wistron-HW-00004-V003 / b2620ccfe91669e8.",
+    "I2C is BMC/platform-management scope by default; SW_BD must be reached through a documented BMC/OOB controller and mux branch, not inferred from host adapter numbering.",
+    "The same numerical address on another mux branch is a different device. A global address scan cannot prove switch-board identity, BOM coverage or safe access.",
+    "ED-03 prohibits guessed OEM parameters and ED-15 prohibits PASS without the approved response and switch/fabric health oracle.",
+    "Switch control, EEPROM and sensor functions have different safety properties; reserved and live-transaction exclusions must come from the project/vendor contract.",
+    "No SSH, I2C, switch, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Switch-board I2C sideband identity/status verification — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Validate the exact switch-board sideband path and allowlisted devices with approved identity/status reads while proving switch/fabric, BMC and OS health remain unchanged.",
+    "required_package": [
+      "Exact switch-board model/revision and approved sideband I2C specification/BOM response matrix",
+      "Owning BMC/OOB controller, mux hierarchy/branch, bus and allowlisted addresses/device identities",
+      "Reserved, EEPROM/configuration and live-transaction exclusions plus exact permitted register/length/timeout semantics",
+      "Authoritative expected responses/masks and switch/fabric plus management health acceptance criteria",
+      "Approved tool/version, secure transport, maintenance window, independent console/BMC/switch recovery and owner"
+    ],
+    "test_command": "BLOCKED; perform no I2C access. After the complete switch-board contract and fresh review authorize execution, use verified secret-safe BMC/OOB access, select only the specified controller and mux branch, and read only the approved identity/status fields from allowlisted targets. Capture full untruncated raw responses and pre/post switch links/fabric, BMC SEL/SDR/sensors and OS health. Do not scan every host bus, probe reserved/configuration/EEPROM space, force access, write, clear logs or automatically retry.",
+    "expected_result": "No executable PASS exists under current evidence. In a future authorized run, the specified mux branch and every allowlisted switch-board target must match the approved board-revision response matrix, with no extra/unknown access and no switch-link, fabric, management, BMC, sensor or OS health regression.",
+    "pass_fail_basis": "Current result is BLOCKED. Adapter/address enumeration alone cannot PASS. Future PASS requires exact board, path, allowed transaction and response matches plus clean switch/fabric and platform-health deltas. Missing contract, wrong branch, unexpected/missing device, response mismatch, unsafe operation, incomplete evidence or any link/management anomaly is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not infer SW_BD from host-visible bus numbering or probe an undocumented mux branch.",
+      "Do not access switch configuration or EEPROM command space or use force/write-capable transactions.",
+      "Use verified authentication, retain complete evidence and preserve switch, BMC and OS event history.",
+      "Stop on the first bus, link, fabric, management or sensor anomaly; do not retry or reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved SW_BD specification, board revision, BOM and response matrix",
+      "Controller/mux-branch/bus/address allowlist, exclusions and exact safe-read definition",
+      "Complete authenticated command/output transcript and per-target raw response comparison",
+      "Before/after switch links/fabric state, BMC SEL/SDR/sensors and OS health",
+      "Abort/no-retry/recovery audit and switch/platform owner verdict"
+    ],
+    "recovery": "No action is authorized now. In a future authorized run, stop at the first mismatch or health change, preserve complete evidence and do not retry. Use the independent approved console/BMC/switch recovery path; reset a bus, mux or switch only when the vendor/project recovery procedure explicitly authorizes it."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Procedure and Criteria consistently defer to one absent switch-board specification; the defect is incompleteness, not contradiction."},
+  "blocked": {"before": true, "after": true, "reason": "SW_BD identity/path, safe transaction, authoritative response, fabric-health oracle and recovery are core semantics unavailable from generic i2c-tools."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Switch-board revision/specification, BMC/OOB controller and mux path, address/device allowlist, exclusions, transaction/response matrix, health oracle and recovery.", "execution_status": "BLOCKED; NO SSH, I2C, SWITCH, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires a defined BMC/platform path, prohibits guessed OEM topology and prevents PASS without the response/health oracle."}],
+  "project_authority": "Switch/platform owner must provide and approve the SW_BD sideband topology, safe-read and response contract, fabric-health boundary and recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "i2c_bmc_scope_applied": true, "switch_board_identity_preserved": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1802|Wistron-HW-00004-V003", "next_missing_formal_queue_case_variant_id": "b2620ccfe91669e8"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_switch_board_sideband_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
