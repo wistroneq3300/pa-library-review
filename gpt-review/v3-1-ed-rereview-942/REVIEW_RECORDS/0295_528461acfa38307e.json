@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 295,
+  "formal_queue_sequence": 144,
+  "source_key": "Functionality|1805|Wistron-HW-00007-V003",
+  "case_variant_id": "528461acfa38307e",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1805, "code": "Wistron-HW-00007-V003", "original_row_sha256": "2d6f2ff3357102e8abd31cde9ca8581240efb5b0949c4f2bfc8fd2c2666499ad", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "I2C HSC_BD", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No hot-swap channel/gate/register contract is supplied.", "deepseek": "YES/no-risk; globally scans host buses through unsafe SSH, truncates evidence and does not identify hot-swap gates or live power state.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk with HSC/PSU telemetry and redundancy controls.", "historical_v3_1": "BLOCKED because HSC revision/channel/gate map, BMC mux route, safe registers, power-good/fault oracle and independent recovery are absent."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1938_528461acfa38307e.json",
+  "old_problem": "The absent HSC specification determines which transactions merely observe status and which can affect gate enable, current limits, resets or fault latches. DeepSeek's generic scan cannot select or map a hot-swap channel and may disturb a live whole-system power boundary while providing no power-good/load correlation.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_HSC_CHANNEL_GATE_AND_SAFE_REGISTER_CONTRACT; GENERIC_SCAN_REJECTED_AS_CRITICAL_HOT_SWAP_RISK",
+  "disposition_reason": "Retain Pending and BLOCKED. HSC identity, channel/gate/load mapping, register semantics, expected fault/power-good state and independent recovery define the test and its safety boundary. They cannot be inferred from I2C presence or supplied later as arbitrary parameters. No bus access is reviewable until the project/OEM power-gate contract exists.",
+  "decision_basis": [
+    "The exact XLSX row 1805, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1806 / Wistron-HW-00008-V003 / edd92d2e81d957ba.",
+    "HSC_BD defaults to BMC/platform-management scope and requires a named controller/mux/address plus channel-aware register map.",
+    "Identity, telemetry, fault latches, current limits and gate control can coexist at one HSC address; address discovery provides no safe-operation proof.",
+    "ED-03 prohibits guessed OEM routes/registers and ED-15 prohibits PASS without approved voltage/current/power-good/fault acceptance.",
+    "Independent recovery cannot rely solely on the hot-swap controller path under test, and no automatic retry, reset or power cycle is allowed.",
+    "No SSH, I2C, HSC, hot-swap, power, scan, write, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "HSC-board channel/status verification with unchanged power gates — blocked pending contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Verify named hot-swap-controller channels through allowlisted identity/status/telemetry reads while proving gate, current-limit, latch, output, redundancy and management state remain unchanged.",
+    "required_package": [
+      "Approved HSC board specification/revision and physical channel/gate/load topology",
+      "BMC/OOB controller, mux route, bus/address and exact safe identity/status/telemetry register allowlist",
+      "Gate-enable, current-limit, reset, latch-clear, fault-injection, force, quick-write and write exclusions",
+      "Expected per-channel voltage/current/power-good/fault/limit values, units and abort thresholds",
+      "Stable load/redundancy state, approved tool/version, maintenance authorization and independent console/BMC/power recovery"
+    ],
+    "test_command": "BLOCKED; perform no HSC bus access. After the complete HSC contract and fresh review authorize execution, establish stable load/redundancy and independent recovery, use secure BMC/OOB access to the exact controller/mux path, and read only allowlisted identity/status/telemetry registers on named channels. Capture complete raw and converted values with synchronized PSU/PDB, power-good, BMC SEL/SDR and OS state. Never globally scan, touch gate/limit/reset/latch/fault-control space, force/write, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. In a future authorized run, each HSC channel identity and raw/status value must match the approved map, every voltage/current/power-good/fault condition must meet its criterion, and gate/output/load/redundancy/BMC/OS state must remain unchanged.",
+    "pass_fail_basis": "Current result is BLOCKED. Address presence cannot PASS. Future PASS requires exact route/channel/register/response agreement and clean synchronized power-state evidence. Missing contract, wrong channel, unapproved register, response/fault mismatch, gate/output/current/redundancy change, evidence gap or management anomaly is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not access HSC buses until channel/gate mapping and the register-level safe-read matrix are approved.",
+      "Prohibit generic scans and all gate, current-limit, reset, latch-clear, fault-injection, force, quick-write or write operations.",
+      "Confirm stable load/redundancy and independent recovery; preserve synchronized HSC/PSU/PDB/BMC evidence.",
+      "Stop on any gate, power-good, current, fault, output, management or bus change; do not retry or power-cycle automatically."
+    ],
+    "expected_evidence": [
+      "Approved HSC specification/revision and channel/gate/load topology",
+      "Controller/mux/bus/address/register allowlist, exclusions, tool/version and authenticated session audit",
+      "Complete per-channel raw identity/status/telemetry mapped to voltage/current/power-good/fault criteria",
+      "Synchronized gate/output/load/redundancy, PSU/PDB, BMC SEL/SDR and OS baselines/deltas",
+      "Abort/no-retry/independent-power-recovery audit and power/platform owner verdict"
+    ],
+    "recovery": "No access or recovery action is authorized now. In a future approved run, stop on the first gate, power or management anomaly, preserve all evidence and do not retry. Use the independent console/BMC/power recovery path; HSC reset, latch clear, failover, reboot or power cycle requires a separate approved procedure and authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The row is incomplete rather than contradictory; both operative fields defer to the absent HSC specification."},
+  "blocked": {"before": true, "after": true, "reason": "HSC channel/register semantics determine whether access observes status or manipulates live power gates and therefore cannot be guessed."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "HSC revision/channel/gate topology, BMC/OOB route, safe register matrix/exclusions, expected power-good/fault/telemetry states and independent power recovery.", "execution_status": "BLOCKED; NO SSH, I2C, HSC, HOT-SWAP, POWER, SCAN, WRITE, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-15/ED-18", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Prohibits guessed OEM controls and PASS without approved criteria; any power action requires explicit safe transition/recovery authorization."}],
+  "project_authority": "Power/platform owner must define the HSC route, channel/gate/register contract, expected states and independent recovery; end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "hsc_channel_gate_identity_preserved": true, "critical_hot_swap_risk_applied": true, "generic_scan_rejected": true, "oem_parameters_not_guessed": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1806|Wistron-HW-00008-V003", "next_missing_formal_queue_case_variant_id": "edd92d2e81d957ba"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_hsc_power_gate_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
