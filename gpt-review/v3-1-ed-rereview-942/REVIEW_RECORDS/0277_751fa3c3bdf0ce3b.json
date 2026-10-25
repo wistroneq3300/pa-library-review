@@ -1,0 +1,65 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 277,
+  "formal_queue_sequence": 126,
+  "source_key": "Functionality|1783|Wistron-HW-00416-V002",
+  "case_variant_id": "751fa3c3bdf0ce3b",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1783, "code": "Wistron-HW-00416-V002", "original_row_sha256": "d28a4dfce04d4cee63dce5348ce49105f5bf5b05b68a822d86e4ffe2ff2c1e84", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Encode: AV1", "procedure": "Display video and check for no issue or `bleeding edge`; no encode operation, media input, retained bitstream, decode step or display path is specified.", "criteria": "TBD.", "script": "No Script; 3 attended and 1 machine minute.", "deepseek": "PARTIAL; proposes CPU `libaom-av1` encoding to null while calling it a GPU encode/decode self-test, without a retained bitstream, reverse decode or visual proof.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at HIGH risk; supplies useful future controls but assumes an AV1 round trip not authorized by the source.", "round2_history": "UNRESOLVED; the exact AV1 row remained undecidable because Procedure and Criteria did not define the pipeline or acceptance."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1917_751fa3c3bdf0ce3b.json",
+  "old_problem": "The preserved Items requires AV1 Encode, while Procedure asks only to display video and visually check an undefined `bleeding edge`; Criteria is TBD. DeepSeek's `libaom-av1` path is software encoding and null output retains no AV1 bitstream for the claimed reverse decode. The historical Round-2 review correctly stayed UNRESOLVED, but no later owner ruling completed the stage, hardware capability, output, duration, quality or visual contract.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_SOURCE_CONFLICT_AND_BLOCKED_FOR_AV1_PIPELINE_CAPABILITY_AND_ACCEPTANCE; PRESERVE_ROUND2_UNRESOLVED",
+  "disposition_reason": "Retain Engineering Decision Pending, Source Conflict and BLOCKED. Official NVIDIA documentation separates NVENC encoding, NVDEC decoding and display rendering; it also requires querying the selected device's codec capabilities. FFmpeg separately documents software `libaom-av1` and NVIDIA NVENC encoders. These authorities can define a safe future evidence structure, but cannot choose whether this project row owns encode, decode/display or both, which exact GPU is in scope, or what output/quality/visual result is authoritative. Those are core source semantics, not replaceable runtime parameters.",
+  "decision_basis": [
+    "The exact XLSX row 1783, same-row DeepSeek/test-json content, GPT V2, historical V3.1 record, Round-2 UNRESOLVED result, pending/conflict/blocked analyses, ED-01 through ED-30 and official NVIDIA/FFmpeg documentation were read. The next formal identity was directly opened as Functionality row 1784 / Wistron-HW-00417-V002 / d07fd08d1a99b05c.",
+    "NVIDIA's NVENC guide defines encoding as consuming raw YUV/RGB frames and producing a compliant AV1 bitstream, with supported encoder GUIDs queried from the selected device. A null-output software run does not provide that hardware or retained-bitstream evidence.",
+    "NVIDIA's NVDEC guide defines AV1 decoding as a separate path that yields decoded frames; displaying those frames requires an additional graphics conversion/rendering path. Therefore encoding, decoding and physical display cannot share an inferred PASS.",
+    "FFmpeg documents `libaom-av1` as a separate encoder from NVENC encoders. The DeepSeek proposal neither binds `av1_nvenc`/NVENC capability nor prevents software fallback and it discards output with the null muxer.",
+    "Exact AV1 encode/decode support is GPU-architecture and capability dependent. A GPU that can decode AV1 does not thereby prove AV1 NVENC encode support, so exact GPU UUID/BDF and per-device capability evidence are mandatory.",
+    "The owner must select stage ownership and define profile/level, bit depth/chroma/pixel format, resolution/frame rate, duration/frame count, GOP/rate control/quality, deterministic input, retained output/container/bitstream, decode reference and the visual oracle/path if display remains in scope.",
+    "The 1-minute Machine Time is scheduling metadata, not an approved media duration, frame count or acceptance threshold. No media command, GPU workload, scratch write, playback, display inspection, log clear or DUT action was executed."
+  ],
+  "test_case": {
+    "test_name": "AV1 media pipeline — blocked pending authoritative stage and acceptance contract",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve the AV1 encode intent and display wording without falsely treating software encoding, decode capability or generic playback as equivalent, and require an authoritative per-stage contract before execution.",
+    "required_package": [
+      "Owner ruling for AV1 hardware encode, decode/display or separately accepted stages",
+      "Exact GPU serial/UUID/BDF and authoritative proof of AV1 NVENC and/or NVDEC capability for that device; driver/VBIOS, Video Codec SDK and pinned ffmpeg build",
+      "AV1 profile/level, bit depth/chroma/pixel format, resolution/frame rate, duration or exact frame count, GOP, rate control/bitrate/quality and deterministic raw/source input",
+      "Expected retained AV1 container/elementary bitstream and metadata, immutable reference, reverse-decode/frame/quality oracle and bounded scratch location",
+      "Defined `bleeding edge` visual criterion plus exact connector/display/capture/operator path if display remains in scope; health thresholds, recovery and per-row evidence location"
+    ],
+    "test_command": "BLOCKED; no AV1 execution. After owner resolution and a fresh review, bind the exact GPU and query/prove the required NVENC/NVDEC capability. If encode is assigned, use the approved hardware AV1 encoder with explicit no-fallback evidence, deterministic input and bounded retained output; do not use `libaom-av1` as GPU proof or null output. Decode the retained bitstream and compare approved frame/quality references only if decode is assigned. Perform connector-bound visual inspection only if display is assigned. Preserve full logs/events, tag all artifacts with this Source Key/Variant, stop on fallback or anomaly and never auto-retry.",
+    "expected_result": "No executable PASS result is currently defined. Eventual PASS requires every owner-assigned AV1 stage to use the approved capability on the bound GPU, produce and retain the specified media/output for the approved duration or frame count, satisfy frame/quality and any physical visual oracle, and leave GPU/system health within approved thresholds.",
+    "pass_fail_basis": "Current status is BLOCKED. A successful `libaom-av1` exit, AV1 decode support, a null output, generic video playback, a file hash or the one-minute schedule cannot PASS. After a fresh review, unsupported capability, software fallback, wrong GPU/profile, missing/short/corrupt bitstream, duration/frame mismatch, decode/reference/quality/visual failure, wrong display path or GPU/thermal/storage/event regression is reported for engineer FAIL/BLOCKED disposition. The end user owns the eventual verdict.",
+    "safety_gate": [
+      "Preserve Round-2 UNRESOLVED status until stage ownership and measurable acceptance are authoritatively completed.",
+      "Bind the exact device and query capability; never infer AV1 encode support from decode support or from a generic product-family label.",
+      "Reject `libaom-av1`, CPU/software fallback and null output as GPU AV1 encode evidence.",
+      "Bound input, duration/frame count, scratch capacity and GPU load; preserve pre/during/post health and events without clearing logs.",
+      "Require real connector-bound visual evidence only when display is explicitly in scope. Stop on fallback, GPU/driver/Xid, thermal/power, storage, media/reference, display or evidence failure; do not retry, reset, reboot or clear logs automatically."
+    ],
+    "expected_evidence": [
+      "Owner stage-ownership ruling and completed AV1 Procedure/Criteria",
+      "Exact GPU UUID/BDF, driver/VBIOS/SDK/ffmpeg versions and per-device NVENC/NVDEC capability/no-fallback proof",
+      "Approved AV1 profile/level/bit-depth/chroma/resolution/rate/GOP/quality/input/duration/output/container and immutable hashes",
+      "Retained hardware encoder logs and bitstream, decode/frame/reference/quality evidence and genuine display captures/operator observation only for assigned stages",
+      "Fresh review, bounded-storage and no-retry audit, pre/during/post health/events, recovery record and engineer-owned PASS/FAIL/BLOCKED verdict"
+    ],
+    "recovery": "No DUT action is authorized now. In a future approved run, stop on unsupported capability, fallback, GPU/driver/Xid, thermal, storage, bitstream/decode/reference or visual failure; preserve media and logs and do not retry. End only the approved workload, remove only approved scratch after evidence retention, restore the GPU/display under the owner plan and escalate media/GPU service if health remains abnormal."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Items says AV1 Encode while Procedure only displays video and Criteria is TBD. NVENC, NVDEC and display are distinct stages, so public documentation cannot choose the authoritative project scope."},
+  "blocked": {"before": true, "after": true, "reason": "Stage ownership, exact supported hardware capability, duration/output/quality and visual acceptance are missing test-defining facts. Package installation and safe parameterization cannot supply them."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Owner AV1 stage ruling; exact GPU and NVENC/NVDEC capability; approved profile/level/bit-depth/chroma/resolution/rate/GOP/quality/input/duration/frame count; retained output/container and decode/reference oracle; visual criterion/path; scratch/health/recovery; completed Criteria and fresh review.", "execution_status": "REVIEW COMPLETE BUT ENGINEERING DECISION PENDING, SOURCE CONFLICT AND BLOCKED; ROUND2 UNRESOLVED PRESERVED; NO FFMPEG, LIBAOM, NVENC, NVDEC, MEDIA WRITE, PLAYBACK, DISPLAY, LOG CLEAR, RETRY OR OTHER DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [
+    {"authority": "NVIDIA NVENC Video Encoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvenc-video-encoder-api-prog-guide/index.html", "application": "Defines AV1 hardware encoding as raw-frame input to compliant bitstream output and requires device codec-capability enumeration; it cannot select this row's project stage or oracle."},
+    {"authority": "NVIDIA NVDEC Video Decoder API Programming Guide", "url": "https://docs.nvidia.com/video-technologies/video-codec-sdk/13.1/nvdec-video-decoder-api-prog-guide/index.html", "application": "Defines AV1 decoding and subsequent display rendering as distinct capability-dependent steps, so decode or display cannot be inferred from encode."},
+    {"authority": "FFmpeg codec documentation", "url": "https://ffmpeg.org/ffmpeg-codecs.html", "application": "Separates `libaom-av1` and NVENC encoder implementations; supports rejecting the software/null-output proposal as GPU evidence."}
+  ],
+  "project_authority": "The GPU/media/display owner must select AV1 stage ownership, exact supported device and measurable output/quality/visual contract while preserving the Master TBD and Round-2 UNRESOLVED result. A qualified operator may judge approved physical pixels; the end user decides verdict. AI cannot infer these choices from codec standards.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-08", "ED-13", "ED-18", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "round2_unresolved_preserved": true, "pipeline_stage_ownership_unresolved": true, "exact_av1_capability_required": true, "libaom_not_gpu_evidence": true, "null_output_not_bitstream_evidence": true, "encode_decode_display_evidence_separated": true, "fresh_review_required_after_ruling": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1784|Wistron-HW-00417-V002", "next_missing_formal_queue_case_variant_id": "d07fd08d1a99b05c"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "round2_unresolved_and_historical_blocked_record_read": true, "pending_conflict_and_blocked_analyses_read": true, "official_nvidia_nvenc_nvdec_and_ffmpeg_docs_checked": true, "device_capability_and_stage_specific_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
