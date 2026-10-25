@@ -1,0 +1,60 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 254,
+  "formal_queue_sequence": 103,
+  "source_key": "Functionality|1626|Wistron-BMC-00897-V002",
+  "case_variant_id": "8be978e637e0cb77",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1626, "code": "Wistron-BMC-00897-V002", "original_row_sha256": "1b01214b4dac40649e56e0961aa14b8fefc0ce93c0c955d0ac2503d315ffeb07", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Inventory and LEDs - Assembles", "procedure": "Open BMC-Web Hardware Status / Inventory and LEDs and inspect `Fans`; generic pre/post text requests log clearing and photos.", "criteria": "All information should match SPEC definition.", "script": "None; 10 attended and 10 machine minutes.", "deepseek": "YES; treats `/redfish/v1/Chassis/system` `.Links.Oem` as assembly evidence, while using TLS bypass/inline credentials and ignoring the Fans procedure.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; asks the owner to define Assembles versus Fans, authoritative assembly resources, membership relationships and physical mapping."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1764_8be978e637e0cb77.json",
+  "old_problem": "The Item names the ambiguous `Assembles` inventory, Procedure names Fans, and DeepSeek assumes that an OEM-links object represents chassis assemblies. A link container is not a closed inventory: it does not establish expected parts, exact membership, parent/child relationships, roles, optionality or physical locations. The generic SPEC criterion supplies none of those semantics, and nearby Processor/DIMM/PSU inventory conflicts cannot be reused to define this row.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_WITH_ASSEMBLY_TOPOLOGY_OR_FAN_READ_ONLY_BRANCHES",
+  "disposition_reason": "Retain Engineering Decision Pending and source conflict while classifying the future work as REQUIRES PACKAGE / USER CONFIRMATION, not BLOCKED. Once the owner selects Assembles/chassis parts or Fans and supplies the matching topology/schema, either path is a bounded read-only inventory collection with no recovery-intensive mutation. The case cannot be marked RESOLVED from `Links.Oem`: navigation may expose zero, one or many vendor resources and cannot prove completeness or physical correctness. A review-layer branch contract is therefore safe, but the source-controlled target and its authoritative Expected remain pending.",
+  "decision_basis": [
+    "The exact XLSX row 1626, same-row DeepSeek/test-json fields, V2 review, historical V3.1 record, pending/conflict analyses, decision register and exact-code/variant history were read. The actual next formal queue identity was reconstructed and directly opened in XLSX as Functionality row 1635 / Wistron-BMC-00906-V003 / 034875486cc4de67.",
+    "Assembly correctness is graph-based: every expected fitted part must resolve exactly once to an approved resource identity, role, parent, children and physical location, with explicit optional/absent/virtual/OEM rules. An OEM links projection proves none of those closure properties.",
+    "The Fans branch requires a different population and oracle—rotor/location, speed/units, status/health and thermal association—so it cannot be folded into an assembly relationship ledger or inferred as a copied word without row-specific authority.",
+    "DeepSeek changes the evidence model from BMC-Web inventory to a single OEM-navigation object, omits complete resource traversal and uses insecure transport/secret handling. Its YES classification therefore understates both the owner inputs and false-acceptance risk.",
+    "After scope selection, approved link traversal can remain within the verified same chassis and read only explicitly allowed resources; no disassembly, LED actuation, chassis control, power change, thermal action, firmware write or log clear belongs to this row.",
+    "ED-12 supplies no row-specific copy-error ruling; ED-20 retains genuine BMC-Web screenshots/photos; ED-24 keeps the competing source scopes visible. ED-02/ED-21 preserve this identity, ED-03/ED-13 prohibit invented OEM semantics, and ED-26/ED-33/ED-35/ED-36/ED-38 prevent retry, source loss, reduced coverage or a review-level DUT verdict."
+  ],
+  "test_case": {
+    "test_name": "Inventory and LEDs - Assembles — owner-defined topology or Fan branch",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "Preserve the row's Assembles/chassis-parts and Fans alternatives until the owner defines the authoritative domain. If assemblies are selected, validate a complete same-chassis component relationship graph; if Fans is selected, validate its independently specified population without claiming assembly coverage.",
+    "required_package": [
+      "Owner overlay decision choosing Assembles/chassis parts, Fans or two separate checkpoints, including explicit disposition of the unselected Master wording",
+      "Verified SUT/BMC/chassis identity, BMC firmware/UI version, protected BMC-Web/API access, validated TLS and approved same-target resource traversal boundary",
+      "For assemblies: authoritative standard/OEM resource map and expected part/member, role, parent-child, model/serial/asset, physical-location, optional/absent/virtual/alias matrix",
+      "For Fans: independent member/rotor/location, status/health, speed/unit and thermal-association matrix",
+      "Complete raw selected resources/links/members, source-required UI screenshots/photos, physical-map corroboration, timestamps, comparison ledger and no-mutation evidence"
+    ],
+    "test_command": "NOT STARTED — first record the owner-selected branch. For an assembly decision, capture the BMC-Web Inventory and LEDs view and traverse only the approved same-chassis collection/member/relationship resources; retain full raw payloads and build a closed expected-versus-observed graph covering stable identities, roles, parents, children, locations, aliases and optionality. For a Fans decision, collect the separately approved full fan UI/resource population and compare its own matrix. Report missing, extra, duplicate, dangling, cross-linked, stale, malformed or mismatched entries. Do not use `curl -k`, inline passwords, `.Links.Oem` alone, unrestricted link traversal or API-only evidence in place of the required UI capture.",
+    "expected_result": "Before owner resolution, the expected result is a selected domain plus its authoritative schema/matrix. Under an assembly contract, every expected fitted part appears exactly once with correct role, relationship and physical location, allowed optional/virtual nodes are identified, and no unapproved or dangling member exists. A Fans contract has its own complete member/telemetry result. Neither branch currently has a DUT verdict.",
+    "pass_fail_basis": "Engineering Decision Pending remains until scope and the selected authoritative matrix exist. Future assembly PASS evidence requires graph closure and one-to-one identity/location agreement, not merely a nonempty OEM link object or an HTTP success. Missing/extra/duplicate/dangling/cross-chassis/stale nodes and unexplained field differences are engineer-reviewed exceptions. Fan evidence cannot pass assembly coverage and vice versa; final PASS/FAIL/BLOCKED belongs to the end user.",
+    "safety_gate": [
+      "Do not infer that `Assembles` means every OEM link, that Fans is a typo, or that adjacent inventory rows define this topology.",
+      "Constrain any future traversal to approved read-only same-target resources; reject external, recursive, cross-chassis or unknown action links.",
+      "Do not disassemble/replace hardware, actuate LEDs, alter power/thermal/fan/chassis/firmware configuration or clear SEL/dmesg/syslog/audit evidence.",
+      "Use protected credentials and validated TLS; preserve actual BMC-Web visual evidence because a resource graph alone does not validate the UI path.",
+      "Stop interpretation on unknown resource ownership, cyclic/dangling topology, stale data, incomplete members or target mismatch; never auto-retry to hide the first graph defect."
+    ],
+    "expected_evidence": [
+      "Exact Source Key/variant/hash, literal Assembles/Fans conflict, owner decision and selected resource/UI schema",
+      "Same-SUT/BMC/chassis and firmware/UI identity with timestamped BMC-Web screenshots/photos",
+      "Complete approved raw collections, members and relationships plus a closed topology/location/optionality comparison ledger or the separately defined complete Fan ledger",
+      "Missing/extra/duplicate/dangling/cross-linked/stale/malformed analysis, no-mutation/session audit and preserved SEL/audit/health evidence",
+      "Current no-DUT-action/no-verdict record and future engineer-owned outcome"
+    ],
+    "recovery": "This review authorizes no state change. If traversal reaches an unapproved target, identity differs, graph data is incomplete or stale, stop immediately, retain the raw URI/resource/UI evidence, close the protected session and verify chassis, fan, thermal, power and firmware state remained unchanged. Do not clear logs, disassemble hardware, reboot or repeat traversal as a repair."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Items, Procedure and DeepSeek describe three non-equivalent evidence models: assembly topology, Fans inventory and OEM navigation links. The overlay preserves them pending an explicit owner scope decision."},
+  "blocked": {"before": false, "after": false, "reason": "After owner scope/schema selection, both candidate observations are bounded read-only collections with a clear stop/recovery boundary. The missing domain/topology is an engineering/project prerequisite rather than an inherently unsafe operation."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Assembles-versus-Fans ruling; authoritative assembly resources/UI and member-role-relationship-location/optionality matrix or complete Fan matrix; same-chassis traversal bounds; protected visual/raw evidence and engineer verdict workflow.", "execution_status": "NOT STARTED; NO OEM LINK TRAVERSAL USED AS VERDICT EVIDENCE, NO CHASSIS/FAN/THERMAL/POWER/LED/FIRMWARE/LOG/DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [],
+  "project_authority": "The BMC/platform owner defines `Assembles`, approves standard/OEM resources and aliases, or selects Fans; the mechanical/chassis owner supplies expected fitted topology and locations; the operator supplies UI/physical corroboration; the end user owns verdict. They may not edit Master, treat navigation as membership or waive the distinct branch coverage.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-12", "ED-13", "ED-20", "ED-21", "ED-24", "ED-26", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "no_source_key_specific_copy_correction": true, "assembly_graph_and_fan_scopes_kept_independent": true, "oem_links_not_accepted_as_complete_inventory": true, "webui_evidence_preserved": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1635|Wistron-BMC-00906-V003", "next_missing_formal_queue_case_variant_id": "034875486cc4de67"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_conflict_record_read": true, "pending_and_conflict_analyses_read": true, "duplicate_code_search_completed": true, "next_formal_queue_identity_directly_read": true, "case_specific_assembly_graph_relationship_reasoning": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
