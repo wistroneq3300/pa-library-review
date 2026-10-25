@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 300,
+  "formal_queue_sequence": 149,
+  "source_key": "Functionality|1810|Wistron-HW-00432-V002",
+  "case_variant_id": "5068136d5993e9db",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1810, "code": "Wistron-HW-00432-V002", "original_row_sha256": "19538de1737f3a49665a7b08ed3ccb1eb984cf07a08a0f8161d04175f124e647", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "E1S_BD1", "procedure": "follow up spec procedure", "criteria": "follow up spec criteria", "script": "No BD1 board/slot/connector identity or operation is supplied.", "deepseek": "NO; assumes an unspecified physical board connection/continuity test and allows optional BMC readback later.", "gpt_v2": "MANUAL ONLY at HIGH risk; adds ESD, inspection and continuity controls, but the source never establishes that physical continuity is the essential method.", "historical_v3_1": "BLOCKED because BD1 identity and whether coverage is logical I2C, physical/continuity or separately accepted stages are undefined."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1943_5068136d5993e9db.json",
+  "old_problem": "DeepSeek and GPT V2 correctly refuse autonomous execution but infer physical continuity from a board name and missing specification. The I2C test set could instead require BMC-side logical reachability or both independent stages. Classifying MANUAL ONLY now would convert an unsupported interpretation into source truth and could discard logical coverage.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_E1S_BD1_IDENTITY_AND_LOGICAL_VERSUS_PHYSICAL_SCOPE; MANUAL_ONLY_NOT_YET_AUTHORIZED",
+  "disposition_reason": "Retain Pending and BLOCKED. Engineering must identify BD1 and select required evidence modalities before automation classification can be final. Logical I2C, visual/connector inspection and continuity prove different properties. ED-09 makes any physical work human-only, but it does not prove that physical work is the entire intended case. Each approved stage must preserve independent coverage and PASS criteria.",
+  "decision_basis": [
+    "The exact XLSX row 1810, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1811 / Wistron-HW-00433-V002 / 07e79485818af389.",
+    "The I2C test-set label and E1S_BD1 name identify a target but not the operation; physical continuity is an inference rather than a source requirement.",
+    "Logical reachability cannot prove every conductor or connector integrity, while inspection/continuity cannot prove managed-device enumeration and response.",
+    "ED-09 reserves physical board/cable work for a qualified human; ED-03 and ED-15 prohibit guessed topology and unapproved acceptance thresholds.",
+    "BD1 must remain independent from BD2; no connector, slot, mux, address or limit may be copied from the neighboring case.",
+    "No I2C, BMC, E1.S, NVMe, physical, continuity, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "E1S_BD1 logical and/or physical connection validation — blocked pending scope",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve independent BD1 coverage and, after owner definition, validate each required logical I2C and/or physical inspection/continuity stage against the exact board, slot, cable and connector identity without substituting one modality for another.",
+    "required_package": [
+      "E1S_BD1 vendor/platform specification with exact board, slot, cable, connector and endpoint identities",
+      "Owner decision listing required logical-I2C, visual/physical and continuity checkpoints separately",
+      "For logical checks: BMC/OOB controller/mux/bus/address/transaction and expected-response matrix",
+      "For physical checks: pinout, safe power/isolation/ESD state, qualified operator/instrument and measurement limits",
+      "E1.S/NVMe presence and health criteria, maintenance authorization, evidence plan and independent recovery"
+    ],
+    "test_command": "BLOCKED; perform no bus or physical action. After BD1 scope and specification receive fresh review, execute only the approved stages: secure bounded BMC/OOB reads for logical coverage and qualified-human inspection/continuity measurements for physical coverage in the specified safe state. Capture each stage separately with BD1 identity and pre/post E1.S/NVMe, BMC SEL/SDR and OS health. Do not copy BD2, invent addresses/pins/limits, energize an incomplete connection, write, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. Future PASS requires exact BD1 identity and every mandated stage independently meeting its approved endpoint-response, physical-condition and/or continuity limits, with E1.S/NVMe presence, namespaces/storage health and platform management unchanged.",
+    "pass_fail_basis": "Current result is BLOCKED. Neither logical enumeration nor physical inspection alone can PASS unless the owner explicitly defines it as complete coverage. Missing scope/specification, BD1/BD2 mix-up, wrong endpoint/pin, response mismatch, damage/open/short, absent stage, storage/management anomaly or incomplete evidence is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not infer continuity work solely from the item name or classify MANUAL ONLY before the owner defines the modality.",
+      "Never copy BD2 topology or probe unknown BD1 pins, buses, addresses or control endpoints.",
+      "All physical work requires qualified human, approved ESD/power isolation and instrument limits; logical work requires an allowlist.",
+      "Stop on damage, open/short, device disappearance, storage, BMC or bus anomaly; do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved E1S_BD1 specification, exact board/slot/cable/connector/endpoint identity and scope decision",
+      "Logical BMC route and complete raw response comparison when required",
+      "Qualified-human photos, connector/pin inspection and continuity measurements when required",
+      "Pre/post E1.S/NVMe presence/namespaces/health plus BMC SEL/SDR and OS evidence",
+      "Per-stage verdict, abort/no-retry/independent-recovery audit and platform/storage owner disposition"
+    ],
+    "recovery": "No action is authorized now. Future recovery must be independent of BD1 and tailored to each approved stage. Stop and preserve evidence on any defect or health change; connector work, bus reset, NVMe reset, reboot or power cycle is separately owner-authorized and never automatic."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The source itself contains no contradiction; unsupported review interpretations differ only because authoritative scope is absent."},
+  "blocked": {"before": true, "after": true, "reason": "Core operation modality, hardware identity, target, acceptance and recovery are unresolved; choosing MANUAL or logical execution would invent coverage."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "BD1 board/slot/cable/connector identity, modality decision, logical route/responses and/or physical pinout/limits, storage-health criteria and recovery.", "execution_status": "BLOCKED; NO I2C, BMC, E1S, NVME, PHYSICAL, CONTINUITY, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-09/ED-15/ED-19", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Forbids guessed OEM methods, assigns physical work to humans, requires approved criteria and preserves BD1's independent identity/coverage."}],
+  "project_authority": "E1.S/storage/platform owner must define BD1 identity, required modalities, topology or pinout, acceptance and independent recovery; qualified humans own physical work and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-09", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "bd1_identity_preserved": true, "logical_physical_modalities_separated": true, "manual_only_not_invented": true, "bd2_not_substituted": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1811|Wistron-HW-00433-V002", "next_missing_formal_queue_case_variant_id": "07e79485818af389"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_bd1_modality_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
