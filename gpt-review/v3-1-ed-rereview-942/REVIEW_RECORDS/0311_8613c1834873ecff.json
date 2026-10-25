@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 311,
+  "formal_queue_sequence": 160,
+  "source_key": "Functionality|1925|Wistron-GB NV PVP HW-00465-V003",
+  "case_variant_id": "8613c1834873ecff",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1925, "code": "Wistron-GB NV PVP HW-00465-V003", "original_row_sha256": "750a7c87786de7f16e37fbb5b1320ff8c5baa07922466160c4a06f325343250e", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "SY.5_DC 2 reboot test", "procedure": "DC cycle run power and standby power from BMC.", "criteria": "System returns after DC cycle, boots to OS, has no unexpected AER and fully enumerates PCIe after every cycle.", "script": "Manual Validation; 10 attended and 20 machine minutes; code shared by three rows.", "deepseek": "PARTIAL; repeats the SY.4 generic chassis power off/on command, which does not establish loss/restoration of standby power, and supplies only uptime plus a dmesg tail.", "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION at CRITICAL risk; exact DC-2 dual-rail OEM procedure and complete evidence are missing."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2056_8613c1834873ecff.json",
+  "old_problem": "The authoritative SY.5 method explicitly cycles run power and standby power, but the supplied command is the same generic BMC chassis off/on used for SY.4 and normally leaves the BMC/standby domain energized. Neither standard IPMI semantics nor the Master identifies the platform-specific controller, rail sequence, safe restore path or proof that standby was actually removed.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_FOR_EXACT_OEM_DC2_RUN_AND_STANDBY_POWER_CONTROL_CONTRACT",
+  "disposition_reason": "Retain Pending and Source Conflict. ED-02/ED-06/ED-19 preserve this shared-code SY.5 identity and prohibit credit from SY.4. The missing element is not a runtime IP or ordinary parameter: it is the OEM-specific command/physical control that removes and restores the management standby domain, including how evidence and recovery remain available while BMC power is absent. Guessing generic IPMI, PDU or AC commands could strand or damage the platform. A fail-closed draft defines evidence and recovery, but execution stays closed until the platform power owner supplies a versioned DC-2 rail-state contract and exact procedure.",
+  "decision_basis": [
+    "XLSX row 1925, same-row tests.json/DeepSeek, exact GPT V2, historical record, shared-code variants and ED-01 through ED-30 were read. The next locked-queue row was directly opened as Functionality 1926 / Wistron-GB NV PVP HW-00465-V004 / 47ac7e49e25ebc81.",
+    "The same code also labels row 1920 physical E1.S hot swap and row 1922 SY.4 DC reboot. Variant binding is mandatory; neither operation supplies SY.5 standby-power coverage.",
+    "Standard `chassis power off/on` controls host/chassis run power but does not prove the BMC or standby rail went away. The source therefore lacks the core DC-2 command semantics, not merely target values.",
+    "If standby power is removed, the initiating BMC cannot be the only observer or recovery channel. Independent PDU/rail/serial control, exact sequencing, minimum dwell, discharge proof and safe restoration must be Project-authoritative.",
+    "Full per-cycle PCIe/AER and OS Ready criteria remain preserved, but they cannot resolve whether the required dual-domain action occurred.",
+    "No BMC, chassis, PDU, standby, reboot, SSH, log, recovery, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "DC-2 run-power plus standby-power cycle and recovery — BLOCKED DRAFT",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "user_confirmation_required": true,
+    "purpose": "After the OEM power contract is supplied, verify an exact approved cycle removes and restores both host run power and the specified standby/management domain, then reaches OS Ready with complete PCIe enumeration and no unapproved AER or platform-health fault.",
+    "required_package": [
+      "Versioned OEM schematic/power-state definition identifying run and standby rails, controllers, dependencies, discharge thresholds and normal final state",
+      "Exact approved BMC/PDU/CPLD/physical DC-2 sequence, credentials, dwell/timeout, cycle count and independent rail-state observation",
+      "Workload/storage quiescence, data-protection approval, stable facility power and point-of-action authorization",
+      "Expected PCIe identity/link manifest plus complete AER/DPC/kernel/BMC/storage acceptance criteria",
+      "Recovery channel that remains usable with standby absent, cold-start procedure, restart inhibition and named power/platform operators"
+    ],
+    "test_command": "BLOCKED — DO NOT EXECUTE. Preserve read-only host/BMC/PCIe/storage/error baselines and bind the exact target. After the missing signed OEM DC-2 contract is reviewed, a qualified operator may execute only its bounded run-power and standby-power sequence while an independent observer proves each required rail transition, dwell/discharge and restoration. Require OFF-to-ON-to-OS-Ready state evidence and complete post-cycle PCIe/link, AER/DPC/kernel/BMC/storage health. Generic `ipmitool chassis power off/on`, an AC-cycle guess, fixed sleeps or SY.4 evidence cannot substitute. Do not expose credentials, continue on anomaly or automatically retry.",
+    "expected_result": "Cannot be finalized until the OEM defines the exact dual-domain state sequence. The eventual expected result must show both named power domains reach their approved OFF/discharged and restored states in order, the management and host paths recover, the same SUT reaches OS Ready, all expected PCIe functions/links return and complete health/event evidence meets signed limits.",
+    "pass_fail_basis": "No PASS is possible without the signed DC-2 rail/command contract and direct independent evidence of both run and standby transitions. After unlock, PASS requires every commanded state, dwell, recovery, OS Ready, complete PCIe and error/health criterion. Generic chassis off/on, BMC unreachability alone, uptime or log tail cannot pass. FAIL on wrong/ambiguous rail, sequencing or restore failure, boot timeout, missing/downtrained device, AER/DPC, data/power/thermal fault or incomplete evidence; end user owns verdict.",
+    "safety_gate": [
+      "Current gate is CLOSED: no run-power, standby-power, BMC, PDU, CPLD, AC or physical power action is authorized without the OEM contract and point-of-action approval.",
+      "Verify all workloads/writes are drained and protected; preserve first-failure evidence before any power mutation.",
+      "Use independent control/observation and recovery that survives BMC/standby loss; never depend only on the domain being removed.",
+      "Stop on unexpected rail state, lost recovery, boot, PCIe, storage, data, thermal or power anomaly; do not automatically retry or substitute another cycle class."
+    ],
+    "expected_evidence": [
+      "Exact row/variant and all shared-code identities, signed OEM DC-2 state/rail diagram and approved command/operator sequence",
+      "Target, firmware, facility power, workload/data approval, cycle/dwell/timeouts and independent recovery",
+      "Timestamped independent run/standby rail and controller-state trace across OFF/discharge/restore plus BMC/serial/OS boot timeline",
+      "Complete post-cycle PCIe/link manifest diff, AER/DPC/kernel/BMC/SEL and storage/RAID health",
+      "No-SY.4-substitution/no-insecure-secret/no-auto-retry audit, recovery/workload-restore approval and engineer verdict"
+    ],
+    "recovery": "Because standby removal can disable the BMC, recovery must come from the signed independent PDU/CPLD/physical path. On any ambiguous or failed state, stop further transitions, preserve available external/serial evidence, keep workloads stopped and have the power/platform owner restore rails in the documented safe order. Do not improvise AC cycling, reset, retry or another BMC command; inspect power, management, storage and PCIe health before any workload return."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Master requires run plus standby power while DeepSeek supplies only generic chassis run-power off/on. No approved rule or standard equates them, so the core method conflict remains."},
+  "blocked": {"before": false, "after": false, "reason": "Static review and a safe draft are complete. Execution is NOT READY pending an irreducible OEM DC-2 contract; the existing V3.1 BLOCKED metric remains unchanged because this queue item was historically Pending/Conflict but not classified BLOCKED."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Irreducible OEM command/physical mechanism and state contract for run plus standby rail removal/restoration, independent observation/recovery, dwell/discharge limits, cycle count and complete acceptance matrix.", "execution_status": "ENGINEERING DECISION RETAINED; GATE CLOSED; NO POWER, BMC, PDU, CPLD, REBOOT, SSH, LOG, RECOVERY, RETRY OR DUT ACTION EXECUTED", "owner": "Platform power/BMC/CPLD owner", "unlock_condition": "A versioned signed exact-platform DC-2 specification identifies both domains, exact sequence and surviving recovery/evidence path; this Source Key is then re-reviewed before execution."},
+  "external_authorities": [{"authority": "Master XLSX plus approved ED-02/ED-06/ED-18/ED-19/ED-29/ED-30", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Keeps shared variants and power-cycle classes distinct and forbids guessing OEM power controls."}],
+  "project_authority": "Only the exact-platform power/BMC/CPLD owner can define the DC-2 rail semantics and safe sequence. They cannot credit generic chassis off/on, an unrelated shared-code row or an unproven AC/PDU action as standby-power coverage.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-04", "ED-06", "ED-13", "ED-14", "ED-15", "ED-18", "ED-19", "ED-20", "ED-21", "ED-26", "ED-29", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "shared_code_variant_bound": true, "sy4_substitution_rejected": true, "run_and_standby_domains_kept_distinct": true, "oem_command_not_guessed": true, "independent_recovery_required": true, "no_automatic_retry": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1926|Wistron-GB NV PVP HW-00465-V004", "next_missing_formal_queue_case_variant_id": "47ac7e49e25ebc81"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "shared_code_and_power_conflict_read": true, "case_specific_dual_domain_command_and_recovery_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
