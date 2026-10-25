@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 305,
+  "formal_queue_sequence": 154,
+  "source_key": "Functionality|1828|Wistron-HW-00450-V002",
+  "case_variant_id": "7d4f44f885f692c1",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1828, "code": "Wistron-HW-00450-V002", "original_row_sha256": "9680896dcfff2def60e8c8224e008bf20d4deb215373e1ee7ed03b2b9e7b086b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "Cable", "procedure": "TBD", "criteria": "TBD", "script": "No cable identity, endpoints, method or acceptance is supplied.", "deepseek": "NO; assumes an unspecified physical connection/continuity test and asks for future bus/address steps and photos.", "gpt_v2": "MANUAL ONLY at HIGH risk; assumes physical inspection/continuity is core while allowing optional endpoint/BMC readback.", "historical_v3_1": "BLOCKED because exact cable and whether coverage is logical reachability, assembly, continuity/insulation, signal integrity or multiple stages are undefined."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/1960_7d4f44f885f692c1.json",
+  "old_problem": "The generic Cable label and two TBD fields establish neither a harness nor a test property. Logical response, visual seating, DC continuity/insulation and dynamic signal integrity are non-equivalent. DeepSeek's refusal is correct, but both references infer a physical-continuity method not stated by the Master; earlier row-1808 I2C Cable cannot provide target facts for this distinct identity.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_CABLE_IDENTITY_AND_STAGE_MATRIX; MANUAL_CONTINUITY_CLASSIFICATION_NOT_SOURCE_AUTHORIZED",
+  "disposition_reason": "Retain Pending and BLOCKED. The owner must identify this exact harness/endpoints and select required evidence stages before capability classification is possible. ED-09 assigns any physical action to humans but does not decide that physical continuity is the only requirement. Each chosen logical, visual, continuity/insulation or signal-integrity stage needs independent method, threshold, safe state and recovery.",
+  "decision_basis": [
+    "The exact XLSX row 1828, same-row DeepSeek/test-json, GPT V2, historical record, pending/blocked analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1912 / Wistron-HW-00462-V002 / 595eaec2ec529cf2.",
+    "This code/variant is unique; row 1808 is a different Cable identity and its review cannot define this harness, endpoints or required evidence.",
+    "A downstream I2C response proves only momentary logical reachability, while inspection, continuity/insulation and signal measurements each cover different failure modes.",
+    "ED-09 reserves manipulation/measurement for qualified humans; ED-03 and ED-15 prohibit guessed OEM routes, pinouts, instruments and thresholds.",
+    "Two-minute planning estimates do not define or shorten any eventual physical/electrical procedure.",
+    "No I2C, BMC, cable handling, continuity, insulation, signal measurement, reset, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "Cable logical, assembly, continuity/insulation and signal validation — blocked pending stage matrix",
+    "automation_classification": "BLOCKED",
+    "user_confirmation_required": true,
+    "purpose": "Preserve this cable Source Identity and, once defined, independently verify every owner-required logical, physical-assembly, continuity/insulation and signal-integrity property for the exact harness and endpoints.",
+    "required_package": [
+      "Exact cable/harness PN/revision, length/routing, source/destination boards, connectors, pinout and shielding",
+      "Approved stage matrix listing logical, visual/assembly, continuity/insulation and signal-integrity requirements separately",
+      "For logical stages: BMC/OOB controller/mux/bus/target/transaction and expected responses",
+      "For physical/electrical stages: safe power/isolation state, qualified operator, instrument/calibration, points and numeric limits",
+      "Endpoint/power/thermal monitoring, maintenance authorization, evidence plan and independent recovery"
+    ],
+    "test_command": "BLOCKED; perform no bus or physical cable action. After the exact cable and stage matrix receive fresh review, execute only approved stages: mapped BMC/OOB transactions for logical reachability; qualified-human visual/assembly work; pin-to-pin continuity/insulation measurements; and/or signal measurements in the specified load/power state. Capture each stage independently with endpoint/BMC/power/thermal health. Do not reuse row-1808 targets, infer endpoints, manipulate an energized unknown cable, clear logs or automatically retry.",
+    "expected_result": "No current executable PASS exists. Future PASS requires the correct harness/endpoints and every required stage independently meeting its approved logical response, assembly/retention, continuity/insulation and/or waveform/timing limits, with no endpoint, management, power or thermal health change.",
+    "pass_fail_basis": "Current result is BLOCKED. MANUAL ONLY, a bus response or any single modality cannot PASS until the owner defines complete coverage. Missing cable/stage definition, wrong endpoint/pin, response mismatch, assembly defect, open/short/insulation or signal-limit failure, absent evidence or health anomaly is FAIL/BLOCKED for owner verdict.",
+    "safety_gate": [
+      "Do not infer endpoints/pinout from Cable or scan buses to discover the harness.",
+      "Do not disconnect, reseat, back-probe or measure an energized unknown cable; use approved isolation and qualified humans.",
+      "Keep logical, visual, continuity/insulation and signal-integrity evidence and verdicts separate.",
+      "Stop on pinout mismatch, short, endpoint loss, bus, power or thermal anomaly; preserve evidence and do not retry/reset automatically."
+    ],
+    "expected_evidence": [
+      "Approved cable definition and stage matrix with PN/revision/endpoints/connectors/pinout/routing",
+      "Logical BMC route/raw responses when required",
+      "Human photos/assembly/retention evidence when required",
+      "Instrument/calibration and raw per-pin continuity/insulation or waveform/timing evidence when required",
+      "Pre/post endpoint, BMC, power and thermal health plus per-stage verdict and recovery audit"
+    ],
+    "recovery": "No action is authorized now. The approved contract must define an isolated safe state and recovery independent of the cable path. On anomaly stop and preserve evidence without retry; reseat, bus reset, reboot or power action is owner-controlled and separately authorized."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master has no contradictory instruction; it omits the cable identity and fundamental method/criteria."},
+  "blocked": {"before": true, "after": true, "reason": "Neither target harness nor operation/acceptance modality can be determined, so selecting MANUAL or an automated probe would invent scope."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Cable PN/revision/endpoints/pinout/routing, complete stage matrix, routes/instruments/limits, safe power state, health criteria and recovery.", "execution_status": "BLOCKED; NO I2C, BMC, CABLE HANDLING, CONTINUITY, INSULATION, SIGNAL MEASUREMENT, RESET, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-09/ED-15/ED-19", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Prevents guessed cable semantics or coverage substitution, assigns physical work to humans and requires stage-specific criteria."}],
+  "project_authority": "Cabling/platform owner must define this harness, required stages, methods, thresholds, safe state and recovery; qualified humans perform physical work and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-09", "ED-15", "ED-17", "ED-19", "ED-20", "ED-23", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "cable_variant_identity_preserved": true, "row1808_not_substituted": true, "stage_modalities_separated": true, "manual_only_not_invented": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1912|Wistron-HW-00462-V002", "next_missing_formal_queue_case_variant_id": "595eaec2ec529cf2"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_blocked_record_read": true, "pending_and_blocked_analyses_read": true, "case_specific_cable_stage_matrix_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
