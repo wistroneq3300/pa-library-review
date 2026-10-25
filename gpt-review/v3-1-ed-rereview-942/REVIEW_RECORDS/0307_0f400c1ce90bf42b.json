@@ -1,0 +1,59 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 307,
+  "formal_queue_sequence": 156,
+  "source_key": "Functionality|1913|Wistron-HW-00463-V002",
+  "case_variant_id": "0f400c1ce90bf42b",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Functionality", "source_row": 1913, "code": "Wistron-HW-00463-V002", "original_row_sha256": "fd4caa5290a54d91c1d01275ebb4f2129fa75abbdb13d8acd3f0cc0e2eed10c8", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {"items": "ID Button LED Check", "procedure": "Under Green Solid: Off when power off and normal. Under Green Blink: blink when BMC command. Amber Solid/Blink not defined.", "criteria": "Green Solid; Green Blink; Amber Solid Not Defined; Amber Blink Not Defined.", "script": "No Script; 15 attended and 5 machine minutes.", "deepseek": "NO; direct visual observation required.", "gpt_v2": "MANUAL ONLY; exact owner-approved BMC identify command, physical evidence and recovery required.", "historical_v3_1": "MANUAL ONLY with Source Conflict and Pending because Green Solid heading conflicts with normal OFF, identify command/cadence are absent and amber modes are undefined."},
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2044_0f400c1ce90bf42b.json",
+  "old_problem": "The procedure puts normal OFF behavior under Green Solid while Criteria names Green Solid, leaving it unclear whether a solid-green state exists or the heading is copied. The BMC identify stimulus, target, duration, clear action and blink cadence are unspecified; Amber Solid/Blink are undefined. A logical BMC state cannot prove emitted light or correct physical mapping.",
+  "new_disposition": "RETAIN_ENGINEERING_DECISION_PENDING_AND_SOURCE_CONFLICT_FOR_GREEN_SOLID_VERSUS_NORMAL_OFF_AND_COMPLETE_IDENTIFY_LED_MATRIX; MANUAL_VISUAL_METHOD_CONFIRMED",
+  "disposition_reason": "Retain Pending and Source Conflict, not BLOCKED. ED-09 fixes direct operator visual evidence and ED-03 permits only an owner-approved standard or vendor BMC identify interface without guessed parameters. The normal OFF observation and bounded identify-blink test are technically reviewable, but no rule can decide whether solid green is a separate required state or mislabeled. Amber modes also require definition or specification-backed N/A.",
+  "decision_basis": [
+    "The exact XLSX row 1913, same-row DeepSeek/test-json, GPT V2, historical record, pending/conflict analyses and ED-01 through ED-30 were read. The next formal locked-queue identity was directly opened as Functionality row 1916 / Wistron-GB NV PVP SW-00002-V002 / da30ff43f44fe880.",
+    "ED-09 requires a qualified operator and contextual/close photos or video; a BMC identify state is supporting-only and cannot prove color/cadence.",
+    "The Green Solid heading and normal OFF instruction express incompatible optical states unless Engineering defines different power phases or corrects the label.",
+    "ED-03 prohibits inventing an ipmitool, Redfish or OEM identify command/target; the request must be bounded and explicitly cleared.",
+    "ED-13/ED-15 prevent implicit PASS or N/A for the undefined amber states and missing blink timing.",
+    "No BMC command, identify change, power action, LED observation, clear, retry or DUT action was performed."
+  ],
+  "test_case": {
+    "test_name": "ID Button LED normal and bounded BMC-identify behavior — pending state matrix",
+    "automation_classification": "MANUAL ONLY",
+    "user_confirmation_required": true,
+    "purpose": "Visually verify the exact chassis ID indicator in every approved normal power state, during one bounded owner-approved identify request and after explicit clear, while preserving the unresolved solid-green/OFF polarity and amber modes.",
+    "required_package": [
+      "Exact physical ID button/LED, front/rear indicator and BMC controller mapping plus platform revision",
+      "Approved normal-state matrix resolving Green Solid versus OFF across AC-off, standby, host-off and host-on as applicable",
+      "Exact supported BMC identify request/clear interface, target, privilege, bounded duration and audit method",
+      "Expected green color, assertion latency, blink frequency/duty, timeout and post-clear state",
+      "Amber definitions or specification-backed N/A, physical video capture and independent BMC/platform recovery"
+    ],
+    "test_command": "MANUAL ONLY; after the full state matrix and exact identify interface are approved, verify target identity, capture contextual and close visual evidence in each required normal state, issue one bounded identify request, record physical green blink with synchronized command/control timestamps, explicitly clear the request and record return to normal. Read-only BMC state is corroboration only. Do not invent the interface, address the wrong system, create amber fault stimuli, power-cycle, or automatically retry.",
+    "expected_result": "Normal optical behavior matches the approved per-power-state matrix; during the bounded identify request the exact mapped ID LED asserts within limit and blinks green at the approved cadence; after clear both logical and physical states return within timeout. Amber is assessed only when defined or specification-backed N/A, and no BMC/power/thermal anomaly occurs.",
+    "pass_fail_basis": "Current review remains Pending because normal solid-green/OFF polarity and amber coverage are unresolved. After approval, PASS requires every normal state plus request/blink/clear transition, physical mapping, cadence/timing and health criterion. FAIL on wrong indicator/color/state, command/clear failure, stuck locate, timing/cadence mismatch, evidence gap or BMC/platform anomaly. Logical status alone cannot PASS; end user owns verdict.",
+    "safety_gate": [
+      "Do not invent or issue an unapproved identify command; verify exact target system and use bounded duration.",
+      "Require direct before/during/after visual evidence and explicit request clear; control state is supporting-only.",
+      "Do not create amber behavior using unsupported fault stimuli or infer N/A without platform specification.",
+      "Stop on wrong-system indication, stuck identify, BMC loss, power/thermal anomaly or evidence loss; no automatic retry."
+    ],
+    "expected_evidence": [
+      "Approved ID LED/controller map, platform revision and per-power-state color/cadence/timing matrix",
+      "Exact identify request/clear audit with target, duration, timestamps and API/exit status",
+      "Timestamped contextual and close visual evidence for normal, identify and cleared states",
+      "Read-only BMC state, amber disposition and verified restored normal state",
+      "No-wrong-target/no-auto-retry/recovery audit and engineer/end-user verdict"
+    ],
+    "recovery": "If the wrong system/indicator changes, the locate state sticks or BMC/platform health changes, stop, preserve evidence and do not retry. Use the approved clear interface first, then independent BMC/platform recovery; any reset or power action requires separate explicit authorization."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "Green Solid is named in heading/Criteria while its instruction says the indicator is OFF when normal; no approved power-state interpretation resolves the polarity."},
+  "blocked": {"before": false, "after": false, "reason": "Normal and identify-blink observations are technically designable after an approved interface; final coverage remains Pending on the state matrix."},
+  "pending": {"before": true, "after": true, "remaining_project_configuration": "Normal Green Solid/OFF matrix by power state, exact bounded identify/clear interface and target, blink timing/cadence, amber definitions/N/A, mapping and recovery.", "execution_status": "STATIC MANUAL TEST DESIGN RETAINED PENDING AUTHORITATIVE ID-LED MATRIX; NO BMC COMMAND, IDENTIFY, POWER, LED, CLEAR, RETRY OR DUT ACTION AUTHORIZED OR EXECUTED"},
+  "external_authorities": [{"authority": "Approved project workflow and ED-03/ED-09/ED-13/ED-15", "url": "gpt-review/REVIEW_WORKFLOW_LOGIC_GPT_SECOND_REVIEW.md", "application": "Requires direct physical evidence, prohibits guessed OEM commands and implicit N/A/PASS, and retains contradictory optical semantics pending owner decision."}],
+  "project_authority": "Hardware/BMC owner must resolve normal-state polarity, approve identify/clear semantics and amber disposition; qualified operator captures physical evidence and end user owns verdict.",
+  "traceability": {"applicable_decisions": ["ED-03", "ED-08", "ED-09", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-33", "ED-35", "ED-36", "ED-38"], "user_ed_01_30_reviewed": true, "physical_visual_evidence_preserved": true, "green_off_conflict_retained": true, "identify_request_and_clear_required": true, "amber_states_not_invented": true, "controller_state_supporting_only": true, "no_automatic_retry": true, "hardware_action_executed": false, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|1916|Wistron-GB NV PVP SW-00002-V002", "next_missing_formal_queue_case_variant_id": "da30ff43f44fe880"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "pending_and_conflict_analyses_read": true, "case_specific_id_led_state_and_clear_reasoning": true, "next_formal_queue_identity_directly_read": true, "no_template_or_bulk_decision": true, "protected_sources_unchanged": true}
+}
