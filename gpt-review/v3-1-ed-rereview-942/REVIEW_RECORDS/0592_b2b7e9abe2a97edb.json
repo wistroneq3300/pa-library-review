@@ -1,0 +1,110 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 592,
+  "formal_queue_sequence": 441,
+  "source_key": "Functionality|2279|Wistron-HW-00246-V003",
+  "case_variant_id": "b2b7e9abe2a97edb",
+  "second_review_outcome": "IMPROVED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2279,
+    "code": "Wistron-HW-00246-V003",
+    "original_row_sha256": "ad3238438128678ce3534d23a19d0f70f4e9e364cb874c37b662a4a02b5453d3",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "BMC FW Recovery",
+    "procedure": "Verify AST1060 is provisioned, destroy the BMC active region, use DediProg to program a bad-active image into BMC SPI, boot and allow AST1060 to recover.",
+    "criteria": "AST1060 verifies the BMC successfully and the BMC boots.",
+    "deepseek": "PARTIAL; operator stages forced corruption/recovery and the agent reads post-recovery BMC state.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CRITICAL; require exact SPI map, bounded offline programming, image hashes, PFR recovery evidence, stable power and external rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2400_b2b7e9abe2a97edb.json",
+  "old_problem": "The destructive recovery scenario did not identify the SPI part and voltage, active/recovery/provisioning ranges, bad-active construction, protected bytes, expected recovery source/content/version, DediProg procedure, recovery timeout or full external rollback. A post-recovery `mc info` alone could not prove AST1060 restored the intended region.",
+  "new_disposition": "RETAINED_PENDING_FOR_BOUND_AST1060_ACTIVE_REGION_CORRUPTION_AND_RECOVERY_RUNBOOK",
+  "disposition_reason": "The case intentionally creates the failure that PFR is expected to repair, so preserving the physical bad-active-region and DediProg coverage is essential. A wrong chip, address range or programming voltage can overwrite the recovery bank, descriptor or trust/provisioning data and remove the mechanism under test. Conversely, a BMC can boot an alternate bank without restoring the corrupted bytes; successful network access is therefore not sufficient. The project must supply an authoritative SPI region map, traceable bad-active image, address-bounded offline write/verify procedure, expected AST1060 detection/recovery measurement, recovered-content hash and non-target integrity oracle, plus an independent full-reflash path. These are missing core project specifications, so Pending remains; because the operation and the exact expected vendor artifacts are understood, risk or missing package alone does not force BLOCKED classification.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2279 and 2280 with row-2279 Items, Procedure, Criteria and DeepSeek fields; row 2280 is the actual next formal pending identity.",
+    "Read GPT V2/historical record 2400 and retained the exact Source Key, Variant ID and source-row hash.",
+    "Preserve provision-state check, deliberate active-region damage, physical DediProg programming, AST1060 recovery, verification and boot coverage.",
+    "ED-07 requires independent authorization and pre/post firmware verification for Flash operations; ED-12 prohibits blind retry or repeated corruption.",
+    "Recovery evidence must prove content restoration and protected-region invariance, not only version text or service reachability.",
+    "No SPI read/write, image corruption, power change, boot attempt or DUT command occurred."
+  ],
+  "test_case": {
+    "test_name": "AST1060 recovery from bounded BMC active-region corruption",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove that a provisioned AST1060 detects one authorized invalid BMC active region, restores the approved content from the designated recovery source, verifies it and returns the expected BMC firmware and management services without changing protected non-target regions.",
+    "required_package": [
+      "Exact SUT/BMC/AST1060/PFR firmware, lifecycle, provision and lock state",
+      "BMC SPI manufacturer/part/capacity/voltage plus active, recovery, descriptor and provisioning address map",
+      "Known-good full backup, recovery image and reproducible bad-active image with construction record and hashes",
+      "Qualified DediProg model, socket/clip/adapter, voltage, offline connection, bounded write and readback-verify runbook",
+      "Expected AST1060 detection/recovery events, source bank/content/version, timeout and measurement/hash oracle",
+      "Stable power, independent console and complete external-reflash rollback package"
+    ],
+    "test_command": "Confirm PFR state and capture full-flash, configuration, version and service baseline. With the platform de-energized exactly as the hardware runbook requires, a qualified programmer operator connects the approved DediProg setup, verifies JEDEC identity/voltage, writes and readback-verifies only the authorized active-region bytes from the traceable bad-active image, and proves protected ranges unchanged. Restore wiring, apply stable power once, capture AST1060 detect/verify/recovery events and timing, then verify the recovered region hash/version, BMC boot and complete management-service health.",
+    "expected_result": "Only the approved active range is corrupted; AST1060 identifies the invalid active content, recovers it from the specified trusted source within the approved duration, verifies the restored bytes, boots the expected BMC version and services, preserves recovery/provisioning/descriptor and configuration data, and records the required PFR/SEL evidence.",
+    "pass_fail_basis": "PASS requires the exact flash map and programmer identity, bounded write/readback proof, unchanged protected ranges, target-correlated AST1060 recovery events, recovered-content hash, expected version and full service readiness. BMC reachability, `mc info` alone, alternate-bank boot without restored bytes, whole-chip programming, an unverified bad image, power interruption or missing rollback evidence is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Obtain separate explicit authorization for deliberate corruption and physical programming; use a sacrificial/isolated target where required.",
+      "Verify SPI part, capacity, voltage, pinout, active-region offsets and full backup before any write.",
+      "Never modify descriptor, recovery, trust/provisioning, calibration or other non-target ranges.",
+      "Maintain qualified stable power during AST1060 recovery and an independent console/programmer path throughout.",
+      "Stop on JEDEC, readback, protected-range, event, timeout, boot or service anomaly; preserve evidence and do not retry or power-cycle automatically."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash plus PFR lifecycle/provision state and SPI part/region map",
+      "Full pretest backup, known-good/recovery/bad-active image provenance and hashes",
+      "DediProg/adapter/voltage setup and offline connection evidence",
+      "Address-bounded write/readback logs and protected-range before/after hashes",
+      "AST1060 detection, recovery-source, verification and duration evidence",
+      "Recovered region hash/version, boot, IPMI/Redfish/Web/network health and PFR/SEL records",
+      "Rollback readiness/actions and engineer-owned verdict"
+    ],
+    "recovery": "If programmer identification, write/readback, protected-range hashes or AST1060 recovery deviates, stop further power and write actions, retain the flash and event evidence, and use the separately approved full backup/golden image with the external programmer. Any reprogramming, retry or power cycle requires a new authorization and a confirmed cause."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Procedure and Criteria consistently require deliberate active-region failure followed by AST1060 recovery, verification and BMC boot."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "Target operation and necessary OEM artifacts are known. The destructive runtime is forbidden until they are approved, but firmware/recovery risk alone does not make the review irreducibly BLOCKED."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "PFR lifecycle; exact SPI part/voltage and region map; bad-active/recovery/full-backup images and hashes; DediProg bounded offline procedure; protected-range oracle; recovery events/source/content/duration; recovered hash/version/service criteria; stable power and external rollback.",
+    "execution_status": "ENGINEERING DECISION RETAINED; NO FLASH CORRUPTION, PROGRAMMING, POWER OR RECOVERY ACTION EXECUTED",
+    "owner": "PFR/BMC firmware and hardware owners approve map, images and oracle; qualified lab programmer operator owns the physical step; end engineer owns the verdict.",
+    "unlock_condition": "Provide a signed target-specific flash map, image set, DediProg procedure, PFR oracle and independent rollback, with explicit one-shot authorization."
+  },
+  "external_authorities": [],
+  "project_authority": "BMC/PFR OEM documentation is authoritative for flash ownership, AST1060 recovery behavior, protected regions and service recovery; lab hardware authority controls programming safety.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-09", "ED-11", "ED-12", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "active_region_dediprog_ast1060_recovery_verify_and_boot_coverage_preserved": true,
+    "protected_non_target_region_integrity_required": true,
+    "physical_programming_retained_as_human_operation": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2280|Wistron-HW-00248-V003",
+    "next_missing_formal_queue_case_variant_id": "9bca37010e03e569"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_spi_region_programmer_and_recovery_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
