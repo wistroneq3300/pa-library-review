@@ -1,0 +1,109 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 595,
+  "formal_queue_sequence": 444,
+  "source_key": "Functionality|2282|Wistron-BMC-00878-V003",
+  "case_variant_id": "ccfb07e841fda008",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2282,
+    "code": "Wistron-BMC-00878-V003",
+    "original_row_sha256": "27cb76a147d08bb43401623fed0c889ad75717ac132b7f986f69d19f7cb61b91",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Operations - Reboot BMC",
+    "procedure": "Use BMC Web Operations -> Reboot BMC, observe management-IP disconnection during reboot, then reconnection with working BMC functions.",
+    "criteria": "Management connectivity is lost during reboot and returns with usable BMC functions.",
+    "deepseek": "PARTIAL; substitutes IPMI cold reset or Redfish Manager.Reset and checks return after about 60 seconds.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/HIGH; preserve the WebUI control path, use independent observation, staged readiness checks, bounded timeouts, host invariance and no retry."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2403_ccfb07e841fda008.json",
+  "old_problem": "The source named a WebUI operation but DeepSeek replaced it with IPMI/Redfish reset, and neither defined the outage/readiness timeline, full BMC function matrix, critical-task exclusion, independent recovery channel or host-state invariance.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_WEBUI_BMC_REBOOT_AND_STAGED_SERVICE_RECOVERY",
+  "disposition_reason": "The engineering method is fully defined once runtime BMC identity, WebUI labels and approved timing values are supplied. ED-03 permits those build-specific values as configuration; ED-08 requires actual WebUI visual/action evidence, so API resets may observe readiness but do not replace the Operations-page stimulus unless the project explicitly changes coverage. A BMC reboot has clear phased observables—session loss, network return, fresh authentication, IPMI/Redfish/WebUI/provider readiness and final function checks—and an independent recovery/no-retry policy can be specified without another design decision. Pending is therefore removed while execution still requires outage authorization.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2282 and 2283 with row-2282 Items, Procedure, Criteria and DeepSeek fields; row 2283 is the verified next formal pending identity.",
+    "Read GPT V2/historical record 2403 and retained the exact Source Key, Variant ID and source-row hash.",
+    "Preserve the source's actual BMC Web Operations control, observed disconnect, reconnect and restored-function coverage.",
+    "Distinguish network reachability from application readiness; ping alone is not sufficient.",
+    "ED-11/ED-12 require a one-shot action with no automatic reset retry, and host power/workload state must remain invariant.",
+    "No browser action, BMC reset, service outage or DUT query occurred."
+  ],
+  "test_case": {
+    "test_name": "BMC Web Operations reboot with complete management-service recovery",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the exact authenticated BMC Web Operations/Reboot BMC control initiates one management-controller reboot, causes the expected bounded management outage and restores all required BMC functions without changing host power or workload state.",
+    "required_package": [
+      "Exact BMC target, firmware/WebUI/browser build and Operations/Reboot control mapping",
+      "Authorized outage window, credentials/TLS policy and WebUI capture method",
+      "Signed onset, network, authentication, IPMI, Redfish, WebUI/provider and full-readiness timeouts",
+      "No-critical-task checklist and post-reboot BMC function matrix",
+      "Independent console/observer and approved timeout recovery plan"
+    ],
+    "test_command": "Capture BMC identity, host state, active update/recovery/tasks, services and existing logs. After explicit outage approval, use the authenticated BMC Web interface to navigate to Operations and activate Reboot BMC exactly once while an independent observer timestamps browser/session loss, network loss/return, fresh authentication, IPMI, Redfish, sensor provider and WebUI recovery. Run the approved final BMC function checklist and compare host power/workload state with baseline.",
+    "expected_result": "The WebUI action is visibly accepted once; management access becomes unavailable within the approved onset window, returns through each readiness phase within its deadline, all required BMC functions pass with correct identity, and host power/workload state remains unchanged without unexplained critical events.",
+    "pass_fail_basis": "PASS requires real evidence of the Web Operations action, observed outage, staged service recovery within signed timeouts, complete function checklist and host-state invariance. An IPMI/Redfish-triggered reset without approved equivalence, ping-only return, cached session, missing Web evidence, repeated reset or host power impact is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Confirm no firmware update, recovery, log export, critical management task or sole-dependent workload is active.",
+      "Use an independent observer/recovery path because the initiating Web session is expected to disappear.",
+      "Issue one reboot only and preserve existing logs/events rather than clearing them.",
+      "Stop on identity change, repeated flapping, host impact or any readiness timeout; do not retry or power-cycle automatically.",
+      "Require a new authorization if target, command path, outage window or recovery method changes."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash, BMC/WebUI/browser identity and outage authorization",
+      "No-critical-task and host power/workload baseline",
+      "Screenshots/video or equivalent visual evidence of exact Operations/Reboot action and confirmation",
+      "Timestamped session/network/authentication/IPMI/Redfish/WebUI/provider loss and recovery timeline",
+      "Post-reboot identity, sensor/SEL/network/account/WebUI/API function checklist",
+      "Host-state comparison, alternate-recovery status and engineer-owned verdict"
+    ],
+    "recovery": "On a readiness timeout or flapping service, do not send another reset. Preserve browser, network, console and service traces; use the approved independent management/service-console recovery once and escalate to the BMC owner before any host power action."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Items, Procedure and Criteria consistently require a WebUI-triggered reboot with outage and restored function; API substitution was an AI-review mismatch, not protected-source conflict."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The Web action, observation method, safety gates and recovery are defined. Build-specific labels and timeouts are runtime configuration."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "BMC/WebUI/browser identity and field mapping; outage authorization; phase timeouts; service/function checklist; critical-task exclusion; independent observer/recovery; host-state baseline.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED WEBUI BMC REBOOT; NO RESET OR DUT ACTION EXECUTED",
+    "owner": "BMC owner supplies build mapping, readiness oracle and recovery; lab/workload owner authorizes outage; end engineer owns the verdict.",
+    "unlock_condition": "Bind the signed runtime values and approve the single outage before execution; missing values block execution but do not reopen review."
+  },
+  "external_authorities": [],
+  "project_authority": "The BMC project owner defines WebUI path, service-readiness matrix, timing and recovery; ED-08 preserves true visual evidence for the WebUI operation."
+  ,"traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "webui_action_disconnect_reconnect_and_function_coverage_preserved": true,
+    "visual_webui_evidence_required": true,
+    "api_reset_not_substituted_without_approval": true,
+    "runtime_timing_and_build_values_do_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2283|Wistron-HW-00176-V003",
+    "next_missing_formal_queue_case_variant_id": "59142a34afc1e1d7"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_webui_path_and_staged_readiness_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
