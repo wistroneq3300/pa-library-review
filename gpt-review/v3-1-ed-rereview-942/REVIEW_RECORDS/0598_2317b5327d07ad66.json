@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 598,
+  "formal_queue_sequence": 447,
+  "source_key": "Functionality|2285|Wistron-HW-00163-V003",
+  "case_variant_id": "2317b5327d07ad66",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2285,
+    "code": "Wistron-HW-00163-V003",
+    "original_row_sha256": "ecb8a5fdb241e033cfd1bf4de820548a5f1e5e909e914854e708f1d41ee872aa",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Jumper check",
+    "procedure": "Prepare the system specification and motherboard, then check that jumper positions follow the specification.",
+    "criteria": "Jumpers match the system specification.",
+    "deepseek": "NO; a human visually verifies each jumper is present, seated and set.",
+    "gpt_v2": "MANUAL ONLY; bind an exhaustive recipe-specific pin-bridge matrix, orientation and seating acceptance and preserve as-found state."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2406_2317b5327d07ad66.json",
+  "old_problem": "The row did not provide the product recipe revision, complete per-jumper designator/pin-bridge/default/exception table, pin numbering/orientation, seating acceptance or explicit as-found/no-correction boundary.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_JUMPER_SETTING_AND_SEATING_INSPECTION",
+  "disposition_reason": "This source has an objective, safe inspection method once the SKU/recipe-specific jumper matrix is supplied. ED-03 allows expected designators, bridged pins and exceptions as runtime configuration, while ED-09 retains physical access and visual pin/seating evidence with a qualified human. Unlike row 2284, this row verifies actual shunt electrical-position geometry and seating, but it still does not authorize correction. The method, evidence, safety gate and recovery boundary are defined, so Pending is removed.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2285 and 2287, including row-2285 Items, Procedure, Criteria and DeepSeek fields; row 2286 is outside this Pending queue and row 2287 is the verified next formal case.",
+    "Read GPT V2/historical record 2406 and retained the exact Source Key, Variant ID and original row hash.",
+    "Preserve every required jumper's setting/seating comparison and keep it separate from row-2284 header-location coverage.",
+    "Require oriented images showing numbered bridged pins and seating depth; an overview or header coordinate alone cannot prove state.",
+    "Any mismatch correction or reseat destroys as-found evidence and may alter boot/security behavior, so it remains a separately authorized action.",
+    "No chassis access, jumper movement, reset or DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "Complete motherboard jumper shunt setting and seating inspection",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Verify every in-scope motherboard jumper shunt is present, fully seated and bridges the exact numbered pins/state required by the signed product recipe and SKU exception matrix, without altering the as-found configuration.",
+    "required_package": [
+      "SUT, motherboard assembly/PCB revision and product recipe/SKU revision",
+      "Complete per-jumper designator, expected bridged pins/state/default and exception matrix",
+      "Header pin-1/numbering and orientation references",
+      "Defined shunt seating, damage and ambiguity acceptance criteria",
+      "Approved powered-down/discharged ESD access and indexed-photo procedure"
+    ],
+    "test_command": "A qualified operator establishes the approved de-energized/ESD state, verifies board and recipe revisions, and captures an oriented close-up for every in-scope jumper showing its designator, pin-1 reference, numbered pins bridged, shunt seating and nearby landmarks. Reconcile each actual state with the signed recipe/exception matrix, record missing, extra, loose, damaged, mis-set or ambiguous items, and leave every shunt untouched before restoring the chassis.",
+    "expected_result": "Every required shunt is present, undamaged and fully seated across the exact approved pins/state for the applicable SKU, no unauthorized/extra shunt exists, all exceptions are traceable, and the as-found configuration remains unchanged.",
+    "pass_fail_basis": "PASS requires complete per-designator evidence with unambiguous pin numbering, correct bridge state, seating and applicable SKU exception. Correct header location alone, an overview that hides pins, assumed orientation, a loose shunt, an unexplained exception or correction performed before preserving as-found evidence is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "De-energize/discharge the platform and use approved chassis and ESD controls.",
+      "Verify PCB and product-recipe revisions before comparing any setting.",
+      "Do not remove, reposition, reseat or probe a shunt under this inspection authorization.",
+      "Stop on ambiguous numbering, inaccessible/unsafe hardware, a loose/damaged shunt or evidence that the state was disturbed."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash and SUT/motherboard/PCB/recipe/SKU identity",
+      "Signed complete designator-to-pin-bridge/default/exception matrix",
+      "Indexed oriented close-ups showing designator, pin-1, bridged pins and seating for every jumper",
+      "Per-designator actual-versus-expected reconciliation including loose/damaged/extra/missing findings",
+      "As-found/no-movement attestation and chassis-restoration evidence",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "The inspection is no-touch. On a mismatch, loose/damaged shunt or uncertain pin numbering, preserve as-found images and stop. Any correction/reseat requires a separate maintenance authorization, impact assessment and its own before/after verification."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Items, Procedure and Criteria consistently require jumper settings to follow the system specification."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The manual setting/seating inspection is fully specified at review layer; recipe values and exceptions are runtime bindings."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "SUT/board/PCB and recipe/SKU revisions, complete per-jumper pin-bridge/default/exception matrix, pin orientation, seating criteria and safe ESD/photo procedure.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED MANUAL SETTING/SEATING INSPECTION; NO HARDWARE ACCESS EXECUTED",
+    "owner": "Board/product configuration owner supplies the recipe matrix; qualified operator captures physical evidence; end engineer owns the verdict.",
+    "unlock_condition": "Bind the signed recipe and complete matrix before inspection; any correction remains separately authorized."
+  },
+  "external_authorities": [],
+  "project_authority": "The motherboard product recipe and SKU exception control are authoritative for shunt pin bridges, defaults and allowed variants.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-08", "ED-09", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "complete_jumper_setting_and_seating_coverage_preserved": true,
+    "location_only_evidence_not_substituted": true,
+    "correction_and_reseat_outside_inspection_authorization": true,
+    "runtime_recipe_values_do_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2287|Wistron-HW-00472-V002",
+    "next_missing_formal_queue_case_variant_id": "f56a4b634fa9e713"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_pin_bridge_seating_and_as_found_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
