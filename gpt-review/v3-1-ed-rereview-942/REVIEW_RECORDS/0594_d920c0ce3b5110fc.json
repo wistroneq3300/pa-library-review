@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 594,
+  "formal_queue_sequence": 443,
+  "source_key": "Functionality|2281|Wistron-HW-00247-V003",
+  "case_variant_id": "d920c0ce3b5110fc",
+  "second_review_outcome": "IMPROVED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2281,
+    "code": "Wistron-HW-00247-V003",
+    "original_row_sha256": "30118ce286b7336073f560f1780e5ef85ecbea13ee21a9fe521462815f3a3b1b",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Reject BMC Update with Corrupt Update Image",
+    "procedure": "Attempt a corrupt capsule update against the BMC active/recovery region.",
+    "criteria": "AST1060 rejects the update.",
+    "deepseek": "PARTIAL; combines corrupt and older images, submits an update and checks an error plus unchanged version.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CRITICAL; define one reproducible corruption, exact target path and validation gate, then prove no active or recovery content changed."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2402_d920c0ce3b5110fc.json",
+  "old_problem": "The source did not define whether active, recovery or both paths must be tested, which capsule byte/field is corrupted, which AST1060 validation layer must reject it, or how to prove neither region was staged or written. DeepSeek also mixed older-image rollback with corruption.",
+  "new_disposition": "RETAINED_PENDING_FOR_REPRODUCIBLE_CORRUPT_CAPSULE_TARGET_AND_REJECTION_GATE_SPEC",
+  "disposition_reason": "A secure-update pipeline can reject malformed structure, metadata, signature, payload digest, compatibility or SVN at different points. An arbitrary truncation may be rejected by the client before AST1060 sees it, while an older valid image exercises anti-rollback rather than corruption. This row needs a known-good parent capsule and a single documented binary change designed to reach the intended AST1060/PFR validation gate, plus an explicit active or recovery target and immutable before/after evidence for both boot-critical regions. Those OEM capsule-layout and rejection semantics are not safely derivable; Pending remains until supplied. The test purpose and required artifacts are nonetheless clear, so a missing approved capsule alone is not classified BLOCKED.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2281 and 2282 with row-2281 Items, Procedure, Criteria and DeepSeek fields; row 2282 is the verified next pending identity.",
+    "Read GPT V2/historical record 2402 and retained the exact Source Key, Variant ID and row hash.",
+    "Preserve corrupt-capsule rejection for the source's active/recovery language and keep it distinct from row-2280 SVN rollback coverage.",
+    "Require binary-diff provenance and a target validation layer so rejection is attributable to corruption rather than a different policy gate.",
+    "ED-07 retains the one-shot update attempt plus pre/post state, recovery and independent authorization; ED-12 prohibits retry.",
+    "No image was generated, submitted, staged or flashed and no DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "AST1060 rejection of a reproducibly corrupted BMC capsule",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the selected BMC active or recovery update path rejects one traceably corrupted capsule at the approved AST1060/PFR validation layer before any stage, write or activation, while both boot-critical regions and BMC health remain unchanged.",
+    "required_package": [
+      "BMC/AST1060/PFR build, lifecycle and active/recovery version/hash baseline",
+      "Known-good signed compatible capsule plus corrupt derivative, hashes and byte/field diff",
+      "Approved corruption type/location and intended parser/signature/digest/integrity validation gate",
+      "Explicit active or recovery update endpoint/path and expected task/status/error/PFR event/timeout",
+      "Stable isolated SUT, independent console, golden image and external programmer rollback"
+    ],
+    "test_command": "Validate and hash the known-good capsule; reproduce exactly the approved single corruption and record its binary diff/hash; bind one authorized active or recovery target path. Capture PFR and both-region baseline, submit the corrupt derivative once through the vendor endpoint, retain the complete request/task/error/PFR evidence, and verify no staging, flash write, activation, reboot, region hash/version, trust or configuration change occurred.",
+    "expected_result": "The corrupt derivative reaches and is rejected by the named AST1060/PFR validation gate within timeout, produces the expected status/event, and leaves active, recovery, staged, trust/configuration and BMC service state identical to the approved baseline.",
+    "pass_fail_basis": "PASS requires a reproducible known-good-to-corrupt diff, the exact target path, rejection at the intended validation layer, and complete no-stage/no-write/no-activation proof for both regions. An older image, client-side parse failure, a generic HTTP error, unchanged `mc info` alone, ambiguous active/recovery target or any unexpected mutation is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Use only the approved parent and corrupt derivative; verify target path and both hashes offline.",
+      "Authorize one submission with stable power, isolated target, independent console and golden/programmer recovery ready.",
+      "Stop and escalate if the endpoint begins staging, writing, activation or reboot, or if any region/configuration hash changes.",
+      "Preserve PFR/task/SEL evidence rather than clearing it.",
+      "Do not substitute an older image, test both regions in one uncontrolled attempt, retry or auto-recover."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash, PFR lifecycle and active/recovery/staged baseline",
+      "Known-good and corrupted capsule provenance, hashes and exact binary difference",
+      "Approved corruption-to-validation-gate rationale and target path",
+      "Complete update request, task/error and AST1060/PFR event",
+      "Before/after active/recovery hashes, versions, staging/activation/reboot/configuration proof",
+      "Final BMC service health, rollback readiness and engineer-owned verdict"
+    ],
+    "recovery": "If any target ambiguity, staging, write, activation, reboot or hash change appears, stop further requests, preserve all update/PFR/console evidence, and invoke the separately approved golden/programmer restoration. A second target or rerun requires a new isolated subtest authorization."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "The protected source consistently requests rejection of a corrupt image; the active/recovery selection is unresolved scope, not contradictory intent."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The target operation and required vendor capsule/rejection artifacts are understood; conditional execution awaits their approval."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "PFR lifecycle; active versus recovery scope; known-good/corrupt capsules, exact diff and hashes; intended rejection gate/status/event/timeout; proof of no staging/write/activation or region/configuration change; stable-power isolated rollback.",
+    "execution_status": "ENGINEERING DECISION RETAINED; NO CORRUPT CAPSULE SUBMISSION OR FLASH ACTION EXECUTED",
+    "owner": "BMC/PFR security owner approves capsule construction, validation gate and target; lab owner controls the one-shot attempt and rollback; end engineer owns the verdict.",
+    "unlock_condition": "Issue a signed corruption manifest, explicit target-path plan, deterministic rejection oracle and no-mutation/rollback procedure."
+  },
+  "external_authorities": [],
+  "project_authority": "BMC/PFR OEM security documentation is authoritative for capsule layout, target routes, validation order, events and recovery.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-15", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "corrupt_capsule_active_recovery_rejection_coverage_preserved": true,
+    "svn_downgrade_not_substituted": true,
+    "both_region_no_mutation_evidence_required": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2282|Wistron-BMC-00878-V003",
+    "next_missing_formal_queue_case_variant_id": "ccfb07e841fda008"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_capsule_corruption_layer_and_region_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
