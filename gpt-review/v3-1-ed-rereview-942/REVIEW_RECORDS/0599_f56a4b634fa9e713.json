@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 599,
+  "formal_queue_sequence": 448,
+  "source_key": "Functionality|2287|Wistron-HW-00472-V002",
+  "case_variant_id": "f56a4b634fa9e713",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2287,
+    "code": "Wistron-HW-00472-V002",
+    "original_row_sha256": "a4bcee0434b794334d97590595ac449a42cf217a55f357006ea0e83efca9b705",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "TH.1_Thermal Stress Test",
+    "procedure": "Full-power thermal stress with all external components, including InfiniBand and E1.S, at worst-case chamber ambient.",
+    "criteria": "Test completes without thermal warnings or faults.",
+    "deepseek": "PARTIAL; proposes CPU stress-ng, a GPU temperature query and BMC sensor output, but does not load GPU, InfiniBand or E1.S.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; requires a qualified chamber profile, simultaneous full-component workloads, independent monitoring, aborts and cooldown."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2407_f56a4b634fa9e713.json",
+  "old_problem": "The historical review left the case Pending because chamber setpoints, soak duration, workload mappings and numeric thermal/fault limits were not yet project-bound, while the DeepSeek command materially undercovered the named GPU, InfiniBand and E1.S heat sources.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_CONTROLLED_FULL_SYSTEM_CHAMBER_THERMAL_STRESS",
+  "disposition_reason": "The source intent, safe execution state machine and authoritative PASS structure are clear. ED-03 permits chamber values, workload binaries/mappings and project limits to remain runtime configuration; ED-14 forbids replacing the formal soak with a smoke test; ED-15 forbids an execution PASS until approved numeric limits are bound. Requiring those bindings as preconditions removes review-layer Pending without inventing values or reducing all-component coverage.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2287 and 2288, including row-2287 Items, Procedure, Criteria and DeepSeek fields.",
+    "Read GPT V2/historical record 2407 and retained the exact Source Key, Variant ID and original row hash.",
+    "Preserve concurrent full-power CPU, GPU, InfiniBand and E1.S coverage at worst-case chamber ambient; CPU stress plus a GPU temperature query is not equivalent.",
+    "Treat chamber profile, calibrated tolerances, approved load tools, device mappings, utilization/power targets, soak duration and numeric limits as mandatory runtime bindings, not inferred constants.",
+    "Require independent chamber and platform telemetry, hard aborts, controlled cooldown and preservation of warnings/faults; no automatic retry or evidence clearing is allowed.",
+    "No chamber, DUT workload, power action or hardware test occurred."
+  ],
+  "test_case": {
+    "test_name": "Worst-case-ambient concurrent full-system thermal stress qualification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Demonstrate that the fully populated platform sustains the approved concurrent CPU, GPU, InfiniBand and E1.S full-power condition at the project-defined worst-case ambient for the complete formal soak without thermal warnings, faults, prohibited throttling or telemetry loss.",
+    "required_package": [
+      "SUT population/topology plus cooling, fan, pump, PSU and firmware configuration manifest",
+      "Calibrated chamber, ambient sensor placement and approved setpoint/tolerance/ramp/stabilization/soak profile",
+      "Approved CPU, GPU, InfiniBand and E1.S stress packages, device mappings and utilization/power targets",
+      "Signed thermal, cooling, power, throttle, error and telemetry-completeness limits",
+      "Independent monitoring, emergency stop, cooldown and recovery procedure"
+    ],
+    "test_command": "After a qualified chamber operator confirms calibration, airflow/orientation, emergency shutdown and all runtime bindings, inventory every target and establish synchronized chamber, BMC, CPU, GPU, InfiniBand, E1.S, fan/pump/PSU and OS/SEL telemetry. Ramp and stabilize the approved ambient, start each approved workload against its explicit device mapping, prove every utilization/power target concurrently, hold for the full approved soak, and continuously evaluate warning/fault/throttle/error/telemetry-loss aborts. On completion or abort, stop loads in the approved order, cool to the recovery baseline and preserve all raw evidence.",
+    "expected_result": "The complete population reaches and maintains every approved concurrent load target for the full stabilized soak; all chamber and platform measurements remain within signed limits; no thermal warning, hardware/cooling/power fault, prohibited throttle, workload error or telemetry gap occurs; and the platform returns to the approved stable baseline after controlled cooldown.",
+    "pass_fail_basis": "PASS requires the signed chamber profile and numeric limits, full-duration evidence, concurrent target attainment for CPU/GPU/InfiniBand/E1.S, complete synchronized telemetry, zero disallowed warning/fault/error/throttle event and verified cooldown recovery. Missing thresholds, shortened duration, a smoke run, CPU-only load, observation without loading, missing component evidence, telemetry loss or an abort cannot be called PASS. The end engineer owns the verdict.",
+    "safety_gate": [
+      "A qualified chamber operator confirms calibration, safe airflow/orientation, emergency shutdown and approved ambient profile before ramp.",
+      "Verify all sensors, fans, pumps, PSUs, cooling loops and independent monitors before applying load.",
+      "Abort immediately on any approved limit, telemetry loss, cooling/power/component fault or uncontrolled temperature rise.",
+      "Do not auto-retry at temperature, suppress or clear warnings, or substitute a shorter smoke duration for the formal soak."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash and complete SUT population/configuration identity",
+      "Chamber calibration, sensor placement and ambient ramp/stability/soak timeline",
+      "Per-component workload command, package version, device mapping and utilization/power attainment",
+      "Synchronized chamber, BMC, CPU, GPU, NIC, storage, fan, pump, PSU, OS and SEL telemetry",
+      "Limit evaluation, warning/fault/throttle/error and telemetry-completeness report",
+      "Abort or orderly stop, cooldown/final baseline evidence and engineer-owned verdict"
+    ],
+    "recovery": "On a limit breach, fault, telemetry loss or workload error, preserve evidence, execute the approved immediate load-stop/emergency response, keep chamber control under the qualified operator, and cool to the specified safe baseline. Do not retry automatically; engineering must assess the event and separately authorize any rerun."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Items, Procedure and Criteria consistently require a full-system worst-case-ambient thermal stress with no thermal warning or fault."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The review-layer method and safety boundary are complete; project values and approved workload packages are runtime prerequisites."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "SUT population/cooling mode, calibrated chamber profile, exact concurrent workload packages/mappings/targets, formal soak, signed numeric limits, aborts and cooldown procedure.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED CONTROLLED THERMAL QUALIFICATION; NO DUT OR CHAMBER TEST EXECUTED",
+    "owner": "Thermal/platform engineering binds profiles and limits; the chamber operator controls the environment; the end engineer owns the verdict.",
+    "unlock_condition": "Bind all signed runtime values and packages and complete the pre-run safety authorization before execution."
+  },
+  "external_authorities": [],
+  "project_authority": "The approved platform thermal specification, chamber procedure, workload manifest and product limit table are authoritative for setpoints, load targets, duration, aborts and PASS thresholds.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-14", "ED-15", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "full_power_cpu_gpu_infiniband_e1s_coverage_preserved": true,
+    "formal_soak_not_replaced_by_smoke_test": true,
+    "unapproved_thresholds_not_invented": true,
+    "runtime_bindings_do_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2288|Wistron-GB NV PVP HW-00015-V003",
+    "next_missing_formal_queue_case_variant_id": "f66d3fb7c8b49da4"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_chamber_full_component_load_and_abort_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
