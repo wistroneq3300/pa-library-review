@@ -1,0 +1,110 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 587,
+  "formal_queue_sequence": 436,
+  "source_key": "Functionality|2273|Wistron-HW-00475-V002",
+  "case_variant_id": "0167355737b887af",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2273,
+    "code": "Wistron-HW-00475-V002",
+    "original_row_sha256": "c7b1fd5c6436b59bca62613fbda2582cc4a4daec3f4026f676026961674db711",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "MLPerf - Retinanet _Offline",
+    "procedure": "Install the GPU software stack, obtain the MLPerf package, run `make run RUN_ARGS=\"--benchmarks=retinanet --scenarios=offline\"`, and compare against MLCommons v5.0; copied prose incorrectly names `training_results_v5.0` and BERT.",
+    "criteria": "The inference run completes without error and its score is compared with MLCommons.",
+    "deepseek": "YES with an operator-provided MLPerf directory and run command; inventory plus benchmark output are returned for user comparison.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; pin harness, assets, configuration, validity evidence, comparable reference and safety limits."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2395_0167355737b887af.json",
+  "old_problem": "The row mixed a RetinaNet Offline title/command with copied BERT wording and a training-results repository name, while leaving the harness revision, assets, validity mode, comparable reference and acceptance tolerance unspecified.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MLPERF_INFERENCE_V5_RETINANET_OFFLINE_CASE",
+  "disposition_reason": "The testcase identity is established by two independent source elements: its item names RetinaNet Offline and its executable selector requests `retinanet` plus `offline`. ED-10 requires preserving that workload/model/mode, so the BERT and training-results phrases are treated as copied defects rather than alternate scope. Official MLCommons v5.0 inference material establishes the benchmark family and validity machinery; project-specific harness, model/data checksums, SUT configuration, matched reference and numeric tolerance remain mandatory runtime bindings. ED-14 rejects a smoke run as the formal result and ED-15 forbids PASS until the signed comparison threshold is supplied.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2273 and 2275, including row-2273 Items, Procedure, Criteria and DeepSeek columns; row 2275 is the actual next formal pending identity.",
+    "Read GPT V2/historical record 2395 and preserved the unique row hash, Source Key and Variant ID.",
+    "RetinaNet Offline remains the complete test coverage; BERT is not substituted and training/inference repositories are not conflated.",
+    "A result is comparable only after implementation, hardware count/topology, division/category, scenario, validity rules, metric and reference are bound like-for-like.",
+    "No package download, benchmark execution, log clearing, retry or DUT verdict occurred."
+  ],
+  "test_case": {
+    "test_name": "MLPerf Inference v5.0 RetinaNet Offline valid-result comparison",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Execute one authorized, full-duration MLPerf Inference v5.0 RetinaNet Offline run on the pinned SUT and determine whether its valid Offline throughput meets an owner-approved like-for-like MLCommons comparison threshold.",
+    "required_package": [
+      "Signed MLPerf Inference v5.0 implementation/harness revision and configuration",
+      "Authorized RetinaNet model, weights, dataset/calibration assets, checksums and licenses",
+      "Pinned SUT hardware, BIOS/power/thermal, OS/kernel, driver, CUDA and container manifest",
+      "Matched MLCommons v5.0 system/result, metric, validity policy and numeric acceptance ratio",
+      "Approved thermal, power, Xid/ECC/error abort limits and one-run authorization"
+    ],
+    "test_command": "After manifest and safety preflight, run the approved harness once with RetinaNet and Offline selectors equivalent to `make run RUN_ARGS=\"--benchmarks=retinanet --scenarios=offline\"`; collect complete LoadGen accuracy, performance, compliance and validity outputs plus synchronized SUT health, then calculate the declared metric ratio against the approved matched reference.",
+    "expected_result": "The pinned RetinaNet Offline workload completes its required formal duration, satisfies the applicable accuracy/validity checks, produces the expected Offline throughput unit, records no configured health abort, and meets the supplied comparison threshold against the explicitly matched v5.0 reference.",
+    "pass_fail_basis": "PASS requires correct RetinaNet+Offline identity, complete non-smoke validity/accuracy evidence, an unchanged pinned SUT, healthy telemetry, a genuinely comparable reference and an approved numeric threshold. BERT output, `training_results_v5.0`, `--test_run`, exit zero alone, a bare score, missing validity logs or `not too far` without a threshold is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Confirm package hashes/licenses and isolate unrelated workloads before starting.",
+      "Verify cooling, power and storage headroom; monitor GPU temperature, power, throttling, Xid/ECC and host errors continuously.",
+      "Abort on any owner-defined health limit or lost telemetry and preserve the partial result as invalid.",
+      "Do not clear pre-existing evidence and do not automatically retry a failed, invalid or thermally aborted run."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash and approved benchmark/SUT manifest",
+      "Harness, configuration, model and dataset/calibration checksums and license record",
+      "Exact command plus complete build, accuracy, compliance, performance and LoadGen validity logs",
+      "Synchronized GPU/host thermal, power, throttle and error telemetry",
+      "Matched reference identity, metric/unit, threshold and reproducible ratio calculation",
+      "Engineer-owned final verdict"
+    ],
+    "recovery": "Stop the workload on a validity or health abort, preserve all logs and telemetry, return temporary services/performance settings to the captured baseline, verify GPU/host health, and require a new authorization before any rerun."
+  },
+  "source_conflict": {
+    "before": true,
+    "after": false,
+    "reason": "ED-10 and the consistent item plus command selectors make RetinaNet Offline authoritative; copied BERT/training text is explicitly rejected without deleting the original source history."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The operation and safety method are defined. Missing project package, reference and threshold values block execution until bound but do not leave the review semantics indeterminate."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Harness/config/division/category, RetinaNet assets, SUT software and power/thermal manifest, formal run mode, matched MLCommons reference, metric, acceptance ratio, monitoring abort limits and authorization.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED RETINANET OFFLINE CASE; NO BENCHMARK OR DUT ACTION EXECUTED",
+    "owner": "ML performance owner supplies the signed package, reference and threshold; end engineer owns execution and verdict.",
+    "unlock_condition": "Bind and approve every listed runtime artifact before execution; absence of any threshold or validity input prevents PASS but does not reopen the review identity."
+  },
+  "external_authorities": [
+    "https://github.com/mlcommons/inference_results_v5.0",
+    "https://github.com/mlcommons/inference/releases/tag/v5.0",
+    "https://github.com/mlcommons/inference/blob/master/loadgen/mlperf.conf"
+  ],
+  "project_authority": "The project ML performance owner controls implementation compatibility, assets, SUT recipe, matched reference and acceptance threshold; the end engineer owns the final verdict.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-10", "ED-11", "ED-12", "ED-14", "ED-15", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "retinanet_offline_and_v5_comparison_coverage_preserved": true,
+    "copied_bert_and_training_repository_text_rejected": true,
+    "runtime_threshold_does_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2275|Wistron-BMC-00694-V003",
+    "next_missing_formal_queue_case_variant_id": "e9d1fa6752c97ef7"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_retinanet_mode_validity_and_reference_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
