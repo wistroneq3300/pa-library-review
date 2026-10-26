@@ -1,0 +1,58 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 601,
+  "formal_queue_sequence": 450,
+  "source_key": "Functionality|2289|Wistron-GB NV PVP HW-00489-V003",
+  "case_variant_id": "d226185859babd66",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet":"Functionality","source_row":2289,"code":"Wistron-GB NV PVP HW-00489-V003","original_row_sha256":"1d9ac3033a90611fda567b6cc57a9880cdf0804a5c4ffbf06b326bf697f6ee83","source_xlsx_sha256":"e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Partner Diagnostics",
+    "procedure": "Run ./partnerdiag --mfg --run_spec=spec_cx8aas_board_partner_mfg.json and observe PASS/FAIL/RETEST; optional help documents test filters.",
+    "criteria": "Defines PASS and FAIL, but omits the Procedure's RETEST state.",
+    "deepseek": "PARTIAL; uses the exact base command but truncates evidence to 40 lines.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; bind package/spec/board compatibility, prove unfiltered coverage and reconcile RETEST without automatic rerun."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2409_d226185859babd66.json",
+  "old_problem": "The Procedure named an exact manufacturing command and three possible terminal states, but Criteria omitted RETEST and the package/spec compatibility, complete virtual-ID scope and exit schema were not project-bound.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FULL_SCOPE_PARTNER_MANUFACTURING_DIAGNOSTIC",
+  "disposition_reason": "ED-03 permits the authorized package hash, board-to-spec compatibility, timeout and expected virtual-ID inventory to be runtime bindings. The explicit command and conservative result semantics are sufficient: only an unfiltered, complete run with an agreed PASS result can pass; FAIL and RETEST are both non-PASS, and RETEST correction/rerun requires separate authorization under ED-11/12. This resolves the Criteria omission without inventing acceptance.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2289 and 2290, including the exact command, filter options, Criteria and DeepSeek fields.",
+    "Read GPT V2/historical record 2409 and retained exact source identity and hashes.",
+    "Preserve `./partnerdiag --mfg --run_spec=spec_cx8aas_board_partner_mfg.json` and require package/spec hashes and matching CX8AAS board revision.",
+    "Reject tail-only evidence and any unapproved --skip_tests or --test filter because either can conceal missing manufacturing coverage.",
+    "Reconcile RETEST as incomplete/non-PASS, never as hardware PASS or automatic rerun permission.",
+    "No diagnostic, package installation, filter, log clear or DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "Full-scope CX8AAS partner manufacturing diagnostic",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Execute the complete approved CX8AAS partner manufacturing specification on the matching board and prove package/spec identity, every required virtual test, complete results and post-run platform health.",
+    "required_package": ["Authorized partnerdiag package/version/hash/license/runbook","Approved spec_cx8aas_board_partner_mfg.json hash and board/SKU/revision compatibility","Expected virtual-ID inventory and explicit filter/waiver policy","Privileges, dependencies, timeout, artifact schema and health abort/recovery limits"],
+    "test_command": "Verify the SUT recipe, board identity, package and JSON-spec hashes; enumerate the required virtual IDs and confirm no unapproved filter. Preserve pre-state logs, then from the authorized package directory run `./partnerdiag --mfg --run_spec=spec_cx8aas_board_partner_mfg.json` exactly once with complete stdout/stderr, exit status and result artifacts. Monitor host/GPU/BMC health, reconcile every expected virtual ID and terminal PASS/FAIL/RETEST state, and preserve post-run log deltas.",
+    "expected_result": "The exact matching full manufacturing spec executes every required virtual ID with no unapproved skip, all subtests and the terminal result report PASS consistently, output/artifacts are complete, and no unexpected system-health event occurs. FAIL or RETEST is not PASS.",
+    "pass_fail_basis": "PASS requires verified board/package/spec identity, zero unauthorized filter, exact expected-versus-executed virtual-ID equality, complete lossless artifacts, consistent successful exit and terminal PASS, and clean health/log reconciliation. FAIL, RETEST, a missing/skipped test, marker/exit inconsistency, truncated evidence, timeout or health anomaly is not PASS; the end engineer owns the verdict.",
+    "safety_gate": ["Use only the verified package/spec on an isolated maintenance SUT.","Do not use --skip_tests or --test unless a separately approved waiver defines the changed coverage.","Capture full output and monitor host/GPU/BMC health; stop on timeout, crash or approved abort.","Do not auto-correct RETEST, rerun, clear failure evidence or translate tool status directly into a DUT verdict."],
+    "expected_evidence": ["Row/variant/hash and board/SKU/revision/topology identity","Partnerdiag package and JSON spec version/hash/license/runbook","Expected/executed virtual-ID inventory and filter/waiver attestation","Exact command, full stdout/stderr, exit status and all result artifacts","Per-subtest and terminal PASS/FAIL/RETEST consistency","Pre/post log delta, health monitoring, recovery and engineer verdict"],
+    "recovery": "On RETEST, FAIL, timeout, crash, missing coverage or health anomaly, preserve complete evidence and stop. Restore via the approved vendor/platform recovery. Any setup correction, filter change or rerun needs separate authorization and a new evidence set."
+  },
+  "source_conflict": {"before":true,"after":false,"reason":"Procedure's RETEST is conservatively reconciled as incomplete/non-PASS; Criteria's PASS/FAIL meanings remain unchanged."},
+  "blocked": {"before":false,"after":false,"reason":"The exact base command and safe result rule are known; package/spec values are runtime prerequisites."},
+  "pending": {"before":true,"after":false,"remaining_project_configuration":"Authorized package/spec hashes, board compatibility, expected virtual IDs, timeout, artifacts, health limits and any separately approved coverage waiver.","execution_status":"REVIEW RESOLVED AS A PARAMETERIZED FULL-SCOPE VENDOR DIAGNOSTIC; NO DUT ACTION EXECUTED","owner":"Package/platform owner binds artifacts and compatibility; end engineer owns RETEST disposition and verdict.","unlock_condition":"Bind the verified package/spec/board/coverage manifest before execution."},
+  "external_authorities": [],
+  "project_authority": "The approved partnerdiag release/runbook, signed CX8AAS JSON spec and board recipe are authoritative for compatibility and virtual-ID coverage; the source command and PASS/FAIL semantics remain binding.",
+  "traceability": {
+    "applicable_decisions": ["ED-01","ED-02","ED-03","ED-04","ED-05","ED-06","ED-07","ED-08","ED-11","ED-12","ED-15","ED-19","ED-20","ED-24","ED-26","ED-30","ED-36","ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "exact_command_and_full_virtual_id_coverage_preserved": true,
+    "retest_conservatively_reconciled_as_non_pass": true,
+    "tail_truncation_and_unapproved_filters_rejected": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2290|Wistron-HW-00455-V002",
+    "next_missing_formal_queue_case_variant_id": "0f19c1a737546a61"
+  },
+  "review_quality": {"exact_xlsx_row_read":true,"same_row_deepseek_read":true,"gpt_v2_read":true,"historical_pending_record_read":true,"unique_code_and_variant_verified":true,"case_specific_partnerdiag_spec_scope_filter_and_retest_reasoning":true,"next_formal_queue_identity_directly_read":true,"written_without_generator_or_template":true,"protected_sources_unchanged":true}
+}
