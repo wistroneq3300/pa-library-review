@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 589,
+  "formal_queue_sequence": 438,
+  "source_key": "Functionality|2276|Wistron-BMC-00693-V003",
+  "case_variant_id": "9aa824b06ae288e2",
+  "second_review_outcome": "IMPROVED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2276,
+    "code": "Wistron-BMC-00693-V003",
+    "original_row_sha256": "7267cbe9faccac3a60a3d082d80e3a214d13dccb802dd22c4088ed7c0f65dc46",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Connector leaky sensor",
+    "procedure": "Spray water near the CDU connector, observe a warning, wipe the area dry, and verify warning clearance.",
+    "criteria": "A warning/error is recorded, the system takes the correct protective action (example: shutdown within one minute), and the sensor recovers when the connector is dry.",
+    "deepseek": "NO; a human must introduce the connector leak and observe the alarm.",
+    "gpt_v2": "MANUAL ONLY/CRITICAL; identify the exact connector and zone, use a connector-qualified localized stimulus, protect contacts, inspect for trapped liquid and define safe recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2397_9aa824b06ae288e2.json",
+  "old_problem": "The protected procedure called for an uncontrolled water spray at a CDU connector and surface wiping, but did not define the connector/zone, material compatibility, application boundary, electrical isolation, trapped-fluid/contact inspection, authoritative protective behavior or safe return to service.",
+  "new_disposition": "RETAINED_PENDING_FOR_CDU_CONNECTOR_STIMULUS_CONTACT_INTEGRITY_AND_RECOVERY_SPEC",
+  "disposition_reason": "Connector leak testing has a distinct hazard and coverage target from a sensing-line test: liquid can enter conductive contacts, capillary gaps or seals and remain after the exterior appears dry, creating delayed corrosion or a short. A generic BMC alarm injection would not validate fluid-path placement, while uncontrolled spray could test damage rather than detection. The project must therefore identify the CDU connector and mapped zone, approve a localized simulator or compatible metered fluid method with barriers, specify alarm/protection timing, and require contact-integrity plus independent dryness inspection before re-energization. These are case-specific OEM physical and recovery decisions, so Pending remains; the purpose and missing vendor artifacts are sufficiently identifiable that BLOCKED is not asserted at static-review time.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2276 and 2277 with row-2276 Items, Procedure, Criteria and DeepSeek columns; row 2277 is the verified next formal pending source.",
+    "Read GPT V2/historical record 2397 and retained the exact Source Key, Variant ID and source-row hash.",
+    "Preserve connector-localized wetting, warning, platform action, wipe/cleanup, dry deassertion and recovered-state coverage as separate evidence stages.",
+    "ED-09 assigns the physical operation and inspection to a qualified human; remote telemetry is supplementary only.",
+    "ED-15 and ED-16 require an approved deterministic oracle, isolated environment and connector-safe recovery before any execution verdict.",
+    "No connector wetting, wipe, power transition, log clear, retry or DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "CDU connector leak sensing, protection and contact-safe recovery",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Verify a localized, physically representative stimulus at the specified CDU connector reaches the intended leak-sensor zone, asserts the correct BMC event and platform protection response, and can be removed without contact damage before controlled deassertion and return to service.",
+    "required_package": [
+      "Exact CDU, connector designator/revision and sensor-zone/channel/SEL mapping",
+      "Connector-vendor-approved simulator or compatible fluid, metered amount, point, dwell and physical-coverage statement",
+      "Barriers, containment, electrical isolation, PPE/ESD and emergency power plan",
+      "Signed alarm/severity/protective-action assertion and deassertion timings",
+      "Approved cleanup, connector/contact inspection, dryness measurement and re-energization checklist"
+    ],
+    "test_command": "With the designated connector in the approved energy state and protected by the signed containment boundary, a qualified operator applies the localized simulator or metered compatible fluid at the defined point, records application/removal markers, collects the material using the approved method, opens or inspects contacts only as the service procedure permits, and proves dryness before authorizing power. Record the mapped sensor, SEL, alarm and chassis/power response continuously through assertion, cleanup, deassertion and final recovery.",
+    "expected_result": "The stimulus is contained to the approved connector area, the exact mapped sensor and event assert within the specified time and severity, the platform takes the defined protective action, no unintended electrical/contact damage is observed, the connector passes inspection/dryness criteria, and the alarm plus system state recover according to the signed policy.",
+    "pass_fail_basis": "PASS requires connector identity, localized physical-stimulus evidence, the mapped event and protection timeline, complete containment, contact-integrity/dryness acceptance, correct deassertion and final service recovery. Surface wiping alone, ordinary water spray, a software-only alarm, assumed one-minute shutdown, missing contact inspection, unexplained moisture migration or power restoration before dryness approval is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Use a dedicated isolated SUT, qualified cooling/electrical operator and independent emergency power control.",
+      "Never spray uncontrolled liquid at an energized connector; follow the approved connector energy state and barrier plan.",
+      "Abort on fluid migration, unexpected alarm/action, arcing, insulation/contact anomaly, telemetry loss or inability to recover the material.",
+      "Export rather than clear existing SEL/OS evidence.",
+      "Do not re-energize or repeat until contact inspection and independent dryness are accepted by the hardware owner."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash and CDU connector/zone/sensor/SEL mapping",
+      "Stimulus fixture/material compatibility, amount, application point, dwell, barriers and containment photos",
+      "Timestamped visual evidence plus sensor, alarm, SEL and chassis/power transitions",
+      "Protective-action timing and any latched-state behavior",
+      "Cleanup record, connector/contact inspection, dryness measurement, deassertion and final health checklist",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "If fluid enters an unauthorized area or contact cavity, an electrical anomaly occurs, the mapped alarm/action fails, or dryness cannot be demonstrated, isolate all approved energy sources, quarantine the assembly, preserve evidence and invoke the connector/cooling owner inspection and remediation plan. No power restoration or rerun is allowed without explicit release."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "The row consistently targets connector wet detection, protective response and recovery; it lacks safe project parameters and oracle details but does not contradict itself."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "A connector-qualified vendor method and recovery package can supply the identified prerequisites. Execution is prohibited until then, but target and intended operation are understood."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "CDU/connector/zone identity; approved localized simulator or compatible fluid and coverage; containment/isolation; exact alarm, protection and timing; cleanup, contact inspection, dryness, deassertion, re-energization and final recovery.",
+    "execution_status": "ENGINEERING DECISION RETAINED; CONNECTOR LIQUID TEST NOT AUTHORIZED OR EXECUTED",
+    "owner": "Cooling, connector/hardware, electrical-safety and BMC owners approve the stimulus and service recovery; end engineer owns the verdict.",
+    "unlock_condition": "Provide a signed connector-specific test and recovery procedure addressing every remaining item; a generic leak alarm simulation cannot replace connector fluid-path coverage."
+  },
+  "external_authorities": [],
+  "project_authority": "OEM connector and platform owners control material compatibility, permissible energy state, alarm policy, inspection and re-energization criteria.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-09", "ED-11", "ED-12", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "connector_stimulus_alarm_protection_cleanup_and_recovery_coverage_preserved": true,
+    "software_alarm_not_substituted_for_fluid_path_coverage": true,
+    "surface_dryness_not_accepted_as_contact_integrity": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2277|Wistron-HW-00447-V002",
+    "next_missing_formal_queue_case_variant_id": "db10530bfbaee208"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_connector_contact_and_latent_liquid_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
