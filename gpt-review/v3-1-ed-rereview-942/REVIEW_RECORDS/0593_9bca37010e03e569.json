@@ -1,0 +1,107 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 593,
+  "formal_queue_sequence": 442,
+  "source_key": "Functionality|2280|Wistron-HW-00248-V003",
+  "case_variant_id": "9bca37010e03e569",
+  "second_review_outcome": "IMPROVED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2280,
+    "code": "Wistron-HW-00248-V003",
+    "original_row_sha256": "e4f360848e35cd230e524c292b76932045f3d50c0e9ba7e2b43fe6143229e2de",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Reject BMC FW Downgrade",
+    "procedure": "Attempt to apply a BMC capsule whose SVN is invalid or revoked.",
+    "criteria": "The platform blocks the update.",
+    "deepseek": "PARTIAL; attempts an older/corrupt image and checks update error plus unchanged BMC version.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CRITICAL; distinguish SVN enforcement from generic corruption and prove rejection at the anti-rollback gate with no firmware-state mutation."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2401_9bca37010e03e569.json",
+  "old_problem": "Neither the current security-version/revocation policy nor a structurally and cryptographically valid capsule carrying the controlled lower/revoked SVN was identified. Generic corrupt/old images could fail earlier gates, and unchanged `mc info` did not prove that no staging or trust state changed.",
+  "new_disposition": "RETAINED_PENDING_FOR_SVN_SPECIFIC_ANTI_ROLLBACK_CAPSULE_AND_NO_MUTATION_ORACLE",
+  "disposition_reason": "This case is specifically about the security-version gate. Format, signature, platform compatibility and SVN are layered decisions; if the negative image is malformed, unsigned or incompatible, its rejection says nothing about rollback protection. The owner must provide a traceable capsule that is acceptable through all earlier gates but deliberately violates the approved current/revoked SVN rule, plus the exact rejection reason/stage and proof that active, recovery, staged, SVN and configuration state remain unchanged. That capsule and anti-rollback policy are project security artifacts that cannot be invented, so Pending remains. The purpose and expected prerequisites are known, so the missing package does not alone make the static review BLOCKED.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2280 and 2281 with row-2280 Items, Procedure, Criteria and DeepSeek fields; row 2281 is the next formal pending identity.",
+    "Read GPT V2/historical record 2401 and retained the exact Source Key, Variant ID and original row hash.",
+    "Preserve invalid/revoked SVN downgrade rejection as independent coverage from adjacent corrupt-capsule rejection.",
+    "Require a negative capsule whose non-SVN properties are accepted so evidence reaches the intended anti-rollback decision.",
+    "ED-07 retains the attempted update and before/after firmware state while requiring separate authorization and recovery; ED-12 forbids retry.",
+    "No capsule was submitted, staged or flashed and no DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "BMC secure-update rejection of invalid or revoked SVN",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the exact BMC/PFR secure-update implementation rejects one otherwise valid capsule solely because its encoded security version is below or revoked by current policy, without staging, writing, activating, rebooting or altering trust/configuration state.",
+    "required_package": [
+      "BMC/PFR build, active/recovery/staged versions and current SVN/revocation policy",
+      "Signed compatible negative-test capsule with manifest, signature, hash and deliberately invalid/revoked SVN",
+      "Vendor update endpoint/runbook and anti-rollback rejection status/event decoder",
+      "Expected rejection stage, task/error/PFR event and maximum timeout",
+      "Stable power, isolated target, console, golden image and programmer recovery authorization"
+    ],
+    "test_command": "Capture current active/recovery/staged versions, SVN/policy, trust/configuration and PFR health. Offline-validate that the owner-approved capsule is correctly structured, signed and compatible except for its declared invalid/revoked SVN. Submit it exactly once through the authorized update endpoint, capture the complete task/error/PFR audit evidence, and compare all version, staging, activation, reboot, SVN, trust and configuration state before and after.",
+    "expected_result": "The request reaches the documented SVN/anti-rollback check, is rejected with the approved status/event within timeout, and produces no staging, flash write, activation, reboot, active/recovery version, SVN, trust or configuration change; BMC services remain healthy.",
+    "pass_fail_basis": "PASS requires proof that earlier capsule gates were satisfied, the intended SVN policy caused rejection, the exact task/PFR event matches the oracle, and every protected firmware/trust state is unchanged. Parser/signature/compatibility rejection, generic corruption, a bare HTTP error, unchanged version alone, partial staging or an unexpected reboot is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Use only the signed owner-supplied negative capsule and verify target, capsule hash, compatibility and encoded SVN offline.",
+      "Authorize one submission only with stable power, independent console and external recovery ready.",
+      "Abort/escalate immediately if the platform begins staging, writing, activation or reboot unexpectedly.",
+      "Export existing PFR/task/SEL evidence rather than clearing it.",
+      "Do not generate an ad-hoc image, attempt an uncontrolled downgrade, retry or auto-recover."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash plus current SVN/revocation policy and firmware/trust baseline",
+      "Negative capsule manifest, signature, compatibility, hash and encoded SVN proof",
+      "Exact authorized update request and full task/error/PFR/audit record",
+      "Evidence the rejection occurred at the SVN gate",
+      "Before/after active, recovery and staged versions; no-write/no-activation/no-reboot/SVN/configuration proof",
+      "Final BMC health, recovery readiness and engineer-owned verdict"
+    ],
+    "recovery": "If any staging, write, activation, reboot or state change occurs, stop further submissions, preserve task/PFR/console evidence and invoke the pre-approved golden/programmer recovery under separate authorization. Do not retry the capsule or clear audit evidence."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Title, Procedure and Criteria consistently target rejection caused by invalid/revoked SVN."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The negative-test semantics and required security artifacts are identifiable; runtime awaits the owner-supplied capsule/policy/recovery package."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Current SVN/revocation policy; otherwise valid signed compatible lower/revoked-SVN capsule; exact rejection stage/status/event/timeout; no-staging/write/activation/reboot/trust-change oracle; stable-power isolated recovery.",
+    "execution_status": "ENGINEERING DECISION RETAINED; NO UPDATE REQUEST, FLASH OR DOWNGRADE ATTEMPT EXECUTED",
+    "owner": "BMC/PFR security owner supplies policy, capsule and decoder; lab owner authorizes the one-shot attempt and recovery; end engineer owns the verdict.",
+    "unlock_condition": "Approve an SVN-specific negative-test manifest and full no-mutation/recovery oracle; generic corrupt or merely older firmware is insufficient."
+  },
+  "external_authorities": [],
+  "project_authority": "The platform BMC/PFR security owner is authoritative for SVN encoding, revocation policy, capsule validity, rejection status and recovery."
+  ,"traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-15", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "svn_anti_rollback_coverage_preserved_separately_from_corrupt_image": true,
+    "no_mutation_proof_required": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2281|Wistron-HW-00247-V003",
+    "next_missing_formal_queue_case_variant_id": "d920c0ce3b5110fc"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_svn_gate_and_layered_rejection_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
