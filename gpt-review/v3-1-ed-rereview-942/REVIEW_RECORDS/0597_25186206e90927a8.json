@@ -1,0 +1,107 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 597,
+  "formal_queue_sequence": 446,
+  "source_key": "Functionality|2284|Wistron-HW-00165-V003",
+  "case_variant_id": "25186206e90927a8",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2284,
+    "code": "Wistron-HW-00165-V003",
+    "original_row_sha256": "f0a5aeb7ead1f102199f035c022b471ee146c30f3bd9f40b6645c528c8c678fd",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Location Check",
+    "procedure": "Prepare the system specification and motherboard, then check jumper locations on the motherboard.",
+    "criteria": "Jumper location is correct.",
+    "deepseek": "NO; a human opens the chassis and visually inspects jumper position/location.",
+    "gpt_v2": "MANUAL ONLY; use a complete board-revision-specific designator/location/population map and keep setting verification separate in row 2285."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2405_25186206e90927a8.json",
+  "old_problem": "The protected row did not identify the motherboard revision or complete in-scope jumper/header location and population/DNI map, and the word `position` could incorrectly import shunt-setting coverage from the adjacent Jumper check.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_COMPLETE_JUMPER_LOCATION_AND_POPULATION_INSPECTION",
+  "disposition_reason": "This row's scope is physically enumerable once the exact PCB revision and signed jumper/header location map are supplied. ED-03 allows those designators, coordinates and DNI exceptions to be runtime project configuration; ED-09 assigns the no-touch chassis inspection to a qualified human. The adjacent row independently verifies shunt settings, so this record deliberately checks only presence/population, location and mechanical orientation. No further command semantics or safety decision is missing, and Pending can be removed.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2284 and 2285, including row-2284 Items, Procedure, Criteria and DeepSeek fields; row 2285 is the verified next formal pending source.",
+    "Read GPT V2/historical record 2405 and retained the exact Source Key, Variant ID and row hash.",
+    "Preserve exhaustive jumper location/population coverage rather than accepting one representative photograph.",
+    "Keep row-2284 location/population identity distinct from row-2285 electrical shunt-state verification, satisfying ED-19 duplicate/similar coverage identity.",
+    "Require safe de-energized/ESD access and prohibit shunt removal, repositioning or probing.",
+    "No chassis access, jumper handling or DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "Complete motherboard jumper/header location and population map inspection",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Verify every in-scope jumper/header reference is present or DNI exactly as specified at the correct PCB coordinate and mechanical orientation for the exact motherboard revision, without evaluating or changing its shunt setting.",
+    "required_package": [
+      "SUT identity, motherboard assembly and PCB revision",
+      "Complete signed jumper/header reference-designator and coordinate map",
+      "Per-designator populated/unpopulated/DNI and body-orientation expectation",
+      "Visible silkscreen and neighboring-component landmarks",
+      "Approved de-energized chassis access, ESD and indexed-photo procedure"
+    ],
+    "test_command": "A qualified operator powers down and accesses the board according to the approved service/ESD procedure, verifies motherboard/PCB revision, captures one indexed overview and a labeled close-up for every in-scope jumper/header, and reconciles designator, presence/DNI state, coordinate and mechanical orientation against the signed map. Do not touch, remove, reseat or electrically probe any shunt; restore the chassis when complete.",
+    "expected_result": "Every required designator is uniquely visible at the specified coordinate with the approved population/DNI and mechanical orientation, no extra or mislocated header is present, the photo set covers the complete map, and the inspection leaves all shunts unchanged.",
+    "pass_fail_basis": "PASS requires a complete one-to-one reconciliation for every map entry with exact board/revision identity and traceable overview/close-up evidence. One representative jumper, a correct shunt setting without location proof, hidden/ambiguous designators, wrong PCB revision, unexplained extra/missing header or any movement is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Use the approved de-energized/service state and ESD controls before exposing the board.",
+      "Confirm PCB revision before selecting the jumper map and DNI exceptions.",
+      "Do not move, remove, reseat or probe any jumper or header in this location-only check.",
+      "Stop on unsafe access, missing labels, suspected disturbance or inability to uniquely bind a photo to a designator."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash plus SUT/motherboard assembly and PCB revision",
+      "Signed complete designator/coordinate/population-DNI map",
+      "Annotated board overview with all inspected locations indexed",
+      "Per-designator close-ups showing silkscreen, coordinate landmarks and body orientation",
+      "Complete missing/extra/mislocated/DNI reconciliation and no-touch/chassis-restoration attestation",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "The planned inspection is non-mutating. If a header cannot be identified or appears disturbed, stop and preserve as-found photographs; any shunt correction/reseat belongs to a separately authorized maintenance action and requires its own before/after evidence."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "The protected row consistently asks for jumper location; formatting and spelling defects do not create competing scope."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The exhaustive manual location/population method is defined; revision-specific map values are runtime configuration."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "SUT/motherboard/PCB revision, complete jumper/header designator-coordinate-population/DNI map, orientation/landmarks and approved de-energized ESD/photo procedure.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED MANUAL LOCATION/POPULATION INSPECTION; NO HARDWARE ACCESS EXECUTED",
+    "owner": "Board configuration owner supplies the complete map; qualified operator captures physical evidence; end engineer owns the verdict.",
+    "unlock_condition": "Bind the signed revision-specific map before inspection; missing runtime identifiers block execution but do not reopen review."
+  },
+  "external_authorities": [],
+  "project_authority": "The project motherboard assembly/BOM/layout package is authoritative for jumper/header presence and physical location."
+  ,"traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-08", "ED-09", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "complete_jumper_location_population_and_dni_coverage_preserved": true,
+    "adjacent_shunt_setting_coverage_not_imported": true,
+    "runtime_board_map_does_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2285|Wistron-HW-00163-V003",
+    "next_missing_formal_queue_case_variant_id": "2317b5327d07ad66"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_complete_map_and_location_setting_boundary_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
