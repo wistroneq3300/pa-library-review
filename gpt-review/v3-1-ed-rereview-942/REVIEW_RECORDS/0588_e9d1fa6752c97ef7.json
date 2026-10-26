@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 588,
+  "formal_queue_sequence": 437,
+  "source_key": "Functionality|2275|Wistron-BMC-00694-V003",
+  "case_variant_id": "e9d1fa6752c97ef7",
+  "second_review_outcome": "IMPROVED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2275,
+    "code": "Wistron-BMC-00694-V003",
+    "original_row_sha256": "95c18570b34e5d71a6dc581d57143bedb71733e45faf9c4d4035afde5ac5e29f",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Leaky sensor line",
+    "procedure": "Drip water on the leak-detection line, observe a warning, use a hair dryer, and observe warning clearance.",
+    "criteria": "The leak sensor records a warning/error, the system performs the correct protective action (example: shutdown within one minute), and the sensor recovers after drying.",
+    "deepseek": "NO; a human must physically stimulate the leak line and observe the alarm.",
+    "gpt_v2": "MANUAL ONLY/CRITICAL; replace literal uncontrolled water/hot-air use with a vendor-approved stimulus, containment, electrical isolation, dryness proof and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2396_e9d1fa6752c97ef7.json",
+  "old_problem": "The physical objective was identifiable, but the protected row did not identify the line/zone, repeatable compatible stimulus, authoritative alarm and shutdown policy, safe drying method, independent dryness test or re-energization recovery. Literal water and hair-dryer execution would be unsafe and non-repeatable.",
+  "new_disposition": "RETAINED_PENDING_FOR_LEAK_LINE_STIMULUS_PROTECTION_AND_DRY_RECOVERY_SPEC",
+  "disposition_reason": "This is not a missing IP or ordinary runtime identifier. Fluid conductivity, wetted location/length and dwell determine whether the sensing line is genuinely exercised, while unmetered water can wick into energized hardware and forced hot air can redistribute moisture or overheat materials. The one-minute shutdown is only an example in the source and cannot be promoted to PASS criteria without the platform protection policy. The test can be made executable after the cooling/BMC owner supplies a compatible simulator or metered fluid method, zone-to-sensor/SEL map, deterministic action timing, electrical isolation, dryness verification and re-energization recovery; until then the engineering decision remains pending. Because those named vendor/project artifacts can define the method, the static review is not classified BLOCKED under the skill boundary.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2275 and 2276, including row-2275 Items, Procedure, Criteria and DeepSeek fields; row 2276 is the actual next formal pending row.",
+    "Read GPT V2/historical record 2396 and verified the unique Source Key, Variant ID and row hash.",
+    "Preserve separate leak-line coverage: alarm assertion, protective response, dry deassertion and final recovery all remain required.",
+    "ED-09 keeps the physical stimulus/drying with a qualified human; telemetry collection does not replace it.",
+    "ED-15 forbids PASS without an approved event/action/timing oracle, and ED-16 requires isolation plus recovery for fault injection.",
+    "No liquid, heat, power action, log clear, retry or DUT test occurred."
+  ],
+  "test_case": {
+    "test_name": "Leak-detection line controlled wet assertion and verified dry recovery",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Demonstrate that the specified leak-detection line responds to an approved, physically representative wet stimulus with the mapped BMC alarm and platform protection behavior, then safely deasserts and returns to its approved final state after independent dryness verification.",
+    "required_package": [
+      "Signed leak-line/zone/channel to sensor and SEL mapping",
+      "Vendor-approved electrical simulator or compatible test fluid with quantity, placement, wetted length, dwell and containment limits",
+      "Approved warning/error severity, protective action and assertion/deassertion timing",
+      "Electrical isolation, PPE/ESD, abort, drying, dryness-inspection, re-energization and recovery procedure",
+      "Independent power control plus timestamped BMC sensor, SEL and chassis-state capture"
+    ],
+    "test_command": "A qualified operator applies the approved simulator or metered compatible fluid to the exact line location under the authorized isolation/containment plan, marks stimulus and removal times, performs the approved non-damaging dry-out and independent dryness inspection, and authorizes re-energization only after the dryness criterion passes. In parallel, collect the mapped sensor reading/state, SEL/event severity, alarms and chassis/power behavior from baseline through assertion, protection, deassertion and final recovery.",
+    "expected_result": "The exact mapped line asserts the approved warning/error within its signed timing, the platform performs the specified protective response without unrelated damage, the alarm remains correctly latched or active as defined, and after approved stimulus removal/drying it deasserts within the specified hysteresis/timing and the recovered system matches its authorized final state.",
+    "pass_fail_basis": "PASS requires the signed stimulus/recovery package, physical application evidence, target-correlated sensor/SEL assertion, deterministic protection timing, independent dryness proof, correct deassertion and final recovery. A software-only alarm, ordinary water, uncontrolled hair dryer, an assumed one-minute shutdown, absent event correlation, moisture outside containment, premature re-energization or missing recovery is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Use only a dedicated isolated SUT, qualified liquid-cooling operator, approved PPE/ESD and verified containment.",
+      "Do not drip ordinary water or direct uncontrolled heated airflow at live hardware.",
+      "Establish independent emergency power control and abort immediately on spread, electrical anomaly, unexpected heating or loss of telemetry.",
+      "Do not clear existing SEL/OS evidence; export the baseline and retain it.",
+      "Do not re-energize or retry until the owner accepts dryness and inspection results."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash plus leak line, zone, sensor and SEL mapping",
+      "Approved stimulus/fixture identity, material compatibility, quantity, location, dwell and containment record",
+      "Time-correlated operator photos/video and sensor, alarm, SEL and power-state evidence",
+      "Measured assertion and protective-action timing against the signed oracle",
+      "Drying method, independent dryness/inspection result, deassertion timing and recovered-state checklist",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "If liquid escapes containment, electrical behavior is abnormal, the alarm/action is unexpected or dryness cannot be proved, isolate energy using the approved independent control, stop handling, preserve evidence and escalate to the cooling/hardware owner. Re-energization requires inspection and explicit approval; no automatic repeat is permitted."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "The source consistently asks for wet assertion, platform response and dry recovery; the unresolved values are unsafe project-specific method and oracle inputs, not contradictory scope."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The purpose and required physical operation are understood, and the missing vendor stimulus/protection/recovery artifacts are explicitly identifiable prerequisites. Runtime remains prohibited until supplied, but the review semantics are not irreducibly indeterminate."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Leak-line/zone/sensor/SEL map; approved simulator or compatible fluid parameters and containment; exact severity, protection action and timing; electrical isolation and aborts; non-damaging dry-out, dryness acceptance, deassertion, re-energization and final recovery.",
+    "execution_status": "ENGINEERING DECISION RETAINED; CRITICAL PHYSICAL LIQUID TEST NOT AUTHORIZED OR EXECUTED",
+    "owner": "Cooling-system, BMC and hardware-safety owners jointly approve the physical method and recovery; the end engineer owns the verdict.",
+    "unlock_condition": "Issue a signed case-specific liquid-line test and recovery package covering every remaining item; a generic sensor command or software alarm is insufficient."
+  },
+  "external_authorities": [],
+  "project_authority": "The platform cooling/BMC/hardware owners define fluid compatibility, sensor mapping, protection policy, safe isolation, dryness and re-energization because these are OEM/project physical behaviors.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-09", "ED-11", "ED-12", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "wet_assertion_protection_dry_deassertion_and_recovery_coverage_preserved": true,
+    "physical_stimulus_not_replaced_by_software_alarm": true,
+    "unsafe_literal_water_and_hair_dryer_not_authorized": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2276|Wistron-BMC-00693-V003",
+    "next_missing_formal_queue_case_variant_id": "9aa824b06ae288e2"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_fluid_line_protection_and_dryness_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
