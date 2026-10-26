@@ -1,0 +1,107 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 596,
+  "formal_queue_sequence": 445,
+  "source_key": "Functionality|2283|Wistron-HW-00176-V003",
+  "case_variant_id": "59142a34afc1e1d7",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2283,
+    "code": "Wistron-HW-00176-V003",
+    "original_row_sha256": "4b6ac653f1b2702e27b08b9fde52e383402dc9a72765b5820580b70da1c00f72",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Location check",
+    "procedure": "Prepare the system specification and motherboard, then check the switch location on the motherboard.",
+    "criteria": "The switch location is correct.",
+    "deepseek": "NO; a human visually inspects the physical switch against its labeled board location.",
+    "gpt_v2": "MANUAL ONLY; bind board revision and switch designator, collect traceable overview/close-up evidence and prohibit switch actuation."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2404_59142a34afc1e1d7.json",
+  "old_problem": "The source lacked the motherboard revision, exact switch designator, authoritative layout and photographic acceptance references, and the word `position` in prior review could be mistaken for an electrical lever-setting test rather than physical placement.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_SWITCH_LOCATION_ONLY_INSPECTION",
+  "disposition_reason": "The test method and safe boundary are complete once the release-specific board assembly/revision, switch designator and approved drawing are bound. ED-03 permits those identifiers as project configuration, and ED-09 correctly keeps chassis access and visual inspection with a human. This row verifies physical population/location/orientation only; it neither reads nor changes the switch's electrical setting. Missing future SUT identifiers therefore block execution evidence but do not require another engineering decision.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2283 and 2284, including row-2283 Items, Procedure, Criteria and DeepSeek fields; row 2284 is the verified next pending identity.",
+    "Read GPT V2/historical record 2404 and retained the exact Source Key, Variant ID and row hash.",
+    "Preserve the original system-spec-to-motherboard physical switch-location comparison without expanding it to lever state or actuation.",
+    "Require board-revision-bound overview and close-up visual evidence because nearby switches and similar PCB variants can otherwise be confused.",
+    "ED-09 assigns chassis handling and inspection to a qualified operator; any automated photo comparison remains advisory.",
+    "No chassis access, switch touch, probe or DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "Motherboard switch physical location and orientation inspection",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Confirm the specified switch is physically populated at the reference-designator/coordinate and mechanical orientation defined for the exact motherboard revision, without inspecting or changing its electrical setting.",
+    "required_package": [
+      "SUT serial/configuration and motherboard assembly plus PCB revision",
+      "Exact switch reference designator and function",
+      "Approved motherboard layout/assembly drawing revision with coordinate and orientation",
+      "Visible silkscreen and neighboring-component reference features",
+      "Powered-state/chassis access/ESD procedure and required photo views"
+    ],
+    "test_command": "A qualified operator establishes the approved power and ESD state, opens only the authorized access path, identifies the motherboard and PCB revision, locates the named switch by silkscreen and stable neighboring features, and captures an overview plus orthogonal close-up with scale/orientation. Compare presence, reference designator, board coordinate and body/mechanical orientation against the signed drawing; do not touch or actuate the switch; restore the chassis.",
+    "expected_result": "The photographed switch is uniquely attributable to the intended SUT and board revision, is present at the exact approved designator/coordinate with the specified mechanical orientation and accessibility, and the inspection causes no setting or hardware change.",
+    "pass_fail_basis": "PASS requires matching board/revision identity, switch designator, coordinate and orientation with clear overview and close-up evidence. An unlabeled photo, a different PCB revision, a correctly set switch at another location, or any actuation/change is not PASS for this location-only row. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Use the owner-approved powered/unpowered access state, ESD protection and chassis procedure.",
+      "Verify SUT and PCB revision before using a drawing or comparing coordinates.",
+      "Do not touch, toggle, probe or infer the switch's electrical setting.",
+      "Stop on uncertain designator, obstructed/hazardous access or suspected damage and preserve as-found condition."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash, SUT identity, motherboard assembly and PCB revision",
+      "Approved drawing/spec revision and switch designator/function",
+      "Annotated overview locating the switch on the board",
+      "Close-up showing silkscreen, orientation, scale and neighboring reference features",
+      "Coordinate/orientation comparison, as-found/no-touch attestation and chassis restoration",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "This is a no-touch inspection. If access or identity is uncertain, stop and restore the chassis without moving the control. If accidental actuation or damage occurs, preserve the as-found/as-left evidence and invoke the board owner's separate configuration/recovery procedure."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Items, Procedure and Criteria consistently request physical switch location; spelling errors do not create alternate coverage."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The location-only method, evidence and safety boundary are defined; board/designator values are runtime project inputs."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "SUT/board assembly and PCB revision, switch designator/function, signed layout coordinate/orientation, visual reference features and safe chassis/ESD inspection state.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED MANUAL LOCATION INSPECTION; NO HARDWARE ACCESS OR DUT ACTION EXECUTED",
+    "owner": "Board/configuration owner supplies the authoritative drawing and identity; qualified operator collects physical evidence; end engineer owns the verdict.",
+    "unlock_condition": "Bind the signed board package before inspection; missing runtime identity prevents execution but does not reopen review."
+  },
+  "external_authorities": [],
+  "project_authority": "The project motherboard assembly drawing and configuration owner define physical placement for each PCB revision.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-08", "ED-09", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "physical_switch_location_coverage_preserved": true,
+    "lever_setting_and_actuation_excluded": true,
+    "runtime_board_identity_does_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2284|Wistron-HW-00165-V003",
+    "next_missing_formal_queue_case_variant_id": "25186206e90927a8"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_switch_location_only_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
