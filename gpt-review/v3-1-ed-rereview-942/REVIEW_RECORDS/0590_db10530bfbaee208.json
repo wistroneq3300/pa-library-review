@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 590,
+  "formal_queue_sequence": 439,
+  "source_key": "Functionality|2277|Wistron-HW-00447-V002",
+  "case_variant_id": "db10530bfbaee208",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2277,
+    "code": "Wistron-HW-00447-V002",
+    "original_row_sha256": "99d1065c841c52afa71f8188567f99207dacc791e294fafa1df32cfc4d9a296b",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Release note",
+    "procedure": "Review general information, firmware version, new features/fixed defects and known issues.",
+    "criteria": "Information is readable and free of spelling errors, firmware version is correct, and feature/fix/known-issue descriptions are clear.",
+    "deepseek": "NO; returns a human release-note checklist and confirmed firmware version.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; objective extraction/version/spelling checks can be automated while technical accuracy and clarity require an authorized reviewer."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2398_db10530bfbaee208.json",
+  "old_problem": "The exact firmware package and note pairing, authoritative version source, required template, approved feature/fix/known-issue baselines, disclosure policy and qualified semantic reviewer were absent, so filename matching or spell-check alone could not establish correctness.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_IMMUTABLE_RELEASE_NOTE_TRACEABILITY_REVIEW",
+  "disposition_reason": "The review procedure and safety boundary are fully definable without knowing the future package filename or firmware version. ED-03 permits those release-specific artifacts and values to be bound at runtime. The review layer now separates machine-checkable facts—hash pairing, required-section presence, version comparison and located spelling/readability findings—from human-owned technical clarity, completeness, accuracy and disclosure decisions. Missing artifacts prevent execution, but they do not leave an engineering-method decision pending.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2277 and 2278, including row-2277 Items, Procedure, Criteria and DeepSeek fields; row 2278 is the verified next formal pending case.",
+    "Read GPT V2/historical record 2398 and retained the unique Source Key, Variant ID and original row hash.",
+    "Preserve all four original content areas plus readability, spelling, version correctness and clarity coverage.",
+    "A release note is accepted only when immutably paired to the actual build and reconciled with authoritative change/issue sources; filename-only comparison is rejected.",
+    "Human semantic judgment is retained and explicitly evidenced rather than incorrectly automated.",
+    "No document was altered, published or accepted and no DUT action occurred."
+  ],
+  "test_case": {
+    "test_name": "Firmware release-note package pairing and content traceability review",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Confirm the exact release note belongs to the approved firmware build and accurately, completely and readably describes its scope, component versions, new features, fixed defects and known issues without uncontrolled disclosure.",
+    "required_package": [
+      "Immutable release-note file and firmware package/build hashes",
+      "Signed product/platform applicability and component-version manifest",
+      "Approved release-note template and required-section checklist",
+      "Authoritative feature, fixed-defect and known-issue source lists",
+      "Spelling/readability policy, disclosure classification and qualified reviewer assignment"
+    ],
+    "test_command": "Hash and bind the note to the firmware package/build; render the original in its native layout and extract text read-only; check every required section and field; compare each stated component version with the signed manifest; produce page/line-referenced spelling and readability findings; reconcile every feature, fix and known issue with the approved source lists; route semantic accuracy, clarity, omission and disclosure findings to the named reviewer for disposition.",
+    "expected_result": "The release note and package form one traceable artifact pair, product/component scope and every version match authoritative metadata, all required sections are complete, each feature/fix/known issue reconciles to an approved source, and all spelling, readability, ambiguity, accuracy and disclosure findings have an approved disposition.",
+    "pass_fail_basis": "PASS requires exact hashes, applicability, component-version matches, complete required sections, source-list traceability and qualified semantic-review sign-off with no open acceptance finding. A matching filename, OCR-only output, spell-check alone, missing/unclear entry, version mismatch, unresolved disclosure issue or silent document edit is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Open and render artifacts read-only; retain original hashes and never silently edit evidence.",
+      "Protect unpublished defects, security issues and embargoed information according to the supplied disclosure policy.",
+      "Distinguish formatting/spelling observations from technical truth; automation cannot approve semantic accuracy.",
+      "Stop acceptance or publication on artifact mismatch, missing scope, unresolved ambiguity or unauthorized disclosure."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash plus release-note/package/build hashes and product scope",
+      "Rendered original and extracted text with tool/version record",
+      "Required-section and field checklist",
+      "Per-component authoritative version comparison",
+      "Page/line-referenced spelling/readability findings",
+      "Feature/fix/known-issue reconciliation, disclosure review and signed reviewer dispositions",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "This review is non-mutating. Preserve the original artifacts and findings; if correction is required, release engineering must issue a new controlled document revision with a new hash, after which the entire pairing and checklist are rerun against that revision."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "Procedure and Criteria consistently require general information, correct version, features, fixes, known issues, readability and clarity."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The immutable-artifact workflow and acceptance structure are defined; release-specific files, baselines and reviewer identity are runtime inputs."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Release-note/package hashes, platform scope, component-version manifest, template, authoritative feature/fix/issue lists, language policy, disclosure controls and qualified reviewer.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED HYBRID DOCUMENT CHECK; NO ARTIFACT ACCEPTANCE OR DUT ACTION EXECUTED",
+    "owner": "Release/configuration management supplies immutable artifacts and baselines; firmware/product reviewer owns semantic dispositions; end engineer owns the verdict.",
+    "unlock_condition": "Bind the listed controlled artifacts and reviewer before running the checklist; missing inputs block execution but do not reopen review methodology."
+  },
+  "external_authorities": [],
+  "project_authority": "Project release management is authoritative for package/build identity, component versions, change sources and disclosure; qualified product engineering owns semantic accuracy.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-15", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "general_version_features_fixes_known_issues_coverage_preserved": true,
+    "human_semantic_and_disclosure_review_preserved": true,
+    "runtime_release_artifacts_do_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2278|Wistron-HW-00245-V003",
+    "next_missing_formal_queue_case_variant_id": "e3e7b3795f1858bb"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_artifact_pair_version_and_semantic_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
