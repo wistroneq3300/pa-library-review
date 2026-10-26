@@ -1,0 +1,110 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 591,
+  "formal_queue_sequence": 440,
+  "source_key": "Functionality|2278|Wistron-HW-00245-V003",
+  "case_variant_id": "e3e7b3795f1858bb",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2278,
+    "code": "Wistron-HW-00245-V003",
+    "original_row_sha256": "16a469a003f2943580535def2c256d9de08ae8d5ee38403d4816c2d02c1db6e8",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "BMC FW Update",
+    "procedure": "Read AST1060 provision state; conditionally provision with `rk384_pub.pem`; update a BMC capsule through Root-of-Trust; then the row mentions erasing unlocked provision data with `--unprovision`.",
+    "criteria": "AST1060 verifies the BMC successfully and the BMC boots.",
+    "deepseek": "PARTIAL but replaces the affirmative update with corrupt/older-image rejection and unchanged-version evidence.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CRITICAL; restore valid capsule-update coverage and treat provision, update/activation and unprovision as separately authorized state transitions."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2399_e3e7b3795f1858bb.json",
+  "old_problem": "The Master row required an affirmative PFR-governed BMC update but omitted the AST1060 lifecycle/lock state, trust-key provenance, capsule identity/compatibility, activation and expected-version oracle, final provisioning state and external recovery. DeepSeek instead described a different negative corrupt/downgrade rejection test.",
+  "new_disposition": "RETAINED_PENDING_FOR_AST1060_PFR_UPDATE_STATE_MACHINE_AND_RECOVERY_AUTHORITY",
+  "disposition_reason": "ED-07 requires this Flash-containing source coverage to remain an actual signed capsule update with pre/post version verification and independent authorization; corrupt or older-image rejection belongs to separate cases and cannot substitute. Provisioning a trust key, staging/verifying/activating a capsule, and erasing unlocked provisioning data are three distinct security-state mutations with different irreversibility and recovery consequences. The exact AST1060 lifecycle, whether the device is locked, approved initial/final state, key/config trust, capsule compatibility, activation flow and programmer/golden recovery are OEM/project authorities and cannot be inferred from generic PFR concepts. Pending therefore remains. The purpose and expected vendor artifacts are identifiable, so the missing package/approval alone does not change the review classification to BLOCKED.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2278 and 2279 with row-2278 Items, complete Procedure, Criteria and DeepSeek fields; row 2279 is the verified next formal pending case.",
+    "Read GPT V2/historical record 2399 and retained the exact Source Key, Variant ID and row hash.",
+    "Preserve `aspeed-pfr-tool -p show`, conditional provisioning, affirmative capsule update, Root-of-Trust verification, BMC boot and the source's stated unprovision coverage as separate checkpoints.",
+    "Reject DeepSeek's corrupt/downgrade substitution because a rejection path cannot prove valid-image stage, verify, activate and boot behavior.",
+    "ED-12 forbids automatic retry and ED-17 requires evidence export before any potentially destructive event/log action.",
+    "No provisioning, unprovisioning, image staging, Flash, activation, reboot or DUT query occurred."
+  ],
+  "test_case": {
+    "test_name": "AST1060 PFR authorized BMC capsule update and approved final trust state",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify that the exact platform accepts and activates one authorized signed BMC capsule through the required AST1060 Root-of-Trust state, boots the expected BMC version with healthy services, and finishes in the explicitly approved provisioning state.",
+    "required_package": [
+      "SUT/BMC/AST1060 identities, firmware versions, lifecycle and lock/fuse state",
+      "Approved initial and final provisioning-state transition diagram",
+      "Trusted rk384 public key/config source, signature and hash if provisioning is permitted",
+      "Signed BMC capsule version, hash, compatibility manifest and vendor update/activation runbook",
+      "Golden/recovery image, full backup, independent console, correct SPI programmer/adapter and rollback procedure",
+      "Separate written authorizations for provisioning, Flash/update activation and any unprovision operation"
+    ],
+    "test_command": "Capture provision/lifecycle/lock state and BMC version/health; validate the signed key/config and capsule against the exact target; confirm stable power and external recovery readiness. Execute only the separately authorized state transition: provision if explicitly allowed and required, submit exactly one approved capsule through the vendor PFR update flow, monitor verification/task/activation and BMC boot, verify the expected new version and full management readiness, then run `--unprovision` only when the signed lifecycle plan separately requires it and verify the approved final state.",
+    "expected_result": "Every authorized transition starts from the expected AST1060 state, the exact capsule passes Root-of-Trust verification, update and activation complete once, the BMC boots the declared target version and passes the management-service checklist, no unexplained PFR/SEL event occurs, and provisioning ends in the owner-approved state.",
+    "pass_fail_basis": "PASS requires immutable key/capsule provenance, correct target compatibility, separate approvals, complete PFR verification/task/activation evidence, expected pre/post version change, successful BMC boot/readiness and exact final trust state. Rejection of a bad/old image, unchanged version after a supposed valid update, implicit provisioning, unauthorized `--unprovision`, missing recovery readiness, retry or boot-only evidence is not PASS. The end engineer decides PASS/FAIL/BLOCKED.",
+    "safety_gate": [
+      "Treat provisioning, capsule Flash/activation and unprovisioning as independently authorized mutations; never chain them by default.",
+      "Stop if lifecycle/lock state, target identity, key/config/capsule hash or compatibility differs from the signed package.",
+      "Maintain uninterrupted qualified power, independent console and verified golden/programmer recovery for the entire operation.",
+      "Export existing PFR/SEL/task evidence before mutation and do not clear it to manufacture a baseline.",
+      "On verification, task, activation, boot or state anomaly, preserve evidence and do not automatically retry, erase or power-cycle."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash and SUT/BMC/AST1060 firmware plus lifecycle/lock pre-state",
+      "Initial/final state-machine approval and separate mutation authorizations",
+      "Key/config and capsule provenance, signature, hashes and compatibility",
+      "Exact vendor commands, complete update task, PFR verification and activation logs",
+      "Pre/post BMC version, boot timeline, IPMI/Redfish/Web service readiness and PFR/SEL events",
+      "Final provisioning/lock state and documented recovery readiness or actions",
+      "Engineer-owned verdict"
+    ],
+    "recovery": "On any unexpected PFR state, failed verification/task, activation timeout or absent BMC boot, stop further tool operations, preserve console/PFR/task/SEL evidence, keep power according to the vendor recovery runbook, and invoke the approved golden-image or external-programmer recovery. Unprovision, retry and power interruption require new explicit authorization."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "The protected Master row consistently targets a valid PFR BMC update; the negative-image mismatch exists only in the prior AI review and is rejected here, not recorded as a source conflict."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The intended state transitions and required OEM artifacts are identifiable. Runtime is prohibited until they are approved, but a missing firmware package/authorization alone is not BLOCKED under the review policy."
+  },
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "AST1060 firmware/lifecycle/lock and initial/final states; rk384 key/config provenance and permission; signed compatible capsule, update/activation/boot/version oracle; whether unprovision is required; separate authorizations; stable power and golden/programmer rollback.",
+    "execution_status": "ENGINEERING DECISION RETAINED; NO PFR STATE CHANGE, FLASH OR BMC UPDATE EXECUTED",
+    "owner": "Platform security/PFR and BMC firmware owners approve lifecycle, keys, capsule and recovery; lab owner authorizes each mutation; end engineer owns the verdict.",
+    "unlock_condition": "Issue a target-specific signed PFR state-transition and recovery package with separate approvals for every in-scope mutation."
+  },
+  "external_authorities": [],
+  "project_authority": "AST1060 lifecycle, trust anchors, BMC capsule compatibility, final provisioning state and programmer recovery are platform/OEM security authorities.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-15", "ED-17", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "valid_capsule_flash_and_pre_post_version_coverage_preserved": true,
+    "provision_update_activation_and_unprovision_separately_gated": true,
+    "negative_rejection_not_substituted": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2279|Wistron-HW-00246-V003",
+    "next_missing_formal_queue_case_variant_id": "b2b7e9abe2a97edb"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_pfr_lifecycle_capsule_and_unprovision_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
