@@ -1,9 +1,10 @@
 # Engineering Decision Re-review Handoff
 
-- Completed formal queue: **600 / 942**; append-only review events: **751**.
-- Last formal review: `Reliability|179|Wistron-GPU RAS-00030-V002` / `d34dd43dadd7c08d` (formal queue sequence 600; review event 751).
-- Next source-verified pending identity: `Reliability|180|Wistron-GPU RAS-00467-V004` / `f2e753543277de69` (first missing formal queue sequence 601).
-- Latest disposition: RETAINED_PENDING_OUT_OF_BAND:_UMC_UNCORRECTABLE_ADDRESS_OR_COMMAND_PARITY_SINGLE_SHOT_0600; The injector's zero exit status only proves command acceptance. The test's engineering claim is end-to-end: one mapped UMC parity stimulus must traverse the OOB RAS pipeline into one new CPER whose component, bank, extended code/type and fatal severity all agree. A max-index delta is insufficient when other dumps can be created concurrently, so entry timestamps/IDs and attachment hashes must bind the decoded JSON to the injection. Mode1 distinguishes the single-shot state and forbids retry or persistent behavior. The remaining project decision is case-specific: Resolve Reliability row179 Wistron-GPU RAS-00030-V002: approve platform/UBB/BMC/host and device0 UUID/OAM/BDF plus block0=UMC mapping; provide amdgpuras/cdump_analyzer versions/hashes/licenses and `-s4 -t4 -m1` semantics, canonical secure Systems/UBB Dump entries/attachment endpoint with auth/CA, CPER index collision/attribution and exact OAM/UMC/ext4/AddressCommandParityErr/fatal decoder schema, plus dedicated-workload and GPU/BMC/host OOB no-retry recovery. ED-16 therefore prohibits executing or declaring PASS until the named vendor authority, isolated target, deterministic oracle and recovery are approved. No DUT action ran.
-- Integrity disposition: formal checkpoint 200 was fully validated and pushed at `4185ff58`; the locked 942 queue hash is unchanged; 151 out-of-scope records remain historical.
+- Completed formal queue: **435 / 942**; append-only active review events: **586**.
+- Last valid formal review: `Functionality|2272|Wistron-BMC-00957-V002` / `95ee08c2b4246a15` (formal queue sequence 435; review event 586).
+- Next directly verified pending identity: `Functionality|2273|Wistron-HW-00475-V002` / `0167355737b887af` (first missing formal queue sequence 436).
+- Latest valid disposition: row-2272 is resolved as complete read-only TEMP_HIB_PEX validation across IB/OOB SDR/sensor data and real BMC Web evidence; sensor SPEC/range remain runtime configuration. No DUT action ran.
+- Integrity disposition: formal sequences 436-600 / events 587-751 were invalidated on 2026-10-27 because a mechanical generator violated the mandatory one-case-at-a-time reasoning rule. Their exact files are preserved under `INVALIDATED_REVIEW_RECORDS/20261027_GENERATOR_0436_0600/`; active progress is restored to formal 435 and re-review resumes at 436.
+- Formal checkpoint 200 was fully validated and pushed at `4185ff58`; the locked 942 queue hash is unchanged; 151 out-of-scope records remain historical.
 - Protected sources: unchanged.
 - DUT execution: none.
