@@ -1,0 +1,108 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 600,
+  "formal_queue_sequence": 449,
+  "source_key": "Functionality|2288|Wistron-GB NV PVP HW-00015-V003",
+  "case_variant_id": "f66d3fb7c8b49da4",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Functionality",
+    "source_row": 2288,
+    "code": "Wistron-GB NV PVP HW-00015-V003",
+    "original_row_sha256": "ef395f3ac3465b3f736fd2b6064e913bac02bd2d8a6e6f50d8404720c53274e0",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "Field RMA Diagnostics",
+    "procedure": "Verify recipe/configuration, preserve pre-test logs, meet listed memory/kernel/glibc/architecture/OS prerequisites, then collect results/photos and inspect post-test logs.",
+    "criteria": "Exit 0 with PASS, exit 1 with FAIL, or exit 2 with RETEST and a pre-check warning.",
+    "deepseek": "PARTIAL; guesses an executable named ./diagnostic and truncates output to the final 30 lines.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION; bind the authorized package/runbook and preserve full exit, marker and health evidence without automatic retest."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2408_f66d3fb7c8b49da4.json",
+  "old_problem": "The source omitted the proprietary diagnostic entry point and package identity while its Criteria required a completed diagnostic result. The historical review therefore recorded a source conflict and Pending request rather than guessing the command.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_VENDOR_FIELD_RMA_DIAGNOSTIC",
+  "disposition_reason": "The diagnostic purpose and three-state result contract are explicit. ED-03 permits the licensed package identity, official entry point, arguments, support matrix and timeout to be bound as runtime prerequisites. The review-layer case can safely require the vendor-documented command verbatim and refuse execution until supplied, so neither a guessed binary nor an engineering decision is needed. RETEST remains a non-PASS state and any correction/rerun is separately authorized under ED-11/12.",
+  "decision_basis": [
+    "Directly read XLSX Functionality rows 2288 and 2289, including the exact prerequisite list, result contract and DeepSeek proposal.",
+    "Read GPT V2/historical record 2408 and retained the exact Source Key, Variant ID and original row hash.",
+    "Rejected `./diagnostic` because the Master row does not name that binary, and rejected `tail -n 30` because it can discard pre-check and failure evidence.",
+    "Require the package owner to bind the vendor-documented entry point and support matrix before execution; this is a package prerequisite, not an unresolved test design decision.",
+    "Treat exit code and terminal marker as jointly required: 0/PASS is candidate success, 1/FAIL is failure, 2/RETEST is incomplete and inconsistent pairs are not PASS.",
+    "No package installation, diagnostic execution, log clearing, correction or retest occurred."
+  ],
+  "test_case": {
+    "test_name": "Authorized NVIDIA field-RMA diagnostic with strict PASS/FAIL/RETEST reconciliation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Run the authorized field-RMA diagnostic once on the exact supported SUT environment and preserve its complete pre-check, test, exit-code, terminal-marker and system-health evidence for engineer disposition.",
+    "required_package": [
+      "Authorized diagnostic package name/version/hash/license and official runbook",
+      "Vendor-documented executable, arguments, privileges, working directory, timeout and artifact locations",
+      "Applicable OS/kernel/glibc/Python/architecture/driver/firmware/GPU-topology support matrix",
+      "SUT hardware/firmware/driver recipe and at least 2 GB memory confirmation where applicable",
+      "Approved monitoring, abort and recovery procedure"
+    ],
+    "test_command": "After the owner binds and verifies the authorized package manifest, invoke exactly the vendor-documented field-RMA entry point and arguments from its approved working directory once. Capture complete, untruncated stdout and stderr, process exit status, all package artifacts and timestamps while monitoring host, GPU and BMC health. Reconcile the final marker with the exit status and preserve every pre-check or error message; do not repair a RETEST condition or rerun under this authorization.",
+    "expected_result": "The package passes every pre-check and diagnostic, emits a final PASS marker, returns exit status 0, produces complete readable artifacts, and introduces no unexpected OS, GPU or BMC health event. Exit 1/FAIL is a diagnostic failure; exit 2/RETEST is incomplete and requires separate correction/rerun authorization.",
+    "pass_fail_basis": "PASS requires an authorized package on an explicitly supported environment, complete output/artifacts, exit 0 and terminal PASS in agreement, plus clean post-test health/log reconciliation. FAIL, RETEST, marker/exit disagreement, missing/truncated evidence, unsupported environment, timeout, crash or unexpected health event is not PASS. Tool output is evidence; the end engineer owns the DUT verdict.",
+    "safety_gate": [
+      "Verify package hash/license/runbook and the exact support matrix before running any vendor binary.",
+      "Preserve pre-test logs before any approved clear operation and continuously monitor host/GPU/BMC health.",
+      "Stop on unsupported pre-check, timeout, crash or an approved health abort; do not guess flags or executable names.",
+      "Do not auto-install, repair a RETEST condition, truncate output, clear failure evidence or automatically rerun."
+    ],
+    "expected_evidence": [
+      "Row/variant/hash and complete SUT/GPU/OS/kernel/glibc/Python/driver/firmware identity",
+      "Package version/hash/license/runbook and exact invoked command",
+      "Pre-test configuration and preserved OS/BMC/GPU logs",
+      "Complete stdout/stderr, timestamps, process exit status and all package artifacts",
+      "Final PASS/FAIL/RETEST marker, pre-check/error reason and marker/exit consistency result",
+      "Post-test log delta, health monitoring and engineer-owned verdict"
+    ],
+    "recovery": "On RETEST, FAIL, timeout, crash, inconsistent result or health anomaly, preserve all evidence and stop. Restore only through the approved package/platform recovery procedure. Correcting a pre-check condition and rerunning requires a separate authorization; no automatic retry is allowed."
+  },
+  "source_conflict": {
+    "before": true,
+    "after": false,
+    "reason": "The omitted proprietary entry point is reconciled as an explicit vendor-package runtime binding. The source's prerequisites and three-state Criteria are preserved without inventing a command."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The test is safely specified at review layer and remains non-executable until the authorized package and runbook are bound."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Authorized package/runbook, exact executable and arguments, support matrix, timeout/artifact locations and monitoring limits.",
+    "execution_status": "REVIEW RESOLVED AS A PARAMETERIZED VENDOR DIAGNOSTIC; NO PACKAGE OR DUT ACTION EXECUTED",
+    "owner": "Package/platform owner supplies and authorizes the vendor package; the end engineer owns result disposition and any rerun.",
+    "unlock_condition": "Bind and verify the complete authorized package manifest and supported SUT environment before execution."
+  },
+  "external_authorities": [],
+  "project_authority": "The licensed diagnostic package's official runbook and support matrix are authoritative for its executable, arguments, environment and artifacts; the Master row remains authoritative for the 0/PASS, 1/FAIL and 2/RETEST contract.",
+  "traceability": {
+    "applicable_decisions": ["ED-01", "ED-02", "ED-03", "ED-04", "ED-05", "ED-06", "ED-07", "ED-08", "ED-11", "ED-12", "ED-15", "ED-19", "ED-20", "ED-24", "ED-26", "ED-30", "ED-36", "ED-38"],
+    "user_ed_01_30_reviewed": true,
+    "source_key_and_variant_preserved": true,
+    "environment_and_three_state_result_contract_preserved": true,
+    "guessed_executable_and_tail_truncation_rejected": true,
+    "retest_not_counted_as_pass_or_automatically_retried": true,
+    "runtime_package_binding_does_not_keep_review_pending": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified_from_xlsx_manifest_and_queue": "Functionality|2289|Wistron-GB NV PVP HW-00489-V003",
+    "next_missing_formal_queue_case_variant_id": "d226185859babd66"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "unique_code_and_variant_verified": true,
+    "case_specific_vendor_package_exit_marker_and_retest_reasoning": true,
+    "next_formal_queue_identity_directly_read": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
