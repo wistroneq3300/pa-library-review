@@ -1,0 +1,82 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1011,
+  "formal_queue_sequence": 860,
+  "source_key": "Compatibility|438|Wistron-Processor-00019-V002",
+  "case_variant_id": "1a0dc5393adde7b5",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 438, "code": "Wistron-Processor-00019-V002", "original_row_sha256": "ce169ab95801477a65ba775fec40ec00ee0906f5fa79e8866ae982d1855c6ffe", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "CPU Stress - Intel PTAT",
+    "procedure": "Run `./ptat -ct 1` for one hour.",
+    "criteria": "The system remains workable and no new system-log error appears after stress.",
+    "deepseek": "PARTIAL; checks PTAT help and defers the workload, so it never preserves the literal -ct 1 profile or one-hour run.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; restores -ct 1 and requires a 60-minute supervisor, per-socket telemetry, error limits and OOB recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3028_1a0dc5393adde7b5.json",
+  "old_problem": "The active record left the licensed PTAT release, -ct 1 meaning and CPU safety limits as another engineering decision. The source workload and duration are explicit; the authorized package can prove release-specific profile semantics, while per-socket load, thermal, power, throttle and error limits are mandatory project configuration rather than unresolved review logic.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_PTAT_CT1_CONTINUOUS_ONE_HOUR_CPU_STRESS_TEST",
+  "disposition_reason": "ED-03 permits artifact/platform/profile bindings, ED-14 requires the complete continuous hour, ED-15 forbids PASS without measurable per-socket utilization and numeric health limits, ED-16 requires independent stress isolation/watchdog/recovery, and ED-17 preserves bounded logs. The review retains -ct 1 exactly and does not infer proprietary workload composition.",
+  "decision_basis": [
+    "Directly read Compatibility row438 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3028 and adjacent row437 PTAT memory plus row439 IB-mode bandwidth cases.",
+    "Preserved exactly `./ptat -ct 1` and the source's continuous one-hour CPU-stress coverage; help-only discovery is not a substitute.",
+    "Required the authorized PTAT release's help/documentation to identify -ct 1 workload units and supported CPU/platform; no opaque vendor semantics are guessed.",
+    "Separated workload success from effective stress by requiring per-socket utilization/frequency/power/temperature/throttle plus RAS/MCE/SEL/kernel evidence and responsiveness heartbeat.",
+    "Directly read next formal queue Compatibility row439 and verified its manifest identity; no PTAT, CPU stress or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Intel PTAT -ct 1 continuous one-hour per-socket CPU stress with independent health supervision",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Run the authorized PTAT CPU profile continuously for one hour and prove every in-scope socket sustains meaningful processor load without hang, unaccepted throttling, thermal/power excursion, hardware error or loss of manageability.",
+    "required_package": [
+      "Authorized pinned Intel PTAT binary/package, license, checksum and supported CPU/platform/OS matrix",
+      "Release-specific help/documentation proving -ct 1 workload composition, socket/core scope and expected behavior",
+      "CPU topology, firmware/microcode, cooling and idle per-socket baseline",
+      "Project-approved per-socket utilization/frequency/power/temperature/throttle floors/ceilings, heartbeat cadence and RAS/MCE/kernel/SEL allowlist",
+      "Dedicated full-hour window, independent hard watchdog, BMC/OOB abort and recovery plan"
+    ],
+    "test_command": "Verify PTAT identity/support and capture the release help for -ct 1. Record CPU/socket/core topology, firmware/microcode, idle clocks/power/temperature/throttle state and non-destructive RAS/MCE/kernel/SEL markers. Under the approved hard watchdog run exactly `./ptat -ct 1` for 3600 continuous seconds, retaining complete stdout/stderr/exit and sampling each socket's utilization, frequency, power, temperature, throttling and host heartbeat with synchronized BMC evidence. Stop at any approved limit, then capture bounded error deltas, cooldown and post-health.",
+    "expected_result": "The authorized -ct 1 profile remains continuously active for the full 3600 seconds, exercises every required socket above the approved utilization floor and completes successfully. The host remains responsive/manageable, per-socket frequency/power/temperature/throttle behavior stays within approved limits, no unaccepted RAS/MCE/kernel/SEL event appears, and post-stress health is intact.",
+    "pass_fail_basis": "PASS requires artifact/profile identity, vendor-proven -ct 1 semantics, a gap-free 3600-second timeline, per-socket measurable load, successful PTAT output/exit, continuous heartbeat and every approved health/error rule satisfied. Help output, a zero exit, one busy socket or a shorter run cannot pass. Missing numeric limits is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Validate the licensed binary, supported CPU/platform and -ct 1 semantics before execution",
+      "Confirm cooling/power headroom, synchronized independent telemetry, OOB access and external hard watchdog",
+      "Abort on thermal/power/throttle/RAS/MCE limit, heartbeat loss, hang or watchdog failure",
+      "Preserve baseline/delta logs, allow cooldown and never clear evidence, reboot or auto-retry"
+    ],
+    "expected_evidence": [
+      "PTAT license/version/hash/support matrix and release help for -ct 1",
+      "CPU topology, firmware/microcode, cooling/power and idle per-socket baseline",
+      "Exact command plus gap-free 3600-second PTAT output/exit and watchdog timeline",
+      "Time-aligned per-socket utilization/frequency/power/temperature/throttle and heartbeat series",
+      "RAS/MCE/kernel/SEL delta, cooldown/post-health and engineer verdict"
+    ],
+    "recovery": "On health-limit breach, hang or watchdog loss, terminate PTAT through the approved supervisor when possible, preserve the partial timeline and use OOB only through the separately approved recovery procedure. Cool down and recheck socket/RAS health; do not automatically reboot or retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek remains aligned with PTAT CPU stress but omits the actual -ct 1 workload; this is incomplete rather than a source contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "The source command and duration are explicit; vendor profile semantics and numeric CPU-health limits are execution/project prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Provide the authorized PTAT release/help/support, -ct 1 scope, per-socket load/health limits, watchdog and OOB recovery before execution.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED PTAT, VENDOR-PROVEN CT1 SEMANTICS AND FULL-HOUR CPU SAFETY ORACLE REQUIRED; NOT EXECUTED",
+    "owner": "Intel PTAT license/tool, platform CPU/thermal/RAS and lab recovery owners.",
+    "unlock_condition": "Approve the immutable -ct 1 profile, per-socket hour-long stress/health envelope and recovery."
+  },
+  "external_authorities": [],
+  "project_authority": "The licensed PTAT release documentation exclusively defines -ct 1 semantics; project owners bind per-socket load, frequency/power/thermal/throttle/error and recovery rules without guesswork.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "ct1_and_continuous_one_hour_coverage_preserved": true,
+    "licensed_vendor_semantics_required_without_guessing": true,
+    "per_socket_load_thermal_power_throttle_ras_and_heartbeat_required": true,
+    "help_only_short_run_exit_only_and_log_clear_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|439|Wistron-Networking-00050-V002",
+    "next_missing_formal_queue_case_variant_id": "bac092cf8e7f062b"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_memory_ptat_and_ib_mode_cases_compared": true, "case_specific_ptat_cpu_reasoning": true, "licensed_vendor_authority_boundary_preserved": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
