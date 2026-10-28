@@ -1,0 +1,82 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1003,
+  "formal_queue_sequence": 852,
+  "source_key": "Compatibility|429|Wistron-Processor-00011-V002",
+  "case_variant_id": "f4e3153d701aa7cd",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 429, "code": "Wistron-Processor-00011-V002", "original_row_sha256": "0cb734e6878609504317b4ee543eb72b269b8aba7dfd653d8ca2a93188b587de", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Intel SSMD",
+    "procedure": "Install the licensed SSMD package, build/load cpuaccess.ko, verify /dev/cpuaccess, optionally configure boot persistence, then run flowStressTdp<Program>.json with oc_enable=1 for one hour and optionally monitor with ssmon.",
+    "criteria": "The system remains workable and the CPU remains stressed without hangs or unexpected errors.",
+    "deepseek": "PARTIAL; correctly identifies the licensed package, kernel driver and long diagnostic but omits the literal one-hour max-TDP/OC safety envelope.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires pinned artifacts, compatibility, explicit OC approval, hard runtime/telemetry stops, OOB recovery and rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3020_f4e3153d701aa7cd.json",
+  "old_problem": "The active record left the review pending for a licensed archive, exact Program JSON, platform compatibility and safety thresholds. The vendor package and its bundled ReadMe/flow are the authoritative release-specific command source; their absence blocks execution but not construction of a safe parameterized review. The source already identifies the privileged module, max-TDP flow, oc_enable=1 and one-hour duration.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_LICENSED_SSMD_ONE_HOUR_MAX_TDP_STRESS_TEST",
+  "disposition_reason": "ED-03 allows artifact, Program and platform identities as runtime bindings; ED-14 preserves the full one-hour run; ED-15 requires an approved utilization/power/thermal/RAS oracle before PASS; ED-16 requires controlled fault/thermal isolation and recovery; ED-30 keeps the licensed package and version as a prerequisite. The optional bootupdate action is excluded unless independently approved because persistence is not required for source coverage.",
+  "decision_basis": [
+    "Directly read Compatibility row429 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3020 and adjacent row428 partial-memory plus row430 AGFHC cases.",
+    "Preserved the source cpuaccess build/load, /dev/cpuaccess validation, exact flowStressTdp<Program>.json form, oc_enable=1, optional ssmon profiles and complete one-hour stress duration.",
+    "Treated the licensed SSMD archive, bundled ReadMe, exact flow JSON and support matrix as mandatory execution evidence; no proprietary command semantics or Program token is guessed.",
+    "Separated reversible one-time module loading from optional boot persistence, which requires its own authorization and rollback evidence.",
+    "Directly read next formal queue Compatibility row430 and verified its manifest identity; no package installation, module load, OC setting, stress or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Licensed Intel SSMD cpuaccess one-hour max-TDP flow with OC-enabled safety supervision",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify an approved Intel SSMD release can load its compatible CPU access driver and sustain the exact OC-enabled max-TDP flow for one full hour without hang, loss of manageability, unacceptable throttling, thermal/power excursion or hardware error.",
+    "required_package": [
+      "Licensed pinned SSMD archive, checksum/signature, bundled Drivers/ReadMe and exact flowStressTdp Program JSON",
+      "Vendor/project CPU, firmware, OS, kernel/header, compiler and module-signing compatibility approval",
+      "Approved cpuaccess build/load/unload procedure and explicit decision that bootupdate is out of scope unless separately authorized",
+      "Explicit authorization for oc_enable=1 and one-hour max-power maintenance window with OOB watchdog",
+      "Project-approved CPU utilization/power/temperature/throttle, RAS/kernel/SEL and responsiveness limits"
+    ],
+    "test_command": "Verify the licensed archive and compatibility matrix; snapshot kernel modules, boot configuration, CPU/firmware identity, logs and idle telemetry. Build cpuaccess.ko against the running kernel headers, preserve build/module metadata and load it exactly once only after approval; verify `/dev/cpuaccess` and permissions. Validate and hash the exact flow JSON, then run `sudo ./ssmd -f flowStressTdp<Program>.json -u oc_enable=1` for the complete 3600-second source duration under an external hard watchdog and independent OS/BMC telemetry, optionally collecting `sudo ./ssmon -p 1 -l 2` and `sudo ./ssmon -p 3 -l 2`. Preserve exit/report/logs, unload the module, restore temporary state and verify post-health.",
+    "expected_result": "The approved module builds and loads without compatibility or signature failure, the intended device node appears, and the exact SSMD flow remains active for the full 3600 seconds with the approved CPU-load profile. SSMD completes successfully, the host stays responsive and manageable, all thermal/power/throttle and error measures remain within approved limits, and module/temporary state is restored.",
+    "pass_fail_basis": "PASS requires the licensed artifact and exact flow identity, full build/load evidence, complete 3600-second execution, SSMD success/exit data, independent utilization/power/thermal/RAS evidence within approved limits, continuous responsiveness and verified rollback. Missing numeric limits, flow identity, monitoring interval or recovery evidence is INCONCLUSIVE—not PASS; a device node or SSMD success token alone cannot pass.",
+    "safety_gate": [
+      "Confirm package provenance, exact-kernel compatibility, module-signing policy and unload/recovery path before root module load",
+      "Require explicit user authorization for oc_enable=1, verified cooling/power headroom, OOB access and hard external watchdog",
+      "Do not run bootupdate unless separately approved with boot-recovery plan; default to nonpersistent module state",
+      "Abort on limit breach, unexpected throttle/RAS/kernel/SEL event, hang or OOB loss; preserve evidence and never auto-retry"
+    ],
+    "expected_evidence": [
+      "License/archive checksum, bundled documentation, platform support matrix and exact flow JSON hash",
+      "Kernel/header/compiler identity, complete build log and cpuaccess module metadata/signature",
+      "Prestate, module-load output, /dev/cpuaccess permissions and exact SSMD command",
+      "Full 3600-second SSMD/ssmon output, timestamps/exit and synchronized OS/BMC telemetry",
+      "RAS/kernel/SEL delta, module/boot rollback, post-health and engineer verdict"
+    ],
+    "recovery": "On module, thermal, RAS or responsiveness fault, have the external supervisor stop SSMD, preserve all logs/telemetry, regain control through OOB, unload cpuaccess when safe and restore the original module/boot state. If the host is hung, use only the separately approved recovery plan; do not persist the driver, clear evidence or retry automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is incomplete but aligned with the licensed SSMD package, privileged driver and long diagnostic; no separate source contradiction exists."},
+  "blocked": {"before": false, "after": false, "reason": "Purpose and source command are identifiable; licensed release artifacts and vendor documentation are mandatory execution prerequisites, not a static-review blocker."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Provide the licensed release/ReadMe/flow, compatibility approval, OC authorization and numeric one-hour health/abort oracle before execution.",
+    "execution_status": "REVIEW RESOLVED; LICENSED SSMD ARTIFACT, EXACT FLOW, OC AUTHORIZATION AND NUMERIC SAFETY ENVELOPE REQUIRED; NOT EXECUTED",
+    "owner": "Intel SSMD license/tool, platform kernel, thermal/power and project CPU-validation owners.",
+    "unlock_condition": "Approve the immutable package/flow, module compatibility, oc_enable=1 envelope, OOB watchdog and rollback plan."
+  },
+  "external_authorities": [],
+  "project_authority": "The licensed SSMD release's bundled documentation governs exact command semantics and supported platforms; project owners must bind Program, OC permission and numeric health limits without guesswork.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "cpuaccess_flow_oc_and_full_one_hour_coverage_preserved": true,
+    "licensed_vendor_artifacts_required_without_guessed_semantics": true,
+    "optional_boot_persistence_separately_gated": true,
+    "independent_numeric_safety_and_recovery_required": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|430|Wistron-AMD GPU-00141-V002",
+    "next_missing_formal_queue_case_variant_id": "03dba3ce1eaf1e9a"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_memory_and_gpu_cases_compared": true, "case_specific_ssmd_module_oc_reasoning": true, "licensed_vendor_authority_boundary_preserved": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
