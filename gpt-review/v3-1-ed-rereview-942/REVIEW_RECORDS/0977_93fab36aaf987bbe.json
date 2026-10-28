@@ -1,0 +1,86 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 977,
+  "formal_queue_sequence": 826,
+  "source_key": "Compatibility|402|Wistron-AMD GPU-00122-V002",
+  "case_variant_id": "93fab36aaf987bbe",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 402, "code": "Wistron-AMD GPU-00122-V002", "original_row_sha256": "4b0fe07fbb67524bae1f8cb8fe3690062c95dfac4e51f234268028975188265c", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "PCIe Device Checkevice Check",
+    "procedure": "List PCI devices and identify AMD 7xxx accelerators under the OS.",
+    "criteria": "Exactly eight OAM processing accelerators are present, with example BDFs listed in the source.",
+    "deepseek": "YES but evidence-conflicting; runs a fragile marketing-name grep and requests xGMI PCS counters, which do not prove PCIe presence or the eight-device count.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/LOW; requires the exact eight-OAM numeric identity/topology oracle and complete PCI inventory while preserving duplicate-code variant identity."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2994_93fab36aaf987bbe.json",
+  "old_problem": "The active review left a read-only eight-device inventory pending because the platform-specific numeric IDs and topology were absent. Those are safe project bindings, while standard pciutils supplies an authoritative domain-aware numeric inventory. DeepSeek's xGMI counter output was a non-equivalent evidence conflict.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_EIGHT_AMD_OAM_PCIE_INVENTORY_RECONCILIATION",
+  "disposition_reason": "pciutils documents domain-qualified BDF display, numeric vendor/device IDs and machine-readable records. The source already supplies the authoritative expected count of eight; ED-02 requires this row's Source Key and Variant ID to remain distinct from the same-code xGMI row, ED-03 permits exact PCI IDs/topology as project configuration, and ED-19 preserves each OAM's identity. Therefore the review case is complete without guessing hardware IDs or accepting xGMI counters as enumeration proof.",
+  "decision_basis": [
+    "Directly read Compatibility row402 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2994, the same-code row139 variant and the exact row402 manifest identity.",
+    "Applied lspci's documented `-D` domain display, `-nn` numeric IDs and machine-readable inventory formats instead of relying on the mutable marketing string `7xxx`.",
+    "Kept the source criterion of exactly eight unique OAM functions and required one-to-one expected-versus-observed topology reconciliation.",
+    "Rejected xGMI PCS counters as a substitute because they measure fabric error state, not OS PCIe enumeration or count.",
+    "Directly read next formal queue Compatibility row403 and verified its manifest identity; no inventory command or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Eight-AMD-OAM domain-aware PCIe enumeration reconciliation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove that all and only the eight expected AMD OAM accelerator endpoints enumerate under the OS at their approved numeric identities and topology locations, without conflating this variant with the same-code xGMI health test.",
+    "required_package": [
+      "Approved pciutils/lspci version; optional AMDXIO only if the project explicitly requires additional read-only inventory",
+      "Eight expected OAM serial/SKU to PCI vendor/device/subsystem/class identity map",
+      "Expected full-domain BDF or topology-relative root-port/physical-slot map and allowed enumeration flexibility",
+      "Expected driver binding and link generation/width if included in the platform inventory oracle",
+      "Protected raw inventory and kernel/AER/BMC log evidence location"
+    ],
+    "test_command": "Collect complete read-only `lspci -Dnnmm`, `lspci -Dnnk` and topology `lspci -Dtv` output, then capture verbose records only for the eight approved numeric identities. Reconcile every observed full-domain BDF, vendor/device/subsystem/class ID, driver and allowed topology location against the signed eight-OAM map; report missing, duplicate or unexpected endpoints and correlate enumeration/AER/kernel/BMC logs. Use approved AMDXIO read-only inventory only as supplemental evidence, never as a substitute for lspci.",
+    "expected_result": "Exactly eight unique PCIe functions match the approved AMD OAM numeric identities and allowed topology, every expected OAM is represented once, no unexpected or duplicate accelerator endpoint appears, required drivers and link fields match the project oracle, and no disallowed enumeration/AER/system error is present.",
+    "pass_fail_basis": "PASS requires an authoritative eight-OAM map, complete domain-aware raw inventory and a one-to-one eight-row expected-versus-observed reconciliation with no missing, duplicate or unexpected function. A marketing-name grep, line count without numeric identity, xGMI counters, or results from the same-code row139 variant cannot pass.",
+    "safety_gate": [
+      "Use read-only PCI inventory only; do not invoke setpci, AMDXIO margining or any configuration-space write",
+      "Do not identify endpoints solely by `7xxx` display text or suppress PCI domain numbers",
+      "Preserve Source Key, Variant ID and row hash so same-code row139 xGMI coverage remains separate",
+      "Preserve complete raw output and existing error logs without clearing history",
+      "Stop on identity/topology ambiguity and escalate; do not rescan destructively or auto-retry"
+    ],
+    "expected_evidence": [
+      "Signed eight-OAM serial/SKU/numeric-ID/topology map and allowed BDF policy",
+      "Complete lspci version plus raw -Dnnmm, -Dnnk and -Dtv output",
+      "Per-target verbose numeric PCIe/driver/link records and optional approved AMDXIO inventory",
+      "Eight-row expected-versus-observed reconciliation with missing/duplicate/unexpected analysis",
+      "Correlated kernel/AER/BMC enumeration logs and timestamps",
+      "Engineer verdict and any project disposition"
+    ],
+    "recovery": "No state change is expected. If any collector attempts a write or returns ambiguous identity, stop it, preserve the raw evidence, verify system and PCIe health through read-only sources and escalate. Do not invoke margining, reset, rescan or automatic retry."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master eight-device PCIe enumeration criterion remains authoritative; DeepSeek's xGMI-counter evidence is excluded as non-equivalent and retained only for the separate same-code variant."},
+  "blocked": {"before": false, "after": false, "reason": "Standard read-only PCI enumeration and the exact count are defined; numeric identity/topology inputs are project configuration required at execution."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind all eight OAM serial/SKU/vendor-device-subsystem/class identities, BDF/topology policy, required driver/link fields and whether supplemental AMDXIO inventory is mandatory.",
+    "execution_status": "REVIEW RESOLVED; READ-ONLY EXECUTION REQUIRES SIGNED EIGHT-OAM IDENTITY MAP; NOT EXECUTED",
+    "owner": "AMD GPU platform and PCIe topology owners.",
+    "unlock_condition": "Approve the immutable eight-OAM numeric identity/topology oracle and evidence collector versions."
+  },
+  "external_authorities": [
+    {"title": "lspci(8) — pciutils", "url": "https://man7.org/linux/man-pages/man8/lspci.8.html", "applied_rule": "`-D` preserves PCI domains, `-nn` exposes numeric IDs and machine-readable modes support reliable per-device reconciliation."}
+  ],
+  "project_authority": "Exact OAM SKU/numeric PCI IDs, fixed-versus-relative topology, driver and link expectations remain project-specific.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "same_code_row139_variant_kept_separate": true,
+    "exact_eight_amd_oam_pcie_presence_coverage_preserved": true,
+    "numeric_domain_aware_identity_and_topology_evidence_added": true,
+    "xgmi_counters_not_substituted_for_pcie_enumeration": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|403|Wistron-AMD GPU-00469-V003",
+    "next_missing_formal_queue_case_variant_id": "123048d3a1f296eb"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_variants_compared": true, "case_specific_eight_oam_pcie_reasoning": true, "authoritative_pciutils_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
