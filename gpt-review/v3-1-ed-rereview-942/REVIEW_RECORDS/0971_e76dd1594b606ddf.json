@@ -1,0 +1,119 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 971,
+  "formal_queue_sequence": 820,
+  "source_key": "Compatibility|396|Wistron-Networking-00385-V003",
+  "case_variant_id": "e76dd1594b606ddf",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {
+    "sheet": "Compatibility",
+    "source_row": 396,
+    "code": "Wistron-Networking-00385-V003",
+    "original_row_sha256": "93207eae5ec464b99051160ec3cd1a523fd8d0e702a9705a4eadb7a88b5b89d7",
+    "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"
+  },
+  "source_snapshot": {
+    "items": "IPv4",
+    "procedure": "Assign IPv4 to the BlueField ports, verify address and LED, ping the peer, then remove NIC cables and verify the address/link and LED-disabled condition.",
+    "criteria": "Correct assigned address, LED on and error-free ping before cable removal; the port is disabled for IPv4 traffic and the LED is off after removal.",
+    "deepseek": "PARTIAL; proposes sshpass plus an assumed /24 address addition, but omits duplicate-address/route protection, cable removal, carrier oracle, visual proof and restoration.",
+    "gpt_v2": "MANUAL ONLY/CHANGED/CRITICAL; requires a dedicated non-management interface, exact network bindings, operator cable/LED work and deterministic rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2988_e76dd1594b606ddf.json",
+  "old_problem": "The active record left 'IP addresses should be disable' without an authoritative oracle and therefore requested another engineering decision. It also lacked exact port/peer bindings and safe mutation/rollback inputs. Linux normally separates the configured protocol address from carrier/operational state, so cable removal cannot be assumed to delete the address object.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_IPV4_CARRIER_LOSS_AND_RESTORATION_TEST",
+  "disposition_reason": "Linux kernel operational-state semantics establish that an unplugged Ethernet interface is unable to transfer data at L1 and reports a down/no-carrier condition; iproute2 separately manages protocol addresses. Therefore the source's disabled requirement is review-resolved as loss of carrier and IPv4 reachability, while address retention/removal is recorded and judged only against an approved network-manager policy. ED-03 permits exact network values as runtime configuration, ED-05 keeps Ethernet distinct from InfiniBand, ED-09 assigns cable and LED actions to an operator, and ED-19 preserves the complete before/unplug/restore sequence.",
+  "decision_basis": [
+    "Directly read Compatibility row396 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2988 and its unique source identity.",
+    "Applied Linux kernel operational-state documentation: physical cable loss drives carrier/operstate down and prevents L1 data transfer; administrative state and configured IPv4 address are distinct state dimensions.",
+    "Applied iproute2 address semantics: an address is explicitly added, shown and deleted; no blanket address flush or assumed deletion on cable removal is permitted.",
+    "Retained IPv4 assignment, address verification, LED-on, ping, cable removal, disabled traffic, LED-off, evidence collection and final log review, while adding exact restoration.",
+    "Directly read next formal queue Compatibility row397 and verified its manifest identity; no address, ping, cable, LED or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Dedicated-port IPv4 reachability, carrier-loss and restoration verification",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Prove an approved IPv4 configuration works on each mapped BlueField Ethernet port, its physical indication is correct, cable removal causes attributable carrier and reachability loss, and the original network state is restored.",
+    "required_package": [
+      "Exact BlueField BDF/netdev/MAC/physical connector/peer map and confirmation that every target is Ethernet rather than InfiniBand",
+      "Approved disposable IPv4 address, prefix, route/gateway and peer ping target for each port, with ownership and duplicate-address checks",
+      "Signed carrier/operstate, ping deadline/loss and LED-on/off oracle, plus address-retention policy if project network management requires one",
+      "Qualified cable/LED operator, maintenance window, timestamped visual-evidence method and independent management/OOB access",
+      "Complete pre-state snapshot and exact address/route/link/network-manager restoration procedure"
+    ],
+    "test_command": "After proving independent management and mapping each dedicated Ethernet port, preserve complete `ip -details link show dev <netdev>`, `ip -4 address show dev <netdev>`, routes, manager profile and relevant logs. Apply only the approved temporary IPv4/prefix/route through the authorized local/session method, verify the exact address plus carrier/operstate and ping the bound peer. A qualified operator then removes that port's cable while automation records carrier/operstate, full address state, routes, ping result and logs and captures LED evidence; reconnect once, verify recovery, then restore the exact pre-state.",
+    "expected_result": "Before removal, the approved IPv4 address and route are present on the exact Ethernet port, carrier/operstate is usable, its LED matches the signed legend and peer ping meets the approved oracle. After removal, the same port reports no carrier/down within deadline, peer IPv4 traffic fails as specified and its LED is off. The configured address is recorded rather than presumed deleted and is judged only by the approved manager policy. After reconnection and rollback, the original address, route, carrier, peer reachability and logs are restored without cross-port impact.",
+    "pass_fail_basis": "PASS requires target-bound before/cable-out/restored link, address, route, ping, log and visual evidence for every mapped Ethernet port; exact signed timing and traffic-loss rules; no disallowed errors; and a clean final diff. Address presence alone cannot pass, cable loss need not delete an address unless project policy explicitly requires it, and a static ping or LED observation cannot replace the full transition.",
+    "safety_gate": [
+      "Use only a proven dedicated non-management Ethernet port and independent management/OOB; stop if mapping or alternate access is uncertain",
+      "Never assume /24, invent an address/route, embed credentials, use broad interface selection or flush all addresses",
+      "Check address/route ownership and duplicate use before mutation; preserve complete pre-state before any change",
+      "Qualified operator controls the exact cable and physical LED observation; one port is exercised at a time",
+      "Stop on wrong-port effect, duplicate address, route drift, management loss, unexpected errors or failed recovery; restore once and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Approved BDF/netdev/MAC/connector/peer and Ethernet-mode map plus alternate-access proof",
+      "Disposable IPv4/prefix/route ownership, duplicate-address check and signed address/carrier/ping/LED oracle",
+      "Complete baseline and configured link/address/route/manager/log state plus successful peer ping",
+      "Timestamped cable-out no-carrier/operstate, unchanged-or-policy-governed address state, failed ping and LED-off photo/witness",
+      "Reconnected state, restored peer ping and exact final configuration/log diff",
+      "Operator action record, recovery record and engineer verdict"
+    ],
+    "recovery": "On wrong-port behavior, route drift, access loss or failed reconnection, stop, use independent management, reconnect only the mapped cable and restore the saved address/link/route/network-manager state once. Verify carrier, peer reachability and management health, preserve the failed evidence and do not retry automatically."
+  },
+  "source_conflict": {
+    "before": false,
+    "after": false,
+    "reason": "DeepSeek covers only the address-add phase of the same source workflow; its omissions and unsafe assumptions are corrected without replacing the Master intent."
+  },
+  "blocked": {
+    "before": false,
+    "after": false,
+    "reason": "The standard carrier/address semantics, pass/fail model, safety gates and recovery are defined; project network bindings and operator evidence are runtime prerequisites."
+  },
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind every Ethernet BDF/netdev/MAC/connector/peer, disposable IPv4/prefix/routes, duplicate-address control, carrier/ping timing, LED legend/evidence, address-retention policy, alternate access and exact rollback.",
+    "execution_status": "REVIEW RESOLVED; MANUAL NETWORK CHANGE AND PHYSICAL CABLE APPROVAL REQUIRED; NOT EXECUTED",
+    "owner": "Network, BlueField platform and lab operations owners.",
+    "unlock_condition": "Approve the immutable Ethernet topology, disposable network plan, signed transition oracle, operator evidence and restoration plan."
+  },
+  "external_authorities": [
+    {
+      "title": "Linux Kernel Operational States",
+      "url": "https://www.kernel.org/doc/html/latest/networking/operstates.html",
+      "applied_rule": "Linux separates administrative and operational state; an unplugged Ethernet interface is operationally down/no-carrier and unable to transfer L1 data."
+    },
+    {
+      "title": "ip-address(8) — iproute2 protocol address management",
+      "url": "https://man7.org/linux/man-pages/man8/ip-address.8.html",
+      "applied_rule": "Protocol addresses are explicitly shown, added and deleted; an unqualified flush is destructive and address deletion is not inferred from carrier loss."
+    }
+  ],
+  "project_authority": "Physical topology, disposable IP plan, manager-specific address-retention policy, transition timing, LED legend and rollback remain project-specific.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-09", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "ipv4_assignment_address_led_ping_cable_removal_disabled_traffic_led_off_and_restore_coverage_preserved": true,
+    "configured_address_not_conflated_with_carrier_operstate": true,
+    "ethernet_not_conflated_with_infiniband": true,
+    "physical_cable_and_visual_led_remain_manual": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|397|Wistron-Networking-00386-V003",
+    "next_missing_formal_queue_case_variant_id": "e9c85f73026e773f"
+  },
+  "review_quality": {
+    "exact_xlsx_row_read": true,
+    "same_row_deepseek_read": true,
+    "gpt_v2_read": true,
+    "historical_pending_record_read": true,
+    "case_specific_ipv4_carrier_and_address_reasoning": true,
+    "authoritative_linux_and_iproute2_sources_applied": true,
+    "next_identity_directly_verified": true,
+    "written_without_generator_or_template": true,
+    "protected_sources_unchanged": true
+  }
+}
