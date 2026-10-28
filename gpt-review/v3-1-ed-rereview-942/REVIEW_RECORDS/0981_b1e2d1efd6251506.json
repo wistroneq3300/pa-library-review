@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 981,
+  "formal_queue_sequence": 830,
+  "source_key": "Compatibility|406|Wistron-AMD GPU-00126-V002",
+  "case_variant_id": "b1e2d1efd6251506",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 406, "code": "Wistron-AMD GPU-00126-V002", "original_row_sha256": "5281b28158695fc7a5c8f685d751a2a952c7ac42b74c06f22ee771e3c2255d60", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "XGMI BW Test - A2A Stress",
+    "procedure": "Use `USE_GPU_DMA=1 ./TransferBench p2p` for every power-of-two transfer size from 1K through 1G, directing bidirectional traffic between each GPU and all applicable CPU/GPU peers.",
+    "criteria": "Pass/fail criteria are owned by the pinned `/opt/amd/agfhc/hclib/mi300/definitions.yml`.",
+    "deepseek": "PARTIAL; preserves the 1K-to-1G loop but truncates each result with tail, does not prove every applicable pair and returns IOMMU/driver lines instead of the bandwidth matrix and threshold evaluation.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires pinned TransferBench and AGFHC definitions, exact topology, complete pair-by-size matrix, full output, telemetry and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2998_b1e2d1efd6251506.json",
+  "old_problem": "The active record left this review pending for the exact topology, tool version and definitions.yml thresholds. The upstream TransferBench specification now establishes the p2p workload semantics and matrix output, while the missing per-cell AGFHC limits can be treated as mandatory project configuration under ED-03/ED-15 rather than an unresolved command meaning.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_COMPLETE_1K_TO_1G_TRANSFERBENCH_CPU_GPU_PAIR_MATRIX",
+  "disposition_reason": "ROCm TransferBench documents that the p2p preset measures CPU-to-CPU, CPU-to-GPU and GPU-to-GPU pairs, can select bidirectional mode and GPU DMA, and outputs a labeled bandwidth matrix. Thus the core workload is authoritative. ED-03 permits the applicable topology and pinned definition artifact as runtime configuration, ED-14 preserves the entire size sweep rather than a sample, and ED-15 forbids PASS until every matrix cell is evaluated against the signed definitions.yml rule. Missing thresholds remain execution prerequisites and do not keep the review pending.",
+  "decision_basis": [
+    "Directly read Compatibility row406 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2998 and its unique source identity.",
+    "Applied official ROCm TransferBench p2p semantics: all detected CPU/GPU pair classes, bidirectional mode, GPU-DMA selection and labeled matrix output.",
+    "Retained every power-of-two size from 1K through 1G and required a complete pair-by-size matrix; no tail truncation or final-only summary is accepted.",
+    "Required the exact versioned AGFHC definitions.yml and recorded per-cell rule/hash; without it the result is NOT EVALUATED, never PASS.",
+    "Directly read next formal queue Compatibility row407 and verified its manifest identity; no TransferBench, DMA, stress or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Complete 1K-to-1G ROCm TransferBench bidirectional CPU/GPU pair bandwidth matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Measure saturated bidirectional copy bandwidth for every applicable CPU/GPU source-destination pair at every power-of-two size from 1 KiB through 1 GiB and evaluate each cell against the approved MI300 AGFHC definition.",
+    "required_package": [
+      "Pinned checksum-verified ROCm TransferBench build plus compatible ROCm/AMDGPU stack",
+      "Pinned AGFHC package and exact `/opt/amd/agfhc/hclib/mi300/definitions.yml` content/hash",
+      "Approved GPU serial/UUID/BDF and CPU NUMA-node topology with the complete applicable pair matrix",
+      "Approved IOMMU, large-BAR, memory-type, P2P_MODE=2 bidirectional, USE_GPU_DMA=1, iteration/subexecutor and output settings for the pinned build",
+      "Dedicated maintenance window, per-GPU/link/RAS/thermal/power abort thresholds, independent access and cleanup/recovery plan"
+    ],
+    "test_command": "After validating artifact hashes, topology, IOMMU/large-BAR/P2P prerequisites and an isolated window, record the exact TransferBench environment and run the approved p2p bidirectional GPU-DMA profile for each size `1K 2K 4K 8K 16K 32K 64K 128K 256K 512K 1M 2M 4M 8M 16M 32M 64M 128M 256M 512M 1G`. Preserve untruncated stdout/stderr and labeled pair matrices for every size, while synchronously recording GPU/link/RAS/thermal/power telemetry. Join every expected pair/size cell to the exact signed definitions.yml threshold and retain skipped/unsupported pair reasons.",
+    "expected_result": "All expected CPU/GPU and GPU/GPU pairs produce complete attributable bidirectional results at all 21 sizes, every applicable matrix cell meets its versioned AGFHC minimum/maximum rule and unit, no required pair is silently skipped, and no disallowed DMA, IOMMU, P2P, XGMI/PCIe, RAS, thermal, power or system error occurs.",
+    "pass_fail_basis": "PASS requires the immutable topology and artifact hashes, complete expected-pair × 21-size matrix, untruncated raw output, exact definitions.yml rule and threshold evaluation for every applicable cell, explicit allowed skips and clean synchronized health evidence. Without the signed definition artifact or any required cell, the result is NOT EVALUATED; driver/IOMMU lines or a tail sample cannot pass.",
+    "safety_gate": [
+      "Run only in a dedicated high-load window with independent management and confirmed cooling/power headroom",
+      "Verify stable GPU/CPU topology, compatible TransferBench build, IOMMU/large-BAR/P2P and memory-mode prerequisites before load",
+      "Do not invent per-cell thresholds, truncate output or silently exclude slow/missing pairs",
+      "Preserve complete pre/during/post link, RAS, dmesg, thermal and power telemetry without clearing history",
+      "Abort on GPU loss/reset, XGMI/PCIe error, IOMMU fault, RAS event, thermal/power limit, hang or access loss; clean up once and never auto-retry"
+    ],
+    "expected_evidence": [
+      "TransferBench/ROCm/driver and AGFHC definitions.yml versions, checksums and exact environment/profile",
+      "GPU UUID/BDF and CPU NUMA topology plus expected applicable pair matrix",
+      "Untruncated command/stdout/stderr and labeled bandwidth matrix for every 1K-to-1G size",
+      "Per-cell observed value, unit, definition key/threshold and evaluation table including explicit skips",
+      "Synchronized XGMI/PCIe, IOMMU, GPU/RAS, thermal/power and system-log evidence",
+      "Cleanup/post-health comparison and engineer verdict"
+    ],
+    "recovery": "On a fault or missing result, stop the active TransferBench process, preserve the complete partial matrix and telemetry, verify every GPU/CPU/P2P path and management health through read-only sources, remove only temporary workload artifacts and escalate. Do not rerun a failed cell or the whole sweep automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek keeps the source TransferBench sweep but truncates and misdirects evidence; the Master complete matrix remains authoritative."},
+  "blocked": {"before": false, "after": false, "reason": "Upstream documentation defines the workload/matrix; exact topology, artifact, project thresholds and high-load controls are execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind TransferBench/ROCm/AGFHC artifact hashes, exact definitions.yml, GPU/CPU topology and applicable pairs, IOMMU/large-BAR/profile settings, per-cell thresholds, telemetry and recovery.",
+    "execution_status": "REVIEW RESOLVED; HIGH-LOAD MATRIX REQUIRES PINNED ARTIFACTS, DEFINITIONS, TOPOLOGY AND WINDOW; NOT EXECUTED",
+    "owner": "AMD GPU performance, ROCm/AGFHC, platform topology and lab operations owners.",
+    "unlock_condition": "Approve the immutable pair/profile matrix, versioned definitions.yml, artifact compatibility and high-load abort/recovery plan."
+  },
+  "external_authorities": [
+    {"title": "ROCm TransferBench p2p Preset Documentation", "url": "https://rocm.docs.amd.com/projects/TransferBench/en/docs-1.66.03/reference/presets.html", "applied_rule": "The p2p preset measures labeled CPU/GPU pair matrices, supports bidirectional selection and GPU-DMA execution, and requires explicit environment/profile control."},
+    {"title": "ROCm TransferBench Repository", "url": "https://github.com/ROCm/TransferBench", "applied_rule": "TransferBench is the upstream AMD utility for simultaneous CPU/GPU memory-copy bandwidth benchmarking."}
+  ],
+  "project_authority": "Applicable pairs, exact build/profile, versioned AGFHC definitions and all per-cell pass/fail and health thresholds remain project-specific.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "all_applicable_cpu_gpu_pairs_and_every_1k_to_1g_power_of_two_size_preserved": true,
+    "bidirectional_gpu_dma_matrix_not_replaced_by_driver_or_iommu_logs": true,
+    "untruncated_per_cell_evidence_required": true,
+    "no_pass_without_versioned_definitions_yml": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|407|Wistron-AMD GPU-00127-V002",
+    "next_missing_formal_queue_case_variant_id": "9c83ddcd3c0eb38e"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "case_specific_transferbench_pair_size_matrix_reasoning": true, "authoritative_rocm_transferbench_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
