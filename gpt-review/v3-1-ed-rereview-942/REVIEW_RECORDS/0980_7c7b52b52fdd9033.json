@@ -1,0 +1,88 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 980,
+  "formal_queue_sequence": 829,
+  "source_key": "Compatibility|405|Wistron-AMD GPU-00125-V002",
+  "case_variant_id": "7c7b52b52fdd9033",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 405, "code": "Wistron-AMD GPU-00125-V002", "original_row_sha256": "b3b93d9cc0dbfb0ab8d15e1b9e7e31249a56348fb6adcd03c25b238b2f99a0ca", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Detection and installation",
+    "procedure": "Verify eight AMD GPUs through lspci, inspect verbose PCIe link state per BDF and confirm rocm-smi operates.",
+    "criteria": "All eight GPUs remain detected, no hardware error appears in dmesg, no GPU is lost and no unexpected shutdown occurs.",
+    "deepseek": "YES but incomplete; uses fixed DRM card0-card7 indices and maximum link speed only, omitting stable BDF/unique identity, negotiated link width/speed and complete error/shutdown evidence.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires exact eight-GPU mapping, compatible ROCm SMI, capable-versus-current PCIe link and full preserved logs."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2997_7c7b52b52fdd9033.json",
+  "old_problem": "The active record kept a standard read-only detection/health review pending for exact GPU mapping and expected PCIe values. Those are project configuration inputs; AMD ROCm SMI and pciutils provide sufficient stable identity and inventory mechanisms. Fixed DRM indices and max_link_speed alone remained unsafe evidence.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_READ_ONLY_EIGHT_AMD_GPU_PCIE_ROCM_AND_SYSTEM_HEALTH_CHECK",
+  "disposition_reason": "ROCm SMI exposes product, serial/unique ID, PCI bus and driver information, while pciutils exposes domain-qualified numeric PCI identity and negotiated/capable link fields. AMD documentation also confirms enumeration indices are discovery-order identifiers, not stable device identities. ED-02 keeps this performance-health row distinct from same-code row141 driver installation; ED-03 permits the eight-GPU map and expected link values as configuration, and ED-15 requires those signed values before PASS. The review method is therefore complete without another engineering decision.",
+  "decision_basis": [
+    "Directly read Compatibility row405 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2997, and same-code row141 driver-install variant.",
+    "Applied AMD ROCm SMI identity/bus/driver query documentation and AMD's explicit warning that ordinal GPU indexes follow discovery order rather than stable identity.",
+    "Applied domain-aware numeric lspci evidence and required both capable and negotiated PCIe generation/width for every mapped BDF.",
+    "Retained exactly eight GPUs, working rocm-smi, persistent OS visibility, no hardware dmesg error and no unexpected shutdown; product names or maximum speed alone cannot pass.",
+    "Directly read next formal queue Compatibility row406 and verified its manifest identity; no ROCm, PCIe or DUT command ran."
+  ],
+  "test_case": {
+    "test_name": "Eight-AMD-GPU stable-identity PCIe, ROCm SMI and system-health verification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove all eight approved AMD GPUs enumerate at their expected negotiated PCIe state, are visible and queryable through the approved ROCm SMI stack, remain present during collection and show no hardware-error or unexpected-shutdown evidence.",
+    "required_package": [
+      "Pinned ROCm SMI/ROCm/AMDGPU versions compatible with the platform; AMD SMI successor may be supplemental but cannot silently replace a source-required rocm-smi check",
+      "Approved pciutils version",
+      "Eight GPU serial/unique-ID/BDF/DRM-node/ROCm-index/topology map and allowed index/BDF flexibility",
+      "Expected capable and current PCIe generation/width per GPU under the approved platform state",
+      "Signed hardware-error, GPU-loss and unexpected-shutdown log/event oracle with evidence time window"
+    ],
+    "test_command": "Capture pinned tool/driver versions, full `lspci -Dnnk`, topology and per-mapped-BDF verbose link records. Run the approved read-only rocm-smi identity/product/driver/bus queries and join each result to the signed serial/unique-ID/BDF map rather than assuming card0-card7 order. Record current and maximum PCIe speed/width from the exact BDF/sysfs records, repeat the eight-device identity reconciliation at the end, and preserve dmesg/journal plus BMC/SEL/shutdown evidence for the bounded window.",
+    "expected_result": "Exactly eight unique approved GPU identities appear consistently in PCIe, DRM/ROCm and driver views; each BDF reports the signed capable and negotiated PCIe generation/width; rocm-smi completes without device/query error; no GPU disappears between snapshots; and no disallowed AMDGPU, PCIe/AER, hardware-error or unexpected-shutdown event occurs.",
+    "pass_fail_basis": "PASS requires a signed eight-GPU identity/link oracle, complete domain-aware raw inventory, successful target-bound ROCm SMI output, exact capable/current link comparison for every GPU, stable before/after count and preserved error/shutdown evidence. Fixed ordinal indices, product names only, max speed only or absence of a narrow grep match cannot pass.",
+    "safety_gate": [
+      "Use read-only SMI, PCIe and log queries only; do not call SMI set/reset controls",
+      "Join by serial/unique ID and full-domain BDF; never assume DRM or ROCm ordinal stability",
+      "Keep same-code row141 driver-install coverage separate; this row performs no package or driver mutation",
+      "Preserve complete raw logs and event history without clearing them",
+      "Stop on identity, link-state or log ambiguity and escalate; do not reset, rescan or auto-retry"
+    ],
+    "expected_evidence": [
+      "Pinned ROCm SMI/ROCm/AMDGPU/pciutils versions and signed eight-GPU identity/topology/link map",
+      "Complete lspci -Dnnk/tree and per-BDF capable/current link evidence",
+      "Full rocm-smi product, serial/unique-ID, bus and driver output joined to every BDF",
+      "Before/after eight-device reconciliation proving no GPU loss",
+      "Preserved dmesg/journal and BMC/SEL/shutdown-window evidence with applied oracle",
+      "Engineer verdict"
+    ],
+    "recovery": "No state change is expected. If a GPU is absent, link state is wrong or an error appears, preserve all raw evidence, verify identities through independent read-only PCIe/ROCm/BMC views and escalate. Do not install drivers, reset a GPU, rescan PCIe or automatically retry under this testcase."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek retains the same detection/ROCm intent but its fixed-index and max-speed evidence is expanded rather than treated as an alternative test."},
+  "blocked": {"before": false, "after": false, "reason": "Standard read-only PCIe and ROCm identity/health methods are defined; exact mapping, link values and log oracle are execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind all eight serial/unique-ID/BDF/DRM/ROCm identities, pinned ROCm/driver versions, expected capable/current PCIe speed/width and the error/shutdown event oracle.",
+    "execution_status": "REVIEW RESOLVED; READ-ONLY EXECUTION REQUIRES SIGNED EIGHT-GPU MAP, LINK SPEC AND ROCM PACKAGE; NOT EXECUTED",
+    "owner": "AMD GPU platform, ROCm software and PCIe topology owners.",
+    "unlock_condition": "Approve the eight-GPU identity/link recipe, compatible package versions and hardware-error/shutdown oracle."
+  },
+  "external_authorities": [
+    {"title": "ROCm SMI LIB Usage", "url": "https://rocm.docs.amd.com/projects/rocm_smi_lib/en/latest/how-to/use-python.html", "applied_rule": "ROCm SMI provides product, driver, serial/unique-ID and PCI-bus queries for correlating GPU management identity to PCIe inventory."},
+    {"title": "AMD SMI CLI Tool Usage", "url": "https://rocm.docs.amd.com/projects/amdsmi/en/develop/how-to/amdsmi-cli-tool.html", "applied_rule": "GPU ordinal IDs are assigned in discovery order; BDF or UUID must be used for stable target selection."},
+    {"title": "lspci(8) — pciutils", "url": "https://man7.org/linux/man-pages/man8/lspci.8.html", "applied_rule": "Domain-aware numeric and verbose PCI records provide stable identity, driver and link-capability evidence."}
+  ],
+  "project_authority": "Exact GPU identity/topology, expected negotiated link values, compatible ROCm stack and error/shutdown policy remain project-specific.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "same_code_row141_driver_install_variant_kept_separate": true,
+    "eight_gpu_detection_pcie_rocm_no_loss_no_error_no_shutdown_coverage_preserved": true,
+    "stable_identity_not_fixed_ordinal_index": true,
+    "capable_and_negotiated_link_both_required": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|406|Wistron-AMD GPU-00126-V002",
+    "next_missing_formal_queue_case_variant_id": "b1e2d1efd6251506"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_variants_compared": true, "case_specific_eight_gpu_pcie_rocm_reasoning": true, "authoritative_amd_and_pciutils_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
