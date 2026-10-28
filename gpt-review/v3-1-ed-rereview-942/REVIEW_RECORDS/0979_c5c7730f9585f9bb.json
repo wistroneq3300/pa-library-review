@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 979,
+  "formal_queue_sequence": 828,
+  "source_key": "Compatibility|404|Wistron-AMD GPU-00469-V003",
+  "case_variant_id": "c5c7730f9585f9bb",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 404, "code": "Wistron-AMD GPU-00469-V003", "original_row_sha256": "481d5d81d7f3bcfd25faef41f5574db5f664aec16b95a994978d2fdce38002e4", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Retimer 4-point Margin",
+    "procedure": "Derive eight root-port/retimer/endpoint paths and run AMDXIO four-point margin separately at retimer upstream receiver 2 and downstream receiver 3 with BER=10, errcnt=5 and specified phase/voltage ranges.",
+    "criteria": "Each direction's CSV has one row per tested lane, every required margin value is non-zero and Margin Left/Right/Top/Bottom ErrCnt values are zero.",
+    "deepseek": "PARTIAL; reduces both retimer directions to generic AMDXIO CSV collection and omits receiver semantics, exact topology, known zero-result handling, full oracle and recovery.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/CRITICAL; requires pinned proprietary tool, live retimer chains, both receiver runs, complete parser, monitoring and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2996_c5c7730f9585f9bb.json",
+  "old_problem": "The active review exposed missing retimer topology and tool inputs but assumed the source's generic non-zero and zero-ErrCnt oracle could be parameterized. AMD release notes directly identify a PCIe retimer downstream-port margin zero-value issue and require stepthrough mode, so receiver-direction, tool-build and workaround semantics are core test authority rather than simple runtime values.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_FOR_AMDXIO_RETIMER_RECEIVER2_RECEIVER3_METHOD_AND_MARGIN_ORACLE",
+  "disposition_reason": "The source names proprietary AMDXIO receiver values 2 and 3 but provides no approved build, receiver map, output schema or release-specific workaround. AMD documentation records a retimer DSPP margin zero-value defect whose prescribed AMDXIO method is stepthrough, and AMD errata also describes transient invalid zero margin status. ED-03 cannot fill in an OEM tool's command semantics; ED-15 forbids PASS without an authoritative value/error oracle, and ED-16/ED-17 require approved disruptive tooling, monitoring and recovery. Pending must remain until the project/AMD owner resolves these particulars.",
+  "decision_basis": [
+    "Directly read Compatibility row404 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2996 and both same-code row403/404 variants.",
+    "Preserved row404's distinct retimer upstream receiver=2 and downstream receiver=3 runs and did not substitute row403 endpoint receiver=6 coverage.",
+    "AMD release notes explicitly associate a zero margin result at the retimer DSPP with a required AMDXIO `-method=stepthrough` workaround; the source command omits it.",
+    "AMD Family 19h errata shows margin status can transiently read zero and requires invalid-zero reread handling, so an unconditional any-zero failure rule is unsafe without platform/build authority.",
+    "Directly read next formal queue Compatibility row405 and verified its manifest identity; no AMDXIO, margin or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Eight-path retimer upstream-receiver-2 and downstream-receiver-3 four-point margin characterization",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Measure and independently validate every lane on both retimer channel segments for all eight AMD OAM paths using the approved direction-specific AMDXIO method, without confusing endpoint receiver coverage or invalid zero samples.",
+    "required_package": [
+      "AMD-approved AMDXIO build/checksum/license/release notes and exact receiver=2/3 plus stepthrough syntax documentation",
+      "Eight current full-domain root-port/upstream-retimer/downstream-retimer/endpoint chains and physical lane maps",
+      "Authoritative mapping of receiver 2 to upstream segment and receiver 3 to downstream segment for the exact retimer/platform",
+      "Approved CSV schema, lane ordering, invalid-zero/re-read rules, four ErrCnt meanings and numeric PASS/FAIL thresholds",
+      "Isolated maintenance window, independent access, AER/link/GPU/thermal monitoring, abort and retimer/link recovery"
+    ],
+    "test_command": "NOT RELEASED FOR EXECUTION. Once AMD/project authority is supplied, attest each live retimer chain and baseline link/AER/GPU/thermal state, then run the signed build-specific four-point profile separately for receiver 2 and receiver 3 using the approved normal or stepthrough method. Preserve direction-tagged stdout/stderr and original CSVs, apply the approved invalid-zero/re-read and error-count rules, and verify link/retimer/GPU health after each path before proceeding.",
+    "expected_result": "Both approved receiver directions complete for every mapped retimer path; each direction contains exactly the expected per-lane records; valid margin and four directional error-count fields satisfy the signed numeric and invalid-sample rules; no disallowed link/AER/GPU/thermal event occurs; and all paths remain at their required rate/width after testing.",
+    "pass_fail_basis": "PENDING AUTHORITY. PASS requires an approved AMDXIO build and method, exact receiver-direction mapping, complete lane/schema evidence, release-specific zero/re-read/stepthrough rules and numeric margin/error thresholds. A generic non-zero check, combined receiver output or endpoint receiver=6 result cannot pass.",
+    "safety_gate": [
+      "Do not execute without signed AMDXIO provenance and build/platform-specific receiver and stepthrough guidance",
+      "Derive full-domain retimer chains live; never reuse source example BDF paths without attestation",
+      "Run receiver 2 and receiver 3 independently and preserve direction labels; never merge their results",
+      "Isolate one path at a time with independent management and live AER/link/GPU/thermal monitoring",
+      "Stop on mapping/schema ambiguity, retimer/link degradation, AER escalation, thermal event or failed recovery; never auto-retry"
+    ],
+    "expected_evidence": [
+      "Approved AMDXIO binary/checksum/release guidance and receiver 2/3/stepthrough authority",
+      "Eight full-domain root/retimer/endpoint and physical-lane maps plus baseline health",
+      "Exact direction-tagged commands, complete stdout/stderr and original receiver 2 and receiver 3 CSVs",
+      "Per-lane parser output applying approved invalid-zero, reread, stepthrough, numeric margin and four-ErrCnt rules",
+      "Post-direction link/rate/AER/GPU/thermal comparison for every path",
+      "Recovery record and engineer verdict"
+    ],
+    "recovery": "On receiver, schema, link or margin anomaly, stop the current and all remaining paths, preserve both direction datasets, use independent access to verify retimer and endpoint enumeration/link rate/AER/GPU health, perform only the AMD/project-approved recovery and escalate. Do not rerun or reinterpret zero results without the missing authority."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek remains a materially incomplete summary of the same retimer test; the unresolved conflict is with absent OEM authority, not an alternative source method."},
+  "blocked": {"before": false, "after": false, "reason": "The review records the two-direction coverage and missing authority; execution is prohibited until the proprietary method/oracle and recovery are approved."},
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Provide eight live retimer paths and isolation, but configuration alone is insufficient without approved AMDXIO build, receiver 2/3 mapping, stepthrough/zero handling, CSV schema, numeric thresholds and recovery.",
+    "execution_status": "ENGINEERING DECISION PENDING; RETIMER-SPECIFIC AMDXIO METHOD/ORACLE AND RECOVERY NOT APPROVED; NOT EXECUTED",
+    "owner": "AMD platform/tool owner, retimer/PCIe signal-integrity owner and project hardware architect.",
+    "unlock_condition": "Supply approved tool build/release notes, exact receiver-direction and stepthrough method, live topology/lane map, definitive zero/error/numeric oracle and tested link/retimer recovery."
+  },
+  "external_authorities": [
+    {"title": "AMD Release Notes — PCIe Retimer Margin Key Fix P179695", "url": "https://docs.amd.com/api/khub/documents/W~s1E8M5m1EQQ_McscCwQ/content", "applied_rule": "A retimer downstream-port zero margin issue requires the AMDXIO stepthrough method, so build/platform-specific command guidance is mandatory."},
+    {"title": "AMD Family 19h Models A0h-AFh Revision Guide — Erratum 1395", "url": "https://docs.amd.com/api/khub/documents/aBaGVEhC_kN7n61TYp_76A/content", "applied_rule": "Margin status can transiently read invalid zero values and must be handled with the documented reread behavior rather than unconditional failure."}
+  ],
+  "project_authority": "Only AMD/project owners can approve the proprietary tool build, retimer receiver mapping/method, definitive CSV/numeric oracle and safe recovery.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "same_code_endpoint_receiver6_row403_variant_kept_separate": true,
+    "eight_retimer_paths_receiver2_and_receiver3_lane_coverage_preserved": true,
+    "zero_error_and_stepthrough_oracle_not_invented": true,
+    "proprietary_command_not_released_without_authority": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|405|Wistron-AMD GPU-00125-V002",
+    "next_missing_formal_queue_case_variant_id": "7c7b52b52fdd9033"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_variants_compared": true, "case_specific_retimer_receiver2_receiver3_reasoning": true, "authoritative_amd_errata_and_release_notes_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
