@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 992,
+  "formal_queue_sequence": 841,
+  "source_key": "Compatibility|417|Wistron-AMD GPU-00136-V002",
+  "case_variant_id": "d821e95a1ddebf09",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 417, "code": "Wistron-AMD GPU-00136-V002", "original_row_sha256": "beb405f4abb5e109970e46cdd8a5fbaeb77d9db9256c8a612232d069808b083f", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UBB IPMI FRU",
+    "procedure": "Retrieve the UBB FRU Product Info Area through supported in-band and/or out-of-band methods and include the tool/method and output in the report.",
+    "criteria": "Both in-band and out-of-band must be available, and results must be human-readable.",
+    "deepseek": "PARTIAL; proposes in-band ipmitool plus an unspecified Redfish equivalent, but grep-only output and insecure SSH cannot prove exact UBB identity or field parity.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires exact UBB-to-IPMI/Redfish mapping, endpoint identity, read-only access and raw field comparison."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3009_d821e95a1ddebf09.json",
+  "old_problem": "The active review treated the target's IPMI FRU ID and Redfish URI as an engineering decision. DMTF defines a standard read-only Assembly model and its identity fields; actual resource IDs and endpoint credentials are discoverable runtime parameters. The source already defines the acceptance rule: both paths must be available and readable.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_DUAL_PATH_UBB_FRU_PRODUCT_INFO_IDENTITY_AND_PARITY_TEST",
+  "disposition_reason": "The UBB physical serial/part label anchors identity. In-band FRU inventory can discover the matching IPMI record, while the Redfish service/chassis inventory can discover the matching Assembly member or vendor-supported read-only FRU resource. DMTF Assembly defines Vendor/Producer, Model, PartNumber, SerialNumber, SKU, Version and related fields. ED-03 permits endpoint/resource bindings and forbids guessing them; their absence before execution does not keep the review pending. Both independent paths and human-readable field parity remain mandatory.",
+  "decision_basis": [
+    "Directly read Compatibility row417 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3009, same-code row151 SGEMM and adjacent row418 UFM case.",
+    "Kept same-code row151 SGEMM coverage separate from this read-only UBB FRU retrieval case.",
+    "Applied DMTF Redfish Assembly semantics for assembly identity and product fields, while retaining full IPMI FRU Product Info output in-band.",
+    "Converted IPMI FRU ID, BMC endpoint and Redfish resource URI to runtime-discovered, serial-anchored parameters rather than guessed constants.",
+    "Directly read next formal queue Compatibility row418 and verified its manifest identity; no IPMI, Redfish or DUT/BMC query ran."
+  ],
+  "test_case": {
+    "test_name": "UBB FRU Product Info dual-path availability, readability and identity parity",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove the exact physical UBB's product information is retrievable and human-readable through both approved in-band IPMI and out-of-band BMC/Redfish paths, and that shared identity fields describe the same assembly.",
+    "required_package": [
+      "`ipmitool` with in-band IPMI device access and recorded version/status",
+      "BMC endpoint/certificate/firmware, least-privilege Redfish credentials and service-root/chassis inventory access",
+      "Physical/project UBB identity anchor: chassis/slot plus serial and part number",
+      "Supported Redfish Assembly resource or vendor-documented read-only OOB FRU endpoint when Assembly is not implemented"
+    ],
+    "test_command": "Record the target chassis/slot and physical UBB serial/part label. In-band, capture unfiltered `ipmitool fru` inventory, select the record whose stable identity matches the UBB, then capture `ipmitool fru print <discovered_fru_id>` with stderr/status. Out-of-band, securely enumerate Redfish service root and Chassis resources, follow the matching chassis `Assembly` link and select the assembly by serial/part/location; if absent, use only the BMC vendor's documented read-only UBB FRU URI. Preserve full HTTP status/headers/body. Render both raw records into a human-readable field table and compare shared manufacturer/vendor, product/model, part, serial and version fields.",
+    "expected_result": "Both independent read paths succeed against the same physical UBB, return complete nonempty Product/Assembly information and render readable field names/values. Stable shared identity fields match exactly after documented whitespace/encoding normalization; neither response describes another chassis, GPU, PSU or board.",
+    "pass_fail_basis": "PASS requires status-successful unfiltered evidence from both paths, serial/part/location proof that each maps to the UBB, readable Product Info and equality of all shared stable fields. One path only, a grep excerpt, guessed resource, authentication failure, empty/placeholder values or identity mismatch cannot pass.",
+    "safety_gate": [
+      "Read-only commands and HTTP GET only; do not invoke FRU write, PATCH, POST, reset or OEM mutation",
+      "Validate BMC certificate/endpoint and chassis identity; keep credentials out of logs and command history",
+      "Discover resource IDs from inventories and match stable identity; never assume FRU 0 or a fixed Redfish URI",
+      "Preserve full raw evidence and stop on identity mismatch, unsupported schema or unexpected write requirement; never auto-retry with broader privilege"
+    ],
+    "expected_evidence": [
+      "Physical/project UBB chassis/slot/serial/part identity and BMC firmware/certificate",
+      "ipmitool version, full FRU inventory, selected ID rationale, full Product Info output and status",
+      "Redfish service/chassis discovery, exact resource URI, schema/@odata type, HTTP status and full response",
+      "Human-readable normalized field-parity table with raw-value references",
+      "Access logs without secrets and engineer verdict"
+    ],
+    "recovery": "No state change is expected. On missing resource, access failure or mismatch, preserve both raw responses and stop for BMC/platform mapping correction; do not write FRU data, change privileges, reset BMC or substitute another assembly."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek preserves dual-path intent but leaves the OOB resource and full identity evidence incomplete."},
+  "blocked": {"before": false, "after": false, "reason": "Standards define a safe discovery/read method; unsupported OOB exposure becomes an execution failure or project implementation gap, not missing review logic."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "At runtime provide BMC access and physical UBB identity, then bind the discovered IPMI FRU ID and Redfish/vendor-supported read-only resource.",
+    "execution_status": "REVIEW RESOLVED; DUAL-PATH READ ACCESS AND RUNTIME RESOURCE DISCOVERY REQUIRED; NOT EXECUTED",
+    "owner": "BMC/IPMI/Redfish and platform FRU inventory owners.",
+    "unlock_condition": "Provide the target BMC, least-privilege credentials and physical UBB identity anchor for read-only discovery."
+  },
+  "external_authorities": [
+    {"title": "DMTF Redfish Data Model — Assembly", "url": "https://redfish.dmtf.org/schemas/DSP0268_2026.1.html", "applied_rule": "Assembly represents a device assembly and exposes read-only vendor/producer, model, part, serial, SKU, version and original-data information at chassis and device Assembly URIs."}
+  ],
+  "project_authority": "BMC implementation, endpoint access and exact UBB resource IDs remain runtime/project bindings; they do not alter the dual-path availability and field-parity acceptance rule.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "same_code_row151_sgemm_kept_separate": true,
+    "inband_and_outofband_both_required": true,
+    "ubb_identity_bound_by_stable_fields": true,
+    "resource_ids_discovered_not_guessed": true,
+    "human_readability_and_raw_parity_preserved": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|418|Wistron-L12 Cluster-00001-V002",
+    "next_missing_formal_queue_case_variant_id": "315c87fc10cf6f4b"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_variants_compared": true, "case_specific_dual_path_fru_reasoning": true, "authoritative_dmtf_redfish_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
