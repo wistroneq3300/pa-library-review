@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 975,
+  "formal_queue_sequence": 824,
+  "source_key": "Compatibility|400|Wistron-Networking-00389-V003",
+  "case_variant_id": "7c2ed92869d96e64",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 400, "code": "Wistron-Networking-00389-V003", "original_row_sha256": "fad5694a6c90b2d26fc62d2ae9cb3e9bcb1df70eb5c56b29cd97955387a2327c", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Infiniband Stress",
+    "procedure": "Run ib_write_bw for eight hours and collect results and system logs.",
+    "criteria": "Bandwidth matches the project specification throughout stress and the system remains workable without event-log errors.",
+    "deepseek": "PARTIAL; recognizes a peer-dependent soak but lists Ethernet and RDMA tools as generic alternatives and omits the exact verbs profile and numeric oracle.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/HIGH; requires exact HCA/port/GID/peer/profile, numeric SPEC, monitoring, abort/recovery and full eight-hour evidence."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2992_7c2ed92869d96e64.json",
+  "old_problem": "The active review retained a decision for RDMA endpoint/profile/threshold values that can be mandatory project configuration. Its command discussion also needed to exclude Ethernet iperf because that would not exercise RDMA Write verbs, memory registration and HCA queues.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_EIGHT_HOUR_INFINIBAND_RDMA_WRITE_SOAK",
+  "disposition_reason": "The linux-rdma perftest documentation defines ib_write_bw as an RDMA Write bandwidth benchmark, requires matching server/client mode options, supports fixed duration with `-D`, and warns that matching versions and an active InfiniBand subnet manager are required. ED-03 permits exact topology/profile as configuration, ED-05 separates InfiniBand from Ethernet, ED-14 preserves all eight hours, and ED-15 requires signed numeric thresholds before PASS. No new engineering decision is needed to define the review-layer case.",
+  "decision_basis": [
+    "Directly read Compatibility row400 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2992 and its unique source identity.",
+    "Applied upstream linux-rdma perftest semantics for ib_write_bw server/client roles, matching mode options, HCA/port/GID controls and fixed-duration execution.",
+    "Kept RDMA Write verbs distinct from Ethernet throughput; iperf and raw Ethernet tools are not accepted substitutes.",
+    "Retained the full 28,800-second duration and required periodic health correlation; a smoke run or final-only average cannot pass.",
+    "Directly read next formal queue Compatibility row401 and verified its manifest identity; no RDMA traffic, package installation or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Eight-hour BlueField InfiniBand RDMA Write bandwidth and health soak",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Exercise the exact isolated BlueField InfiniBand path with a pinned ib_write_bw RDMA Write workload for eight continuous hours and prove sustained bandwidth, fabric, HCA and system health against the approved specification.",
+    "required_package": [
+      "Pinned checksum-verified matching linux-rdma perftest/ib_write_bw and compatible rdma-core versions on both endpoints",
+      "Exact HCA/BDF/device/port/GUID/GID/P_Key/peer/switch-fabric map and active subnet-manager proof",
+      "Approved server/client roles, connection type, message size, QP count, queue depths, direction, duration, margins and reporting mode",
+      "Numeric sustained/final bandwidth, variance, retry/error/port-counter, thermal and system-log thresholds",
+      "Isolated fabric window, independent management, monitoring/abort limits, process cleanup and recovery plan"
+    ],
+    "test_command": "After proving matching perftest versions, active InfiniBand fabric and immutable endpoint map, capture full ibstat/sysfs link/rate, HCA/port counters and system/thermal baseline. Start the approved ib_write_bw server bound to the signed HCA/port/GID and launch the peer client with identical mode options and `--duration 28800`; preserve stdout/stderr and periodic bandwidth data using the approved reporting strategy. Concurrently sample port/HCA/retry/error and system/BMC/thermal telemetry for all eight hours, enforce signed abort limits, stop both processes and collect final health.",
+    "expected_result": "The exact RDMA Write session runs for the complete 28,800 seconds on the signed InfiniBand HCA/port/GID and produces complete periodic/final bandwidth evidence. All applicable results meet approved numeric thresholds, link rate/state and subnet remain healthy, no disallowed HCA/port/retry/system/thermal event occurs, and endpoints/fabric remain workable after cleanup.",
+    "pass_fail_basis": "PASS requires matching pinned artifacts and mode options, immutable InfiniBand identities, full eight-hour time coverage, signed numeric bandwidth/variance/error thresholds, synchronized HCA/fabric/system telemetry and clean post-health. Without project thresholds the result is NOT EVALUATED, never PASS; iperf, Ethernet counters, a short run or final-only average cannot substitute.",
+    "safety_gate": [
+      "Use only the isolated non-management InfiniBand path and approved peer; never saturate shared production fabric",
+      "Verify HCA, port, GID/P_Key, link layer, subnet manager and matching perftest versions before launch",
+      "Approve identical server/client message/QP/depth/direction parameters and resource footprint",
+      "Preserve full port/HCA/system logs and monitor live retry/error/link/thermal limits without clearing history",
+      "Abort on access loss, link-state/rate change, retry/error threshold, thermal limit, peer failure or fabric impact; clean up once and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Perftest/rdma-core versions and checksums plus exact server/client commands",
+      "HCA/BDF/device/port/GUID/GID/P_Key/peer/fabric map, subnet-manager and isolation proof",
+      "Complete 28,800-second ib_write_bw stdout/stderr and periodic/final bandwidth evidence",
+      "Synchronized InfiniBand state/rate, port/HCA retry/error counters and peer telemetry",
+      "System/BMC/thermal/log trace and numeric project-threshold evaluation",
+      "Process cleanup, post-health comparison and engineer verdict"
+    ],
+    "recovery": "On bandwidth, link, HCA, thermal, access or peer failure, terminate only the mapped ib_write_bw processes, verify subnet manager and both endpoint port states, restore any temporary binding/configuration, preserve partial evidence and diagnose before any separately authorized rerun. Do not shorten or automatically retry the soak."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek's alternative list is narrowed to the Master ib_write_bw InfiniBand method; Ethernet tools are explicitly excluded as substitutes."},
+  "blocked": {"before": false, "after": false, "reason": "The RDMA workload, duration, health evidence, safety and recovery are defined; exact topology/profile and numeric SPEC are execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the HCA/port/GID/P_Key/peer/fabric, matching perftest versions, message/QP/depth/direction/reporting profile, numeric thresholds, isolation and abort/recovery plan.",
+    "execution_status": "REVIEW RESOLVED; EIGHT-HOUR RDMA SATURATION REQUIRES APPROVED FABRIC, PROFILE, THRESHOLDS AND WINDOW; NOT EXECUTED",
+    "owner": "InfiniBand fabric, RDMA performance, BlueField platform and lab operations owners.",
+    "unlock_condition": "Approve the immutable RDMA topology/profile, numeric SPEC, isolated peer/fabric and abort/recovery plan."
+  },
+  "external_authorities": [
+    {"title": "linux-rdma perftest Manual", "url": "https://github.com/linux-rdma/perftest/blob/master/man/perftest.1", "applied_rule": "ib_write_bw uses explicit server/client roles; mode-specific options must match on both endpoints and duration mode is supported."},
+    {"title": "linux-rdma perftest README", "url": "https://github.com/linux-rdma/perftest/blob/master/README", "applied_rule": "ib_write_bw benchmarks RDMA Write bandwidth, supports fixed-duration execution and requires a functioning InfiniBand fabric with subnet management."}
+  ],
+  "project_authority": "Exact RDMA topology/profile and all numeric bandwidth/variance/retry/error/thermal thresholds remain project-specific and mandatory before PASS evaluation.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "eight_hour_28800_second_ib_write_bw_infiniband_coverage_preserved": true,
+    "infiniband_rdma_not_conflated_with_ethernet": true,
+    "short_smoke_or_final_only_result_not_accepted": true,
+    "no_pass_without_numeric_project_thresholds": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|401|Wistron-OS-00016-V002",
+    "next_missing_formal_queue_case_variant_id": "b250634a5ad4eda1"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "case_specific_eight_hour_rdma_reasoning": true, "authoritative_linux_rdma_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
