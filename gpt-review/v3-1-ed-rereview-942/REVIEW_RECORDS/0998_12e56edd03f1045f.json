@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 998,
+  "formal_queue_sequence": 847,
+  "source_key": "Compatibility|424|Wistron-L12 Cluster-00006-V002",
+  "case_variant_id": "12e56edd03f1045f",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 424, "code": "Wistron-L12 Cluster-00006-V002", "original_row_sha256": "8435532c85085080b09bbdb1231b3d06dc51f98098cc1c16a6c11d7bb72245cf", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Network Validation Initial Environment Setup and trial run - Test Fabric Health",
+    "procedure": "Run IB-Stress between node-1 and node-2, run a new UFM Fabric Health report, then inspect UFM Alarms for `Fabric Health Report Warning` while Port RX Data Rate exceeds 100 Gb/s.",
+    "criteria": "The named UFM warning is generated when the condition is true.",
+    "deepseek": "PARTIAL/CONFLICTING; preserves only generic UFM access and attaches unrelated subnet-merger risk, omitting load, threshold, report and alarm causality.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; restores exact load/threshold/report/alarm phases and requests timing/lifecycle evidence."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3015_12e56edd03f1045f.json",
+  "old_problem": "The active review kept the source-specified 100-Gb/s threshold and alarm lifecycle pending. NVIDIA defines threshold-driven events/alarms and itemized Fabric Health reports; release labels, sampling intervals and delays are discoverable execution metadata. The authoritative trigger value and named warning already exist in the source.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_15_MINUTE_IB_LOAD_TO_100_GBPS_FABRIC_HEALTH_REPORT_WARNING_CAUSAL_TEST",
+  "disposition_reason": "NVIDIA UFM documentation defines Fabric Health report execution and events/alarms when configured conditions are exceeded. The source explicitly sets Port RX Data Rate >100 Gb/s and expects Fabric Health Report Warning. ED-03 permits node/link/report bindings, ED-05 isolates IB load, ED-14 preserves the 15-minute allocation, ED-15 uses the approved threshold, and ED-17 preserves preexisting alarms. A synchronized threshold-crossing→report-ID→alarm timeline creates an auditable test without inventing criteria.",
+  "decision_basis": [
+    "Directly read Compatibility row424 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3015, completed row423 baseline and adjacent row425 telemetry-curve case.",
+    "Applied NVIDIA UFM System Health and Events/Alarms behavior for itemized reports and threshold-triggered warning evidence.",
+    "Preserved the exact >100 Gb/s Port RX condition, named warning, Run New Report action and full 15-minute source allocation.",
+    "Required alarm prestate and unique report/time/link correlation so stale warnings cannot satisfy the case; no alarm acknowledgement or clearing is allowed.",
+    "Directly read next formal queue Compatibility row425 and verified its manifest identity; no traffic, report, alarm or fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "15-minute IB load to UFM >100-Gb/s Fabric Health warning causality",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove a new UFM Fabric Health report observes the approved node-1/node-2 link above 100 Gb/s Port RX Data Rate and generates the exact corresponding Fabric Health Report Warning.",
+    "required_package": [
+      "Approved UFM/version/account, fabric/node/link GUID/port identity and healthy baseline",
+      "Pinned finite two-node IB-Stress/perftest profile capable of the source threshold, with 900-second watchdog and safe abort",
+      "Confirmed UFM Port RX Data Rate metric, Gbit/s units, sampling/report window and synchronized clocks",
+      "Alarm/report export access, preexisting alarm snapshot and release-specific warning fields/lifecycle"
+    ],
+    "test_command": "Capture UFM/fabric/link identity, clocks, existing alarms and idle Port RX samples. Start the approved node-1/node-2 IB load for the complete 900-second allocation under a hard watchdog. Confirm the exact mapped UFM Port RX Data Rate produces timestamped samples >100 Gb/s; while true, invoke one System Health > Fabric Health > Run New Report. Preserve its unique report ID, selected checks, window and detail, then capture the newly created `Fabric Health Report Warning` with link, threshold, severity and timestamps. Stop traffic, retain post-condition samples/alarm lifecycle and verify fabric health.",
+    "expected_result": "The mapped link crosses >100 Gb/s during the bounded load, the one new report covers that interval and records the condition, and exactly attributable new warning evidence appears with the expected name/link/threshold and valid timing. Traffic terminates and the link/fabric remain healthy; post-condition behavior follows documented UFM lifecycle without deleting evidence.",
+    "pass_fail_basis": "PASS requires full 900-second load evidence, timestamped >100-Gb/s samples in confirmed units, unique report ID/scope overlapping the crossing, a newly attributable named warning and clean post-health. A stale alarm, wrong link, threshold inferred from endpoint-only output, report outside the window or generic health-page status cannot pass.",
+    "safety_gate": [
+      "Use only the approved isolated IB path and bounded 900-second traffic with external watchdog",
+      "Verify the mapped link has capacity/headroom to exceed 100 Gb/s and stop on errors, congestion outside scope or thermal/fabric limits",
+      "Snapshot alarms/reports before load; do not acknowledge, delete, clear logs or change event policy",
+      "Abort on identity/unit/time mismatch, unexpected alarm, link degradation or management loss; stop both peers and never auto-retry"
+    ],
+    "expected_evidence": [
+      "UFM/fabric/node/link identity, versions, clocks and alarm/report baseline",
+      "Exact supervised traffic commands, 900-second timeline, outputs/status and endpoint counters",
+      "UFM Port RX samples proving >100 Gb/s with metric/unit/link identity",
+      "Fabric Health report ID, scope/window/detail and real UI screenshot",
+      "New warning name/link/threshold/severity/timestamps, lifecycle, post-health and engineer verdict"
+    ],
+    "recovery": "On any load, report or alarm anomaly, stop both traffic peers, preserve the full threshold/report/alarm timeline, restore only temporary network state from the approved traffic case and verify link/UFM/fabric health. Do not clear or acknowledge alarms, rerun the report or restart traffic automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The rewrite removes DeepSeek's unrelated subnet-merger risk and restores the source's causal traffic/report/alarm sequence."},
+  "blocked": {"before": false, "after": false, "reason": "The source supplies threshold and expected warning; release/runtime identity and timing are bindable parameters."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind UFM/fabric/link, finite 900-second load profile, metric/unit/sampling/report window and release-specific alarm fields/lifecycle.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED BOUNDED IB LOAD AND UFM REPORT/ALARM OBSERVATION REQUIRED; NOT EXECUTED",
+    "owner": "InfiniBand fabric, UFM monitoring and lab operations owners.",
+    "unlock_condition": "Approve the exact path/load envelope, UFM metric/report mapping and non-destructive alarm observation window."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA UFM System Health", "url": "https://docs.nvidia.com/networking/display/UFMEnterpriseUMv6171/system-health.pdf", "applied_rule": "Defines running Fabric Health reports and itemized results."},
+    {"title": "NVIDIA UFM Events Policy", "url": "https://docs.nvidia.com/networking/display/ufmsdnappumv4184/Events%2BPolicy", "applied_rule": "Defines threshold-based events/alarms and their Web UI evidence."}
+  ],
+  "project_authority": "Exact link/load, UFM release fields, sampling/report timing and lifecycle are project bindings; >100 Gb/s and the named warning are source-approved acceptance criteria.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "port_rx_over_100_gbps_threshold_preserved": true,
+    "full_fifteen_minute_allocation_preserved": true,
+    "threshold_report_alarm_causal_chain_required": true,
+    "preexisting_alarms_preserved": true,
+    "unrelated_subnet_merger_risk_removed": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|425|Wistron-L12 Cluster-00007-V002",
+    "next_missing_formal_queue_case_variant_id": "49c878a1d6e26e59"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "completed_baseline_and_adjacent_telemetry_cases_compared": true, "case_specific_alarm_causality_reasoning": true, "authoritative_nvidia_system_health_and_alarm_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
