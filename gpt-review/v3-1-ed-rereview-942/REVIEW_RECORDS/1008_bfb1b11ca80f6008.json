@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1008,
+  "formal_queue_sequence": 857,
+  "source_key": "Compatibility|434|Wistron-Storage-00069-V002",
+  "case_variant_id": "bfb1b11ca80f6008",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 434, "code": "Wistron-Storage-00069-V002", "original_row_sha256": "8903101e300f5b7999e8503c111ca5b201f56f6d432c8a9916faffab783539c3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Sensor check",
+    "procedure": "Run ipmitool `sdr elist` and `sensor list` filtered for E1.s both in-band on the host and out-of-band through lanplus.",
+    "criteria": "Commands succeed; E1.s sensor name, description, reading, status and thresholds are reasonable and match SPEC.",
+    "deepseek": "CONFLICTING; queries a placeholder sensor named 'Sensor check' only locally and truncates a generic SDR fallback.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; restores both access paths and requires a complete slot/sensor/spec matrix, secure credentials and field-level parity."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3025_bfb1b11ca80f6008.json",
+  "old_problem": "The active record kept sensor names, thresholds and allowed path differences as an engineering decision. ipmitool authoritatively defines `sdr elist` and `sensor list`; platform-specific E1.S sensor identities and ranges are normal project SPEC/runtime bindings. The test can be fully specified without inventing an OEM name or threshold.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_E1S_INBAND_OOB_SENSOR_PARITY_AND_SPEC_TEST",
+  "disposition_reason": "ipmitool documentation defines extended SDR output to include sensor number/entity and sensor list output to include readings/status. ED-03 permits endpoint and sensor-map parameters, ED-15 requires the approved numeric/status/threshold oracle before PASS, ED-17 preserves complete evidence, and ED-20 requires all four source command/path combinations. OEM sensor names and ranges remain mandatory project SPEC rather than guessed values.",
+  "decision_basis": [
+    "Directly read Compatibility row434 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3025, completed row435 LED baseline and next pending row436 storage-fullness case.",
+    "Applied ipmitool semantics: `sdr elist` reports sensor name/number/entity/status detail while `sensor list` reports sensor readings and status; lanplus provides the required remote BMC path.",
+    "Preserved both command families across both in-band and OOB paths and required complete capture before offline E1.S filtering.",
+    "Replaced command-line password exposure with secure credential injection and required stable sensor-number/slot identity, timestamps, units and approved tolerances.",
+    "Directly read Compatibility row435 and next formal queue row436, then verified row436 manifest identity; no IPMI, BMC, sensor or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "E1.S IPMI sensor identity, reading, threshold and in-band/OOB parity validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every expected E1.S sensor is exposed with the correct stable identity and specification-compliant reading/status/thresholds through both local IPMI and remote lanplus paths.",
+    "required_package": [
+      "Pinned ipmitool, BMC firmware and host IPMI interface versions",
+      "Authoritative E1.S physical-slot/device-to-SDR sensor-number/name/description/unit map",
+      "Project SPEC for reading ranges, status, lower/upper thresholds, tolerance, optional/unavailable sensors and path formatting differences",
+      "Approved host/BMC endpoints and secure OOB credential injection that does not place passwords in process lists or logs",
+      "Clock synchronization and comparison window short enough for approved live-value tolerance"
+    ],
+    "test_command": "Record endpoint/tool/firmware identity and timestamps. Capture complete unfiltered in-band `ipmitool sdr elist` and `ipmitool sensor list` outputs. From an approved remote client use lanplus with password-file/environment/secret handling that is redacted from process and evidence, and capture the complete OOB outputs for the same two commands. Only after preserving originals, match approved E1.S sensor IDs/names offline; join each to physical slot and compare name, number/entity, description, reading, unit, status and thresholds against SPEC and the approved time/tolerance-aware path-parity rules.",
+    "expected_result": "Every mandatory E1.S sensor appears exactly once in all applicable in-band and OOB views with the approved stable identity. Readings and units are valid, statuses and thresholds match SPEC, and path differences remain within approved formatting/numeric/time tolerance; commands return without IPMI transport or completion-code errors.",
+    "pass_fail_basis": "PASS requires the authoritative sensor/slot/SPEC matrix, complete redacted artifacts from all four command/path combinations, exact mandatory-sensor membership and field-level SPEC/parity results within approved tolerances. Missing grep output, placeholder names, truncated data or subjective 'reasonable' judgment cannot pass. Without approved thresholds/ranges the result is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Use read-only SDR and sensor commands only; do not reset BMC, change thresholds or clear SEL/logs",
+      "Never expose BMC passwords in command lines, process listings, stdout, records or Git",
+      "Capture complete source output before filtering and retain timestamps/units for live-value comparison",
+      "Stop on endpoint mismatch, authentication anomaly or transport instability; preserve first evidence and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Host/BMC/ipmitool identity and approved slot-to-sensor/SPEC matrix",
+      "Full timestamped in-band sdr elist and sensor list outputs",
+      "Full timestamped, credential-redacted OOB lanplus outputs",
+      "Per-sensor identity/name/description/reading/unit/status/threshold parity and SPEC table",
+      "Missing/extra/out-of-range/path-mismatch list and engineer verdict"
+    ],
+    "recovery": "This procedure is read-only. On endpoint, authentication or sensor-path discrepancy, stop after preserving the first redacted artifacts, verify the BMC and host remain reachable and escalate for a separately approved management-path recovery. Revoke temporary credentials when applicable; do not reset BMC or retry automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The rewrite removes DeepSeek's placeholder/local-only/truncated substitution and restores every E1.S sensor across both source commands and access paths."},
+  "blocked": {"before": false, "after": false, "reason": "IPMI command semantics and safe comparison method are complete; OEM sensor identities/ranges are explicit project SPEC prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Provide the BMC/host/IPMI versions, E1.S slot-to-sensor matrix, numeric/status/threshold tolerances, path-difference rules and secure credential path before execution.",
+    "execution_status": "REVIEW RESOLVED; AUTHORITATIVE E1S SENSOR SPEC AND SECURE TWO-PATH ACCESS REQUIRED; NOT EXECUTED",
+    "owner": "BMC/IPMI, E1.S platform sensor and project environmental-acceptance owners.",
+    "unlock_condition": "Approve the complete sensor/slot/SPEC matrix, both endpoints and field-level parity tolerances."
+  },
+  "external_authorities": [
+    {"title": "ipmitool Manual", "url": "https://github.com/ipmitool/ipmitool/blob/master/doc/ipmitool.1.in", "applied_rule": "Defines lanplus IPMI 2.0 access and SDR/sensor command families."},
+    {"title": "ipmitool Sensor/SDR Command Reference", "url": "https://manpages.debian.org/trixie/ipmitool/ipmitool.1.en.html", "applied_rule": "Defines `sdr elist` identity/entity detail and sensor-list reading/status behavior."}
+  ],
+  "project_authority": "The platform sensor specification exclusively defines E1.S sensor numbers/names/slot mapping, units, ranges, statuses, thresholds and allowed in-band/OOB differences; no OEM value is guessed.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "inband_oob_sdr_elist_and_sensor_list_coverage_preserved": true,
+    "complete_output_before_filtering_required": true,
+    "secure_credentials_and_field_level_spec_oracle_required": true,
+    "deepseek_placeholder_local_only_truncation_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|436|Wistron-Storage-00071-V002",
+    "next_missing_formal_queue_case_variant_id": "0719ec35389580c0"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "completed_led_baseline_and_next_fullness_case_compared": true, "case_specific_e1s_sensor_parity_reasoning": true, "authoritative_ipmitool_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
