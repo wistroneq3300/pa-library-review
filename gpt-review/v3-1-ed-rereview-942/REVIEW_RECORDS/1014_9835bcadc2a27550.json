@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1014,
+  "formal_queue_sequence": 863,
+  "source_key": "Compatibility|441|Wistron-Networking-00052-V002",
+  "case_variant_id": "9835bcadc2a27550",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 441, "code": "Wistron-Networking-00052-V002", "original_row_sha256": "03acd62787b50c8b5b7a2ea56943cb18986a542745ea46c61c6707e22d5792fe", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Infiniband mode (Bandwidth test)",
+    "procedure": "Set LINK_TYPE_P1=1, DC cycle, assign an IB /24 address and run paired taskset/ib_write_bw with -F -b --report_gbits on port 3000.",
+    "criteria": "Bandwidth is about 90% of ideal; the example states 6400 Gbps -> 800 GB/s -> 90%: 720 MB/s, whose final unit is dimensionally wrong.",
+    "deepseek": "CONFLICTING; calls the case latency and allows ib_write_lat or ib_write_bw interchangeably despite the Master bandwidth title and literal ib_write_bw commands.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; preserves the conflict but does not apply the safe parameterization rule to the authoritative 90%-of-ideal criterion."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3031_9835bcadc2a27550.json",
+  "old_problem": "The active record kept the case pending because the example's final MB/s unit is wrong and DeepSeek changes bandwidth into latency. The Master title, procedure and tool consistently establish bandwidth, while its general 90%-of-ideal rule is usable. Dimensional conversion is authoritative: 6400 Gbit/s divided by 8 equals 800 GB/s, and 90% equals 720 GB/s, not 720 MB/s. Actual acceptance must still bind to the verified Mellanox link or aggregate scope.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MELLANOX_INFINIBAND_BANDWIDTH_TEST_WITH_CORRECTED_UNIT_FORMULA",
+  "disposition_reason": "ED-05 preserves IB bandwidth and rejects latency substitution; ED-15 permits no PASS with the incorrect 720 MB/s example but allows the source-approved 90% rule after unit correction; ED-03 parameterizes the actual link/aggregate identity; ED-19/ED-20 retain this Mellanox variant independently from BlueField row439 and latency row442. The result is computed from verified physical/aggregate payload ideal, never guessed from the bad example.",
+  "decision_basis": [
+    "Directly read Compatibility row441 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3031 and adjacent BlueField IB row439, Ethernet/RoCE row440 and explicit read-latency row442.",
+    "The Master title plus literal ib_write_bw server/client commands conclusively select bandwidth; DeepSeek's latency and ib_write_lat substitution is rejected.",
+    "Applied exact dimensional arithmetic: 6400 Gbit/s / 8 = 800 GB/s and 0.9 x 800 GB/s = 720 GB/s; the source's 720 MB/s token is a three-order unit typo and cannot be used.",
+    "Preserved a separate identity because this row is the Networking-Mellanox variant while row439 is Networking-BlueField; both source keys and coverage records remain independent.",
+    "Directly read next formal queue Compatibility row442 and verified its manifest identity; no mlxconfig, DC cycle, network configuration, traffic or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Mellanox P1 InfiniBand finite paired write-bandwidth test with dimensionally correct 90%-of-ideal oracle",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Activate the approved Mellanox P1 in InfiniBand mode through a complete DC cycle and measure finite bidirectional ib_write_bw throughput against 90% of the verified link-specific or approved aggregate payload ideal using consistent units.",
+    "required_package": [
+      "Pinned NVIDIA MFT/firmware/OFED or rdma-core/perftest versions",
+      "Mellanox adapter serial/MST/BDF/P1/IB-device/GUID/GID/NUMA/peer/cable map and saved prior LINK_TYPE/network state",
+      "Approved /24 addresses, MTU, SM/fabric, negotiated rate/width and whether the intended ideal is per-port or an explicit multi-link aggregate",
+      "Finite ib_write_bw message/QP/depth/duration or iteration/repeat/statistic profile plus valid CPU 0-72 affinity",
+      "Approved payload-efficiency formula/overhead, decimal units, 90% threshold, OOB/DC-cycle and rollback plan"
+    ],
+    "test_command": "Verify the exact Mellanox adapter/P1/peer and save its current/next-boot LINK_TYPE/network state. At an approved hold point set `LINK_TYPE_P1=1`, perform the full DC OFF-to-ON-to-OS-ready cycle, and prove active IB rate/width/MTU/GID with clean counters. Configure only approved /24 addresses, validate CPUs 0-72/NUMA, then run the literal paired taskset/ib_write_bw options on port 3000 under the approved finite profile and repeats. Compute the selected statistic in Gbit/s against 90% of the verified per-link or explicitly approved aggregate payload ideal. If 6400 Gbit/s is the approved ideal, record 800 GB/s and a 720 GB/s floor; never use 720 MB/s. Restore prior mode/network and verify post-health.",
+    "expected_result": "The exact Mellanox P1 becomes active InfiniBand after the complete DC cycle, reaches the approved rate/width/MTU/GID state and remains error-free. Finite paired runs complete with matched parameters, and the approved statistic reaches at least 90% of the unit-consistent payload ideal. The result is reported under this row's independent source identity and prior mode/network is restored.",
+    "pass_fail_basis": "PASS requires immutable Mellanox target/peer identity, complete mode/DC/link evidence, finite raw paired outputs, valid affinity, explicit per-link-or-aggregate scope, and a unit-correct 90% calculation. 720 MB/s cannot pass the stated 6400-Gbit/s example. Without authoritative actual/aggregate link scope or payload formula the result is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Never change an unidentified/shared management port; require maintenance, OOB and explicit mutation/DC authorization",
+      "Prove pending/active LINK_TYPE and exact per-link versus aggregate scope before traffic",
+      "Bound bidirectional traffic and abort on link/fabric/thermal/RAS impact",
+      "Restore prior mode/network, preserve evidence and never substitute a latency tool or auto-retry"
+    ],
+    "expected_evidence": [
+      "Pinned stack and independent Mellanox adapter/P1/peer/GUID/GID/NUMA identity",
+      "mlxconfig before/pending/active and complete DC OFF/ON/OS-ready timeline",
+      "IB link rate/width/MTU/GID/fabric plus pre/post error counters",
+      "Exact finite paired commands/outputs/exits, affinity and repeat statistic",
+      "Per-link/aggregate ideal derivation, corrected units/90% floor, restoration and verdict"
+    ],
+    "recovery": "On mode, cycle, link or traffic failure, stop the benchmark, preserve state/counters and use OOB to restore the saved LINK_TYPE/network through the approved cycle. Verify fabric/manageability and do not switch metrics, change units or retry automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master bandwidth title/tool is authoritative, DeepSeek's latency substitution is rejected, and the erroneous 720 MB/s token is corrected by transparent dimensional arithmetic while retaining the 90% rule."},
+  "blocked": {"before": false, "after": false, "reason": "Metric/tool identity and unit arithmetic are resolved; exact Mellanox link/aggregate scope, finite profile and payload formula are mandatory project/runtime bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the independent Mellanox target/peer, per-link or aggregate rate, finite profile, payload-efficiency formula, 90% statistic and rollback before execution.",
+    "execution_status": "REVIEW RESOLVED AS BANDWIDTH; 720 MB/S TYPO PROHIBITED; UNIT-CORRECT LINK/AGGREGATE 90% ORACLE REQUIRED; NOT EXECUTED",
+    "owner": "Mellanox adapter/fabric, network performance and platform power/recovery owners.",
+    "unlock_condition": "Approve the exact Mellanox scope, finite ib_write_bw profile, payload ideal/units and rollback."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA MFT Documentation — Using mlxconfig to Set IB/ETH Parameters", "url": "https://docs.nvidia.com/networking/display/nvidia-firmware-tools-mft-documentation-v4-30-1-1210-lts-2024-lts-u3.1-1210%20LTS%20%282024%20LTS%20U3%29.pdf", "applied_rule": "LINK_TYPE_P1=1 selects InfiniBand and requires reboot to activate."},
+    {"title": "NVIDIA NCCL Networking Troubleshooting", "url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting/networking_troubleshooting.html", "applied_rule": "ib_write_bw is the bandwidth tool for paired IB/RDMA node validation."}
+  ],
+  "project_authority": "The performance owner binds whether 6400 Gbit/s is an actual aggregate and the payload-efficiency/statistic; exact arithmetic fixes only the unit typo, not the hardware scope.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-05", "ED-06", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "mellanox_ib_mode_dc_cycle_and_ib_write_bw_coverage_preserved": true,
+    "distinct_from_bluefield_row439_and_latency_row442": true,
+    "6400_gbits_800_gbytes_720_gbytes_arithmetic_applied": true,
+    "deepseek_latency_and_720_mbytes_substitutions_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|442|Wistron-Networking-00053-V002",
+    "next_missing_formal_queue_case_variant_id": "dde234ab2c214580"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_bluefield_roce_and_latency_variants_compared": true, "case_specific_metric_unit_reasoning": true, "authoritative_nvidia_mft_and_bandwidth_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
