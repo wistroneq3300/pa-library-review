@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 986,
+  "formal_queue_sequence": 835,
+  "source_key": "Compatibility|411|Wistron-AMD GPU-00131-V003",
+  "case_variant_id": "13295c72aef69327",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 411, "code": "Wistron-AMD GPU-00131-V003", "original_row_sha256": "5d1a3f8a4fd57c01654796baf800a74320bd74603748e00be012e3c92b622386", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "RCCL",
+    "procedure": "Clone/build rccl-tests and run `all_reduce_perf -b 1G -e 1G -g 8` plus `alltoall_perf -b 1G -e 1G -g 8`.",
+    "criteria": "For eight GPUs, the table states all_reduce average/minimum/maximum 286/264/309 GB/s and alltoall 260/230/286 GB/s, without identifying the output metric, memory placement or aggregation rule.",
+    "deepseek": "PARTIAL; gives a generic RCCL workload and score comparison but omits both exact collectives, the two bands and their output-column semantics.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/CRITICAL; requires pinned build/topology, exact commands, band/statistic mapping and complete health evidence."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3003_13295c72aef69327.json",
+  "old_problem": "The active record requested a broad set of approvals but did not isolate the non-parameterizable blocker. Official RCCL Tests documentation defines multiple simultaneously reported performance values, so the source's unlabeled GB/s ranges do not produce a unique PASS/FAIL verdict.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_FOR_RCCL_METRIC_PLACEMENT_AND_STATISTIC_ORACLE",
+  "disposition_reason": "Official RCCL Tests documentation confirms that `-g 8` is eight GPUs per thread and the commands test one 1-GiB size, but output includes time, algorithm bandwidth and bus bandwidth for in-place and out-of-place runs. Bus bandwidth also applies a collective-specific factor: all-reduce uses 2*(n-1)/n while all-to-all uses (n-1)/n. The source does not say whether its ranges govern algbw or busbw, in-place or out-of-place, or how 'average/minimum/maximum' is calculated from the default iterations. Selecting one would fabricate the authoritative expected result forbidden by ED-15. Toolchain/topology/safety can be parameterized; this core oracle cannot.",
+  "decision_basis": [
+    "Directly read Compatibility row411 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3003 and adjacent row412 GEMM case.",
+    "Applied official RCCL Tests usage: `-b 1G -e 1G` selects a single message size, `-g 8` selects eight GPUs per thread, and default runs expose both in-place and out-of-place results.",
+    "Applied official RCCL performance definitions: algbw and busbw are distinct and collective-specific conversion factors differ for all-reduce and all-to-all.",
+    "Determined that artifact versions, topology, iterations and safety limits are runtime/project bindings, but the unlabeled numeric band is an irreplaceable acceptance oracle.",
+    "Directly read next formal queue Compatibility row412 and verified its manifest identity; no clone, build, collective or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Eight-GPU RCCL 1-GiB all-reduce and all-to-all bandwidth validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Measure the two distinct eight-GPU RCCL collectives at exactly 1 GiB, verify data correctness and compare the approved output statistic to the source bands without fabric, GPU or host faults.",
+    "required_package": [
+      "Approved ROCm/RCCL and pinned RCCL Tests source commit or verified rocm-systems successor commit with build checksums",
+      "Stable eight-GPU UUID/BDF/rank topology and pinned partition mode, RCCL tuning environment and CPU/NUMA binding",
+      "Engineering-approved oracle mapping each source band to algbw or busbw, in-place or out-of-place, and exact iteration/statistic aggregation",
+      "Approved warmup/iteration count, high-load window, XGMI/PCIe/RAS/thermal/power stops and OOB recovery"
+    ],
+    "test_command": "After the missing oracle is approved, record repository/ROCm/RCCL/build provenance, GPU UUID/BDF/rank topology and environment. Build the pinned source reproducibly. Run the source-equivalent single-process commands `./build/all_reduce_perf -b 1G -e 1G -g 8 -w <approved_warmups> -n <approved_iterations> -Z csv -x <new_all_reduce.csv>` and `./build/alltoall_perf -b 1G -e 1G -g 8 -w <approved_warmups> -n <approved_iterations> -Z csv -x <new_alltoall.csv>` once each, preserving complete stdout/stderr and synchronized RCCL debug, XGMI/PCIe, RAS, thermal and power evidence.",
+    "expected_result": "Both collectives complete correct data checks for all eight mapped ranks at 1 GiB, produce complete in-place/out-of-place algbw and busbw results, and the specifically approved metric/placement/statistic falls within its corresponding source band with no GPU/fabric/RAS/kernel/thermal/power or host fault.",
+    "pass_fail_basis": "PENDING: no PASS may be assigned until an owner maps all_reduce 264-309 GB/s (nominal 286) and alltoall 230-286 GB/s (nominal 260) to an exact RCCL Tests output column, memory placement and aggregation formula. Once approved, both independent collectives, correctness checks, band comparisons and health evidence must pass; an average cannot hide an out-of-band required sample or rank.",
+    "safety_gate": [
+      "Do not run against unpinned HEAD; verify compatibility, build flags, partition mode and eight-rank topology",
+      "Obtain the signed band-semantic decision before interpreting any bandwidth as PASS",
+      "Reserve cooling/power headroom and independent management; preserve pre-test logs and complete outputs",
+      "Abort on correctness failure, GPU/rank loss, XGMI/PCIe/RAS/dmesg fault, thermal/power limit, hang or access loss; never auto-retry"
+    ],
+    "expected_evidence": [
+      "Pinned repository/ROCm/RCCL/build provenance and exact environment",
+      "Eight-GPU UUID/BDF/rank/NUMA/fabric map and partition mode",
+      "Signed band-to-metric/placement/statistic decision",
+      "Complete all-reduce and all-to-all stdout/stderr, CSV, process status and correctness output",
+      "Per-run band calculation plus synchronized fabric/RAS/dmesg/thermal/power evidence and engineer verdict"
+    ],
+    "recovery": "On any collective or platform fault, stop the current process, preserve its first-failure output and telemetry, verify every GPU/rank/link from OS and BMC, restore only approved temporary environment/build changes and escalate. Do not automatically retry or substitute one collective for the other."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is incomplete rather than contradictory; the ambiguity is inside the source acceptance table."},
+  "blocked": {"before": false, "after": false, "reason": "Static review can define the safe method; execution and PASS remain gated by the missing project acceptance oracle."},
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Pin stack/build/topology/partition mode, iterations, safety limits and recovery; most importantly, approve the numeric band's exact RCCL output metric, placement and statistic.",
+    "execution_status": "REVIEW METHOD COMPLETE; ENGINEERING DECISION PENDING FOR AUTHORITATIVE BAND SEMANTICS; NOT EXECUTED",
+    "owner": "GPU performance architecture and project acceptance-spec owners.",
+    "unlock_condition": "Provide a controlled specification or signed decision mapping each source range to algbw versus busbw, in-place versus out-of-place, and an exact aggregation over defined iterations."
+  },
+  "external_authorities": [
+    {"title": "AMD RCCL Tests README", "url": "https://github.com/ROCm/rccl-tests", "applied_rule": "Defines `-b`, `-e`, `-g`, warmup/iteration and machine-readable output options; notes the repository retirement and successor location."},
+    {"title": "AMD RCCL Tests Performance", "url": "https://github.com/ROCm/rccl-tests/blob/develop_deprecated/doc/PERFORMANCE.md", "applied_rule": "Distinguishes algbw from busbw and defines different all-reduce and all-to-all bus-bandwidth factors."}
+  ],
+  "project_authority": "Only the project acceptance owner can bind the source's numeric bands to a particular RCCL Tests output and aggregation; external documentation cannot infer that intent.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "all_reduce_and_alltoall_kept_independent": true,
+    "one_gib_and_eight_gpu_scope_preserved": true,
+    "unlabeled_metric_not_guessed": true,
+    "deprecated_repository_not_silently_replaced": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|412|Wistron-AMD GPU-00470-V002",
+    "next_missing_formal_queue_case_variant_id": "ece6aa849af9a141"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_case_compared": true, "case_specific_metric_semantics_reasoning": true, "authoritative_amd_rccl_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
