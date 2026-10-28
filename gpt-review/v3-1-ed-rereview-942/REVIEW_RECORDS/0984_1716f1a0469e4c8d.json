@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 984,
+  "formal_queue_sequence": 833,
+  "source_key": "Compatibility|409|Wistron-AMD GPU-00130-V002",
+  "case_variant_id": "1716f1a0469e4c8d",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 409, "code": "Wistron-AMD GPU-00130-V002", "original_row_sha256": "83f9b0997f481c54516bdc572cd4d9b6c5d39b21b7f1f7f7d2f6fb96ad6b96a3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "AMD GPU Filed Health check - Level 5",
+    "procedure": "Install the distro-specific AGFHC archive and run `sudo ./agfhc -r all_lvl5`; the prose says approximately 30 minutes while the source machine allocation is 120 minutes.",
+    "criteria": "Preserve the referenced log directory; PASS requires `Program exiting with return code AGFHC_SUCCESS [0]`, while failure output includes summary, total time, log directory and return code.",
+    "deepseek": "PARTIAL; gives a generic level-5 sustained diagnostic and cooling warning but omits controlled install, exact recipe, authoritative duration and complete result artifacts.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires signed compatible artifact, controlled install/rollback, complete all_lvl5 output, telemetry and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3001_1716f1a0469e4c8d.json",
+  "old_problem": "The active review retained the source's approximately 30-minute statement and requested another runtime decision. AMD's current acceptance guidance identifies all_lvl5 as an approximately two-hour broad system-level recipe, matching the source's 120-minute machine allocation. A 30-minute cutoff would violate ED-14 and reduce coverage.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_AUTHORIZED_TWO_HOUR_AGFHC_ALL_LVL5_INSTALL_AND_COMPLETE_RESULT_TEST",
+  "disposition_reason": "AMD documents all_lvl5 as broad PCIe/HBM/compute/power validation with approximately two-hour runtime and return-code/result-log evaluation. This authoritative duration resolves the ambiguous source prose without inventing a threshold. ED-02 keeps this standalone all_lvl5 variant distinct from same-code row146's driver-downgrade-plus-validation flow, ED-03 permits artifact/platform bindings, ED-14 forbids shortening to 30 minutes, and ED-16/ED-17 gate privileged install and sustained load. The review-layer case is complete.",
+  "decision_basis": [
+    "Directly read Compatibility row409 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3001 and same-code row146 driver-downgrade variant.",
+    "Applied AMD Instinct acceptance guidance: all_lvl5 is a broad system-level recipe with approximately two-hour runtime, full logs and return-code/result evaluation.",
+    "Reconciled the source's conflicting approximately 30-minute prose against its 120-minute machine allocation and AMD's two-hour authority; the full two-hour recipe controls.",
+    "Retained authorized package installation, exact all_lvl5 command and full per-GPU/subtest artifacts; generic level-5 notes cannot substitute.",
+    "Directly read next formal queue Compatibility row410 and verified its manifest identity; no installation, AGFHC load or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Authorized AGFHC all_lvl5 controlled installation and complete two-hour system validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Install the exact authorized platform/distro AGFHC build under rollback control and run the complete approximately two-hour all_lvl5 recipe once, proving broad GPU subsystem health with full diagnostics.",
+    "required_package": [
+      "AMD-authorized signed AGFHC archive, checksum/license and matching user guide for the exact Instinct platform and distro",
+      "Compatible ROCm/AMDGPU, RVS prerequisite, firmware, OS/kernel and IOMMU matrix",
+      "Installer manifest, existing-install backup, privilege scope, output capacity and uninstall/restore procedure",
+      "Stable GPU serial/UUID/BDF topology and pinned all_lvl5 recipe listing/test-info/definitions",
+      "At least the documented approximately two-hour dedicated window, independent management, cooling/power/RAS/thermal thresholds and recovery"
+    ],
+    "test_command": "Verify the authorized archive signature/checksum, platform compatibility and installer manifest; preserve any current installation and log/config tree. Under separate install approval, execute the documented installer once and confirm `agfhc --list` plus `--recipe-info all_lvl5`. Under high-load approval run `/opt/amd/agfhc/agfhc -r all_lvl5 -o <approved_run_dir>` once for its complete vendor-defined approximately two-hour duration, capturing untruncated stdout/stderr, real process status, terminal summary, results.json and every log while independently monitoring each GPU and platform health.",
+    "expected_result": "The signed build installs only its approved manifest, exposes the expected all_lvl5 recipe and completes every required test on every mapped GPU for the full vendor-defined run. It returns actual status 0 and `AGFHC_SUCCESS [0]` only with complete passing results/logs and no disallowed skip, GPU loss/reset, RAS/dmesg, PCIe/XGMI, HBM, compute, thermal, power or system event.",
+    "pass_fail_basis": "PASS requires authorized artifact/install evidence, the full approximately two-hour all_lvl5 duration, complete per-GPU/subtest coverage, untruncated stdout/stderr, actual process status 0, `AGFHC_SUCCESS [0]`, complete results.json/log tree and clean synchronized telemetry. A 30-minute cutoff, lower-level recipe, summary excerpt or missing artifacts cannot pass.",
+    "safety_gate": [
+      "Verify AGFHC authorization, signature/checksum and exact platform/distro/ROCm/firmware compatibility before privileged install",
+      "Back up and review installer footprint and output capacity; never overwrite prior evidence",
+      "Reserve the full vendor-defined approximately two-hour window with independent management and cooling/power headroom",
+      "Keep RAS/dmesg/system monitoring active and preserve historical logs; do not suppress failures without signed authority",
+      "Abort on GPU loss/reset, RAS/dmesg failure, thermal/power limit, link fault, hang, storage exhaustion or access loss; never auto-retry"
+    ],
+    "expected_evidence": [
+      "Authorized AGFHC archive/checksum/license/guide and OS/ROCm/driver/firmware/IOMMU compatibility record",
+      "Installer manifest and before/after package/files/service/config diff with rollback owner",
+      "Pinned all_lvl5 recipe listing/info and exact command/environment",
+      "Complete approximately two-hour stdout/stderr, process status, summary, results.json and log bundle",
+      "Per-GPU/subtest coverage and synchronized PCIe/XGMI/HBM/compute/RAS/dmesg/thermal/power telemetry",
+      "Post-health/install-restoration evidence and engineer verdict"
+    ],
+    "recovery": "On install mismatch, restore the saved installation/config/ownership before load. On all_lvl5 fault, stop per the AMD guide, preserve all partial results and telemetry, verify every GPU and management path, restore only approved temporary changes and escalate. Do not rerun automatically or replace the failed run with a shorter profile."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek retains all_lvl5 intent but lacks exact lifecycle and duration; AMD authority reconciles the source's own runtime prose without changing the test identity."},
+  "blocked": {"before": false, "after": false, "reason": "AMD defines the all_lvl5 scope, duration and result model; authorized artifact, install controls and environment are execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the authorized build/checksum/guide, platform/distro/ROCm/firmware compatibility, installer/output/rollback, recipe contents, GPU topology and high-load health/recovery thresholds.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED PACKAGE, PRIVILEGED INSTALL AND FULL TWO-HOUR HIGH-LOAD WINDOW REQUIRED; NOT EXECUTED",
+    "owner": "AMD/AGFHC authorization, ROCm platform, GPU thermal/power and lab operations owners.",
+    "unlock_condition": "Approve the signed compatible artifact, install/rollback, full all_lvl5 recipe/window, monitoring and recovery."
+  },
+  "external_authorities": [
+    {"title": "AMD Instinct MI350X Customer Acceptance — System Validation", "url": "https://instinct.docs.amd.com/projects/system-acceptance/en/latest/gpus/mi350x.html", "applied_rule": "all_lvl5 is broad system-level PCIe/HBM/compute/power coverage with approximately two-hour runtime and PASS/return-code-0 evaluation."},
+    {"title": "AMD Instinct System Validation — AGFHC", "url": "https://instinct.docs.amd.com/projects/system-acceptance/en/latest/common/system-validation.html", "applied_rule": "AGFHC validation requires recipe introspection and complete terminal/results/log evaluation."}
+  ],
+  "project_authority": "Exact authorized build, recipe contents, platform compatibility, install footprint, environmental thresholds and recovery remain project/AMD-owner decisions.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "same_code_row146_driver_downgrade_variant_kept_separate": true,
+    "authorized_install_and_complete_all_lvl5_coverage_preserved": true,
+    "official_two_hour_duration_not_shortened_to_source_thirty_minute_prose": true,
+    "full_results_logs_and_actual_exit_status_required": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|410|Wistron-AMD GPU-00469-V002",
+    "next_missing_formal_queue_case_variant_id": "053ccfc6517f2e07"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_variants_compared": true, "case_specific_all_lvl5_duration_install_reasoning": true, "authoritative_amd_agfhc_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
