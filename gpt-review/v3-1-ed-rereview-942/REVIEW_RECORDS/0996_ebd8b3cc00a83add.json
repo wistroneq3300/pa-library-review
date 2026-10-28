@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 996,
+  "formal_queue_sequence": 845,
+  "source_key": "Compatibility|421|Wistron-L12 Cluster-00004-V002",
+  "case_variant_id": "ebd8b3cc00a83add",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 421, "code": "Wistron-L12 Cluster-00004-V002", "original_row_sha256": "aade37f8161026c2480534f168150dbd20f8097774a01071575ba69cb7e8d100", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UFM Telemetry TMS setup and trial run - Run IB-Stress",
+    "procedure": "Assign 10.10.10.1/16 to node-1 ibp79s0f0 and 10.10.10.2/16 to node-2 ibp206s0; run `ib_write_bw` server on mlx5_4 and client on mlx5_10 at port 11000 with `--report_gbits --run_infinitely`; inspect Telemetry.",
+    "criteria": "UFM panels show correct information, network status matches the nodes and the configured time window is recorded correctly.",
+    "deepseek": "PARTIAL/CONFLICTING; gives only generic UFM access and attaches unrelated subnet-merger risk, omitting address, device and unbounded-worker safety.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires exact identity mapping, isolated address scope, finite supervision, telemetry correlation and rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3013_ebd8b3cc00a83add.json",
+  "old_problem": "The active review left the case pending for node/device mapping, traffic duration and telemetry tolerance. Perftest documents the peer roles, fixed-duration mode and that `--run_infinitely` runs until interrupted; the source's 20-minute allocation supplies a safe complete duration. Remaining identities and correlation tolerance are runtime project bindings.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_REVERSIBLE_20_MINUTE_TWO_NODE_IB_WRITE_BW_TO_UFM_TELEMETRY_CORRELATION",
+  "disposition_reason": "Official perftest supports fixed `-D` duration and Gbit/s output, and requires matching peer versions/options. The source's 20-minute machine time can preserve workload coverage while replacing indefinite execution with 1200 seconds plus a watchdog. NVIDIA UFM defines port bandwidth telemetry and time-series windows. ED-03 permits identity/IP/tolerance bindings, ED-05 isolates IB from Ethernet, ED-14 preserves the full duration, and ED-16 gates network mutation and recovery. No new engineering decision is needed.",
+  "decision_basis": [
+    "Directly read Compatibility row421 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3013 and adjacent row420 view plus row422 cable-validation cases.",
+    "Applied linux-rdma perftest semantics: server/client roles, matching versions/options, `--report_gbits`, fixed-duration `-D` and unbounded `--run_infinitely` behavior.",
+    "Mapped the source's 20-minute allocation to a complete 1200-second supervised run rather than a shortened smoke test.",
+    "Preserved both source IPs, netdevs, mlx5 devices and TCP control port subject to direct port/GID/route/collision verification and exact restoration.",
+    "Directly read next formal queue Compatibility row422 and verified its manifest identity; no address change, bandwidth worker, UFM query or DUT/fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "Reversible 20-minute two-node IB write load and UFM telemetry correlation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Generate a controlled 20-minute RDMA-write stream over the exact approved InfiniBand path and prove UFM records the same port status, bandwidth trend and configured time interval as synchronized endpoint evidence.",
+    "required_package": [
+      "Same pinned perftest/rdma-core/OFED version on both nodes and approved UFM Telemetry view from row420",
+      "Node serial/host identities plus verified ibp79s0f0↔mlx5_4 and ibp206s0↔mlx5_10 port/GID/peer/cable mapping",
+      "Collision-free isolated 10.10.10.0/16 test scope, approved routes/PKey/SL/MTU and alternate management access",
+      "Approved endpoint-to-UFM metric/unit/sample interval, timestamp skew and numeric correlation tolerance, 1200-second window and network rollback"
+    ],
+    "test_command": "Capture node/netdev/HCA/port/GID/route/address/link/counter prestate and prove 10.10.10.1/16 plus 10.10.10.2/16 are isolated and unused. Add the two addresses without replacing management configuration. Start synchronized UFM/endpoint counter capture. Run matching pinned peers for the complete 1200 seconds: server `ib_write_bw -d mlx5_4 --report_gbits -p 11000 -D 1200` and client `ib_write_bw -d mlx5_10 10.10.10.1 --report_gbits -p 11000 -D 1200`, both under a 1200-second-plus-grace external watchdog. Preserve outputs/status, stop both peers, remove only added addresses/routes and verify exact prestate restoration.",
+    "expected_result": "Both mapped peers negotiate and complete the 1200-second RDMA-write run with successful statuses and no link/RAS/error event. UFM identifies the same ports and operational state, shows traffic rise/run/return in the configured window and matches endpoint rate/counter deltas within the approved sampling/unit tolerance. Network state returns exactly to baseline.",
+    "pass_fail_basis": "PASS requires verified identities, collision-free reversible address changes, full 1200-second peer evidence, successful termination, synchronized endpoint/UFM values within the approved tolerance, correct UFM time window and exact cleanup. A populated panel, unbounded leftover process, shortened run, wrong port or missing restoration cannot pass.",
+    "safety_gate": [
+      "Confirm physical/verbs/netdev mapping and isolated IB address scope; never modify a management or Ethernet path",
+      "Use matching pinned perftest versions/options and a hard external watchdog; do not use unsupervised `--run_infinitely`",
+      "Preserve address/route/link/counter/log prestate and maintain alternate management access",
+      "Abort on route/address conflict, unexpected port, link/RAS/error/thermal event, UFM mismatch or access loss; terminate both peers and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Node/netdev/HCA/port/GID/peer/cable identity and pre/post address/route/link state",
+      "Perftest versions, exact peer commands, PIDs, watchdog, full outputs and statuses",
+      "Endpoint rate/counter time series and UFM port/metric/unit/time-series export",
+      "Timestamp/unit normalization and approved tolerance comparison",
+      "Real UFM screenshots, clean fabric logs, worker termination, restored state and engineer verdict"
+    ],
+    "recovery": "On any fault stop client then server through the supervisor, preserve first-failure endpoint/UFM evidence, remove only test addresses/routes, restore captured link/network state and verify both ports plus UFM/fabric health. Do not restart traffic automatically or alter topology."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The review removes DeepSeek's unrelated subnet-merger deployment risk and restores exact IB traffic/network-mutation hazards."},
+  "blocked": {"before": false, "after": false, "reason": "Standards define bounded traffic and telemetry behavior; target mapping/tolerance are approved execution parameters."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind node/netdev/HCA/port/GID path, isolated IP/route scope, perftest version/profile, UFM metric/unit/time/tolerance and rollback.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED REVERSIBLE IB NETWORK MUTATION AND 20-MINUTE LOAD REQUIRED; NOT EXECUTED",
+    "owner": "InfiniBand fabric, node networking, UFM telemetry and lab operations owners.",
+    "unlock_condition": "Approve the exact two-node path/address scope, full-duration traffic envelope, telemetry correlation oracle and restoration plan."
+  },
+  "external_authorities": [
+    {"title": "linux-rdma perftest", "url": "https://github.com/linux-rdma/perftest", "applied_rule": "Defines ib_write_bw peer roles, fixed-duration mode, Gbit/s output, matching peer requirements and `--run_infinitely` until interrupted."},
+    {"title": "NVIDIA UFM Telemetry Sessions", "url": "https://docs.nvidia.com/networking/display/nvidia-ufm-sdn-appliance-user-manual-v4-14-6-4-lts-2023-lts-u5.6-4%20LTS%20%282023%20LTS%20U5%29.pdf", "applied_rule": "Defines port bandwidth counters, monitored objects and time-series views."}
+  ],
+  "project_authority": "Exact path, address scope, counter mapping and numeric/timestamp tolerance remain project bindings; the complete 20-minute coverage is fixed by the source.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "source_ips_netdevs_hcas_and_port_preserved": true,
+    "full_twenty_minute_duration_preserved": true,
+    "unbounded_run_replaced_by_supervised_fixed_duration": true,
+    "telemetry_endpoint_correlation_and_cleanup_required": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|422|Wistron-L12 Cluster-00471-V003",
+    "next_missing_formal_queue_case_variant_id": "c33f40bde175a7f6"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_view_and_cable_cases_compared": true, "case_specific_ib_telemetry_reasoning": true, "authoritative_perftest_and_nvidia_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
