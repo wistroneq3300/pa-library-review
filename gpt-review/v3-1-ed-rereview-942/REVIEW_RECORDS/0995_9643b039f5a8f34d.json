@@ -1,0 +1,83 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 995,
+  "formal_queue_sequence": 844,
+  "source_key": "Compatibility|420|Wistron-L12 Cluster-00003-V002",
+  "case_variant_id": "9643b039f5a8f34d",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 420, "code": "Wistron-L12 Cluster-00003-V002", "original_row_sha256": "f04574155f54b7fadeb5a88e6334e1eb352fb54616fb21345078f698892076e4", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UFM Telemetry TMS setup and trial run - Set up Telemetry view",
+    "procedure": "Open Telemetry, add a panel, edit/save a named view, optionally set a panel threshold, add/delete a panel parameter, save and change the record time.",
+    "criteria": "Panels and parameters can be added/deleted, and a configured threshold is displayed.",
+    "deepseek": "PARTIAL/CONFLICTING; preserves generic UFM UI access but attaches subnet-merger/topology-deploy evidence and risk from another case.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; correctly scopes persistent telemetry-view configuration and requests explicit settings, persistence and rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3012_9643b039f5a8f34d.json",
+  "old_problem": "The active record kept the case pending for a performance threshold oracle even though the source only validates dashboard configuration and threshold rendering; it does not use the chosen threshold as a hardware PASS criterion. NVIDIA defines view/panel/counter/time functionality, so a disposable, parameterized UI transaction is complete at review time.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_REVERSIBLE_UFM_TELEMETRY_VIEW_PANEL_PARAMETER_THRESHOLD_AND_TIME_UI_TEST",
+  "disposition_reason": "NVIDIA documents Telemetry views, time-series/TopX panels, monitored objects, raw/calculated counters and selectable time windows. A project owner may bind any supported harmless counter, unit, display-only threshold and record-time value in a disposable view. ED-03 permits those UI parameters, ED-08 requires real screenshots, and ED-15 prevents interpreting the display threshold as a platform acceptance limit. The rewrite removes DeepSeek's unrelated fabric-deployment risk and preserves every CRUD/persistence action.",
+  "decision_basis": [
+    "Directly read Compatibility row420 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3012 and adjacent row419 merger plus row421 live-traffic cases.",
+    "Applied NVIDIA UFM Telemetry documentation for multiple editable views, panel types, monitored objects/counters and time-range rendering.",
+    "Distinguished a display-configuration threshold from a hardware PASS threshold; no unapproved engineering limit is inferred.",
+    "Scoped all edits to a named disposable or backed-up view and retained save/reopen/delete/re-add/restore visual evidence.",
+    "Directly read next formal queue Compatibility row421 and verified its manifest identity; no UFM UI or fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "Reversible UFM Telemetry view panel, parameter, threshold and record-time persistence",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Prove an authorized user can create and persist a named UFM Telemetry test view, add/delete panels and parameters, display a configured threshold and change the record-time window without touching fabric topology or production dashboards.",
+    "required_package": [
+      "Approved UFM endpoint/version/telemetry provider and least-privilege UI account",
+      "Named disposable test view or export/screenshot of the exact existing view for restoration",
+      "One supported object/port, panel type, counter/metric, unit, display-only threshold and record-time selection valid for that UFM release",
+      "UFM configuration/view backup or documented delete/restore method and real browser screenshot capture"
+    ],
+    "test_command": "Record UFM/version/provider and export or fully capture the target view prestate. In Telemetry create/open `<approved_test_view>`; add one supported panel for `<approved_object,counter,unit>`, save and reopen it. Set `<approved_display_threshold>` and `<approved_record_time>`, save/reopen and capture their rendered labels. Add then delete one supported parameter and verify each saved state after refresh; delete/re-add the disposable panel as required by the source. Finally restore the exact approved prestate or delete the disposable view, proving no NDT, topology, route, port or event-policy setting changed.",
+    "expected_result": "Each bounded add/delete operation succeeds only in the target view; after save and browser refresh the exact view name, panel, metric/unit, threshold and time selection persist and render visibly. Parameter and panel deletion/re-addition behave as requested, and final restoration leaves prior views and fabric state unchanged.",
+    "pass_fail_basis": "PASS requires before/edit/save/reopen/restore evidence, real timestamped screenshots, exact supported metric/unit/threshold/time values and unchanged unrelated views/fabric state. A text claim, unsaved transient control, threshold without its metric/unit, or topology action cannot pass. The selected threshold is a UI-display test value, not a hardware performance verdict.",
+    "safety_gate": [
+      "Use a disposable or fully backed-up view and least privilege; do not overwrite an operator dashboard",
+      "Confirm metric/unit/provider support and keep the threshold display-only unless a separate approved event policy exists",
+      "Do not enter NDT/Subnet Merger, fabric configuration or production event-policy controls",
+      "Stop on unexpected shared-view mutation, inability to restore or fabric/service impact; preserve logs and never auto-retry"
+    ],
+    "expected_evidence": [
+      "UFM endpoint/version/provider/account role and exact target-view identity",
+      "Prestate export or complete screenshots and chosen panel/object/counter/unit/threshold/time matrix",
+      "Timestamped real screenshots after add, save/reopen, threshold/time change, parameter delete/re-add and panel delete/re-add",
+      "Optional view/API export proving persisted values",
+      "Restored/deleted test view, unchanged fabric/config evidence and engineer verdict"
+    ],
+    "recovery": "If a save/render action fails, capture the UI/API error and current view export, stop further edits, restore the saved prestate or remove only the disposable view, and verify other views plus UFM/fabric health. Do not retry automatically or mutate topology/event policies."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The review explicitly removes DeepSeek's unrelated subnet-merger deployment risk and evidence while preserving the source Telemetry UI intent."},
+  "blocked": {"before": false, "after": false, "reason": "NVIDIA defines supported telemetry UI objects; concrete harmless values and view identity are runtime bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind UFM endpoint/version/account, disposable view, supported panel/object/counter/unit, display-only threshold, record-time value and restoration method.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED REVERSIBLE UFM UI CONFIGURATION REQUIRED; NOT EXECUTED",
+    "owner": "UFM telemetry/dashboard and lab operations owners.",
+    "unlock_condition": "Approve the target test view, supported display settings and restoration method."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA UFM — Establishing Telemetry Sessions", "url": "https://docs.nvidia.com/networking/display/nvidia-ufm-sdn-appliance-user-manual-v4-14-6-4-lts-2023-lts-u5.6-4%20LTS%20%282023%20LTS%20U5%29.pdf", "applied_rule": "Defines editable Telemetry views, panels, monitored objects, raw/calculated attributes and real-time/historical rendering."}
+  ],
+  "project_authority": "Exact supported display settings and disposable view remain UFM-version/project bindings; they are not hardware acceptance thresholds.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "panel_parameter_threshold_and_record_time_coverage_preserved": true,
+    "save_reopen_and_restore_required": true,
+    "display_threshold_not_promoted_to_hardware_oracle": true,
+    "unrelated_subnet_merger_risk_removed": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|421|Wistron-L12 Cluster-00004-V002",
+    "next_missing_formal_queue_case_variant_id": "ebd8b3cc00a83add"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_merger_and_traffic_cases_compared": true, "case_specific_telemetry_view_reasoning": true, "authoritative_nvidia_telemetry_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
