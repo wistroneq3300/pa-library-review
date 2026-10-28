@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 982,
+  "formal_queue_sequence": 831,
+  "source_key": "Compatibility|407|Wistron-AMD GPU-00127-V002",
+  "case_variant_id": "9c83ddcd3c0eb38e",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 407, "code": "Wistron-AMD GPU-00127-V002", "original_row_sha256": "35f55e7ddc1dc9c715f476302c8ee366e56347e8242eb81b018c57947c95c247", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "AMD GPU Filed Health check - Level 3 (agfhc)",
+    "procedure": "Extract and install the distro-specific AGFHC archive, then run `sudo ./agfhc -r all_lvl3` for approximately 30 minutes.",
+    "criteria": "Preserve the referenced log directory; PASS requires the exact terminal message `Program exiting with return code AGFHC_SUCCESS [0]`, while failure output contains the summary, total time, log directory and non-success code.",
+    "deepseek": "PARTIAL; uses an opportunistic install and truncates the decisive suite output to 30 lines, then asks for IOMMU/driver evidence instead of full AGFHC results.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires authorized signed artifact, controlled privileged install/rollback, complete all_lvl3 results/logs, telemetry and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2999_9c83ddcd3c0eb38e.json",
+  "old_problem": "The active review kept the case pending for artifact, install and environment approval even though AMD now publicly documents AGFHC recipe semantics, all_lvl3's approximately 30-minute scope, detailed logs/results and success/failure reporting. Those missing values are approval-gated prerequisites, not unresolved test semantics.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_AUTHORIZED_AGFHC_ALL_LVL3_INSTALL_AND_FULL_RESULT_TEST",
+  "disposition_reason": "AMD documents AGFHC as a structured GPU health framework covering PCIe, HBM, compute, power/thermal and fabric, lists `all_lvl3` as an approximately 30-minute whole-system recipe, and requires full result/log evaluation. AMD also states AGFHC is authorization-controlled rather than publicly downloadable. ED-03 permits exact artifact/platform bindings as configuration, ED-14 preserves the full level-3 duration, ED-15 requires the actual success result, and ED-16/ED-17 gate high-load privileged install and recovery. The review is complete without guessing a package or executing it.",
+  "decision_basis": [
+    "Directly read Compatibility row407 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2999 and its unique source identity.",
+    "Applied AMD AGFHC documentation confirming structured recipes, full detailed logs/results and `all_lvl3` as an approximately 30-minute system check.",
+    "Recognized AGFHC's authorization requirement and treated the exact archive/checksum/license/user guide as a mandatory package prerequisite, not an engineering-decision blocker.",
+    "Retained the privileged install and complete all_lvl3 execution; opportunistic install, tail truncation and IOMMU lines cannot substitute for full suite results.",
+    "Directly read next formal queue Compatibility row408 and verified its manifest identity; no install, AGFHC load or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Authorized AGFHC all_lvl3 installation transaction and complete 30-minute health validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Install the exact authorized platform/distro AGFHC build under a controlled rollback plan, run the complete all_lvl3 system-health recipe once and preserve every per-GPU/subtest result and diagnostic artifact.",
+    "required_package": [
+      "AMD-authorized signed AGFHC archive, checksum/license and matching user guide for the exact GPU platform and distro",
+      "Compatible ROCm/AMDGPU, RVS prerequisite, firmware, OS/kernel and IOMMU configuration matrix",
+      "Installer manifest, privilege scope, current `/opt/amd/agfhc` backup/ownership/capacity and uninstall/restore procedure",
+      "Stable GPU serial/UUID/BDF topology and signed all_lvl3 recipe listing/test-info for the pinned build",
+      "Dedicated approximately 30-minute load window, independent management, cooling/power/RAS/thermal abort thresholds and recovery"
+    ],
+    "test_command": "After verifying the authorized archive signature/checksum and compatibility, preserve the existing installation/config/log manifest and review the installer delta. Under separate install approval, extract the exact archive and run its documented installer once. Confirm `agfhc --list` and `--recipe-info all_lvl3`, then under high-load approval execute `/opt/amd/agfhc/agfhc -r all_lvl3 -o <approved_output_dir>` once with default system monitoring and complete stdout/stderr capture. Preserve terminal summary, exit status, results.json and every referenced log; compare pre/post GPU/RAS/dmesg/thermal/power health and restore the prior installation if required.",
+    "expected_result": "The approved build installs only its signed manifest, exposes the expected all_lvl3 recipe, completes the full approximately 30-minute run on every mapped GPU, records all required subtests without silent skip, returns the exact documented success status/code 0 only when all required results pass, produces complete logs/results.json, and causes no disallowed RAS, dmesg, thermal, power or system event.",
+    "pass_fail_basis": "PASS requires authorized artifact/compatibility and install-diff evidence, complete untruncated all_lvl3 stdout/stderr, actual process exit status 0, `AGFHC_SUCCESS [0]`, complete results.json/log directory, all required GPU/subtest coverage and clean health telemetry. A tail excerpt, shell pipeline status, IOMMU lines or absent log artifacts cannot pass.",
+    "safety_gate": [
+      "Do not obtain AGFHC from an unapproved source; verify authorization, signature/checksum, platform and distro compatibility",
+      "Review and back up the privileged installer footprint before mutation; do not opportunistically install based only on `command -v`",
+      "Run only in a dedicated window with independent management and verified cooling/power headroom",
+      "Keep AGFHC system monitoring/RAS/dmesg checks enabled unless a separately signed procedure says otherwise; preserve historical logs",
+      "Abort on GPU loss/reset, RAS/dmesg failure, thermal/power limit, hang, storage exhaustion or access loss; never auto-retry"
+    ],
+    "expected_evidence": [
+      "AGFHC archive signature/checksum/license/user-guide and OS/ROCm/driver/firmware/IOMMU compatibility record",
+      "Installer manifest, before/after filesystem/package/service diff and rollback owner",
+      "Pinned build's all_lvl3 recipe listing/info and exact command/environment",
+      "Complete stdout/stderr, process exit status, terminal summary, results.json and full log bundle",
+      "Per-GPU/subtest coverage plus synchronized RAS/dmesg/thermal/power telemetry",
+      "Cleanup/installation-restoration evidence and engineer verdict"
+    ],
+    "recovery": "On install mismatch, restore the saved package/files/ownership/services before any test. On all_lvl3 fault, stop according to the vendor guide, preserve the full output/log directory and telemetry, verify every GPU and management path, restore only approved temporary settings and escalate. Do not rerun automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek targets the same all_lvl3 workflow but truncates and misdirects evidence; the Master full install/run/result coverage remains authoritative."},
+  "blocked": {"before": false, "after": false, "reason": "AMD documents the recipe, duration and result model; authorization, compatible artifact, install scope and window are execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the authorized artifact/checksum/guide, exact platform/distro/ROCm/RVS/IOMMU compatibility, installer footprint/rollback, output capacity, GPU topology and monitoring/abort thresholds.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED PACKAGE, PRIVILEGED INSTALL AND HIGH-LOAD WINDOW REQUIRED; NOT EXECUTED",
+    "owner": "AMD/AGFHC authorization, ROCm platform, system security and lab operations owners.",
+    "unlock_condition": "Approve the signed compatible artifact, controlled install/rollback, complete all_lvl3 oracle and high-load recovery plan."
+  },
+  "external_authorities": [
+    {"title": "AMD Instinct System Validation — AGFHC", "url": "https://instinct.docs.amd.com/projects/system-acceptance/en/latest/common/system-validation.html", "applied_rule": "AGFHC recipes provide structured subsystem coverage, recipe introspection, detailed logs and terminal/result evaluation."},
+    {"title": "AMD GPU Operator — AGFHC Support", "url": "https://instinct.docs.amd.com/projects/gpu-operator/en/main/test/agfhc.html", "applied_rule": "`all_lvl3` is an approximately 30-minute whole-system recipe and AGFHC produces detailed per-suite results/logs; the toolkit requires AMD authorization."}
+  ],
+  "project_authority": "Exact authorized build, platform compatibility, installer scope, recipe contents, environmental thresholds and recovery remain project/AMD-owner decisions.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "authorized_install_and_complete_all_lvl3_approximately_30_minute_coverage_preserved": true,
+    "full_results_json_logs_and_real_exit_status_required": true,
+    "tail_and_iommu_lines_not_substituted": true,
+    "privileged_install_and_high_load_separately_gated": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|408|Wistron-AMD GPU-00129-V002",
+    "next_missing_formal_queue_case_variant_id": "c370542e8dd83f5e"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "case_specific_agfhc_all_lvl3_install_reasoning": true, "authoritative_amd_agfhc_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
