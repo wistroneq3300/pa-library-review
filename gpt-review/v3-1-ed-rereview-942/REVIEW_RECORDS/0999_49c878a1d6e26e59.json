@@ -1,0 +1,83 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 999,
+  "formal_queue_sequence": 848,
+  "source_key": "Compatibility|425|Wistron-L12 Cluster-00007-V002",
+  "case_variant_id": "49c878a1d6e26e59",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 425, "code": "Wistron-L12 Cluster-00007-V002", "original_row_sha256": "cb03b5d87c3026fffb75ce2675f78732634476cc58e16b64ac092c522120c6e3", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Network Validation Initial Environment Setup and trial run - Check Telemetry",
+    "procedure": "Run IB-Stress between node-1 and node-2, set UFM Telemetry time to Last 5 Minutes, inspect tables and curves.",
+    "criteria": "Curves display correctly without abnormal surges or drops.",
+    "deepseek": "PARTIAL/CONFLICTING; recognizes generic live telemetry but attaches unrelated subnet-merger risk and omits the five-minute window and curve oracle.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires exact panels/units/sampling, bounded load, raw series and numerical continuity/correlation rules."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3016_49c878a1d6e26e59.json",
+  "old_problem": "The active review treated unspecified surge/drop tolerances as another review decision. The user-approved parameterization rule explicitly allows project performance thresholds when purpose, method and safety are clear. NVIDIA defines five-minute time-series telemetry; numeric tolerances can be mandatory execution configuration without fabricating PASS.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_FIVE_MINUTE_UFM_TELEMETRY_CONTINUITY_AND_ENDPOINT_ACCURACY_TEST",
+  "disposition_reason": "NVIDIA UFM supports time-series views over selected counters/devices and raw/calculated port metrics. The source fixes Last 5 Minutes and a bounded 15-minute load allocation. ED-03 permits panel/metric/tolerance bindings, ED-05 isolates IB, ED-14 preserves full load coverage, and ED-15 prohibits PASS until numeric gap/spike/drop/correlation tolerances are approved. This creates a complete review-layer test while leaving project-specific curve thresholds as runtime prerequisites.",
+  "decision_basis": [
+    "Directly read Compatibility row425 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3016 and adjacent row424 alarm plus row426 PHY-diagnostic cases.",
+    "Applied NVIDIA UFM Telemetry semantics for selected device/port counters, calculated rates and time-series windows.",
+    "Preserved the full 15-minute IB-Stress allocation and exact Last 5 Minutes view while requiring an exported raw series rather than subjective visual judgment alone.",
+    "Made numerical surge/drop/gap/variance and endpoint-delta rules mandatory project configuration; absent rules yield INCONCLUSIVE, never PASS.",
+    "Directly read next formal queue Compatibility row426 and verified its manifest identity; no traffic, telemetry query or fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "Five-minute UFM telemetry curve continuity and endpoint-counter accuracy under bounded IB load",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify selected UFM port telemetry accurately and continuously represents the approved two-node IB workload in the exact Last 5 Minutes window without unexplained missing samples, spikes or drops.",
+    "required_package": [
+      "Approved UFM/version/provider/view and mapped node/link GUID/ports",
+      "Pinned finite two-node IB-Stress profile for the complete 900-second source allocation with watchdog",
+      "Exact panel/metric/unit list, UFM sample/aggregation/refresh interval and synchronized endpoint counter source",
+      "Project-approved missing-sample limit, startup/stop transient window, spike/drop/variance rules, timestamp skew and endpoint-to-UFM tolerance"
+    ],
+    "test_command": "Capture synchronized clocks, idle baseline, mapped endpoint counters and UFM raw exports. Run the approved node-1/node-2 IB load for the complete 900 seconds under a hard watchdog. During a steady interval select Telemetry > Last 5 Minutes and export every approved mapped series plus endpoint counters spanning the same timestamps. Preserve real UI curves/tables, compute missing/duplicate samples, interval deltas, discontinuities, variance and endpoint-normalized rate error using only approved tolerances. Stop traffic, capture return to baseline and post-health.",
+    "expected_result": "Every selected series identifies the correct port/metric/unit and covers the complete five-minute window at the documented cadence. Its load rise, steady region and return behavior match synchronized endpoint counters; missing samples, unexplained spikes/drops, steady variation and rate error remain within approved project tolerances, with no link/fabric fault.",
+    "pass_fail_basis": "PASS requires the approved numerical oracle, complete raw five-minute series, matching endpoint counters/timestamps, real UI rendering and all calculated continuity/accuracy results within tolerance. Without approved tolerances, raw export, unit identity or aligned endpoint evidence the result is INCONCLUSIVE—not PASS. Visual smoothness alone cannot pass.",
+    "safety_gate": [
+      "Use only the approved isolated IB path and bounded 900-second load with external watchdog",
+      "Confirm exact UFM port/metric/unit/sample behavior and clock alignment before comparison",
+      "Preserve raw exports and operational logs; do not clear history or change topology/event policy",
+      "Abort on link/RAS/fabric/thermal fault, unexpected path or management loss; terminate peers and never auto-retry"
+    ],
+    "expected_evidence": [
+      "UFM/version/provider/view, node/link/port identity and clock alignment",
+      "Approved traffic profile/timeline and full 900-second peer outputs/status",
+      "Idle baseline, raw Last-5-Minutes UFM series and synchronized endpoint counters",
+      "Real UI screenshots and gap/spike/drop/variance/correlation calculation workbook or JSON",
+      "Approved tolerance set, return-to-baseline/post-health and engineer verdict"
+    ],
+    "recovery": "On traffic or telemetry anomaly stop both peers, preserve the raw series and endpoint/fabric evidence, restore temporary network state from the approved load case and verify link/UFM health. Do not smooth, delete or regenerate samples and do not retry automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The rewrite removes DeepSeek's unrelated subnet-merger risk and restores the exact five-minute telemetry-curve test."},
+  "blocked": {"before": false, "after": false, "reason": "Purpose/method/safety are complete; numerical curve tolerances are explicitly allowed project configuration prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind node/link/load, panel/metric/unit/cadence and numeric gap/spike/drop/variance/timestamp/endpoint-correlation tolerances before execution.",
+    "execution_status": "REVIEW RESOLVED; APPROVED FIVE-MINUTE NUMERIC CURVE ORACLE AND BOUNDED LOAD REQUIRED; NOT EXECUTED",
+    "owner": "UFM telemetry, InfiniBand fabric and project performance-acceptance owners.",
+    "unlock_condition": "Approve the mapped series, complete load profile and numerical continuity/accuracy tolerance set."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA UFM — Establishing Telemetry Sessions", "url": "https://docs.nvidia.com/networking/display/nvidia-ufm-sdn-appliance-user-manual-v4-14-6-4-lts-2023-lts-u5.6-4%20LTS%20%282023%20LTS%20U5%29.pdf", "applied_rule": "Defines time-series views, monitored devices/ports and raw/calculated network counters."}
+  ],
+  "project_authority": "Exact panels, load shape and numeric continuity/accuracy tolerances remain project bindings; they must exist before any PASS verdict.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "full_fifteen_minute_load_and_last_five_minutes_preserved": true,
+    "raw_series_and_endpoint_correlation_required": true,
+    "numeric_oracle_required_before_pass": true,
+    "unrelated_subnet_merger_risk_removed": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|426|Wistron-L12 Cluster-00008-V002",
+    "next_missing_formal_queue_case_variant_id": "759f49011d32fee0"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_alarm_and_phy_cases_compared": true, "case_specific_curve_continuity_reasoning": true, "authoritative_nvidia_telemetry_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
