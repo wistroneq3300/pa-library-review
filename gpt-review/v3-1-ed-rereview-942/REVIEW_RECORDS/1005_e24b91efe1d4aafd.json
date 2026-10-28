@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1005,
+  "formal_queue_sequence": 854,
+  "source_key": "Compatibility|431|Wistron-AMD GPU-00142-V002",
+  "case_variant_id": "e24b91efe1d4aafd",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 431, "code": "Wistron-AMD GPU-00142-V002", "original_row_sha256": "047907068813976202c969925dfe2f871cfd58a05e3e1dba0626583986a3e1a2", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "amd-smi list",
+    "procedure": "With amdgpu loaded and all devices visible, execute `amd-smi list`.",
+    "criteria": "Eight entries expose GPU index, BDF, UUID, KFD_ID, NODE_ID and PARTITION_ID; the shown BDF/UUID values may vary.",
+    "deepseek": "PARTIAL; supplies the correct read-only command but no expected inventory, uniqueness or partition-mode reconciliation.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; requires pinned AMD SMI/stack, authoritative expected identity set and independent PCI/KFD cross-check."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3022_e24b91efe1d4aafd.json",
+  "old_problem": "The active record treated the project GPU identity matrix and permitted dynamic identifiers as an engineering decision. AMD documents exactly which fields `amd-smi list` emits and explains that displayed GPU numbers are discovery-order indexes while partition mode changes logical-GPU enumeration. The expected hardware set and partition mode can be mandatory runtime configuration without keeping the review pending.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_AMD_SMI_GPU_IDENTITY_AND_PARTITION_ENUMERATION_TEST",
+  "disposition_reason": "AMD SMI authoritatively defines BDF, UUID, KFD_ID, NODE_ID and Partition ID output and warns that enumeration index is not a stable device identity. ED-02 preserves this row's unique Variant ID, ED-03 allows the platform map as runtime input, ED-13 forbids N/A merely because identities differ, ED-15 requires exact set/relationship rules before PASS, and ED-17 replaces source log clearing with a bounded marker.",
+  "decision_basis": [
+    "Directly read Compatibility row431 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3022 and adjacent row430 AGFHC plus row432 E1.S firmware cases.",
+    "Applied official AMD SMI CLI semantics: `list` reports BDF, UUID, KFD_ID, NODE_ID and Partition ID, while the numeric GPU index follows discovery order.",
+    "Applied AMD partition guidance that logical enumeration and BDF/partition relationships depend on partition mode; literal sample UUID/BDF values are not fixed expectations.",
+    "Preserved all eight source entries and fields, requiring uniqueness, set membership and cross-source KFD/PCI relationships rather than index-only matching.",
+    "Directly read next formal queue Compatibility row432 and verified its manifest identity; no AMD SMI, GPU or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMD SMI eight-GPU identity, KFD node and partition enumeration reconciliation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify the approved amdgpu/ROCm stack enumerates every expected GPU or logical partition exactly once and reports a complete, internally consistent BDF/UUID/KFD_ID/NODE_ID/PARTITION_ID mapping.",
+    "required_package": [
+      "Pinned AMD SMI, ROCm, amdgpu and GPU firmware versions",
+      "Authoritative expected eight-device physical or logical inventory keyed by stable serial/UUID/OAM slot/root port",
+      "Approved compute/memory partition mode and expected logical-GPU-to-physical-GPU relationship",
+      "Permitted dynamic index/BDF/KFD changes for the active stack/partition mode",
+      "Independent lspci, KFD sysfs and bounded driver/RAS log sources"
+    ],
+    "test_command": "Record tool/stack/partition mode and a non-destructive kernel-log marker. Run `amd-smi list` once with complete stdout, stderr, exit code and timestamp; when the pinned release supports it, also retain structured output and enumeration mapping. Parse every GPU entry and compare the observed set with the approved eight-device map using stable identity rather than numeric order. Verify BDF/UUID uniqueness, KFD_ID/NODE_ID/PARTITION_ID relationships and cross-check PCI/KFD sysfs; inspect the bounded post-marker driver/RAS delta.",
+    "expected_result": "Exactly the eight expected GPUs or logical partitions are present with no missing, extra or duplicate stable identity. Every entry has valid BDF, UUID, KFD_ID, NODE_ID and PARTITION_ID values consistent with the approved partition mode and independent PCI/KFD inventory, and no new unaccepted driver or RAS error appears.",
+    "pass_fail_basis": "PASS requires the approved expected inventory/partition mode, complete amd-smi output, exact set equality, uniqueness and relationship checks, independent PCI/KFD agreement and a clean bounded error delta. Matching the example values is not required and index count alone cannot pass. Without an approved expected map or partition-mode oracle the result is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Use read-only inventory commands only and do not alter GPU or memory partition configuration",
+      "Do not hard-code source sample BDF/UUID values or treat discovery-order index as stable identity",
+      "Mark but do not clear dmesg, SEL or driver history",
+      "Stop on device disappearance or driver instability, preserve the first observation and never auto-retry"
+    ],
+    "expected_evidence": [
+      "AMD SMI/ROCm/amdgpu/firmware and active partition-mode identity",
+      "Approved eight-device stable identity/OAM-slot/root-port map",
+      "Full amd-smi list output, exit code and timestamp",
+      "Parsed uniqueness/set-difference/KFD-node-partition report with lspci/sysfs cross-check",
+      "Bounded driver/RAS log delta and engineer verdict"
+    ],
+    "recovery": "This test is read-only. On missing/duplicate identity or driver fault, preserve the first output and bounded logs, stop further GPU checks, verify the host remains manageable and escalate for the separately approved driver/device recovery. Do not change partition mode, clear logs or rerun automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek and Master use the same read-only amd-smi command; the older review is incomplete rather than contradictory."},
+  "blocked": {"before": false, "after": false, "reason": "AMD defines the command and field semantics; exact expected membership and partition relationships are project/runtime bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the pinned stack, eight-device stable identity map, active partition mode, allowed dynamic-field changes and driver/RAS policy before execution.",
+    "execution_status": "REVIEW RESOLVED; APPROVED EIGHT-GPU IDENTITY AND PARTITION-MODE ORACLE REQUIRED; NOT EXECUTED",
+    "owner": "AMD GPU stack, platform topology and project partition-configuration owners.",
+    "unlock_condition": "Approve the expected stable identity set and KFD/node/partition relationships for the pinned stack."
+  },
+  "external_authorities": [
+    {"title": "AMD SMI CLI Tool Usage — amd-smi list", "url": "https://rocm.docs.amd.com/projects/amdsmi/en/develop/how-to/amdsmi-cli-tool.html", "applied_rule": "Defines list output fields and states that the numeric GPU ID is a discovery-order enumeration index."},
+    {"title": "AMD SMI — GPU Partitioning", "url": "https://rocm.docs.amd.com/projects/amdsmi/en/develop/conceptual/partition.html", "applied_rule": "Defines logical-GPU enumeration, BDF partition encoding and UUID/Partition ID behavior under partition modes."}
+  ],
+  "project_authority": "The platform inventory and approved partition mode determine the expected eight identities and relationships; sample values and enumeration order are explicitly non-authoritative.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "eight_entries_and_all_source_identity_fields_preserved": true,
+    "sample_values_treated_as_variable": true,
+    "stable_identity_set_and_partition_relationships_required": true,
+    "index_only_match_and_log_clear_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|432|Wistron-Storage-00067-V002",
+    "next_missing_formal_queue_case_variant_id": "eab83c9ee3054ff9"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_gpu_health_and_storage_flash_cases_compared": true, "case_specific_amd_smi_identity_reasoning": true, "authoritative_amd_smi_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
