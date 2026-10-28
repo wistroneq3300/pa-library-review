@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 997,
+  "formal_queue_sequence": 846,
+  "source_key": "Compatibility|422|Wistron-L12 Cluster-00471-V003",
+  "case_variant_id": "c33f40bde175a7f6",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 422, "code": "Wistron-L12 Cluster-00471-V003", "original_row_sha256": "45c2414d822438e2bdbc78e173fdae945619dd382ddb994a949020ef1566dda6", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "NV Cable validation setup and trial run - Cable validation",
+    "procedure": "Open UFM System Health > Fabric Validation, select each left-bar `Check xxx` item one by one and inspect the center-pane result.",
+    "criteria": "Each item displays PASS; any warning is investigated against the corresponding item.",
+    "deepseek": "PARTIAL/CONFLICTING; preserves only generic UFM access and adds unrelated subnet-merger deployment risk without enumerating or evidencing cable checks.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires release-specific checklist, item-level evidence, topology mapping and warning disposition."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3014_c33f40bde175a7f6.json",
+  "old_problem": "The active record kept the case pending because item names vary by UFM release. NVIDIA documents the System Health validation categories and itemized report model; the complete visible release-matched catalog can be captured before execution. Dynamic catalog discovery is safer and more complete than hard-coding another release's list.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_RELEASE_DISCOVERED_ITEM_BY_ITEM_READ_ONLY_UFM_CABLE_VALIDATION",
+  "disposition_reason": "NVIDIA System Health documentation defines Fabric Validation/Health checks and itemized results, including cable diagnostics, link speed/width, BER and physical port-grade checks. ED-03 permits target/release/topology bindings, ED-08 requires actual UI evidence, ED-09 keeps physical warning investigation manual, and ED-16 holds unknown or mutating checks. Capturing the entire current UI catalog, classifying each item from its built-in description and running every approved read-only cable item once preserves the source's 'one by one' coverage without inventing omitted names.",
+  "decision_basis": [
+    "Directly read Compatibility row422 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3014, completed baseline row423 and next pending row424.",
+    "Applied NVIDIA UFM System Health documentation for versioned validation/report items and cable/link/BER/physical-grade categories.",
+    "Required a captured release-specific full UI checklist before selecting checks, avoiding both omitted items and guessed names.",
+    "Converted warning acceptance into per-item report, GUID/port/cable mapping and owner disposition; no automatic remediation or topology action is allowed.",
+    "Directly read row423 as already completed baseline and row424 as the next pending manifest identity; no UFM check or fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "Release-discovered item-by-item UFM cable and link validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Run every applicable read-only cable/link validation exposed by the approved UFM release and prove each item passes or has a cable-specific warning fully mapped and dispositioned without changing fabric state.",
+    "required_package": [
+      "Approved UFM endpoint/version/account and designated fabric/topology snapshot",
+      "Complete captured Fabric Validation UI item catalog with descriptions and read-only/disruptive classification for that exact release",
+      "Switch/HCA GUID, port, peer, cable serial/label/type/speed/width map",
+      "Warning exception authority, qualified physical cable observer and escalation owner"
+    ],
+    "test_command": "Capture UFM/version/fabric/topology/alarms and the complete visible Fabric Validation left-bar catalog with each item's description. Build an execution ledger in UI order; run once every item whose documented scope is cable type/diagnostics, link speed/width, BER/signal integrity or physical port grade and is confirmed read-only. For each, preserve start/end, report ID, status, full detail and affected GUID/port/cable. Hold rather than run any unknown or mutating item. Map every warning to physical identity/counters and obtain explicit owner disposition; do not remediate.",
+    "expected_result": "The ledger accounts for every current UI item and every applicable approved cable check completes. Each required item reports PASS; any warning remains non-PASS until its exact GUID/port/cable, raw measurements and approved exception are documented. No topology, port state, routing, configuration or active job changes.",
+    "pass_fail_basis": "PASS requires the complete versioned catalog, per-item reports/status/details, all applicable cable items executed exactly once, no unresolved warning/error and unchanged fabric state. A single aggregate PASS, omitted checkbox, unidentified warning or unknown item executed without semantics cannot pass.",
+    "safety_gate": [
+      "Capture and read each item's release-specific description before execution; run only confirmed read-only checks",
+      "Do not invoke corrective, topology, port-state, firmware or cable-remediation actions",
+      "Preserve existing alarms/logs and full report detail; do not clear or acknowledge evidence",
+      "Stop on unknown/mutating semantics, new critical alarm, fabric/job impact or management loss; never auto-retry"
+    ],
+    "expected_evidence": [
+      "UFM version/fabric/topology/alarms baseline and complete UI item catalog screenshots/export",
+      "Ordered item ledger with applicability and read-only authority",
+      "Per-item timestamps, report IDs, status, full details and real UI screenshots",
+      "GUID/port/peer/cable-label map and measurement evidence for each warning",
+      "Warning dispositions, unchanged topology/post-health and engineer verdict"
+    ],
+    "recovery": "No state change is expected. On unknown behavior or fabric impact, stop the current validation, preserve the report and alarms, verify UFM/OpenSM/topology/link health and escalate without remediation or retry. Physical cable work belongs to a separately authorized action."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The rewrite removes DeepSeek's unrelated subnet-merger risk and restores versioned per-item cable validation evidence."},
+  "blocked": {"before": false, "after": false, "reason": "The current UFM UI supplies the complete catalog and item descriptions; target/topology/warning mappings are execution parameters."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind UFM release/fabric/account, current catalog descriptions, topology/cable map, warning exceptions and physical escalation owner.",
+    "execution_status": "REVIEW RESOLVED; RELEASE CATALOG CAPTURE AND AUTHORIZED READ-ONLY UFM VALIDATION REQUIRED; NOT EXECUTED",
+    "owner": "UFM, InfiniBand fabric and physical cabling owners.",
+    "unlock_condition": "Approve the target/release/account, cable topology map and warning disposition authority."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA UFM System Health", "url": "https://docs.nvidia.com/networking/display/UFMEnterpriseUMv6171/system-health.pdf", "applied_rule": "Defines System Health validation/report UI and cable diagnostics, link speed/width, BER and physical port-grade check categories with itemized results."}
+  ],
+  "project_authority": "Exact release catalog, physical topology and accepted warning exceptions remain project bindings; all applicable current items must still be accounted for.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-09", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "all_current_ui_items_accounted_for": true,
+    "each_approved_cable_check_run_independently": true,
+    "warnings_require_physical_identity_and_disposition": true,
+    "unrelated_subnet_merger_risk_removed": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "intervening_completed_source_row_verified": "Compatibility|423|Wistron-L12 Cluster-00005-V002",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|424|Wistron-L12 Cluster-00006-V002",
+    "next_missing_formal_queue_case_variant_id": "12e56edd03f1045f"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "intervening_completed_and_next_pending_rows_read": true, "case_specific_cable_catalog_reasoning": true, "authoritative_nvidia_system_health_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
