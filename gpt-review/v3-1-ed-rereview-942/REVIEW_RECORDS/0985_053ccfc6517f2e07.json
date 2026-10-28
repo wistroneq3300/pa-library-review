@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 985,
+  "formal_queue_sequence": 834,
+  "source_key": "Compatibility|410|Wistron-AMD GPU-00469-V002",
+  "case_variant_id": "053ccfc6517f2e07",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 410, "code": "Wistron-AMD GPU-00469-V002", "original_row_sha256": "f8ebab0e87e7298b14f1d447febcae3c08c95768ea2d1d32f6e7328588643d56", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "ROCm Validation Suite (RVS)",
+    "procedure": "Verify the recipe, install ROCm/RVS prerequisites, run the MI300X `gst_single.conf`, and concurrently invoke `amd-smi monitor -w 1 -i 50` while following dmesg.",
+    "criteria": "All eight GPUs must ramp above 50% utilization and 50% TDP, reach the stated high-load condition without unintended throttling, remain enumerated and initialized, and show no dmesg/RAS/assertion or host reboot/shutdown/power-off failure; the source remarks that thermal protection may occur near 95-100 C.",
+    "deepseek": "PARTIAL; identifies an RVS load and score comparison but omits the exact MI300X GST config, all-GPU identity, monitor duration, throttle semantics and failure signatures.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; preserves GST and requests a pinned stack/config, all-GPU monitoring, numeric/throttle oracle and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3002_053ccfc6517f2e07.json",
+  "old_problem": "The active review treated `amd-smi -i 50` and the utilization/TDP/throttle wording as unresolved engineering semantics. AMD SMI documents `-i` as iteration count, not GPU selection, and RVS documents platform-specific GST configuration plus its own per-GPU target/tolerance result model. These authorities permit a safe parameterized case without guessing an OEM threshold.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_PINNED_MI300X_RVS_GST_WITH_FULL_RUN_ALL_GPU_TELEMETRY",
+  "disposition_reason": "The source already supplies the MI300X workload, eight-GPU scope, ramp checks and failure oracle. Official AMD documentation resolves the command semantics: `-i 50` is only 50 monitor iterations, while `-g all` selects all GPUs; it cannot cover a 180-minute allocation. Official RVS documentation requires the platform-specific configuration and reports per-GPU target/tolerance status. ED-03 permits stack/config/topology bindings, ED-14 prevents a 50-second sample from replacing the full run, and ED-15 keeps the source and pinned configuration thresholds explicit. No further engineering decision is required at review time.",
+  "decision_basis": [
+    "Directly read Compatibility row410 all 18 XLSX columns, same-row DeepSeek content, GPT V2/history3002 and adjacent row411 RCCL variant.",
+    "Applied AMD RVS guidance that MI300X must use its platform-specific `gst_single.conf` and that GST emits per-GPU achieved versus target/tolerance results.",
+    "Applied AMD SMI CLI semantics: `-i 50` means 50 iterations, `-w 1` means one-second watch interval and `-g all` selects every GPU.",
+    "Replaced the inadequate 50-iteration excerpt with full-run telemetry bounded to the actual RVS process, without changing the source GST workload or its 180-minute allocation.",
+    "Directly read next formal queue Compatibility row411 and verified its source key and variant; no package install, RVS workload or DUT command ran."
+  ],
+  "test_case": {
+    "test_name": "Pinned MI300X RVS GST with complete eight-GPU load, throttle and health evidence",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Run the exact MI300X RVS GST configuration once and prove that all eight stable GPU identities sustain the required load without unexpected throttle, device loss, RAS/kernel failure or host disruption.",
+    "required_package": [
+      "Approved ROCm, AMD SMI and `rocm-validation-suite` versions with repository/package checksums and compatibility matrix",
+      "Pinned `/opt/rocm/share/rocm-validation-suite/conf/MI300X/gst_single.conf` checksum and reviewed target_stress/tolerance/duration values",
+      "Stable GPU 0-7 to UUID/BDF/serial map and confirmed MI300X topology",
+      "Approved 180-minute window, power/cooling headroom, platform thermal/throttle limits, BMC/OOB access and recovery owner"
+    ],
+    "test_command": "Record package/config hashes, `rvs --version`, `rvs -g`, `amd-smi list` and the UUID/BDF map; preserve pre-test dmesg, RAS and BMC/SEL evidence without clearing it. Run the pinned `/opt/rocm/bin/rvs -c /opt/rocm/share/rocm-validation-suite/conf/MI300X/gst_single.conf -j <new_results.json> -l <new_rvs.log>` once. From before launch through process exit, capture `amd-smi monitor -g all -w 1 -W <approved_full_run_seconds> -p -t -u -m -n -v -e -r --csv --file <new_monitor.csv>` and a timestamped dmesg follow; verify the monitor duration covers the complete run rather than only 50 iterations.",
+    "expected_result": "Every mapped GPU 0-7 remains present, initialized and represented throughout the complete telemetry. RVS completes the pinned GST actions with each configured per-GPU target/tolerance result met, the source load-ramp conditions are observed, and no unexpected throttle below the approved platform thermal/power boundary, GPU drop/reset, RAS/dmesg error, assertion, host hang, reboot, shutdown or power-off occurs.",
+    "pass_fail_basis": "PASS requires actual RVS status 0, complete JSON/log output, every required GST action and all eight identities passing the pinned configuration's target/tolerance checks, source utilization/power ramp evidence, full-run all-GPU telemetry and clean synchronized kernel/RAS/BMC evidence. Fifty samples, an average that hides one GPU, or thermal throttling excused without the approved platform limit cannot pass.",
+    "safety_gate": [
+      "Approve exact package/config provenance and inspect target, tolerance, duration and device scope before sustained load",
+      "Verify all eight UUID/BDF identities, PSU/cooling capacity, output space and independent BMC/OOB access",
+      "Preserve baseline logs; do not clear SEL, dmesg or prior evidence",
+      "Abort on unexpected throttle, platform thermal/power limit, GPU loss/reset, RAS/dmesg fault, host instability, storage exhaustion or management-path loss; never auto-retry"
+    ],
+    "expected_evidence": [
+      "ROCm/RVS/AMD SMI package provenance, MI300X config checksum/content and GPU UUID/BDF topology",
+      "Pre/post inventory plus preserved baseline and delta kernel/RAS/BMC evidence",
+      "Exact command/environment, full stdout/stderr, process status, RVS JSON and verbose log",
+      "Full-run per-GPU utilization, power, temperature, clock, throttle and error CSV covering all eight identities",
+      "Per-action/per-GPU target comparison, post-health result and signed engineer verdict"
+    ],
+    "recovery": "On a stop condition, terminate the workload through the documented RVS path, preserve all partial output and independent telemetry, verify host and every GPU from OS and BMC, restore only approved temporary package/config changes, and escalate the first failure. Do not reboot, clear evidence or rerun automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is incomplete but does not contradict the source; AMD documentation resolves the monitor and GST result semantics."},
+  "blocked": {"before": false, "after": false, "reason": "Pinned versions, config checksum, identity map and safety thresholds are execution prerequisites rather than missing review logic."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind approved ROCm/RVS/AMD SMI versions, the exact MI300X config and its target/tolerance values, eight-GPU UUID/BDF map, full-run duration, thermal/power/throttle limits and recovery owner.",
+    "execution_status": "REVIEW RESOLVED; PINNED STACK/CONFIG AND APPROVED 180-MINUTE HIGH-LOAD WINDOW REQUIRED; NOT EXECUTED",
+    "owner": "GPU platform, ROCm package, thermal/power and lab operations owners.",
+    "unlock_condition": "Approve the compatible stack/config, identity map, full-run telemetry duration and platform safety/recovery boundaries."
+  },
+  "external_authorities": [
+    {"title": "AMD ROCm Validation Suite User Guide", "url": "https://rocm.docs.amd.com/projects/ROCmValidationSuite/en/latest/ug1main.html", "applied_rule": "Use the GPU-specific MI300X configuration; GST evaluates per-GPU achieved performance against configured target_stress and tolerance and supports complete JSON/log output."},
+    {"title": "AMD SMI CLI — monitor", "url": "https://rocm.docs.amd.com/projects/amdsmi/en/docs-6.2.1/how-to/using-AMD-SMI-CLI-tool.html", "applied_rule": "`-i` is iteration count, `-w` is watch interval, `-W` is total watch time and `-g all` selects all GPUs."}
+  ],
+  "project_authority": "Exact stack/config, configured GST targets, platform thermal/power/throttle boundaries, full-run duration and recovery remain project-owner bindings.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-04", "ED-08", "ED-13", "ED-14", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "mi300x_gst_and_eight_gpu_coverage_preserved": true,
+    "amd_smi_iteration_semantics_corrected": true,
+    "full_run_monitoring_replaces_fifty_second_excerpt": true,
+    "platform_config_targets_not_invented": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|411|Wistron-AMD GPU-00131-V003",
+    "next_missing_formal_queue_case_variant_id": "13295c72aef69327"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_case_compared": true, "case_specific_monitor_and_gst_reasoning": true, "authoritative_amd_rvs_and_smi_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
