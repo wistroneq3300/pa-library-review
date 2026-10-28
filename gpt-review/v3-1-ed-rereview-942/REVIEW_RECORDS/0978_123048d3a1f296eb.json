@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 978,
+  "formal_queue_sequence": 827,
+  "source_key": "Compatibility|403|Wistron-AMD GPU-00469-V003",
+  "case_variant_id": "123048d3a1f296eb",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 403, "code": "Wistron-AMD GPU-00469-V003", "original_row_sha256": "fc226bee3e63bb69eabfd5111da26b1cccfaedd59be1e86c9a9d07dd63ccb656", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Check PCIe 4-point Margin",
+    "procedure": "Discover eight AMD OAM links, disable L0s/L1 on their exact upstream bridges and run AMDXIO receiver=6 four-point margin commands with BER=10, errcnt=5 and the specified phase/voltage ranges.",
+    "criteria": "CSV row count equals the number of lanes, every required margin value is non-zero and each named column contains equal values; fewer rows or any zero fails.",
+    "deepseek": "PARTIAL; reduces the test to generic AMDXIO execution and CSV collection, omitting live ASPM mutation, receiver identity, exact parameters, recovery and the contested oracle.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/CRITICAL; requires pinned proprietary tool, live endpoint/bridge map, ASPM backup/restore, exact per-lane parser, AER monitoring and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2995_123048d3a1f296eb.json",
+  "old_problem": "The active review treated the source's non-zero/equal-column rule as usable once project parameters were supplied, but no authoritative AMDXIO schema or build-specific interpretation was cited. Direct AMD documentation now shows that margin status can transiently read zero on affected platforms and that a known retimer margin issue requires stepthrough mode, so the source oracle cannot be generalized safely.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_FOR_AMDXIO_BUILD_SPECIFIC_MARGIN_ORACLE_AND_SAFE_ASPM_RECOVERY",
+  "disposition_reason": "This is not merely a missing BDF. The proprietary AMDXIO command semantics, receiver=6 applicability, output schema, zero-value handling, same-column equality rule, known-issue workaround and exact ASPM restore sequence depend on the approved platform/tool release. AMD errata explicitly warns that lane-margin status may be incorrectly zero for a clock and should be reread, while another AMD release note directs stepthrough mode for a zero retimer result. ED-03 cannot parameterize an unknown authoritative PASS/FAIL oracle; ED-15 forbids PASS without it, and ED-16/ED-17 require safe disruptive-tool and recovery approval. Pending is therefore retained rather than fabricating correctness.",
+  "decision_basis": [
+    "Directly read Compatibility row403 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2995 and both same-code row403/404 variants.",
+    "Preserved this variant's endpoint receiver=6, eight OAM links, ASPM L0s/L1 control, BER/error/range parameters and complete lane CSV coverage separately from row404 retimer receiver=2/3.",
+    "AMD Family 19h errata states lane-margin status fields may transiently read zero under specified conditions and recommends ignoring/re-reading invalid all-zero data; therefore `any zero = fail` is not universally authoritative.",
+    "AMD release notes identify a retimer margin zero-value issue whose workaround is AMDXIO stepthrough mode, proving tool-build/platform behavior affects the command and oracle.",
+    "Directly read next formal queue Compatibility row404 and verified its manifest identity; no AMDXIO, ASPM, margin or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Eight-link AMD OAM endpoint receiver-6 PCIe four-point margin characterization",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Characterize all lanes of each mapped AMD OAM endpoint PCIe link at receiver 6 with the approved AMDXIO four-point profile, while preserving exact target identity, ASPM state and complete per-lane evidence.",
+    "required_package": [
+      "AMD-approved AMDXIO build, checksum, license, release notes and exact command/output-schema documentation for the platform",
+      "Eight OAM serial/end-point BDF/upstream-bridge/receiver/lane maps validated from current topology",
+      "Approved receiver=6 support and BER=10, errcnt=5, four-point phase/voltage range semantics for this build",
+      "Authoritative CSV column definitions, expected lane-row rules, zero/re-read/stepthrough handling and numeric PASS/FAIL thresholds",
+      "Per-bridge ASPM L0s/L1 pre-state, ordered disable/restore method, maintenance isolation, AER/link/thermal monitoring and OOB recovery"
+    ],
+    "test_command": "NOT RELEASED FOR EXECUTION. After the missing AMD/project authority is supplied, attest each current endpoint and upstream bridge, capture ASPM/link/AER/thermal pre-state, disable only the approved bridge L0s/L1 controls in the documented order, and run the signed AMDXIO receiver=6 four-point profile one link at a time. Preserve complete stdout/stderr and original CSV, apply the approved invalid-zero/re-read/stepthrough rule, then restore and verify the exact ASPM state before advancing.",
+    "expected_result": "For every approved endpoint and every expected lane, the tool completes under the signed build-specific procedure, output schema and receiver mapping; lane completeness and margin/error values satisfy the approved numeric and invalid-sample rules; no disallowed AER/link/GPU/thermal event occurs; and every upstream bridge returns to its exact original ASPM state.",
+    "pass_fail_basis": "PENDING AUTHORITY. PASS must not be assigned until AMD/project owners approve the exact AMDXIO build, receiver=6 semantics, CSV schema, numeric thresholds, treatment of zero/equal values and any stepthrough/re-read rule. Row count alone, generic non-zero checks or assumed column equality are insufficient.",
+    "safety_gate": [
+      "Do not execute without signed AMDXIO provenance, exact live topology and build-specific receiver/output documentation",
+      "Never reuse example BDFs; bind endpoint and upstream bridge identities from current topology",
+      "Capture exact ASPM pre-state and prove a tested ordered restore procedure before disabling L0s/L1",
+      "Run one isolated link at a time with independent management and live AER/link/GPU/thermal monitoring",
+      "Stop on mapping/schema ambiguity, link degradation, AER escalation, thermal event or failed ASPM restoration; never auto-retry"
+    ],
+    "expected_evidence": [
+      "Approved AMDXIO binary/checksum/license/release notes and receiver=6 command/schema authority",
+      "Eight-link endpoint/bridge/receiver/lane map and pre-state ASPM/link/AER/thermal evidence",
+      "Exact signed commands plus complete stdout/stderr and original per-link CSVs",
+      "Per-lane parser output applying approved zero/re-read/stepthrough and numeric margin rules",
+      "Post-link AER/GPU/thermal health and exact ASPM restoration diff for every bridge",
+      "Recovery record and engineer verdict"
+    ],
+    "recovery": "If a target, schema, link or margin anomaly occurs, stop all remaining links, restore the captured ASPM settings on the affected upstream/downstream components in the approved order, verify original link rate/width and GPU health through OOB, preserve raw data and escalate. Do not rerun or reinterpret zero values without the missing authority."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is incomplete but does not replace the Master endpoint-margin scope; the unresolved issue is the authoritative tool/oracle, not competing source intent."},
+  "blocked": {"before": false, "after": false, "reason": "Static review can record the exact missing authority and safe skeleton; execution remains prohibited until the proprietary tool/oracle and recovery are approved."},
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Provide the exact live eight-link topology and ASPM state, but configuration alone is insufficient without authoritative AMDXIO build/receiver/schema/zero/equality/threshold and recovery documentation.",
+    "execution_status": "ENGINEERING DECISION PENDING; PROPRIETARY MARGIN TOOL/ORACLE AND SAFE RECOVERY NOT APPROVED; NOT EXECUTED",
+    "owner": "AMD platform/tool owner, PCIe signal-integrity owner and project hardware architect.",
+    "unlock_condition": "Supply an approved AMDXIO build and release-specific command/schema authority; receiver=6 applicability; explicit zero, equality and numeric margin rules including known-issue workarounds; exact topology; and tested ordered ASPM recovery."
+  },
+  "external_authorities": [
+    {"title": "AMD Family 19h Models A0h-AFh Revision Guide — Erratum 1395", "url": "https://docs.amd.com/api/khub/documents/aBaGVEhC_kN7n61TYp_76A/content", "applied_rule": "Lane-margin status fields may transiently report zero; AMD recommends treating invalid all-zero data as a condition to reread rather than an unconditional hardware failure."},
+    {"title": "AMD Release Notes — PCIe Retimer Margin Key Fix P179695", "url": "https://docs.amd.com/api/khub/documents/W~s1E8M5m1EQQ_McscCwQ/content", "applied_rule": "A documented zero retimer-margin issue requires the AMDXIO stepthrough method, so build/platform-specific command guidance is required."}
+  ],
+  "project_authority": "Only AMD/project owners can approve the proprietary tool build, platform receiver mapping, definitive CSV/numeric oracle and safe ASPM restore method.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "same_code_retimer_row404_variant_kept_separate": true,
+    "eight_endpoint_receiver6_aspm_and_four_point_lane_csv_coverage_preserved": true,
+    "zero_and_equal_value_oracle_not_invented": true,
+    "proprietary_command_not_released_without_authority": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|404|Wistron-AMD GPU-00469-V003",
+    "next_missing_formal_queue_case_variant_id": "c5c7730f9585f9bb"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_variants_compared": true, "case_specific_receiver6_aspm_margin_reasoning": true, "authoritative_amd_errata_and_release_notes_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
