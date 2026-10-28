@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 993,
+  "formal_queue_sequence": 842,
+  "source_key": "Compatibility|418|Wistron-L12 Cluster-00001-V002",
+  "case_variant_id": "315c87fc10cf6f4b",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 418, "code": "Wistron-L12 Cluster-00001-V002", "original_row_sha256": "3a1af941ca8a2fae0ef43943614de05b802eb72b6f93a72c0dc17e46c545e6e7", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UFM NDT setup and trial run - Upload and add plugin",
+    "procedure": "SSH to UFM, pull `mellanox/ufm-plugin-ndt:latest`, set `subnet_merger_enable=true` in `/opt/ufm/conf/gv.cfg`, add the NDT plugin in Settings > Plugin management, then refresh the UI.",
+    "criteria": "Plugin upload succeeds and the UFM web interface shows the Subnet merge page.",
+    "deepseek": "PARTIAL; preserves the workflow and lab-fabric risk but uses a mutable latest image and omits backup, compatibility and rollback controls.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; requires pinned image, lab target, config backup/diff, maintenance/rollback and UI/service evidence."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3010_315c87fc10cf6f4b.json",
+  "old_problem": "The active review requested another engineering decision for artifact, target and rollback bindings even though NVIDIA documents the NDT deployment model, plugin management and expected Subnet Merger navigation entry. These are controlled execution prerequisites, not missing test semantics.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_PINNED_UFM_NDT_PLUGIN_ENABLEMENT_AND_SUBNET_MERGER_UI_TEST",
+  "disposition_reason": "NVIDIA UFM documentation identifies NDT as a self-contained managed plugin and states that adding it through Plugin Management creates the Subnet Merger navigation item. NVIDIA's appliance CLI also supports an explicit plugin tag. ED-03 permits UFM/version/artifact bindings, ED-08 requires real UI evidence, and ED-16/ED-17 gate the configuration change and evidence. Replacing mutable `latest` with an approved tag plus immutable digest prevents drift without reducing upload/add/UI coverage; actual topology deployment remains row419 and is not performed here.",
+  "decision_basis": [
+    "Directly read Compatibility row418 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3010 and adjacent row419 merger-deployment case.",
+    "Applied NVIDIA UFM documentation for NDT plugin architecture, supported Plugin Management add flow and resulting Subnet Merger navigation item.",
+    "Preserved `subnet_merger_enable=true`, plugin add, refresh and page-visibility coverage while replacing `latest` with approved tag/digest provenance.",
+    "Separated plugin enablement from row419's NDT upload/deploy, physical connection and live fabric topology mutation.",
+    "Directly read next formal queue Compatibility row419 and verified its manifest identity; no image pull, config edit, plugin add or UFM/fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "Pinned UFM NDT plugin enablement and Subnet Merger UI availability",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Install and enable the approved NDT plugin on the designated non-production UFM service, enable subnet-merger capability and prove the plugin is healthy and the Subnet Merger page is visibly available without deploying topology.",
+    "required_package": [
+      "Designated lab UFM/fabric identity, UFM edition/version and matching NVIDIA NDT compatibility documentation",
+      "Approved NDT image tag and immutable digest/signature or supported plugin bundle checksum; never `latest` alone",
+      "Backup/checksum of `/opt/ufm/conf/gv.cfg`, current plugin inventory/state and documented UFM config-reload semantics",
+      "Authorized SSH/config and UFM Plugin Management UI accounts, maintenance window, service-health gates and tested plugin/config rollback"
+    ],
+    "test_command": "Capture UFM/fabric/version, current jobs/topology/service health, plugin inventory and a hashed `gv.cfg` backup. Pull or import only `<approved_ndt_image>@sha256:<approved_digest>` (or the signed UFM plugin bundle), verify provenance/compatibility, change only the documented `subnet_merger_enable` key to `true`, and perform the version-specific supported reload. In UFM Settings > Plugin Management add/enable that exact NDT tag/digest. Refresh, verify plugin state/version/health and open the Subnet Merger page without uploading, validating or deploying an NDT file.",
+    "expected_result": "Only the approved configuration key changes; UFM remains healthy and manages the exact pinned NDT plugin in enabled/running state. The refreshed UI visibly shows the Subnet Merger navigation/page with no topology file deployed, no fabric route/port/topology change and no new service or fabric error.",
+    "pass_fail_basis": "PASS requires artifact tag/digest verification, config backup/diff, successful supported reload, healthy exact plugin state, timestamped real UI screenshots showing Plugin Management and Subnet Merger, unchanged fabric/job/topology baseline and complete rollback readiness. A `latest`-only pull, text claim, hidden API response or topology deploy cannot pass.",
+    "safety_gate": [
+      "Use designated isolated/lab UFM only; verify active jobs, fabric health and owner approval before control-plane change",
+      "Do not use mutable latest without resolving and approving its digest; validate UFM/plugin compatibility",
+      "Back up `gv.cfg` and plugin state and confirm the exact reload/rollback path before editing",
+      "Stop on UFM restart failure, plugin crash, unexpected topology/route/port change or access loss; do not proceed into NDT upload/deploy and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Lab UFM/fabric identity, versions, active jobs and before/after service/fabric health",
+      "NDT tag/digest/signature or bundle checksum and compatibility authority",
+      "Hashed `gv.cfg` before/after diff, reload command/status and plugin inventory/health output",
+      "Timestamped uncropped Plugin Management and Subnet Merger page screenshots",
+      "No-deployment proof, rollback artifacts and engineer verdict"
+    ],
+    "recovery": "On plugin/config fault, capture logs and state, disable/remove only the newly added plugin using the documented UFM method, restore the exact `gv.cfg` backup, perform the approved reload and verify UFM plus fabric health. Do not delete plugin data or deploy topology unless the rollback procedure explicitly requires it; never retry automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek preserves the workflow and risk but needs immutable artifact and controlled-change evidence."},
+  "blocked": {"before": false, "after": false, "reason": "NVIDIA defines the plugin and UI behavior; version/artifact/target/rollback are execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind lab UFM/fabric/version, approved NDT tag/digest, config reload semantics, UI credentials, maintenance window and rollback.",
+    "execution_status": "REVIEW RESOLVED; PINNED PLUGIN AND AUTHORIZED LAB UFM CONTROL-PLANE CHANGE REQUIRED; NOT EXECUTED",
+    "owner": "UFM platform, InfiniBand fabric, artifact supply-chain and lab operations owners.",
+    "unlock_condition": "Approve the compatible pinned artifact, lab target, config/reload transaction, UI account and rollback."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA UFM Enterprise — NDT Plugin", "url": "https://docs.nvidia.com/networking/display/ufmenterpriseumv6154/ndt%2Bplugin", "applied_rule": "Defines NDT as a UFM-managed self-contained Docker plugin and documents the Subnet Merger UI entry after plugin addition."},
+    {"title": "NVIDIA UFM Plugin Commands", "url": "https://docs.nvidia.com/networking/display/ufmsdnappcliv4170/ufm%2Bplugin%2Bcommands", "applied_rule": "Defines supported add/enable/remove behavior and explicit plugin tag selection."}
+  ],
+  "project_authority": "Exact UFM version, approved NDT digest, reload behavior, lab target and rollback remain project bindings; actual fabric merge is separately controlled by row419.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "pinned_plugin_replaces_mutable_latest": true,
+    "subnet_merger_enable_and_plugin_add_preserved": true,
+    "real_webui_evidence_required": true,
+    "row419_topology_deployment_not_collapsed": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|419|Wistron-L12 Cluster-00002-V002",
+    "next_missing_formal_queue_case_variant_id": "07ddaf7242448d1e"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_merger_case_compared": true, "case_specific_plugin_enablement_reasoning": true, "authoritative_nvidia_ufm_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
