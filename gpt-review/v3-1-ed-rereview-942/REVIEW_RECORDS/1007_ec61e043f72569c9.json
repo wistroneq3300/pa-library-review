@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1007,
+  "formal_queue_sequence": 856,
+  "source_key": "Compatibility|433|Wistron-Storage-00068-V002",
+  "case_variant_id": "ec61e043f72569c9",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 433, "code": "Wistron-Storage-00068-V002", "original_row_sha256": "00a169a651fabf62130134151e9806a385b1030bb5a3be3b11db3cff5ed95e04", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "E.1s detect",
+    "procedure": "Check the E1.S PCIe device, vendor/device ID, negotiated speed and lane width in Linux with lspci.",
+    "criteria": "The device enumerates correctly at PCIe Gen4 16.0 GT/s and its width corresponds to the source theoretical bandwidth table.",
+    "deepseek": "PARTIAL; collects lsblk/NVMe identity but omits the required PCI vendor/device and speed/width validation.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; requires stable serial-to-BDF/slot mapping, exact lspci evidence, capable/current link comparison and correct theoretical-bandwidth interpretation."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3024_ec61e043f72569c9.json",
+  "old_problem": "The active record kept the case pending for drive/slot identities and expected lane width. pciutils defines exact-BDF verbose enumeration, and the source itself fixes Gen4 16.0 GT/s plus the lane-rate table. The fitted-drive map and per-slot width are normal project configuration, so the review can be complete without guessing them.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_E1S_PCIE_GEN4_ENUMERATION_AND_LINK_WIDTH_TEST",
+  "disposition_reason": "ED-03 permits serial/BDF/slot parameters, ED-04 protects storage identities and forbids mutable namespace assumptions, ED-15 requires the approved per-slot width/downtraining oracle, ED-17 requires bounded logs without clearing, and ED-20 preserves this detection/link test independently of the neighboring firmware update. The source bandwidth table is labeled theoretical rather than a measured performance claim.",
+  "decision_basis": [
+    "Directly read Compatibility row433 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3024 and adjacent row432 E1.S firmware plus row434 E1.S sensor cases.",
+    "Applied pciutils lspci semantics: -D preserves PCI domains, -nn exposes numeric vendor/device IDs, -vvv provides complete parsed capabilities, and -s selects the exact verified BDF.",
+    "Preserved Gen4 16.0 GT/s and all source x1/x2/x4/x8/x16 theoretical bandwidth values while separating them from actual workload throughput.",
+    "Required a stable serial/model/controller/BDF/root-port/physical-slot join and both LnkCap and LnkSta so simple NVMe enumeration cannot mask downtraining.",
+    "Directly read next formal queue Compatibility row434 and verified its manifest identity; no storage, PCIe or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "E1.S OS/PCI identity and PCIe Gen4 negotiated speed/lane-width validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Verify every fitted E1.S drive maps to the correct OS, NVMe, PCIe and physical-slot identity and negotiates PCIe Gen4 16.0 GT/s at the project-approved lane width without downtraining or new PCIe errors.",
+    "required_package": [
+      "Pinned pciutils and nvme-cli versions",
+      "Authoritative E1.S serial/model/firmware/namespace/controller/BDF/root-port/physical-slot map",
+      "Approved PCI vendor/device/subsystem IDs for each drive/controller",
+      "Per-slot capable and required current PCIe generation/width plus allowed downtraining policy",
+      "Bounded AER/kernel/NVMe error allowlist"
+    ],
+    "test_command": "Record a non-destructive log marker and collect complete `lsblk`, `nvme list` and `nvme id-ctrl` identity evidence. Join each serial to its verified controller BDF and physical slot; for every exact BDF and its upstream port capture full `lspci -Dnnvvv -s <BDF>` output. Parse vendor/device/subsystem IDs, LnkCap and LnkSta without discarding the complete blocks. Compare current speed to Gen4 16.0 GT/s and current width to the approved slot width, show the source x1/x2/x4/x8/x16 values only as theoretical line-rate bandwidth, and inspect the bounded AER/kernel/NVMe delta.",
+    "expected_result": "Every expected E1.S device is present exactly once and maps consistently across serial, namespace, controller, BDF, root port and physical slot. Numeric PCI IDs match the approved hardware, LnkCap supports the intended link, LnkSta reports 16.0 GT/s at the required lane width, and no unaccepted downtraining, AER or storage error appears.",
+    "pass_fail_basis": "PASS requires the approved drive/slot/link matrix, complete identity joins, exact numeric PCI IDs, full LnkCap/LnkSta evidence at 16.0 GT/s and required width, and clean bounded error evidence. NVMe enumeration alone, keyword grep fragments or a theoretical bandwidth number cannot pass. Without the per-slot width/downtraining oracle the result is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Use read-only lsblk, nvme identify/list and lspci commands only; do not write, reset or benchmark storage",
+      "Never infer physical slot or target identity from /dev namespace order or a generic keyword",
+      "Capture complete exact-BDF and upstream-port output before extracting fields; do not clear logs",
+      "Stop on disappearance, link reset/downtrain or new AER/NVMe error, preserve first evidence and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Tool versions and approved serial/model/controller/BDF/root-port/slot matrix",
+      "Complete lsblk/nvme list/id-ctrl identities and numeric PCI vendor/device/subsystem IDs",
+      "Full exact-BDF and upstream lspci blocks with LnkCap/LnkSta",
+      "Expected-versus-observed generation/width table and theoretical bandwidth annotation",
+      "Bounded AER/kernel/NVMe log delta and engineer verdict"
+    ],
+    "recovery": "The procedure is read-only. On missing device, downtraining or error evidence, stop collection after preserving the first complete identity/path/log bundle, verify the host and unaffected storage remain available, and escalate for a separately approved hardware/link recovery. Do not reset, power-cycle or retry automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek's NVMe inventory is relevant but incomplete supporting evidence; it does not contradict the Master identity/link test."},
+  "blocked": {"before": false, "after": false, "reason": "PCIe identity and link semantics are standard; fitted-drive and per-slot width data are mandatory project/runtime bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind every fitted E1.S serial/controller/BDF/slot, PCI IDs, required lane width and downtraining/error policy before execution.",
+    "execution_status": "REVIEW RESOLVED; APPROVED E1S IDENTITY/SLOT/LINK MATRIX REQUIRED; NOT EXECUTED",
+    "owner": "Storage inventory, platform PCIe topology and project error-acceptance owners.",
+    "unlock_condition": "Approve the fitted drive map and Gen4 speed/width oracle for each physical slot."
+  },
+  "external_authorities": [
+    {"title": "pciutils — lspci Manual", "url": "https://github.com/pciutils/pciutils/blob/master/lspci.man", "applied_rule": "Defines exact-BDF selection, numeric IDs, PCI domains and verbose device/capability output."}
+  ],
+  "project_authority": "The platform recipe determines fitted devices, numeric IDs, root-port mapping, per-slot lane width and any permitted downtraining; the source table remains theoretical, not measured throughput.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-04", "ED-08", "ED-13", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "e1s_detection_pci_identity_gen4_speed_width_preserved": true,
+    "all_source_lane_rate_table_values_preserved_as_theoretical": true,
+    "stable_serial_bdf_slot_and_upstream_path_required": true,
+    "nvme_only_and_keyword_only_substitution_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|434|Wistron-Storage-00069-V002",
+    "next_missing_formal_queue_case_variant_id": "bfb1b11ca80f6008"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_firmware_and_sensor_cases_compared": true, "case_specific_e1s_pcie_reasoning": true, "authoritative_pciutils_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
