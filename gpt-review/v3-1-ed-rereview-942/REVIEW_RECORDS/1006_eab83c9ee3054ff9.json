@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1006,
+  "formal_queue_sequence": 855,
+  "source_key": "Compatibility|432|Wistron-Storage-00067-V002",
+  "case_variant_id": "eab83c9ee3054ff9",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 432, "code": "Wistron-Storage-00067-V002", "original_row_sha256": "51052a73bc490ddcc0b5626097e497c8f1a62d798c1594e3fc7485f443cb4335", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "E.1s FW Update",
+    "procedure": "Read firmware on /dev/nvmexn1; download EPK98B5Q.BIN; activate with action 1 slot 2; power cycle; re-read revision; wait about 10 seconds; power cycle again.",
+    "criteria": "The E1.S update completes without issue and the active revision matches the image.",
+    "deepseek": "CONFLICTING; recognizes flash risk but substitutes /dev/nvme0n1, a generic e1s_fw.bin and slot 1 for the source target/image/slot 2.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; preserves source parameters and requires immutable drive identity, image compatibility, backup, activation semantics, both power cycles and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3023_eab83c9ee3054ff9.json",
+  "old_problem": "The active review left all target/image/activation inputs as an engineering decision. NVMe standard and nvme-cli documentation define download versus commit/activation and action 1 at a selected slot, while the exact E1.S identity, EPK98B5Q compatibility and vendor rollback package are project prerequisites. These can safely parameterize the test without changing the flash or declaring hardware success.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_E1S_SLOT2_FIRMWARE_UPDATE_WITH_DUAL_POWER_CYCLE_VALIDATION",
+  "disposition_reason": "The nvme-cli authority confirms that firmware download only transfers the image and that commit action 1 replaces the selected slot and activates it on the next reset. ED-07 requires retaining Flash and pre/post version validation under independent authorization; ED-12 keeps update distinct from downgrade; ED-15 forbids PASS without the vendor image/revision oracle; ED-18 requires each complete OFF-to-ON-to-OS-ready cycle. DeepSeek substitutions are rejected.",
+  "decision_basis": [
+    "Directly read Compatibility row432 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3023 and adjacent row431 AMD SMI plus row433 E1.S detection cases.",
+    "Applied nvme-cli firmware-download and firmware-commit semantics: download does not apply the image, action 1 targets a selected slot for activation on the next reset, and reset/re-enumeration evidence is required.",
+    "Preserved EPK98B5Q.BIN, source action 1, source slot 2, the first power cycle, revision check, about-ten-second wait and second power cycle; no parameter is replaced by DeepSeek's generic values.",
+    "Made serial/model/controller/BDF/physical-slot identity, signed compatibility, non-boot/data protection and vendor recovery mandatory execution gates.",
+    "Directly read next formal queue Compatibility row433 and verified its manifest identity; no firmware download, activation, storage write, power cycle or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "E1.S EPK98B5Q slot-2 firmware update with staged activation and two controlled power-cycle validations",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Update the exact approved E1.S controller with EPK98B5Q.BIN in firmware slot 2 using vendor-approved action-1 semantics and prove the intended revision, identity, namespace data and device health survive both required power cycles.",
+    "required_package": [
+      "Serial/model/controller/namespace/BDF/physical-slot mapping for the exact non-boot E1.S target",
+      "Vendor-authorized EPK98B5Q.BIN, checksum/signature, release notes, model compatibility and expected active revision",
+      "Pinned nvme-cli version and vendor-approved mapping of source fw-activate action 1/slot 2 to that release's supported command",
+      "Backup or certified disposable/empty-device proof, data-integrity baseline and stable flash power",
+      "Approved two-cycle maintenance plan, OOB access, ten-second timing anchor and vendor rollback/recovery image/procedure"
+    ],
+    "test_command": "Resolve the placeholder only through serial/model/controller/BDF/slot evidence; prove it is not an OS/boot/EFI/swap/RAID/LVM/mounted or protected-data target. Capture `nvme id-ctrl`, firmware-slot log, SMART/error/namespace/PCIe state and data-integrity baseline. Verify EPK98B5Q.BIN hash/signature/compatibility. At an independent flash authorization hold point, download the image to the verified controller, confirm the staged slot, and issue only the vendor-approved semantic equivalent of source action 1 slot 2. Perform controlled power cycle 1 through complete OFF, ON, device re-enumeration and OS Ready; verify active revision. Wait the source's approximately 10 seconds from the approved anchor, perform controlled power cycle 2 through OS Ready, then reverify revision, identity, namespaces, data integrity and health.",
+    "expected_result": "The exact approved controller accepts the complete image and reports slot-2 staging/commit success. After each complete power cycle it re-enumerates at the same identity and mapping, and after the second cycle the active revision exactly matches the vendor-declared EPK98B5Q revision. Namespaces/data, SMART/error, PCIe and system logs remain within the approved healthy baseline.",
+    "pass_fail_basis": "PASS requires immutable target proof, authorized image and slot/action compatibility, backup/data baseline, complete download/commit records, both OFF-to-ON-to-OS-ready timelines, exact post-flash revision and unchanged namespace/data/health evidence. A successful transfer or revision string alone cannot pass. Missing vendor compatibility, rollback or cycle evidence is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Never select by mutable /dev namespace alone; independently exclude all boot, mounted, swap, RAID, LVM, device-mapper and protected-data targets",
+      "Require separate user authorization after showing exact serial/model, image hash, slot/action and recovery plan before any firmware write",
+      "Maintain stable power during download/commit and use only controlled approved power cycles with OOB observation",
+      "Abort on identity, compatibility, slot, health or power mismatch; preserve evidence and never auto-retry or substitute parameters"
+    ],
+    "expected_evidence": [
+      "Serial/model/controller/namespace/BDF/physical-slot and non-boot/data-protection proof",
+      "Pre-flash revision, firmware-slot log, SMART/error/PCIe state and data-integrity baseline",
+      "EPK98B5Q hash/signature/release-note compatibility and independent flash approval",
+      "Exact download/stage/action-1-slot-2 command outputs and timestamps",
+      "Two complete power-cycle/re-enumeration timelines, active revision, post-data/health and rollback readiness"
+    ],
+    "recovery": "On target, download, commit, enumeration or health failure, stop before any next phase, preserve controller/image/power/log evidence and use OOB plus the vendor-approved recovery or rollback image only under a new explicit authorization. Do not issue another firmware command or power cycle automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The rewrite rejects DeepSeek's changed device, filename and slot and restores the exact Master image, action, slot and two-cycle sequence."},
+  "blocked": {"before": false, "after": false, "reason": "Standard activation semantics and a safe staged method are known; exact target/image compatibility and rollback are mandatory execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Provide the exact safe target mapping, authorized EPK98B5Q artifact/revision, vendor slot-2/action-1 support, backup and dual-cycle rollback plan before execution.",
+    "execution_status": "REVIEW RESOLVED; INDEPENDENT FLASH AUTHORIZATION, EXACT TARGET/IMAGE AND VENDOR RECOVERY REQUIRED; NOT EXECUTED",
+    "owner": "E1.S storage firmware, platform power/lab operations and project data-protection owners.",
+    "unlock_condition": "Approve the verified non-boot target, image compatibility, action/slot semantics, both cycles and rollback package."
+  },
+  "external_authorities": [
+    {"title": "linux-nvme nvme-cli — nvme-fw-download", "url": "https://github.com/linux-nvme/nvme-cli/blob/master/Documentation/nvme-fw-download.txt", "applied_rule": "Firmware Image Download transfers the image but does not apply it; Firmware Commit and reset are separate phases."},
+    {"title": "linux-nvme nvme-cli — nvme-fw-commit", "url": "https://github.com/linux-nvme/nvme-cli/blob/master/Documentation/nvme-fw-commit.txt", "applied_rule": "Defines firmware slot selection, action 1 replace-and-activate behavior and the reset normally required for activation."}
+  ],
+  "project_authority": "Only the E1.S vendor release package may approve EPK98B5Q for the exact model, slot-2 writability, action-1 behavior, expected revision and recovery; these values are never inferred.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-04", "ED-07", "ED-08", "ED-12", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "flash_image_slot_action_and_both_power_cycles_preserved": true,
+    "pre_and_post_revision_and_data_health_required": true,
+    "independent_flash_authorization_required": true,
+    "deepseek_target_image_slot_substitution_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|433|Wistron-Storage-00068-V002",
+    "next_missing_formal_queue_case_variant_id": "ec61e043f72569c9"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_gpu_inventory_and_storage_detection_cases_compared": true, "case_specific_e1s_flash_reasoning": true, "authoritative_nvme_cli_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
