@@ -1,0 +1,83 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 994,
+  "formal_queue_sequence": 843,
+  "source_key": "Compatibility|419|Wistron-L12 Cluster-00002-V002",
+  "case_variant_id": "07ddaf7242448d1e",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 419, "code": "Wistron-L12 Cluster-00002-V002", "original_row_sha256": "13a38b13a7555c0c7013184e6253cf10ab013f97c3df71482ea210d5aaf32a78", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UFM NDT setup and trial run - Subnet Merger",
+    "procedure": "Upload/validate/deploy the initial NDT, start New Merger, physically connect new equipment, change approved boundary ports Disabled to No-discover and redeploy, then upload/validate/deploy a combined unique-GUID NDT.",
+    "criteria": "Initial NDT deploy and intended topology change both succeed.",
+    "deepseek": "PARTIAL; retains a generic UFM merger and lab-fabric warning but omits physical connection, boundary-port transition, second NDT and duplicate-GUID gate.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; preserves every phase and requires exact topology, physical operator, approved files/ports and rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3011_07ddaf7242448d1e.json",
+  "old_problem": "The active review kept the case pending for project topology, GUID, port and rollback values. NVIDIA's NDT documentation defines the complete merger transaction and its verification gates; the target-specific identities are safely bindable project configuration rather than missing command semantics.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_PHASE_GATED_LAB_UFM_NDT_PHYSICAL_SUBNET_MERGER",
+  "disposition_reason": "NVIDIA documents the same staged flow as the source: initial NDT upload/validation/deploy, physical connection, boundary ports changed to No-discover, active configuration redeploy, combined NDT verification and a duplicate-GUID prohibition. ED-03 permits exact GUID/port/file bindings; ED-05 requires IB fabric isolation; ED-09 keeps cabling manual; ED-16 requires validated rollback. With approved signed inputs and hold points, the review-layer test is complete without guessing the project topology.",
+  "decision_basis": [
+    "Directly read Compatibility row419 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3011 and adjacent row418 plugin plus row420 telemetry cases.",
+    "Applied NVIDIA's documented Subnet Merger wizard and No-discover boundary-port workflow, including repeatable validation and duplicate-GUID rejection.",
+    "Kept plugin installation row418 separate and preserved every physical/logical merger phase in row419.",
+    "Converted lab fabric, exact equipment/GUID/port/cable map and NDT hashes to mandatory approved bindings with per-phase stop and rollback gates.",
+    "Directly read next formal queue Compatibility row420 and verified its manifest identity; no NDT upload/deploy, cabling or fabric action ran."
+  ],
+  "test_case": {
+    "test_name": "Phase-gated UFM NDT physical subnet merger on an isolated lab fabric",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Extend only the approved lab InfiniBand fabric through UFM's documented NDT merger and prove the physical connection, boundary-port state and final unique-GUID topology match the signed design without route, link or workload regression.",
+    "required_package": [
+      "Compatible pinned UFM/NDT versions and healthy plugin from row418",
+      "Designated isolated lab fabric, workload drain, full UFM/OpenSM/topoconfig/fabric backup and tested rollback",
+      "Signed initial and combined NDT files with hashes, expected switches/HCA GUIDs, links and no duplicates",
+      "Exact new-equipment serial/GUID, boundary switch/port/cable map, qualified physical operator and maintenance approval"
+    ],
+    "test_command": "Capture UFM/OpenSM/fabric/job/routes/link/error baseline and backups. In Subnet Merger upload the signed initial NDT, retain its validation report and deploy only after a clean owner-approved result. Start New Merger and hold. A qualified operator connects only the mapped equipment/cables and provides visual/label evidence. Verify observed GUID/port identities, then authorize the UI to change only mapped boundary ports Disabled→No-discover and redeploy the active file. Upload the signed combined NDT, reject duplicate GUIDs or any topology error, retain the second validation report, then deploy once and capture the final topology/routes/links/errors.",
+    "expected_result": "Both signed NDTs validate and deploy in order; physical labels and discovered GUID/ports match the approved map; only intended boundary ports transition to No-discover; the combined report has no duplicate GUID or unexpected link. Final UFM/OpenSM topology and routing equal the signed design, all intended links are healthy and no unrelated port, route, job or fabric health regresses.",
+    "pass_fail_basis": "PASS requires exact file hashes, two clean validation/deploy reports, manual connection proof, mapped boundary-state audit, zero duplicate GUIDs, expected final topology/routes/links and unchanged unrelated fabric health. A generic success banner, plugin presence, guessed port, unexpected transient state or partial topology cannot pass.",
+    "safety_gate": [
+      "Lab/isolated fabric and drained maintenance window only; never deploy on production or with active jobs",
+      "Back up UFM/OpenSM/topoconfig and prove rollback before initial deploy",
+      "Use hold points before each deploy and before opening boundary ports; physical operator must confirm labels and cable endpoints",
+      "Abort on validation error, duplicate/unknown GUID, port mismatch, route/link/error regression, job activity or management loss; never auto-retry"
+    ],
+    "expected_evidence": [
+      "Lab UFM/fabric identity, versions, jobs/health/routes baseline and recovery backups",
+      "Initial/combined NDT hashes, contents, validation report IDs and deploy audit",
+      "Equipment serial/GUID and boundary port/cable map plus timestamped physical evidence",
+      "Before/after boundary port states and real UI screenshots for each wizard phase",
+      "Final GUID/topology/route/link/error diff, rollback readiness and engineer verdict"
+    ],
+    "recovery": "At the first failed gate stop the wizard, preserve reports and fabric evidence, return only affected boundary ports to the backed-up state, disconnect new equipment only under operator direction, restore the approved UFM/OpenSM/topoconfig backup and verify original topology/routes/health. Do not repeat validation/deploy automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is incomplete but agrees that this is a lab UFM fabric mutation."},
+  "blocked": {"before": false, "after": false, "reason": "NVIDIA defines the transaction; signed topology inputs, physical map and rollback are project execution prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind lab UFM/fabric, initial/combined NDT hashes, exact equipment/GUID/port/cable map, maintenance isolation, health oracle and rollback.",
+    "execution_status": "REVIEW RESOLVED; AUTHORIZED LAB FABRIC MUTATION AND PHYSICAL OPERATOR REQUIRED; NOT EXECUTED",
+    "owner": "InfiniBand fabric architecture, UFM/OpenSM, cabling and lab operations owners.",
+    "unlock_condition": "Approve the isolated target, signed NDT/topology, exact boundary/cable identities, phased window and tested rollback."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA UFM Enterprise — NDT Plugin and Subnet Merger", "url": "https://docs.nvidia.com/networking/display/ufmenterpriseumv6154/ndt%2Bplugin", "applied_rule": "Defines initial NDT validation/deploy, physical connect, Disabled-to-No-discover boundaries, combined NDT verification/deploy and duplicate-GUID restriction."}
+  ],
+  "project_authority": "Exact lab topology, GUID/port/cable identities, signed NDTs, maintenance state and rollback remain project-authorized bindings.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-05", "ED-08", "ED-09", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "initial_and_combined_ndt_phases_preserved": true,
+    "physical_cabling_kept_manual": true,
+    "boundary_disabled_to_no_discover_preserved": true,
+    "duplicate_guid_gate_preserved": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|420|Wistron-L12 Cluster-00003-V002",
+    "next_missing_formal_queue_case_variant_id": "9643b039f5a8f34d"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_plugin_and_telemetry_cases_compared": true, "case_specific_fabric_merger_reasoning": true, "authoritative_nvidia_ufm_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
