@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1012,
+  "formal_queue_sequence": 861,
+  "source_key": "Compatibility|439|Wistron-Networking-00050-V002",
+  "case_variant_id": "bac092cf8e7f062b",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 439, "code": "Wistron-Networking-00050-V002", "original_row_sha256": "bdc2a895d79ce732443185d98e8f1be4ecb0d5b928187e7e9f48e3dc4c590b78", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Infiniband mode (Bandwidth test)",
+    "procedure": "Set LINK_TYPE_P1=1, DC cycle, configure an IB /24 address, then run paired taskset/ib_write_bw server and client with -F -b --report_gbits on port 3000.",
+    "criteria": "Bandwidth is about 90% of ideal; the source example maps 56 Gbps to a 6300 MB/s floor.",
+    "deepseek": "PARTIAL; preserves the mode change, cycle, static IP and pair but leaves all identities, finite load, unit calculation and restoration unresolved.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; requires immutable adapter/peer mapping, active-mode verification, finite profile, link-specific 90% oracle, OOB and rollback."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3029_bac092cf8e7f062b.json",
+  "old_problem": "The active record treated adapter identity, IP/GID/MTU, perftest profile and 90%-of-ideal math as unresolved review decisions. NVIDIA documents LINK_TYPE_P1=1 as InfiniBand and requires a reboot for activation; it also recommends ib_write_bw for inter-node bandwidth checks. Remaining values are safe project/runtime bindings when the formula and units are explicit.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_INFINIBAND_MODE_DC_CYCLE_AND_PAIRED_WRITE_BANDWIDTH_TEST",
+  "disposition_reason": "ED-03 permits adapter, peer, address and finite-profile parameters; ED-05 keeps this InfiniBand case separate from Ethernet; ED-06 and ED-18 preserve the explicit DC transition; ED-14 prevents a shorter smoke substitute; ED-15 requires a link-specific, unit-consistent 90% threshold before PASS. The persistent mode change remains separately authorized and reversible.",
+  "decision_basis": [
+    "Directly read Compatibility row439 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3029 and adjacent row438 PTAT CPU plus row440 Ethernet-mode bandwidth cases.",
+    "Applied NVIDIA MFT semantics that LINK_TYPE_P1=1 selects InfiniBand and the setting becomes active only after reboot/cycle; current and next-boot values must both be captured.",
+    "Applied NVIDIA networking guidance that ib_write_bw is appropriate for inter-node bandwidth validation after confirming link width, speed, error state and port health.",
+    "Preserved P1=1, DC cycle, /24, CPU set 0-72, -F, bidirectional -b, --report_gbits and port 3000, subject to release help and valid NUMA/CPU availability.",
+    "Directly read next formal queue Compatibility row440 and verified its manifest identity; no mlxconfig, DC cycle, network configuration, traffic or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Mellanox P1 InfiniBand-mode activation and finite paired ib_write_bw 90%-of-ideal validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Switch the exact approved port to InfiniBand mode through the required DC cycle, prove the active link identity/state, and measure finite bidirectional write bandwidth against a unit-correct link-specific 90%-of-ideal floor.",
+    "required_package": [
+      "Pinned NVIDIA MFT, firmware, OFED/rdma-core/perftest versions and release help",
+      "Adapter serial/MST/BDF/P1/netdev/IB-device/GUID/GID/NUMA/peer/cable map and saved prior LINK_TYPE/network state",
+      "Collision-free project-approved IB addresses, GID, MTU, link rate/width and fabric/SM state",
+      "Finite ib_write_bw message-size/QP/depth/duration or iteration/repeat/statistic profile and CPU-affinity validation",
+      "Approved payload-ideal formula, decimal/binary units and 90% threshold plus maintenance/OOB/DC-cycle/rollback plan"
+    ],
+    "test_command": "Verify immutable adapter/P1 and peer identity, save current/next-boot LINK_TYPE and network state, and show the exact `mlxconfig ... set LINK_TYPE_P1=1` mutation at a user hold point. Apply it once, perform the approved complete DC OFF-to-ON-to-OS-ready cycle, and prove active InfiniBand mode, expected rate/width/MTU/GID and clean link counters. Configure only the approved /24 addresses. Validate CPUs 0-72 against online/NUMA topology, then run the literal paired server/client taskset/ib_write_bw options on port 3000 under the approved finite limit and repeats. Compute the selected statistic against 90% of the negotiated link's approved payload ideal in consistent Gbit/s units, then remove temporary IP state and restore prior mode/network with the required cycle and post-health proof.",
+    "expected_result": "The exact P1 reports InfiniBand as active after the full DC cycle, reaches the approved rate/width/MTU/GID state and remains error-free. Every finite server/client run completes with matched parameters and no link/fabric error; the approved throughput statistic is at least 90% of the approved payload ideal. The 56-Gbps/6300-MB/s example applies only when the verified link/formula matches it, and prior mode/network state is restored.",
+    "pass_fail_basis": "PASS requires immutable adapter/peer identity, before/pending/active LINK_TYPE evidence, a complete DC transition, verified IB link/fabric state, exact finite paired outputs, valid CPU affinity, a documented unit-consistent 90% calculation and successful restoration. Missing threshold formula/profile or using the 56-Gbps example on another link is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Never change an unidentified port, shared management path or production fabric; require maintenance, OOB and explicit mutation/cycle approval",
+      "Capture prior mode/network state and verify both pending and active settings before traffic",
+      "Bound saturating bidirectional traffic, validate address/cpu/NUMA mapping and abort on link/fabric/thermal/RAS impact",
+      "Restore temporary IP and prior LINK_TYPE/network state; preserve logs and never auto-retry a mutation, cycle or benchmark"
+    ],
+    "expected_evidence": [
+      "Pinned stack and adapter/P1/peer/GUID/GID/NUMA/cable identity plus saved prior state",
+      "mlxconfig current/next-boot evidence and complete DC OFF/ON/OS-ready timeline",
+      "Active IB rate/width/MTU/GID/IP/fabric and pre/post link-error counters",
+      "Exact finite server/client commands, outputs, exits, affinity and repeat statistics",
+      "Payload-ideal/90% calculation, restored mode/network and post-health verdict"
+    ],
+    "recovery": "On mode, cycle, link or traffic failure, stop the benchmark, preserve state/counters, use OOB to restore the saved LINK_TYPE and network configuration through the separately approved cycle, and verify manageability/fabric health. Do not repeat mlxconfig, DC cycle or traffic automatically."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek and Master agree on the IB mode/cycle/pair sequence; missing parameters are incompleteness, not a source contradiction."},
+  "blocked": {"before": false, "after": false, "reason": "NVIDIA defines mode and bandwidth-tool semantics; exact mapping, finite profile and performance formula are mandatory runtime/project configuration."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind adapter/peer/GID/IP/MTU/link identity, finite perftest/affinity profile, payload-ideal formula, 90% statistic and mode/DC rollback before execution.",
+    "execution_status": "REVIEW RESOLVED; EXPLICIT MODE/DC AUTHORIZATION, FINITE IB PROFILE AND LINK-SPECIFIC 90% ORACLE REQUIRED; NOT EXECUTED",
+    "owner": "InfiniBand adapter/firmware, fabric/network performance and platform power/recovery owners.",
+    "unlock_condition": "Approve the immutable P1/peer map, DC transition, IB fabric/profile, unit formula and rollback."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA MFT Documentation — Using mlxconfig to Set IB/ETH Parameters", "url": "https://docs.nvidia.com/networking/display/nvidia-firmware-tools-mft-documentation-v4-30-1-1210-lts-2024-lts-u3.1-1210%20LTS%20%282024%20LTS%20U3%29.pdf", "applied_rule": "LINK_TYPE_P1=1 selects InfiniBand and requires reboot to load the new configuration."},
+    {"title": "NVIDIA NCCL Networking Troubleshooting", "url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting/networking_troubleshooting.html", "applied_rule": "ib_write_bw can validate bandwidth between nodes after checking link width, speed, errors and port health."}
+  ],
+  "project_authority": "The network owner binds the exact adapter/fabric/peer, finite perftest profile and negotiated-link payload ideal/units; the source 56-Gbps example is conditional, not universal.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-05", "ED-06", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "p1_ib_mode_dc_cycle_static_ip_and_paired_bandwidth_preserved": true,
+    "ethernet_case_kept_separate": true,
+    "finite_profile_and_unit_correct_90_percent_oracle_required": true,
+    "mode_network_rollback_required": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|440|Wistron-Networking-00051-V002",
+    "next_missing_formal_queue_case_variant_id": "3799fcd41745d94c"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_ptat_and_ethernet_mode_cases_compared": true, "case_specific_ib_mode_bandwidth_reasoning": true, "authoritative_nvidia_mft_and_network_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
