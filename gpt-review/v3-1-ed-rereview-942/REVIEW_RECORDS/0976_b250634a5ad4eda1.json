@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 976,
+  "formal_queue_sequence": 825,
+  "source_key": "Compatibility|401|Wistron-OS-00016-V002",
+  "case_variant_id": "b250634a5ad4eda1",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 401, "code": "Wistron-OS-00016-V002", "original_row_sha256": "fc7d356d0a8b861dda0c9291a681438ec787b283d1a0b39638db1736e8db4056", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "SSH-Keygen-Login",
+    "procedure": "Generate RSA-4096 keys, inspect the key files, copy the public key to an exact server and verify passwordless remote SSH.",
+    "criteria": "The complete setup has no error and the intended server login succeeds without requiring a password.",
+    "deepseek": "YES but scope-conflicting; inspects a pre-existing id_ed25519 and uses localhost, sshpass and host-key bypass rather than generating, authorizing and testing the requested RSA key on the real server.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/HIGH; requires disposable identity, strict host verification, protected secrets, non-overwrite, explicit new-key proof and revocation."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2993_b250634a5ad4eda1.json",
+  "old_problem": "The active review left a standard OpenSSH credential lifecycle pending for target and policy inputs that can be parameterized. DeepSeek's existing Ed25519/localhost check was a genuine coverage conflict because it neither generated the source's RSA-4096 key nor proved that key authenticated to the real target.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_APPROVAL_GATED_DISPOSABLE_RSA4096_PUBLIC_KEY_AUTHENTICATION_LIFECYCLE",
+  "disposition_reason": "OpenSSH documents RSA bit selection, strict host-key verification, BatchMode to disable password/passphrase prompting, and IdentitiesOnly to restrict authentication to the named identity. These authoritative semantics define a verifiable test without guessing project identities or secrets. ED-03 permits target/account/path values as configuration, ED-17 requires pre-change evidence, and ED-19 preserves generation, authorization and real-target login as distinct phases. Persistent access creation and revocation remain approval-gated runtime actions, not unresolved review logic.",
+  "decision_basis": [
+    "Directly read Compatibility row401 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2993 and its unique source identity.",
+    "Applied OpenSSH ssh-keygen RSA bit semantics and ssh_config BatchMode, IdentitiesOnly, IdentityFile and StrictHostKeyChecking controls.",
+    "Rejected localhost, an existing Ed25519 key, sshpass and StrictHostKeyChecking=no as substitutes for the requested new RSA-4096 real-server workflow.",
+    "Retained generation, key listing, public-key authorization and passwordless target login, while adding non-overwrite, redaction and revocation evidence.",
+    "Directly read next formal queue Compatibility row402 and verified its manifest identity; no key, authorized_keys, SSH or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Disposable RSA-4096 real-server public-key authentication and revocation verification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Generate a new RSA-4096 key at an approved disposable path, authorize only its public key for the approved server account, prove that exact key enables passwordless real-target login, and remove the temporary authorization without exposing secrets.",
+    "required_package": [
+      "Approved OpenSSH client tools and compatible server public-key authentication policy",
+      "Exact client identity, server hostname/IP/account/port and independently verified host-key fingerprint",
+      "Unused non-default disposable key path, RSA-4096 and passphrase/secret-handling policy",
+      "Protected initial authorization channel, authorized_keys owner/baseline/options and least-privilege restrictions",
+      "Independent alternate access, evidence-redaction rules and exact public-key revocation/restoration plan"
+    ],
+    "test_command": "After pinning the real server host key and confirming an unused disposable path, preserve client key-directory metadata and the target account's authorized_keys baseline through the protected owner channel. Generate only the approved RSA-4096 key pair at that path, record the public-key fingerprint and permissions without outputting private material, and authorize the exact public key with approved restrictions. Verify the real target using `ssh -o BatchMode=yes -o IdentitiesOnly=yes -o IdentityFile=<disposable_key> -o StrictHostKeyChecking=yes -o UserKnownHostsFile=<pinned_file> <account>@<server> <approved_non_mutating_command>`, preserve authentication evidence, then remove only the inserted public-key line and prove restoration.",
+    "expected_result": "A new RSA-4096 pair is created only at the approved unused path with safe permissions; its exact public key is atomically and audibly authorized on the intended account; strict BatchMode/IdentitiesOnly login to the pinned real server succeeds using that key without password fallback; and final cleanup removes the temporary authorization while preserving all pre-existing keys and alternate access.",
+    "pass_fail_basis": "PASS requires exact client/server/account and host fingerprint, new RSA-4096 public fingerprint, protected authorization audit, real-target BatchMode/IdentitiesOnly success attributable to that identity, and revocation/restoration proof. Existing-key, localhost, password fallback, host-key bypass, private-key output or missing cleanup cannot pass.",
+    "safety_gate": [
+      "Never overwrite a default or production key; fail closed if the disposable private/public path already exists",
+      "Never log or transmit the private key, passphrase or plaintext server password",
+      "Require independently pinned host identity and StrictHostKeyChecking=yes; do not accept changed/unknown keys automatically",
+      "Authorize only the exact public key on the approved disposable account with owner-approved restrictions and preserved baseline",
+      "Maintain alternate access; stop on identity, permission or access mismatch, revoke the inserted key once and never auto-retry"
+    ],
+    "expected_evidence": [
+      "Approved client/server/account/port identity and pinned server host-key fingerprint",
+      "Unused-path proof, redacted key-file metadata and RSA-4096 public-key fingerprint",
+      "Atomic authorized_keys baseline/delta and protected authorization audit without secrets",
+      "Strict real-target BatchMode/IdentitiesOnly command status and authentication-method evidence",
+      "Removal of only the inserted key plus final authorized_keys and alternate-access restoration proof",
+      "Preserved security logs and engineer verdict"
+    ],
+    "recovery": "If generation, authorization or login identity is wrong, stop; use independent access, remove only the inserted public-key fingerprint from the approved account, restore authorized_keys ownership/mode/content from the captured baseline and securely dispose of the disposable private key per policy. Preserve evidence and never repeat automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master new RSA-4096 generation, real-server authorization and login workflow remains authoritative; DeepSeek's pre-existing Ed25519 localhost check is explicitly rejected as non-equivalent."},
+  "blocked": {"before": false, "after": false, "reason": "OpenSSH defines the key, host and authentication controls; exact identities, secret channel, authorization and revocation ownership are approval-gated execution inputs."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind client/server/account/port, pinned host key, unused key path, passphrase policy, protected authorization channel, authorized_keys restrictions, evidence redaction, alternate access and revocation owner.",
+    "execution_status": "REVIEW RESOLVED; PERSISTENT ACCESS CREATION AND REVOCATION REQUIRE OWNER APPROVAL; NOT EXECUTED",
+    "owner": "System security, server account and lab operations owners.",
+    "unlock_condition": "Approve the disposable identity lifecycle, pinned host, secure authorization channel, restrictions and revocation plan."
+  },
+  "external_authorities": [
+    {"title": "OpenBSD ssh-keygen(1)", "url": "https://man.openbsd.org/ssh-keygen.1", "applied_rule": "ssh-keygen supports explicit RSA key-size selection; the requested 4096-bit identity is generated at a separately selected path."},
+    {"title": "OpenBSD ssh_config(5)", "url": "https://man.openbsd.org/ssh_config.5", "applied_rule": "BatchMode disables interactive credential prompting, IdentitiesOnly restricts offered identities and StrictHostKeyChecking=yes requires pinned host identity."}
+  ],
+  "project_authority": "Approved accounts, RSA/passphrase policy, target host identity, authorization restrictions, evidence retention and revocation ownership remain project security decisions.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-08", "ED-13", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "rsa4096_generation_key_listing_real_server_authorization_and_passwordless_login_coverage_preserved": true,
+    "existing_ed25519_and_localhost_not_substituted": true,
+    "strict_host_identity_and_exact_new_key_authentication_proof_added": true,
+    "temporary_persistent_access_revoked": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|402|Wistron-AMD GPU-00122-V002",
+    "next_missing_formal_queue_case_variant_id": "93fab36aaf987bbe"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "case_specific_ssh_key_lifecycle_reasoning": true, "authoritative_openssh_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
