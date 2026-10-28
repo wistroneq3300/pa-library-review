@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 973,
+  "formal_queue_sequence": 822,
+  "source_key": "Compatibility|398|Wistron-Networking-00387-V003",
+  "case_variant_id": "9f811ff490130109",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 398, "code": "Wistron-Networking-00387-V003", "original_row_sha256": "92d13025f97efdb51d3da348dbba90fd3a4f8ae88fecd54bc3a47c4f38bade22", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Set SR-IOV Parameters",
+    "procedure": "Set persistent SRIOV_EN and NUM_OF_VFS using mlxconfig, power-cycle the SUT and query the network configuration by PCIe bus.",
+    "criteria": "The persistent parameter write succeeds and the resulting network-interface information is correct.",
+    "deepseek": "PARTIAL and scope-conflicting; substitutes a runtime sriov_numvfs sysfs write with an arbitrary example count for the Master persistent mlxconfig transaction.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED/CRITICAL; requires exact PF/BDF, supported VF count, BIOS/IOMMU and NVRAM distinction, pre-state, power and recovery gates and complete PF/VF topology."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/2990_9f811ff490130109.json",
+  "old_problem": "The active review correctly found that runtime sriov_numvfs is not equivalent to the source's persistent mlxconfig operation, but left the case pending for values that can be safely parameterized and checked against per-device supported configuration and project resource limits.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_APPROVAL_GATED_PERSISTENT_SRIOV_NVRAM_TOPOLOGY_TEST",
+  "disposition_reason": "NVIDIA MFT explicitly documents the persistent `SRIOV_EN`/`NUM_OF_VFS` mlxconfig transaction, next-boot activation and the need to validate supported VF capacity because excessive values may prevent boot. This resolves command semantics and safety boundaries. ED-03 permits exact device/count/topology as project configuration, ED-06/ED-18 retain a full power cycle, ED-15 forbids a PASS without the project topology oracle, and ED-17 requires evidence before disruptive state change. DeepSeek's runtime-only substitution is rejected, so no unresolved source conflict remains.",
+  "decision_basis": [
+    "Directly read Compatibility row398 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history2990 and its unique variant.",
+    "Applied NVIDIA MFT's documented persistent SR-IOV command and its warning that requested VF capacity must fit hardware, software, firmware and resource limits.",
+    "Kept firmware/NVRAM enablement and capacity distinct from optional runtime VF instantiation; sysfs alone cannot satisfy the Master case.",
+    "Preserved SRIOV_EN, NUM_OF_VFS, complete power-cycle activation, PCIe-bus query and full PF/VF topology verification.",
+    "Directly read next formal queue Compatibility row399 and verified its manifest identity; no mlxconfig, sysfs, power or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Persistent BlueField SR-IOV enablement, VF capacity and post-power-cycle topology verification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Program the approved persistent SR-IOV enable state and VF capacity for the exact BlueField PF, activate it with a full chassis power cycle and prove the signed PF/VF topology without confusing runtime instantiation with NVRAM configuration.",
+    "required_package": [
+      "Approved NVIDIA MFT/mst/mlxconfig version compatible with the exact BlueField firmware",
+      "Serial/BDF/MST-device/PF/netdev/management-role map and complete pre-state configuration/topology backup",
+      "Per-device supported SRIOV_EN and NUM_OF_VFS range plus project-approved VF count and PCIe/BAR/resource capacity proof",
+      "Approved BIOS SR-IOV, IOMMU, firmware, driver and boot prerequisites",
+      "Traffic drain, independent BMC/OOB/console, full OFF-to-ON-to-OS-ready power-cycle plan and exact rollback"
+    ],
+    "test_command": "For the immutable mapped BlueField PF, collect full mlxconfig query/support data, PCIe/IOMMU/BIOS state, `sriov_totalvfs`, `sriov_numvfs`, `lspci` and `ip -details link` baseline. After approving the exact persistent delta and resource proof, apply only `mlxconfig -d <device> set SRIOV_EN=<approved> NUM_OF_VFS=<approved>`, preserve full output/status and query next-boot values. Under a separate gate, perform one complete chassis OFF-to-ON-to-OS-ready power cycle; then query the exact PCIe device and record persistent values, PF/VF PCIe enumeration, PF netdev identity, driver binding and any separately approved runtime instantiation state.",
+    "expected_result": "The exact device accepts and reads back only the approved persistent SR-IOV enable/count, completes the full power cycle and returns OS ready. Post-cycle persistent values and the signed PF/VF capacity/topology match project specification, all expected functions bind correctly, management and unaffected functions remain healthy, and no disallowed resource, PCIe, driver or system-log errors occur.",
+    "pass_fail_basis": "PASS requires target-bound pre/write/next-boot/post-cycle evidence, approved capacity proof, a complete OFF-to-ON-to-OS-ready trace, and the exact signed PF/VF topology and health oracle. A sysfs write, successful mlxconfig message, generic `ip link`, guessed count or missing VF identity cannot pass.",
+    "safety_gate": [
+      "Prove serial/BDF/MST/PF and management role before write; never target the sole management PF without independent access",
+      "Validate requested NUM_OF_VFS against device support, PCIe/BAR, firmware, driver and project resource limits; never guess a count",
+      "Back up complete persistent and runtime topology and preserve logs before any change",
+      "Authorize the persistent write and full power cycle separately; do not substitute a reboot or runtime sysfs action",
+      "Stop on capacity uncertainty, wrong readback, PCIe resource error, boot failure, management loss, missing function or recovery anomaly; never auto-retry"
+    ],
+    "expected_evidence": [
+      "Immutable device/PF identity, MFT/firmware/driver versions and BIOS/IOMMU state",
+      "Supported-value/resource-capacity proof and signed SRIOV_EN/NUM_OF_VFS target",
+      "Complete pre-state, mlxconfig set output and next-boot readback",
+      "BMC/chassis OFF, ON, boot and OS-ready timestamps",
+      "Post-cycle mlxconfig, lspci, PF/VF IDs, driver bindings, sriov_totalvfs/numvfs and netdev topology",
+      "Management/health/log comparison, recovery record if used and engineer verdict"
+    ],
+    "recovery": "If write readback is wrong, do not power-cycle and restore the saved persistent values only with approval. If boot or PF/VF topology fails after activation, stop, use BMC/OOB, disable or restore the prior supported SR-IOV/count values, perform one separately authorized full power cycle and verify original PCIe/network topology. Preserve the failed state and never retry automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master persistent mlxconfig transaction remains authoritative; DeepSeek's runtime sriov_numvfs action is explicitly excluded as a substitute and may only be a separate approved post-boot step."},
+  "blocked": {"before": false, "after": false, "reason": "NVIDIA defines the persistent command, activation and capacity hazard; exact target/count/resources/topology and maintenance approval are project execution inputs."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the exact PF/device, supported and desired SRIOV_EN/NUM_OF_VFS, BIOS/IOMMU/driver/resource proof, expected PF/VF identities, power window, independent access and rollback.",
+    "execution_status": "REVIEW RESOLVED; PERSISTENT SR-IOV WRITE AND FULL POWER CYCLE REQUIRE SEPARATE APPROVAL; NOT EXECUTED",
+    "owner": "BlueField, PCIe/platform, network and lab operations owners.",
+    "unlock_condition": "Approve the immutable PF, supported count/resource proof, persistent topology oracle and recovery plan."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA MFT — Using mlxconfig to Set SR-IOV Parameters", "url": "https://docs.nvidia.com/networking/display/nvidia-firmware-tools-mft-documentation-v4-22-1-417-lts.1-417%20LTS.pdf", "applied_rule": "The persistent SRIOV_EN/NUM_OF_VFS transaction is performed with mlxconfig and requires restart activation."},
+    {"title": "NVIDIA MFT Supported Configurations and Parameters", "url": "https://docs.nvidia.com/networking/display/mftv4290/mft%2Bsupported%2Bconfigurations%2Band%2Bparameters", "applied_rule": "Supported values must be discovered per device; excessive VF counts can exceed hardware/software resources and prevent boot."}
+  ],
+  "project_authority": "Exact PF identity, VF count, PCIe/BAR capacity, BIOS/IOMMU/driver state, expected function topology and recovery remain project-specific.",
+  "traceability": {
+    "applicable_decisions": ["ED-03", "ED-06", "ED-08", "ED-11", "ED-13", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "persistent_sriov_enable_vf_count_power_cycle_query_and_topology_coverage_preserved": true,
+    "runtime_sysfs_not_substituted_for_persistent_mlxconfig": true,
+    "full_off_on_os_ready_not_replaced_by_reboot": true,
+    "capacity_and_topology_threshold_not_invented": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|399|Wistron-Networking-00388-V003",
+    "next_missing_formal_queue_case_variant_id": "65ab9a2b4751b2ad"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "case_specific_persistent_sriov_reasoning": true, "authoritative_nvidia_mft_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
