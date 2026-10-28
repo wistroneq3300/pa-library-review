@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1013,
+  "formal_queue_sequence": 862,
+  "source_key": "Compatibility|440|Wistron-Networking-00051-V002",
+  "case_variant_id": "3799fcd41745d94c",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 440, "code": "Wistron-Networking-00051-V002", "original_row_sha256": "a4335f5b0a8559e7e339d6f24c93d7f848ccb3951f84d4539258ac01a2d9cda0", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Ethernet mode (Bandwidth test)",
+    "procedure": "Set LINK_TYPE_P1=2, DC cycle, assign an Ethernet /24 address and run paired ib_write_bw with -F -b --report_gbits on port 3000.",
+    "criteria": "Bandwidth is about 90% of ideal value.",
+    "deepseek": "PARTIAL; preserves Ethernet mode but omits the DC-cycle, address, literal RoCE verbs test, finite profile and restoration details.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; correctly identifies transport ambiguity but leaves RoCE versus native Ethernet for another decision."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3030_3799fcd41745d94c.json",
+  "old_problem": "The active record treated `ib_write_bw` in Ethernet mode as an unresolved RoCE-versus-iperf decision. NVIDIA explicitly recommends ib_write_bw as a low-level RoCE communication/bandwidth test and requires the correct RoCE GID path. Because the Master names ib_write_bw, changing to iperf would alter coverage; the authoritative interpretation is RoCE over the Ethernet link.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ETHERNET_MODE_ROCE_IB_WRITE_BW_TEST",
+  "disposition_reason": "NVIDIA documentation establishes that ib_write_bw is valid over RoCE and LINK_TYPE_P1=2 selects Ethernet. ED-05 keeps this Ethernet/RoCE case separate from InfiniBand row439; ED-03 permits GID/IP/fabric/profile bindings; ED-06/ED-18 preserve the DC cycle; ED-15 requires a negotiated-link payload ideal and 90% oracle; ED-20 forbids replacing the literal verbs test with native TCP bandwidth.",
+  "decision_basis": [
+    "Directly read Compatibility row440 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3030 and adjacent row439 IB bandwidth plus row441 distinct inconsistent-unit IB variant.",
+    "Applied NVIDIA LINK_TYPE semantics: P1 value 2 activates Ethernet after reboot/cycle.",
+    "Applied NVIDIA RoCE guidance that ib_write_bw is a valid low-level two-node RoCE test and that correct RoCE v2 GID selection is essential.",
+    "Preserved the source's ib_write_bw, -F, bidirectional -b, --report_gbits, port 3000, /24 addressing and 90% target; iperf is not substituted.",
+    "Directly read next formal queue Compatibility row441 and verified its manifest identity; no mlxconfig, DC cycle, Ethernet/RoCE configuration, traffic or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Mellanox P1 Ethernet-mode RoCE activation and finite paired ib_write_bw 90%-of-ideal validation",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Activate the exact approved port in Ethernet mode through the required DC cycle, prove a valid RoCE path, and measure finite bidirectional verbs bandwidth against a negotiated-link, unit-correct 90%-of-ideal floor.",
+    "required_package": [
+      "Pinned NVIDIA MFT/firmware/OFED or rdma-core/perftest versions with RoCE support",
+      "Adapter serial/MST/BDF/P1/netdev/RDMA-device/GID-index/peer/cable/NUMA map and saved prior LINK_TYPE/network state",
+      "Approved Ethernet/RoCE v1 or v2 configuration: IP/subnet/route, MTU, VLAN, FEC, PFC/ECN/traffic class and switch path",
+      "Finite ib_write_bw message/QP/depth/duration or iteration/repeat/statistic profile and matched peer versions",
+      "Negotiated Ethernet link rate plus approved RoCE payload-ideal formula, units, 90% threshold, OOB/DC-cycle/rollback plan"
+    ],
+    "test_command": "Verify immutable P1/peer identity and save current/next-boot LINK_TYPE plus network/fabric state. At an approved hold point set only `LINK_TYPE_P1=2`, perform the complete DC OFF-to-ON-to-OS-ready cycle, and prove active Ethernet link rate, width, FEC, MTU, VLAN and clean counters. Configure only the approved /24 address and verify the intended RoCE GID type/index, route, RDMA device and lossless/congestion policy. Under the approved finite limit run the literal paired ib_write_bw server/client options on port 3000, retaining complete outputs and repeats. Compare the approved statistic to 90% of the negotiated link's RoCE payload ideal, then remove temporary network state and restore the saved mode/fabric configuration with required cycle/post-health.",
+    "expected_result": "The exact P1 reports Ethernet active after the full DC cycle and the approved RoCE path resolves to the expected RDMA device/GID/peer with healthy link/fabric counters. Every finite ib_write_bw pair completes with matched parameters and no loss/congestion/error anomaly; the approved throughput statistic is at least 90% of the project-defined RoCE payload ideal. Prior mode/network state is restored.",
+    "pass_fail_basis": "PASS requires immutable identity, before/pending/active mode evidence, complete DC transition, verified Ethernet and RoCE GID/fabric state, exact finite paired outputs, link/error/congestion counters, a documented unit-consistent 90% calculation and restoration. Ethernet link-up alone, TCP iperf, an unproven GID or absent payload formula cannot pass; missing oracle is INCONCLUSIVE.",
+    "safety_gate": [
+      "Never change an unidentified/shared management port; require maintenance, OOB and explicit mode/DC approval",
+      "Do not run ib_write_bw until the Ethernet-mode RDMA device, RoCE type/GID/route and switch lossless policy are verified",
+      "Bound saturating traffic and abort on link flap, congestion/loss, fabric, thermal or RAS impact",
+      "Restore prior mode/network/fabric state, preserve logs and never auto-retry a mutation, cycle or benchmark"
+    ],
+    "expected_evidence": [
+      "Pinned stack and adapter/P1/netdev/RDMA/GID/peer/NUMA identity plus saved prestate",
+      "mlxconfig before/pending/active state and complete DC OFF/ON/OS-ready timeline",
+      "Ethernet rate/FEC/MTU/VLAN/IP plus RoCE type/GID/route/PFC/ECN and pre/post counters",
+      "Exact finite server/client commands, outputs, exits and repeat statistics",
+      "RoCE payload-ideal/90% calculation, restored state and post-health verdict"
+    ],
+    "recovery": "On mode, cycle, GID/fabric or traffic failure, stop the test, preserve state/counters, use OOB to restore the saved LINK_TYPE and network/fabric configuration through the separately approved cycle, and verify manageability/link health. Do not switch to another tool or retry automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "Official NVIDIA guidance resolves the literal Ethernet-mode ib_write_bw method as RoCE; native TCP substitution is excluded and DeepSeek incompleteness is reconciled."},
+  "blocked": {"before": false, "after": false, "reason": "RoCE transport semantics are authoritative; exact GID/fabric/profile and performance parameters are mandatory runtime/project configuration."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind P1/netdev/RDMA/GID/peer identity, Ethernet/RoCE fabric, finite perftest profile, payload ideal/90% statistic and DC rollback before execution.",
+    "execution_status": "REVIEW RESOLVED AS ROCE; EXPLICIT MODE/DC AUTHORIZATION, VERIFIED GID/FABRIC AND LINK-SPECIFIC 90% ORACLE REQUIRED; NOT EXECUTED",
+    "owner": "Ethernet/RoCE adapter, switch/fabric, network performance and platform power/recovery owners.",
+    "unlock_condition": "Approve the immutable P1/RoCE path, complete Ethernet fabric/profile, 90% formula and rollback."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA MFT Documentation — Using mlxconfig to Set IB/ETH Parameters", "url": "https://docs.nvidia.com/networking/display/nvidia-firmware-tools-mft-documentation-v4-30-1-1210-lts-2024-lts-u3.1-1210%20LTS%20%282024%20LTS%20U3%29.pdf", "applied_rule": "LINK_TYPE_P1=2 selects Ethernet and requires reboot to activate."},
+    {"title": "NVIDIA NCCL Troubleshooting — RoCE", "url": "https://docs.nvidia.com/deeplearning/nccl/archives/nccl_2265/user-guide/docs/troubleshooting.html", "applied_rule": "ib_write_bw is recommended for low-level RoCE testing and correct RoCE v2 GID selection is required."}
+  ],
+  "project_authority": "The network owner binds the Ethernet/RoCE version, GID/fabric policy, finite verbs profile and negotiated-link payload ideal; native TCP tools do not replace this row's literal coverage.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-05", "ED-06", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "p1_ethernet_mode_dc_cycle_static_ip_roce_bandwidth_preserved": true,
+    "ib_and_ethernet_roce_cases_kept_separate": true,
+    "native_tcp_substitution_rejected": true,
+    "finite_profile_gids_fabric_and_unit_correct_90_percent_oracle_required": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|441|Wistron-Networking-00052-V002",
+    "next_missing_formal_queue_case_variant_id": "9835bcadc2a27550"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_ib_and_inconsistent_unit_variants_compared": true, "case_specific_ethernet_roce_reasoning": true, "authoritative_nvidia_mft_and_roce_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
