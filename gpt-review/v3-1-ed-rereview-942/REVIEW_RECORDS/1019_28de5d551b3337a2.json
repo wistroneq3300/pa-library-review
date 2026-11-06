@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1019,
+  "formal_queue_sequence": 868,
+  "source_key": "Compatibility|446|Wistron-Storage-00070-V004",
+  "case_variant_id": "28de5d551b3337a2",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 446, "code": "Wistron-Storage-00070-V004", "original_row_sha256": "c2d5c646563b033918e2856eed9fdd84e3ed694233b6877be9433335a5f7e8b8", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Storage-SSD-FIO Benchmark-NVMe E1.S 1.92TB",
+    "procedure": "For every 1.92TB E1.S, run direct libaio 2MiB sequential read/write and 4KiB random read/write with iodepth16, numjobs16 and time_based runtime placeholder.",
+    "criteria": "NVMe E1.S performance should reach the customer SPEC definition.",
+    "deepseek": "PARTIAL; checks only `fio --version` and warns about sustained I/O, so none of the four benchmark profiles or all-device coverage is executed.",
+    "gpt_v2": "BLOCKED/CHANGED; correctly prohibits unresolved `/dev/sdx` writes but treats runtime, device identity and customer thresholds as irreducible blockers rather than safe project parameters."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3036_28de5d551b3337a2.json",
+  "old_problem": "The prior review made the case BLOCKED because `/dev/sdx`, `<time>` and the customer performance table were unresolved. The Master nevertheless supplies the four core workload semantics and acceptance source. Under the approved parameterization rule, those missing project values become mandatory prerequisites with a hard no-execution/no-PASS gate rather than keeping the static review pending.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_1_92TB_E1S_FOUR_PROFILE_FIO_BENCHMARK_WITH_DESTRUCTIVE_TARGET_GATE",
+  "disposition_reason": "ED-04 requires serial-bound disposable targets and excludes OS, mounted, RAID and valid data; ED-03 allows runtime, device identities and model-specific customer limits to be project configuration; ED-14 preserves the formal duration/profile rather than a smoke test; ED-15 makes absent thresholds INCONCLUSIVE; ED-19/ED-20 keep this 1.92TB variant independent from row447. Thus the review is executable only after binding but no longer semantically BLOCKED.",
+  "decision_basis": [
+    "Directly read Compatibility row446 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3036 and next formal queue row447/history3037.",
+    "The Master fully defines four distinct fio modes: 2MiB sequential read, 2MiB sequential write, 4KiB random read and 4KiB random write with direct libaio, depth16 and 16 jobs across every 1.92TB E1.S.",
+    "Official fio documentation confirms runtime bounds time_based jobs, numjobs clones workers, iodepth controls outstanding I/O and filename selects the actual target; replacing placeholders after immutable identity checks preserves command semantics.",
+    "The customer SPEC table is a required external oracle. Missing values forbid PASS but do not prevent creation of the parameterized review-layer case.",
+    "Directly read next formal queue Compatibility row447 and verified its manifest identity; no fio benchmark, storage read/write, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "NVMe E1.S 1.92TB four-profile direct FIO benchmark against customer SPEC",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Benchmark every approved 1.92TB E1.S device independently with the source's four sequential/random read/write profiles and compare per-drive bandwidth, IOPS and latency evidence with the correct model-specific customer specification without exposing protected storage.",
+    "required_package": [
+      "Pinned fio version with libaio support and JSON output enabled for evidence",
+      "Every 1.92TB E1.S serial/WWN/model/firmware/namespace/controller/BDF/slot map",
+      "Proof each target is nonboot, unmounted, outside swap/LVM/RAID/device-mapper, disposable and backed up",
+      "Approved runtime, test size/offset/alignment, preconditioning/steady-state, repeat/order and cool-down policy",
+      "Customer per-profile BW/IOPS/latency statistic/threshold table plus endurance/thermal/power/SMART abort and recovery limits"
+    ],
+    "test_command": "For each independently verified disposable 1.92TB namespace, substitute only its serial-bound path for `/dev/sdx` and the approved formal duration for `<time>`. Run the four source profiles separately with `--direct=1 --refill_buffers --norandommap --randrepeat=0 --ioengine=libaio --iodepth=16 --numjobs=16 --time_based --runtime=<approved_time> --group_reporting`: `--rw=read --bs=2048k`, `--rw=write --bs=2048k`, `--rw=randread --bs=4k`, and `--rw=randwrite --bs=4k`, preserving the source job names. Emit full JSON, monitor health, and repeat the complete set for every approved 1.92TB E1.S. Do not execute until the resolved job and target preview receive destructive-write authorization.",
+    "expected_result": "Every approved 1.92TB E1.S completes all four formal profiles with no fio error, device loss, media error, disallowed SMART/endurance change, thermal/power breach or collateral data impact. The project-selected per-drive BW, IOPS and latency statistics meet the matching customer SPEC thresholds for each profile.",
+    "pass_fail_basis": "PASS requires all-device identity/safety proof, the complete four-profile outputs, formal runtime/preconditioning/repeats, per-drive rather than aggregate-only evidence, and comparison with an approved 1.92TB customer SPEC table. Missing target proof, runtime or any profile threshold is INCONCLUSIVE—not PASS; `fio --version` is discovery only.",
+    "safety_gate": [
+      "Never execute the placeholder `/dev/sdx`; bind each namespace to immutable serial/WWN/BDF/slot evidence immediately before the run",
+      "Exclude OS, EFI, mounted, swap, LVM, RAID, device-mapper and valuable-data devices and require backup/disposable proof",
+      "Show the exact four resolved commands and projected write exposure before explicit authorization",
+      "Bound time/bytes, monitor SMART/endurance/thermal/power, preserve logs and never retry automatically"
+    ],
+    "expected_evidence": [
+      "fio version/job hashes and complete 1.92TB target identity/exclusion/backup matrix",
+      "Approved runtime, dataset/offset, preconditioning, repeat/order and SPEC table",
+      "Four raw JSON result sets per drive with achieved depth and errors",
+      "Per-profile per-drive BW/IOPS/latency statistic-to-threshold reconciliation",
+      "SMART/endurance/thermal/power/log pre/post delta, integrity, cleanup and verdict"
+    ],
+    "recovery": "On identity mismatch, fio error, media/device loss, SMART/endurance breach, thermal/power excursion or hang, terminate the affected and remaining jobs, preserve evidence and block further writes. Follow the storage owner's restore/cleanup procedure; do not format, reassemble RAID, sanitize or auto-retry."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek explicitly provides only discovery and does not contradict the Master; the review-layer case restores the authoritative four workload profiles without treating discovery as completion."},
+  "blocked": {"before": true, "after": false, "reason": "Core workload semantics, acceptance source and recovery boundary are known. Device IDs, runtime and threshold values are mandatory project parameters protected by no-execution and INCONCLUSIVE gates."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind every disposable 1.92TB target, formal runtime/preconditioning/repeats, customer per-profile thresholds and destructive-write/recovery authorization.",
+    "execution_status": "REVIEW RESOLVED AS PARAMETERIZED DESTRUCTIVE FIO; NO TARGET, WRITE OR PASS UNTIL ALL PROJECT BINDINGS ARE APPROVED; NOT EXECUTED",
+    "owner": "Storage performance, data-protection, SSD firmware/endurance and platform thermal/power owners.",
+    "unlock_condition": "Approve the immutable target matrix, exact bounded job, customer SPEC table, write exposure and recovery."
+  },
+  "external_authorities": [
+    {"title": "fio official HOWTO", "url": "https://github.com/axboe/fio/blob/master/HOWTO.rst", "applied_rule": "`filename`, `runtime`, `numjobs`, `iodepth`, direct I/O and rw/block-size options materially define the job and must be explicit; achieved depth should be checked."},
+    {"title": "fio official documentation", "url": "https://fio.readthedocs.io/en/latest/fio_doc.html", "applied_rule": "fio provides output/verification and mounted-device safeguards, but explicit immutable target and destructive authorization remain required."}
+  ],
+  "project_authority": "The storage owner binds model-specific targets, duration/preconditioning/repeats, customer BW/IOPS/latency limits and allowable health/endurance change; no threshold is inferred from another capacity.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-04", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "all_1_92tb_devices_and_four_exact_profile_coverage_preserved": true,
+    "distinct_from_3_84tb_capacity_variant": true,
+    "placeholder_device_and_absent_threshold_cannot_pass": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|447|Wistron-Storage-00071-V004",
+    "next_missing_formal_queue_case_variant_id": "f4f5f51450e2f33a"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_nvqual_and_3_84tb_variants_compared": true, "case_specific_1_92tb_target_and_workload_reasoning": true, "official_fio_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
