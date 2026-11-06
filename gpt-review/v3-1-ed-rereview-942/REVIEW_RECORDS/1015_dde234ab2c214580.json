@@ -1,0 +1,86 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1015,
+  "formal_queue_sequence": 864,
+  "source_key": "Compatibility|442|Wistron-Networking-00053-V002",
+  "case_variant_id": "dde234ab2c214580",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 442, "code": "Wistron-Networking-00053-V002", "original_row_sha256": "0703420e660439da8607594b97de0ce5497c25e3d2bef912dea8eee1d7e5cc5a", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Infiniband mode (Latency test)",
+    "procedure": "Set LINK_TYPE_P1=1, perform a DC cycle, assign an IB /24 address, then run paired `ib_read_lat -d <mlx device> -a` server/client commands.",
+    "criteria": "Latency should be about 90% of ideal value; the source gives no unit, reference, statistic, tolerance or direction.",
+    "deepseek": "CONFLICTING; describes a bandwidth test, substitutes ib_write_lat/ib_write_bw, and asks for Gbit/s even though the Master explicitly requires RDMA read latency.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; correctly protects ib_read_lat coverage but leaves the review pending for an undefined latency oracle."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3032_dde234ab2c214580.json",
+  "old_problem": "The active record retained Engineering Decision Pending because `90% of ideal` is not a usable latency oracle and DeepSeek changes read latency into write latency or bandwidth. The Master title, procedure and literal command nevertheless establish the operation unambiguously, and the missing numeric project oracle can be represented as a required runtime/project parameter without inventing a PASS threshold.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_INFINIBAND_RDMA_READ_LATENCY_TEST_WITH_PROJECT_APPROVED_MICROSECOND_UPPER_BOUNDS",
+  "disposition_reason": "ED-05 preserves the distinct InfiniBand latency metric and rejects bandwidth substitution; ED-15 forbids PASS without an approved threshold but does not require the review to remain pending when the test can declare INCONCLUSIVE; ED-03 safely parameterizes adapter, peer, finite profile and per-size latency oracle; ED-06 retains the complete DC cycle; ED-19/ED-20 preserve this row independently from the bandwidth variants. No numeric latency limit is guessed.",
+  "decision_basis": [
+    "Directly read Compatibility row442 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3032 and the next formal queue row443/history3033.",
+    "The Master title, step 4 and literal paired `ib_read_lat -a` commands consistently select RDMA Read latency. DeepSeek's bandwidth, Gbit/s, ib_write_lat and ib_write_bw substitutions are rejected.",
+    "The official linux-rdma perftest documentation identifies `ib_read_lat` as the RDMA Read latency benchmark, defines `-a` as the 2 through 2^23 message-size sweep, and requires matching options on server and client.",
+    "A project-approved microsecond upper bound for each required message size/statistic is a runtime prerequisite. Lower latency is better; absent that oracle the execution result is INCONCLUSIVE and cannot be marked PASS.",
+    "Directly read next formal queue Compatibility row443 and verified its manifest identity; no mlxconfig, DC cycle, address change, latency traffic, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Mellanox P1 InfiniBand RDMA read-latency sweep with approved per-size microsecond oracle",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Activate the approved Mellanox P1 in InfiniBand mode through a complete DC cycle and measure paired RDMA Read latency across the source-required `-a` message-size sweep without substituting bandwidth or write-latency coverage.",
+    "required_package": [
+      "Pinned NVIDIA MFT, adapter firmware and rdma-core/perftest versions",
+      "Approved Mellanox serial/MST/BDF/P1/IB-device/GUID/GID/NUMA/peer/cable mapping and saved prior LINK_TYPE/network state",
+      "Approved /24 addresses, active Subnet Manager/fabric, link rate/width/MTU and synchronized server/client clocks or run metadata",
+      "Finite iteration, warm-up, repeat, CPU-affinity and statistic profile while retaining the `-a` sweep",
+      "Per-message-size microsecond upper bounds, jitter/outlier/error policy, OOB/DC authorization and rollback plan"
+    ],
+    "test_command": "Verify the exact Mellanox adapter/P1/peer and save current and next-boot mode/network state. At an approved hold point run `mlxconfig -d <mlx device> set LINK_TYPE_P1=1`, perform the full DC OFF-to-ON-to-OS-ready cycle, and prove the active IB rate/width/MTU/GID with clean counters. Configure only the approved /24 endpoints. Run matching finite server/client `ib_read_lat -d <mlx device> -a` commands with the approved iterations, warm-up, affinity and repeats. Record per-size latency in microseconds and compare the approved statistic with its project upper bound. Restore the saved mode/network state and verify post-health.",
+    "expected_result": "The exact P1 becomes active InfiniBand after the complete DC cycle, the approved peer path is healthy, and every matched finite `ib_read_lat -a` run completes without transport or counter errors. For every required message size, the approved latency statistic in microseconds is at or below its approved upper bound. Missing bounds or an undefined statistic produce INCONCLUSIVE, not PASS.",
+    "pass_fail_basis": "PASS requires immutable adapter/peer identity, complete mode/DC/link evidence, identical server/client options, raw per-size outputs and the approved lower-is-better microsecond oracle. FAIL may be assigned only against those approved bounds or explicit transport/error limits. The phrase `90% of ideal` alone cannot authorize PASS or FAIL and must never be interpreted as Gbit/s.",
+    "safety_gate": [
+      "Never mutate an unidentified or shared management port; require maintenance, OOB access and explicit mode/DC authorization",
+      "Preserve existing logs and collect a baseline instead of clearing evidence",
+      "Bound iterations and repeats, monitor link/fabric/thermal/RAS state and stop on errors",
+      "Restore prior mode/network through the approved cycle; never substitute another metric or retry automatically"
+    ],
+    "expected_evidence": [
+      "Pinned stack plus Mellanox adapter/P1/peer/GUID/GID/NUMA identity",
+      "mlxconfig before/pending/active state and complete DC OFF/ON/OS-ready timeline",
+      "IB link rate/width/MTU/GID/fabric state with pre/post error counters",
+      "Exact matched server/client commands, versions, affinity, raw per-size microsecond results and exits",
+      "Approved upper-bound table, repeat/statistic calculation, restoration and engineer verdict"
+    ],
+    "recovery": "On mode, cycle, link or measurement failure, stop the latency run, preserve outputs/counters and use OOB to restore the saved LINK_TYPE and network configuration through the approved cycle. Verify fabric and manageability; do not change the metric, relax bounds or retry automatically."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master explicitly and consistently requires RDMA Read latency via `ib_read_lat -a`; DeepSeek's bandwidth/write substitutions are rejected, while the missing numeric oracle is represented as a mandatory project binding rather than a semantic conflict."},
+  "blocked": {"before": false, "after": false, "reason": "Purpose, operation, tool, mode transition and recovery are identifiable. Exact identities, finite profile and microsecond upper bounds are required project/runtime inputs."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the exact Mellanox target/peer, finite `-a` profile, per-size microsecond upper bounds/statistic, error policy and rollback before execution.",
+    "execution_status": "REVIEW RESOLVED AS RDMA READ LATENCY; PROJECT MICROSECOND ORACLE REQUIRED; ABSENT ORACLE IS INCONCLUSIVE; NOT EXECUTED",
+    "owner": "Mellanox fabric/network performance and platform power/recovery owners.",
+    "unlock_condition": "Approve the immutable target/peer, finite profile, lower-is-better per-size latency oracle and rollback."
+  },
+  "external_authorities": [
+    {"title": "linux-rdma/perftest official manual", "url": "https://github.com/linux-rdma/perftest/blob/master/man/perftest.1", "applied_rule": "`ib_read_lat` is the RDMA Read latency benchmark; server/client options must match; `-a` sweeps sizes 2 through 2^23."},
+    {"title": "linux-rdma/perftest official README", "url": "https://github.com/linux-rdma/perftest/blob/master/README", "applied_rule": "`ib_read_lat` measures latency for RDMA Read transactions and is a synthetic micro-benchmark, not application performance."},
+    {"title": "NVIDIA InfiniBand NIC and Port Selection", "url": "https://docs.nvidia.com/infra-controller/documentation/architecture/infini-band-support/nic-and-port-selection", "applied_rule": "`LINK_TYPE_P1=1` selects InfiniBand while `2` selects Ethernet, so exact port identity and saved prior mode are mandatory."}
+  ],
+  "project_authority": "The network performance owner supplies the per-size microsecond bounds, statistic, profile and error/jitter policy. Parameterization resolves review semantics but does not pre-approve a hardware verdict.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-05", "ED-06", "ED-08", "ED-13", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "ib_mode_dc_cycle_ip_and_ib_read_lat_all_sizes_coverage_preserved": true,
+    "distinct_from_ib_bandwidth_and_write_latency_variants": true,
+    "deepseek_bandwidth_gbits_and_write_tool_substitutions_rejected": true,
+    "no_guessed_latency_threshold_or_hardware_pass": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|443|Wistron-Networking-00479-V002",
+    "next_missing_formal_queue_case_variant_id": "c3915ed0a3d548e9"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_bandwidth_and_ethernet_variants_compared": true, "case_specific_lower_is_better_latency_reasoning": true, "authoritative_perftest_and_nvidia_mode_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
