@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1021,
+  "formal_queue_sequence": 870,
+  "source_key": "Compatibility|448|Wistron-NV GPU-00356-V003",
+  "case_variant_id": "4698dad5ae817046",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 448, "code": "Wistron-NV GPU-00356-V003", "original_row_sha256": "87ffdfe3eceb36fd712cbc8b3b2334fe8ce781606204e9f95f3b9e01758e009b", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "nvbandwidth",
+    "procedure": "Check SPEC.",
+    "criteria": "Check SPEC.",
+    "deepseek": "CONFLICTING; the command invokes nvbandwidth but filters its output, while ai_packages and ai_logs substitute DCGM/dcgmi diagnostics.",
+    "gpt_v2": "BLOCKED/CHANGED; treated the Master title as insufficient to choose nvbandwidth over DCGM and retained all missing path/profile/oracle decisions."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3038_4698dad5ae817046.json",
+  "old_problem": "The old review kept the case blocked because the procedure and criteria contain only `check SPEC` and derived fields disagree between nvbandwidth and DCGM. The Master test set and item both explicitly name `nvbandwidth`, and NVIDIA's official tool defines a default all-testcase run plus JSON evidence. DCGM is a different diagnostic and is rejected; topology-specific thresholds remain project parameters.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_NVIDIA_NVBANDWIDTH_ALL_PATH_SUITE_WITH_TOPOLOGY_SPEC_MATRIX",
+  "disposition_reason": "ED-02 preserves the duplicate code's Source Key and Variant ID; ED-03 parameterizes GPU UUID/topology, test list, buffer/samples and thresholds; ED-10 requires correct workload/tool semantics and selects the explicitly named nvbandwidth suite rather than dcgmi; ED-14 rejects a small-buffer smoke run as peak validation; ED-15 requires per-path approved floors; ED-19/ED-20 preserve this row independently from the GDS and other duplicate-code rows.",
+  "decision_basis": [
+    "Directly read Compatibility row448 all 18 XLSX columns, the same-row DeepSeek material, GPT V2/history3038, the completed duplicate-code GDS row449, and next formal pending row450/history3039.",
+    "Both Master identity fields say `nvbandwidth`; therefore the derived DCGM package and `dcgmi diag -r 5` evidence are non-authoritative substitutions.",
+    "Official NVIDIA nvbandwidth documentation states that invoking the tool without testcase selectors runs all available testcases and that `--format json` preserves machine-readable per-path results.",
+    "Official documentation distinguishes host-to-device, device-to-host and device-to-device patterns and notes that reported bidirectional bandwidth is per direction rather than an aggregate sum, so the project oracle must match each exact metric.",
+    "Directly verified that row449 is completed outside this pending queue and that row450 is the next pending identity; no nvbandwidth, CUDA copy, DCGM diagnostic, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "NVIDIA nvbandwidth full single-node path matrix against platform SPEC",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Run the official nvbandwidth suite over the approved NVIDIA GPU topology and validate host-device plus device-device PCIe/NVLink copy paths, directions and methods against matching SKU/topology specifications without substituting DCGM diagnostic status.",
+    "required_package": [
+      "Pinned signed NVIDIA/nvbandwidth release or approved build hash, CUDA Toolkit and compatible NVIDIA driver",
+      "GPU SKU/serial/UUID/BDF/NUMA and NVLink/PCIe topology matrix",
+      "Approved testcases or explicit full-suite scope, buffer size, sample count, median/mean policy and affinity settings",
+      "Per-testcase/per-path/direction GB/s floors and tolerances mapped to topology and copy method",
+      "Thermal/power/XID/AER/link abort limits, cooling/OOB readiness and recovery plan"
+    ],
+    "test_command": "Verify the pinned nvbandwidth binary with `nvbandwidth --version` and preserve `nvbandwidth --list`. Bind every GPU UUID to the recorded topology. Unless the project SPEC explicitly narrows coverage, run the official full suite as `nvbandwidth --format json` with the approved default-or-larger peak buffer, sample count and affinity; retain complete JSON and unfiltered stderr. If specific selectors are approved, list every `--testcase`/prefix and prove the resulting path matrix is complete. Compare each native metric with its matching path/direction/method threshold; never use `dcgmi diag -r 5` as a substitute.",
+    "expected_result": "All required nvbandwidth testcases and topology paths execute successfully, report complete JSON identities and GB/s values, pass internal data verification, and meet their approved path-, direction-, method- and SKU-specific thresholds without new XID, AER, link, thermal or power faults.",
+    "pass_fail_basis": "PASS requires exact binary/stack and GPU topology identity, a coverage matrix proving every required native testcase/path ran, unfiltered JSON, correct per-direction interpretation and approved numeric thresholds. Output presence, grepped/tail text, DCGM PASS, a connectivity-size buffer or missing SPEC is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Validate the exact GPU UUID/topology and pinned CUDA-compatible tool before load",
+      "Use the default 512 MiB or project-approved peak buffer for performance; a small connectivity buffer cannot replace formal bandwidth coverage",
+      "Bound samples/runtime and stop on XID, AER, link degradation, thermal or power limits",
+      "Preserve full evidence and do not change clocks/power/link state or retry automatically"
+    ],
+    "expected_evidence": [
+      "nvbandwidth version/build hash, CUDA/driver versions and full `--list` output",
+      "GPU UUID/BDF/NUMA/NVLink/PCIe topology and required testcase/path matrix",
+      "Exact invocation, buffer/samples/statistic/affinity and complete JSON plus stderr/exit",
+      "Per-path GB/s values reconciled with correctly matched thresholds and bidirectional semantics",
+      "Thermal/power/XID/AER/link pre/during/post evidence and engineer verdict"
+    ],
+    "recovery": "On CUDA/tool error, GPU loss, invalid verification, XID/AER, link degradation, thermal/power limit or hang, terminate the suite, preserve JSON/stderr/telemetry and return GPUs to the approved idle state. Use the platform recovery plan and never substitute DCGM or auto-retry."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master test set/item explicitly select nvbandwidth. Official NVIDIA semantics supply the safe default full-suite method; DCGM/dcgmi fields are rejected as unrelated derived substitutions."},
+  "blocked": {"before": true, "after": false, "reason": "Authoritative tool and default execution semantics are established. GPU topology, selected scope and numeric per-path specifications are mandatory project bindings under an INCONCLUSIVE gate."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the pinned nvbandwidth build, complete GPU topology/test matrix, formal buffer/samples/statistic and per-path numeric thresholds with abort/recovery limits.",
+    "execution_status": "REVIEW RESOLVED AS NVIDIA NVBANDWIDTH; DCGM SUBSTITUTION PROHIBITED; ABSENT PATH-SPEC MATRIX IS INCONCLUSIVE; NOT EXECUTED",
+    "owner": "NVIDIA GPU topology/performance, CUDA software and platform thermal/power owners.",
+    "unlock_condition": "Approve the binary/stack, full path/testcase scope, formal profile, numeric topology SPEC and recovery."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA nvbandwidth official repository", "url": "https://github.com/NVIDIA/nvbandwidth", "applied_rule": "No selector runs all testcases; `--list`, `--testcase`, buffer size, samples and `--format json` define auditable execution. Default peak buffer is 512 MiB and small buffers may underreport bandwidth."},
+    {"title": "NVIDIA nvbandwidth measurement details", "url": "https://github.com/NVIDIA/nvbandwidth#measurement-details", "applied_rule": "Default reporting uses repeated samples and median; copy-engine and SM methods plus bidirectional results have distinct interpretations."},
+    {"title": "NVIDIA GB200 NVL Multi-Node Tuning Guide — Measuring Performance", "url": "https://docs.nvidia.com/multi-node-nvlink-systems/multi-node-tuning-guide/measuring-performance.html", "applied_rule": "nvbandwidth measures host-device and inter-GPU transfer rates across PCIe/NVLink paths, confirming path-specific rather than generic diagnostic coverage."}
+  ],
+  "project_authority": "The GPU performance owner maps the official native testcase names to the platform topology and supplies per-path numeric floors/tolerances. Parameterization does not convert output presence into PASS.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-10", "ED-13", "ED-14", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "duplicate_code_row_identity_preserved_separately_from_gds": true,
+    "nvbandwidth_full_native_path_coverage_preserved": true,
+    "dcgm_grep_tail_and_small_buffer_substitutions_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|450|Wistron-AMD GPU-00468-V003",
+    "next_missing_formal_queue_case_variant_id": "6db8455f2d8b0e25"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "duplicate_code_gds_row_and_next_amd_ras_case_compared": true, "case_specific_nvbandwidth_path_metric_reasoning": true, "authoritative_nvidia_nvbandwidth_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
