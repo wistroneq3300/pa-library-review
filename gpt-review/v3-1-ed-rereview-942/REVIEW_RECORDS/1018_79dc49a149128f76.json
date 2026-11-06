@@ -1,0 +1,85 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1018,
+  "formal_queue_sequence": 867,
+  "source_key": "Compatibility|445|Wistron-NV GPU-00138-V001",
+  "case_variant_id": "79dc49a149128f76",
+  "second_review_outcome": "UNRESOLVED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 445, "code": "Wistron-NV GPU-00138-V001", "original_row_sha256": "39771c5a90545fe997a354c227ec83bffb175e291450dd87f99e1604af641860", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Test #18 Concurrent SSD FIO Test",
+    "procedure": "Run nvqual Test #18 Concurrent SSD FIO Test.",
+    "criteria": "All information should be readable with no spelling error and firmware version should be correct.",
+    "deepseek": "PARTIAL; identifies licensed NVqual plus an SSD/FIO working set and warns about large I/O, but supplies no Test #18 job, immutable targets or result oracle.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; adds nonboot/disposable target and destructive-I/O safeguards while leaving the proprietary workload and acceptance unresolved."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3035_79dc49a149128f76.json",
+  "old_problem": "The Master names a licensed NVqual Test #18 concurrent SSD FIO workload but gives no command/configuration, target population, read/write mix, size/offset, runtime, queue/jobs, preconditioning, per-drive versus aggregate result semantics or performance/integrity limits. Its criteria only check presentation quality and firmware identity, so execution could destroy protected data yet still lack a hardware verdict.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_FOR_PROPRIETARY_NVQUAL_TEST18_JOB_DATA_SCOPE_AND_PERFORMANCE_ORACLE",
+  "disposition_reason": "ED-04 requires exact nonboot serial-bound targets and protects mounted, RAID and valuable data; ED-14 prevents a shortened substitute; ED-15 forbids PASS without performance limits; ED-03 can parameterize ordinary device IDs but cannot invent the proprietary Test #18 job semantics or acceptance contract. ED-17 preserves evidence and ED-20 requires this independent decision. Therefore the review is complete but Pending remains.",
+  "decision_basis": [
+    "Directly read Compatibility row445 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3035 and next formal queue row446/history3036.",
+    "Official fio documentation confirms that `filename`, `rw`, `size`, `runtime`, `numjobs`, `iodepth` and direct-I/O options materially define the workload; none of the Test #18 values are available here.",
+    "Official fio protection against mounted-device writes is only a guardrail, not proof that an unnamed target is nonboot, disposable, outside RAID/LVM or authorized for concurrent writes.",
+    "No public NVIDIA source located an NVqual Test #18 release-specific command, target-selection contract or per-drive/aggregate PASS oracle; generic fio documentation cannot replace that proprietary specification.",
+    "Directly read next formal queue Compatibility row446 and verified its manifest identity; no NVqual, fio, storage write, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "NVqual Test #18 concurrent SSD FIO qualification on serial-bound disposable targets",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Execute the approved licensed NVqual Test #18 concurrent SSD workload on the exact authorized disposable SSD population and evaluate per-drive plus aggregate performance, integrity, health and firmware evidence using the release-specific project oracle.",
+    "required_package": [
+      "Licensed pinned NVqual release/checksum/license, Test #18 guide/config and pinned fio version",
+      "Approved SSD serial/WWN/model/namespace/BDF/slot/capacity/firmware inventory",
+      "Proof that every target is nonboot, unmounted, outside swap/LVM/RAID/device-mapper, disposable and backed up",
+      "Exact Test #18 read/write mix, block sizes, offsets/size, engine, direct mode, queue depth, jobs, preconditioning, runtime, concurrency and repeats",
+      "Per-drive and aggregate IOPS/BW/latency/integrity limits plus endurance/thermal/power/SMART abort and recovery rules"
+    ],
+    "test_command": "Do not execute until the NVqual owner supplies the pinned Test #18 artifact and resolved native job. Validate every target by immutable serial/WWN/namespace/BDF/slot and prove boot/mount/swap/LVM/RAID/device-mapper exclusion plus backup/disposable authorization. Review the exact FIO profile and projected write volume, preserve SMART/endurance/thermal baselines, then run the documented finite Test #18 once under OOB and telemetry. Retain native NVqual/FIO JSON or logs per drive and aggregate; do not substitute a generic FIO command or select devices by `/dev` order.",
+    "expected_result": "Every authorized SSD participates in the documented concurrent workload, retains the approved firmware identity and data-scope contract, and meets the release/project per-drive and aggregate IOPS, bandwidth, latency and integrity limits without device loss, media error, disallowed SMART/endurance delta, thermal/power breach or collateral data change.",
+    "pass_fail_basis": "PENDING: PASS/FAIL requires the exact Test #18 job and approved per-drive/aggregate performance and integrity oracle. Readable output, a correct firmware string or aggregate throughput alone cannot pass; no result is valid unless immutable target and protected-storage exclusions are proven.",
+    "safety_gate": [
+      "Never select all disks or a `/dev` path without serial/WWN/namespace/BDF/slot binding",
+      "Hard-exclude OS, EFI, mounted, swap, LVM, RAID, device-mapper and valuable-data devices",
+      "Require explicit destructive-write authorization after showing the resolved job and projected bytes written",
+      "Bound runtime/concurrency, monitor health/thermal/power, preserve logs and never retry automatically"
+    ],
+    "expected_evidence": [
+      "Licensed artifact/config/fio hashes and release-specific Test #18 documentation",
+      "Serial-bound target map with nonboot/nonmounted/non-RAID/backup/disposable proof",
+      "Resolved job options, preconditioning, duration, concurrency and projected write volume",
+      "Per-drive and aggregate raw performance/latency/error/integrity outputs",
+      "Firmware, SMART/endurance/thermal/power/log pre/post deltas, cleanup/recovery and verdict"
+    ],
+    "recovery": "On wrong-target indication, media error, device loss, latency hang, thermal/power limit or integrity failure, terminate all FIO jobs, preserve evidence, prevent further writes and follow the storage owner's recovery/restore procedure. Do not re-add RAID members, format, sanitize or auto-retry."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "The procedure requires a concurrent SSD FIO qualification, while the Master criteria evaluate only readability and firmware. The proprietary job and technical performance/integrity oracle remain absent."},
+  "blocked": {"before": false, "after": false, "reason": "A guarded future workflow can be described, so static review is not BLOCKED; execution and verdict remain Engineering Decision Pending on indispensable proprietary workload, data scope and oracle evidence."},
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Supply the licensed Test #18 job/guide, immutable disposable target set, destructive authorization, workload profile, technical oracle and recovery contract.",
+    "execution_status": "ENGINEERING DECISION PENDING; PROPRIETARY TEST18 JOB, SAFE TARGET SCOPE AND PERFORMANCE/INTEGRITY ORACLE ABSENT; NOT EXECUTED",
+    "owner": "NVIDIA/NVqual package owner, storage performance/data owner and platform power/thermal owner.",
+    "unlock_condition": "Approve the exact Test #18 artifact/job, serial-bound disposable targets, per-drive/aggregate limits and recovery."
+  },
+  "external_authorities": [
+    {"title": "fio official HOWTO", "url": "https://github.com/axboe/fio/blob/master/HOWTO.rst", "applied_rule": "Filename, rw mode, size, runtime, numjobs, iodepth and direct-I/O settings define materially different workloads and must be resolved explicitly."},
+    {"title": "fio official documentation", "url": "https://fio.readthedocs.io/en/latest/fio_doc.html", "applied_rule": "fio can verify written data and exposes destructive-write safeguards, but those features do not authorize or identify an unknown production device."},
+    {"title": "NVIDIA IGX Certification Program", "url": "https://docs.nvidia.com/igx/user-guide/2.0/NVAIE/thor-certification.html", "applied_rule": "NVQual is NVIDIA's qualification/stress toolset; the public page does not define Test #18 workload or acceptance semantics."}
+  ],
+  "project_authority": "Only the NVqual package owner and project storage authority can approve the release-specific Test #18 job, target/data scope, endurance budget and performance/integrity oracle.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-04", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "nvqual_test18_concurrent_ssd_fio_readability_and_firmware_coverage_preserved": true,
+    "protected_storage_and_destructive_write_gates_applied": true,
+    "generic_fio_or_readability_only_pass_rejected": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|446|Wistron-Storage-00070-V004",
+    "next_missing_formal_queue_case_variant_id": "28de5d551b3337a2"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_nvqual_eom_and_raw_fio_variants_compared": true, "case_specific_concurrent_destructive_io_reasoning": true, "official_fio_and_nvidia_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
