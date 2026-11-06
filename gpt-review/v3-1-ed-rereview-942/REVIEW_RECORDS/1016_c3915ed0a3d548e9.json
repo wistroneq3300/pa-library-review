@@ -1,0 +1,87 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1016,
+  "formal_queue_sequence": 865,
+  "source_key": "Compatibility|443|Wistron-Networking-00479-V002",
+  "case_variant_id": "c3915ed0a3d548e9",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 443, "code": "Wistron-Networking-00479-V002", "original_row_sha256": "6b759d5e7b38bb73a89da71c8121e8ff25e8270e37c3f2dd148269d7c01e8471", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Ethernet mode",
+    "procedure": "Set LINK_TYPE_P1=2, perform a DC cycle, assign an Ethernet /24 address, set MTU 9000 and run paired bidirectional `ib_write_bw --report_gbits -F -b -p 3000`.",
+    "criteria": "Bandwidth should be about 90% of ideal value.",
+    "deepseek": "PARTIAL; performs only read-only mode/MTU/link discovery and explicitly defers the source-required Ethernet activation, jumbo-frame operation and bandwidth traffic.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; preserves the uncovered source scope but leaves RoCE transport and the full execution decision pending."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3033_c3915ed0a3d548e9.json",
+  "old_problem": "The active record retained Engineering Decision Pending because DeepSeek's safe read-only query does not execute the Master procedure and because it treated `ib_write_bw` in Ethernet mode as transport-ambiguous. The literal verbs command is technically valid as RoCE when the approved Ethernet-mode ConnectX port has a verified RDMA device/GID and peer path; all exact identities, jumbo support, lossless settings and the 90% link oracle can remain project bindings.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ETHERNET_MODE_ROCE_BANDWIDTH_TEST_WITH_END_TO_END_MTU_9000_GATE",
+  "disposition_reason": "ED-05 keeps Ethernet distinct from InfiniBand and interprets the source's verbs command only as RoCE, never as native TCP throughput; ED-03 parameterizes the adapter/netdev/RDMA/GID/peer and switch path; ED-06 preserves the complete DC cycle; ED-15 requires a verified link-specific 90% floor; ED-13 requires hardware/path specification proof before MTU 9000 is executed or declared unsupported; ED-19/ED-20 retain this jumbo-frame variant independently from row440.",
+  "decision_basis": [
+    "Directly read Compatibility row443 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3033 and next formal queue row444/history3034.",
+    "NVIDIA documentation uses `ib_write_bw` for paired RDMA bandwidth testing and documents ConnectX Ethernet products as RoCE-capable; the source command is therefore preserved as a RoCE test only after RDMA device/GID/path proof.",
+    "NVIDIA guidance states that jumbo capability must hold across every data-path component; local MTU 9000 alone cannot prove the source objective and some platform/NIC combinations have lower supported maxima.",
+    "The read-only DeepSeek command remains a phase-zero inventory but cannot satisfy persistent LINK_TYPE_P1=2 activation, complete DC cycle, MTU 9000 reachability or the paired performance measurement.",
+    "Directly read next formal queue Compatibility row444 and verified its manifest identity; no mlxconfig, DC cycle, IP/MTU change, traffic, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Mellanox Ethernet-mode RoCE bidirectional write-bandwidth test with end-to-end MTU 9000 proof",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Activate the approved Mellanox P1 in Ethernet mode, prove an end-to-end jumbo-frame RoCE path at the source-required MTU 9000, and measure finite paired bidirectional RDMA Write bandwidth against 90% of the verified link payload ideal.",
+    "required_package": [
+      "Pinned NVIDIA MFT, adapter firmware, MLNX_OFED or rdma-core/perftest versions matched across peers",
+      "Adapter serial/MST/BDF/P1/netdev/RDMA-device/GID/NUMA/peer/cable/switch mapping and saved prior mode/network state",
+      "Hardware and switch specifications proving Ethernet MTU 9000 support on every hop",
+      "Approved /24 addresses, VLAN, PFC/ECN/lossless policy, FEC, QoS and end-to-end jumbo validation method",
+      "Finite message/QP/depth/duration-or-iteration/repeat/statistic profile, link payload ideal, 90% floor, OOB/DC and rollback plan"
+    ],
+    "test_command": "Collect the DeepSeek read-only mlxconfig/ip/ethtool baseline and bind the exact P1/netdev/RDMA/GID/peer path. After specification and maintenance approval, run `mlxconfig -d <mlx device> set LINK_TYPE_P1=2`, perform the full DC OFF-to-ON-to-OS-ready cycle, configure only approved /24 endpoints and set Ethernet MTU 9000 on both hosts and every intervening switch hop. Prove jumbo reachability without fragmentation and clean counters. Then run the literal paired finite `ib_write_bw -d <ETH_device> --report_gbits -F -b -p 3000` server and matching client command against `<server_ip>`. Compare the approved statistic with 90% of the verified link payload ideal, then restore prior mode, MTU and addresses.",
+    "expected_result": "The exact P1 activates in Ethernet mode after the complete DC cycle; the mapped RoCE device/GID is reachable; both hosts and all network hops prove supported MTU 9000 without fragmentation, drops or RDMA retry errors; and finite paired bidirectional bandwidth reaches at least the approved 90% floor. Prior mode/network state is restored.",
+    "pass_fail_basis": "PASS requires immutable adapter/peer/path identity, authoritative MTU 9000 support, complete cycle and jumbo-path evidence, matched RoCE commands/raw outputs, clean counters and a unit-correct 90% calculation from the verified link payload ideal. A read-only inventory, local MTU display, TCP result, unsupported MTU, missing ideal or unverified GID/path is INCONCLUSIVE—not PASS.",
+    "safety_gate": [
+      "Never change an unidentified/shared management interface; require maintenance, OOB and explicit mode/DC/network authorization",
+      "Do not set MTU 9000 until both endpoints and every switch hop are proven compatible",
+      "Bound bidirectional traffic and abort on drops, pause storms, RDMA retry errors, link/FEC degradation, thermal or RAS impact",
+      "Restore prior LINK_TYPE, addresses, MTU and lossless settings; preserve logs and never retry automatically"
+    ],
+    "expected_evidence": [
+      "Pinned matched stack and adapter/P1/netdev/RDMA/GID/peer/switch identity map",
+      "mlxconfig before/pending/active plus full DC OFF/ON/OS-ready timeline",
+      "MTU 9000 support references, endpoint/switch configuration and no-fragment jumbo path proof",
+      "Link/FEC/PFC/ECN/RDMA counters before/during/after",
+      "Exact finite paired commands/outputs/exits, 90% ideal derivation, restoration and verdict"
+    ],
+    "recovery": "If mode activation, jumbo reachability or traffic fails, stop load, preserve outputs and counters, restore saved IP/MTU/lossless settings, and use OOB to restore prior LINK_TYPE through the approved cycle. Verify management and fabric health; do not fall back to TCP, reduce MTU silently or auto-retry."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The Master full procedure is authoritative; DeepSeek's read-only command is retained only as phase-zero evidence. `ib_write_bw` is preserved under a verified RoCE contract, resolving the alleged Ethernet/verbs ambiguity without changing coverage."},
+  "blocked": {"before": false, "after": false, "reason": "Purpose, mode, RoCE tool, jumbo requirement and recovery are identifiable. Exact topology, MTU compatibility, finite profile and 90% oracle are required project/runtime bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the exact RoCE path, prove MTU 9000 support on every hop, approve finite traffic and 90% link oracle, and authorize complete DC/rollback.",
+    "execution_status": "REVIEW RESOLVED AS ETHERNET-MODE ROCE; END-TO-END MTU 9000 AND LINK-SPECIFIC 90% ORACLE REQUIRED; NOT EXECUTED",
+    "owner": "Mellanox adapter, Ethernet/RoCE fabric, switch/QoS, network performance and platform power/recovery owners.",
+    "unlock_condition": "Approve the immutable topology, MTU 9000 compatibility, RoCE GID/path, finite profile, payload ideal and rollback."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA NCCL Networking Troubleshooting", "url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/troubleshooting/networking_troubleshooting.html", "applied_rule": "`ib_write_bw` is an official paired RDMA bandwidth diagnostic; the device and matched peer invocation must be explicit and RDMA counters must be checked."},
+    {"title": "NVIDIA MLNX_OFED Documentation v24.01", "url": "https://docs.nvidia.com/nvidia-mlnx-ofed-documentation-v24-01-0-3-3-1.pdf", "applied_rule": "`ib_write_bw` measures RDMA Write bandwidth between a server/client pair and supports bidirectional mode and controlled iterations/message sizes."},
+    {"title": "NVIDIA DCI Reference Design Guide — Common Topologies", "url": "https://docs.nvidia.com/networking-ethernet-software/guides/Data-Center-Interconnect-Reference-Design-Guide/Common-Topologies/", "applied_rule": "Jumbo MTU must be supported end to end, including third-party layer-2/layer-3 domains."},
+    {"title": "NVIDIA Holoscan Sensor Bridge — MTU notes", "url": "https://docs.nvidia.com/holoscan/sensor-bridge/2-7/support/notes", "applied_rule": "Every component in the path must support the requested MTU and some ConnectX/platform contexts do not support 9000, so model-specific proof is mandatory."}
+  ],
+  "project_authority": "The network owner confirms the exact model/path supports MTU 9000 and binds RoCE/lossless settings, finite profile and payload ideal. If authoritative SPEC proves MTU 9000 unsupported, ED-13 governs N/A or corrected coverage rather than a fabricated PASS.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-05", "ED-06", "ED-08", "ED-13", "ED-15", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "ethernet_mode_dc_cycle_ip_mtu9000_and_ib_write_bw_coverage_preserved": true,
+    "roce_not_tcp_or_infiniband_semantics_explicit": true,
+    "distinct_from_row440_non_jumbo_ethernet_variant": true,
+    "deepseek_read_only_subset_not_counted_as_full_execution": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|444|Wistron-NV GPU-00137-V001",
+    "next_missing_formal_queue_case_variant_id": "8d6dc014fa474802"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_nonjumbo_and_nvqual_variants_compared": true, "case_specific_roce_and_end_to_end_mtu_reasoning": true, "authoritative_nvidia_rdma_and_mtu_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
