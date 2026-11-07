@@ -1,0 +1,46 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1031,
+  "formal_queue_sequence": 880,
+  "source_key": "Stability|3|Wistron-Margin-00002-V002",
+  "case_variant_id": "5797937ddeac0e7d",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Stability", "source_row": 3, "code": "Wistron-Margin-00002-V002", "original_row_sha256": "db9c1480116dce998fd90accca05e7b57114c31cfee7ea0853800bd62da3a5d4", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "40C & +5% 5V/3.3V Front USB3.0 slot 1",
+    "procedure": "Physically install a USB tool in front USB3 slot1, boot, install SST, clear SEL and run USB stress for 12 hours under the named margin environment.",
+    "criteria": "SST log and BMC SEL contain no errors.",
+    "deepseek": "NO; correctly identifies the chamber, programmable-rail, physical port and supervised 12-hour lab boundary.",
+    "gpt_v2": "MANUAL ONLY/IMPROVED; defines port/tool identity, calibration, continuous evidence, aborts and nominal restoration."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3048_5797937ddeac0e7d.json",
+  "old_problem": "The prior review retained Pending for slot/tool mapping, SST profile, calibrated chamber/rail tolerances, error policy and restoration even though the physical intent, duration and safety boundary are clear.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_MANUAL_FRONT_USB3_SLOT1_40C_PLUS5_PERCENT_12_HOUR_MARGIN_TEST",
+  "disposition_reason": "ED-03 allows lab equipment IDs, tolerances, SST profile and allowlists to be project configuration. ED-09 keeps chamber, rail and USB-tool manipulation manual; ED-14 preserves the full 12-hour duration; ED-17 replaces SEL clearing with preserved before/after evidence. The review-layer procedure and safety recovery are complete without a remote-execution claim.",
+  "decision_basis": [
+    "Directly read Stability row3 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3048 and next formal queue row4/history3049.",
+    "The unique coverage is front USB3.0 slot1 at measured 40C and +5% on both 5V and 3.3V rails for 12 hours; adjacent USB2 port groups cannot substitute.",
+    "Valid margin evidence requires chamber/rail measurements for the same interval as the SST workload and proof that the device remained enumerated at the expected USB3 speed.",
+    "The source's SEL-clear step is replaced by an immutable baseline and delta so preexisting and test-generated events remain distinguishable.",
+    "Directly read next formal queue Stability row4 and verified its manifest identity; no chamber/rail adjustment, USB insertion, SST run, SEL clear or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "Front USB3 slot1 40C/+5% 5V/3.3V 12-hour margin stress",
+    "automation_classification": "MANUAL ONLY",
+    "purpose": "Prove the identified front USB3.0 slot1 sustains the approved SST USB workload for 12 continuous hours while ambient is 40C and both 5V/3.3V rails are held at +5%, without USB, kernel, SST or BMC errors.",
+    "required_package": ["Front USB3 slot1 map and USB tool model/serial", "Pinned SST version and full 12-hour USB profile", "Calibrated chamber and rail-margin equipment with measurement points", "Approved temperature/voltage tolerances, error allowlist and telemetry cadence", "Qualified operator, abort limits and nominal restoration plan"],
+    "test_command": "Qualified operator photographs/maps slot1 and tool, preserves nominal USB/kernel/SEL state, verifies calibration, ramps to the approved 40C and +5% 5V/3.3V setpoints, confirms measured stability and USB3 enumeration/speed, then runs the pinned SST USB profile for the full 12 hours while recording synchronized temperature, rails, USB counters, kernel and BMC events. Stop safely, return rails and chamber to nominal, and verify port/system health. Agent activity is limited to artifact analysis.",
+    "expected_result": "The mapped tool remains correctly enumerated at the required USB3 mode for the full 12-hour interval, chamber and both rails remain within approved tolerances, SST completes without error, no disallowed USB/kernel/SEL event occurs, and nominal restoration/post-health succeed.",
+    "pass_fail_basis": "PASS requires physical identity, calibration, continuous 40C/+5% evidence, complete 12-hour SST log, enumeration/speed continuity, preserved event deltas and successful restoration. A nominal-condition remote run, shortened duration, cleared logs or only final screenshots cannot pass.",
+    "safety_gate": ["Qualified lab operator and vendor-approved chamber/rail limits", "Independent temperature and 5V/3.3V measurement before and throughout stress", "Abort on overvoltage, overtemperature, USB instability, SST/kernel/SEL error or loss of control", "Preserve evidence and never auto-retry; restore nominal conditions before release"],
+    "expected_evidence": ["Slot1/tool photos and identities", "Equipment calibration and nominal baseline", "Synchronized 40C and +5% rail time series", "USB3 enumeration/speed and complete 12-hour SST log", "Kernel/USB/BMC/SEL deltas, abort status, nominal restoration and verdict"],
+    "recovery": "On environmental, rail, USB or workload error, stop SST, preserve all evidence, use the qualified operator's controlled ramp to nominal rails and ambient, verify safe electrical/thermal state and port/system health, and do not automatically repeat the 12-hour run."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "Master, DeepSeek and GPT V2 agree on the physical front-USB3 margin intent and 12-hour workload."},
+  "blocked": {"before": false, "after": false, "reason": "The static review is complete; physical execution remains intentionally manual and gated by named lab configuration."},
+  "pending": {"before": true, "after": false, "remaining_project_configuration": "Bind slot/tool identity, SST profile, calibrated equipment, tolerances, telemetry/error policy and restoration limits.", "execution_status": "REVIEW RESOLVED; QUALIFIED MANUAL LAB EXECUTION REQUIRED; NOT EXECUTED", "owner": "Platform margin, USB/SST, BMC and lab safety owners.", "unlock_condition": "Approve the signed lab configuration and operator procedure before execution."},
+  "external_authorities": [],
+  "project_authority": "Project owners define electrical/thermal tolerances, physical slot map, SST profile and error policy; qualified lab staff own stimulus and restoration.",
+  "traceability": {"applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-09", "ED-13", "ED-14", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"], "source_key_and_variant_preserved": true, "front_usb3_slot1_40c_plus5_12h_coverage_preserved": true, "physical_lab_work_not_automated": true, "sel_baseline_preserved": true, "historical_record_preserved": true, "dut_execution": "NOT EXECUTED", "next_missing_formal_queue_source_key_verified": "Stability|4|Wistron-Margin-00003-V002", "next_missing_formal_queue_case_variant_id": "0fbe0dea312f636a"},
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_usb_port_variants_compared": true, "case_specific_slot1_environment_duration_reasoning": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
