@@ -8,3 +8,5 @@
 - Formal checkpoint 200 was fully validated and pushed at `4185ff58`; the locked 942 queue hash is unchanged; 151 out-of-scope records remain historical.
 - Protected sources: unchanged.
 - DUT execution: none.
+- Final static validation: overlay, 3,112 Full Review baseline, locked Final Audit, locked V3.1 release, protected hashes and diff checks all PASS; overlay failures 0.
+- QA lifecycle: NOT ACCEPTED. ED-QA-01 blind independent 312-case sample and ED-QA-02/05/10 independent traceability, coverage and risk expansion remain outstanding.
