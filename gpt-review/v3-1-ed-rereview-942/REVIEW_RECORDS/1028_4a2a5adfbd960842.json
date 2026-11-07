@@ -1,0 +1,84 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1028,
+  "formal_queue_sequence": 877,
+  "source_key": "Compatibility|456|Wistron-AMD GPU-00467-V003",
+  "case_variant_id": "4a2a5adfbd960842",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 456, "code": "Wistron-AMD GPU-00467-V003", "original_row_sha256": "70dc623b4dfbd2eb1474fa94485b2b2725e10224f61391c61659f1070e7cb0ce", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Out Of Band: GFX Poison Consumption Handling With ODECC",
+    "procedure": "Read the BMC CPER entry set, inject device0/block2/type8 once, identify and download the new Redfish attachment, transfer it and decode it with cdump_analyzer.",
+    "criteria": "Injection succeeds; one correlated CPER appears; decoded OAM location, UMC ODECC deferred section and GC GFX poison uncorrected-consumed section match the listed codes and severities.",
+    "deepseek": "PARTIAL; recognizes the OOB AMDGPU-RAS/Redfish path and dedicated-SUT risk but does not preserve the decoded multi-section oracle.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; adds identity, secure Redfish parsing, artifact integrity, decoded-field comparison and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3045_4a2a5adfbd960842.json",
+  "old_problem": "The previous review left the case pending for GPU/OAM identity, secure Redfish resource, decoder schema, decoded oracle and recovery even though the Master supplies the exact type8 injection and required CPER fields.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ONE_SHOT_GFX_POISON_ODECC_OOB_CPER_TEST",
+  "disposition_reason": "ED-03 permits target, endpoint, credential, tool and schema values to remain runtime project bindings. ED-16 keeps the poison injection behind explicit one-shot isolated authorization and recovery. ED-15 requires every listed UMC and GC field, not merely a new index, while ED-17 preserves the pre-entry set and attachment evidence. These gates produce a complete review-layer case without guessing OEM values.",
+  "decision_basis": [
+    "Directly read Compatibility row456 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3045 and next formal queue row457/history3046.",
+    "The literal `amdgpuras -d 0 -b 2 -t 8` and the criteria consistently define GFX poison consumption with ODECC and a two-part decoded CPER oracle.",
+    "A maximum numeric entry ID is not reliable correlation; the full before/after entry-set difference, event time/content and attachment hash bind the CPER to the one injection.",
+    "The UMC On-die ECC deferred fields and GC GFX_IP_Poison_Error uncorrected-consumed fields are both retained as separate mandatory decoded sections.",
+    "Directly read next formal queue Compatibility row457 and verified its manifest identity; no injection, Redfish POST/GET, transfer, decode, reset or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMD GFX poison consumption with ODECC — one-shot OOB CPER verification",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Inject exactly one approved GFX poison-consumption event into the mapped AMD GPU and prove that the authenticated BMC Redfish pipeline produces a content-correlated CPER whose decoded UMC ODECC and GC poison sections match the source oracle.",
+    "required_package": [
+      "Approved amdgpuras release/checksum and supported driver/GPU firmware",
+      "Immutable device0/serial/UUID/BDF/OAM map on a dedicated idle SUT",
+      "Authenticated TLS BMC/SMC endpoint, supported Redfish Dump/attachment resource and credential handling",
+      "Pinned cdump_analyzer version/schema and expected UMC/GC fields",
+      "One-shot poison authorization, abort limits and OOB recovery"
+    ],
+    "test_command": "Preserve the complete authenticated Redfish CPER entry set and timestamps. Reconfirm device0/OAM and type8 semantics, then at the authorized hold point run `sudo amdgpuras -d 0 -b 2 -t 8` exactly once. Enumerate JSON again, identify the new event by set difference plus time/content, download its attachment over the approved TLS resource, hash and securely transfer it, decode with the pinned `cdump_analyzer`, compare every required UMC and GC field, and verify GPU/BMC health. Never use a grep-only maximum ID, hard-coded secret or automatic retry.",
+    "expected_result": "The one-shot injection succeeds; exactly one attributable attachment is preserved; its decoded UMC section reports OAM location, UMC bank, Errorcode ext 0, On-die ECC and Deferred severity, while its GC section reports the same mapped OAM, GC bank, Errorcode ext 62, GFX_IP_Poison_Error and Uncorrected Error with poison consumed; post-health meets the approved recovery oracle.",
+    "pass_fail_basis": "PASS requires authorized target/tool identities, full pre-entry evidence, exact one-shot output, content/time-correlated new attachment and hash, every listed decoded UMC and GC value, and healthy recovery. An index increment, command exit zero, only one section or an uncorrelated CPER is not PASS.",
+    "safety_gate": [
+      "Dedicated idle SUT, OOB access and explicit approval for the immutable GPU/OAM and one poison injection",
+      "Use authenticated approved TLS Redfish resources and secret injection; preserve the baseline and attachment",
+      "Abort on target/schema mismatch, multiple unexplained entries, severity escalation, GPU loss, hang, thermal or power issue",
+      "No log clearing, second injection or automatic retry"
+    ],
+    "expected_evidence": [
+      "Tool/driver/firmware, GPU/OAM and BMC/Redfish/decoder identities",
+      "Full pre/post entry-set diff, injection output/exit/time and correlated entry metadata",
+      "Original CPER attachment, cryptographic hash and secure-transfer record",
+      "Decoded UMC ODECC and GC poison field-by-field comparison",
+      "GPU/BMC health, recovery and engineer verdict"
+    ],
+    "recovery": "On target, Redfish, decoder, severity or health mismatch, stop and preserve the injection/CPER evidence. Use only the AMD/platform-approved OOB recovery, confirm GPU/BMC state and do not clear logs or inject again."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The Master and prior reviews agree on GFX type8 poison injection and OOB CPER content; runtime endpoints and identities are parameters, not conflicting intent."},
+  "blocked": {"before": false, "after": false, "reason": "A complete safe review method and oracle exist; hazardous execution remains gated by ED-16 project authorization."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind immutable GPU/OAM, supported amdgpuras stack, authenticated Redfish resources, decoder/schema, exact UMC/GC oracle and isolated recovery.",
+    "execution_status": "REVIEW RESOLVED; ONE-SHOT GFX POISON EXECUTION REQUIRES SEPARATE ED-16 AUTHORIZATION; NOT EXECUTED",
+    "owner": "AMD FAE/RAS, GPU platform, BMC Redfish/CPER and recovery owners.",
+    "unlock_condition": "Approve the signed runtime bindings and one-shot recovery before execution."
+  },
+  "external_authorities": [
+    {"title": "DMTF Redfish LogEntry schema", "url": "https://redfish.dmtf.org/schemas/v1/LogEntry.v1_19_0.json", "applied_rule": "Enumerate and correlate structured entry metadata rather than treating a maximum numeric ID as proof of source event."},
+    {"title": "Linux Kernel AMDGPU RAS Support", "url": "https://docs.kernel.org/gpu/amdgpu/ras.html", "applied_rule": "AMDGPU RAS evidence is device/block contextual and must be tied to the same GPU identity."}
+  ],
+  "project_authority": "AMD/FAE approves release-specific type8 semantics; BMC owners supply the OEM Redfish resource/schema and decoder oracle; platform owners authorize isolation and recovery.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "device0_block2_type8_coverage_preserved": true,
+    "umc_odecc_and_gc_poison_sections_both_preserved": true,
+    "secure_entry_correlation_and_attachment_integrity_added": true,
+    "one_shot_no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|457|Wistron-AMD GPU-00147-V003",
+    "next_missing_formal_queue_case_variant_id": "b54b672f2365d5b3"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "related_gfx_poison_and_enablement_cases_compared": true, "case_specific_cper_correlation_and_multisection_reasoning": true, "authoritative_redfish_and_kernel_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
