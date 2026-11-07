@@ -1,0 +1,83 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1026,
+  "formal_queue_sequence": 875,
+  "source_key": "Compatibility|454|Wistron-AMD GPU-00149-V003",
+  "case_variant_id": "1cbede19494d71fe",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 454, "code": "Wistron-AMD GPU-00149-V003", "original_row_sha256": "d34a581a7443de3320d86064b7be2cdd34f55de3165884a0b838f24f4dfd85d5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UMC Replay Correctable ODECC In Band",
+    "procedure": "Enable amdgpu RAS, query the device0/block0 UMC baseline and inject subtype2/type4 at address 0x800.",
+    "criteria": "Injection succeeds, dmesg records the AMDGPU event and the post-injection UMC count is not `zer`; the truncated word is unambiguously `zero` from the complete repeated criterion pattern.",
+    "deepseek": "PARTIAL; provides a generic FAE-gated error-injection warning but not the distinct subtype2 replay ODECC tuple or its counter attribution.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; preserves the tuple and documents the truncated criterion, but retains Pending for identities, oracle and recovery."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3043_1cbede19494d71fe.json",
+  "old_problem": "The prior review left the case pending for exact target, tool/firmware semantics, counter delta and recovery. The Master command clearly specifies UMC block0, subtype2, replay type4 and address0x800, and the truncated final word does not obscure its repeated zero-to-nonzero intent. These are sufficient to create a safe parameterized review with ED-16 execution gates.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ONE_SHOT_UMC_REPLAY_CORRECTABLE_ODECC_TEST",
+  "disposition_reason": "ED-16 requires vendor-approved tuple semantics, an isolated one-shot run and recovery; ED-03 parameterizes the device identity and stack; ED-17 prohibits clearing the baseline; ED-15 requires an attributable delta and replay-ODECC event content. ED-19/ED-20 keep subtype2/type4 distinct from CRC-read subtype0/type4 and non-replay subtype2/type2.",
+  "decision_basis": [
+    "Directly read Compatibility row454 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3043 and next formal queue row455/history3044.",
+    "The literal tuple `-d 0 -b 0 -s 2 -t 4 -a 0x800` consistently identifies UMC replay ODECC; it must not be replaced by the adjacent CRC-read subtype0 or non-replay type2 command.",
+    "The criterion's `not zer` is a single-character truncation of `not zero`, corroborated by the full before-query and repeated criteria in the adjacent same-format rows; this textual correction does not invent a numeric threshold.",
+    "Because all UMC variants share the block counter, the approved tuple and correlated replay-ODECC OS/BMC fields prove this specific coverage while the exact counter delta proves detection.",
+    "Directly read next formal queue Compatibility row455 and verified its manifest identity; no driver load, injection, query, reset, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMD UMC replay correctable ODECC one-shot injection at 0x800",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Inject exactly one approved subtype2/type4 UMC replay on-die ECC correctable event into the mapped AMD GPU and prove an attributable UMC counter delta plus replay-ODECC-specific telemetry without persistent degradation.",
+    "required_package": [
+      "Approved amdgpuras release/checksum and supported amdgpu driver/GPU firmware",
+      "Device0/card/serial/UUID/BDF/OAM mapping on a dedicated idle SUT",
+      "Approved ras_enable lifecycle with saved prior module/driver state",
+      "AMD/FAE confirmation of block0/subtype2/type4/address0x800 replay-ODECC semantics",
+      "Expected counter delta and correctable replay-ODECC dmesg/SEL/CPER fields plus OOB recovery"
+    ],
+    "test_command": "Preserve existing UMC counters and dmesg/SEL/CPER; do not clear them. Record current driver/RAS state and enable `ras_enable=1` only through the approved lifecycle. Revalidate device0 identity, query `sudo amdgpuras -d 0 -b 0 -q 1`, and at the authorized one-shot hold point execute `sudo amdgpuras -d 0 -b 0 -s 2 -t 4 -a 0x800` once. Capture output/exit/time, query the identical counter, correlate replay-ODECC correctable event fields, verify GPU health and apply only the approved cleanup/recovery. Never retry.",
+    "expected_result": "The exact subtype2/type4 command reports success, the same GPU/block UMC counter increases by the approved attributable delta, timestamp-correlated evidence classifies the event as replay correctable ODECC rather than CRC-read or non-replay ODECC, and the GPU returns or remains healthy.",
+    "pass_fail_basis": "PASS requires target/tuple approval, preserved before-state, exact one-shot evidence, same-block counter delta, replay-ODECC-specific log/SEL/CPER classification and post-health. The corrected `not zero` wording alone, a generic event or a stale nonzero count cannot pass.",
+    "safety_gate": [
+      "Dedicated idle SUT, OOB and explicit approval for driver lifecycle, one injection and recovery",
+      "Reconfirm device0/UUID/BDF/OAM and subtype2/type4 tuple immediately before the command",
+      "Preserve baseline evidence; abort on severity escalation, GPU loss, hang, thermal or power threshold",
+      "No adjacent-tuple substitution, second injection, log clearing or automatic retry"
+    ],
+    "expected_evidence": [
+      "Tool/driver/firmware identity and immutable device0/GPU/OAM map",
+      "RAS/module state and same-GPU UMC/log baseline",
+      "Exact subtype2/type4 command/output/exit/time with pre/post counter values",
+      "Replay-ODECC-specific correctable dmesg/SEL/CPER content",
+      "GPU health, cleanup/recovery and engineer verdict"
+    ],
+    "recovery": "If the target or tuple is wrong, event escalates, GPU disappears/hangs or expected evidence is absent, stop and preserve all data. Use OOB and the AMD-approved recovery plan; restore only approved driver state and never clear evidence or inject again."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is generic but aligned. The minor `zer` truncation is transparently corrected to the repeated `zero` intent without changing the source oracle."},
+  "blocked": {"before": false, "after": false, "reason": "The exact fault tuple and intended counter/log result are clear. Target, release semantics, event fields and recovery are mandatory ED-16 project bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind exact GPU/OAM, supported tool/stack, replay-ODECC tuple/event oracle, expected delta and isolated one-shot recovery.",
+    "execution_status": "REVIEW RESOLVED; DISTINCT SUBTYPE2/TYPE4 REPLAY ODECC REQUIRES SEPARATE ED-16 AUTHORIZATION; NOT EXECUTED",
+    "owner": "AMD FAE/RAS, GPU driver/platform, BMC event and recovery owners.",
+    "unlock_condition": "Approve immutable target, tuple semantics, attributable counter/event oracle and recovery."
+  },
+  "external_authorities": [
+    {"title": "Linux Kernel AMDGPU RAS Support", "url": "https://docs.kernel.org/gpu/amdgpu/ras.html", "applied_rule": "AMDGPU RAS state and evidence are device-context specific; preserve the same GPU/block baseline and post-state for attribution."}
+  ],
+  "project_authority": "AMD/FAE supplies the release-specific replay-ODECC mapping and event oracle; platform owners authorize the one-shot isolated driver/recovery workflow.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "device0_block0_subtype2_type4_address0x800_coverage_preserved": true,
+    "replay_odecc_distinct_from_crc_read_and_nonreplay_odecc": true,
+    "truncated_zero_corrected_without_threshold_invention": true,
+    "one_shot_no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|455|Wistron-AMD GPU-00152-V003",
+    "next_missing_formal_queue_case_variant_id": "cf7840ba8af6e883"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_crc_read_nonreplay_and_gfx_variants_compared": true, "case_specific_replay_odecc_and_truncation_reasoning": true, "authoritative_kernel_ras_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
