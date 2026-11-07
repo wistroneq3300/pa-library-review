@@ -1,0 +1,80 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1023,
+  "formal_queue_sequence": 872,
+  "source_key": "Compatibility|451|Wistron-AMD GPU-00146-V003",
+  "case_variant_id": "91a43d07ad769dfd",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 451, "code": "Wistron-AMD GPU-00146-V003", "original_row_sha256": "6fc1f63ffc788a531a6cce44980cba22031d1acf2c6b8be278be2fffcee532e7", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "AMD GPU RAS tool version checck",
+    "procedure": "Run `sudo amdgpuras -v`.",
+    "criteria": "Tool version must be equal to or newer than 1.3.4.",
+    "deepseek": "Mostly aligned; its command uses `--version` and states the Master 1.3.4 minimum, but ai_logs independently and incorrectly says 1.6.3.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; kept the row pending for a 1.3.4-versus-1.6.3 authority decision."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3040_91a43d07ad769dfd.json",
+  "old_problem": "One derived DeepSeek evidence field says the minimum is 1.6.3 even though the Master Criteria and the DeepSeek command description both say 1.3.4. The prior review treated these as equal authorities. Under the approved source hierarchy, the directly read Master criterion controls and the isolated derived 1.6.3 token is rejected.",
+  "new_disposition": "RESOLVED_WITH_MASTER_MINIMUM_AMDGPURAS_VERSION_1_3_4_AND_READ_ONLY_SEMANTIC_VERSION_CHECK",
+  "disposition_reason": "ED-02 preserves this unique source identity; ED-03 treats package provenance and platform compatibility as runtime prerequisites; ED-15 applies the explicit Master threshold `>=1.3.4`; ED-20 requires direct row adjudication. No approved rule elevates the conflicting derived 1.6.3 text above the Master XLSX, so the review decision is complete without guessing.",
+  "decision_basis": [
+    "Directly read Compatibility row451 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3040 and next formal queue row452/history3041.",
+    "The Master procedure specifies `sudo amdgpuras -v` and its Criteria explicitly state equal to or newer than 1.3.4.",
+    "The DeepSeek command description also says minimum 1.3.4; only ai_logs says 1.6.3, so that token is a derived internal contradiction rather than an approved project requirement.",
+    "Version acceptance is semantic, including any prerelease policy, and confirms only tool eligibility; it cannot pass the later hazardous RAS injection rows.",
+    "Directly read next formal queue Compatibility row452 and verified its manifest identity; no installation, upgrade, driver load, injection, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMDGPU-RAS tool provenance and minimum version 1.3.4 check",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Identify the installed amdgpuras binary and package, capture its version read-only, and verify the semantic version is at least the Master-approved 1.3.4 floor before any separate RAS-injection case may be considered.",
+    "required_package": [
+      "Installed vendor-approved amdgpuras binary/package",
+      "Binary path, package source, checksum/signature and version-output grammar",
+      "GPU/driver/firmware/platform compatibility matrix for the installed release",
+      "Semantic-version prerelease/build comparison policy if the vendor string is not plain numeric"
+    ],
+    "test_command": "Resolve and hash the amdgpuras executable/package without installing or upgrading it. Capture its supported help output, then run the Master command `sudo amdgpuras -v` once and preserve full stdout, stderr and exit status. If this release documents only `--version`, record that release-specific evidence before using it. Parse the reported semantic version and compare it numerically with 1.3.4; do not use lexical string comparison or substitute 1.6.3.",
+    "expected_result": "A vendor-approved amdgpuras binary is present, its version query exits successfully with an unambiguous version, the parsed release is semantically greater than or equal to 1.3.4, and the package is listed as compatible with the target GPU/driver/firmware platform.",
+    "pass_fail_basis": "PASS for this row requires binary/package provenance, full version evidence, semantic comparison showing `installed >= 1.3.4`, and platform compatibility. Version alone does not authorize or pass any injection. Missing package, ambiguous output/prerelease policy or missing compatibility evidence is INCONCLUSIVE, not an invented hardware failure.",
+    "safety_gate": [
+      "Read-only query only; do not install, upgrade, load drivers or inject errors",
+      "Use the actual documented version option for the identified release and retain full output",
+      "Do not clear logs or infer injection-feature support solely from a numeric version",
+      "Do not retry automatically or silently change the approved minimum"
+    ],
+    "expected_evidence": [
+      "Executable path/hash, package source/signature and platform support reference",
+      "Help and exact version command with full stdout/stderr/exit",
+      "Parsed semantic version including prerelease/build fields",
+      "Transparent comparison with Master minimum 1.3.4",
+      "Explicit statement that no installation, upgrade or RAS injection occurred"
+    ],
+    "recovery": "No state-changing recovery is expected. If the binary is missing, incompatible or below 1.3.4, report the fact and stop; any installation or upgrade is a separate approved change with its own rollback."
+  },
+  "source_conflict": {"before": true, "after": false, "reason": "The directly read Master and DeepSeek command description agree on 1.3.4; the lone derived 1.6.3 ai_logs statement is rejected as non-authoritative."},
+  "blocked": {"before": false, "after": false, "reason": "Command, threshold and evidence semantics are resolved. Package provenance, option support and platform compatibility are ordinary runtime prerequisites."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Provide the installed package/binary provenance, documented option/output grammar, platform support and any prerelease comparison policy.",
+    "execution_status": "REVIEW RESOLVED; AUTHORITATIVE MINIMUM IS 1.3.4; READ-ONLY VERSION QUERY NOT EXECUTED",
+    "owner": "AMD RAS tool package and GPU platform compatibility owners.",
+    "unlock_condition": "Expose the installed approved binary/package and compatibility evidence for read-only evaluation."
+  },
+  "external_authorities": [],
+  "project_authority": "The Master XLSX approves the 1.3.4 floor. The AMD/platform owner still confirms the actual package provenance and feature/platform compatibility before later injection cases.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "master_minus_v_and_minimum_1_3_4_preserved": true,
+    "derived_1_6_3_conflict_rejected": true,
+    "version_check_not_treated_as_injection_or_hardware_pass": true,
+    "no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|452|Wistron-AMD GPU-00148-V003",
+    "next_missing_formal_queue_case_variant_id": "4c0ff21a339d75c3"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_ras_injection_cases_compared": true, "case_specific_source_authority_and_semver_reasoning": true, "master_threshold_directly_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
