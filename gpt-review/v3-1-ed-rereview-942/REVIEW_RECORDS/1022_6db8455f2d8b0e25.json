@@ -1,0 +1,83 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1022,
+  "formal_queue_sequence": 871,
+  "source_key": "Compatibility|450|Wistron-AMD GPU-00468-V003",
+  "case_variant_id": "6db8455f2d8b0e25",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 450, "code": "Wistron-AMD GPU-00468-V003", "original_row_sha256": "c49766bdce22fe391fdaa357c684dbf1bed24a1253604720235dfe5238da10a5", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "Bad Page Persistent",
+    "procedure": "Record CPER entries and retired VRAM pages, map AMD GPU cards, inject device0/block2/type8 GFX poison with amdgpuras, identify/download/decode the new CPER, compare bad pages, warm reset/reboot and verify persistence.",
+    "criteria": "Injection succeeds, exactly one correlated CPER contains the required location/bank/extended-code/type/severity evidence, and the retired bad-page address set persists across the approved reset.",
+    "deepseek": "PARTIAL; recognizes a hazardous FAE-approved GPU injection and checks dmesg, but omits the Master CPER download/decode and bad-page persistence evidence.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/CHANGED; restores the one-shot GFX ODECC, Redfish CPER and post-reset persistence workflow but leaves the review pending for target/tool/decoder parameters."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3039_6db8455f2d8b0e25.json",
+  "old_problem": "The previous record retained Pending for the GPU index/OAM mapping, exact amdgpuras release semantics, authenticated BMC path, CPER decoder and reset recovery. The Master already defines the core injection, expected decoded fields and persistence criterion. Under ED-16 those missing values are mandatory, separately authorized project bindings rather than an unresolved test meaning.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ONE_SHOT_AMD_GFX_POISON_CPER_AND_BAD_PAGE_PERSISTENCE_TEST",
+  "disposition_reason": "ED-16 permits RAS injection only with an approved tool, isolated environment, exact target and recovery; ED-03 parameterizes device/card/UUID/BDF/OAM, endpoints and decoder versions; ED-17 requires preservation of CPER and logs before any changes; ED-18 preserves the complete reset-to-OS-ready evidence; ED-15 retains the explicit field/persistence oracle. The review is resolved but execution remains a one-shot approval gate.",
+  "decision_basis": [
+    "Directly read Compatibility row450 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3039 and next formal queue row451/history3040.",
+    "The Master supplies the exact `amdgpuras -d 0 -b 2 -t 8` stimulus and expected GC/UMC CPER field values plus post-reset bad-page-set persistence; DeepSeek's dmesg-only subset cannot replace those requirements.",
+    "Linux kernel AMDGPU RAS documentation defines `gpu_vram_bad_pages` entries as page address, size and state and explains that some boards persist bad pages in EEPROM, supporting normalized set comparison across reset.",
+    "DMTF Redfish LogEntry defines authenticated log-entry resources, CPER metadata and AdditionalDataURI; a pre/post collection set and timestamp/content correlation is more reliable than assuming maximum numeric ID increments alone.",
+    "Directly read next formal queue Compatibility row451 and verified its manifest identity; no injection, Redfish download, CPER decode, reboot/warm reset, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMD GFX poison one-shot CPER generation and retired VRAM bad-page persistence",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Inject the approved GFX poison-consumption ODECC event into one immutable AMD GPU target, prove the newly correlated CPER matches the source field oracle, and verify the normalized retired bad-page set remains identical after the approved warm reset or reboot.",
+    "required_package": [
+      "FAE-approved amdgpuras release/checksum and documented device0/block2/type8 semantics for the exact GPU/firmware/driver",
+      "GPU device-index/card/serial/UUID/BDF/OAM map and dedicated idle SUT",
+      "Authenticated HTTPS Redfish BMC endpoint/credentials, Dump LogService schema and approved CPER attachment method",
+      "Pinned cdump_analyzer/schema and approved CPER UMC/GC/location/code/type/severity matrix",
+      "Bad-page normalization rule, one-shot authorization, OOB, reset-to-OS-ready and GPU recovery plan"
+    ],
+    "test_command": "On the isolated SUT, preserve all existing logs, authenticated Redfish Dump entry metadata and the exact GPU's normalized `gpu_vram_bad_pages` set. Reconfirm device0/card/UUID/BDF/OAM immediately before the hold point. After explicit one-shot injection and reset authorization, execute only the approved `sudo amdgpuras -d 0 -b 2 -t 8`. Correlate the new Redfish entry by pre/post set, Created time and event content, download through its authenticated AdditionalDataURI/OEM attachment, hash and decode it with the pinned analyzer, compare every required CPER field, record the post-injection bad-page set, then perform the approved warm reset or reboot and prove OFF/transition-to-OS-ready/GPU health plus identical normalized bad-page set. Never retry.",
+    "expected_result": "The one injection returns the approved success indication, exactly one event-correlated CPER artifact is preserved and decodes to the specified OAM/location and UMC/GC code/type/severity evidence, the retired bad-page set changes only as the approved oracle expects before reset, and the same normalized set persists after the GPU and OS return healthy.",
+    "pass_fail_basis": "PASS requires immutable GPU/OAM identity, one-shot command evidence, pre/post Redfish set correlation, attachment hash, complete decoded field match, normalized bad-page sets before and after reset, and healthy reset recovery. A dmesg line, maximum-ID increment alone, missing CPER sections, reordered text or an automatic retry cannot pass.",
+    "safety_gate": [
+      "Dedicated idle SUT with OOB and explicit FAE one-shot injection plus reset authorization",
+      "Revalidate device0/card/UUID/BDF/OAM immediately before injection and preserve all pre-existing logs/CPER",
+      "Use authenticated encrypted Redfish/file transfer; never embed credentials or rely only on grep/max-ID",
+      "Abort on target mismatch, GPU loss, fatal error, thermal/power issue or boot failure; never auto-retry or inject again"
+    ],
+    "expected_evidence": [
+      "amdgpuras/driver/firmware/decoder hashes and immutable GPU/OAM target map",
+      "Pre-injection Redfish entry set/metadata and normalized bad-page set",
+      "Exact injection output, timestamp and independent RAS/XID/kernel telemetry",
+      "New CPER entry metadata, authenticated attachment URI, file hash and full decoded JSON field reconciliation",
+      "Post-injection and post-reset normalized page sets plus reset/OS/GPU health timeline and verdict"
+    ],
+    "recovery": "If the target, injection output, CPER correlation, reset or GPU health is abnormal, stop immediately, preserve all artifacts and use OOB plus the AMD/platform recovery procedure. Do not clear RAS EEPROM, delete logs, repeat the injection or attempt firmware/reset changes outside the approved plan."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is incomplete but does not contradict the detailed Master stimulus and oracle; the review restores every CPER and persistence step rather than replacing it with dmesg."},
+  "blocked": {"before": false, "after": false, "reason": "Core stimulus, evidence chain, acceptance and recovery boundary are defined. Exact identities, approved tool/schema and isolated one-shot recovery are mandatory project bindings."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind the exact GPU/OAM, approved amdgpuras and decoder releases, authenticated CPER resource/field schema, normalized page-set rule and isolated reset/recovery authorization.",
+    "execution_status": "REVIEW RESOLVED; ONE-SHOT RAS INJECTION REQUIRES SEPARATE TARGET/TOOL/ISOLATION/RECOVERY AUTHORIZATION; NOT EXECUTED",
+    "owner": "AMD FAE/RAS, GPU platform, BMC/Redfish, CPER decoder and system recovery owners.",
+    "unlock_condition": "Approve the immutable target, exact injection semantics, CPER field oracle, dedicated-SUT/OOB reset and recovery plan."
+  },
+  "external_authorities": [
+    {"title": "Linux Kernel AMDGPU RAS Support", "url": "https://docs.kernel.org/gpu/amdgpu/ras.html", "applied_rule": "`gpu_vram_bad_pages` exposes one line per VRAM page with address, page size and reservation state, and supported boards persist bad-page information; compare normalized sets rather than display order."},
+    {"title": "DMTF Redfish Data Model Specification DSP0268", "url": "https://redfish.dmtf.org/schemas/v1/DSP0268_2025.3.pdf", "applied_rule": "LogEntry exposes Created, CPER details and authenticated AdditionalDataURI content, supporting set/time/content correlation and immutable artifact capture."}
+  ],
+  "project_authority": "AMD/FAE owns the release-specific injection and decoded-field semantics; platform/BMC owners bind target identity, authenticated resource, reset behavior and recovery. No execution approval is implied by review resolution.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-18", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "gfx_poison_cper_decode_and_bad_page_persistence_coverage_preserved": true,
+    "dmesg_only_and_max_id_only_substitutions_rejected": true,
+    "one_shot_no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|451|Wistron-AMD GPU-00146-V003",
+    "next_missing_formal_queue_case_variant_id": "91a43d07ad769dfd"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "neighbor_amd_ras_version_and_injection_variants_compared": true, "case_specific_cper_and_bad_page_persistence_reasoning": true, "authoritative_kernel_and_redfish_sources_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
