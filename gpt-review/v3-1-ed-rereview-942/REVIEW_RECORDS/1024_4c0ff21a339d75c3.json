@@ -1,0 +1,83 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1024,
+  "formal_queue_sequence": 873,
+  "source_key": "Compatibility|452|Wistron-AMD GPU-00148-V003",
+  "case_variant_id": "4c0ff21a339d75c3",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 452, "code": "Wistron-AMD GPU-00148-V003", "original_row_sha256": "4bd772b55220bf074384a7ddd5d97a98d28a6e9e420d15ef230f3eff0b7bb0a2", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "UMC Correctable ODECC In Band",
+    "procedure": "Load amdgpu with ras_enable=1, query device0 UMC count, then inject block0/subtype2/type2 at address 0x800 using amdgpuras.",
+    "criteria": "The tool reports injection success, dmesg shows the expected AMDGPU hardware error, and the same UMC counter becomes nonzero.",
+    "deepseek": "PARTIAL; correctly gates hazardous AMD GPU injection on FAE approval and a dedicated SUT but reduces evidence to a generic command and dmesg.",
+    "gpt_v2": "REQUIRES PACKAGE / USER CONFIRMATION/IMPROVED; restores the exact ODECC tuple, scoped counter transition and recovery, while retaining Pending for project bindings."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3041_4c0ff21a339d75c3.json",
+  "old_problem": "The prior record treated device mapping, release-specific parameter confirmation, counter delta and recovery as an unresolved Engineering Decision. The Master unambiguously defines a correctable UMC on-die ECC one-shot at address 0x800 and its observable success/counter/log behavior. ED-16 makes the missing target and authorization strict execution prerequisites, not a reason to leave the review itself pending.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_ONE_SHOT_UMC_CORRECTABLE_ODECC_COUNTER_AND_LOG_TEST",
+  "disposition_reason": "ED-16 requires an approved amdgpuras release, isolated SUT, exact immutable GPU target and recovery; ED-03 parameterizes device0-to-UUID/BDF/OAM and release-specific tuple semantics; ED-17 preserves existing counters/logs; ED-15 strengthens `nonzero` to an attributable before/after delta without changing coverage. The source command and oracle remain intact and no injection is pre-authorized.",
+  "decision_basis": [
+    "Directly read Compatibility row452 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3041 and next formal queue row453/history3042.",
+    "The exact tuple `-d 0 -b 0 -s 2 -t 2 -a 0x800` uniquely identifies this correctable ODECC case and must not be merged with the subtype0/type4 or subtype2/type4 replay rows.",
+    "A post-count merely being nonzero is insufficient when prior errors exist; the same mapped GPU/block requires a preserved pre-count and timestamp-correlated positive delta plus correctable UMC evidence.",
+    "Linux AMDGPU RAS documentation confirms that RAS state and counters are per driver/device context; driver lifecycle and module parameters must be recorded instead of silently reloading or clearing logs.",
+    "Directly read next formal queue Compatibility row453 and verified its manifest identity; no modprobe, injection, query, reset, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMD UMC correctable ODECC in-band one-shot injection at 0x800",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Inject exactly one approved UMC correctable on-die ECC event at address 0x800 into the mapped AMD GPU and prove an attributable UMC counter delta and correctly classified OS/BMC evidence while the GPU remains healthy and recoverable.",
+    "required_package": [
+      "Approved amdgpuras >=1.3.4 release/checksum and GPU/driver/firmware support matrix",
+      "Device0/card/serial/UUID/BDF/OAM mapping for a dedicated idle SUT",
+      "Approved amdgpu `ras_enable=1` driver lifecycle and saved prior module/driver state",
+      "AMD/FAE confirmation that block0/subtype2/type2/address0x800 means the intended correctable ODECC stimulus",
+      "Expected counter delta and dmesg/SEL/CPER classification plus OOB abort/recovery plan"
+    ],
+    "test_command": "Preserve existing dmesg, SEL/CPER and the mapped GPU's UMC counter without clearing them. Record current amdgpu module parameters and only apply `modprobe amdgpu ras_enable=1` through the approved driver lifecycle. Reconfirm that device0 maps to the authorized UUID/BDF/OAM, query `sudo amdgpuras -d 0 -b 0 -q 1`, and at the explicit one-shot hold point execute `sudo amdgpuras -d 0 -b 0 -s 2 -t 2 -a 0x800` once. Immediately query the same counter, capture timestamped kernel/BMC evidence and GPU health, then perform only the approved cleanup/recovery. Never retry.",
+    "expected_result": "The exact one-shot command returns the approved success indication, the same GPU/block UMC correctable counter increases by the approved delta, correlated logs identify a correctable UMC ODECC event rather than an uncorrectable escalation, and the GPU remains enumerated, accessible and within health/thermal limits after cleanup.",
+    "pass_fail_basis": "PASS requires immutable device0 identity, approved tuple semantics, preserved baseline, exact command/output/exit/time, attributable UMC counter delta, correctable UMC log/SEL/CPER classification and healthy recovery. A generic hardware-error line, success string or nonzero post-count alone cannot pass; any second injection invalidates the one-shot run.",
+    "safety_gate": [
+      "Dedicated idle SUT, OOB access and separate explicit approval for driver lifecycle, one injection and any recovery reset",
+      "Confirm device0-to-UUID/BDF/OAM immediately before the command",
+      "Preserve pre-existing counters/logs and abort on uncorrectable escalation, GPU loss, hang, thermal or power limits",
+      "Do not change the tuple, clear evidence or retry automatically"
+    ],
+    "expected_evidence": [
+      "amdgpuras/driver/firmware identity and device0/card/UUID/BDF/OAM map",
+      "Driver/module/RAS state and preserved per-GPU UMC/log baseline",
+      "Exact injection command/output/exit/timestamp and same-block pre/post counter values",
+      "Correlated correctable UMC dmesg/SEL/CPER evidence and no fatal escalation",
+      "GPU enumeration/health/thermal state, cleanup/recovery and engineer verdict"
+    ],
+    "recovery": "On target mismatch, failed/ambiguous injection, uncorrectable escalation, GPU loss, hang or health limit, stop immediately, preserve all state and use OOB plus the AMD-approved recovery path. Restore only the saved driver state when authorized; do not clear counters/logs or inject again."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "DeepSeek is generic but aligned; the Master exact correctable ODECC tuple, counter query and dmesg criterion remain authoritative."},
+  "blocked": {"before": false, "after": false, "reason": "Fault type, command and expected observations are known. Target identity, release semantics, exact delta and recovery are mandatory project bindings under ED-16."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind device0 to the exact GPU/OAM, approve tool/stack and tuple semantics, expected counter/log oracle, dedicated-SUT driver lifecycle and recovery.",
+    "execution_status": "REVIEW RESOLVED; ONE-SHOT CORRECTABLE ODECC INJECTION REQUIRES SEPARATE ED-16 AUTHORIZATION; NOT EXECUTED",
+    "owner": "AMD FAE/RAS, GPU platform/driver, BMC telemetry and recovery owners.",
+    "unlock_condition": "Approve immutable target, exact tuple semantics, counter/log oracle and one-shot isolation/recovery."
+  },
+  "external_authorities": [
+    {"title": "Linux Kernel AMDGPU RAS Support", "url": "https://docs.kernel.org/gpu/amdgpu/ras.html", "applied_rule": "AMDGPU RAS exposes device/block state and error interfaces; evidence must stay bound to the same device context and preserved driver state."}
+  ],
+  "project_authority": "AMD/FAE confirms the release-specific parameter tuple and expected correctable telemetry; platform owners authorize driver state, isolated one-shot execution and recovery. Review resolution is not execution approval.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "device0_block0_subtype2_type2_address0x800_coverage_preserved": true,
+    "distinct_from_crc_read_and_odecc_replay_type4_cases": true,
+    "success_or_nonzero_only_pass_rejected": true,
+    "one_shot_no_automatic_retry": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|453|Wistron-AMD GPU-00150-V003",
+    "next_missing_formal_queue_case_variant_id": "9b8ebbb362e91339"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_distinct_replay_variants_compared": true, "case_specific_correctable_odecc_delta_reasoning": true, "authoritative_kernel_ras_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
