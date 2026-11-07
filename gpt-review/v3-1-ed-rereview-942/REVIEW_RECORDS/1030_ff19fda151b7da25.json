@@ -1,0 +1,82 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1030,
+  "formal_queue_sequence": 879,
+  "source_key": "Compatibility|459|Wistron-NV GPU-00069-V004",
+  "case_variant_id": "ff19fda151b7da25",
+  "second_review_outcome": "CHANGED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 459, "code": "Wistron-NV GPU-00069-V004", "original_row_sha256": "6d0c1d3f4005120c91f09e0e049f29c8287de8f8525c7c9afa8f3f3f1f131ce0", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "nvbandwidth",
+    "procedure": "Only `check SPEC` after generic configuration and log handling.",
+    "criteria": "Only `check SPEC`.",
+    "deepseek": "PARTIAL; identifies NVIDIA nvbandwidth and suggests a long generic full-suite run, but supplies no source-authorized test selection or threshold.",
+    "gpt_v2": "BLOCKED/CHANGED; requires a pinned package, GPU topology, path/test matrix, statistic, threshold and long-run safety controls."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3047_ff19fda151b7da25.json",
+  "old_problem": "The source does not name nvbandwidth testcases, paths, buffer/sample settings, statistic or performance limits. The prior review therefore treated the missing Project SPEC as preventing even a review-layer method.",
+  "new_disposition": "RESOLVED_AS_PARAMETERIZED_TOPOLOGY_AWARE_NVBANDWIDTH_TEST_WITH_EXECUTION_VERDICT_GATED_BY_PROJECT_SPEC",
+  "disposition_reason": "NVIDIA's official nvbandwidth interface supplies a safe discovery and exact-selection method (`--version`, `--list`, `--testcase`, JSON output, buffer size and samples). ED-03 permits the required path matrix and topology to be runtime project configuration, while ED-15 forbids PASS until signed per-path thresholds/tolerances exist and ED-14 forbids shortening the stated long run. Thus the review can be completed without inventing acceptance values.",
+  "decision_basis": [
+    "Directly read Compatibility row459 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3047 and next formal queue Stability row3/history3048.",
+    "The official NVIDIA README defines nvbandwidth as a bandwidth tool for host/GPU and GPU/GPU copy paths and supports explicit testcase listing/selection, UUID pair selection, sample count, buffer size and JSON output.",
+    "The source's 60-minute attended and 100-minute machine estimates are retained as planning metadata; execution must use the owner-approved complete profile and cannot be replaced by a short smoke run.",
+    "No generic GB/s limit is authoritative across GPU SKU, NVLink/PCIe topology, direction and copy method; numeric PASS remains gated by the signed Project SPEC.",
+    "Directly read next formal queue Stability row3 and verified its manifest identity; no package download/build, benchmark, load, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "NVIDIA nvbandwidth topology-aware path matrix",
+    "automation_classification": "REQUIRES PACKAGE / USER CONFIRMATION",
+    "purpose": "Measure every project-required host↔GPU and GPU↔GPU path with the pinned nvbandwidth build and prove each named direction/method meets its topology-specific signed threshold without health degradation.",
+    "required_package": [
+      "Pinned NVIDIA nvbandwidth release/commit, source/binary checksum and build manifest",
+      "Supported CUDA Toolkit/driver plus GPU SKU/serial/UUID/BDF and NVLink/PCIe topology map",
+      "Project-required testcase/path/direction matrix, buffer size, samples, statistic and runtime profile",
+      "Per-path metric units, numeric threshold/tolerance and unsupported/skipped-path policy",
+      "Thermal/power/Xid/AER abort and recovery limits"
+    ],
+    "test_command": "Verify the package checksum and `nvbandwidth --version`; capture GPU UUID/BDF/topology and health; save `nvbandwidth --list`; validate the signed profile maps every required testcase/path to the current topology; execute only that complete profile using explicit `--testcase`/`--pair` as applicable, approved `--bufferSize` and `--testSamples`, and `--format json`; preserve raw JSON/stdout/stderr and synchronized health telemetry; compare each required result with its signed per-path threshold. Do not default to an unknown full suite or shorten the approved duration.",
+    "expected_result": "All required named paths execute with the approved settings and verification enabled, produce parseable metrics in the specified units/statistic, satisfy their own signed thresholds/tolerances, contain no unauthorized skip/unsupported/error status, and leave GPU/interconnect/host health within approved limits.",
+    "pass_fail_basis": "PASS requires exact artifact/topology/profile identity, complete required row/path coverage, per-path numeric comparisons and healthy telemetry. Tool exit zero, presence of positive GB/s values, an aggregate average, or an execution without approved thresholds is not PASS and remains execution BLOCKED.",
+    "safety_gate": [
+      "Validate package provenance, compatible CUDA/driver and immutable GPU UUID/BDF topology before load",
+      "Approve full runtime, cooling/power capacity and every selected path; preserve data verification",
+      "Abort on Xid/AER, link degradation, thermal/power limit, hang or topology change",
+      "Preserve complete output; no automatic retry, ad-hoc tuning or log clearing"
+    ],
+    "expected_evidence": [
+      "Artifact/version/checksum/build and CUDA/driver identities",
+      "GPU UUID/BDF and NVLink/PCIe topology plus approved path/profile manifest",
+      "Exact command/settings, complete JSON/raw output and per-path coverage diff",
+      "Per-path threshold/tolerance calculations and skipped/unsupported disposition",
+      "Synchronized health telemetry, recovery and engineer verdict"
+    ],
+    "recovery": "Stop on package/topology/profile mismatch or any health/benchmark error, preserve all artifacts, terminate the workload, restore only recorded temporary settings and allow the SUT to cool/return to baseline. A corrected profile or rerun needs separate authorization."
+  },
+  "source_conflict": {"before": false, "after": false, "reason": "The source is incomplete rather than contradictory; the official tool interface supports parameterization without inventing a Project SPEC."},
+  "blocked": {"before": true, "after": false, "reason": "A complete safe review-layer method is now defined. Execution verdict remains gated by the signed profile and thresholds, but that runtime configuration does not keep the engineering review blocked."},
+  "pending": {
+    "before": true,
+    "after": false,
+    "remaining_project_configuration": "Bind nvbandwidth artifact/build, GPU topology, complete testcase/path settings, per-path thresholds/tolerances, runtime and health/recovery limits.",
+    "execution_status": "REVIEW RESOLVED; EXECUTION AND PASS VERDICT REQUIRE SIGNED PROJECT PROFILE/THRESHOLDS; NOT EXECUTED",
+    "owner": "NVIDIA GPU/interconnect performance and project platform owners.",
+    "unlock_condition": "Supply the signed runtime path matrix and numeric per-path acceptance package before execution."
+  },
+  "external_authorities": [
+    {"title": "NVIDIA nvbandwidth README", "url": "https://github.com/NVIDIA/nvbandwidth/blob/main/README.md", "applied_rule": "Uses official version/list/testcase/pair/buffer/sample/JSON controls and preserves path-specific measurement semantics."}
+  ],
+  "project_authority": "Project performance owners define required topology paths, settings and acceptance thresholds; NVIDIA documentation defines tool behavior but not this platform's PASS limits.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-08", "ED-13", "ED-14", "ED-15", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "nvbandwidth_path_direction_and_topology_coverage_preserved": true,
+    "no_threshold_or_testcase_matrix_invented": true,
+    "formal_runtime_not_replaced_by_smoke": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Stability|3|Wistron-Margin-00002-V002",
+    "next_missing_formal_queue_case_variant_id": "5797937ddeac0e7d"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "tool_scope_topology_paths_statistics_and_thresholds_independently_reviewed": true, "case_specific_nvbandwidth_reasoning": true, "official_nvidia_source_applied": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
