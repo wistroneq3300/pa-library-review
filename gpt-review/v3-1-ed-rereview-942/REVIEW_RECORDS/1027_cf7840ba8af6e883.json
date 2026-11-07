@@ -1,0 +1,80 @@
+{
+  "schema_version": "v3-1-ed-rereview-record-1.1",
+  "rereview_sequence": 1027,
+  "formal_queue_sequence": 876,
+  "source_key": "Compatibility|455|Wistron-AMD GPU-00152-V003",
+  "case_variant_id": "cf7840ba8af6e883",
+  "second_review_outcome": "BLOCKED",
+  "source_ref": {"sheet": "Compatibility", "source_row": 455, "code": "Wistron-AMD GPU-00152-V003", "original_row_sha256": "c7ebbbe1fc889b2b5aa42b0f0d3e6b6af73bbf66818697a001ecfe02c5665684", "source_xlsx_sha256": "e2e737beb9cc4141f89a353813a48ab8034f55da56facba86a72fb9501a114d8"},
+  "source_snapshot": {
+    "items": "GFX Correctable In Band",
+    "procedure": "Enable amdgpu RAS, query device0/block2, then inject `-d 0 -b 2 -s 0 -t 2`; however, the prose calls the target block0 UMC at address0x800 while the literal command targets block2 and omits the address.",
+    "criteria": "Requires injection success, an AMDGPU hardware-error message and a nonzero value from `-d 0 -b 2 -q 1`, but labels that block2 result a UMC error count.",
+    "deepseek": "PARTIAL; warns that the exact FAE-supplied GFX injection target is required, but does not reconcile the block, fault family, address or counter-domain contradictions.",
+    "gpt_v2": "BLOCKED/CHANGED; refuses to choose GFX versus UMC or invent the missing address and counter oracle."
+  },
+  "historical_review_record": "gpt-review/v3-1-full-3112/REVIEW_RECORDS/3044_cf7840ba8af6e883.json",
+  "old_problem": "The source mixes a GFX title and block2 command/query with UMC block0/address0x800 prose and a UMC-named counter criterion. The prior review correctly found that an executable fault domain and authoritative oracle cannot be selected safely.",
+  "new_disposition": "RETAINED_ENGINEERING_DECISION_PENDING_AND_BLOCKED_FOR_CONTRADICTORY_GFX_VERSUS_UMC_FAULT_DOMAIN",
+  "disposition_reason": "ED-16 forbids error injection without an approved tool, isolated target and recovery, while ED-15 forbids a PASS oracle without an authoritative expected result. ED-19/ED-20 require this identity to remain distinct rather than borrowing the adjacent coherent UMC or GFX-poison variants. The contradiction concerns the core command semantics, not a parameter that ED-03 can safely defer.",
+  "decision_basis": [
+    "Directly read Compatibility row455 all 18 XLSX columns, same-row DeepSeek material, GPT V2/history3044 and next formal queue row456/history3045.",
+    "The title and literal `-b 2` operations indicate GFX, while the narrative explicitly says block0 UMC at address0x800; the literal injection omits `-a 0x800`.",
+    "The criterion calls the block2 query a UMC counter, so even a successful command cannot be attributed to the intended fault family without a vendor mapping.",
+    "The adjacent row456 type8 GFX poison CPER test and rows452-454 coherent UMC tests are different coverage and cannot repair or replace this correctable-in-band identity.",
+    "Directly read next formal queue Compatibility row456 and verified its manifest identity; no driver load, error injection, query, reset, log clearing or DUT action ran."
+  ],
+  "test_case": {
+    "test_name": "AMD GFX correctable in-band injection — blocked pending coherent vendor tuple and oracle",
+    "automation_classification": "BLOCKED",
+    "purpose": "Preserve the intended standalone GFX-correctable coverage while preventing execution until AMD/FAE resolves whether the case is GFX block2 or UMC block0 and publishes the exact tuple, counter domain and event oracle.",
+    "required_package": [
+      "AMD/FAE corrected source or signed mapping for GFX versus UMC and block2 versus block0",
+      "Approved amdgpuras release/checksum with subtype0/type2/address semantics",
+      "Immutable GPU/card/serial/UUID/BDF/OAM identity on a dedicated idle SUT",
+      "Authoritative counter and correctable dmesg/SEL/CPER field oracle",
+      "One-shot abort and OOB recovery plan"
+    ],
+    "test_command": "DO NOT EXECUTE the source injection. After an approved correction, preserve counters/logs, bind the immutable GPU identity, validate the exact block/subtype/type/address tuple against the pinned amdgpuras release, obtain one-shot authorization, run exactly once, query only the approved same-domain counter, correlate the specified correctable event and perform the approved health/recovery checks. Never infer `-a 0x800`, substitute an adjacent tuple or retry.",
+    "expected_result": "Not yet authoritatively defined. AMD/FAE must specify the intended fault domain, exact command, attributable counter delta and correctable event fields before any PASS/FAIL result is possible.",
+    "pass_fail_basis": "BLOCKED. Neither command success nor a stale/nonzero block2 value can pass while the source calls the target both GFX and UMC and disagrees on block/address. PASS becomes available only after the corrected tuple and matching counter/event oracle are approved and evidenced.",
+    "safety_gate": [
+      "No injection, module lifecycle change, reset, log clearing or substitute command under the contradictory source",
+      "Dedicated idle SUT, OOB access, immutable target and explicit single-injection authorization after correction",
+      "Abort on any tuple/version mismatch, severity escalation, GPU loss, hang, thermal or power issue",
+      "Preserve all evidence; no automatic retry"
+    ],
+    "expected_evidence": [
+      "Approved GFX-versus-UMC correction and pinned tool/driver/firmware semantics",
+      "Exact target map, tuple and address-applicability record",
+      "Preserved pre-state and same-domain counter baseline",
+      "Exact one-shot command/output/exit/time and specified correctable event fields",
+      "Post-health, recovery and engineer verdict"
+    ],
+    "recovery": "No executable recovery can be assumed for an undefined fault domain. AMD/FAE and platform owners must approve OOB abort/recovery for the corrected event before authorization; if any mismatch or instability occurs, stop, preserve evidence and do not retry."
+  },
+  "source_conflict": {"before": true, "after": true, "reason": "The Master itself conflicts on GFX versus UMC, block2 versus block0, address applicability and counter identity; no ED-01–ED-30 ruling selects one interpretation."},
+  "blocked": {"before": true, "after": true, "reason": "Core injection semantics, authoritative expected result and recovery are unresolved, so safe parameterization cannot make the test executable."},
+  "pending": {
+    "before": true,
+    "after": true,
+    "remaining_project_configuration": "Not merely runtime configuration: publish the corrected fault family/block/subtype/type/address tuple, matching counter/log oracle and one-shot recovery.",
+    "execution_status": "REVIEW COMPLETED; EXECUTION BLOCKED BY CONTRADICTORY GFX/UMC COMMAND SEMANTICS; NOT EXECUTED",
+    "owner": "AMD FAE/RAS tool owner, GPU driver/platform owner and BMC/recovery owner.",
+    "unlock_condition": "Approve a coherent source correction covering fault domain, exact tuple/address, same-domain counter, expected correctable event fields and recovery."
+  },
+  "external_authorities": [],
+  "project_authority": "Only the AMD/FAE tool and platform owners can resolve the release-specific block/subtype/type/address mapping and recovery; general AMDGPU documentation cannot choose between contradictory OEM tool semantics.",
+  "traceability": {
+    "applicable_decisions": ["ED-02", "ED-03", "ED-13", "ED-15", "ED-16", "ED-17", "ED-19", "ED-20", "ED-30"],
+    "source_key_and_variant_preserved": true,
+    "gfx_block2_and_umc_block0_address0x800_conflict_preserved": true,
+    "no_adjacent_umc_or_gfx_poison_substitution": true,
+    "no_command_counter_or_recovery_invented": true,
+    "historical_record_preserved": true,
+    "dut_execution": "NOT EXECUTED",
+    "next_missing_formal_queue_source_key_verified": "Compatibility|456|Wistron-AMD GPU-00467-V003",
+    "next_missing_formal_queue_case_variant_id": "4a2a5adfbd960842"
+  },
+  "review_quality": {"exact_xlsx_row_read": true, "same_row_deepseek_read": true, "gpt_v2_read": true, "historical_pending_record_read": true, "adjacent_umc_and_gfx_poison_variants_compared": true, "case_specific_fault_domain_counter_and_address_reasoning": true, "next_identity_directly_verified": true, "written_without_generator_or_template": true, "protected_sources_unchanged": true}
+}
